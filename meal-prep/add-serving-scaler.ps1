@@ -58,6 +58,9 @@ $widgetCore = @'
 <script>
 (function(){
 if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
 function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
 function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
 function init(box){
@@ -77,6 +80,8 @@ function init(box){
   box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
   num.addEventListener('change',render);
   render();
+  // refine with this week's live cost from the feed (falls back silently to the baked-in baseline)
+  if(data.slug){ smpGetFeed().then(function(f){ if(f&&f.recipes&&f.recipes[data.slug]&&f.recipes[data.slug].week_cost>0){ data.cost=f.recipes[data.slug].week_cost; render(); } }); }
 }
 function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
 if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
@@ -97,7 +102,7 @@ foreach ($r in $targets) {
     $ings = @()
     foreach ($i in $r.ingredients) { $ings += ('{"item":"' + (JsonEsc ([string]$i.item)) + '","grams":' + [int]$i.grams + ',"buy":"' + (JsonEsc ([string]$i.buy)) + '"}') }
     $cost = if ($r.cost_batch_true) { [double]$r.cost_batch_true } else { [double]$r.cost_batch }
-    $dataJson = '{"base":' + [int]$r.servings + ',"cost":' + ('{0:F2}' -f $cost) + ',"ing":[' + ($ings -join ',') + ']}'
+    $dataJson = '{"slug":"' + (JsonEsc ([string]$r.slug)) + '","base":' + [int]$r.servings + ',"cost":' + ('{0:F2}' -f $cost) + ',"ing":[' + ($ings -join ',') + ']}'
     $widget = '<!--SMP-SCALER-->' + $widgetCore +
       '<div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p>' +
       '<div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="' + [int]$r.servings + '"><button type="button" class="smp-sc-btn" data-d="1">+</button></div>' +
