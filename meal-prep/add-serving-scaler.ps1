@@ -58,12 +58,14 @@ $widgetCore = @'
 .smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
 .smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
 .smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
-.smp-sc-liveh{font-family:Georgia,serif;color:#16263F;font-size:1.7rem;margin:1.8rem 0 .3rem}
-.smp-sc-livesub{color:#64748b;font-size:1.2rem;margin:0 0 .8rem}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
 .smp-sc-live{margin:0;padding:0;list-style:none}
-.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.5rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
 .smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
 .smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
 .smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
 <script>
 (function(){
@@ -90,30 +92,33 @@ function init(box){
   box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
   num.addEventListener('change',render);
   render();
-  // CURRENT CHEAPEST PRICING: live per-ingredient price + store + link from this week's feed.
-  // The everyday total above stays the stable baseline; this section carries the live/sale story.
+  // CURRENT CHEAPEST PRICING: its own standalone section (sibling .smp-cp box, NOT inside the scaler).
+  // Lists ALL ingredients: tracked ones get this week's live price + store + See-item link (+ sale tag);
+  // untracked pantry items get an honest note instead of an invented price.
   function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
-  smpGetFeed().then(function(f){
-    if(!f||!f.ingredients) return;
-    var ul=box.querySelector('.smp-sc-live'); if(!ul) return;
-    var html='', tracked=0;
+  function renderCheapest(f){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var html='', live=0;
     data.ing.forEach(function(it){
-      if(!it.bid) return;
-      var e=f.ingredients[it.bid];
-      if(!e||!(e.cheapest>0)) return;
-      tracked++;
-      var price='$'+e.cheapest.toFixed(2)+'/'+e.unit;
-      var sale=(e.type==='sale')?'<span class="smp-sc-saletag">sale</span>':'';
-      var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
-      html+='<li><span>'+escT(it.item)+sale+'</span><span><span class="smp-sc-lp">'+price+' at '+escT(e.store)+'</span>'+link+'</span></li>';
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        right='<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
     });
-    if(!tracked) return;
     ul.innerHTML=html;
-    var un=data.ing.length-tracked;
-    var subEl=box.querySelector('.smp-sc-livesub');
-    if(subEl){ subEl.textContent='The cheapest verified price at six Omaha stores right now, updated as sales start and end.'+(un>0?(' ('+un+' small pantry item'+(un===1?'':'s')+' not price-tracked.)'):''); }
-    var wrap=box.querySelector('.smp-sc-livewrap'); if(wrap){ wrap.style.display=''; }
-  });
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'The cheapest verified price for each ingredient across six Omaha stores this week. Updates automatically as sales start and end.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(renderCheapest);
 }
 function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
 if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
@@ -143,8 +148,8 @@ foreach ($r in $targets) {
       '<div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="' + [int]$r.servings + '"><button type="button" class="smp-sc-btn" data-d="1">+</button></div>' +
       '<p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul>' +
       '<p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p>' +
-      '<div class="smp-sc-livewrap" style="display:none"><h4 class="smp-sc-liveh">Current cheapest pricing</h4><p class="smp-sc-livesub"></p><ul class="smp-sc-live"></ul></div>' +
-      '<script type="application/json" class="smp-sc-data">' + $dataJson + '</script></div><!--/SMP-SCALER-->'
+      '<script type="application/json" class="smp-sc-data">' + $dataJson + '</script></div>' +
+      '<div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->'
     # strip any prior widget, then prepend the fresh one
     $html = [regex]::Replace($html, '<!--SMP-SCALER-->[\s\S]*?<!--/SMP-SCALER-->', '')
     $html = $widget + $html
