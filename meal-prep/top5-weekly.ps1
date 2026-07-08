@@ -103,16 +103,29 @@ foreach ($pn in $tabs.Keys) {
 $sec += "</div>"
 $first = $true
 foreach ($pn in $tabs.Keys) {
-  $sec += "<ol class='smp-t5-card' data-p='" + $pn + "' style='margin:0;padding-left:2.2rem;" + $(if (-not $first) { "display:none" }) + "'>"
+  $sec += "<ul class='smp-t5-card' data-p='" + $pn + "' style='margin:0;padding:0;list-style:none;" + $(if (-not $first) { "display:none" }) + "'>"
   foreach ($t in $tabs[$pn]) {
-    $saleTxt = if (@($t.sale_items).Count -gt 0) { " <span style='color:#b23b2e;font-weight:700;font-size:1.15rem'>" + @($t.sale_items).Count + " ingredient" + $(if (@($t.sale_items).Count -ne 1) { 's' }) + " on sale</span>" } else { "" }
-    $sec += "<li style='margin:0 0 .9rem;font-size:1.55rem;color:#3a4658'><a href='/" + $t.slug + "/' style='color:#16263F;font-weight:700'>" + ($t.name -replace '&','&amp;' -replace '<','&lt;') + "</a> &middot; <b style='color:#0c5c3b'>$" + ('{0:F2}' -f $t.per_serving) + " a serving</b> &middot; " + $t.calories + " cal ($" + ('{0:F2}' -f $t.week_cost) + " for 14 servings)" + $saleTxt + "</li>"
+    $ps = $byId2[$t.slug].per_serving
+    $nm = ($t.name -replace '&','&amp;' -replace '<','&lt;')
+    # clickable header row + hidden teaser panel (macros + this week's sale ingredients + link to the PAID
+    # full recipe; the ingredient AMOUNTS and method stay behind the paywall on the recipe page)
+    $sec += "<li style='margin:0 0 .7rem;border:1px solid #e5dcc8;border-radius:9px;overflow:hidden;background:#fff'>"
+    $sec += "<div class='smp-t5-row' style='display:flex;justify-content:space-between;align-items:center;gap:10px;padding:.85rem 1.1rem;cursor:pointer'><span style='font-size:1.5rem;color:#16263F;font-weight:700'>" + $nm + "</span><span style='white-space:nowrap;font-size:1.35rem;color:#0c5c3b;font-weight:700'>$" + ('{0:F2}' -f $t.per_serving) + "/serving <span class='smp-t5-car' style='color:#8a94a6;font-weight:700'>+</span></span></div>"
+    $sec += "<div class='smp-t5-det' style='display:none;padding:0 1.1rem 1.1rem;font-size:1.35rem;color:#3a4658'>"
+    $sec += "<div style='display:flex;gap:18px;flex-wrap:wrap;margin:.2rem 0 .8rem'><span><b>" + $t.calories + "</b> cal</span><span><b>" + [int]$ps.protein_g + "g</b> protein</span><span><b>" + [int]$ps.carbs_g + "g</b> carbs</span><span><b>" + [int]$ps.fat_g + "g</b> fat</span></div>"
+    if (@($t.sale_items).Count -gt 0) {
+      $names = (@($t.sale_items) | Select-Object -First 4 | ForEach-Object { $_ -replace '&','&amp;' -replace '<','&lt;' }) -join ', '
+      $sec += "<p style='color:#b23b2e;font-weight:600;margin:0 0 .7rem'>On sale this week: " + $names + "</p>"
+    }
+    $sec += "<p style='color:#64748b;margin:0 0 .9rem'>$" + ('{0:F2}' -f $t.week_cost) + " for the full 14-serving batch.</p>"
+    $sec += "<a href='/" + $t.slug + "/' style='display:inline-block;background:#E2A43C;color:#16263F;font-weight:700;padding:9px 20px;border-radius:999px;text-decoration:none;font-size:1.3rem'>See the full recipe + grocery list &rarr;</a>"
+    $sec += "</div></li>"
   }
-  $sec += "</ol>"
+  $sec += "</ul>"
   $first = $false
 }
-$sec += "<p style='color:#8a94a6;font-size:1.15rem;margin:1.2rem 0 0'>Updated automatically when store prices change. Costs assume the cheapest verified price per ingredient; register totals vary by package size.</p>"
-$sec += "<script>(function(){if(window.__smpT5)return;window.__smpT5=1;document.addEventListener('click',function(e){var b=e.target.closest('.smp-t5-tab');if(!b)return;var p=b.getAttribute('data-p');document.querySelectorAll('.smp-t5-tab').forEach(function(x){var on=x===b;x.style.background=on?'#16263F':'#fff';x.style.color=on?'#fff':'#16263F';});document.querySelectorAll('.smp-t5-card').forEach(function(c){c.style.display=(c.getAttribute('data-p')===p)?'':'none';});});})();</script>"
+$sec += "<p style='color:#8a94a6;font-size:1.15rem;margin:1.2rem 0 0'>Tap any dinner for its macros and this week's sale ingredients. Updated automatically when store prices change; register totals vary by package size.</p>"
+$sec += "<script>(function(){if(window.__smpT5)return;window.__smpT5=1;document.addEventListener('click',function(e){var b=e.target.closest('.smp-t5-tab');if(b){var p=b.getAttribute('data-p');document.querySelectorAll('.smp-t5-tab').forEach(function(x){var on=x===b;x.style.background=on?'#16263F':'#fff';x.style.color=on?'#fff':'#16263F';});document.querySelectorAll('.smp-t5-card').forEach(function(c){c.style.display=(c.getAttribute('data-p')===p)?'':'none';});return;}var row=e.target.closest('.smp-t5-row');if(row){var det=row.parentNode.querySelector('.smp-t5-det');var open=det.style.display!=='none';det.style.display=open?'none':'';var car=row.querySelector('.smp-t5-car');if(car)car.textContent=open?'+':'-';}});})();</script>"
 $sec += "</div><!--/SMP-TOP5-->"
 
 $jwt = New-GhostJWT
