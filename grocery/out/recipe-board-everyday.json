@@ -5524,6 +5524,825 @@
                                               "size":  "4 fl oz"
                                           }
                                       ]
+                       },
+                       {
+                           "id":  "worcestershire-sauce",
+                           "commodity":  "Worcestershire Sauce",
+                           "unit":  "floz",
+                           "category":  "Sauces \u0026 Condiments",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.169,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.169,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Worcestershire Sauce 10 Fl Oz",
+                                              "size":  "10 fl oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "dried-parsley",
+                           "commodity":  "Dried Parsley",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  5.58,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  5.58,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Mc Cormick Parsley Flakes 0.5 Oz",
+                                              "size":  "0.5 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "cayenne-pepper",
+                           "commodity":  "Cayenne Pepper",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  1.8663,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  1.8663,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Lawry\u0027s Ground Cayenne Pepper 1.87 Oz",
+                                              "size":  "1.87 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "vegetable-oil",
+                           "commodity":  "Vegetable Oil",
+                           "unit":  "floz",
+                           "category":  "Oils",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.1248,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.1248,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Vegetable Oil 100% Pure 40 Oz",
+                                              "size":  "40 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "smoked-paprika",
+                           "commodity":  "Smoked Paprika",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.9986,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.9986,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Sugar \u0027N Spice Smoked Paprika 7 Oz",
+                                              "size":  "7 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "feta-cheese",
+                           "commodity":  "Feta Cheese",
+                           "unit":  "oz",
+                           "category":  "Dairy \u0026 Cheese",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.8113,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.8113,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Culinary Tours Feta Chunk Cheese 8 Oz",
+                                              "size":  "8 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "dried-dill",
+                           "commodity":  "Dried Dill",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  4.4464,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  4.4464,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Dill Weed 0.56 Oz",
+                                              "size":  "0.56 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "mozzarella-cheese",
+                           "commodity":  "Mozzarella Cheese",
+                           "unit":  "oz",
+                           "category":  "Dairy \u0026 Cheese",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.2494,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.2494,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Low Moisture Part Skim Mozzarella 16 Oz",
+                                              "size":  "16 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "cucumber",
+                           "commodity":  "Cucumber",
+                           "unit":  "each",
+                           "category":  "Produce",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.89,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.89,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Cucumbers",
+                                              "size":  "1 ea"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "dried-basil",
+                           "commodity":  "Dried Basil",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  4.8226,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  4.8226,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Basil Leaves 0.62 Oz",
+                                              "size":  "0.62 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "apple-cider",
+                           "commodity":  "Apple Cider",
+                           "unit":  "floz",
+                           "category":  "Beverages",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.067,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.067,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Apple Cider Juice 64 Fl Oz",
+                                              "size":  "64 fl oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "celery",
+                           "commodity":  "Celery",
+                           "unit":  "each",
+                           "category":  "Produce",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  2.49,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  2.49,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Celery",
+                                              "size":  "1 ea"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "ground-ginger",
+                           "commodity":  "Ground Ginger",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  2.8063,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  2.8063,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Full Circle Market Ground Ginger 1.6 Oz",
+                                              "size":  "1.6 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "au-jus-gravy-mix",
+                           "commodity":  "Au Jus Gravy Mix",
+                           "unit":  "oz",
+                           "category":  "Sauces \u0026 Condiments",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  1.09,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  1.09,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Au Jus Gravy Mix 1 Oz",
+                                              "size":  "1 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "dried-rosemary",
+                           "commodity":  "Dried Rosemary",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  9.3387,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  9.3387,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Mc Cormick Whole Rosemary Leaves 0.62 Oz",
+                                              "size":  "0.62 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "green-onions",
+                           "commodity":  "Green Onions",
+                           "unit":  "each",
+                           "category":  "Produce",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  1.29,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  1.29,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Green Onions/Scallions",
+                                              "size":  "1 ct"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "ground-coriander",
+                           "commodity":  "Ground Coriander",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  3.2071,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  3.2071,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Full Circle Market Ground Coriander 1.4 Oz",
+                                              "size":  "1.4 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "lemon-juice",
+                           "commodity":  "Lemon Juice",
+                           "unit":  "floz",
+                           "category":  "Beverages",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.1247,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.1247,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Lemon 100% Juice 32 Fl Oz",
+                                              "size":  "32 fl oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "condensed-french-onion-soup",
+                           "commodity":  "Condensed French Onion Soup",
+                           "unit":  "each",
+                           "category":  "Canned \u0026 Jarred",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  1.99,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  1.99,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Campbell\u0027s French Onion Soup 10.5 Oz",
+                                              "size":  "10.5 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "celery-salt",
+                           "commodity":  "Celery Salt",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.4158,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.4158,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Dan\u0027s Pantry Celery Salt 12 Oz",
+                                              "size":  "12 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "sweet-chili-sauce",
+                           "commodity":  "Sweet Chili Sauce",
+                           "unit":  "floz",
+                           "category":  "Sauces \u0026 Condiments",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.3193,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.3193,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "La Choy Sauce, Sweet Chili 15 Oz",
+                                              "size":  "15 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "swiss-cheese",
+                           "commodity":  "Swiss Cheese",
+                           "unit":  "oz",
+                           "category":  "Dairy \u0026 Cheese",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.3238,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.3238,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Natural Swiss Cheese 8 Oz",
+                                              "size":  "8 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "half-and-half",
+                           "commodity":  "Half and Half",
+                           "unit":  "floz",
+                           "category":  "Dairy \u0026 Cheese",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.1369,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.1369,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Half And Half 16 Fl Oz",
+                                              "size":  "16 fl oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "white-wine-vinegar",
+                           "commodity":  "White Wine Vinegar",
+                           "unit":  "floz",
+                           "category":  "Sauces \u0026 Condiments",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.2825,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.2825,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Holland House White Wine Vinegar 12 Fl Oz",
+                                              "size":  "12 fl oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "ground-nutmeg",
+                           "commodity":  "Ground Nutmeg",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  3.0613,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  3.0613,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Nutmeg, Ground 2.12 Oz",
+                                              "size":  "2.12 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "pineapple-juice",
+                           "commodity":  "Pineapple Juice",
+                           "unit":  "floz",
+                           "category":  "Beverages",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.1302,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.1302,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Dole 100% Juice, Pineapple 46 Fl Oz",
+                                              "size":  "46 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "sugar",
+                           "commodity":  "Sugar",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.0903,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.0903,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Sugar, Granulated 32 Oz",
+                                              "size":  "32 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "fish-sauce",
+                           "commodity":  "Fish Sauce",
+                           "unit":  "floz",
+                           "category":  "Sauces \u0026 Condiments",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.9601,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.9601,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Thai Gluten Free Premium Fish Sauce 6.76 Fl Oz",
+                                              "size":  "6.76 fl oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "apple-cider-vinegar",
+                           "commodity":  "Apple Cider Vinegar",
+                           "unit":  "floz",
+                           "category":  "Sauces \u0026 Condiments",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.1119,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.1119,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Apple Cider Vinegar Our Family 16 Fl Oz",
+                                              "size":  "16 fl oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "ground-allspice",
+                           "commodity":  "Ground Allspice",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  3.3167,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  3.3167,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Tone\u0027s Allspice, Ground 0.6 Oz",
+                                              "size":  "0.6 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "cheddar-cheese",
+                           "commodity":  "Cheddar Cheese",
+                           "unit":  "oz",
+                           "category":  "Dairy \u0026 Cheese",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.3238,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.3238,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Natural Medium Cheddar Cheese 8 Oz",
+                                              "size":  "8 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "dried-thyme",
+                           "commodity":  "Dried Thyme",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  3.3333,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  3.3333,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Spice Supreme Thyme Leaves 1.5 Oz",
+                                              "size":  "1.5 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "ground-turmeric",
+                           "commodity":  "Ground Turmeric",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  1.345,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  1.345,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Sugar \u0027N Spice Turmeric Ground 2 Oz",
+                                              "size":  "2 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "red-pepper-flakes",
+                           "commodity":  "Red Pepper Flakes",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  1.9933,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  1.9933,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Red Pepper, Crushed 1.5 Oz",
+                                              "size":  "1.5 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "all-purpose-flour",
+                           "commodity":  "All-Purpose Flour",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.0374,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.0374,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family All Purpose Flour, Unbleached 5 Lb",
+                                              "size":  "5 lb"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "sriracha",
+                           "commodity":  "Sriracha",
+                           "unit":  "floz",
+                           "category":  "Sauces \u0026 Condiments",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.3524,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.3524,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Tuong Ot Sriracha Hot Chili Sauce 17 Oz",
+                                              "size":  "17 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "breadcrumbs",
+                           "commodity":  "Panko Breadcrumbs",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.3488,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.3488,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Bread Crumbs, Panko, Plain 8 Oz",
+                                              "size":  "8 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "frozen-peas",
+                           "commodity":  "Frozen Peas",
+                           "unit":  "oz",
+                           "category":  "Frozen",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.1158,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.1158,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Green Peas, Sweet, Frozen 12 Oz",
+                                              "size":  "12 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "ground-cinnamon",
+                           "commodity":  "Ground Cinnamon",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.676,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.676,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "That\u0027s Smart! Ground Cinnamon 2.5 Oz",
+                                              "size":  "2.5 oz"
+                                          }
+                                      ]
                        }
                    ],
     "built_at":  "2026-07-07",

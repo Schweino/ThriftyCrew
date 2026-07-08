@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-07-08T16:31:23",
+    "generated":  "2026-07-08T18:42:33",
     "week_of":  "2026-07-08",
-    "ingredient_count":  142,
+    "ingredient_count":  181,
     "recipe_count":  113,
     "ingredients":  {
                         "ground-beef-8020":  {
@@ -1139,14 +1139,326 @@
                                              "type":  "everyday",
                                              "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/marinades/colgin_original_recipe_hickory_liquid_smoke_4_fl_oz/p/38455",
                                              "n":  1
-                                         }
+                                         },
+                        "worcestershire-sauce":  {
+                                                     "unit":  "floz",
+                                                     "cheapest":  0.169,
+                                                     "store":  "Family Fare",
+                                                     "type":  "everyday",
+                                                     "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/other_sauce/our_family_worcestershire_sauce_10_fl_oz/p/7081427",
+                                                     "n":  1
+                                                 },
+                        "dried-parsley":  {
+                                              "unit":  "oz",
+                                              "cheapest":  5.58,
+                                              "store":  "Family Fare",
+                                              "type":  "everyday",
+                                              "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/mc_cormick_parsley_flakes_0_5_oz/p/34845",
+                                              "n":  1
+                                          },
+                        "cayenne-pepper":  {
+                                               "unit":  "oz",
+                                               "cheapest":  1.8663,
+                                               "store":  "Family Fare",
+                                               "type":  "everyday",
+                                               "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/lawry_s_ground_cayenne_pepper_1_87_oz/p/1564405684713605868",
+                                               "n":  1
+                                           },
+                        "vegetable-oil":  {
+                                              "unit":  "floz",
+                                              "cheapest":  0.1248,
+                                              "store":  "Family Fare",
+                                              "type":  "everyday",
+                                              "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/oils_sprays/our_family_vegetable_oil_100_pure/p/1564405684714575888",
+                                              "n":  1
+                                          },
+                        "smoked-paprika":  {
+                                               "unit":  "oz",
+                                               "cheapest":  0.9986,
+                                               "store":  "Family Fare",
+                                               "type":  "everyday",
+                                               "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/sugar_n_spice_smoked_paprika/p/1564405684715649387",
+                                               "n":  1
+                                           },
+                        "feta-cheese":  {
+                                            "unit":  "oz",
+                                            "cheapest":  0.8113,
+                                            "store":  "Family Fare",
+                                            "type":  "everyday",
+                                            "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/artisan_specialty/culinary_tours_feta_chunk_cheese/p/1564405684711368503",
+                                            "n":  1
+                                        },
+                        "dried-dill":  {
+                                           "unit":  "oz",
+                                           "cheapest":  4.4464,
+                                           "store":  "Family Fare",
+                                           "type":  "everyday",
+                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/our_family_dill_weed_0_56_oz/p/1564405684702629730",
+                                           "n":  1
+                                       },
+                        "mozzarella-cheese":  {
+                                                  "unit":  "oz",
+                                                  "cheapest":  0.2494,
+                                                  "store":  "Family Fare",
+                                                  "type":  "everyday",
+                                                  "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/blocks_wedges/our_family_low_moisture_part_skim_natural_mozzarella_cheese_16_oz/p/7081803",
+                                                  "n":  1
+                                              },
+                        "cucumber":  {
+                                         "unit":  "each",
+                                         "cheapest":  0.89,
+                                         "store":  "Family Fare",
+                                         "type":  "everyday",
+                                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/other_vegetables/fresh_cucumbers/p/12432",
+                                         "n":  1
+                                     },
+                        "dried-basil":  {
+                                            "unit":  "oz",
+                                            "cheapest":  4.8226,
+                                            "store":  "Family Fare",
+                                            "type":  "everyday",
+                                            "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/our_family_basil_leaves_0_62_oz/p/1564405684702629729",
+                                            "n":  1
+                                        },
+                        "apple-cider":  {
+                                            "unit":  "floz",
+                                            "cheapest":  0.067,
+                                            "store":  "Family Fare",
+                                            "type":  "everyday",
+                                            "url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/apple_cider/our_family_apple_cider_juice_64_fl_oz/p/8092393",
+                                            "n":  1
+                                        },
+                        "celery":  {
+                                       "unit":  "each",
+                                       "cheapest":  2.49,
+                                       "store":  "Family Fare",
+                                       "type":  "everyday",
+                                       "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/celery/fresh_celery/p/2311267",
+                                       "n":  1
+                                   },
+                        "ground-ginger":  {
+                                              "unit":  "oz",
+                                              "cheapest":  2.8063,
+                                              "store":  "Family Fare",
+                                              "type":  "everyday",
+                                              "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/full_circle_market_ground_ginger_1_6_oz/p/599157",
+                                              "n":  1
+                                          },
+                        "au-jus-gravy-mix":  {
+                                                 "unit":  "oz",
+                                                 "cheapest":  1.09,
+                                                 "store":  "Family Fare",
+                                                 "type":  "everyday",
+                                                 "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_sauces_gravies/our_family_au_jus_gravy_mix_1_oz/p/1564405684715672213",
+                                                 "n":  1
+                                             },
+                        "dried-rosemary":  {
+                                               "unit":  "oz",
+                                               "cheapest":  9.3387,
+                                               "store":  "Family Fare",
+                                               "type":  "everyday",
+                                               "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/mc_cormick_whole_rosemary_leaves_0_62_oz/p/1564405684703136649",
+                                               "n":  1
+                                           },
+                        "green-onions":  {
+                                             "unit":  "each",
+                                             "cheapest":  1.29,
+                                             "store":  "Family Fare",
+                                             "type":  "everyday",
+                                             "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/fresh_green_onions_scallions/p/111459",
+                                             "n":  1
+                                         },
+                        "ground-coriander":  {
+                                                 "unit":  "oz",
+                                                 "cheapest":  3.2071,
+                                                 "store":  "Family Fare",
+                                                 "type":  "everyday",
+                                                 "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/full_circle_market_ground_coriander_1_4_oz/p/570375",
+                                                 "n":  1
+                                             },
+                        "lemon-juice":  {
+                                            "unit":  "floz",
+                                            "cheapest":  0.1247,
+                                            "store":  "Family Fare",
+                                            "type":  "everyday",
+                                            "url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/lemon_lime/our_family_lemon_100_juice_32_fl_oz/p/6786892",
+                                            "n":  1
+                                        },
+                        "condensed-french-onion-soup":  {
+                                                            "unit":  "each",
+                                                            "cheapest":  1.99,
+                                                            "store":  "Family Fare",
+                                                            "type":  "everyday",
+                                                            "url":  "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/condensed_soups/campbell_s_french_onion_soup_10_500_oz/p/33857",
+                                                            "n":  1
+                                                        },
+                        "celery-salt":  {
+                                            "unit":  "oz",
+                                            "cheapest":  0.4158,
+                                            "store":  "Family Fare",
+                                            "type":  "everyday",
+                                            "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/dan_s_pantry_celery_salt/p/5782384",
+                                            "n":  1
+                                        },
+                        "sweet-chili-sauce":  {
+                                                  "unit":  "floz",
+                                                  "cheapest":  0.3193,
+                                                  "store":  "Family Fare",
+                                                  "type":  "everyday",
+                                                  "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/asian_sauce/la_choy_sauce_sweet_chili_15_oz/p/1564405684704769747",
+                                                  "n":  1
+                                              },
+                        "swiss-cheese":  {
+                                             "unit":  "oz",
+                                             "cheapest":  0.3238,
+                                             "store":  "Family Fare",
+                                             "type":  "everyday",
+                                             "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/blocks_wedges/our_family_natural_swiss_cheese_8_oz/p/7081814",
+                                             "n":  1
+                                         },
+                        "half-and-half":  {
+                                              "unit":  "floz",
+                                              "cheapest":  0.1369,
+                                              "store":  "Family Fare",
+                                              "type":  "everyday",
+                                              "url":  "https://www.shopfamilyfare.com/shop/dairy/cream_half_half/our_family_half_and_half_16_fl_oz/p/7081137",
+                                              "n":  1
+                                          },
+                        "white-wine-vinegar":  {
+                                                   "unit":  "floz",
+                                                   "cheapest":  0.2825,
+                                                   "store":  "Family Fare",
+                                                   "type":  "everyday",
+                                                   "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/holland_house_white_wine_vinegar_12_fl_oz/p/40495",
+                                                   "n":  1
+                                               },
+                        "ground-nutmeg":  {
+                                              "unit":  "oz",
+                                              "cheapest":  3.0613,
+                                              "store":  "Family Fare",
+                                              "type":  "everyday",
+                                              "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/our_family_nutmeg_ground_2_12_oz/p/7194337",
+                                              "n":  1
+                                          },
+                        "pineapple-juice":  {
+                                                "unit":  "floz",
+                                                "cheapest":  0.1302,
+                                                "store":  "Family Fare",
+                                                "type":  "everyday",
+                                                "url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/other_juice/dole_100_juice_pineapple_46_fl_oz/p/26657",
+                                                "n":  1
+                                            },
+                        "sugar":  {
+                                      "unit":  "oz",
+                                      "cheapest":  0.0903,
+                                      "store":  "Family Fare",
+                                      "type":  "everyday",
+                                      "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/sweeteners/our_family_sugar_granulated_32_oz/p/6787181",
+                                      "n":  1
+                                  },
+                        "fish-sauce":  {
+                                           "unit":  "floz",
+                                           "cheapest":  0.9601,
+                                           "store":  "Family Fare",
+                                           "type":  "everyday",
+                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/asian_sauce/thai_gluten_free_premium_fish_sauce_6_76_fl_oz/p/6826",
+                                           "n":  1
+                                       },
+                        "apple-cider-vinegar":  {
+                                                    "unit":  "floz",
+                                                    "cheapest":  0.1119,
+                                                    "store":  "Family Fare",
+                                                    "type":  "everyday",
+                                                    "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/apple_cider_vinegar_our_family/p/7081446",
+                                                    "n":  1
+                                                },
+                        "ground-allspice":  {
+                                                "unit":  "oz",
+                                                "cheapest":  3.3167,
+                                                "store":  "Family Fare",
+                                                "type":  "everyday",
+                                                "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/tone_s_allspice_ground_0_6_oz/p/235148",
+                                                "n":  1
+                                            },
+                        "cheddar-cheese":  {
+                                               "unit":  "oz",
+                                               "cheapest":  0.3238,
+                                               "store":  "Family Fare",
+                                               "type":  "everyday",
+                                               "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/blocks_wedges/our_family_natural_medium_cheddar_cheese_8_oz/p/6787418",
+                                               "n":  1
+                                           },
+                        "dried-thyme":  {
+                                            "unit":  "oz",
+                                            "cheapest":  3.3333,
+                                            "store":  "Family Fare",
+                                            "type":  "everyday",
+                                            "url":  "https://www.shopfamilyfare.com/shop/seasonal_special_occasion/trial_sizes_store/spice_supreme_thyme_leaves/p/2400931",
+                                            "n":  1
+                                        },
+                        "ground-turmeric":  {
+                                                "unit":  "oz",
+                                                "cheapest":  1.345,
+                                                "store":  "Family Fare",
+                                                "type":  "everyday",
+                                                "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/sugar_n_spice_turmeric_ground_pp/p/1564405684701720785",
+                                                "n":  1
+                                            },
+                        "red-pepper-flakes":  {
+                                                  "unit":  "oz",
+                                                  "cheapest":  1.9933,
+                                                  "store":  "Family Fare",
+                                                  "type":  "everyday",
+                                                  "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/our_family_red_pepper_crushed_1_5_oz/p/7081493",
+                                                  "n":  1
+                                              },
+                        "all-purpose-flour":  {
+                                                  "unit":  "oz",
+                                                  "cheapest":  0.0374,
+                                                  "store":  "Family Fare",
+                                                  "type":  "everyday",
+                                                  "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/flour/our_family_all_purpose_flour_unbleached_5_lb/p/7081510",
+                                                  "n":  1
+                                              },
+                        "sriracha":  {
+                                         "unit":  "floz",
+                                         "cheapest":  0.3524,
+                                         "store":  "Family Fare",
+                                         "type":  "everyday",
+                                         "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/hot_sauce/tuong_ot_sriracha_hot_chili_sauce_17_oz/p/19740",
+                                         "n":  1
+                                     },
+                        "breadcrumbs":  {
+                                            "unit":  "oz",
+                                            "cheapest":  0.3488,
+                                            "store":  "Family Fare",
+                                            "type":  "everyday",
+                                            "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/other_baking_necessities/our_family_bread_crumbs_panko_plain_8_oz/p/1564405684711668357",
+                                            "n":  1
+                                        },
+                        "frozen-peas":  {
+                                            "unit":  "oz",
+                                            "cheapest":  0.1158,
+                                            "store":  "Family Fare",
+                                            "type":  "everyday",
+                                            "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_vegetables/other_vegetables/our_family_green_peas_sweet_fresh_frozen_12_oz/p/1564405684703626585",
+                                            "n":  1
+                                        },
+                        "ground-cinnamon":  {
+                                                "unit":  "oz",
+                                                "cheapest":  0.676,
+                                                "store":  "Family Fare",
+                                                "type":  "everyday",
+                                                "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/that_s_smart_ground_cinnamon/p/1564405684704741127",
+                                                "n":  1
+                                            }
                     },
     "recipes":  {
                     "hot-honey-chicken-bowls":  {
                                                     "name":  "Hot Honey Chicken and Broccoli Bowls",
                                                     "servings":  14,
-                                                    "week_cost":  17.99,
-                                                    "per_serving":  1.28,
+                                                    "week_cost":  19.6,
+                                                    "per_serving":  1.4,
                                                     "calories":  357,
                                                     "sale_items":  [
 
@@ -1155,8 +1467,8 @@
                     "bbq-chicken-rice-bowls":  {
                                                    "name":  "Lean BBQ Chicken and Rice Bowls",
                                                    "servings":  14,
-                                                   "week_cost":  19.85,
-                                                   "per_serving":  1.42,
+                                                   "week_cost":  20.59,
+                                                   "per_serving":  1.47,
                                                    "calories":  380,
                                                    "sale_items":  [
 
@@ -1182,66 +1494,46 @@
 
                                                                         ]
                                                      },
-                    "slow-cooker-pork-tinga-bowls":  {
-                                                         "name":  "Slow Cooker Pork Tinga Bowls",
-                                                         "servings":  14,
-                                                         "week_cost":  22.34,
-                                                         "per_serving":  1.6,
-                                                         "calories":  569,
-                                                         "sale_items":  [
-
-                                                                        ]
-                                                     },
                     "italian-sausage-penne":  {
                                                   "name":  "Italian Sausage Penne with Peppers",
                                                   "servings":  14,
-                                                  "week_cost":  23.12,
-                                                  "per_serving":  1.65,
+                                                  "week_cost":  23.82,
+                                                  "per_serving":  1.7,
                                                   "calories":  394,
                                                   "sale_items":  [
 
                                                                  ]
                                               },
-                    "chicken-parmesan-pasta":  {
-                                                   "name":  "Chicken Parmesan Pasta",
-                                                   "servings":  14,
-                                                   "week_cost":  23.65,
-                                                   "per_serving":  1.69,
-                                                   "calories":  403,
-                                                   "sale_items":  [
+                    "slow-cooker-pork-tinga-bowls":  {
+                                                         "name":  "Slow Cooker Pork Tinga Bowls",
+                                                         "servings":  14,
+                                                         "week_cost":  23.87,
+                                                         "per_serving":  1.7,
+                                                         "calories":  569,
+                                                         "sale_items":  [
 
-                                                                  ]
-                                               },
-                    "slow-cooker-honey-garlic-pork-bowls":  {
-                                                                "name":  "Slow Cooker Honey Garlic Pork Bowls",
-                                                                "servings":  14,
-                                                                "week_cost":  23.82,
-                                                                "per_serving":  1.7,
-                                                                "calories":  586,
-                                                                "sale_items":  [
-
-                                                                               ]
-                                                            },
+                                                                        ]
+                                                     },
                     "chicken-enchilada-rice-bowls":  {
                                                          "name":  "Chicken Enchilada Rice Bowls",
                                                          "servings":  14,
-                                                         "week_cost":  24.49,
+                                                         "week_cost":  24.5,
                                                          "per_serving":  1.75,
                                                          "calories":  426,
                                                          "sale_items":  [
 
                                                                         ]
                                                      },
-                    "slow-cooker-char-siu-pork-bowls":  {
-                                                            "name":  "Slow Cooker Char Siu Pork Bowls",
-                                                            "servings":  14,
-                                                            "week_cost":  24.63,
-                                                            "per_serving":  1.76,
-                                                            "calories":  562,
-                                                            "sale_items":  [
+                    "slow-cooker-honey-garlic-pork-bowls":  {
+                                                                "name":  "Slow Cooker Honey Garlic Pork Bowls",
+                                                                "servings":  14,
+                                                                "week_cost":  24.8,
+                                                                "per_serving":  1.77,
+                                                                "calories":  586,
+                                                                "sale_items":  [
 
-                                                                           ]
-                                                        },
+                                                                               ]
+                                                            },
                     "slow-cooker-korean-gochujang-pork-bowls":  {
                                                                     "name":  "Slow Cooker Korean Gochujang Pork Bowls",
                                                                     "servings":  14,
@@ -1252,120 +1544,90 @@
 
                                                                                    ]
                                                                 },
-                    "slow-cooker-brown-sugar-sesame-pork-bowls":  {
-                                                                      "name":  "Slow Cooker Brown Sugar Sesame Pork Bowls",
-                                                                      "servings":  14,
-                                                                      "week_cost":  25.37,
-                                                                      "per_serving":  1.81,
-                                                                      "calories":  607,
-                                                                      "sale_items":  [
+                    "slow-cooker-char-siu-pork-bowls":  {
+                                                            "name":  "Slow Cooker Char Siu Pork Bowls",
+                                                            "servings":  14,
+                                                            "week_cost":  25.32,
+                                                            "per_serving":  1.81,
+                                                            "calories":  562,
+                                                            "sale_items":  [
 
-                                                                                     ]
-                                                                  },
-                    "slow-cooker-pork-carnitas-bowl":  {
-                                                           "name":  "Pork Carnitas Burrito Bowl",
-                                                           "servings":  14,
-                                                           "week_cost":  25.91,
-                                                           "per_serving":  1.85,
-                                                           "calories":  551,
-                                                           "sale_items":  [
-
-                                                                          ]
-                                                       },
+                                                                           ]
+                                                        },
                     "slow-cooker-filipino-pork-adobo-bowls":  {
                                                                   "name":  "Slow Cooker Filipino Pork Adobo Bowls",
                                                                   "servings":  14,
-                                                                  "week_cost":  26.32,
+                                                                  "week_cost":  26.39,
                                                                   "per_serving":  1.88,
                                                                   "calories":  576,
                                                                   "sale_items":  [
 
                                                                                  ]
                                                               },
+                    "slow-cooker-pork-carnitas-bowl":  {
+                                                           "name":  "Pork Carnitas Burrito Bowl",
+                                                           "servings":  14,
+                                                           "week_cost":  26.62,
+                                                           "per_serving":  1.9,
+                                                           "calories":  551,
+                                                           "sale_items":  [
+
+                                                                          ]
+                                                       },
                     "slow-cooker-jerk-pork-bowls":  {
                                                         "name":  "Slow Cooker Jerk Pork Bowls",
                                                         "servings":  14,
-                                                        "week_cost":  26.38,
-                                                        "per_serving":  1.88,
+                                                        "week_cost":  26.7,
+                                                        "per_serving":  1.91,
                                                         "calories":  597,
                                                         "sale_items":  [
 
                                                                        ]
                                                     },
-                    "slow-cooker-pork-green-chili-bowls":  {
-                                                               "name":  "Slow Cooker Pork Green Chili Bowls",
-                                                               "servings":  14,
-                                                               "week_cost":  26.82,
-                                                               "per_serving":  1.92,
-                                                               "calories":  558,
-                                                               "sale_items":  [
+                    "slow-cooker-brown-sugar-sesame-pork-bowls":  {
+                                                                      "name":  "Slow Cooker Brown Sugar Sesame Pork Bowls",
+                                                                      "servings":  14,
+                                                                      "week_cost":  27.01,
+                                                                      "per_serving":  1.93,
+                                                                      "calories":  607,
+                                                                      "sale_items":  [
 
-                                                                              ]
-                                                           },
+                                                                                     ]
+                                                                  },
+                    "chicken-parmesan-pasta":  {
+                                                   "name":  "Chicken Parmesan Pasta",
+                                                   "servings":  14,
+                                                   "week_cost":  27.26,
+                                                   "per_serving":  1.95,
+                                                   "calories":  403,
+                                                   "sale_items":  [
+
+                                                                  ]
+                                               },
                     "slow-cooker-honey-sesame-chicken-bowls":  {
                                                                    "name":  "Slow Cooker Honey Sesame Chicken Bowls",
                                                                    "servings":  14,
-                                                                   "week_cost":  27.32,
-                                                                   "per_serving":  1.95,
+                                                                   "week_cost":  27.37,
+                                                                   "per_serving":  1.96,
                                                                    "calories":  562,
                                                                    "sale_items":  [
 
                                                                                   ]
                                                                },
-                    "slow-cooker-orange-chicken-rice-bowls":  {
-                                                                  "name":  "Slow Cooker Orange Chicken Rice Bowls",
-                                                                  "servings":  14,
-                                                                  "week_cost":  27.51,
-                                                                  "per_serving":  1.96,
-                                                                  "calories":  567,
-                                                                  "sale_items":  [
-
-                                                                                 ]
-                                                              },
                     "slow-cooker-dr-pepper-pulled-pork-bowls":  {
                                                                     "name":  "Slow Cooker Dr Pepper Pulled Pork Bowls",
                                                                     "servings":  14,
-                                                                    "week_cost":  27.58,
-                                                                    "per_serving":  1.97,
+                                                                    "week_cost":  27.69,
+                                                                    "per_serving":  1.98,
                                                                     "calories":  557,
                                                                     "sale_items":  [
 
                                                                                    ]
                                                                 },
-                    "slow-cooker-general-tso-chicken-bowls":  {
-                                                                  "name":  "Slow Cooker General Tso\u0027s Chicken Bowls",
-                                                                  "servings":  14,
-                                                                  "week_cost":  27.82,
-                                                                  "per_serving":  1.99,
-                                                                  "calories":  567,
-                                                                  "sale_items":  [
-
-                                                                                 ]
-                                                              },
-                    "slow-cooker-butter-chicken-rice-bowls":  {
-                                                                  "name":  "Slow Cooker Butter Chicken Rice Bowls",
-                                                                  "servings":  14,
-                                                                  "week_cost":  28.01,
-                                                                  "per_serving":  2,
-                                                                  "calories":  592,
-                                                                  "sale_items":  [
-
-                                                                                 ]
-                                                              },
-                    "slow-cooker-apple-cider-pork-bowls":  {
-                                                               "name":  "Slow Cooker Apple Cider Pork Bowls",
-                                                               "servings":  14,
-                                                               "week_cost":  28.11,
-                                                               "per_serving":  2.01,
-                                                               "calories":  562,
-                                                               "sale_items":  [
-
-                                                                              ]
-                                                           },
                     "slow-cooker-ranch-pork-potato-bowls":  {
                                                                 "name":  "Slow Cooker Ranch Pork and Potato Bowls",
                                                                 "servings":  14,
-                                                                "week_cost":  28.22,
+                                                                "week_cost":  28.33,
                                                                 "per_serving":  2.02,
                                                                 "calories":  551,
                                                                 "sale_items":  [
@@ -1375,153 +1637,93 @@
                     "slow-cooker-chicken-curry-rice-bowls":  {
                                                                  "name":  "Slow Cooker Chicken Curry Rice Bowls",
                                                                  "servings":  14,
-                                                                 "week_cost":  28.47,
-                                                                 "per_serving":  2.03,
+                                                                 "week_cost":  28.64,
+                                                                 "per_serving":  2.05,
                                                                  "calories":  568,
                                                                  "sale_items":  [
 
                                                                                 ]
                                                              },
-                    "slow-cooker-chicken-tortilla-soup-bowls":  {
-                                                                    "name":  "Slow Cooker Chicken Tortilla Soup Bowls",
-                                                                    "servings":  14,
-                                                                    "week_cost":  28.95,
-                                                                    "per_serving":  2.07,
-                                                                    "calories":  559,
-                                                                    "sale_items":  [
+                    "slow-cooker-orange-chicken-rice-bowls":  {
+                                                                  "name":  "Slow Cooker Orange Chicken Rice Bowls",
+                                                                  "servings":  14,
+                                                                  "week_cost":  28.85,
+                                                                  "per_serving":  2.06,
+                                                                  "calories":  567,
+                                                                  "sale_items":  [
 
-                                                                                   ]
-                                                                },
-                    "slow-cooker-chicken-korma-rice-bowls":  {
-                                                                 "name":  "Slow Cooker Chicken Korma Rice Bowls",
-                                                                 "servings":  14,
-                                                                 "week_cost":  29.1,
-                                                                 "per_serving":  2.08,
-                                                                 "calories":  584,
-                                                                 "sale_items":  [
+                                                                                 ]
+                                                              },
+                    "slow-cooker-general-tso-chicken-bowls":  {
+                                                                  "name":  "Slow Cooker General Tso\u0027s Chicken Bowls",
+                                                                  "servings":  14,
+                                                                  "week_cost":  29.52,
+                                                                  "per_serving":  2.11,
+                                                                  "calories":  567,
+                                                                  "sale_items":  [
 
-                                                                                ]
-                                                             },
+                                                                                 ]
+                                                              },
                     "slow-cooker-pulled-pork-bowl":  {
                                                          "name":  "BBQ Pulled Pork Rice Bowl",
                                                          "servings":  14,
-                                                         "week_cost":  29.36,
-                                                         "per_serving":  2.1,
+                                                         "week_cost":  29.9,
+                                                         "per_serving":  2.14,
                                                          "calories":  512,
                                                          "sale_items":  [
 
                                                                         ]
                                                      },
+                    "slow-cooker-apple-cider-pork-bowls":  {
+                                                               "name":  "Slow Cooker Apple Cider Pork Bowls",
+                                                               "servings":  14,
+                                                               "week_cost":  30.14,
+                                                               "per_serving":  2.15,
+                                                               "calories":  562,
+                                                               "sale_items":  [
+
+                                                                              ]
+                                                           },
                     "slow-cooker-italian-pork-loin-bowls":  {
                                                                 "name":  "Slow Cooker Italian Pork and White Bean Bowls",
                                                                 "servings":  14,
-                                                                "week_cost":  30.23,
+                                                                "week_cost":  30.25,
                                                                 "per_serving":  2.16,
                                                                 "calories":  593,
                                                                 "sale_items":  [
 
                                                                                ]
                                                             },
-                    "slow-cooker-chicken-tagine-bowls":  {
-                                                             "name":  "Slow Cooker Chicken Tagine Bowls",
-                                                             "servings":  14,
-                                                             "week_cost":  30.36,
-                                                             "per_serving":  2.17,
-                                                             "calories":  567,
-                                                             "sale_items":  [
-
-                                                                            ]
-                                                         },
                     "cheesy-beef-broccoli-bowls":  {
                                                        "name":  "Cheesy Beef and Broccoli Rice Bowls",
                                                        "servings":  14,
-                                                       "week_cost":  31.1,
-                                                       "per_serving":  2.22,
+                                                       "week_cost":  31.46,
+                                                       "per_serving":  2.25,
                                                        "calories":  389,
                                                        "sale_items":  [
 
                                                                       ]
                                                    },
-                    "slow-cooker-king-ranch-chicken-bowls":  {
-                                                                 "name":  "Slow Cooker King Ranch Chicken Bowls",
+                    "slow-cooker-chicken-korma-rice-bowls":  {
+                                                                 "name":  "Slow Cooker Chicken Korma Rice Bowls",
                                                                  "servings":  14,
-                                                                 "week_cost":  31.16,
-                                                                 "per_serving":  2.23,
-                                                                 "calories":  567,
+                                                                 "week_cost":  31.47,
+                                                                 "per_serving":  2.25,
+                                                                 "calories":  584,
                                                                  "sale_items":  [
 
                                                                                 ]
                                                              },
-                    "slow-cooker-cilantro-lime-chicken-bowls":  {
-                                                                    "name":  "Slow Cooker Cilantro Lime Chicken Bowls",
-                                                                    "servings":  14,
-                                                                    "week_cost":  31.48,
-                                                                    "per_serving":  2.25,
-                                                                    "calories":  578,
-                                                                    "sale_items":  [
-
-                                                                                   ]
-                                                                },
-                    "slow-cooker-mediterranean-chicken-bowls":  {
-                                                                    "name":  "Slow Cooker Mediterranean Chicken Bowls",
-                                                                    "servings":  14,
-                                                                    "week_cost":  31.58,
-                                                                    "per_serving":  2.26,
-                                                                    "calories":  562,
-                                                                    "sale_items":  [
-
-                                                                                   ]
-                                                                },
-                    "slow-cooker-chicken-tinga-bowls":  {
-                                                            "name":  "Slow Cooker Chicken Tinga Bowls",
-                                                            "servings":  14,
-                                                            "week_cost":  31.71,
-                                                            "per_serving":  2.26,
-                                                            "calories":  560,
-                                                            "sale_items":  [
-
-                                                                           ]
-                                                        },
                     "slow-cooker-bbq-pulled-chicken-bowls":  {
                                                                  "name":  "Slow Cooker BBQ Pulled Chicken Bowls",
                                                                  "servings":  14,
-                                                                 "week_cost":  31.95,
-                                                                 "per_serving":  2.28,
+                                                                 "week_cost":  32.06,
+                                                                 "per_serving":  2.29,
                                                                  "calories":  574,
                                                                  "sale_items":  [
 
                                                                                 ]
                                                              },
-                    "slow-cooker-buffalo-chicken-bowl":  {
-                                                             "name":  "Slow Cooker Buffalo Chicken and Rice Bowl",
-                                                             "servings":  14,
-                                                             "week_cost":  32,
-                                                             "per_serving":  2.29,
-                                                             "calories":  513,
-                                                             "sale_items":  [
-
-                                                                            ]
-                                                         },
-                    "slow-cooker-salsa-verde-chicken-bowl":  {
-                                                                 "name":  "Salsa Verde Chicken Burrito Bowl",
-                                                                 "servings":  14,
-                                                                 "week_cost":  32.07,
-                                                                 "per_serving":  2.29,
-                                                                 "calories":  543,
-                                                                 "sale_items":  [
-
-                                                                                ]
-                                                             },
-                    "turkey-bolognese-penne":  {
-                                                   "name":  "Turkey Bolognese Penne",
-                                                   "servings":  14,
-                                                   "week_cost":  32.08,
-                                                   "per_serving":  2.29,
-                                                   "calories":  418,
-                                                   "sale_items":  [
-
-                                                                  ]
-                                               },
                     "slow-cooker-salsa-chicken-bowl":  {
                                                            "name":  "Slow Cooker Salsa Chicken Burrito Bowl",
                                                            "servings":  14,
@@ -1532,6 +1734,16 @@
 
                                                                           ]
                                                        },
+                    "slow-cooker-chicken-tinga-bowls":  {
+                                                            "name":  "Slow Cooker Chicken Tinga Bowls",
+                                                            "servings":  14,
+                                                            "week_cost":  32.24,
+                                                            "per_serving":  2.3,
+                                                            "calories":  560,
+                                                            "sale_items":  [
+
+                                                                           ]
+                                                        },
                     "slow-cooker-pork-posole-verde-bowls":  {
                                                                 "name":  "Slow Cooker Pork Posole Verde Bowls",
                                                                 "servings":  14,
@@ -1542,186 +1754,216 @@
 
                                                                                ]
                                                             },
-                    "slow-cooker-chicken-shawarma-bowls":  {
-                                                               "name":  "Slow Cooker Chicken Shawarma Bowls",
-                                                               "servings":  14,
-                                                               "week_cost":  32.66,
-                                                               "per_serving":  2.33,
-                                                               "calories":  585,
-                                                               "sale_items":  [
+                    "slow-cooker-butter-chicken-rice-bowls":  {
+                                                                  "name":  "Slow Cooker Butter Chicken Rice Bowls",
+                                                                  "servings":  14,
+                                                                  "week_cost":  32.32,
+                                                                  "per_serving":  2.31,
+                                                                  "calories":  592,
+                                                                  "sale_items":  [
 
-                                                                              ]
-                                                           },
-                    "slow-cooker-chicken-saag-rice-bowls":  {
-                                                                "name":  "Slow Cooker Chicken Saag Rice Bowls",
-                                                                "servings":  14,
-                                                                "week_cost":  32.68,
-                                                                "per_serving":  2.33,
-                                                                "calories":  565,
-                                                                "sale_items":  [
+                                                                                 ]
+                                                              },
+                    "slow-cooker-chicken-tagine-bowls":  {
+                                                             "name":  "Slow Cooker Chicken Tagine Bowls",
+                                                             "servings":  14,
+                                                             "week_cost":  32.68,
+                                                             "per_serving":  2.33,
+                                                             "calories":  567,
+                                                             "sale_items":  [
 
-                                                                               ]
-                                                            },
+                                                                            ]
+                                                         },
                     "slow-cooker-kung-pao-chicken-bowls":  {
                                                                "name":  "Slow Cooker Kung Pao Chicken Bowls",
                                                                "servings":  14,
-                                                               "week_cost":  32.79,
-                                                               "per_serving":  2.34,
+                                                               "week_cost":  33.17,
+                                                               "per_serving":  2.37,
                                                                "calories":  576,
                                                                "sale_items":  [
 
                                                                               ]
                                                            },
-                    "slow-cooker-chicken-gyro-bowls":  {
-                                                           "name":  "Slow Cooker Chicken Gyro Bowls",
-                                                           "servings":  14,
-                                                           "week_cost":  32.81,
-                                                           "per_serving":  2.34,
-                                                           "calories":  573,
-                                                           "sale_items":  [
+                    "slow-cooker-buffalo-chicken-bowl":  {
+                                                             "name":  "Slow Cooker Buffalo Chicken and Rice Bowl",
+                                                             "servings":  14,
+                                                             "week_cost":  33.37,
+                                                             "per_serving":  2.38,
+                                                             "calories":  513,
+                                                             "sale_items":  [
 
-                                                                          ]
-                                                       },
-                    "slow-cooker-mongolian-chicken-bowls":  {
-                                                                "name":  "Slow Cooker Mongolian Chicken Bowls",
-                                                                "servings":  14,
-                                                                "week_cost":  32.82,
-                                                                "per_serving":  2.34,
-                                                                "calories":  564,
-                                                                "sale_items":  [
-
-                                                                               ]
-                                                            },
+                                                                            ]
+                                                         },
                     "slow-cooker-chicken-tacos-rice-bowls":  {
                                                                  "name":  "Slow Cooker Chicken Taco Rice Bowls",
                                                                  "servings":  14,
-                                                                 "week_cost":  33.1,
-                                                                 "per_serving":  2.36,
+                                                                 "week_cost":  33.85,
+                                                                 "per_serving":  2.42,
                                                                  "calories":  560,
                                                                  "sale_items":  [
 
                                                                                 ]
                                                              },
-                    "turkey-taco-rice-skillet":  {
-                                                     "name":  "Turkey Taco Rice Skillet",
-                                                     "servings":  14,
-                                                     "week_cost":  33.11,
-                                                     "per_serving":  2.36,
-                                                     "calories":  488,
-                                                     "sale_items":  [
+                    "slow-cooker-cilantro-lime-chicken-bowls":  {
+                                                                    "name":  "Slow Cooker Cilantro Lime Chicken Bowls",
+                                                                    "servings":  14,
+                                                                    "week_cost":  33.99,
+                                                                    "per_serving":  2.43,
+                                                                    "calories":  578,
+                                                                    "sale_items":  [
 
-                                                                    ]
-                                                 },
-                    "slow-cooker-french-onion-chicken-bowls":  {
-                                                                   "name":  "Slow Cooker French Onion Chicken Bowls",
-                                                                   "servings":  14,
-                                                                   "week_cost":  33.15,
-                                                                   "per_serving":  2.37,
-                                                                   "calories":  580,
-                                                                   "sale_items":  [
+                                                                                   ]
+                                                                },
+                    "slow-cooker-pork-green-chili-bowls":  {
+                                                               "name":  "Slow Cooker Pork Green Chili Bowls",
+                                                               "servings":  14,
+                                                               "week_cost":  34.23,
+                                                               "per_serving":  2.44,
+                                                               "calories":  558,
+                                                               "sale_items":  [
 
-                                                                                  ]
-                                                               },
+                                                                              ]
+                                                           },
+                    "slow-cooker-chicken-shawarma-bowls":  {
+                                                               "name":  "Slow Cooker Chicken Shawarma Bowls",
+                                                               "servings":  14,
+                                                               "week_cost":  34.27,
+                                                               "per_serving":  2.45,
+                                                               "calories":  585,
+                                                               "sale_items":  [
+
+                                                                              ]
+                                                           },
                     "fajita-chicken-rice-bowl":  {
                                                      "name":  "Fajita Chicken Rice Bowl",
                                                      "servings":  14,
-                                                     "week_cost":  33.2,
-                                                     "per_serving":  2.37,
+                                                     "week_cost":  34.37,
+                                                     "per_serving":  2.45,
                                                      "calories":  541,
                                                      "sale_items":  [
 
                                                                     ]
                                                  },
-                    "slow-cooker-chicken-tikka-masala-rice-bowls":  {
-                                                                        "name":  "Slow Cooker Chicken Tikka Masala Rice Bowls",
-                                                                        "servings":  14,
-                                                                        "week_cost":  33.23,
-                                                                        "per_serving":  2.37,
-                                                                        "calories":  554,
-                                                                        "sale_items":  [
-
-                                                                                       ]
-                                                                    },
-                    "slow-cooker-italian-chicken-penne":  {
-                                                              "name":  "Slow Cooker Italian Chicken Penne",
-                                                              "servings":  14,
-                                                              "week_cost":  34.41,
-                                                              "per_serving":  2.46,
-                                                              "calories":  503,
-                                                              "sale_items":  [
-
-                                                                             ]
-                                                          },
                     "slow-cooker-greek-chicken-bowls":  {
                                                             "name":  "Slow Cooker Greek Chicken Bowls",
                                                             "servings":  14,
-                                                            "week_cost":  34.46,
-                                                            "per_serving":  2.46,
+                                                            "week_cost":  34.58,
+                                                            "per_serving":  2.47,
                                                             "calories":  555,
                                                             "sale_items":  [
 
                                                                            ]
                                                         },
-                    "cheeseburger-pasta":  {
-                                               "name":  "High-Protein Cheeseburger Pasta",
-                                               "servings":  14,
-                                               "week_cost":  34.57,
-                                               "per_serving":  2.47,
-                                               "calories":  415,
-                                               "sale_items":  [
+                    "slow-cooker-italian-chicken-penne":  {
+                                                              "name":  "Slow Cooker Italian Chicken Penne",
+                                                              "servings":  14,
+                                                              "week_cost":  34.72,
+                                                              "per_serving":  2.48,
+                                                              "calories":  503,
+                                                              "sale_items":  [
 
-                                                              ]
-                                           },
+                                                                             ]
+                                                          },
                     "slow-cooker-chicken-adobo-rice-bowls":  {
                                                                  "name":  "Slow Cooker Chicken Adobo Rice Bowls",
                                                                  "servings":  14,
-                                                                 "week_cost":  34.62,
-                                                                 "per_serving":  2.47,
+                                                                 "week_cost":  34.74,
+                                                                 "per_serving":  2.48,
                                                                  "calories":  561,
                                                                  "sale_items":  [
 
                                                                                 ]
                                                              },
+                    "slow-cooker-mongolian-chicken-bowls":  {
+                                                                "name":  "Slow Cooker Mongolian Chicken Bowls",
+                                                                "servings":  14,
+                                                                "week_cost":  34.81,
+                                                                "per_serving":  2.49,
+                                                                "calories":  564,
+                                                                "sale_items":  [
+
+                                                                               ]
+                                                            },
+                    "cheeseburger-pasta":  {
+                                               "name":  "High-Protein Cheeseburger Pasta",
+                                               "servings":  14,
+                                               "week_cost":  34.98,
+                                               "per_serving":  2.5,
+                                               "calories":  415,
+                                               "sale_items":  [
+
+                                                              ]
+                                           },
+                    "slow-cooker-salsa-verde-chicken-bowl":  {
+                                                                 "name":  "Salsa Verde Chicken Burrito Bowl",
+                                                                 "servings":  14,
+                                                                 "week_cost":  35.14,
+                                                                 "per_serving":  2.51,
+                                                                 "calories":  543,
+                                                                 "sale_items":  [
+
+                                                                                ]
+                                                             },
+                    "slow-cooker-chicken-gyro-bowls":  {
+                                                           "name":  "Slow Cooker Chicken Gyro Bowls",
+                                                           "servings":  14,
+                                                           "week_cost":  35.18,
+                                                           "per_serving":  2.51,
+                                                           "calories":  573,
+                                                           "sale_items":  [
+
+                                                                          ]
+                                                       },
                     "beef-chili-rice-bowls":  {
                                                   "name":  "Beef Chili Rice Bowls",
                                                   "servings":  14,
-                                                  "week_cost":  34.66,
-                                                  "per_serving":  2.48,
+                                                  "week_cost":  35.2,
+                                                  "per_serving":  2.51,
                                                   "calories":  477,
                                                   "sale_items":  [
 
                                                                  ]
                                               },
-                    "slow-cooker-chicken-pozole-bowls":  {
-                                                             "name":  "Slow Cooker Chicken Pozole Bowls",
-                                                             "servings":  14,
-                                                             "week_cost":  34.95,
-                                                             "per_serving":  2.5,
-                                                             "calories":  549,
-                                                             "sale_items":  [
+                    "turkey-bolognese-penne":  {
+                                                   "name":  "Turkey Bolognese Penne",
+                                                   "servings":  14,
+                                                   "week_cost":  35.25,
+                                                   "per_serving":  2.52,
+                                                   "calories":  418,
+                                                   "sale_items":  [
 
-                                                                            ]
-                                                         },
+                                                                  ]
+                                               },
                     "beef-burrito-bowls":  {
                                                "name":  "High-Protein Beef Burrito Bowls",
                                                "servings":  14,
-                                               "week_cost":  35.07,
-                                               "per_serving":  2.5,
+                                               "week_cost":  35.29,
+                                               "per_serving":  2.52,
                                                "calories":  499,
                                                "sale_items":  [
 
                                                               ]
                                            },
-                    "slow-cooker-thai-peanut-chicken-bowls":  {
-                                                                  "name":  "Slow Cooker Thai Peanut Chicken Bowls",
-                                                                  "servings":  14,
-                                                                  "week_cost":  35.72,
-                                                                  "per_serving":  2.55,
-                                                                  "calories":  603,
-                                                                  "sale_items":  [
+                    "slow-cooker-chicken-tikka-masala-rice-bowls":  {
+                                                                        "name":  "Slow Cooker Chicken Tikka Masala Rice Bowls",
+                                                                        "servings":  14,
+                                                                        "week_cost":  36.16,
+                                                                        "per_serving":  2.58,
+                                                                        "calories":  554,
+                                                                        "sale_items":  [
 
-                                                                                 ]
-                                                              },
+                                                                                       ]
+                                                                    },
+                    "slow-cooker-king-ranch-chicken-bowls":  {
+                                                                 "name":  "Slow Cooker King Ranch Chicken Bowls",
+                                                                 "servings":  14,
+                                                                 "week_cost":  36.3,
+                                                                 "per_serving":  2.59,
+                                                                 "calories":  567,
+                                                                 "sale_items":  [
+
+                                                                                ]
+                                                             },
                     "teriyaki-chicken-bowl":  {
                                                   "name":  "Teriyaki Chicken and Rice Bowl",
                                                   "servings":  14,
@@ -1732,26 +1974,46 @@
 
                                                                  ]
                                               },
-                    "slow-cooker-chicken-cacciatore-pasta":  {
-                                                                 "name":  "Slow Cooker Chicken Cacciatore Pasta",
-                                                                 "servings":  14,
-                                                                 "week_cost":  37.69,
-                                                                 "per_serving":  2.69,
-                                                                 "calories":  570,
-                                                                 "sale_items":  [
-                                                                                    "Traditional Pasta Sauce"
-                                                                                ]
-                                                             },
-                    "slow-cooker-tuscan-chicken-pasta":  {
-                                                             "name":  "Slow Cooker Tuscan Chicken Pasta",
-                                                             "servings":  14,
-                                                             "week_cost":  37.7,
-                                                             "per_serving":  2.69,
-                                                             "calories":  577,
-                                                             "sale_items":  [
+                    "slow-cooker-mediterranean-chicken-bowls":  {
+                                                                    "name":  "Slow Cooker Mediterranean Chicken Bowls",
+                                                                    "servings":  14,
+                                                                    "week_cost":  36.72,
+                                                                    "per_serving":  2.62,
+                                                                    "calories":  562,
+                                                                    "sale_items":  [
 
-                                                                            ]
-                                                         },
+                                                                                   ]
+                                                                },
+                    "slow-cooker-thai-peanut-chicken-bowls":  {
+                                                                  "name":  "Slow Cooker Thai Peanut Chicken Bowls",
+                                                                  "servings":  14,
+                                                                  "week_cost":  36.78,
+                                                                  "per_serving":  2.63,
+                                                                  "calories":  603,
+                                                                  "sale_items":  [
+
+                                                                                 ]
+                                                              },
+                    "slow-cooker-chicken-saag-rice-bowls":  {
+                                                                "name":  "Slow Cooker Chicken Saag Rice Bowls",
+                                                                "servings":  14,
+                                                                "week_cost":  37.71,
+                                                                "per_serving":  2.69,
+                                                                "calories":  565,
+                                                                "sale_items":  [
+
+                                                                               ]
+                                                            },
+                    "slow-cooker-chicken-tortilla-soup-bowls":  {
+                                                                    "name":  "Slow Cooker Chicken Tortilla Soup Bowls",
+                                                                    "servings":  14,
+                                                                    "week_cost":  38.2,
+                                                                    "per_serving":  2.73,
+                                                                    "calories":  559,
+                                                                    "sale_items":  [
+
+                                                                                   ]
+                                                                },
                     "slow-cooker-chicken-chile-verde-bowls":  {
                                                                   "name":  "Slow Cooker Chicken Chile Verde Bowls",
                                                                   "servings":  14,
@@ -1762,51 +2024,61 @@
 
                                                                                  ]
                                                               },
-                    "cheesy-zucchini-beef-rice-skillet":  {
-                                                              "name":  "Cheesy Zucchini Beef and Rice Skillet",
-                                                              "servings":  14,
-                                                              "week_cost":  38.33,
-                                                              "per_serving":  2.74,
-                                                              "calories":  512,
-                                                              "sale_items":  [
+                    "slow-cooker-chicken-pozole-bowls":  {
+                                                             "name":  "Slow Cooker Chicken Pozole Bowls",
+                                                             "servings":  14,
+                                                             "week_cost":  38.37,
+                                                             "per_serving":  2.74,
+                                                             "calories":  549,
+                                                             "sale_items":  [
 
-                                                                             ]
-                                                          },
-                    "slow-cooker-barbacoa-bowl":  {
-                                                      "name":  "Slow Cooker Barbacoa Burrito Bowl",
-                                                      "servings":  14,
-                                                      "week_cost":  38.42,
-                                                      "per_serving":  2.74,
-                                                      "calories":  558,
-                                                      "sale_items":  [
+                                                                            ]
+                                                         },
+                    "slow-cooker-chicken-cacciatore-pasta":  {
+                                                                 "name":  "Slow Cooker Chicken Cacciatore Pasta",
+                                                                 "servings":  14,
+                                                                 "week_cost":  38.53,
+                                                                 "per_serving":  2.75,
+                                                                 "calories":  570,
+                                                                 "sale_items":  [
+                                                                                    "Traditional Pasta Sauce"
+                                                                                ]
+                                                             },
+                    "turkey-taco-rice-skillet":  {
+                                                     "name":  "Turkey Taco Rice Skillet",
+                                                     "servings":  14,
+                                                     "week_cost":  39.16,
+                                                     "per_serving":  2.8,
+                                                     "calories":  488,
+                                                     "sale_items":  [
 
-                                                                     ]
-                                                  },
+                                                                    ]
+                                                 },
                     "slow-cooker-creamy-chicken-mushroom-bowls":  {
                                                                       "name":  "Slow Cooker Creamy Chicken and Mushroom Bowls",
                                                                       "servings":  14,
-                                                                      "week_cost":  38.7,
-                                                                      "per_serving":  2.76,
+                                                                      "week_cost":  39.17,
+                                                                      "per_serving":  2.8,
                                                                       "calories":  568,
                                                                       "sale_items":  [
 
                                                                                      ]
                                                                   },
-                    "slow-cooker-cuban-mojo-pork-bowls":  {
-                                                              "name":  "Slow Cooker Cuban Mojo Pork Bowls",
-                                                              "servings":  14,
-                                                              "week_cost":  38.92,
-                                                              "per_serving":  2.78,
-                                                              "calories":  565,
-                                                              "sale_items":  [
+                    "slow-cooker-tuscan-chicken-pasta":  {
+                                                             "name":  "Slow Cooker Tuscan Chicken Pasta",
+                                                             "servings":  14,
+                                                             "week_cost":  39.25,
+                                                             "per_serving":  2.8,
+                                                             "calories":  577,
+                                                             "sale_items":  [
 
-                                                                             ]
-                                                          },
+                                                                            ]
+                                                         },
                     "slow-cooker-korean-shredded-pork-bowls":  {
                                                                    "name":  "Slow Cooker Korean Shredded Pork Bowls",
                                                                    "servings":  14,
-                                                                   "week_cost":  39.07,
-                                                                   "per_serving":  2.79,
+                                                                   "week_cost":  39.3,
+                                                                   "per_serving":  2.81,
                                                                    "calories":  569,
                                                                    "sale_items":  [
 
@@ -1822,20 +2094,50 @@
 
                                                                                  ]
                                                               },
-                    "turkey-picadillo-rice-bowls":  {
-                                                        "name":  "Turkey Picadillo Rice Bowls",
-                                                        "servings":  14,
-                                                        "week_cost":  41.1,
-                                                        "per_serving":  2.94,
-                                                        "calories":  552,
-                                                        "sale_items":  [
+                    "slow-cooker-french-onion-chicken-bowls":  {
+                                                                   "name":  "Slow Cooker French Onion Chicken Bowls",
+                                                                   "servings":  14,
+                                                                   "week_cost":  39.54,
+                                                                   "per_serving":  2.82,
+                                                                   "calories":  580,
+                                                                   "sale_items":  [
 
-                                                                       ]
-                                                    },
+                                                                                  ]
+                                                               },
+                    "slow-cooker-cuban-mojo-pork-bowls":  {
+                                                              "name":  "Slow Cooker Cuban Mojo Pork Bowls",
+                                                              "servings":  14,
+                                                              "week_cost":  39.78,
+                                                              "per_serving":  2.84,
+                                                              "calories":  565,
+                                                              "sale_items":  [
+
+                                                                             ]
+                                                          },
+                    "cheesy-zucchini-beef-rice-skillet":  {
+                                                              "name":  "Cheesy Zucchini Beef and Rice Skillet",
+                                                              "servings":  14,
+                                                              "week_cost":  39.92,
+                                                              "per_serving":  2.85,
+                                                              "calories":  512,
+                                                              "sale_items":  [
+
+                                                                             ]
+                                                          },
+                    "slow-cooker-barbacoa-bowl":  {
+                                                      "name":  "Slow Cooker Barbacoa Burrito Bowl",
+                                                      "servings":  14,
+                                                      "week_cost":  41,
+                                                      "per_serving":  2.93,
+                                                      "calories":  558,
+                                                      "sale_items":  [
+
+                                                                     ]
+                                                  },
                     "slow-cooker-italian-beef-bowl":  {
                                                           "name":  "Slow Cooker Italian Beef Rice Bowl",
                                                           "servings":  14,
-                                                          "week_cost":  41.73,
+                                                          "week_cost":  41.74,
                                                           "per_serving":  2.98,
                                                           "calories":  504,
                                                           "sale_items":  [
@@ -1845,53 +2147,13 @@
                     "slow-cooker-salsa-verde-pork-bowls":  {
                                                                "name":  "Slow Cooker Salsa Verde Pork Bowls",
                                                                "servings":  14,
-                                                               "week_cost":  41.87,
-                                                               "per_serving":  2.99,
+                                                               "week_cost":  42.04,
+                                                               "per_serving":  3,
                                                                "calories":  579,
                                                                "sale_items":  [
 
                                                                               ]
                                                            },
-                    "turkey-chili-mac":  {
-                                             "name":  "High-Protein Turkey Chili Mac",
-                                             "servings":  14,
-                                             "week_cost":  42.5,
-                                             "per_serving":  3.04,
-                                             "calories":  568,
-                                             "sale_items":  [
-
-                                                            ]
-                                         },
-                    "slow-cooker-teriyaki-pork-bowls":  {
-                                                            "name":  "Slow Cooker Teriyaki Pork Bowls",
-                                                            "servings":  14,
-                                                            "week_cost":  42.54,
-                                                            "per_serving":  3.04,
-                                                            "calories":  565,
-                                                            "sale_items":  [
-
-                                                                           ]
-                                                        },
-                    "turkey-ragu-pasta":  {
-                                              "name":  "Turkey Ragu Pasta",
-                                              "servings":  14,
-                                              "week_cost":  42.76,
-                                              "per_serving":  3.05,
-                                              "calories":  604,
-                                              "sale_items":  [
-
-                                                             ]
-                                          },
-                    "ground-beef-gyro-bowls":  {
-                                                   "name":  "Ground Beef Gyro Bowls",
-                                                   "servings":  14,
-                                                   "week_cost":  42.78,
-                                                   "per_serving":  3.06,
-                                                   "calories":  593,
-                                                   "sale_items":  [
-
-                                                                  ]
-                                               },
                     "slow-cooker-crack-chicken-bowls":  {
                                                             "name":  "Slow Cooker Crack Chicken Bowls",
                                                             "servings":  14,
@@ -1902,31 +2164,11 @@
 
                                                                            ]
                                                         },
-                    "mongolian-ground-beef-bowls":  {
-                                                        "name":  "Mongolian Ground Beef Bowls",
-                                                        "servings":  14,
-                                                        "week_cost":  43.15,
-                                                        "per_serving":  3.08,
-                                                        "calories":  559,
-                                                        "sale_items":  [
-
-                                                                       ]
-                                                    },
-                    "mediterranean-ground-turkey-bowls":  {
-                                                              "name":  "Mediterranean Ground Turkey Bowls",
-                                                              "servings":  14,
-                                                              "week_cost":  43.2,
-                                                              "per_serving":  3.09,
-                                                              "calories":  581,
-                                                              "sale_items":  [
-
-                                                                             ]
-                                                          },
                     "ground-beef-and-broccoli-bowls":  {
                                                            "name":  "Ground Beef and Broccoli Bowls",
                                                            "servings":  14,
-                                                           "week_cost":  43.49,
-                                                           "per_serving":  3.11,
+                                                           "week_cost":  43.61,
+                                                           "per_serving":  3.12,
                                                            "calories":  596,
                                                            "sale_items":  [
 
@@ -1935,173 +2177,83 @@
                     "beef-chili-mac":  {
                                            "name":  "Beef Chili Mac",
                                            "servings":  14,
-                                           "week_cost":  43.53,
-                                           "per_serving":  3.11,
+                                           "week_cost":  43.83,
+                                           "per_serving":  3.13,
                                            "calories":  596,
                                            "sale_items":  [
 
                                                           ]
                                        },
+                    "slow-cooker-teriyaki-pork-bowls":  {
+                                                            "name":  "Slow Cooker Teriyaki Pork Bowls",
+                                                            "servings":  14,
+                                                            "week_cost":  44.49,
+                                                            "per_serving":  3.18,
+                                                            "calories":  565,
+                                                            "sale_items":  [
+
+                                                                           ]
+                                                        },
                     "buffalo-turkey-potato-bowls":  {
                                                         "name":  "Buffalo Turkey and Potato Bowls",
                                                         "servings":  14,
-                                                        "week_cost":  43.81,
-                                                        "per_serving":  3.13,
+                                                        "week_cost":  44.66,
+                                                        "per_serving":  3.19,
                                                         "calories":  661,
                                                         "sale_items":  [
 
                                                                        ]
                                                     },
-                    "turkey-meatball-marinara-pasta":  {
-                                                           "name":  "Turkey Meatball Marinara Pasta",
-                                                           "servings":  14,
-                                                           "week_cost":  43.84,
-                                                           "per_serving":  3.13,
-                                                           "calories":  654,
-                                                           "sale_items":  [
+                    "turkey-picadillo-rice-bowls":  {
+                                                        "name":  "Turkey Picadillo Rice Bowls",
+                                                        "servings":  14,
+                                                        "week_cost":  44.77,
+                                                        "per_serving":  3.2,
+                                                        "calories":  552,
+                                                        "sale_items":  [
 
-                                                                          ]
-                                                       },
-                    "curry-ground-turkey-bowls":  {
-                                                      "name":  "Curry Ground Turkey Bowls",
-                                                      "servings":  14,
-                                                      "week_cost":  44.42,
-                                                      "per_serving":  3.17,
-                                                      "calories":  600,
-                                                      "sale_items":  [
-
-                                                                     ]
-                                                  },
+                                                                       ]
+                                                    },
                     "slow-cooker-balsamic-pork-bowls":  {
                                                             "name":  "Slow Cooker Balsamic Pork Bowls",
                                                             "servings":  14,
-                                                            "week_cost":  44.85,
-                                                            "per_serving":  3.2,
+                                                            "week_cost":  45.08,
+                                                            "per_serving":  3.22,
                                                             "calories":  556,
                                                             "sale_items":  [
 
                                                                            ]
                                                         },
-                    "beef-enchilada-skillet-bowls":  {
-                                                         "name":  "Beef Enchilada Skillet Bowls",
-                                                         "servings":  14,
-                                                         "week_cost":  45.04,
-                                                         "per_serving":  3.22,
-                                                         "calories":  566,
-                                                         "sale_items":  [
+                    "mongolian-ground-beef-bowls":  {
+                                                        "name":  "Mongolian Ground Beef Bowls",
+                                                        "servings":  14,
+                                                        "week_cost":  45.66,
+                                                        "per_serving":  3.26,
+                                                        "calories":  559,
+                                                        "sale_items":  [
 
-                                                                        ]
-                                                     },
-                    "thai-turkey-larb-bowls":  {
-                                                   "name":  "Thai Turkey Larb Bowls",
-                                                   "servings":  14,
-                                                   "week_cost":  45.27,
-                                                   "per_serving":  3.23,
-                                                   "calories":  642,
-                                                   "sale_items":  [
-
-                                                                  ]
-                                               },
-                    "unstuffed-cabbage-roll-bowls":  {
-                                                         "name":  "Unstuffed Cabbage Roll Bowls",
-                                                         "servings":  14,
-                                                         "week_cost":  45.56,
-                                                         "per_serving":  3.25,
-                                                         "calories":  560,
-                                                         "sale_items":  [
-
-                                                                        ]
-                                                     },
-                    "loaded-beef-taco-skillet-bowls":  {
-                                                           "name":  "Loaded Beef Taco Skillet Bowls",
-                                                           "servings":  14,
-                                                           "week_cost":  45.57,
-                                                           "per_serving":  3.26,
-                                                           "calories":  636,
-                                                           "sale_items":  [
-
-                                                                          ]
-                                                       },
-                    "cheeseburger-rice-bowls":  {
-                                                    "name":  "Cheeseburger Rice Bowls",
-                                                    "servings":  14,
-                                                    "week_cost":  45.6,
-                                                    "per_serving":  3.26,
-                                                    "calories":  602,
-                                                    "sale_items":  [
-
-                                                                   ]
-                                                },
-                    "slow-cooker-sweet-and-sour-pork-bowls":  {
-                                                                  "name":  "Slow Cooker Sweet and Sour Pork Bowls",
-                                                                  "servings":  14,
-                                                                  "week_cost":  45.72,
-                                                                  "per_serving":  3.27,
-                                                                  "calories":  581,
-                                                                  "sale_items":  [
-
-                                                                                 ]
-                                                              },
+                                                                       ]
+                                                    },
                     "slow-cooker-maple-dijon-pork-bowls":  {
                                                                "name":  "Slow Cooker Maple Dijon Pork Bowls",
                                                                "servings":  14,
-                                                               "week_cost":  45.99,
-                                                               "per_serving":  3.28,
+                                                               "week_cost":  46.06,
+                                                               "per_serving":  3.29,
                                                                "calories":  565,
                                                                "sale_items":  [
 
                                                                               ]
                                                            },
-                    "ground-beef-teriyaki-bowls":  {
-                                                       "name":  "Ground Beef Teriyaki Bowls",
-                                                       "servings":  14,
-                                                       "week_cost":  46.06,
-                                                       "per_serving":  3.29,
-                                                       "calories":  593,
-                                                       "sale_items":  [
+                    "cheeseburger-rice-bowls":  {
+                                                    "name":  "Cheeseburger Rice Bowls",
+                                                    "servings":  14,
+                                                    "week_cost":  46.32,
+                                                    "per_serving":  3.31,
+                                                    "calories":  602,
+                                                    "sale_items":  [
 
-                                                                      ]
-                                                   },
-                    "ground-turkey-enchilada-skillet-bowls":  {
-                                                                  "name":  "Ground Turkey Enchilada Skillet Bowls",
-                                                                  "servings":  14,
-                                                                  "week_cost":  46.16,
-                                                                  "per_serving":  3.3,
-                                                                  "calories":  671,
-                                                                  "sale_items":  [
-
-                                                                                 ]
-                                                              },
-                    "ground-beef-fried-rice-bowls":  {
-                                                         "name":  "Ground Beef Fried Rice Bowls",
-                                                         "servings":  14,
-                                                         "week_cost":  46.16,
-                                                         "per_serving":  3.3,
-                                                         "calories":  593,
-                                                         "sale_items":  [
-
-                                                                        ]
-                                                     },
-                    "korean-ground-turkey-bowls":  {
-                                                       "name":  "Korean Ground Turkey Bowls",
-                                                       "servings":  14,
-                                                       "week_cost":  46.31,
-                                                       "per_serving":  3.31,
-                                                       "calories":  651,
-                                                       "sale_items":  [
-
-                                                                      ]
-                                                   },
-                    "slow-cooker-root-beer-pulled-pork-bowls":  {
-                                                                    "name":  "Slow Cooker Root Beer Pulled Pork Bowls",
-                                                                    "servings":  14,
-                                                                    "week_cost":  46.37,
-                                                                    "per_serving":  3.31,
-                                                                    "calories":  560,
-                                                                    "sale_items":  [
-
-                                                                                   ]
-                                                                },
+                                                                   ]
+                                                },
                     "ground-beef-shawarma-bowls":  {
                                                        "name":  "Ground Beef Shawarma Bowls",
                                                        "servings":  14,
@@ -2112,31 +2264,221 @@
 
                                                                       ]
                                                    },
-                    "tex-mex-beef-rice-skillet-bowls":  {
-                                                            "name":  "Tex-Mex Beef and Rice Skillet Bowls",
-                                                            "servings":  14,
-                                                            "week_cost":  46.52,
-                                                            "per_serving":  3.32,
-                                                            "calories":  576,
-                                                            "sale_items":  [
+                    "korean-ground-turkey-bowls":  {
+                                                       "name":  "Korean Ground Turkey Bowls",
+                                                       "servings":  14,
+                                                       "week_cost":  46.65,
+                                                       "per_serving":  3.33,
+                                                       "calories":  651,
+                                                       "sale_items":  [
 
-                                                                           ]
-                                                        },
+                                                                      ]
+                                                   },
+                    "turkey-chili-mac":  {
+                                             "name":  "High-Protein Turkey Chili Mac",
+                                             "servings":  14,
+                                             "week_cost":  46.71,
+                                             "per_serving":  3.34,
+                                             "calories":  568,
+                                             "sale_items":  [
+
+                                                            ]
+                                         },
+                    "beef-enchilada-skillet-bowls":  {
+                                                         "name":  "Beef Enchilada Skillet Bowls",
+                                                         "servings":  14,
+                                                         "week_cost":  46.72,
+                                                         "per_serving":  3.34,
+                                                         "calories":  566,
+                                                         "sale_items":  [
+
+                                                                        ]
+                                                     },
+                    "ground-beef-teriyaki-bowls":  {
+                                                       "name":  "Ground Beef Teriyaki Bowls",
+                                                       "servings":  14,
+                                                       "week_cost":  46.77,
+                                                       "per_serving":  3.34,
+                                                       "calories":  593,
+                                                       "sale_items":  [
+
+                                                                      ]
+                                                   },
                     "ground-beef-stroganoff-pasta":  {
                                                          "name":  "Ground Beef Stroganoff Pasta",
                                                          "servings":  14,
-                                                         "week_cost":  46.55,
-                                                         "per_serving":  3.32,
+                                                         "week_cost":  46.85,
+                                                         "per_serving":  3.35,
                                                          "calories":  601,
                                                          "sale_items":  [
 
                                                                         ]
                                                      },
+                    "ground-turkey-enchilada-skillet-bowls":  {
+                                                                  "name":  "Ground Turkey Enchilada Skillet Bowls",
+                                                                  "servings":  14,
+                                                                  "week_cost":  46.91,
+                                                                  "per_serving":  3.35,
+                                                                  "calories":  671,
+                                                                  "sale_items":  [
+
+                                                                                 ]
+                                                              },
+                    "tex-mex-beef-rice-skillet-bowls":  {
+                                                            "name":  "Tex-Mex Beef and Rice Skillet Bowls",
+                                                            "servings":  14,
+                                                            "week_cost":  46.93,
+                                                            "per_serving":  3.35,
+                                                            "calories":  576,
+                                                            "sale_items":  [
+
+                                                                           ]
+                                                        },
+                    "curry-ground-turkey-bowls":  {
+                                                      "name":  "Curry Ground Turkey Bowls",
+                                                      "servings":  14,
+                                                      "week_cost":  46.99,
+                                                      "per_serving":  3.36,
+                                                      "calories":  600,
+                                                      "sale_items":  [
+
+                                                                     ]
+                                                  },
+                    "unstuffed-cabbage-roll-bowls":  {
+                                                         "name":  "Unstuffed Cabbage Roll Bowls",
+                                                         "servings":  14,
+                                                         "week_cost":  47.12,
+                                                         "per_serving":  3.37,
+                                                         "calories":  560,
+                                                         "sale_items":  [
+
+                                                                        ]
+                                                     },
+                    "slow-cooker-root-beer-pulled-pork-bowls":  {
+                                                                    "name":  "Slow Cooker Root Beer Pulled Pork Bowls",
+                                                                    "servings":  14,
+                                                                    "week_cost":  47.44,
+                                                                    "per_serving":  3.39,
+                                                                    "calories":  560,
+                                                                    "sale_items":  [
+
+                                                                                   ]
+                                                                },
+                    "mediterranean-ground-turkey-bowls":  {
+                                                              "name":  "Mediterranean Ground Turkey Bowls",
+                                                              "servings":  14,
+                                                              "week_cost":  47.79,
+                                                              "per_serving":  3.41,
+                                                              "calories":  581,
+                                                              "sale_items":  [
+
+                                                                             ]
+                                                          },
+                    "philly-cheesesteak-skillet-bowls":  {
+                                                             "name":  "Ground Beef Philly Cheesesteak Bowls",
+                                                             "servings":  14,
+                                                             "week_cost":  47.84,
+                                                             "per_serving":  3.42,
+                                                             "calories":  579,
+                                                             "sale_items":  [
+
+                                                                            ]
+                                                         },
+                    "ground-beef-fried-rice-bowls":  {
+                                                         "name":  "Ground Beef Fried Rice Bowls",
+                                                         "servings":  14,
+                                                         "week_cost":  48.01,
+                                                         "per_serving":  3.43,
+                                                         "calories":  593,
+                                                         "sale_items":  [
+
+                                                                        ]
+                                                     },
+                    "beef-ragu-pasta":  {
+                                            "name":  "Simple Beef Ragu Pasta",
+                                            "servings":  14,
+                                            "week_cost":  48.07,
+                                            "per_serving":  3.43,
+                                            "calories":  603,
+                                            "sale_items":  [
+
+                                                           ]
+                                        },
+                    "sloppy-joe-rice-bowls":  {
+                                                  "name":  "Sloppy Joe Rice Bowls",
+                                                  "servings":  14,
+                                                  "week_cost":  48.47,
+                                                  "per_serving":  3.46,
+                                                  "calories":  584,
+                                                  "sale_items":  [
+
+                                                                 ]
+                                              },
+                    "turkey-ragu-pasta":  {
+                                              "name":  "Turkey Ragu Pasta",
+                                              "servings":  14,
+                                              "week_cost":  48.79,
+                                              "per_serving":  3.48,
+                                              "calories":  604,
+                                              "sale_items":  [
+
+                                                             ]
+                                          },
+                    "salisbury-steak-potato-bowls":  {
+                                                         "name":  "Salisbury Steak and Potato Bowls",
+                                                         "servings":  14,
+                                                         "week_cost":  48.81,
+                                                         "per_serving":  3.49,
+                                                         "calories":  538,
+                                                         "sale_items":  [
+
+                                                                        ]
+                                                     },
+                    "loaded-beef-taco-skillet-bowls":  {
+                                                           "name":  "Loaded Beef Taco Skillet Bowls",
+                                                           "servings":  14,
+                                                           "week_cost":  48.88,
+                                                           "per_serving":  3.49,
+                                                           "calories":  636,
+                                                           "sale_items":  [
+
+                                                                          ]
+                                                       },
+                    "turkey-fajita-rice-bowls":  {
+                                                     "name":  "Ground Turkey Fajita Rice Bowls",
+                                                     "servings":  14,
+                                                     "week_cost":  48.98,
+                                                     "per_serving":  3.5,
+                                                     "calories":  544,
+                                                     "sale_items":  [
+
+                                                                    ]
+                                                 },
+                    "slow-cooker-sweet-and-sour-pork-bowls":  {
+                                                                  "name":  "Slow Cooker Sweet and Sour Pork Bowls",
+                                                                  "servings":  14,
+                                                                  "week_cost":  49.01,
+                                                                  "per_serving":  3.5,
+                                                                  "calories":  581,
+                                                                  "sale_items":  [
+
+                                                                                 ]
+                                                              },
+                    "swedish-meatball-potato-bowls":  {
+                                                          "name":  "Swedish Meatball and Potato Bowls",
+                                                          "servings":  14,
+                                                          "week_cost":  49.11,
+                                                          "per_serving":  3.51,
+                                                          "calories":  546,
+                                                          "sale_items":  [
+
+                                                                         ]
+                                                      },
                     "slow-cooker-mississippi-pork-bowls":  {
                                                                "name":  "Slow Cooker Mississippi Pork Bowls",
                                                                "servings":  14,
-                                                               "week_cost":  46.67,
-                                                               "per_serving":  3.33,
+                                                               "week_cost":  49.32,
+                                                               "per_serving":  3.52,
                                                                "calories":  550,
                                                                "sale_items":  [
 
@@ -2145,39 +2487,89 @@
                     "korean-ground-beef-rice-bowls":  {
                                                           "name":  "Korean Ground Beef Rice Bowls",
                                                           "servings":  14,
-                                                          "week_cost":  46.99,
-                                                          "per_serving":  3.36,
+                                                          "week_cost":  49.43,
+                                                          "per_serving":  3.53,
                                                           "calories":  615,
                                                           "sale_items":  [
 
                                                                          ]
                                                       },
-                    "philly-cheesesteak-skillet-bowls":  {
-                                                             "name":  "Ground Beef Philly Cheesesteak Bowls",
-                                                             "servings":  14,
-                                                             "week_cost":  47.35,
-                                                             "per_serving":  3.38,
-                                                             "calories":  579,
-                                                             "sale_items":  [
+                    "american-goulash-pasta":  {
+                                                   "name":  "American Goulash Pasta",
+                                                   "servings":  14,
+                                                   "week_cost":  49.47,
+                                                   "per_serving":  3.53,
+                                                   "calories":  598,
+                                                   "sale_items":  [
 
-                                                                            ]
-                                                         },
-                    "swedish-meatball-potato-bowls":  {
-                                                          "name":  "Swedish Meatball and Potato Bowls",
-                                                          "servings":  14,
-                                                          "week_cost":  47.61,
-                                                          "per_serving":  3.4,
-                                                          "calories":  546,
-                                                          "sale_items":  [
+                                                                  ]
+                                               },
+                    "beef-picadillo-rice-bowls":  {
+                                                      "name":  "Cuban Beef Picadillo Rice Bowls",
+                                                      "servings":  14,
+                                                      "week_cost":  49.85,
+                                                      "per_serving":  3.56,
+                                                      "calories":  565,
+                                                      "sale_items":  [
 
-                                                                         ]
-                                                      },
+                                                                     ]
+                                                  },
                     "slow-cooker-turkey-chili-bowls":  {
                                                            "name":  "Slow Cooker Turkey Chili Bowls",
                                                            "servings":  14,
-                                                           "week_cost":  47.66,
-                                                           "per_serving":  3.4,
+                                                           "week_cost":  50.11,
+                                                           "per_serving":  3.58,
                                                            "calories":  568,
+                                                           "sale_items":  [
+
+                                                                          ]
+                                                       },
+                    "turkey-sloppy-joe-bowls":  {
+                                                    "name":  "Turkey Sloppy Joe Bowls",
+                                                    "servings":  14,
+                                                    "week_cost":  50.48,
+                                                    "per_serving":  3.61,
+                                                    "calories":  681,
+                                                    "sale_items":  [
+
+                                                                   ]
+                                                },
+                    "unstuffed-pepper-skillet-bowls":  {
+                                                           "name":  "Unstuffed Pepper Skillet Bowls",
+                                                           "servings":  14,
+                                                           "week_cost":  50.81,
+                                                           "per_serving":  3.63,
+                                                           "calories":  594,
+                                                           "sale_items":  [
+
+                                                                          ]
+                                                       },
+                    "thai-turkey-larb-bowls":  {
+                                                   "name":  "Thai Turkey Larb Bowls",
+                                                   "servings":  14,
+                                                   "week_cost":  51.16,
+                                                   "per_serving":  3.65,
+                                                   "calories":  642,
+                                                   "sale_items":  [
+
+                                                                  ]
+                                               },
+                    "ground-beef-gyro-bowls":  {
+                                                   "name":  "Ground Beef Gyro Bowls",
+                                                   "servings":  14,
+                                                   "week_cost":  51.35,
+                                                   "per_serving":  3.67,
+                                                   "calories":  593,
+                                                   "sale_items":  [
+
+                                                                  ]
+                                               },
+                    "turkey-meatball-marinara-pasta":  {
+                                                           "name":  "Turkey Meatball Marinara Pasta",
+                                                           "servings":  14,
+                                                           "week_cost":  52,
+                                                           "per_serving":  3.71,
+                                                           "calories":  654,
                                                            "sale_items":  [
 
                                                                           ]
@@ -2185,92 +2577,12 @@
                     "ground-turkey-stir-fry-bowls":  {
                                                          "name":  "Ground Turkey Stir Fry Bowls",
                                                          "servings":  14,
-                                                         "week_cost":  47.81,
-                                                         "per_serving":  3.42,
+                                                         "week_cost":  53.13,
+                                                         "per_serving":  3.8,
                                                          "calories":  638,
                                                          "sale_items":  [
 
                                                                         ]
-                                                     },
-                    "unstuffed-pepper-skillet-bowls":  {
-                                                           "name":  "Unstuffed Pepper Skillet Bowls",
-                                                           "servings":  14,
-                                                           "week_cost":  47.82,
-                                                           "per_serving":  3.42,
-                                                           "calories":  594,
-                                                           "sale_items":  [
-
-                                                                          ]
-                                                       },
-                    "beef-ragu-pasta":  {
-                                            "name":  "Simple Beef Ragu Pasta",
-                                            "servings":  14,
-                                            "week_cost":  47.85,
-                                            "per_serving":  3.42,
-                                            "calories":  603,
-                                            "sale_items":  [
-
-                                                           ]
-                                        },
-                    "turkey-fajita-rice-bowls":  {
-                                                     "name":  "Ground Turkey Fajita Rice Bowls",
-                                                     "servings":  14,
-                                                     "week_cost":  48.05,
-                                                     "per_serving":  3.43,
-                                                     "calories":  544,
-                                                     "sale_items":  [
-
-                                                                    ]
-                                                 },
-                    "sloppy-joe-rice-bowls":  {
-                                                  "name":  "Sloppy Joe Rice Bowls",
-                                                  "servings":  14,
-                                                  "week_cost":  48.08,
-                                                  "per_serving":  3.43,
-                                                  "calories":  584,
-                                                  "sale_items":  [
-
-                                                                 ]
-                                              },
-                    "american-goulash-pasta":  {
-                                                   "name":  "American Goulash Pasta",
-                                                   "servings":  14,
-                                                   "week_cost":  48.1,
-                                                   "per_serving":  3.44,
-                                                   "calories":  598,
-                                                   "sale_items":  [
-
-                                                                  ]
-                                               },
-                    "turkey-sloppy-joe-bowls":  {
-                                                    "name":  "Turkey Sloppy Joe Bowls",
-                                                    "servings":  14,
-                                                    "week_cost":  48.25,
-                                                    "per_serving":  3.45,
-                                                    "calories":  681,
-                                                    "sale_items":  [
-
-                                                                   ]
-                                                },
-                    "salisbury-steak-potato-bowls":  {
-                                                         "name":  "Salisbury Steak and Potato Bowls",
-                                                         "servings":  14,
-                                                         "week_cost":  48.26,
-                                                         "per_serving":  3.45,
-                                                         "calories":  538,
-                                                         "sale_items":  [
-
-                                                                        ]
-                                                     },
-                    "beef-picadillo-rice-bowls":  {
-                                                      "name":  "Cuban Beef Picadillo Rice Bowls",
-                                                      "servings":  14,
-                                                      "week_cost":  48.62,
-                                                      "per_serving":  3.47,
-                                                      "calories":  565,
-                                                      "sale_items":  [
-
-                                                                     ]
-                                                  }
+                                                     }
                 }
 }
