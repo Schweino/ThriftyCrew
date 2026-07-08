@@ -784,6 +784,41 @@
                          "board":  "recipe",
                          "grams_per_unit":  28.3495,
                          "unit":  "oz"
+                     },
+                     {
+                         "item":  "Salt",
+                         "board_id":  "salt",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Black Pepper",
+                         "board_id":  "black-pepper",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
+                     },
+                     {
+                         "item":  "Fresh Cilantro",
+                         "board_id":  "fresh-cilantro",
+                         "board":  "recipe",
+                         "grams_per_unit":  28,
+                         "unit":  "each"
+                     },
+                     {
+                         "item":  "Jalapeno",
+                         "board_id":  "jalapeno",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Liquid Smoke",
+                         "board_id":  "liquid-smoke",
+                         "board":  "recipe",
+                         "grams_per_unit":  29.57,
+                         "unit":  "floz"
                      }
                  ],
     "unmapped":  [

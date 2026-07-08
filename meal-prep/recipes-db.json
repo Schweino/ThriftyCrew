@@ -1789,6 +1789,56 @@
                                                 "item":  "Broccoli Florets",
                                                 "grams":  400,
                                                 "buy":  "2 bags"
+                                            },
+                                            {
+                                                "item":  "Poblano Peppers",
+                                                "grams":  200,
+                                                "buy":  "1.5 poblano peppers"
+                                            },
+                                            {
+                                                "item":  "Jalapeno",
+                                                "grams":  30,
+                                                "buy":  "1 jalapeno"
+                                            },
+                                            {
+                                                "item":  "Garlic",
+                                                "grams":  12,
+                                                "buy":  "1 bulb"
+                                            },
+                                            {
+                                                "item":  "Fresh Cilantro",
+                                                "grams":  28,
+                                                "buy":  "1 bunch"
+                                            },
+                                            {
+                                                "item":  "Lime Juice",
+                                                "grams":  60,
+                                                "buy":  "2 limes, juiced"
+                                            },
+                                            {
+                                                "item":  "Ground Cumin",
+                                                "grams":  8,
+                                                "buy":  "1 jar"
+                                            },
+                                            {
+                                                "item":  "Dried Oregano",
+                                                "grams":  4,
+                                                "buy":  "1 jar"
+                                            },
+                                            {
+                                                "item":  "Salt",
+                                                "grams":  10,
+                                                "buy":  "1 container"
+                                            },
+                                            {
+                                                "item":  "Black Pepper",
+                                                "grams":  4,
+                                                "buy":  "1 jar"
+                                            },
+                                            {
+                                                "item":  "Chicken Broth",
+                                                "grams":  240,
+                                                "buy":  "1 carton"
                                             }
                                         ],
                         "grocery_list":  [
@@ -1797,7 +1847,17 @@
                                              "2 lb tomatillos",
                                              "3 onions yellow onion",
                                              "2 cans diced green chiles",
-                                             "2 bags broccoli florets"
+                                             "2 bags broccoli florets",
+                                             "1.5 poblano peppers",
+                                             "1 jalapeno",
+                                             "1 bulb",
+                                             "1 bunch",
+                                             "2 limes, juiced",
+                                             "1 jar",
+                                             "1 jar",
+                                             "1 container",
+                                             "1 jar",
+                                             "1 carton"
                                          ],
                         "per_serving":  {
                                             "calories":  557,
@@ -1812,10 +1872,10 @@
                                       "fat_g":  136
                                   },
                         "ratio":  10.8,
-                        "cost_per_serving":  2.1,
-                        "cost_batch":  29.38,
-                        "cost_per_serving_true":  2.44,
-                        "cost_batch_true":  34.22,
+                        "cost_per_serving":  2.74,
+                        "cost_batch":  33.48,
+                        "cost_per_serving_true":  2.74,
+                        "cost_batch_true":  38.32,
                         "published":  "2026-07-06",
                         "source_url":  "https://www.ambitiouskitchen.com/healthy-slow-cooker-chicken-chile-verde/",
                         "source_site":  "Ambitious Kitchen",
@@ -2060,6 +2120,56 @@
                                                 "item":  "Green Bell Peppers",
                                                 "grams":  300,
                                                 "buy":  "3 peppers"
+                                            },
+                                            {
+                                                "item":  "Jalapeno",
+                                                "grams":  30,
+                                                "buy":  "1 jalapeno"
+                                            },
+                                            {
+                                                "item":  "Garlic",
+                                                "grams":  12,
+                                                "buy":  "1 bulb"
+                                            },
+                                            {
+                                                "item":  "Ground Cumin",
+                                                "grams":  8,
+                                                "buy":  "1 jar"
+                                            },
+                                            {
+                                                "item":  "Dried Oregano",
+                                                "grams":  4,
+                                                "buy":  "1 jar"
+                                            },
+                                            {
+                                                "item":  "Chili Powder",
+                                                "grams":  14,
+                                                "buy":  "1 jar"
+                                            },
+                                            {
+                                                "item":  "Salt",
+                                                "grams":  10,
+                                                "buy":  "1 container"
+                                            },
+                                            {
+                                                "item":  "Black Pepper",
+                                                "grams":  4,
+                                                "buy":  "1 jar"
+                                            },
+                                            {
+                                                "item":  "Chicken Broth",
+                                                "grams":  360,
+                                                "buy":  "1 carton"
+                                            },
+                                            {
+                                                "item":  "Lime Juice",
+                                                "grams":  60,
+                                                "buy":  "2 limes, juiced"
+                                            },
+                                            {
+                                                "item":  "Fresh Cilantro",
+                                                "grams":  28,
+                                                "buy":  "1 bunch"
                                             }
                                         ],
                         "grocery_list":  [
@@ -2067,7 +2177,17 @@
                                              "7 cans cannellini beans",
                                              "2 cans coconut milk",
                                              "3 onions yellow onion",
-                                             "3 peppers green bell peppers"
+                                             "3 peppers green bell peppers",
+                                             "1 jalapeno",
+                                             "1 bulb",
+                                             "1 jar",
+                                             "1 jar",
+                                             "1 jar",
+                                             "1 container",
+                                             "1 jar",
+                                             "1 carton",
+                                             "2 limes, juiced",
+                                             "1 bunch"
                                          ],
                         "per_serving":  {
                                             "calories":  575,
@@ -2082,10 +2202,10 @@
                                       "fat_g":  227
                                   },
                         "ratio":  8.9,
-                        "cost_per_serving":  2.43,
-                        "cost_batch":  34.03,
-                        "cost_per_serving_true":  2.6,
-                        "cost_batch_true":  36.35,
+                        "cost_per_serving":  2.82,
+                        "cost_batch":  37.16,
+                        "cost_per_serving_true":  2.82,
+                        "cost_batch_true":  39.48,
                         "published":  "2026-07-06",
                         "source_url":  "https://therealfooddietitians.com/slow-cooker-white-chicken-chili/",
                         "source_site":  "The Real Food Dietitians",
@@ -4813,12 +4933,24 @@
                                                 "item":  "Green Cabbage",
                                                 "grams":  1400,
                                                 "buy":  "4 lb"
+                                            },
+                                            {
+                                                "item":  "Salt",
+                                                "grams":  15,
+                                                "buy":  "2 tbsp"
+                                            },
+                                            {
+                                                "item":  "Liquid Smoke",
+                                                "grams":  15,
+                                                "buy":  "1 bottle"
                                             }
                                         ],
                         "grocery_list":  [
                                              "8 lb pork loin",
                                              "1 lb rice",
-                                             "4 lb green cabbage"
+                                             "4 lb green cabbage",
+                                             "2 tbsp",
+                                             "1 bottle"
                                          ],
                         "per_serving":  {
                                             "calories":  567,
@@ -4833,10 +4965,10 @@
                                       "fat_g":  184
                                   },
                         "ratio":  10.2,
-                        "cost_per_serving":  1.39,
-                        "cost_batch":  19.5,
-                        "cost_per_serving_true":  1.51,
-                        "cost_batch_true":  21.12,
+                        "cost_per_serving":  1.54,
+                        "cost_batch":  19.96,
+                        "cost_per_serving_true":  1.54,
+                        "cost_batch_true":  21.58,
                         "published":  "2026-07-06",
                         "source_url":  "https://downshiftology.com/recipes/slow-cooker-kalua-pork/",
                         "source_site":  "Downshiftology",
@@ -4874,6 +5006,51 @@
                                                 "item":  "Yellow Onion",
                                                 "grams":  160,
                                                 "buy":  "2 onions"
+                                            },
+                                            {
+                                                "item":  "Garlic",
+                                                "grams":  15,
+                                                "buy":  "1 bulb"
+                                            },
+                                            {
+                                                "item":  "Salt",
+                                                "grams":  10,
+                                                "buy":  "1 container"
+                                            },
+                                            {
+                                                "item":  "Black Pepper",
+                                                "grams":  4,
+                                                "buy":  "1 jar"
+                                            },
+                                            {
+                                                "item":  "Dried Oregano",
+                                                "grams":  4,
+                                                "buy":  "1 jar (Mexican oregano)"
+                                            },
+                                            {
+                                                "item":  "Ground Cumin",
+                                                "grams":  8,
+                                                "buy":  "1 jar"
+                                            },
+                                            {
+                                                "item":  "Chili Powder",
+                                                "grams":  10,
+                                                "buy":  "1 jar"
+                                            },
+                                            {
+                                                "item":  "Orange Juice",
+                                                "grams":  120,
+                                                "buy":  "1/2 cup"
+                                            },
+                                            {
+                                                "item":  "Lime Juice",
+                                                "grams":  60,
+                                                "buy":  "2 limes, juiced"
+                                            },
+                                            {
+                                                "item":  "Chicken Broth",
+                                                "grams":  480,
+                                                "buy":  "1 carton"
                                             }
                                         ],
                         "grocery_list":  [
@@ -4881,7 +5058,16 @@
                                              "6 cans hominy",
                                              "2 lb tomatillos",
                                              "4 peppers poblano peppers",
-                                             "2 onions yellow onion"
+                                             "2 onions yellow onion",
+                                             "1 bulb",
+                                             "1 container",
+                                             "1 jar",
+                                             "1 jar (Mexican oregano)",
+                                             "1 jar",
+                                             "1 jar",
+                                             "1/2 cup",
+                                             "2 limes, juiced",
+                                             "1 carton"
                                          ],
                         "per_serving":  {
                                             "calories":  562,
@@ -4896,10 +5082,10 @@
                                       "fat_g":  230
                                   },
                         "ratio":  10,
-                        "cost_per_serving":  2,
-                        "cost_batch":  27.94,
-                        "cost_per_serving_true":  2.13,
-                        "cost_batch_true":  29.84,
+                        "cost_per_serving":  2.3,
+                        "cost_batch":  30.34,
+                        "cost_per_serving_true":  2.3,
+                        "cost_batch_true":  32.24,
                         "published":  "2026-07-06",
                         "source_url":  "https://www.peanutbutterandfitness.com/slow-cooker-posole-verde/",
                         "source_site":  "Peanut Butter and Fitness",

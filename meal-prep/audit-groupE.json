@@ -1,0 +1,32 @@
+{
+  "verdicts": [
+    {
+      "slug": "slow-cooker-kalua-pork-bowls",
+      "verdict": "gap",
+      "missing_ingredients": ["Hawaiian sea salt (Alaea sea salt / coarse sea salt)", "Liquid smoke"],
+      "source_used": "https://downshiftology.com/recipes/slow-cooker-kalua-pork/",
+      "reasoning": "Downshiftology's Slow Cooker Kalua Pork is explicitly a 3-ingredient recipe: pork shoulder, 1 tablespoon Hawaiian Alaea sea salt, and 1 tablespoon liquid smoke. Our stored list (Pork Loin, Rice, Green Cabbage) has zero seasoning - both defining flavor ingredients (the salt and the liquid smoke, which together are what make it taste like 'kalua' pork instead of plain shredded pork) are completely absent."
+    },
+    {
+      "slug": "slow-cooker-white-chicken-chili-bowls",
+      "verdict": "gap",
+      "missing_ingredients": ["Jalapeno", "Garlic", "Ground Cumin", "Dried Oregano", "Chili Powder", "Salt", "Black Pepper", "Chicken Broth", "Lime Juice", "Fresh Cilantro"],
+      "source_used": "https://therealfooddietitians.com/slow-cooker-white-chicken-chili/",
+      "reasoning": "The Real Food Dietitians' recipe ingredient list: chicken breasts/thighs, yellow onion, bell pepper, jalapeno, garlic cloves, 2 1/2 tsp ground cumin, 1 tsp dried oregano, 1 tbsp chili powder, 1 tsp salt, 1/2 tsp black pepper, 1 1/2-2 cups chicken broth, canned coconut milk, juice of 1/2 lime, 1/2 cup cilantro (plus optional white beans/garnishes). Our stored list only has chicken breast, cannellini beans, coconut milk, yellow onion, and green bell peppers - every spice, aromatic, acid and liquid base (jalapeno, garlic, cumin, oregano, chili powder, salt, pepper, chicken broth, lime juice, cilantro) is missing."
+    },
+    {
+      "slug": "slow-cooker-chicken-chile-verde-bowls",
+      "verdict": "gap",
+      "missing_ingredients": ["Poblano or Anaheim Peppers", "Jalapeno", "Garlic", "Fresh Cilantro", "Lime Juice", "Ground Cumin", "Dried Oregano", "Salt", "Black Pepper", "Chicken Broth"],
+      "source_used": "https://www.ambitiouskitchen.com/healthy-slow-cooker-chicken-chile-verde/",
+      "reasoning": "Ambitious Kitchen's Healthy Slow Cooker Chicken Chile Verde ingredient list: tomatillos, 4 poblano/Anaheim peppers, 2-3 jalapenos, 6 garlic cloves, 1 can diced green chiles, cilantro, juice of 1 lime, 2 tsp ground cumin, 2 tsp dried oregano, 1/4 tsp salt, black pepper, 3/4 cup chicken broth, chicken thighs, yellow onion. Our stored list (chicken thigh, rice, tomatillos, yellow onion, diced green chiles, broccoli florets) keeps the diced green chiles but is missing the poblano/Anaheim peppers (a separate ingredient from the diced green chiles in the source) plus every aromatic/seasoning: jalapeno, garlic, cilantro, lime juice, cumin, oregano, salt, pepper, and the chicken broth cooking liquid. (Broccoli florets appear to be our own addition, not from the source recipe, but that's a non-seasoning add rather than a gap.)"
+    },
+    {
+      "slug": "slow-cooker-pork-posole-verde-bowls",
+      "verdict": "gap",
+      "missing_ingredients": ["Garlic", "Salt", "Black Pepper", "Mexican Oregano", "Cumin", "Chili Powder", "Orange Juice", "Lime Juice", "Chicken Broth/Stock"],
+      "source_used": "https://www.peanutbutterandfitness.com/slow-cooker-posole-verde/",
+      "reasoning": "Peanut Butter and Fitness's Slow Cooker Posole Verde ingredient list: pork shoulder, 1 orange, 1 lime, chicken bone broth, yellow onion, garlic, 1 tsp salt, 1 tsp pepper, 1 tbsp Mexican oregano, 1/2 tbsp cumin, 1 tsp chili powder, chicken stock, tomatillos, poblano peppers, hominy. Our stored list (Pork Loin, Hominy, Tomatillos, Poblano Peppers, Yellow Onion) keeps the produce/protein base but is missing every seasoning and liquid: garlic, salt, pepper, Mexican oregano, cumin, chili powder, plus the orange/lime juice used in the braise and the chicken broth/stock used both for cooking the pork and for finishing the green sauce."
+    }
+  ]
+}

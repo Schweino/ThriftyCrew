@@ -4787,6 +4787,51 @@
                                                             "size":  "0.75 oz",
                                                             "name":  "Our Family Oregano Leaves 0.75 Oz"
                                                         }
-                                    }
+                                    },
+                  "salt":  {
+                               "commodity":  "Salt",
+                               "Family Fare":  {
+                                                   "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/salt_pepper/iodized_salt_our_family/p/6787156",
+                                                   "price":  0.99,
+                                                   "size":  "26 oz",
+                                                   "name":  "Iodized Salt Our Family"
+                                               }
+                           },
+                  "black-pepper":  {
+                                       "commodity":  "Black Pepper",
+                                       "Family Fare":  {
+                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/salt_pepper/that_s_smart_ground_black_pepper/p/1564405684704741125",
+                                                           "price":  1.39,
+                                                           "size":  "2 oz",
+                                                           "name":  "That\u0027s Smart! Ground Black Pepper"
+                                                       }
+                                   },
+                  "fresh-cilantro":  {
+                                         "commodity":  "Fresh Cilantro",
+                                         "Family Fare":  {
+                                                             "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/cilantro_chinese_parsley_coriander/p/78771",
+                                                             "price":  0.99,
+                                                             "size":  "1 ct",
+                                                             "name":  "Cilantro (Chinese Parsley/Coriander)"
+                                                         }
+                                     },
+                  "jalapeno":  {
+                                   "commodity":  "Jalapeno Pepper",
+                                   "Family Fare":  {
+                                                       "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/jalapeno_peppers/p/12548",
+                                                       "price":  2.29,
+                                                       "size":  "lb",
+                                                       "name":  "Jalapeno Peppers"
+                                                   }
+                               },
+                  "liquid-smoke":  {
+                                       "commodity":  "Liquid Smoke",
+                                       "Family Fare":  {
+                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/marinades/colgin_original_recipe_hickory_liquid_smoke_4_fl_oz/p/38455",
+                                                           "price":  3.49,
+                                                           "size":  "4 fl oz",
+                                                           "name":  "Colgin Original Recipe Hickory Liquid Smoke 4 Fl Oz"
+                                                       }
+                                   }
               }
 }

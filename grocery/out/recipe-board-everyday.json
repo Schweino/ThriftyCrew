@@ -5419,6 +5419,111 @@
                                               "size":  "0.75 oz"
                                           }
                                       ]
+                       },
+                       {
+                           "id":  "salt",
+                           "commodity":  "Salt",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.0381,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.0381,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Iodized Salt Our Family",
+                                              "size":  "26 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "black-pepper",
+                           "commodity":  "Black Pepper",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.695,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.695,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "That\u0027s Smart! Ground Black Pepper",
+                                              "size":  "2 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "fresh-cilantro",
+                           "commodity":  "Fresh Cilantro",
+                           "unit":  "each",
+                           "category":  "Produce",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.99,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.99,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Cilantro (Chinese Parsley/Coriander)",
+                                              "size":  "1 ct"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "jalapeno",
+                           "commodity":  "Jalapeno Pepper",
+                           "unit":  "lb",
+                           "category":  "Produce",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  2.29,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  2.29,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Jalapeno Peppers",
+                                              "size":  "lb"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "liquid-smoke",
+                           "commodity":  "Liquid Smoke",
+                           "unit":  "floz",
+                           "category":  "Sauces \u0026 Condiments",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.8725,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.8725,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Colgin Original Recipe Hickory Liquid Smoke 4 Fl Oz",
+                                              "size":  "4 fl oz"
+                                          }
+                                      ]
                        }
                    ],
     "built_at":  "2026-07-07",
