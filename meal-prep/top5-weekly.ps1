@@ -15,7 +15,7 @@
 param([switch]$NoPublish)
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
-$gout = 'C:\Codex\income\grocery\out'
+$gout = Join-Path (Split-Path $PSScriptRoot -Parent) 'grocery\out'   # repo-relative (meal-prep and grocery are siblings)
 # Ghost admin key: env var (GitHub Actions secret) first, then a gitignored local .ghostkey file, never source.
 $adminKey = if ($env:GHOST_ADMIN_KEY) { $env:GHOST_ADMIN_KEY } elseif (Test-Path (Join-Path $PSScriptRoot '.ghostkey')) { (Get-Content (Join-Path $PSScriptRoot '.ghostkey') -Raw).Trim() } else { throw 'Ghost admin key missing: set $env:GHOST_ADMIN_KEY or create meal-prep\.ghostkey' }
 $apiUrl   = "https://map-to-success.ghost.io"

@@ -2,7 +2,7 @@ $ProgressPreference='SilentlyContinue'
 # Merge weekly resolver outputs (store-*-urls.json) into the durable product-urls.json (accumulates).
 # Drop your resolver output files into out\url-inputs\ named store-<store>-urls.json (or ...2, ...3 for
 # extra passes). Store is inferred from the filename via $storeOf below. Idempotent; safe to re-run.
-$g="C:\Codex\income\grocery"
+$g = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }   # repo-relative
 $dir=Join-Path $g "out\url-inputs"
 if(-not (Test-Path $dir)){ New-Item -ItemType Directory -Force -Path $dir | Out-Null }
 # commodity labels (metadata only) from the current comparison + recipe board, if present
