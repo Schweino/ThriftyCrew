@@ -34,16 +34,20 @@ $ing = [ordered]@{}
 function AddBoard($rows) {
   foreach ($r in $rows) {
     $id = [string]$r.id
-    $lo = $null; $los = ''; $lot = ''
+    $lo = $null; $los = ''; $lot = ''; $nStores = 0
     foreach ($s in $r.stores) {
       $p = [double]$s.per_unit
+      if ($p -gt 0) { $nStores++ }
       if ($p -gt 0 -and ($null -eq $lo -or $p -lt $lo)) { $lo = $p; $los = [string]$s.store; $lot = [string]$s.type }
     }
     if ($null -ne $lo) {
       # weekly board wins ties for a shared id (it carries this week's ad price); don't overwrite it with recipe floor
       if (-not $ing.Contains($id)) {
         $u = if ($purl.ContainsKey($id) -and $purl[$id].ContainsKey($los)) { $purl[$id][$los] } else { '' }
-        $ing[$id] = [ordered]@{ unit=[string]$r.unit; cheapest=[math]::Round($lo,4); store=$los; type=$lot; url=$u }
+        # n = how many of the 6 stores actually have a price for this ingredient - so the UI never overclaims
+        # "checked at 6 stores" for an item only 1-2 stores have been priced at yet (new adds, or an item some
+        # stores simply don't carry).
+        $ing[$id] = [ordered]@{ unit=[string]$r.unit; cheapest=[math]::Round($lo,4); store=$los; type=$lot; url=$u; n=$nStores }
       }
     }
   }

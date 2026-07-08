@@ -2424,8 +2424,8 @@
                            "commodity":  "93/7 Ground Beef",
                            "unit":  "lb",
                            "category":  "Meat \u0026 Poultry",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  9.29,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  6.17,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2437,6 +2437,56 @@
                                               "membership":  false,
                                               "item":  "Our Certified 93% Lean / 7% Fat, Lean Ground Beef Roll, 1 Lb. 16 Oz",
                                               "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  6.97,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "93% Lean / 7% Fat Lean Ground Beef, 1 lb Roll, Fresh, All Natural*",
+                                              "size":  "1 lb Roll"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  6.17,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark 93/7 Ground Beef, priced per pound",
+                                              "size":  "priced per lb"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  8.99,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Lean Ground Beef 93% Lean 7% Fat",
+                                              "size":  "1 lb"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  7.49,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "93% Ground Beef",
+                                              "size":  "1 lb"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  9.49,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® 93/7 Ground Beef Roll",
+                                              "size":  "1 lb"
                                           }
                                       ]
                        },
@@ -2445,8 +2495,8 @@
                            "commodity":  "Sugar-Free BBQ Sauce",
                            "unit":  "oz",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.3883,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.174,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2458,6 +2508,36 @@
                                               "membership":  false,
                                               "item":  "G Hughes Sugar Free Original Bbq Sauce 18 Oz",
                                               "size":  "18 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.174,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Ray\u0027s No Sugar Added Original Barbecue Sauce",
+                                              "size":  "18.5 oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.2772,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "G Hughes Smokehouse Sugar Free Original BBQ Sauce",
+                                              "size":  "18 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.2,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Ray\u0027s No Sugar Added Original BBQ Sauce",
+                                              "size":  "18.5 oz"
                                           }
                                       ]
                        },
@@ -2466,8 +2546,8 @@
                            "commodity":  "Beef Broth",
                            "unit":  "floz",
                            "category":  "Meat \u0026 Poultry",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.0528,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.04,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2479,6 +2559,46 @@
                                               "membership":  false,
                                               "item":  "Our Family Beef Broth 32 Fl Oz",
                                               "size":  "32 fl oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.04,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Unsalted Gluten-Free Beef Broth, 32 oz Carton (Shelf-Stable)",
+                                              "size":  "32 fl oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.0622,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Beef Broth, Reduced Sodium, Gluten Free, No MSG",
+                                              "size":  "32 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.0434,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Chef\u0027s Cupboard Beef Broth",
+                                              "size":  "32 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.05,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Fat Free Beef Broth",
+                                              "size":  "32 oz"
                                           }
                                       ]
                        },
@@ -2487,8 +2607,8 @@
                            "commodity":  "Beef Chuck Roast",
                            "unit":  "lb",
                            "category":  "Meat \u0026 Poultry",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  10.99,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  7.47,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2500,6 +2620,56 @@
                                               "membership":  false,
                                               "item":  "Fresh Beef Chuck Roast, Boneless",
                                               "size":  "lb"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  7.97,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Chuck Roast, Choice Angus Beef, Fresh, 1.6 - 2.85 lb",
+                                              "size":  "Fresh, ~1.6-2.85 lb"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  7.47,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark USDA Choice Angus Beef Boneless Chuck Roast, priced per pound",
+                                              "size":  "priced per lb"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  10.99,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Beef Boneless Chuck Roast",
+                                              "size":  "lbs ($10.99/lb)"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  7.99,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "USDA Choice Black Angus Chuck Roast",
+                                              "size":  "per lb"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  10.99,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Choice Beef Chuck Roast",
+                                              "size":  "per lb"
                                           }
                                       ]
                        },
@@ -2508,8 +2678,8 @@
                            "commodity":  "Frozen Broccoli Florets",
                            "unit":  "oz",
                            "category":  "Produce",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.1408,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.097,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2521,6 +2691,56 @@
                                               "membership":  false,
                                               "item":  "Frozen Broccoli Florets Our Family Steamable",
                                               "size":  "12 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.097,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Frozen Broccoli Florets Steamable Bag, 12 oz",
+                                              "size":  "12 oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.0994,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Steamable Broccoli Florets",
+                                              "size":  "1 lb bags, 4 pk (priced $1.59/lb)"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.1579,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Birds Eye Baby Broccoli Florets, 3g of Fiber per Serving, Frozen Vegetables",
+                                              "size":  "12.6 oz. Bag"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.1075,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Season\u0027s Choice Steamable Frozen Broccoli Florets",
+                                              "size":  "12 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.13,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Frozen Broccoli Florets",
+                                              "size":  "12 oz"
                                           }
                                       ]
                        },
@@ -2529,8 +2749,8 @@
                            "commodity":  "Buffalo Wing Sauce",
                            "unit":  "floz",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.3119,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.13,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2542,6 +2762,56 @@
                                               "membership":  false,
                                               "item":  "Sweet Baby Ray\u0027s Buffalo Wing Wing Sauce 16 Fl Oz",
                                               "size":  "16 fl oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.203,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Sweet Baby Ray\u0027s Buffalo Wing Sauce",
+                                              "size":  "16 fl oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.13,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Frank\u0027s RedHot Original Buffalo Wing Sauce",
+                                              "size":  "1 gal."
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.2488,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Sweet Baby Ray\u0027s Mild Buffalo Wing Sauce",
+                                              "size":  "16 fl oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.1958,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Burman\u0027s Medium Wing Sauce",
+                                              "size":  "12 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.27,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Mild Buffalo Wing Sauce",
+                                              "size":  "12 fl oz"
                                           }
                                       ]
                        },
@@ -2550,8 +2820,8 @@
                            "commodity":  "Chicken Broth",
                            "unit":  "floz",
                            "category":  "Meat \u0026 Poultry",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.0528,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.04,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2563,6 +2833,56 @@
                                               "membership":  false,
                                               "item":  "Our Family Chicken Broth 32 Fl Oz",
                                               "size":  "32 fl oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.04,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Reduced Sodium Gluten-Free Chicken Broth, 32 oz Carton",
+                                              "size":  "32 fl oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.04,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Chicken Broth",
+                                              "size":  "32 oz., 6 pk."
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.0622,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Chicken Broth 33% Less Sodium Fat Free Gluten Free",
+                                              "size":  "32 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.0434,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Chef\u0027s Cupboard Chicken Broth",
+                                              "size":  "32 fl oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.0477,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® 99% Fat Free Chicken Broth Family Size",
+                                              "size":  "48 oz"
                                           }
                                       ]
                        },
@@ -2571,8 +2891,8 @@
                            "commodity":  "Chili Powder",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.6145,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.36,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2584,6 +2904,56 @@
                                               "membership":  false,
                                               "item":  "That\u0027s Smart Spices Chili Powder Seasoning",
                                               "size":  "2.75 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.36,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Chili Powder",
+                                              "size":  "3 oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.5,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Chili Powder",
+                                              "size":  "20 oz."
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.4545,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "That\u0027s Smart Chili Powder",
+                                              "size":  "2.75 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.436,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Stonemill Chili Powder",
+                                              "size":  "2.5 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.63,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Smart Wayâ„¢ Chili Powder",
+                                              "size":  "1.98 oz"
                                           }
                                       ]
                        },
@@ -2592,8 +2962,8 @@
                            "commodity":  "Chipotle Peppers in Adobo",
                            "unit":  "oz",
                            "category":  "Beans \u0026 Canned",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.2653,
+                           "cheapest_store":  "Baker\u0027s",
+                           "cheapest_price":  0.21,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2605,6 +2975,36 @@
                                               "membership":  false,
                                               "item":  "San Marcos Original Recipe Chipotles Peppers In Adobo Sauce 7.5 Oz",
                                               "size":  "7.5 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.211,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "San Marcos Peppers Chipolte",
+                                              "size":  "7.5 oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.4992,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "La Costena Chipotle Peppers in Adobo Sauce",
+                                              "size":  "12 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.21,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Gluten Free Whole Chipotle Peppers in Adobo Sauce",
+                                              "size":  "7 oz"
                                           }
                                       ]
                        },
@@ -2613,8 +3013,8 @@
                            "commodity":  "Coconut Milk (Canned)",
                            "unit":  "floz",
                            "category":  "Beans \u0026 Canned",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.2067,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.1369,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2626,6 +3026,46 @@
                                               "membership":  false,
                                               "item":  "Geisha Coconut Milk, Original 13.5 Fl Oz",
                                               "size":  "13.5 fl oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.147,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Savia Coconut Milk",
+                                              "size":  "13.5 fl oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.1369,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Thai Kitchen Unsweetened Coconut Milk",
+                                              "size":  "13.66 fl. oz. cans, 6 pk. ($1.87/can)"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.2511,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Coconut Milk",
+                                              "size":  "13.5 fl oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.22,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Premium Coconut Milk",
+                                              "size":  "13.5 fl oz"
                                           }
                                       ]
                        },
@@ -2634,8 +3074,8 @@
                            "commodity":  "Diced Green Chiles",
                            "unit":  "oz",
                            "category":  "Beans \u0026 Canned",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.2975,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.22,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2647,6 +3087,46 @@
                                               "membership":  false,
                                               "item":  "Our Family Green Chiles, Mild, Diced 4 Oz",
                                               "size":  "4 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.22,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Canned Medium Diced Green Chiles",
+                                              "size":  "4 oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.4475,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Mild Green Chiles Diced",
+                                              "size":  "4 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.2375,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Pueblo Lindo Chopped Green Chiles",
+                                              "size":  "4 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.25,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Diced Green Chile Peppers",
+                                              "size":  "4 oz"
                                           }
                                       ]
                        },
@@ -2655,8 +3135,8 @@
                            "commodity":  "Diced Tomatoes",
                            "unit":  "oz",
                            "category":  "Beans \u0026 Canned",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.0683,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.0559,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2668,6 +3148,56 @@
                                               "membership":  false,
                                               "item":  "Our Family Tomatoes, Diced 14.5 Oz",
                                               "size":  "14.5 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.066,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Diced Tomatoes in Tomato Juice, 14.5 oz Can",
+                                              "size":  "14.5 oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.0559,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Diced Tomatoes in Tomato Juice",
+                                              "size":  "14.5 oz., 12 pk. ($0.81/can)"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.0821,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Diced Tomatoes",
+                                              "size":  "14.5 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.0683,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Happy Harvest Diced Tomatoes",
+                                              "size":  "14.5 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.07,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Kroger Diced Tomatoes",
+                                              "size":  "14.5 oz"
                                           }
                                       ]
                        },
@@ -2676,8 +3206,8 @@
                            "commodity":  "Fajita Seasoning Packet",
                            "unit":  "each",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.99,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.64,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2689,6 +3219,36 @@
                                               "membership":  false,
                                               "item":  "Our Family Seasoning Mix, Fajita 1.25 Oz",
                                               "size":  "1.25 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.64,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Fajita Seasoning Mix",
+                                              "size":  "1.25 oz packet"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  2.39,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "McCormick Fajita Seasoning Mix",
+                                              "size":  "1.12 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.89,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Fajita Seasoning Mix",
+                                              "size":  "1.27 oz"
                                           }
                                       ]
                        },
@@ -2697,8 +3257,8 @@
                            "commodity":  "Garlic (Bulb)",
                            "unit":  "each",
                            "category":  "Produce",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.79,
+                           "cheapest_store":  "Aldi",
+                           "cheapest_price":  0.63,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2710,6 +3270,46 @@
                                               "membership":  false,
                                               "item":  "Fresh Garlic",
                                               "size":  "1 ea"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.72,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Garlic Bulb Fresh Whole",
+                                              "size":  "1 bulb"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.79,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Jumbo Garlic",
+                                              "size":  "1 ct"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.63,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Garlic, Package",
+                                              "size":  "3 ct"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.89,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Garlic (fresh bulb)",
+                                              "size":  "1 ct"
                                           }
                                       ]
                        },
@@ -2718,8 +3318,8 @@
                            "commodity":  "Garlic Powder",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.556,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.318,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2731,6 +3331,56 @@
                                               "membership":  false,
                                               "item":  "That\u0027s Smart! Garlic Powder",
                                               "size":  "2.5 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.318,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Garlic Powder",
+                                              "size":  "3.4 oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.44,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Garlic Powder",
+                                              "size":  "22.5 oz."
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.5,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "That\u0027s Smart Garlic Powder",
+                                              "size":  "2.5 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.3494,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Stonemill Garlic Powder",
+                                              "size":  "3.12 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.63,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Smart Wayâ„¢ Garlic Powder",
+                                              "size":  "2 oz"
                                           }
                                       ]
                        },
@@ -2739,8 +3389,8 @@
                            "commodity":  "Frozen Cut Green Beans",
                            "unit":  "oz",
                            "category":  "Beans \u0026 Canned",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.0996,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.061,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2752,6 +3402,46 @@
                                               "membership":  false,
                                               "item":  "Our Family Green Beans, Cut, Fresh Frozen 24 Oz",
                                               "size":  "24 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.061,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Frozen Cut Green Beans",
+                                              "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.139,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Fresh Steam Cut Green Beans",
+                                              "size":  "10 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.0908,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Season\u0027s Choice Steam Cut Green Beans",
+                                              "size":  "12 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.1,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Smart Wayâ„¢ Cut Green Beans",
+                                              "size":  "10 oz"
                                           }
                                       ]
                        },
@@ -2760,8 +3450,8 @@
                            "commodity":  "Green Bell Pepper",
                            "unit":  "each",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  1.69,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.83,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2773,6 +3463,46 @@
                                               "membership":  false,
                                               "item":  "Fresh Green Peppers",
                                               "size":  "1 ct"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.86,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Green Bell Pepper",
+                                              "size":  "1 each"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.83,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Green Bell Peppers",
+                                              "size":  "6 ct. ($0.83/pepper)"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  1.5,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Green Bell Pepper",
+                                              "size":  "1 ct (2 for $3.00)"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.99,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Large Green Bell Pepper",
+                                              "size":  "1 ct"
                                           }
                                       ]
                        },
@@ -2781,8 +3511,8 @@
                            "commodity":  "Ground Cumin",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  1.745,
+                           "cheapest_store":  "Aldi",
+                           "cheapest_price":  0.545,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2794,6 +3524,56 @@
                                               "membership":  false,
                                               "item":  "Lawry\u0027s Ground Cumin 2 Oz",
                                               "size":  "2 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.548,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Ground Cumin",
+                                              "size":  "2.5 oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.56,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Ground Cumin",
+                                              "size":  "16 oz."
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  1.245,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Lawry\u0027s Ground Cumin",
+                                              "size":  "2.0 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.545,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Stonemill Ground Cumin",
+                                              "size":  "2 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  1.5,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Lawry\u0027s Ground Cumin",
+                                              "size":  "2 oz"
                                           }
                                       ]
                        },
@@ -2802,8 +3582,8 @@
                            "commodity":  "Hot Honey",
                            "unit":  "oz",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.6244,
+                           "cheapest_store":  "Aldi",
+                           "cheapest_price":  0.3992,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2815,6 +3595,56 @@
                                               "membership":  false,
                                               "item":  "Nate\u0027s 100% Pure Hot Honey 16 Oz",
                                               "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.413,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "bettergoods Hot Honey",
+                                              "size":  "12 oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.48,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Nate\u0027s Honey 100% Pure Hot Honey with Habanero Chili Peppers",
+                                              "size":  "24 oz."
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.5825,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Hot Honey Infused with Chilies",
+                                              "size":  "12 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.3992,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Berryhill Hot Honey",
+                                              "size":  "12 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.62,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Hot Honey",
+                                              "size":  "12 oz"
                                           }
                                       ]
                        },
@@ -2823,8 +3653,8 @@
                            "commodity":  "Hot Italian Sausage",
                            "unit":  "lb",
                            "category":  "Meat \u0026 Poultry",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  5.89,
+                           "cheapest_store":  "Aldi",
+                           "cheapest_price":  2.5179,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2836,6 +3666,46 @@
                                               "membership":  false,
                                               "item":  "Johnsonville Sausage, Italian, Hot 19 Oz",
                                               "size":  "19 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  4.98,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Johnsonville Hot Italian Pork Sausage Links, 19 oz, (5 Count) Refrigerated",
+                                              "size":  "19 oz (5 links)"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  5.0442,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Johnsonville Hot Italian Sausage, 5 Count",
+                                              "size":  "19 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  2.5179,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hot Italian Sausage Links",
+                                              "size":  "19 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  4.88,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Hot Italian Sausage",
+                                              "size":  "18 oz"
                                           }
                                       ]
                        },
@@ -2844,8 +3714,8 @@
                            "commodity":  "Hot Sauce",
                            "unit":  "floz",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.3742,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.12,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2857,6 +3727,56 @@
                                               "membership":  false,
                                               "item":  "Louisiana Brand Original Hot Sauce 12 Fl Oz",
                                               "size":  "12 fl oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.13,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Louisiana Hot Sauce",
+                                              "size":  "12 fl oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.12,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Frank\u0027s RedHot Original Cayenne Pepper Hot Sauce",
+                                              "size":  "1 gal."
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.3325,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Louisiana Hot Sauce",
+                                              "size":  "12 fl oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.1458,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Burman\u0027s Hot Sauce",
+                                              "size":  "12 fl oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.13,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Louisiana Style Hot Sauce",
+                                              "size":  "12 fl oz"
                                           }
                                       ]
                        },
@@ -2865,8 +3785,8 @@
                            "commodity":  "Italian Seasoning",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  1.352,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  1.14,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2878,6 +3798,56 @@
                                               "membership":  false,
                                               "item":  "That\u0027s Smart! Italian Seasoning",
                                               "size":  "1.25 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  1.14,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Italian Seasoning",
+                                              "size":  "0.95 oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  1.15,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Italian Seasoning",
+                                              "size":  "6 oz."
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  1.25,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "That\u0027s Smart Italian Seasoning",
+                                              "size":  "1 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  1.4533,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Stonemill Italian Seasoning",
+                                              "size":  "0.75 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  2.08,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Smart Wayâ„¢ Italian Seasoning",
+                                              "size":  "0.60 oz"
                                           }
                                       ]
                        },
@@ -2886,8 +3856,8 @@
                            "commodity":  "Limes",
                            "unit":  "each",
                            "category":  "Produce",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.79,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.25,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2899,6 +3869,26 @@
                                               "membership":  false,
                                               "item":  "Fresh Limes",
                                               "size":  "1 ct"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.25,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Lime",
+                                              "size":  "1 each"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.69,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Limes - Each",
+                                              "size":  "1 each"
                                           }
                                       ]
                        },
@@ -2907,8 +3897,8 @@
                            "commodity":  "Olive Oil",
                            "unit":  "floz",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.3991,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.19,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2920,6 +3910,56 @@
                                               "membership":  false,
                                               "item":  "Our Family Olive Oil, 100% Pure, Imported 33.8 Fl Oz",
                                               "size":  "33.8 fl oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.324,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Classic Olive Oil for Cooking",
+                                              "size":  "51 fl oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.19,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Pure Olive Oil",
+                                              "size":  "101 fl. oz."
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.4112,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Gustare Vita Classic Olive Oil",
+                                              "size":  "17 fl oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.3683,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Carlini Pure Olive Oil",
+                                              "size":  "33.8 fl oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.37,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® 100% Pure Olive Oil",
+                                              "size":  "16.9 fl oz"
                                           }
                                       ]
                        },
@@ -2928,8 +3968,8 @@
                            "commodity":  "Onion Powder",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.7511,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.332,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2941,6 +3981,56 @@
                                               "membership":  false,
                                               "item":  "That\u0027s Smart! Onion Powder",
                                               "size":  "2.25 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.332,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Onion Powder",
+                                              "size":  "3.25 oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.43,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Onion Powder",
+                                              "size":  "21 oz."
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.5556,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "That\u0027s Smart Onion Powder",
+                                              "size":  "2.25 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.416,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Stonemill Onion Powder",
+                                              "size":  "2.62 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.71,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Smart Wayâ„¢ Onion Powder",
+                                              "size":  "1.75 oz"
                                           }
                                       ]
                        },
@@ -2949,8 +4039,8 @@
                            "commodity":  "Parmesan Cheese, Grated",
                            "unit":  "oz",
                            "category":  "Cheese \u0026 Dairy",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.4056,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.31,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2962,6 +4052,56 @@
                                               "membership":  false,
                                               "item":  "Our Family Grated Cheese, Parmesan 16 Oz",
                                               "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.343,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Grated Parmesan Cheese, 16 oz Bottle",
+                                              "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.31,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Grated Parmesan Cheese",
+                                              "size":  "24 oz."
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.3744,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Grated Parmesan Cheese",
+                                              "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.3863,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Reggano Grated Parmesan Cheese",
+                                              "size":  "8 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.37,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Grated Parmesan Cheese",
+                                              "size":  "16 oz"
                                           }
                                       ]
                        },
@@ -2970,8 +4110,8 @@
                            "commodity":  "Penne Pasta",
                            "unit":  "oz",
                            "category":  "Pasta, Rice \u0026 Grains",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.1181,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.078,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -2983,6 +4123,56 @@
                                               "membership":  false,
                                               "item":  "Creamette Penne Rigate 1 Lb",
                                               "size":  "1 lb"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.078,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Penne Pasta",
+                                              "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.0888,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Barilla Penne Pasta",
+                                              "size":  "16 oz., 6 pk. ($1.42/box)"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.09,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Penne Rigate",
+                                              "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.0781,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Reggano Penne",
+                                              "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.08,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Penne Rigate Pasta",
+                                              "size":  "16 oz"
                                           }
                                       ]
                        },
@@ -2991,8 +4181,8 @@
                            "commodity":  "Pepperoncini",
                            "unit":  "floz",
                            "category":  "Produce",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.2742,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.158,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -3004,6 +4194,36 @@
                                               "membership":  false,
                                               "item":  "Mt Olive Pepperoncini, Italian Seasoned 12 Fl Oz",
                                               "size":  "12 fl oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.158,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Whole Pepperoncini",
+                                              "size":  "12 fl oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.2809,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Mezzetta Medium Heat Golden Greek Peperoncini",
+                                              "size":  "32 fl oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.25,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Whole Pepperoncini Peppers",
+                                              "size":  "16 fl oz"
                                           }
                                       ]
                        },
@@ -3012,8 +4232,8 @@
                            "commodity":  "Pork Tenderloin",
                            "unit":  "lb",
                            "category":  "Meat \u0026 Poultry",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  5.49,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  2.94,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -3025,6 +4245,56 @@
                                               "membership":  false,
                                               "item":  "Whole Boneless Pork Tenderloin",
                                               "size":  "lb"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  3.97,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Prairie Fresh Natural Fresh Pork Tenderloin 2 Pieces, Boneless, 1.75-3.0 lb",
+                                              "size":  "1.75-3.0 lb, 2 pieces"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  2.94,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Pork Tenderloins, Case, priced per pound (plain, not marinated)",
+                                              "size":  "priced per lb"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  3.99,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Boneless Pork Loin Pork Tenderloin",
+                                              "size":  "lbs ($3.99/lb)"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  3.59,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Two-Pack Boneless Pork Tenderloin",
+                                              "size":  "2-pack, about 2.64 lb"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  4.99,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Fresh Natural Pork Tenderloin",
+                                              "size":  "per lb"
                                           }
                                       ]
                        },
@@ -3033,8 +4303,8 @@
                            "commodity":  "Ranch Seasoning Packet",
                            "unit":  "each",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  2.49,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.64,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -3046,6 +4316,46 @@
                                               "membership":  false,
                                               "item":  "Kinder\u0027s Ranch Dips And Seasoning Mix 1.25 Oz",
                                               "size":  "1.25 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.64,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Classic Ranch Salad Dressing \u0026 Recipe Mix",
+                                              "size":  "1 oz packet"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  1.49,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Good Graces Organic Gluten Free Ranch Dip \u0026 Dressing Mix",
+                                              "size":  "0.55 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.65,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Tuscan Garden Ranch Salad Dressing and Seasoning Mix",
+                                              "size":  "1 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.69,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Ranch Dip Mix",
+                                              "size":  "1 oz"
                                           }
                                       ]
                        },
@@ -3054,8 +4364,8 @@
                            "commodity":  "Part-Skim Mozzarella, Shredded",
                            "unit":  "oz",
                            "category":  "Cheese \u0026 Dairy",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.2494,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.18,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -3067,6 +4377,46 @@
                                               "membership":  false,
                                               "item":  "Our Family Part Skim Mozzarella Shredded Cheese 16 Oz",
                                               "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.218,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Low-Moisture Part-Skim Mozzarella Shredded Cheese, 16 oz Bag",
+                                              "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.18,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Part-Skim Shredded Mozzarella Cheese",
+                                              "size":  "1 lb., 2 pk."
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.31,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Natural Cheese",
+                                              "size":  "8 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.23,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Low-Moisture Part Skim Mozzarella Shredded Cheese",
+                                              "size":  "16 oz"
                                           }
                                       ]
                        },
@@ -3075,8 +4425,8 @@
                            "commodity":  "Jasmine Rice (Dry)",
                            "unit":  "oz",
                            "category":  "Pasta, Rice \u0026 Grains",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.1249,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.05,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -3088,6 +4438,56 @@
                                               "membership":  false,
                                               "item":  "Dynasty Jasmine Rice, Milagrosa 5 Lb",
                                               "size":  "5 lb"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.078,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Mahatma Jasmine Rice, Thai Fragrant Long Grain Rice, Gluten Free, 80 oz Bag (5 lbs)",
+                                              "size":  "80 oz (5 lb)"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.05,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Thai Jasmine Rice",
+                                              "size":  "50 lbs."
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.0934,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Riceland Enriched Long Grain Jasmine Rice",
+                                              "size":  "32 oz (2 lb)"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.0856,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Earthly Grains Jasmine Rice",
+                                              "size":  "5 lb"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.09,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Jasmine Rice",
+                                              "size":  "5 lb"
                                           }
                                       ]
                        },
@@ -3096,8 +4496,8 @@
                            "commodity":  "Salsa",
                            "unit":  "oz",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.1556,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.1,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -3109,6 +4509,56 @@
                                               "membership":  false,
                                               "item":  "Mild Thick \u0026 Chunky Salsa Our Family",
                                               "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.123,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Thick and Chunky Salsa Mild",
+                                              "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.1,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Pace Chunky Salsa, Medium (closest match; no \u0027Mild\u0027 thick \u0026 chunky variant found at Sam\u0027s Club)",
+                                              "size":  "38 oz., 2 ct."
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.1487,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Mild Salsa Thick \u0026 Chunky",
+                                              "size":  "45 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.1188,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Casa Mamita Mild Salsa",
+                                              "size":  "24 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.17,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Thick \u0026 Chunky Mild Salsa",
+                                              "size":  "16 oz"
                                           }
                                       ]
                        },
@@ -3117,8 +4567,8 @@
                            "commodity":  "Salsa Verde",
                            "unit":  "oz",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.2244,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.165,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -3130,6 +4580,46 @@
                                               "membership":  false,
                                               "item":  "Our Family Salsa Verde, Mild 16 Oz",
                                               "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.165,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Medium Cantina Style Salsa Verde",
+                                              "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.293,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Salsa Verde, Mild",
+                                              "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.2619,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Specially Selected Verde Salsa",
+                                              "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.17,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "HerdezÂ® Salsa Verde Mild",
+                                              "size":  "24 oz"
                                           }
                                       ]
                        },
@@ -3138,8 +4628,8 @@
                            "commodity":  "Seasoned Black Beans (Canned)",
                            "unit":  "oz",
                            "category":  "Beans \u0026 Canned",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.1193,
+                           "cheapest_store":  "Hy-Vee",
+                           "cheapest_price":  0.0993,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -3151,6 +4641,36 @@
                                               "membership":  false,
                                               "item":  "Bush\u0027s Best Seasoned Recipe Black Beans 15 Oz",
                                               "size":  "15 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.111,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Bush\u0027s Sidekicks Taco Fiesta Black Beans",
+                                              "size":  "15.1 oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.0993,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Bush\u0027s Seasoned Recipe Black Beans",
+                                              "size":  "15 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.1,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Bush\u0027s Seasoned Recipe Black Beans",
+                                              "size":  "15 oz"
                                           }
                                       ]
                        },
@@ -3159,8 +4679,8 @@
                            "commodity":  "Shredded Carrots",
                            "unit":  "oz",
                            "category":  "Produce",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.249,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.193,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -3172,6 +4692,36 @@
                                               "membership":  false,
                                               "item":  "Dole Shredded Carrot",
                                               "size":  "10 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.193,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Shredded Orange Carrots",
+                                              "size":  "10 oz Bag"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.199,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Grimmway Farms Shredded Carrots",
+                                              "size":  "10 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.23,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Shredded Carrots",
+                                              "size":  "10 oz"
                                           }
                                       ]
                        },
@@ -3180,8 +4730,8 @@
                            "commodity":  "Sun-Dried Tomatoes",
                            "unit":  "oz",
                            "category":  "Beans \u0026 Canned",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.7488,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.42,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -3193,6 +4743,56 @@
                                               "membership":  false,
                                               "item":  "California Sun Dry Sun Dried Tomatoes Julienne Ct",
                                               "size":  "8 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.609,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Bella Sun Luci Sun Dried Tomatoes in Olive Oil with Italian Herbs, Julienne Cut",
+                                              "size":  "8.5 oz Jar"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.42,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Terra Verde Italian Sundried Tomatoes in Oil",
+                                              "size":  "24 oz."
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.499,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Valued Naturals Sun Dried Tomatoes PrePriced",
+                                              "size":  "8 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.5488,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Tuscan Garden Sundried Tomatoes",
+                                              "size":  "8 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.5,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "California Sun DryÂ® Sun-Dried Julienne Cut Tomatoes in Oil with Herbs",
+                                              "size":  "16 oz"
                                           }
                                       ]
                        },
@@ -3201,8 +4801,8 @@
                            "commodity":  "Canned Sweet Corn",
                            "unit":  "each",
                            "category":  "Beans \u0026 Canned",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.99,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.78,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -3214,6 +4814,56 @@
                                               "membership":  false,
                                               "item":  "Our Family Sweet Whole Kernel Corn 15.25 Oz",
                                               "size":  "15.25 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.78,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value No Salt Added Golden Sweet Whole Kernel Corn",
+                                              "size":  "15.25 oz can"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  1.05,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Del Monte Golden Sweet Whole Kernel Corn",
+                                              "size":  "15.25 oz., 8 pk. (price per can)"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  1.49,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Green Giant Whole Kernel Sweet Corn Low Sodium",
+                                              "size":  "15.25 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.89,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Happy Harvest Whole Kernel Corn",
+                                              "size":  "15.25 oz can"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.78,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Smart Wayâ„¢ Whole Kernel Sweet Golden Corn",
+                                              "size":  "15.25 oz can"
                                           }
                                       ]
                        },
@@ -3222,8 +4872,8 @@
                            "commodity":  "Taco Seasoning Packet",
                            "unit":  "each",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  1.29,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.47,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -3235,6 +4885,56 @@
                                               "membership":  false,
                                               "item":  "La Preferida Taco Seasoning 1.25 Oz",
                                               "size":  "1.25 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.47,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Taco Seasoning Mix, Original",
+                                              "size":  "1 oz packet"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.65,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "McCormick Original Taco Seasoning Mix",
+                                              "size":  "1 oz. packets, 12 pk. (price per packet)"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  1.19,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "McCormick Original Taco Seasoning Mix",
+                                              "size":  "1 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.55,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Casa Mamita Taco Seasoning Mix",
+                                              "size":  "1 oz packet"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.5,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Taco Seasoning",
+                                              "size":  "1 oz"
                                           }
                                       ]
                        },
@@ -3243,8 +4943,8 @@
                            "commodity":  "Teriyaki Sauce",
                            "unit":  "floz",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.229,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.165,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -3256,6 +4956,56 @@
                                               "membership":  false,
                                               "item":  "Teriyaki Sauce Our Family",
                                               "size":  "10 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.165,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Teriyaki Sauce",
+                                              "size":  "15 fl oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.21,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Kinder\u0027s Teriyaki Marinade Sauce",
+                                              "size":  "27.5 oz."
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.249,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Teriyaki Sauce",
+                                              "size":  "10 fl oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.169,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Burman\u0027s Teriyaki Sauce",
+                                              "size":  "14.5 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.2,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Teriyaki Marinade and Sauce",
+                                              "size":  "10 fl oz"
                                           }
                                       ]
                        },
@@ -3264,8 +5014,8 @@
                            "commodity":  "Turkey Pepperoni",
                            "unit":  "oz",
                            "category":  "Meat \u0026 Poultry",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.9975,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.584,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -3277,6 +5027,46 @@
                                               "membership":  false,
                                               "item":  "Armour Turkey Pepperoni 4 Oz",
                                               "size":  "4 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.584,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Turkey Pepperoni Slices",
+                                              "size":  "5 oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.994,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hormel Turkey Pepperoni",
+                                              "size":  "5 oz"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.638,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Mama Cozzi\u0027s Pizza Kitchen Sliced Turkey Pepperoni",
+                                              "size":  "5 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.66,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Sliced Turkey Pepperoni",
+                                              "size":  "5 oz"
                                           }
                                       ]
                        },
@@ -3285,8 +5075,8 @@
                            "commodity":  "Zero-Sugar Soda (2 L)",
                            "unit":  "floz",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.0516,
+                           "cheapest_store":  "Baker\u0027s",
+                           "cheapest_price":  0.01,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -3298,6 +5088,46 @@
                                               "membership":  false,
                                               "item":  "Dr Pepper Soda, Zero Sugar 2 L",
                                               "size":  "2 l"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.015,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Dr Thunder Zero Sugar Soda Pop",
+                                              "size":  "2 Liter Bottle"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.04,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Diet Coke Soda Soft Drink (no 2-liter bottle found at Sam\u0027s Club; priced from a 12 fl oz can multipack)",
+                                              "size":  "12 fl. oz., 35 pk."
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.0516,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Coca-Cola Zero Sugar Soda Soft Drink Bottle",
+                                              "size":  "2 liters"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.01,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Big KÂ® Lemon Lime Zero Sugar Caffeine Free Soda Bottle",
+                                              "size":  "2 liter"
                                           }
                                       ]
                        },
@@ -3306,8 +5136,8 @@
                            "commodity":  "Zucchini",
                            "unit":  "lb",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  2.29,
+                           "cheapest_store":  "Aldi",
+                           "cheapest_price":  1.39,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -3319,6 +5149,148 @@
                                               "membership":  false,
                                               "item":  "Zucchini Squash",
                                               "size":  "lb"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  1.52,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Zucchini",
+                                              "size":  "each (priced per lb)"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  1.99,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Zucchini Squash",
+                                              "size":  "0.6 lbs ($1.99/lb)"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  1.39,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Zucchini, Package",
+                                              "size":  "per lb"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  1.79,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Zucchini",
+                                              "size":  "per lb"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "pork-loin",
+                           "commodity":  "Pork Loin",
+                           "unit":  "lb",
+                           "category":  "Meat \u0026 Poultry",
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  1.98,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  2.14,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Prairie Fresh Natural Fresh Pork Half Loin, Boneless, 3.5-5.5 lb",
+                                              "size":  "3.5-5.5 lb"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  1.98,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Whole Boneless Pork Loin, Vacuum Pack, priced per pound (plain, not marinated)",
+                                              "size":  "priced per lb"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  3.89,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Pork Loin Top Loin Roast Boneless",
+                                              "size":  "2.8 lbs ($3.89/lb)"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  2.09,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "USDA Premium Boneless Half Pork Loin",
+                                              "size":  "per lb"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  1.99,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Fresh Natural Pork Loin Boneless",
+                                              "size":  "per lb"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "fat-free-cheddar",
+                           "commodity":  "Fat-Free Cheddar Cheese",
+                           "unit":  "oz",
+                           "category":  "Dairy",
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.281,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.281,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Mild Cheddar Fat-Free Shredded Cheese",
+                                              "size":  "7 oz Bag"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.4543,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Kraft Cheddar Fat Free Shredded Cheese",
+                                              "size":  "7 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.54,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Kraft Fat Free Cheddar Natural Shredded Cheese Bag",
+                                              "size":  "7 oz"
                                           }
                                       ]
                        }

@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-07-08T14:05:53",
+    "generated":  "2026-07-08T15:08:07",
     "week_of":  "2026-07-08",
-    "ingredient_count":  129,
+    "ingredient_count":  131,
     "recipe_count":  113,
     "ingredients":  {
                         "ground-beef-8020":  {
@@ -9,904 +9,1049 @@
                                                  "cheapest":  5.56,
                                                  "store":  "Sam\u0027s Club",
                                                  "type":  "everyday",
-                                                 "url":  "https://www.samsclub.com/ip/Member-s-Mark-80-20-Ground-Beef-Roll-Vacuum-Pack-priced-per-pound/21213000000"
+                                                 "url":  "https://www.samsclub.com/ip/Member-s-Mark-80-20-Ground-Beef-Roll-Vacuum-Pack-priced-per-pound/21213000000",
+                                                 "n":  4
                                              },
                         "apples":  {
                                        "unit":  "lb",
                                        "cheapest":  1.08,
                                        "store":  "Walmart",
                                        "type":  "everyday",
-                                       "url":  "https://www.walmart.com/ip/44390958"
+                                       "url":  "https://www.walmart.com/ip/44390958",
+                                       "n":  6
                                    },
                         "avocados":  {
                                          "unit":  "each",
                                          "cheapest":  0.59,
                                          "store":  "Aldi",
                                          "type":  "sale",
-                                         "url":  "https://www.aldi.us/store/aldi/products/3111634-avocado-each"
+                                         "url":  "https://www.aldi.us/store/aldi/products/3111634-avocado-each",
+                                         "n":  6
                                      },
                         "bacon":  {
                                       "unit":  "lb",
                                       "cheapest":  3.96,
                                       "store":  "Sam\u0027s Club",
                                       "type":  "everyday",
-                                      "url":  "https://www.samsclub.com/ip/Member-s-Mark-Naturally-Hickory-Smoked-Bacon-3-lbs/13892064138"
+                                      "url":  "https://www.samsclub.com/ip/Member-s-Mark-Naturally-Hickory-Smoked-Bacon-3-lbs/13892064138",
+                                      "n":  6
                                   },
                         "bananas":  {
                                         "unit":  "lb",
                                         "cheapest":  0.48,
                                         "store":  "Aldi",
                                         "type":  "everyday",
-                                        "url":  "https://www.aldi.us/store/aldi/products/25720157-bananas-per-lb"
+                                        "url":  "https://www.aldi.us/store/aldi/products/25720157-bananas-per-lb",
+                                        "n":  6
                                     },
                         "blueberries":  {
                                             "unit":  "oz",
                                             "cheapest":  0.2578,
                                             "store":  "Walmart",
                                             "type":  "everyday",
-                                            "url":  "https://www.walmart.com/ip/161115457"
+                                            "url":  "https://www.walmart.com/ip/161115457",
+                                            "n":  4
                                         },
                         "chicken-breast":  {
                                                "unit":  "lb",
                                                "cheapest":  2.29,
                                                "store":  "Baker\u0027s",
                                                "type":  "sale",
-                                               "url":  "https://www.bakersplus.com/p/heritage-farm-boneless-skinless-chicken-breasts/0028334900000"
+                                               "url":  "https://www.bakersplus.com/p/heritage-farm-boneless-skinless-chicken-breasts/0028334900000",
+                                               "n":  5
                                            },
                         "bread":  {
                                       "unit":  "each",
                                       "cheapest":  1.19,
                                       "store":  "Baker\u0027s",
                                       "type":  "everyday",
-                                      "url":  "https://www.bakersplus.com/p/smart-way-enriched-white-bread/0001111015125"
+                                      "url":  "https://www.bakersplus.com/p/smart-way-enriched-white-bread/0001111015125",
+                                      "n":  5
                                   },
                         "butter":  {
                                        "unit":  "lb",
                                        "cheapest":  2.74,
                                        "store":  "Sam\u0027s Club",
                                        "type":  "everyday",
-                                       "url":  "https://www.samsclub.com/ip/Member-s-Mark-Salted-Sweet-Cream-Butter-Block-1-lb-4-lbs/15365221245"
+                                       "url":  "https://www.samsclub.com/ip/Member-s-Mark-Salted-Sweet-Cream-Butter-Block-1-lb-4-lbs/15365221245",
+                                       "n":  6
                                    },
                         "chicken-thighs":  {
                                                "unit":  "lb",
                                                "cheapest":  1.28,
                                                "store":  "Sam\u0027s Club",
                                                "type":  "everyday",
-                                               "url":  "https://www.samsclub.com/ip/Member-s-Mark-Bone-In-Chicken-Thighs-priced-per-pound/13608013618"
+                                               "url":  "https://www.samsclub.com/ip/Member-s-Mark-Bone-In-Chicken-Thighs-priced-per-pound/13608013618",
+                                               "n":  6
                                            },
                         "coffee":  {
                                        "unit":  "oz",
                                        "cheapest":  0.411,
                                        "store":  "Sam\u0027s Club",
                                        "type":  "everyday",
-                                       "url":  "https://www.samsclub.com/ip/Folgers-Classic-Medium-Roast-Ground-Coffee-43-5-oz/13626705840"
+                                       "url":  "https://www.samsclub.com/ip/Folgers-Classic-Medium-Roast-Ground-Coffee-43-5-oz/13626705840",
+                                       "n":  6
                                    },
                         "cottage-cheese":  {
                                                "unit":  "oz",
                                                "cheapest":  0.1196,
                                                "store":  "Walmart",
                                                "type":  "everyday",
-                                               "url":  "https://www.walmart.com/ip/10315022"
+                                               "url":  "https://www.walmart.com/ip/10315022",
+                                               "n":  6
                                            },
                         "cream-cheese":  {
                                              "unit":  "oz",
                                              "cheapest":  0.13,
                                              "store":  "Sam\u0027s Club",
                                              "type":  "everyday",
-                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Cream-Cheese-Brick-48-oz/13865569340"
+                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Cream-Cheese-Brick-48-oz/13865569340",
+                                             "n":  6
                                          },
                         "grapes":  {
                                        "unit":  "lb",
                                        "cheapest":  1.69,
                                        "store":  "Aldi",
                                        "type":  "everyday",
-                                       "url":  "https://www.aldi.us/store/aldi/products/305371-red-grapes-each"
+                                       "url":  "https://www.aldi.us/store/aldi/products/305371-red-grapes-each",
+                                       "n":  5
                                    },
                         "ground-turkey":  {
                                               "unit":  "lb",
                                               "cheapest":  2.6633,
                                               "store":  "Aldi",
                                               "type":  "sale",
-                                              "url":  "https://www.aldi.us/store/aldi/products/41417088-kirkwood-ground-turkey-3-lb"
+                                              "url":  "https://www.aldi.us/store/aldi/products/41417088-kirkwood-ground-turkey-3-lb",
+                                              "n":  6
                                           },
                         "eggs":  {
                                      "unit":  "dozen",
                                      "cheapest":  1.47,
                                      "store":  "Walmart",
                                      "type":  "everyday",
-                                     "url":  "https://www.walmart.com/ip/145051970"
+                                     "url":  "https://www.walmart.com/ip/145051970",
+                                     "n":  6
                                  },
                         "milk":  {
                                      "unit":  "gallon",
                                      "cheapest":  2.99,
                                      "store":  "Hy-Vee",
                                      "type":  "everyday",
-                                     "url":  "https://www.hy-vee.com/aisles-online/p/4132830/thats-smart-2-reduced-fat-milk"
+                                     "url":  "https://www.hy-vee.com/aisles-online/p/4132830/thats-smart-2-reduced-fat-milk",
+                                     "n":  6
                                  },
                         "orange-juice":  {
                                              "unit":  "floz",
                                              "cheapest":  0.0648,
                                              "store":  "Sam\u0027s Club",
                                              "type":  "everyday",
-                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Pulp-Free-100-Orange-Juice-52-fl-oz-2-pk/13879263904"
+                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Pulp-Free-100-Orange-Juice-52-fl-oz-2-pk/13879263904",
+                                             "n":  6
                                          },
                         "peaches":  {
                                         "unit":  "lb",
                                         "cheapest":  1.79,
                                         "store":  "Baker\u0027s",
                                         "type":  "everyday",
-                                        "url":  "https://www.bakersplus.com/p/fresh-southern-yellow-peach/0000000003117"
+                                        "url":  "https://www.bakersplus.com/p/fresh-southern-yellow-peach/0000000003117",
+                                        "n":  6
                                     },
                         "peanut-butter":  {
                                               "unit":  "oz",
                                               "cheapest":  0.0995,
                                               "store":  "Walmart",
                                               "type":  "everyday",
-                                              "url":  "https://www.walmart.com/ip/10315479"
+                                              "url":  "https://www.walmart.com/ip/10315479",
+                                              "n":  5
                                           },
                         "pork-chops":  {
                                            "unit":  "lb",
                                            "cheapest":  2.52,
                                            "store":  "Sam\u0027s Club",
                                            "type":  "everyday",
-                                           "url":  "https://www.samsclub.com/ip/Member-s-Mark-Bone-In-Pork-Chops-priced-per-pound/17799324269"
+                                           "url":  "https://www.samsclub.com/ip/Member-s-Mark-Bone-In-Pork-Chops-priced-per-pound/17799324269",
+                                           "n":  5
                                        },
                         "russet-potatoes":  {
                                                 "unit":  "lb",
                                                 "cheapest":  0.439,
                                                 "store":  "Aldi",
                                                 "type":  "everyday",
-                                                "url":  "https://www.aldi.us/store/aldi/products/16725303-russet-potato-bag-10-lbs"
+                                                "url":  "https://www.aldi.us/store/aldi/products/16725303-russet-potato-bag-10-lbs",
+                                                "n":  6
                                             },
                         "shredded-cheese":  {
                                                 "unit":  "oz",
                                                 "cheapest":  0.1862,
                                                 "store":  "Baker\u0027s",
                                                 "type":  "sale",
-                                                "url":  "https://www.bakersplus.com/p/kroger-colby-jack-shredded-cheese-family-size/0001111015117"
+                                                "url":  "https://www.bakersplus.com/p/kroger-colby-jack-shredded-cheese-family-size/0001111015117",
+                                                "n":  6
                                             },
                         "sour-cream":  {
                                            "unit":  "oz",
                                            "cheapest":  0.115,
                                            "store":  "Walmart",
                                            "type":  "everyday",
-                                           "url":  "https://www.walmart.com/ip/12335111"
+                                           "url":  "https://www.walmart.com/ip/12335111",
+                                           "n":  6
                                        },
                         "strawberries":  {
                                              "unit":  "oz",
                                              "cheapest":  0.1241,
                                              "store":  "Sam\u0027s Club",
                                              "type":  "everyday",
-                                             "url":  "https://www.samsclub.com/ip/Strawberries-2-lbs/13612870276"
+                                             "url":  "https://www.samsclub.com/ip/Strawberries-2-lbs/13612870276",
+                                             "n":  6
                                          },
                         "sweet-corn":  {
                                            "unit":  "each",
                                            "cheapest":  0.4,
                                            "store":  "Baker\u0027s",
                                            "type":  "sale",
-                                           "url":  "https://www.bakersplus.com/p/fresh-sweet-corn-on-the-cob-each/0000000004590"
+                                           "url":  "https://www.bakersplus.com/p/fresh-sweet-corn-on-the-cob-each/0000000004590",
+                                           "n":  5
                                        },
                         "watermelon":  {
                                            "unit":  "each",
                                            "cheapest":  2.99,
                                            "store":  "Baker\u0027s",
                                            "type":  "sale",
-                                           "url":  "https://www.bakersplus.com/p/mini-seedless-whole-watermelon/0000000003421"
+                                           "url":  "https://www.bakersplus.com/p/mini-seedless-whole-watermelon/0000000003421",
+                                           "n":  5
                                        },
                         "onions":  {
                                        "unit":  "lb",
                                        "cheapest":  0.74,
                                        "store":  "Sam\u0027s Club",
                                        "type":  "everyday",
-                                       "url":  "https://www.samsclub.com/ip/Yellow-Onions-10-lbs/13599313206"
+                                       "url":  "https://www.samsclub.com/ip/Yellow-Onions-10-lbs/13599313206",
+                                       "n":  6
                                    },
                         "yogurt":  {
                                        "unit":  "oz",
                                        "cheapest":  0.0825,
                                        "store":  "Walmart",
                                        "type":  "everyday",
-                                       "url":  "https://www.walmart.com/ip/10450127"
+                                       "url":  "https://www.walmart.com/ip/10450127",
+                                       "n":  6
                                    },
                         "93-7-ground-turkey":  {
                                                    "unit":  "lb",
                                                    "cheapest":  4.33,
                                                    "store":  "Sam\u0027s Club",
                                                    "type":  "everyday",
-                                                   "url":  "https://www.samsclub.com/ip/Jennie-O-Lean-Ground-Turkey-Case-20-lbs/13730411236"
+                                                   "url":  "https://www.samsclub.com/ip/Jennie-O-Lean-Ground-Turkey-Case-20-lbs/13730411236",
+                                                   "n":  6
                                                },
                         "boneless-skinless-chicken-thigh":  {
                                                                 "unit":  "lb",
                                                                 "cheapest":  1.99,
                                                                 "store":  "Hy-Vee",
                                                                 "type":  "everyday",
-                                                                "url":  "https://www.hy-vee.com/aisles-online/p/289369/tyson-boneless-skinless-chicken-thighs-frozen"
+                                                                "url":  "https://www.hy-vee.com/aisles-online/p/289369/tyson-boneless-skinless-chicken-thighs-frozen",
+                                                                "n":  6
                                                             },
                         "1-3-fat-cream-cheese":  {
                                                      "unit":  "oz",
                                                      "cheapest":  0.1488,
                                                      "store":  "Aldi",
                                                      "type":  "everyday",
-                                                     "url":  "https://www.aldi.us/store/aldi/products/20713385-happy-farms-cream-cheese-8-oz"
+                                                     "url":  "https://www.aldi.us/store/aldi/products/20713385-happy-farms-cream-cheese-8-oz",
+                                                     "n":  6
                                                  },
                         "apple":  {
                                       "unit":  "each",
                                       "cheapest":  0.39,
                                       "store":  "Walmart",
                                       "type":  "everyday",
-                                      "url":  "https://www.walmart.com/ip/44390953"
+                                      "url":  "https://www.walmart.com/ip/44390953",
+                                      "n":  6
                                   },
                         "balsamic-vinegar":  {
                                                  "unit":  "oz",
                                                  "cheapest":  0.1947,
                                                  "store":  "Aldi",
                                                  "type":  "everyday",
-                                                 "url":  "https://www.aldi.us/store/aldi/products/21111028-priano-balsamic-vinegar-16-9-fl-oz"
+                                                 "url":  "https://www.aldi.us/store/aldi/products/21111028-priano-balsamic-vinegar-16-9-fl-oz",
+                                                 "n":  4
                                              },
                         "bread-crumbs":  {
                                              "unit":  "oz",
                                              "cheapest":  0.0744,
                                              "store":  "Sam\u0027s Club",
                                              "type":  "everyday",
-                                             "url":  "https://www.samsclub.com/ip/Vigo-Italian-Style-Bread-Crumbs-5-lbs/13803520339"
+                                             "url":  "https://www.samsclub.com/ip/Vigo-Italian-Style-Bread-Crumbs-5-lbs/13803520339",
+                                             "n":  6
                                          },
                         "brown-sugar":  {
                                             "unit":  "oz",
                                             "cheapest":  0.03,
                                             "store":  "Sam\u0027s Club",
                                             "type":  "everyday",
-                                            "url":  "https://www.samsclub.com/ip/Member-s-Mark-Light-Brown-Sugar-7-lbs/68113177798"
+                                            "url":  "https://www.samsclub.com/ip/Member-s-Mark-Light-Brown-Sugar-7-lbs/68113177798",
+                                            "n":  6
                                         },
                         "cannellini-beans":  {
                                                  "unit":  "oz",
                                                  "cheapest":  0.055,
                                                  "store":  "Walmart",
                                                  "type":  "everyday",
-                                                 "url":  "https://www.walmart.com/ip/22002645"
+                                                 "url":  "https://www.walmart.com/ip/22002645",
+                                                 "n":  5
                                              },
                         "carrots":  {
                                         "unit":  "lb",
                                         "cheapest":  0.87,
                                         "store":  "Sam\u0027s Club",
                                         "type":  "everyday",
-                                        "url":  "https://www.samsclub.com/ip/Organic-Tender-Sweet-Carrots-5-lbs/13585974324"
+                                        "url":  "https://www.samsclub.com/ip/Organic-Tender-Sweet-Carrots-5-lbs/13585974324",
+                                        "n":  6
                                     },
                         "cashews":  {
                                         "unit":  "oz",
                                         "cheapest":  0.39,
                                         "store":  "Aldi",
                                         "type":  "everyday",
-                                        "url":  "https://www.aldi.us/store/aldi/products/19061996-southern-grove-deluxe-whole-cashews-with-sea-salt-30-oz"
+                                        "url":  "https://www.aldi.us/store/aldi/products/19061996-southern-grove-deluxe-whole-cashews-with-sea-salt-30-oz",
+                                        "n":  6
                                     },
                         "cheddar-cheese-shredded":  {
                                                         "unit":  "oz",
                                                         "cheapest":  0.18,
                                                         "store":  "Sam\u0027s Club",
                                                         "type":  "everyday",
-                                                        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Mild-Cheddar-Shredded-Cheese-16-oz-2-pk/13771120208"
+                                                        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Mild-Cheddar-Shredded-Cheese-16-oz-2-pk/13771120208",
+                                                        "n":  6
                                                     },
                         "chickpeas":  {
                                           "unit":  "oz",
                                           "cheapest":  0.055,
                                           "store":  "Walmart",
                                           "type":  "everyday",
-                                          "url":  "https://www.walmart.com/ip/10534041"
+                                          "url":  "https://www.walmart.com/ip/10534041",
+                                          "n":  6
                                       },
                         "cornstarch":  {
                                            "unit":  "oz",
                                            "cheapest":  0.12,
                                            "store":  "Walmart",
                                            "type":  "everyday",
-                                           "url":  "https://www.walmart.com/ip/664106906"
+                                           "url":  "https://www.walmart.com/ip/664106906",
+                                           "n":  6
                                        },
                         "crushed-tomatoes":  {
                                                  "unit":  "oz",
                                                  "cheapest":  0.0536,
                                                  "store":  "Sam\u0027s Club",
                                                  "type":  "everyday",
-                                                 "url":  "https://www.samsclub.com/ip/Tuttorosso-Crushed-Tomatoes-with-Basil-28-oz-8-pk/7294075605"
+                                                 "url":  "https://www.samsclub.com/ip/Tuttorosso-Crushed-Tomatoes-with-Basil-28-oz-8-pk/7294075605",
+                                                 "n":  6
                                              },
                         "curry-powder":  {
                                              "unit":  "oz",
                                              "cheapest":  0.5,
                                              "store":  "Sam\u0027s Club",
                                              "type":  "everyday",
-                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Salt-Free-Curry-Powder-18-oz/13629410820"
+                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Salt-Free-Curry-Powder-18-oz/13629410820",
+                                             "n":  5
                                          },
                         "dijon-mustard":  {
                                               "unit":  "oz",
                                               "cheapest":  0.1375,
                                               "store":  "Aldi",
                                               "type":  "everyday",
-                                              "url":  "https://www.aldi.us/store/aldi/products/18648757-burman-s-all-natural-dijon-mustard-12-oz"
+                                              "url":  "https://www.aldi.us/store/aldi/products/18648757-burman-s-all-natural-dijon-mustard-12-oz",
+                                              "n":  5
                                           },
                         "enchilada-sauce":  {
                                                 "unit":  "oz",
                                                 "cheapest":  0.1,
                                                 "store":  "Walmart",
                                                 "type":  "everyday",
-                                                "url":  "https://www.walmart.com/ip/1840673347"
+                                                "url":  "https://www.walmart.com/ip/1840673347",
+                                                "n":  4
                                             },
                         "fries":  {
                                       "unit":  "oz",
                                       "cheapest":  0.0334,
                                       "store":  "Sam\u0027s Club",
                                       "type":  "everyday",
-                                      "url":  "https://www.samsclub.com/ip/Ore-Ida-Crispy-Crinkles-French-Fries-Frozen-8-lbs/13621707320"
+                                      "url":  "https://www.samsclub.com/ip/Ore-Ida-Crispy-Crinkles-French-Fries-Frozen-8-lbs/13621707320",
+                                      "n":  6
                                   },
                         "frozen-chopped-spinach":  {
                                                        "unit":  "oz",
                                                        "cheapest":  0.079,
                                                        "store":  "Walmart",
                                                        "type":  "everyday",
-                                                       "url":  "https://www.walmart.com/ip/36817130"
+                                                       "url":  "https://www.walmart.com/ip/36817130",
+                                                       "n":  5
                                                    },
                         "frozen-green-peas":  {
                                                   "unit":  "oz",
                                                   "cheapest":  0.078,
                                                   "store":  "Walmart",
                                                   "type":  "everyday",
-                                                  "url":  "https://www.walmart.com/ip/443429457"
+                                                  "url":  "https://www.walmart.com/ip/443429457",
+                                                  "n":  6
                                               },
                         "ginger":  {
                                        "unit":  "lb",
                                        "cheapest":  3.41,
                                        "store":  "Sam\u0027s Club",
                                        "type":  "everyday",
-                                       "url":  "https://www.samsclub.com/ip/Organic-Ginger-Root-1-75-lbs/13888814112"
+                                       "url":  "https://www.samsclub.com/ip/Organic-Ginger-Root-1-75-lbs/13888814112",
+                                       "n":  6
                                    },
                         "gochujang":  {
                                           "unit":  "oz",
                                           "cheapest":  0.261,
                                           "store":  "Walmart",
                                           "type":  "everyday",
-                                          "url":  "https://www.walmart.com/ip/7260864094"
+                                          "url":  "https://www.walmart.com/ip/7260864094",
+                                          "n":  2
                                       },
                         "golden-raisins":  {
                                                "unit":  "oz",
                                                "cheapest":  0.13,
                                                "store":  "Sam\u0027s Club",
                                                "type":  "everyday",
-                                               "url":  "https://www.samsclub.com/ip/Sun-Maid-California-Sun-Dried-Raisins-30-oz-2-pk/4114312907"
+                                               "url":  "https://www.samsclub.com/ip/Sun-Maid-California-Sun-Dried-Raisins-30-oz-2-pk/4114312907",
+                                               "n":  5
                                            },
                         "greek-yogurt":  {
                                              "unit":  "oz",
                                              "cheapest":  0.0872,
                                              "store":  "Aldi",
                                              "type":  "everyday",
-                                             "url":  "https://www.aldi.us/store/aldi/products/20249671-friendly-farms-nonfat-plain-greek-yogurt-32-oz"
+                                             "url":  "https://www.aldi.us/store/aldi/products/20249671-friendly-farms-nonfat-plain-greek-yogurt-32-oz",
+                                             "n":  6
                                          },
                         "green-beans":  {
                                             "unit":  "oz",
                                             "cheapest":  0.054,
                                             "store":  "Walmart",
                                             "type":  "everyday",
-                                            "url":  "https://www.walmart.com/ip/10448318"
+                                            "url":  "https://www.walmart.com/ip/10448318",
+                                            "n":  5
                                         },
                         "green-cabbage":  {
                                               "unit":  "lb",
                                               "cheapest":  0.79,
                                               "store":  "Aldi",
                                               "type":  "everyday",
-                                              "url":  "https://www.aldi.us/store/aldi/products/25939587-cabbage-per-lb"
+                                              "url":  "https://www.aldi.us/store/aldi/products/25939587-cabbage-per-lb",
+                                              "n":  5
                                           },
                         "hickory-smoked-bacon":  {
                                                      "unit":  "lb",
                                                      "cheapest":  3.96,
                                                      "store":  "Sam\u0027s Club",
                                                      "type":  "everyday",
-                                                     "url":  "https://www.samsclub.com/ip/Member-s-Mark-Naturally-Hickory-Smoked-Bacon-3-lbs/13892064138"
+                                                     "url":  "https://www.samsclub.com/ip/Member-s-Mark-Naturally-Hickory-Smoked-Bacon-3-lbs/13892064138",
+                                                     "n":  6
                                                  },
                         "hoisin-sauce":  {
                                              "unit":  "oz",
                                              "cheapest":  0.271,
                                              "store":  "Walmart",
                                              "type":  "everyday",
-                                             "url":  "https://www.walmart.com/ip/178135682"
+                                             "url":  "https://www.walmart.com/ip/178135682",
+                                             "n":  4
                                          },
                         "hominy":  {
                                        "unit":  "oz",
                                        "cheapest":  0.0507,
                                        "store":  "Walmart",
                                        "type":  "everyday",
-                                       "url":  "https://www.walmart.com/ip/10451514"
+                                       "url":  "https://www.walmart.com/ip/10451514",
+                                       "n":  3
                                    },
                         "honey":  {
                                       "unit":  "oz",
                                       "cheapest":  0.225,
                                       "store":  "Walmart",
                                       "type":  "everyday",
-                                      "url":  "https://www.walmart.com/ip/20647992"
+                                      "url":  "https://www.walmart.com/ip/20647992",
+                                      "n":  5
                                   },
                         "honey-dijon-mustard":  {
                                                     "unit":  "oz",
                                                     "cheapest":  0.1375,
                                                     "store":  "Aldi",
                                                     "type":  "everyday",
-                                                    "url":  "https://www.aldi.us/store/aldi/products/18648757-burman-s-all-natural-dijon-mustard-12-oz"
+                                                    "url":  "https://www.aldi.us/store/aldi/products/18648757-burman-s-all-natural-dijon-mustard-12-oz",
+                                                    "n":  5
                                                 },
                         "ketchup":  {
                                         "unit":  "oz",
                                         "cheapest":  0.047,
                                         "store":  "Walmart",
                                         "type":  "everyday",
-                                        "url":  "https://www.walmart.com/ip/10533323"
+                                        "url":  "https://www.walmart.com/ip/10533323",
+                                        "n":  6
                                     },
                         "kidney-beans":  {
                                              "unit":  "oz",
                                              "cheapest":  0.055,
                                              "store":  "Walmart",
                                              "type":  "everyday",
-                                             "url":  "https://www.walmart.com/ip/10534045"
+                                             "url":  "https://www.walmart.com/ip/10534045",
+                                             "n":  6
                                          },
                         "light-sour-cream":  {
                                                  "unit":  "oz",
                                                  "cheapest":  0.1044,
                                                  "store":  "Baker\u0027s",
                                                  "type":  "everyday",
-                                                 "url":  "https://www.bakersplus.com/p/kroger-light-sour-cream/0001111003896"
+                                                 "url":  "https://www.bakersplus.com/p/kroger-light-sour-cream/0001111003896",
+                                                 "n":  6
                                              },
                         "marinara-sauce":  {
                                                "unit":  "oz",
                                                "cheapest":  0.076,
                                                "store":  "Walmart",
                                                "type":  "everyday",
-                                               "url":  "https://www.walmart.com/ip/952045923"
+                                               "url":  "https://www.walmart.com/ip/952045923",
+                                               "n":  5
                                            },
                         "olives":  {
                                        "unit":  "oz",
                                        "cheapest":  0.21,
                                        "store":  "Sam\u0027s Club",
                                        "type":  "everyday",
-                                       "url":  "https://www.samsclub.com/ip/Member-s-Mark-Pimento-Stuffed-Manzanilla-Olives-2-pk/13636265901"
+                                       "url":  "https://www.samsclub.com/ip/Member-s-Mark-Pimento-Stuffed-Manzanilla-Olives-2-pk/13636265901",
+                                       "n":  5
                                    },
                         "paprika":  {
                                         "unit":  "oz",
                                         "cheapest":  0.432,
                                         "store":  "Walmart",
                                         "type":  "everyday",
-                                        "url":  "https://www.walmart.com/ip/559839182"
+                                        "url":  "https://www.walmart.com/ip/559839182",
+                                        "n":  6
                                     },
                         "pineapple-chunks":  {
                                                  "unit":  "oz",
                                                  "cheapest":  0.081,
                                                  "store":  "Hy-Vee",
                                                  "type":  "everyday",
-                                                 "url":  "https://www.hy-vee.com/aisles-online/p/2970344/thats-smart-pineapple-chunks"
+                                                 "url":  "https://www.hy-vee.com/aisles-online/p/2970344/thats-smart-pineapple-chunks",
+                                                 "n":  6
                                              },
                         "poblano-peppers":  {
                                                 "unit":  "lb",
                                                 "cheapest":  2.99,
                                                 "store":  "Family Fare",
                                                 "type":  "everyday",
-                                                "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/green_pasilla_peppers_capsicums/p/2311679"
+                                                "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/green_pasilla_peppers_capsicums/p/2311679",
+                                                "n":  2
                                             },
                         "potato":  {
                                        "unit":  "lb",
                                        "cheapest":  0.44,
                                        "store":  "Aldi",
                                        "type":  "everyday",
-                                       "url":  "https://www.aldi.us/store/aldi/products/16725303-russet-potato-bag-10-lbs"
+                                       "url":  "https://www.aldi.us/store/aldi/products/16725303-russet-potato-bag-10-lbs",
+                                       "n":  6
                                    },
                         "provolone-cheese":  {
                                                  "unit":  "oz",
                                                  "cheapest":  0.209,
                                                  "store":  "Walmart",
                                                  "type":  "everyday",
-                                                 "url":  "https://www.walmart.com/ip/10451510"
+                                                 "url":  "https://www.walmart.com/ip/10451510",
+                                                 "n":  5
                                              },
                         "red-bell-pepper":  {
                                                 "unit":  "each",
                                                 "cheapest":  0.83,
                                                 "store":  "Sam\u0027s Club",
                                                 "type":  "everyday",
-                                                "url":  ""
+                                                "url":  "",
+                                                "n":  6
                                             },
                         "red-wine-vinegar":  {
                                                  "unit":  "oz",
                                                  "cheapest":  0.1473,
                                                  "store":  "Hy-Vee",
                                                  "type":  "everyday",
-                                                 "url":  "https://www.hy-vee.com/aisles-online/p/55824/gustare-vita-red-wine-vinegar"
+                                                 "url":  "https://www.hy-vee.com/aisles-online/p/55824/gustare-vita-red-wine-vinegar",
+                                                 "n":  4
                                              },
                         "roasted-red-peppers":  {
                                                     "unit":  "oz",
                                                     "cheapest":  0.178,
                                                     "store":  "Walmart",
                                                     "type":  "everyday",
-                                                    "url":  "https://www.walmart.com/ip/863905651"
+                                                    "url":  "https://www.walmart.com/ip/863905651",
+                                                    "n":  4
                                                 },
                         "rotini-pasta":  {
                                              "unit":  "oz",
                                              "cheapest":  0.078,
                                              "store":  "Walmart",
                                              "type":  "everyday",
-                                             "url":  "https://www.walmart.com/ip/10534080"
+                                             "url":  "https://www.walmart.com/ip/10534080",
+                                             "n":  5
                                          },
                         "sesame-oil":  {
                                            "unit":  "oz",
                                            "cheapest":  0.536,
                                            "store":  "Walmart",
                                            "type":  "everyday",
-                                           "url":  "https://www.walmart.com/ip/600101709"
+                                           "url":  "https://www.walmart.com/ip/600101709",
+                                           "n":  4
                                        },
                         "soy-sauce":  {
                                           "unit":  "oz",
                                           "cheapest":  0.112,
                                           "store":  "Walmart",
                                           "type":  "everyday",
-                                          "url":  "https://www.walmart.com/ip/15056122"
+                                          "url":  "https://www.walmart.com/ip/15056122",
+                                          "n":  6
                                       },
                         "sugar-free-maple-syrup":  {
                                                        "unit":  "oz",
                                                        "cheapest":  0.1121,
                                                        "store":  "Baker\u0027s",
                                                        "type":  "everyday",
-                                                       "url":  "https://www.bakersplus.com/p/kroger-sugar-free-original-pancake-syrup/0001111014734"
+                                                       "url":  "https://www.bakersplus.com/p/kroger-sugar-free-original-pancake-syrup/0001111014734",
+                                                       "n":  3
                                                    },
                         "tahini":  {
                                        "unit":  "oz",
                                        "cheapest":  0.331,
                                        "store":  "Walmart",
                                        "type":  "everyday",
-                                       "url":  "https://www.walmart.com/ip/181163509"
+                                       "url":  "https://www.walmart.com/ip/181163509",
+                                       "n":  3
                                    },
                         "toasted-sesame-seeds":  {
                                                      "unit":  "oz",
                                                      "cheapest":  0.36,
                                                      "store":  "Sam\u0027s Club",
                                                      "type":  "everyday",
-                                                     "url":  "https://www.samsclub.com/ip/Member-s-Mark-White-Sesame-Seed-20-5-oz/17777018655"
+                                                     "url":  "https://www.samsclub.com/ip/Member-s-Mark-White-Sesame-Seed-20-5-oz/17777018655",
+                                                     "n":  5
                                                  },
                         "tomatillos":  {
                                            "unit":  "lb",
                                            "cheapest":  1.99,
                                            "store":  "Family Fare",
                                            "type":  "everyday",
-                                           "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/other_vegetables/tomatillos/p/12573"
+                                           "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/other_vegetables/tomatillos/p/12573",
+                                           "n":  5
                                        },
                         "tomato-paste":  {
                                              "unit":  "oz",
                                              "cheapest":  0.1117,
                                              "store":  "Sam\u0027s Club",
                                              "type":  "everyday",
-                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Tomato-Paste-6-oz-12-pk/7874211804"
+                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Tomato-Paste-6-oz-12-pk/7874211804",
+                                             "n":  6
                                          },
                         "tomato-sauce":  {
                                              "unit":  "oz",
                                              "cheapest":  0.05,
                                              "store":  "Sam\u0027s Club",
                                              "type":  "everyday",
-                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Tomato-Sauce-106-oz/13602663979"
+                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Tomato-Sauce-106-oz/13602663979",
+                                             "n":  6
                                          },
                         "traditional-pasta-sauce":  {
                                                         "unit":  "oz",
                                                         "cheapest":  0.07,
                                                         "store":  "Hy-Vee",
                                                         "type":  "sale",
-                                                        "url":  "https://www.hy-vee.com/aisles-online/p/6752/hunts-traditional-pasta-sauce-24-oz-can"
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/6752/hunts-traditional-pasta-sauce-24-oz-can",
+                                                        "n":  5
                                                     },
                         "white-mushrooms":  {
                                                 "unit":  "oz",
                                                 "cheapest":  0.17,
                                                 "store":  "Sam\u0027s Club",
                                                 "type":  "everyday",
-                                                "url":  "https://www.samsclub.com/ip/Whole-White-Mushrooms-24-oz/13894703507"
+                                                "url":  "https://www.samsclub.com/ip/Whole-White-Mushrooms-24-oz/13894703507",
+                                                "n":  6
                                             },
                         "white-vinegar":  {
                                               "unit":  "oz",
                                               "cheapest":  0.034,
                                               "store":  "Family Fare",
                                               "type":  "everyday",
-                                              "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/our_family_white_vinegar/p/1564405684716741569"
+                                              "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/our_family_white_vinegar/p/1564405684716741569",
+                                              "n":  6
                                           },
                         "zero-sugar-soda":  {
                                                 "unit":  "each",
                                                 "cheapest":  1,
                                                 "store":  "Baker\u0027s",
                                                 "type":  "everyday",
-                                                "url":  "https://www.bakersplus.com/p/big-k-lemon-lime-zero-sugar-caffeine-free-soda-bottle/0001111009836"
+                                                "url":  "https://www.bakersplus.com/p/big-k-lemon-lime-zero-sugar-caffeine-free-soda-bottle/0001111009836",
+                                                "n":  5
                                             },
                         "93-7-ground-beef":  {
                                                  "unit":  "lb",
-                                                 "cheapest":  9.29,
-                                                 "store":  "Family Fare",
+                                                 "cheapest":  6.17,
+                                                 "store":  "Sam\u0027s Club",
                                                  "type":  "everyday",
-                                                 "url":  "https://www.shopfamilyfare.com/shop/meat/beef/ground/our_certified_93_lean_7_fat_lean_ground_beef_roll_1_lb_16_oz/p/6427566"
+                                                 "url":  "https://www.samsclub.com/ip/Member-s-Mark-93-7-Ground-Beef-priced-per-pound/13865573229",
+                                                 "n":  6
                                              },
                         "sugar-free-bbq-sauce":  {
                                                      "unit":  "oz",
-                                                     "cheapest":  0.3883,
-                                                     "store":  "Family Fare",
+                                                     "cheapest":  0.174,
+                                                     "store":  "Walmart",
                                                      "type":  "everyday",
-                                                     "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/bbq_sauce/g_hughes_sugar_free_original_bbq_sauce_18_oz/p/8145902"
+                                                     "url":  "https://www.walmart.com/ip/409008803",
+                                                     "n":  4
                                                  },
                         "beef-broth":  {
                                            "unit":  "floz",
-                                           "cheapest":  0.0528,
-                                           "store":  "Family Fare",
+                                           "cheapest":  0.04,
+                                           "store":  "Walmart",
                                            "type":  "everyday",
-                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/broth_stock/our_family_beef_broth_32_fl_oz/p/7081311"
+                                           "url":  "https://www.walmart.com/ip/312850691",
+                                           "n":  5
                                        },
                         "beef-chuck-roast":  {
                                                  "unit":  "lb",
-                                                 "cheapest":  10.99,
-                                                 "store":  "Family Fare",
+                                                 "cheapest":  7.47,
+                                                 "store":  "Sam\u0027s Club",
                                                  "type":  "everyday",
-                                                 "url":  "https://www.shopfamilyfare.com/shop/meat/beef/roasts/fresh_beef_chuck_roast_boneless/p/1564405684713030667"
+                                                 "url":  "https://www.samsclub.com/ip/Member-s-Mark-USDA-Choice-Angus-Beef-Boneless-Chuck-Roast-priced-per-pound/13596802079",
+                                                 "n":  6
                                              },
                         "frozen-broccoli-florets":  {
                                                         "unit":  "oz",
-                                                        "cheapest":  0.1408,
-                                                        "store":  "Family Fare",
+                                                        "cheapest":  0.097,
+                                                        "store":  "Walmart",
                                                         "type":  "everyday",
-                                                        "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_vegetables/broccoli/frozen_broccoli_florets_our_family_steamable/p/1564405684703626598"
+                                                        "url":  "https://www.walmart.com/ip/735585383",
+                                                        "n":  6
                                                     },
                         "buffalo-wing-sauce":  {
                                                    "unit":  "floz",
-                                                   "cheapest":  0.3119,
-                                                   "store":  "Family Fare",
+                                                   "cheapest":  0.13,
+                                                   "store":  "Sam\u0027s Club",
                                                    "type":  "everyday",
-                                                   "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/marinades/sweet_baby_ray_s_buffalo_wing_wing_sauce_16_fl_oz/p/536061"
+                                                   "url":  "https://www.samsclub.com/ip/Frank-s-RedHot-Original-Buffalo-Wing-Sauce-1-gal/4150074161",
+                                                   "n":  6
                                                },
                         "chicken-broth":  {
                                               "unit":  "floz",
-                                              "cheapest":  0.0528,
-                                              "store":  "Family Fare",
+                                              "cheapest":  0.04,
+                                              "store":  "Walmart",
                                               "type":  "everyday",
-                                              "url":  "https://www.shopfamilyfare.com/shop/pantry/broth_soups_stews_chili/broth_stock/our_family_chicken_broth_32_fl_oz/p/7081307"
+                                              "url":  "https://www.walmart.com/ip/44391066",
+                                              "n":  6
                                           },
                         "chili-powder":  {
                                              "unit":  "oz",
-                                             "cheapest":  0.6145,
-                                             "store":  "Family Fare",
+                                             "cheapest":  0.36,
+                                             "store":  "Walmart",
                                              "type":  "everyday",
-                                             "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/that_s_smart_spices_chili_powder_seasoning/p/1564405684704741126"
+                                             "url":  "https://www.walmart.com/ip/157643393",
+                                             "n":  6
                                          },
                         "chipotle-in-adobo":  {
                                                   "unit":  "oz",
-                                                  "cheapest":  0.2653,
-                                                  "store":  "Family Fare",
+                                                  "cheapest":  0.21,
+                                                  "store":  "Baker\u0027s",
                                                   "type":  "everyday",
-                                                  "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/san_marcos_original_recipe_chipotles_peppers_in_adobo_sauce_7_5_oz/p/2392969"
+                                                  "url":  "",
+                                                  "n":  4
                                               },
                         "coconut-milk":  {
                                              "unit":  "floz",
-                                             "cheapest":  0.2067,
-                                             "store":  "Family Fare",
+                                             "cheapest":  0.1369,
+                                             "store":  "Sam\u0027s Club",
                                              "type":  "everyday",
-                                             "url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/lemon_lime/geisha_coconut_milk_original_13_5_fl_oz/p/5848585"
+                                             "url":  "https://www.samsclub.com/ip/Thai-Kitchen-Unsweetened-Coconut-Milk-13-66-fl-oz-cans-6-pk/73762801083",
+                                             "n":  5
                                          },
                         "diced-green-chiles":  {
                                                    "unit":  "oz",
-                                                   "cheapest":  0.2975,
-                                                   "store":  "Family Fare",
+                                                   "cheapest":  0.22,
+                                                   "store":  "Walmart",
                                                    "type":  "everyday",
-                                                   "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/our_family_green_chiles_mild_diced_4_oz/p/7081291"
+                                                   "url":  "https://www.walmart.com/ip/10415222",
+                                                   "n":  5
                                                },
                         "diced-tomatoes":  {
                                                "unit":  "oz",
-                                               "cheapest":  0.0683,
-                                               "store":  "Family Fare",
+                                               "cheapest":  0.0559,
+                                               "store":  "Sam\u0027s Club",
                                                "type":  "everyday",
-                                               "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/tomatoes/our_family_tomatoes_diced_14_5_oz/p/6786990"
+                                               "url":  "https://www.samsclub.com/ip/Member-s-Mark-Diced-Tomatoes-in-Tomato-Juice-14-5-oz-12-pk/19396803121",
+                                               "n":  6
                                            },
                         "fajita-seasoning":  {
                                                  "unit":  "each",
-                                                 "cheapest":  0.99,
-                                                 "store":  "Family Fare",
+                                                 "cheapest":  0.64,
+                                                 "store":  "Walmart",
                                                  "type":  "everyday",
-                                                 "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_meats/our_family_seasoning_mix_fajita_1_25_oz/p/7083800"
+                                                 "url":  "https://www.walmart.com/ip/149215159",
+                                                 "n":  4
                                              },
                         "garlic":  {
                                        "unit":  "each",
-                                       "cheapest":  0.79,
-                                       "store":  "Family Fare",
+                                       "cheapest":  0.63,
+                                       "store":  "Aldi",
                                        "type":  "everyday",
-                                       "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/fresh_garlic/p/12517"
+                                       "url":  "https://www.aldi.us/store/aldi/products/17819978-garlic-3-ct",
+                                       "n":  5
                                    },
                         "garlic-powder":  {
                                               "unit":  "oz",
-                                              "cheapest":  0.556,
-                                              "store":  "Family Fare",
+                                              "cheapest":  0.318,
+                                              "store":  "Walmart",
                                               "type":  "everyday",
-                                              "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/that_s_smart_garlic_powder/p/1564405684704741119"
+                                              "url":  "https://www.walmart.com/ip/676979470",
+                                              "n":  6
                                           },
                         "frozen-green-beans":  {
                                                    "unit":  "oz",
-                                                   "cheapest":  0.0996,
-                                                   "store":  "Family Fare",
+                                                   "cheapest":  0.061,
+                                                   "store":  "Walmart",
                                                    "type":  "everyday",
-                                                   "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_vegetables/beans/our_family_green_beans_cut_fresh_frozen_24_oz/p/1564405684703626593"
+                                                   "url":  "https://www.walmart.com/ip/10315044",
+                                                   "n":  5
                                                },
                         "green-bell-pepper":  {
                                                   "unit":  "each",
-                                                  "cheapest":  1.69,
-                                                  "store":  "Family Fare",
+                                                  "cheapest":  0.83,
+                                                  "store":  "Sam\u0027s Club",
                                                   "type":  "everyday",
-                                                  "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/fresh_green_peppers/p/2310614"
+                                                  "url":  "https://www.samsclub.com/ip/Green-Bell-Peppers-6-ct/13888070896",
+                                                  "n":  5
                                               },
                         "ground-cumin":  {
                                              "unit":  "oz",
-                                             "cheapest":  1.745,
-                                             "store":  "Family Fare",
+                                             "cheapest":  0.545,
+                                             "store":  "Aldi",
                                              "type":  "everyday",
-                                             "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/lawry_s_ground_cumin_2_oz/p/1564405684713583933"
+                                             "url":  "https://www.aldi.us/store/aldi/products/19688303-stonemill-ground-cumin-2-oz",
+                                             "n":  6
                                          },
                         "hot-honey":  {
                                           "unit":  "oz",
-                                          "cheapest":  0.6244,
-                                          "store":  "Family Fare",
+                                          "cheapest":  0.3992,
+                                          "store":  "Aldi",
                                           "type":  "everyday",
-                                          "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/honey/nate_s_100_pure_hot_honey_16_oz/p/1564405684712885492"
+                                          "url":  "https://www.aldi.us/store/aldi/products/64499010-hot-honey",
+                                          "n":  6
                                       },
                         "hot-italian-sausage":  {
                                                     "unit":  "lb",
-                                                    "cheapest":  5.89,
-                                                    "store":  "Family Fare",
+                                                    "cheapest":  2.5179,
+                                                    "store":  "Aldi",
                                                     "type":  "everyday",
-                                                    "url":  "https://www.shopfamilyfare.com/shop/meat/sausage/italian/johnsonville_sausage_italian_hot_19_oz/p/532113"
+                                                    "url":  "https://www.aldi.us/store/aldi/products/19400441-italian-hot-sausage-19-oz",
+                                                    "n":  5
                                                 },
                         "hot-sauce":  {
                                           "unit":  "floz",
-                                          "cheapest":  0.3742,
-                                          "store":  "Family Fare",
+                                          "cheapest":  0.12,
+                                          "store":  "Sam\u0027s Club",
                                           "type":  "everyday",
-                                          "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/hot_sauce/louisiana_brand_original_hot_sauce_12_fl_oz/p/5576168"
+                                          "url":  "https://www.samsclub.com/ip/Frank-s-RedHot-Original-Cayenne-Pepper-Hot-Sauce-1-gal/13888220869",
+                                          "n":  6
                                       },
                         "italian-seasoning":  {
                                                   "unit":  "oz",
-                                                  "cheapest":  1.352,
-                                                  "store":  "Family Fare",
+                                                  "cheapest":  1.14,
+                                                  "store":  "Walmart",
                                                   "type":  "everyday",
-                                                  "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/special_blends/that_s_smart_italian_seasoning/p/1564405684704741128"
+                                                  "url":  "https://www.walmart.com/ip/637648335",
+                                                  "n":  6
                                               },
                         "limes":  {
                                       "unit":  "each",
-                                      "cheapest":  0.79,
-                                      "store":  "Family Fare",
+                                      "cheapest":  0.25,
+                                      "store":  "Walmart",
                                       "type":  "everyday",
-                                      "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/citrus_fruits/fresh_limes/p/2311246"
+                                      "url":  "https://www.walmart.com/ip/44391008",
+                                      "n":  3
                                   },
                         "olive-oil":  {
                                           "unit":  "floz",
-                                          "cheapest":  0.3991,
-                                          "store":  "Family Fare",
+                                          "cheapest":  0.19,
+                                          "store":  "Sam\u0027s Club",
                                           "type":  "everyday",
-                                          "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/oils_sprays/our_family_olive_oil_100_pure_imported_33_8_fl_oz/p/1564405684704295454"
+                                          "url":  "https://www.samsclub.com/ip/Member-s-Mark-Pure-Olive-Oil-101-fl-oz/13894506105",
+                                          "n":  6
                                       },
                         "onion-powder":  {
                                              "unit":  "oz",
-                                             "cheapest":  0.7511,
-                                             "store":  "Family Fare",
+                                             "cheapest":  0.332,
+                                             "store":  "Walmart",
                                              "type":  "everyday",
-                                             "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/that_s_smart_onion_powder/p/1564405684704741120"
+                                             "url":  "https://www.walmart.com/ip/705601418",
+                                             "n":  6
                                          },
                         "parmesan-cheese":  {
                                                 "unit":  "oz",
-                                                "cheapest":  0.4056,
-                                                "store":  "Family Fare",
+                                                "cheapest":  0.31,
+                                                "store":  "Sam\u0027s Club",
                                                 "type":  "everyday",
-                                                "url":  "https://www.shopfamilyfare.com/shop/pantry/crackers/toppers_dips/our_family_grated_cheese_parmesan_16_oz/p/1564405684712451099"
+                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-Grated-Parmesan-Cheese-24-oz/15176922436",
+                                                "n":  6
                                             },
                         "penne-pasta":  {
                                             "unit":  "oz",
-                                            "cheapest":  0.1181,
-                                            "store":  "Family Fare",
+                                            "cheapest":  0.078,
+                                            "store":  "Walmart",
                                             "type":  "everyday",
-                                            "url":  "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/penne_mostaccioli/creamette_penne_rigate_1_lb/p/597827"
+                                            "url":  "https://www.walmart.com/ip/10534084",
+                                            "n":  6
                                         },
                         "pepperoncini":  {
                                              "unit":  "floz",
-                                             "cheapest":  0.2742,
-                                             "store":  "Family Fare",
+                                             "cheapest":  0.158,
+                                             "store":  "Walmart",
                                              "type":  "everyday",
-                                             "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/mt_olive_pepperoncini_italian_seasoned_12_fl_oz/p/1564405684712988238"
+                                             "url":  "https://www.walmart.com/ip/185310896",
+                                             "n":  4
                                          },
                         "pork-tenderloin":  {
                                                 "unit":  "lb",
-                                                "cheapest":  5.49,
-                                                "store":  "Family Fare",
+                                                "cheapest":  2.94,
+                                                "store":  "Sam\u0027s Club",
                                                 "type":  "everyday",
-                                                "url":  "https://www.shopfamilyfare.com/shop/meat/pork/fresh/whole_boneless_pork_tenderloin/p/1564405684713031380"
+                                                "url":  "https://www.samsclub.com/ip/Pork-Tenderloins-Case-priced-per-pound/13624165417",
+                                                "n":  6
                                             },
                         "ranch-seasoning-mix":  {
                                                     "unit":  "each",
-                                                    "cheapest":  2.49,
-                                                    "store":  "Family Fare",
+                                                    "cheapest":  0.64,
+                                                    "store":  "Walmart",
                                                     "type":  "everyday",
-                                                    "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_fruits_vegetables/kinder_s_ranch_dips_and_seasoning_mix_1_25_oz/p/1564405684714083263"
+                                                    "url":  "https://www.walmart.com/ip/187211086",
+                                                    "n":  5
                                                 },
                         "reduced-fat-mozzarella":  {
                                                        "unit":  "oz",
-                                                       "cheapest":  0.2494,
-                                                       "store":  "Family Fare",
+                                                       "cheapest":  0.18,
+                                                       "store":  "Sam\u0027s Club",
                                                        "type":  "everyday",
-                                                       "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/our_family_part_skim_mozzarella_shredded_cheese_16_oz/p/7081843"
+                                                       "url":  "https://www.samsclub.com/ip/Member-s-Mark-Part-Skim-Shredded-Mozzarella-Cheese-1-lb-2-pk/13571719477",
+                                                       "n":  5
                                                    },
                         "jasmine-rice":  {
                                              "unit":  "oz",
-                                             "cheapest":  0.1249,
-                                             "store":  "Family Fare",
+                                             "cheapest":  0.05,
+                                             "store":  "Sam\u0027s Club",
                                              "type":  "everyday",
-                                             "url":  "https://www.shopfamilyfare.com/shop/pantry/dry_goods/rice/dynasty_jasmine_rice_milagrosa_5_lb/p/13131"
+                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Thai-Jasmine-Rice-50-lbs/13590054318",
+                                             "n":  6
                                          },
                         "salsa":  {
                                       "unit":  "oz",
-                                      "cheapest":  0.1556,
-                                      "store":  "Family Fare",
+                                      "cheapest":  0.1,
+                                      "store":  "Sam\u0027s Club",
                                       "type":  "everyday",
-                                      "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salsa/mild_thick_chunky_salsa_our_family/p/6787000"
+                                      "url":  "https://www.samsclub.com/ip/Pace-Chunky-Salsa-Medium-38-oz-2-ct/4156518836",
+                                      "n":  6
                                   },
                         "salsa-verde":  {
                                             "unit":  "oz",
-                                            "cheapest":  0.2244,
-                                            "store":  "Family Fare",
+                                            "cheapest":  0.165,
+                                            "store":  "Walmart",
                                             "type":  "everyday",
-                                            "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mexican_sauces/our_family_salsa_verde_mild_16_oz/p/1564405684713651909"
+                                            "url":  "https://www.walmart.com/ip/2922389780",
+                                            "n":  5
                                         },
                         "seasoned-black-beans":  {
                                                      "unit":  "oz",
-                                                     "cheapest":  0.1193,
-                                                     "store":  "Family Fare",
+                                                     "cheapest":  0.0993,
+                                                     "store":  "Hy-Vee",
                                                      "type":  "everyday",
-                                                     "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/bush_s_best_seasoned_recipe_black_beans_15_oz/p/2351346"
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/48195/bushs-seasoned-recipe-black-beans",
+                                                     "n":  4
                                                  },
                         "shredded-carrots":  {
                                                  "unit":  "oz",
-                                                 "cheapest":  0.249,
-                                                 "store":  "Family Fare",
+                                                 "cheapest":  0.193,
+                                                 "store":  "Walmart",
                                                  "type":  "everyday",
-                                                 "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_prepared_fruits_vegetables/dole_shredded_carrot/p/38986"
+                                                 "url":  "https://www.walmart.com/ip/46491672",
+                                                 "n":  4
                                              },
                         "sun-dried-tomatoes":  {
                                                    "unit":  "oz",
-                                                   "cheapest":  0.7488,
-                                                   "store":  "Family Fare",
+                                                   "cheapest":  0.42,
+                                                   "store":  "Sam\u0027s Club",
                                                    "type":  "everyday",
-                                                   "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tomatoes/california_sun_dry_sun_dried_tomatoes_julienne_ct/p/1764405684715566620"
+                                                   "url":  "https://www.samsclub.com/ip/Terra-Verde-Italian-Sundried-Tomatoes-in-Oil-24-oz/17242460680",
+                                                   "n":  6
                                                },
                         "canned-sweet-corn":  {
                                                   "unit":  "each",
-                                                  "cheapest":  0.99,
-                                                  "store":  "Family Fare",
+                                                  "cheapest":  0.78,
+                                                  "store":  "Walmart",
                                                   "type":  "everyday",
-                                                  "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/vegetables/our_family_sweet_whole_kernel_corn_15_25_oz/p/545011"
+                                                  "url":  "https://www.walmart.com/ip/589659824",
+                                                  "n":  6
                                               },
                         "taco-seasoning":  {
                                                "unit":  "each",
-                                               "cheapest":  1.29,
-                                               "store":  "Family Fare",
+                                               "cheapest":  0.47,
+                                               "store":  "Walmart",
                                                "type":  "everyday",
-                                               "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_meats/la_preferida_taco_seasoning_1_25_oz/p/270495"
+                                               "url":  "https://www.walmart.com/ip/379517847",
+                                               "n":  6
                                            },
                         "teriyaki-sauce":  {
                                                "unit":  "floz",
-                                               "cheapest":  0.229,
-                                               "store":  "Family Fare",
+                                               "cheapest":  0.165,
+                                               "store":  "Walmart",
                                                "type":  "everyday",
-                                               "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/asian_sauce/teriyaki_sauce_our_family/p/7081431"
+                                               "url":  "https://www.walmart.com/ip/23598506",
+                                               "n":  6
                                            },
                         "turkey-pepperoni":  {
                                                  "unit":  "oz",
-                                                 "cheapest":  0.9975,
-                                                 "store":  "Family Fare",
+                                                 "cheapest":  0.584,
+                                                 "store":  "Walmart",
                                                  "type":  "everyday",
-                                                 "url":  "https://www.shopfamilyfare.com/shop/meat/sausage/pepperoni/armour_turkey_pepperoni_4_oz/p/588138"
+                                                 "url":  "https://www.walmart.com/ip/40495517",
+                                                 "n":  5
                                              },
                         "zero-sugar-soda-2l":  {
                                                    "unit":  "floz",
-                                                   "cheapest":  0.0516,
-                                                   "store":  "Family Fare",
+                                                   "cheapest":  0.01,
+                                                   "store":  "Baker\u0027s",
                                                    "type":  "everyday",
-                                                   "url":  "https://www.shopfamilyfare.com/shop/beverages/soda_other_carbonated_beverages/2_liters_soda/dr_pepper_soda_zero_sugar_2_l/p/1564405684710717642"
+                                                   "url":  "",
+                                                   "n":  5
                                                },
                         "zucchini":  {
                                          "unit":  "lb",
-                                         "cheapest":  2.29,
-                                         "store":  "Family Fare",
+                                         "cheapest":  1.39,
+                                         "store":  "Aldi",
                                          "type":  "everyday",
-                                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/squashes/zucchini_squash/p/12434"
-                                     }
+                                         "url":  "https://www.aldi.us/store/aldi/products/193785-zucchini-squash-1-lb",
+                                         "n":  5
+                                     },
+                        "pork-loin":  {
+                                          "unit":  "lb",
+                                          "cheapest":  1.98,
+                                          "store":  "Sam\u0027s Club",
+                                          "type":  "everyday",
+                                          "url":  "https://www.samsclub.com/ip/Member-s-Mark-Whole-Boneless-Pork-Loin-Vacuum-Pack-priced-per-pound/15607106819",
+                                          "n":  5
+                                      },
+                        "fat-free-cheddar":  {
+                                                 "unit":  "oz",
+                                                 "cheapest":  0.281,
+                                                 "store":  "Walmart",
+                                                 "type":  "everyday",
+                                                 "url":  "https://www.walmart.com/ip/465384428",
+                                                 "n":  3
+                                             }
                     },
     "recipes":  {
                     "hot-honey-chicken-bowls":  {

@@ -728,16 +728,23 @@
                          "board":  "recipe",
                          "grams_per_unit":  453.592,
                          "unit":  "lb"
-                     }
-                 ],
-    "unmapped":  [
-                     {
-                         "item":  "Fat Free Cheddar",
-                         "why":  "ambiguous form: board cheddar is regular; fat-free is a different-priced specialty item"
                      },
                      {
                          "item":  "Pork Loin",
-                         "why":  "no matching commodity (weekly board has pork chops only, a different cut)"
+                         "board_id":  "pork-loin",
+                         "board":  "recipe",
+                         "grams_per_unit":  453.592,
+                         "unit":  "lb"
+                     },
+                     {
+                         "item":  "Fat Free Cheddar",
+                         "board_id":  "fat-free-cheddar",
+                         "board":  "recipe",
+                         "grams_per_unit":  28.3495,
+                         "unit":  "oz"
                      }
+                 ],
+    "unmapped":  [
+
                  ]
 }

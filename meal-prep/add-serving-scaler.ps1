@@ -122,7 +122,8 @@ function init(box){
           sum+=c; summed++;
           tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
         }
-        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+link;
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
       } else if(it.bid){
         right='<span class="smp-cp-un">live price unavailable right now</span>';
       }
