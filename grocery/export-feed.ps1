@@ -20,6 +20,16 @@ $out  = Join-Path $root 'out'
 $mp   = Join-Path (Split-Path $root -Parent) 'meal-prep'
 
 # ---- ingredients: cheapest verified price per board commodity id (both boards) ----
+# durable product links: id -> store -> url (so the feed can point at the exact cheapest item)
+$purl = @{}
+try {
+  $pd = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+  foreach ($p in $pd.PSObject.Properties) {
+    $m = @{}
+    foreach ($sp in $p.Value.PSObject.Properties) { if ($sp.Name -ne 'commodity' -and $sp.Value -and $sp.Value.url) { $m[[string]$sp.Name] = [string]$sp.Value.url } }
+    $purl[[string]$p.Name] = $m
+  }
+} catch {}
 $ing = [ordered]@{}
 function AddBoard($rows) {
   foreach ($r in $rows) {
@@ -32,7 +42,8 @@ function AddBoard($rows) {
     if ($null -ne $lo) {
       # weekly board wins ties for a shared id (it carries this week's ad price); don't overwrite it with recipe floor
       if (-not $ing.Contains($id)) {
-        $ing[$id] = [ordered]@{ unit=[string]$r.unit; cheapest=[math]::Round($lo,4); store=$los; type=$lot }
+        $u = if ($purl.ContainsKey($id) -and $purl[$id].ContainsKey($los)) { $purl[$id][$los] } else { '' }
+        $ing[$id] = [ordered]@{ unit=[string]$r.unit; cheapest=[math]::Round($lo,4); store=$los; type=$lot; url=$u }
       }
     }
   }

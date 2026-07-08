@@ -38,6 +38,9 @@ function JsonEsc([string]$s) {
 }
 
 $db = (Get-Content (Join-Path $PSScriptRoot 'recipes-db.json') -Raw | ConvertFrom-Json).recipes
+# ingredient -> board id map (both boards): lets each widget row look up its live price in the feed
+$bidMap = @{}
+try { foreach ($m in (Get-Content (Join-Path $PSScriptRoot 'ingredient-map.json') -Raw | ConvertFrom-Json).mappings) { $bidMap[[string]$m.item] = [string]$m.board_id } } catch {}
 $targets = if ($All) { @($db | Where-Object { "" + $_.published -match "^\d{4}" }) } else { @($db | Where-Object { $_.slug -eq $Slug }) }
 if (-not $targets) { Write-Output "no matching recipes"; exit 1 }
 
@@ -54,7 +57,14 @@ $widgetCore = @'
 .smp-sc-list{margin:0;padding:0;list-style:none}
 .smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
 .smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
-.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}</style>
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-sc-liveh{font-family:Georgia,serif;color:#16263F;font-size:1.7rem;margin:1.8rem 0 .3rem}
+.smp-sc-livesub{color:#64748b;font-size:1.2rem;margin:0 0 .8rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.5rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
 <script>
 (function(){
 if(window.__smpScaler)return; window.__smpScaler=1;
@@ -75,13 +85,35 @@ function init(box){
     });
     list.innerHTML=html;
     var tot=data.cost*f;
-    cost.innerHTML='Total for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
   }
   box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
   num.addEventListener('change',render);
   render();
-  // refine with this week's live cost from the feed (falls back silently to the baked-in baseline)
-  if(data.slug){ smpGetFeed().then(function(f){ if(f&&f.recipes&&f.recipes[data.slug]&&f.recipes[data.slug].week_cost>0){ data.cost=f.recipes[data.slug].week_cost; render(); } }); }
+  // CURRENT CHEAPEST PRICING: live per-ingredient price + store + link from this week's feed.
+  // The everyday total above stays the stable baseline; this section carries the live/sale story.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  smpGetFeed().then(function(f){
+    if(!f||!f.ingredients) return;
+    var ul=box.querySelector('.smp-sc-live'); if(!ul) return;
+    var html='', tracked=0;
+    data.ing.forEach(function(it){
+      if(!it.bid) return;
+      var e=f.ingredients[it.bid];
+      if(!e||!(e.cheapest>0)) return;
+      tracked++;
+      var price='$'+e.cheapest.toFixed(2)+'/'+e.unit;
+      var sale=(e.type==='sale')?'<span class="smp-sc-saletag">sale</span>':'';
+      var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+      html+='<li><span>'+escT(it.item)+sale+'</span><span><span class="smp-sc-lp">'+price+' at '+escT(e.store)+'</span>'+link+'</span></li>';
+    });
+    if(!tracked) return;
+    ul.innerHTML=html;
+    var un=data.ing.length-tracked;
+    var subEl=box.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent='The cheapest verified price at six Omaha stores right now, updated as sales start and end.'+(un>0?(' ('+un+' small pantry item'+(un===1?'':'s')+' not price-tracked.)'):''); }
+    var wrap=box.querySelector('.smp-sc-livewrap'); if(wrap){ wrap.style.display=''; }
+  });
 }
 function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
 if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
@@ -100,7 +132,10 @@ foreach ($r in $targets) {
     $html = [string]$post.html
     # per-recipe data JSON (item/grams/buy + base + true cost)
     $ings = @()
-    foreach ($i in $r.ingredients) { $ings += ('{"item":"' + (JsonEsc ([string]$i.item)) + '","grams":' + [int]$i.grams + ',"buy":"' + (JsonEsc ([string]$i.buy)) + '"}') }
+    foreach ($i in $r.ingredients) {
+      $bid = if ($bidMap.ContainsKey([string]$i.item)) { ',"bid":"' + (JsonEsc $bidMap[[string]$i.item]) + '"' } else { '' }
+      $ings += ('{"item":"' + (JsonEsc ([string]$i.item)) + '","grams":' + [int]$i.grams + ',"buy":"' + (JsonEsc ([string]$i.buy)) + '"' + $bid + '}')
+    }
     $cost = if ($r.cost_batch_true) { [double]$r.cost_batch_true } else { [double]$r.cost_batch }
     $dataJson = '{"slug":"' + (JsonEsc ([string]$r.slug)) + '","base":' + [int]$r.servings + ',"cost":' + ('{0:F2}' -f $cost) + ',"ing":[' + ($ings -join ',') + ']}'
     $widget = '<!--SMP-SCALER-->' + $widgetCore +
@@ -108,10 +143,14 @@ foreach ($r in $targets) {
       '<div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="' + [int]$r.servings + '"><button type="button" class="smp-sc-btn" data-d="1">+</button></div>' +
       '<p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul>' +
       '<p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p>' +
+      '<div class="smp-sc-livewrap" style="display:none"><h4 class="smp-sc-liveh">Current cheapest pricing</h4><p class="smp-sc-livesub"></p><ul class="smp-sc-live"></ul></div>' +
       '<script type="application/json" class="smp-sc-data">' + $dataJson + '</script></div><!--/SMP-SCALER-->'
     # strip any prior widget, then prepend the fresh one
     $html = [regex]::Replace($html, '<!--SMP-SCALER-->[\s\S]*?<!--/SMP-SCALER-->', '')
     $html = $widget + $html
+    # relabel the stats-bar cost stat: the baked figure is the EVERYDAY estimate (the live section above
+    # now carries current/sale pricing). Idempotent: no match once renamed.
+    $html = [regex]::Replace($html, '(?<=>)\s*Estimated Cost\s*(?=<)', 'Estimated Everyday Cost')
     # LEXICAL single html card, NOT ?source=html: the html-source path re-parses the content and strips
     # style/script/input tags (it destroyed the pilot post). The html card preserves everything verbatim.
     $lexObj = @{root=[ordered]@{children=@([ordered]@{type='html';version=1;html=$html});direction=$null;format='';indent=0;type='root';version=1}}
