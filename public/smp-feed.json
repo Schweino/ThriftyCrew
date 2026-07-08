@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-08T07:40:54",
-    "week_of":  "2026-07-06",
+    "generated":  "2026-07-08T15:55:11",
+    "week_of":  "2026-07-08",
     "ingredient_count":  86,
     "recipe_count":  113,
     "ingredients":  {
@@ -18,13 +18,13 @@
                                    },
                         "avocados":  {
                                          "unit":  "each",
-                                         "cheapest":  0.4817,
+                                         "cheapest":  0.59,
                                          "store":  "Aldi",
                                          "type":  "sale"
                                      },
                         "bacon":  {
                                       "unit":  "lb",
-                                      "cheapest":  3.94,
+                                      "cheapest":  3.96,
                                       "store":  "Sam\u0027s Club",
                                       "type":  "everyday"
                                   },
@@ -36,15 +36,15 @@
                                     },
                         "blueberries":  {
                                             "unit":  "oz",
-                                            "cheapest":  0.2609,
+                                            "cheapest":  0.2578,
                                             "store":  "Walmart",
                                             "type":  "everyday"
                                         },
                         "chicken-breast":  {
                                                "unit":  "lb",
-                                               "cheapest":  2.48,
-                                               "store":  "Walmart",
-                                               "type":  "everyday"
+                                               "cheapest":  2.29,
+                                               "store":  "Baker\u0027s",
+                                               "type":  "sale"
                                            },
                         "bread":  {
                                       "unit":  "each",
@@ -72,9 +72,9 @@
                                    },
                         "cottage-cheese":  {
                                                "unit":  "oz",
-                                               "cheapest":  0.1042,
-                                               "store":  "Baker\u0027s",
-                                               "type":  "sale"
+                                               "cheapest":  0.1196,
+                                               "store":  "Walmart",
+                                               "type":  "everyday"
                                            },
                         "cream-cheese":  {
                                              "unit":  "oz",
@@ -90,20 +90,20 @@
                                    },
                         "ground-turkey":  {
                                               "unit":  "lb",
-                                              "cheapest":  3.99,
-                                              "store":  "Hy-Vee",
-                                              "type":  "everyday"
+                                              "cheapest":  2.6633,
+                                              "store":  "Aldi",
+                                              "type":  "sale"
                                           },
                         "eggs":  {
                                      "unit":  "dozen",
-                                     "cheapest":  1.45,
-                                     "store":  "Hy-Vee",
+                                     "cheapest":  1.47,
+                                     "store":  "Walmart",
                                      "type":  "everyday"
                                  },
                         "milk":  {
                                      "unit":  "gallon",
-                                     "cheapest":  3,
-                                     "store":  "Walmart",
+                                     "cheapest":  2.99,
+                                     "store":  "Hy-Vee",
                                      "type":  "everyday"
                                  },
                         "orange-juice":  {
@@ -114,8 +114,8 @@
                                          },
                         "peaches":  {
                                         "unit":  "lb",
-                                        "cheapest":  1.49,
-                                        "store":  "Aldi",
+                                        "cheapest":  1.79,
+                                        "store":  "Baker\u0027s",
                                         "type":  "everyday"
                                     },
                         "peanut-butter":  {
@@ -138,15 +138,15 @@
                                             },
                         "shredded-cheese":  {
                                                 "unit":  "oz",
-                                                "cheapest":  0.1559,
+                                                "cheapest":  0.1862,
                                                 "store":  "Baker\u0027s",
                                                 "type":  "sale"
                                             },
                         "sour-cream":  {
                                            "unit":  "oz",
-                                           "cheapest":  0.1042,
-                                           "store":  "Baker\u0027s",
-                                           "type":  "sale"
+                                           "cheapest":  0.115,
+                                           "store":  "Walmart",
+                                           "type":  "everyday"
                                        },
                         "strawberries":  {
                                              "unit":  "oz",
@@ -158,13 +158,13 @@
                                            "unit":  "each",
                                            "cheapest":  0.4,
                                            "store":  "Baker\u0027s",
-                                           "type":  "everyday"
+                                           "type":  "sale"
                                        },
                         "watermelon":  {
                                            "unit":  "each",
-                                           "cheapest":  4.65,
-                                           "store":  "Walmart",
-                                           "type":  "everyday"
+                                           "cheapest":  2.99,
+                                           "store":  "Baker\u0027s",
+                                           "type":  "sale"
                                        },
                         "onions":  {
                                        "unit":  "lb",
@@ -174,8 +174,8 @@
                                    },
                         "yogurt":  {
                                        "unit":  "oz",
-                                       "cheapest":  0.0872,
-                                       "store":  "Aldi",
+                                       "cheapest":  0.0825,
+                                       "store":  "Walmart",
                                        "type":  "everyday"
                                    },
                         "93-7-ground-turkey":  {

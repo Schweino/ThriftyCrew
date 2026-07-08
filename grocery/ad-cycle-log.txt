@@ -42,3 +42,14 @@
 [2026-07-08T06:32:32] top5-weekly refreshed
 [2026-07-08T06:32:32] REVIEW FLAGS: 2 -> SANITY|Yogurt|wow|cheapest moved down 41% vs last week ($0.15 -> $0.09) ; MULTIBUY|Family Fare|Blueberries
 [2026-07-08T06:32:32] run complete; flips=0
+[2026-07-08T15:54:29] pull attempt 1 ok=True
+[2026-07-08T15:55:02] FF everyday refreshed
+[2026-07-08T15:55:02] NEW AD Aldi 2026-07-08..2026-07-14
+[2026-07-08T15:55:05] verify-apply re-applied verdicts to fresh board
+[2026-07-08T15:55:08] recipe-overlay applied
+[2026-07-08T15:55:10] top5-weekly refreshed
+[2026-07-08T15:55:11] smp-feed exported
+[2026-07-08T15:55:12] downstream refreshed after flips: Aldi
+[2026-07-08T15:55:12] REVIEW FLAGS: 2 -> SANITY|Sweet Corn (ear) Whole Watermelon|outlier outlier|Baker's $0.40 is 35% below runner-up Sam's Club $0.62 - verify the price/size parse Baker's $2.99 is 36% below runner-up Walmart $4.65 - verify the price/size parse ; MULTIBUY|Family Fare|Blueberries
+[2026-07-08T15:55:17] AUTO-PUBLISH: live page updated (price change/new ad)
+[2026-07-08T15:55:17] run complete; flips=1

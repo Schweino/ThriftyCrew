@@ -240,24 +240,6 @@
                                                    "basis":  "size 5.3 oz"
                                                },
                                                {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Oikos Triple Zero Triple Zero Peach High Protein Nonfat Greek Yogurt 5.3 Oz",
-                                                   "price_text":  "$1.69",
-                                                   "size_text":  "5.3 oz",
-                                                   "regular":  1.69,
-                                                   "unit_price":  0.3189,
-                                                   "basis":  "size 5.3 oz"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Chobani Nonfat Greek Peach Yogurt 5.3 Oz",
-                                                   "price_text":  "$1.59",
-                                                   "size_text":  "5.3 oz",
-                                                   "regular":  1.59,
-                                                   "unit_price":  0.3,
-                                                   "basis":  "size 5.3 oz"
-                                               },
-                                               {
                                                    "store":  "Hy-Vee",
                                                    "name":  "Hy-Vee Nonfat Plain Greek Yogurt",
                                                    "price_text":  "$5.88",
@@ -389,15 +371,6 @@
                                                    "regular":  6.99,
                                                    "unit_price":  0.4369,
                                                    "basis":  "size 16 oz"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Bomb Pop Pops, Strawberry, Watermelon \u0026 Grape, Nerds Candy 12 Ea",
-                                                   "price_text":  "$4.99",
-                                                   "size_text":  "12 ea",
-                                                   "regular":  4.99,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
                                                },
                                                {
                                                    "store":  "Hy-Vee",
@@ -934,96 +907,6 @@
                                                    "basis":  "per-each"
                                                },
                                                {
-                                                   "store":  "Family Fare",
-                                                   "name":  "White Bread Our Family",
-                                                   "price_text":  "$2.19",
-                                                   "size_text":  "20 oz",
-                                                   "regular":  2.19,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Pepperidge Farm Farmhouse Hearty White Bread, 24 Oz Loaf",
-                                                   "price_text":  "$4.99",
-                                                   "size_text":  "24 oz",
-                                                   "regular":  4.99,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Rhodes Bread, White 3 Ea",
-                                                   "price_text":  "$6.99",
-                                                   "size_text":  "3pk 16oz",
-                                                   "regular":  6.99,
-                                                   "unit_price":  null,
-                                                   "basis":  "OUT-OF-BAND"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Fresh \u0026 Finest White Bread",
-                                                   "price_text":  "$3.99",
-                                                   "size_text":  "15 oz",
-                                                   "regular":  3.99,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Village Hearth White Bread, Cottage 24 Oz",
-                                                   "price_text":  "$4.79",
-                                                   "size_text":  "24 oz",
-                                                   "regular":  4.79,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Sara Lee Whole Grain White Bread 20 Oz",
-                                                   "price_text":  "$4.69",
-                                                   "size_text":  "20 oz",
-                                                   "regular":  4.69,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Sara Lee Bread, Classic White 20 Oz",
-                                                   "price_text":  "$3.69",
-                                                   "size_text":  "20 oz",
-                                                   "regular":  3.69,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "White Sandwich Bread Our Family",
-                                                   "price_text":  "$2.19",
-                                                   "size_text":  "20 oz",
-                                                   "regular":  2.19,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Our Family Bread, Enriched, White, Split Top 20 Oz",
-                                                   "price_text":  "$2.19",
-                                                   "size_text":  "20 oz",
-                                                   "regular":  2.19,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Village Hearth Sandwich Bread, Enriched, White, Texas Toast 28 Oz",
-                                                   "price_text":  "$5.49",
-                                                   "size_text":  "28 oz",
-                                                   "regular":  5.49,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
-                                               },
-                                               {
                                                    "store":  "Hy-Vee",
                                                    "name":  "Hy-Vee White Bread",
                                                    "price_text":  "$1.99",
@@ -1207,141 +1090,6 @@
                                                    "regular":  null,
                                                    "unit_price":  0.1014,
                                                    "basis":  "size 64 oz"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Creamy Reduced Salt \u0026 Sugar Peanut Butter",
-                                                   "price_text":  "$2.29",
-                                                   "size_text":  "16 oz",
-                                                   "regular":  2.29,
-                                                   "unit_price":  0.1431,
-                                                   "basis":  "size 16 oz"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Jif Unsweet Creamy Peanut Butter",
-                                                   "price_text":  "$3.99",
-                                                   "size_text":  "15 oz",
-                                                   "regular":  3.99,
-                                                   "unit_price":  0.266,
-                                                   "basis":  "size 15 oz"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Creamy No Stir Peanut Butter Spread",
-                                                   "price_text":  "$2.29",
-                                                   "size_text":  "16 oz",
-                                                   "regular":  2.29,
-                                                   "unit_price":  0.1431,
-                                                   "basis":  "size 16 oz"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Jif Creamy Peanut Butter 16 Oz",
-                                                   "price_text":  "$3.99",
-                                                   "size_text":  "16 oz",
-                                                   "regular":  3.99,
-                                                   "unit_price":  0.2494,
-                                                   "basis":  "size 16 oz"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Creamy Peanut Butter Our Family",
-                                                   "price_text":  "$2.29",
-                                                   "size_text":  "16 oz",
-                                                   "regular":  2.29,
-                                                   "unit_price":  0.1431,
-                                                   "basis":  "size 16 oz"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Jif Creamy Peanut Butter 28 Oz",
-                                                   "price_text":  "$5.89",
-                                                   "size_text":  "28 oz",
-                                                   "regular":  5.89,
-                                                   "unit_price":  0.2104,
-                                                   "basis":  "size 28 oz"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Creamy Peanut Butter Our Family",
-                                                   "price_text":  "$3.99",
-                                                   "size_text":  "28 oz",
-                                                   "regular":  3.99,
-                                                   "unit_price":  0.1425,
-                                                   "basis":  "size 28 oz"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Crunchy Peanut Butter Our Family",
-                                                   "price_text":  "$2.29",
-                                                   "size_text":  "16 oz",
-                                                   "regular":  2.29,
-                                                   "unit_price":  0.1431,
-                                                   "basis":  "size 16 oz"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Jif Creamy Peanut Butter 40 Oz",
-                                                   "price_text":  "$8.49",
-                                                   "size_text":  "40 oz",
-                                                   "regular":  8.49,
-                                                   "unit_price":  0.2122,
-                                                   "basis":  "size 40 oz"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Jif Extra Crunchy Peanut Butter 16 Oz",
-                                                   "price_text":  "$3.99",
-                                                   "size_text":  "16 oz",
-                                                   "regular":  3.99,
-                                                   "unit_price":  0.2494,
-                                                   "basis":  "size 16 oz"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Creamy Peanut Butter Our Family",
-                                                   "price_text":  "$5.49",
-                                                   "size_text":  "40 oz",
-                                                   "regular":  5.49,
-                                                   "unit_price":  0.1372,
-                                                   "basis":  "size 40 oz"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Creamy Peanut Butter Our Family",
-                                                   "price_text":  "$7.99",
-                                                   "size_text":  "64 oz",
-                                                   "regular":  7.99,
-                                                   "unit_price":  0.1248,
-                                                   "basis":  "size 64 oz"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Crunchy Peanut Butter Our Family",
-                                                   "price_text":  "$5.49",
-                                                   "size_text":  "40 oz",
-                                                   "regular":  5.49,
-                                                   "unit_price":  0.1372,
-                                                   "basis":  "size 40 oz"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Smucker\u0027s Creamy Natural Peanut Butter 16 Oz",
-                                                   "price_text":  "$5.99",
-                                                   "size_text":  "16 oz",
-                                                   "regular":  5.99,
-                                                   "unit_price":  0.3744,
-                                                   "basis":  "size 16 oz"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Skippy Creamy Peanut Butter 28 Oz",
-                                                   "price_text":  "$7.49",
-                                                   "size_text":  "28 oz",
-                                                   "regular":  7.49,
-                                                   "unit_price":  0.2675,
-                                                   "basis":  "size 28 oz"
                                                },
                                                {
                                                    "store":  "Hy-Vee",
@@ -1617,33 +1365,6 @@
                                                    "regular":  null,
                                                    "unit_price":  1.79,
                                                    "basis":  "size 1 lb"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Fresh Peaches, Prima",
-                                                   "price_text":  "$3.49",
-                                                   "size_text":  "lb",
-                                                   "regular":  3.49,
-                                                   "unit_price":  3.49,
-                                                   "basis":  "size 1 lb"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Tree Ripened Yellow Flesh Peaches, Small",
-                                                   "price_text":  "$3.99",
-                                                   "size_text":  "lb",
-                                                   "regular":  3.99,
-                                                   "unit_price":  3.99,
-                                                   "basis":  "size 1 lb"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Buzz Ballz Peach Chiller Chillers 187 Ml",
-                                                   "price_text":  "$2.99",
-                                                   "size_text":  "187 ml",
-                                                   "regular":  2.99,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
                                                },
                                                {
                                                    "store":  "Hy-Vee",
@@ -2433,78 +2154,6 @@
                                                    "regular":  null,
                                                    "unit_price":  0.6,
                                                    "basis":  "per-each"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Fresh Sweet Corn (4 Ct)",
-                                                   "price_text":  "$5.99",
-                                                   "size_text":  "1 pk",
-                                                   "regular":  5.99,
-                                                   "unit_price":  1.4975,
-                                                   "basis":  "per-4-pack"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Birds Eye Super Sweet Corn 10 Oz",
-                                                   "price_text":  "$1.59",
-                                                   "size_text":  "10 oz",
-                                                   "regular":  1.59,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Del Monte Cream Style Sweet Corn 14.75 Oz",
-                                                   "price_text":  "$1.79",
-                                                   "size_text":  "14.75 oz",
-                                                   "regular":  1.79,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Beech Nut Stage 2 (6+ Months) Sweet Corn \u0026 Green Beans 4 Oz",
-                                                   "price_text":  "$1.59",
-                                                   "size_text":  "4 oz",
-                                                   "regular":  1.59,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Del Monte Cream Style Golden Sweet Corn 8.25 Oz",
-                                                   "price_text":  "$1.79",
-                                                   "size_text":  "8.25 oz",
-                                                   "regular":  1.79,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Del Monte No Salt Added Whole Kernel Golden Sweet Corn 11 Oz",
-                                                   "price_text":  "$3.39",
-                                                   "size_text":  "11 oz",
-                                                   "regular":  3.39,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Libby\u0027s Whole Kernel Sweet Corn 4 Ea",
-                                                   "price_text":  "$2.69",
-                                                   "size_text":  "4 ea",
-                                                   "regular":  2.69,
-                                                   "unit_price":  null,
-                                                   "basis":  "OUT-OF-BAND"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Del Monte No Salt Added Golden Cream Style Sweet Corn 14.75 Oz",
-                                                   "price_text":  "$1.99",
-                                                   "size_text":  "14.75 oz",
-                                                   "regular":  1.99,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
                                                },
                                                {
                                                    "store":  "Hy-Vee",
@@ -3366,33 +3015,6 @@
                                                    "basis":  "size 3 lb"
                                                },
                                                {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Fresh White/Green Seedless Grapes",
-                                                   "price_text":  "$3.49",
-                                                   "size_text":  "lb",
-                                                   "regular":  3.49,
-                                                   "unit_price":  3.49,
-                                                   "basis":  "size 1 lb"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Red Seedless Grapes",
-                                                   "price_text":  "$3.69",
-                                                   "size_text":  "lb",
-                                                   "regular":  3.69,
-                                                   "unit_price":  3.69,
-                                                   "basis":  "size 1 lb"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Fresh Grapes Fresh Divide",
-                                                   "price_text":  "$4.99",
-                                                   "size_text":  "lb",
-                                                   "regular":  4.99,
-                                                   "unit_price":  4.99,
-                                                   "basis":  "size 1 lb"
-                                               },
-                                               {
                                                    "store":  "Hy-Vee",
                                                    "name":  "Red Seedless Grapes",
                                                    "price_text":  "$3.99",
@@ -3639,60 +3261,6 @@
                                                    "regular":  null,
                                                    "unit_price":  5.99,
                                                    "basis":  "per-each"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Fresh Watermelons, Seedless",
-                                                   "price_text":  "$6.99",
-                                                   "size_text":  "1 ct",
-                                                   "regular":  6.99,
-                                                   "unit_price":  6.99,
-                                                   "basis":  "per-each"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Fresh Watermelon Cubes",
-                                                   "price_text":  "$5.0",
-                                                   "size_text":  "18 oz",
-                                                   "regular":  5.0,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Fresh  Watermelon, Fillets Fresh Divide",
-                                                   "price_text":  "$2.49",
-                                                   "size_text":  "lb",
-                                                   "regular":  2.49,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Watermelon Mini Seedless",
-                                                   "price_text":  "$5.99",
-                                                   "size_text":  "1 ct",
-                                                   "regular":  5.99,
-                                                   "unit_price":  5.99,
-                                                   "basis":  "per-each"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Dots Watermelon Dots",
-                                                   "price_text":  "$1.69",
-                                                   "size_text":  "6.5 oz",
-                                                   "regular":  1.69,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
-                                               },
-                                               {
-                                                   "store":  "Family Fare",
-                                                   "name":  "Claeys Hard Candies,  Old Fashioned, Watermelon 6 Oz",
-                                                   "price_text":  "$2.39",
-                                                   "size_text":  "6 oz",
-                                                   "regular":  2.39,
-                                                   "unit_price":  null,
-                                                   "basis":  "UNPRICED"
                                                },
                                                {
                                                    "store":  "Hy-Vee",

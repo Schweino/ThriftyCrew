@@ -1,7 +1,7 @@
 ﻿{
-    "built_at":  "2026-07-08T07:50:00",
+    "built_at":  "2026-07-08T15:55:05",
     "week_of":  "2026-07-08",
-    "verified_from":  "C:\\Codex\\income\\grocery\\out\\comparison-2026-07-08.json",
+    "verified_from":  "D:\\a\\SimpleMoneyPlaybook\\SimpleMoneyPlaybook\\grocery\\out\\comparison-2026-07-08.json",
     "commodities":  29,
     "comparison":  [
                        {
@@ -1249,20 +1249,6 @@
                                               "ord":  3
                                           },
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  3.49,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Fresh White/Green Seedless Grapes",
-                                              "ad":  "$3.49",
-                                              "note":  "",
-                                              "size":  "lb",
-                                              "annotation":  null,
-                                              "ord":  4
-                                          },
-                                          {
                                               "store":  "Hy-Vee",
                                               "per_unit":  3.99,
                                               "unit":  "lb",
@@ -1274,7 +1260,7 @@
                                               "note":  "",
                                               "size":  "lb",
                                               "annotation":  null,
-                                              "ord":  5
+                                              "ord":  4
                                           }
                                       ]
                        },
@@ -1837,20 +1823,6 @@
                                               "ord":  3
                                           },
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.1248,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  true,
-                                              "membership":  false,
-                                              "item":  "Creamy Peanut Butter Our Family",
-                                              "ad":  "$7.99",
-                                              "note":  "",
-                                              "size":  "64 oz",
-                                              "annotation":  null,
-                                              "ord":  4
-                                          },
-                                          {
                                               "store":  "Hy-Vee",
                                               "per_unit":  0.1675,
                                               "unit":  "oz",
@@ -1862,7 +1834,7 @@
                                               "note":  "",
                                               "size":  "16 oz",
                                               "annotation":  null,
-                                              "ord":  5
+                                              "ord":  4
                                           }
                                       ]
                        },
@@ -2467,20 +2439,6 @@
                                               "ord":  2
                                           },
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  5.99,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Watermelon Mini Seedless",
-                                              "ad":  "$5.99",
-                                              "note":  "",
-                                              "size":  "1 ct",
-                                              "annotation":  "mini watermelon - smaller than full-size",
-                                              "ord":  3
-                                          },
-                                          {
                                               "store":  "Sam\u0027s Club",
                                               "per_unit":  6.97,
                                               "unit":  "each",
@@ -2492,7 +2450,7 @@
                                               "note":  "",
                                               "size":  "each",
                                               "annotation":  null,
-                                              "ord":  4
+                                              "ord":  3
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -2506,7 +2464,7 @@
                                               "note":  "",
                                               "size":  "each",
                                               "annotation":  null,
-                                              "ord":  5
+                                              "ord":  4
                                           }
                                       ]
                        },
