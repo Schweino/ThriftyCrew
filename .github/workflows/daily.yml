@@ -1,0 +1,59 @@
+name: Daily grocery pipeline
+
+# Runs the whole server-side pipeline in the cloud so Brad's PC can stay off:
+# pull server ads -> compare -> verify -> recipe overlay -> top5 -> export feed -> publish to Ghost,
+# then commits the refreshed data + feed back to the repo (Cloudflare serves public/smp-feed.json).
+#
+# Windows runner on purpose: the engine is Windows PowerShell 5.1 and spawns child `powershell`
+# processes, so we run it in the exact interpreter it was written and tested for (no pwsh porting).
+
+on:
+  schedule:
+    - cron: '0 13 * * *'      # 13:00 UTC = ~08:00 America/Chicago
+  workflow_dispatch: {}        # manual "Run workflow" button for testing
+
+permissions:
+  contents: write              # allow committing the refreshed data back
+
+concurrency:
+  group: daily-pipeline
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run the daily pipeline
+        env:
+          GHOST_ADMIN_KEY: ${{ secrets.GHOST_ADMIN_KEY }}
+        shell: powershell
+        run: |
+          powershell -ExecutionPolicy Bypass -File grocery/check-ad-cycles.ps1 -NoAlert
+          Write-Host "--- ad-cycle log tail ---"
+          if (Test-Path grocery/ad-cycle-log.txt) { Get-Content grocery/ad-cycle-log.txt -Tail 25 }
+
+      - name: Assert the feed refreshed today (fails -> GitHub emails you)
+        shell: powershell
+        run: |
+          $today = (Get-Date).ToString('yyyy-MM-dd')
+          $feed  = Get-Content grocery/public/smp-feed.json -Raw | ConvertFrom-Json
+          $gen   = ([datetime]$feed.generated).ToString('yyyy-MM-dd')
+          if ($gen -ne $today) {
+            Write-Error "Pipeline did NOT refresh the feed today (feed generated $gen, expected $today). A store pull likely failed from the cloud IP; nothing bad was published."
+            exit 1
+          }
+          Write-Host "OK: feed fresh - week $($feed.week_of), $($feed.recipe_count) recipes, $($feed.ingredient_count) ingredients."
+
+      - name: Commit refreshed prices + feed
+        shell: powershell
+        run: |
+          git config user.name  "smp-pipeline-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet
+          if ($LASTEXITCODE -eq 0) { Write-Host "No changes to commit."; exit 0 }
+          git commit -m "Daily pipeline: refresh prices + feed ($(Get-Date -Format 'yyyy-MM-dd'))"
+          git pull --rebase --autostash origin main
+          git push

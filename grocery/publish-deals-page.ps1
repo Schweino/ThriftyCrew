@@ -12,8 +12,13 @@ param([string]$CompareFile = "", [int]$MinCommodities = 25, [int]$MinPerStore = 
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $OutDir = Join-Path $root 'out'
-$lesson = 'C:\Codex\.claude\skills\lesson'
 $slug   = 'omaha-grocery-prices'
+# Ghost admin key: env var (CI secret) or gitignored .ghostkey; apiUrl stays the ghost.io admin host.
+$adminKey = if ($env:GHOST_ADMIN_KEY) { $env:GHOST_ADMIN_KEY }
+  elseif (Test-Path (Join-Path $root '.ghostkey')) { (Get-Content (Join-Path $root '.ghostkey') -Raw).Trim() }
+  elseif (Test-Path (Join-Path (Split-Path $root -Parent) 'meal-prep\.ghostkey')) { (Get-Content (Join-Path (Split-Path $root -Parent) 'meal-prep\.ghostkey') -Raw).Trim() }
+  else { throw 'Ghost admin key missing: set $env:GHOST_ADMIN_KEY or create meal-prep\.ghostkey' }
+$apiUrl = 'https://map-to-success.ghost.io'
 if (-not $CompareFile) {
   $cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1)
   $CompareFile = $cmpF.FullName
@@ -51,7 +56,6 @@ if ($LASTEXITCODE -ne 0) { Write-Output ("ERROR: page build FAILED (rc=$LASTEXIT
 if (-not (Test-Path $embed) -or ((Get-Item $embed).Length -lt 2000)) { Write-Output 'ERROR: page build produced no/short file'; exit 1 }
 
 # ---- preserve the live post's current visibility (so a weekly refresh never reverts a manual paid-gate) ----
-. "$lesson\ghost-config.ps1"
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $secretHex=$p[1]
   $sb=New-Object byte[] ($secretHex.Length/2); for($i=0;$i -lt $sb.Length;$i++){ $sb[$i]=[Convert]::ToByte($secretHex.Substring($i*2,2),16) }
@@ -76,7 +80,7 @@ elseif (Test-Path $visFile) { $vis = (Get-Content $visFile -Raw).Trim(); Write-O
 else { $vis = 'public' }
 
 # ---- republish (publish-resource.ps1 upserts by slug) ----
-$pubArgs = @('-ExecutionPolicy','Bypass','-File',"$lesson\publish-resource.ps1",
+$pubArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'publish-resource.ps1'),
   '-Title',"Omaha's Cheapest Groceries This Week",
   '-Slug',$slug,
   '-HtmlFile',$embed,
