@@ -70,5 +70,11 @@ $feed = [ordered]@{
   ingredients = $ing
   recipes     = $rec
 }
-$feed | ConvertTo-Json -Depth 8 | Set-Content (Join-Path $out 'smp-feed.json') -Encoding UTF8
-Write-Output ("smp-feed.json: " + $ing.Count + " ingredients, " + $rec.Count + " recipes, week " + $weekOf)
+# Write to the repo-root public\ dir - this is the ONLY folder Cloudflare Pages serves, so nothing else
+# in the repo is exposed. _headers there sets CORS + cache. Keep a copy in out\ for local inspection.
+$json = $feed | ConvertTo-Json -Depth 8
+$json | Set-Content (Join-Path $out 'smp-feed.json') -Encoding UTF8
+$pub = Join-Path (Split-Path $root -Parent) 'public'
+if (-not (Test-Path $pub)) { New-Item -ItemType Directory -Force -Path $pub | Out-Null }
+$json | Set-Content (Join-Path $pub 'smp-feed.json') -Encoding UTF8
+Write-Output ("smp-feed.json: " + $ing.Count + " ingredients, " + $rec.Count + " recipes, week " + $weekOf + " -> out\ + public\")

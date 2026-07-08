@@ -6,6 +6,7 @@
 !/grocery/
 !/meal-prep/
 !/.github/
+!/public/
 
 # --- never commit, anywhere in the tree ---
 # secrets (the Ghost admin key lives here locally; it is a GitHub Actions secret in CI)
