@@ -12,28 +12,6 @@
                         "size_text":  ""
                     },
                     {
-                        "id":  "avocados",
-                        "label":  "Avocados",
-                        "store":  "Sam\u0027s Club",
-                        "name":  "Avocados (5 ct)",
-                        "unit":  "each",
-                        "unit_price":  0.214,
-                        "band":  "0.25-3.00",
-                        "price_text":  "$1.07",
-                        "size_text":  "each"
-                    },
-                    {
-                        "id":  "sweet-corn",
-                        "label":  "Sweet Corn (ear)",
-                        "store":  "Sam\u0027s Club",
-                        "name":  "Sweet Corn (8 ct)",
-                        "unit":  "each",
-                        "unit_price":  0.0775,
-                        "band":  "0.15-2.00",
-                        "price_text":  "$0.62",
-                        "size_text":  "each"
-                    },
-                    {
                         "id":  "bacon",
                         "label":  "Bacon",
                         "store":  "Family Fare",
@@ -92,6 +70,17 @@
                         "id":  "milk",
                         "label":  "Milk (gallon)",
                         "store":  "Family Fare",
+                        "name":  "Horizon Organic Dha Omega 3 2% Reduced Fat Milk, 64 Fl Oz Half Gallon Carton",
+                        "unit":  "gallon",
+                        "unit_price":  15.98,
+                        "band":  "1.80-7.00",
+                        "price_text":  "$7.99",
+                        "size_text":  "64 oz"
+                    },
+                    {
+                        "id":  "milk",
+                        "label":  "Milk (gallon)",
+                        "store":  "Family Fare",
                         "name":  "Lactaid Lactose Free 1% Lowfat Milk 0.5 Gal",
                         "unit":  "gallon",
                         "unit_price":  11.98,
@@ -109,17 +98,6 @@
                         "band":  "1.80-7.00",
                         "price_text":  "$5.99",
                         "size_text":  "1/2 gal"
-                    },
-                    {
-                        "id":  "milk",
-                        "label":  "Milk (gallon)",
-                        "store":  "Family Fare",
-                        "name":  "Lactaid Lactose Free 2% Reduced Fat Milk 0.5 Gal",
-                        "unit":  "gallon",
-                        "unit_price":  11.98,
-                        "band":  "1.80-7.00",
-                        "price_text":  "$5.99",
-                        "size_text":  "hg"
                     },
                     {
                         "id":  "butter",
@@ -152,6 +130,17 @@
                         "unit_price":  12.58,
                         "band":  "1.80-9.00",
                         "price_text":  "$6.29",
+                        "size_text":  "8 oz"
+                    },
+                    {
+                        "id":  "butter",
+                        "label":  "Butter",
+                        "store":  "Family Fare",
+                        "name":  "Land O Lakes Salted Whipped Butter 8 Oz",
+                        "unit":  "lb",
+                        "unit_price":  10.58,
+                        "band":  "1.80-9.00",
+                        "price_text":  "$5.29",
                         "size_text":  "8 oz"
                     },
                     {
@@ -202,17 +191,6 @@
                         "id":  "cream-cheese",
                         "label":  "Cream Cheese",
                         "store":  "Family Fare",
-                        "name":  "Philadelphia Chive \u0026 Onion Cream Cheese Spread 7.5 Oz",
-                        "unit":  "oz",
-                        "unit_price":  0.6653,
-                        "band":  "0.06-0.50",
-                        "price_text":  "$4.99",
-                        "size_text":  "7.5 oz"
-                    },
-                    {
-                        "id":  "cream-cheese",
-                        "label":  "Cream Cheese",
-                        "store":  "Family Fare",
                         "name":  "Philadelphia Honey Pecan Cream Cheese Spread 7.5 Oz",
                         "unit":  "oz",
                         "unit_price":  0.6653,
@@ -235,12 +213,23 @@
                         "id":  "cream-cheese",
                         "label":  "Cream Cheese",
                         "store":  "Family Fare",
-                        "name":  "Philadelphia Strawberry Cream Cheese Spread 7.5 Oz",
+                        "name":  "Philadelphia Whipped Mixed Berry Cream Cheese Spread 7.5 Oz",
                         "unit":  "oz",
-                        "unit_price":  0.6238,
+                        "unit_price":  0.6653,
                         "band":  "0.06-0.50",
                         "price_text":  "$4.99",
-                        "size_text":  "8 oz"
+                        "size_text":  "7.5 oz"
+                    },
+                    {
+                        "id":  "cream-cheese",
+                        "label":  "Cream Cheese",
+                        "store":  "Family Fare",
+                        "name":  "Philadelphia Whipped Chive Cream Cheese Spread 7.5 Oz",
+                        "unit":  "oz",
+                        "unit_price":  0.6653,
+                        "band":  "0.06-0.50",
+                        "price_text":  "$4.99",
+                        "size_text":  "7.5 oz"
                     },
                     {
                         "id":  "shredded-cheese",
@@ -329,6 +318,39 @@
                         "band":  "0.15-2.00",
                         "price_text":  "$2.69",
                         "size_text":  "4 ea"
+                    },
+                    {
+                        "id":  "bread",
+                        "label":  "Bread (loaf)",
+                        "store":  "Family Fare",
+                        "name":  "Rhodes Bread, White 3 Ea",
+                        "unit":  "each",
+                        "unit_price":  6.99,
+                        "band":  "0.70-6.00",
+                        "price_text":  "$6.99",
+                        "size_text":  "3pk 16oz"
+                    },
+                    {
+                        "id":  "orange-juice",
+                        "label":  "Orange Juice",
+                        "store":  "Family Fare",
+                        "name":  "Simply Pulp Free Orange Juice Bottle 11.5 Fl Oz",
+                        "unit":  "floz",
+                        "unit_price":  0.2165,
+                        "band":  "0.01-0.20",
+                        "price_text":  "$2.49",
+                        "size_text":  "11.5 fl oz"
+                    },
+                    {
+                        "id":  "orange-juice",
+                        "label":  "Orange Juice",
+                        "store":  "Family Fare",
+                        "name":  "Kemps® 100% Pure Orange Juice From Concentrate .5 Gal. Jug",
+                        "unit":  "floz",
+                        "unit_price":  0.007,
+                        "band":  "0.01-0.20",
+                        "price_text":  "$4.49",
+                        "size_text":  "0.5 gll"
                     }
                 ],
     "multibuy_unpriced":  [
@@ -343,6 +365,6 @@
                                   "reason":  "has regular but no unit basis - add the pack size (e.g. \"12 pk 12 fl oz\"), or \"lb\" for a per-pound item"
                               }
                           ],
-    "week_of":  "2026-07-06",
-    "flagged_count":  30
+    "week_of":  "2026-07-08",
+    "flagged_count":  32
 }

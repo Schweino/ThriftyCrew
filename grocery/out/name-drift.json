@@ -1,46 +1,38 @@
 ﻿{
     "generated":  "2026-07-08",
-    "count":  18,
+    "count":  9,
     "flags":  [
                   {
                       "id":  "ground-beef-8020",
-                      "store":  "Family Fare",
+                      "store":  "Hy-Vee",
                       "reason":  "name-drift",
-                      "board_item":  "Our Certified 80% Lean / 20% Fat, Ground Chuck Beef Roll, 1 Lb. 16 Oz",
-                      "link_name":  "Ground Beef Meal Deal 80/20",
-                      "link_price":  7.99
+                      "board_item":  "Ground Beef Chub 80% Lean 20% Fat (5 lb)",
+                      "link_name":  "Ground Beef Roll 80% Lean 20% Fat",
+                      "link_price":  20.99
                   },
                   {
                       "id":  "apples",
                       "store":  "Aldi",
                       "reason":  "name-drift",
-                      "board_item":  "Gala Apples, Bag",
+                      "board_item":  "Gala Apples",
                       "link_name":  "Envy Apple, Each",
                       "link_price":  1.27
-                  },
-                  {
-                      "id":  "avocados",
-                      "store":  "Sam\u0027s Club",
-                      "reason":  "name-drift",
-                      "board_item":  "Member\u0027s Mark Large Avocados",
-                      "link_name":  "Avocados, 5 ct.",
-                      "link_price":  5.96
                   },
                   {
                       "id":  "bacon",
                       "store":  "Baker\u0027s",
                       "reason":  "name-drift",
-                      "board_item":  "Farmland Thick Cut Bacon",
+                      "board_item":  "Oscar Mayer Bacon",
                       "link_name":  "Kroger Naturally Hardwood Smoked Thick Cut Bacon",
                       "link_price":  10
                   },
                   {
-                      "id":  "blueberries",
-                      "store":  "Baker\u0027s",
+                      "id":  "bacon",
+                      "store":  "Family Fare",
                       "reason":  "name-drift",
-                      "board_item":  "Driscoll\u0027s Blueberries",
-                      "link_name":  "Fresh Blueberries 18 OZ Clamshell",
-                      "link_price":  5.99
+                      "board_item":  "Plumrose Bacon, Sliced 12 Oz",
+                      "link_name":  "Our Family Bacon, Premium, Original 12 Oz",
+                      "link_price":  4.49
                   },
                   {
                       "id":  "chicken-breast",
@@ -51,100 +43,36 @@
                       "link_price":  24.97
                   },
                   {
-                      "id":  "chicken-breast",
-                      "store":  "Aldi",
-                      "reason":  "form-flip",
-                      "board_item":  "Never Any! Family Pack Boneless Skinless Chicken Breasts",
-                      "link_name":  "Kirkwood Frozen Chicken Breasts",
-                      "link_price":  9.89
-                  },
-                  {
-                      "id":  "bread",
-                      "store":  "Baker\u0027s",
-                      "reason":  "name-drift",
-                      "board_item":  "Smart Way Enriched White Bread",
-                      "link_name":  "Kroger White Sandwich Bread",
-                      "link_price":  1.99
-                  },
-                  {
                       "id":  "bread",
                       "store":  "Sam\u0027s Club",
                       "reason":  "name-drift",
-                      "board_item":  "Bimbo Soft White Bread, 2 pk",
+                      "board_item":  "Bimbo Soft White Bread (2 pk)",
                       "link_name":  "Rotella\u0027s Italian Vienna Bread",
                       "link_price":  2.24
-                  },
-                  {
-                      "id":  "bread",
-                      "store":  "Hy-Vee",
-                      "reason":  "name-drift",
-                      "board_item":  "Hy-Vee White Bread (20 oz loaf)",
-                      "link_name":  "Hy-Vee White Bread",
-                      "link_price":  1.99
-                  },
-                  {
-                      "id":  "bread",
-                      "store":  "Family Fare",
-                      "reason":  "name-drift",
-                      "board_item":  "Our Family White Sandwich Bread",
-                      "link_name":  "White Bread Our Family",
-                      "link_price":  2.19
-                  },
-                  {
-                      "id":  "butter",
-                      "store":  "Baker\u0027s",
-                      "reason":  "name-drift",
-                      "board_item":  "Land O\u0027Lakes Butter",
-                      "link_name":  "Kroger Salted Butter Sticks",
-                      "link_price":  6.49
-                  },
-                  {
-                      "id":  "chicken-thighs",
-                      "store":  "Hy-Vee",
-                      "reason":  "name-drift",
-                      "board_item":  "Smart Chicken drumsticks or thighs, $1.99 lb.",
-                      "link_name":  "George\u0027s Chicken Leg Quarters",
-                      "link_price":  8.99
                   },
                   {
                       "id":  "cottage-cheese",
                       "store":  "Family Fare",
                       "reason":  "name-drift",
-                      "board_item":  "Our Family Cottage Cheese, Small Curd, 4% Milkfat Minimum 24 Oz",
+                      "board_item":  "Our Family Cottage Cheese, Large Curd, 4% Milkfat Minimum 24 Oz",
                       "link_name":  "Daisy Low Fat 2% Cottage Cheese",
                       "link_price":  2.99
-                  },
-                  {
-                      "id":  "grapes",
-                      "store":  "Baker\u0027s",
-                      "reason":  "name-drift",
-                      "board_item":  "Kroger Fresh Seedless White Grapes",
-                      "link_name":  "Fresh Mixed Grape Bowl",
-                      "link_price":  5
                   },
                   {
                       "id":  "milk",
                       "store":  "Family Fare",
                       "reason":  "name-drift",
-                      "board_item":  "Whole Milk Vitamin D Our Family",
+                      "board_item":  "Our Family Lowfat Milk 1 Gal",
                       "link_name":  "Our Family Whole Milk 0.5 Gal",
                       "link_price":  1.99
                   },
                   {
-                      "id":  "yogurt",
+                      "id":  "watermelon",
                       "store":  "Baker\u0027s",
                       "reason":  "name-drift",
-                      "board_item":  "Kroger Blended Vanilla Low Fat Yogurt Tub",
-                      "link_name":  "Yoplait Original Low Fat Yogurt Cups",
-                      "link_price":  5.99
-                  },
-                  {
-                      "id":  "yogurt",
-                      "store":  "Hy-Vee",
-                      "reason":  "name-drift",
-                      "board_item":  "Yoplait original or protein yogurt, 4 to 6 oz., 10/ $6 .60 each",
-                      "link_name":  "Hy-Vee Low Fat Vanilla Yogurt",
-                      "link_price":  3.38
+                      "board_item":  "Personal Watermelon",
+                      "link_name":  "Mini Seedless Whole Watermelon",
+                      "link_price":  4.99
                   }
               ]
 }

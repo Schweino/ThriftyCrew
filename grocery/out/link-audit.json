@@ -1,10 +1,10 @@
 ﻿{
     "generated":  "2026-07-08",
     "tolerance":  0.15,
-    "total_links":  433,
-    "ok":  353,
-    "mismatch":  65,
-    "uncomputable":  15,
+    "total_links":  458,
+    "ok":  410,
+    "mismatch":  27,
+    "uncomputable":  14,
     "flags":  [
                   {
                       "id":  "1-3-fat-cream-cheese",
@@ -40,7 +40,7 @@
                       "link_pu":  0.195,
                       "link_price":  1.56,
                       "size":  "8 oz",
-                      "name":  "Great Value Cream Cheese Brick, 8 oz"
+                      "name":  "Great Value Neufchatel Cheese Brick, 8 oz"
                   },
                   {
                       "id":  "93-7-ground-turkey",
@@ -94,7 +94,7 @@
                       "store":  "Aldi",
                       "reason":  "uncomputable",
                       "delta":  null,
-                      "board_pu":  1.0967,
+                      "board_pu":  1.1833,
                       "unit":  "lb",
                       "link_price":  1.27,
                       "size":  "each",
@@ -113,42 +113,6 @@
                       "name":  "Full Circle Balsamic Vinegar"
                   },
                   {
-                      "id":  "bananas",
-                      "store":  "Aldi",
-                      "reason":  "mismatch(52%)",
-                      "delta":  0.521,
-                      "board_pu":  0.48,
-                      "unit":  "lb",
-                      "link_pu":  0.73,
-                      "link_price":  0.73,
-                      "size":  "per lb",
-                      "name":  "Bananas, per lb"
-                  },
-                  {
-                      "id":  "bananas",
-                      "store":  "Walmart",
-                      "reason":  "mismatch(60%)",
-                      "delta":  0.6,
-                      "board_pu":  0.5,
-                      "unit":  "lb",
-                      "link_pu":  0.2,
-                      "link_price":  0.2,
-                      "size":  "per lb",
-                      "name":  "Fresh Banana, Each"
-                  },
-                  {
-                      "id":  "blueberries",
-                      "store":  "Aldi",
-                      "reason":  "mismatch(36%)",
-                      "delta":  0.358,
-                      "board_pu":  0.2718,
-                      "unit":  "oz",
-                      "link_pu":  0.1746,
-                      "link_price":  4.19,
-                      "size":  "24 oz",
-                      "name":  "Season\u0027s Choice Frozen Blueberries"
-                  },
-                  {
                       "id":  "blueberries",
                       "store":  "Baker\u0027s",
                       "reason":  "mismatch(20%)",
@@ -161,17 +125,6 @@
                       "name":  "Fresh Blueberries 18 OZ Clamshell"
                   },
                   {
-                      "id":  "blueberries",
-                      "store":  "Hy-Vee",
-                      "reason":  "uncomputable",
-                      "delta":  null,
-                      "board_pu":  0.5445,
-                      "unit":  "oz",
-                      "link_price":  4.99,
-                      "size":  "1 pint",
-                      "name":  "Fresh Blueberries, 1 Pint"
-                  },
-                  {
                       "id":  "boneless-skinless-chicken-thigh",
                       "store":  "Hy-Vee",
                       "reason":  "mismatch(101%)",
@@ -182,18 +135,6 @@
                       "link_price":  9.99,
                       "size":  "2.5 lb",
                       "name":  "Tyson Boneless Skinless Chicken Thighs"
-                  },
-                  {
-                      "id":  "boneless-skinless-chicken-thigh",
-                      "store":  "Sam\u0027s Club",
-                      "reason":  "mismatch(20%)",
-                      "delta":  0.202,
-                      "board_pu":  2.48,
-                      "unit":  "lb",
-                      "link_pu":  2.98,
-                      "link_price":  16.72,
-                      "size":  "$2.98/lb",
-                      "name":  "Member\u0027s Mark Boneless Skinless Chicken Thighs"
                   },
                   {
                       "id":  "bread",
@@ -209,25 +150,13 @@
                   {
                       "id":  "bread",
                       "store":  "Baker\u0027s",
-                      "reason":  "mismatch(67%)",
-                      "delta":  0.672,
-                      "board_pu":  1.19,
-                      "unit":  "each",
-                      "link_pu":  1.99,
-                      "link_price":  1.99,
-                      "size":  "$0.10/oz",
-                      "name":  "Kroger White Sandwich Bread"
-                  },
-                  {
-                      "id":  "bread",
-                      "store":  "Family Fare",
                       "reason":  "uncomputable",
                       "delta":  null,
-                      "board_pu":  2.19,
+                      "board_pu":  1.19,
                       "unit":  "each",
-                      "link_price":  2.19,
-                      "size":  "20 oz",
-                      "name":  "White Bread Our Family"
+                      "link_price":  1.19,
+                      "size":  "16 oz",
+                      "name":  "Smart Way Enriched White Bread"
                   },
                   {
                       "id":  "bread",
@@ -288,18 +217,6 @@
                   },
                   {
                       "id":  "brown-sugar",
-                      "store":  "Hy-Vee",
-                      "reason":  "mismatch(59%)",
-                      "delta":  0.589,
-                      "board_pu":  0.0588,
-                      "unit":  "oz",
-                      "link_pu":  0.0934,
-                      "link_price":  2.99,
-                      "size":  "32 oz",
-                      "name":  "Hy-Vee Pure Cane Light Brown Sugar"
-                  },
-                  {
-                      "id":  "brown-sugar",
                       "store":  "Sam\u0027s Club",
                       "reason":  "mismatch(108%)",
                       "delta":  1.077,
@@ -322,18 +239,6 @@
                       "name":  "Land O Lakes Butter, Salted 4 Ea"
                   },
                   {
-                      "id":  "cannellini-beans",
-                      "store":  "Hy-Vee",
-                      "reason":  "mismatch(50%)",
-                      "delta":  0.504,
-                      "board_pu":  0.0639,
-                      "unit":  "oz",
-                      "link_pu":  0.0961,
-                      "link_price":  1.49,
-                      "size":  "15.5 oz",
-                      "name":  "Bush\u0027s Cannellini Beans"
-                  },
-                  {
                       "id":  "carrots",
                       "store":  "Walmart",
                       "reason":  "mismatch(18%)",
@@ -344,66 +249,6 @@
                       "link_price":  2.26,
                       "size":  "2 lb",
                       "name":  "Fresh Whole Carrots, 2 lb Bag"
-                  },
-                  {
-                      "id":  "cheddar-cheese-shredded",
-                      "store":  "Sam\u0027s Club",
-                      "reason":  "mismatch(36%)",
-                      "delta":  0.361,
-                      "board_pu":  0.18,
-                      "unit":  "oz",
-                      "link_pu":  0.245,
-                      "link_price":  7.84,
-                      "size":  "2 lb",
-                      "name":  "Member\u0027s Mark Sliced Sharp Cheddar Cheese, 2 lbs."
-                  },
-                  {
-                      "id":  "chicken-breast",
-                      "store":  "Aldi",
-                      "reason":  "mismatch(17%)",
-                      "delta":  0.174,
-                      "board_pu":  3.99,
-                      "unit":  "lb",
-                      "link_pu":  3.2967,
-                      "link_price":  9.89,
-                      "size":  "48 oz",
-                      "name":  "Kirkwood Frozen Chicken Breasts"
-                  },
-                  {
-                      "id":  "chicken-thighs",
-                      "store":  "Aldi",
-                      "reason":  "mismatch(73%)",
-                      "delta":  0.731,
-                      "board_pu":  1.55,
-                      "unit":  "lb",
-                      "link_pu":  2.6833,
-                      "link_price":  8.05,
-                      "size":  "48 oz",
-                      "name":  "Kirkwood Boneless Skinless Chicken Thighs"
-                  },
-                  {
-                      "id":  "chicken-thighs",
-                      "store":  "Hy-Vee",
-                      "reason":  "mismatch(55%)",
-                      "delta":  0.548,
-                      "board_pu":  1.99,
-                      "unit":  "lb",
-                      "link_pu":  0.899,
-                      "link_price":  8.99,
-                      "size":  "10 lb",
-                      "name":  "George\u0027s Chicken Leg Quarters"
-                  },
-                  {
-                      "id":  "chickpeas",
-                      "store":  "Hy-Vee",
-                      "reason":  "mismatch(46%)",
-                      "delta":  0.457,
-                      "board_pu":  0.0639,
-                      "unit":  "oz",
-                      "link_pu":  0.0931,
-                      "link_price":  1.49,
-                      "size":  "16 oz",
-                      "name":  "Bush\u0027s Garbanzo Chick Peas"
                   },
                   {
                       "id":  "cottage-cheese",
@@ -426,18 +271,6 @@
                       "link_price":  4.62,
                       "size":  "",
                       "name":  "Member\u0027s Mark Cage Free Grade A Large White Eggs, 2 dozen"
-                  },
-                  {
-                      "id":  "enchilada-sauce",
-                      "store":  "Hy-Vee",
-                      "reason":  "mismatch(136%)",
-                      "delta":  1.362,
-                      "board_pu":  0.1139,
-                      "unit":  "oz",
-                      "link_pu":  0.269,
-                      "link_price":  2.69,
-                      "size":  "10 oz",
-                      "name":  "Old El Paso Mild Red Enchilada Sauce"
                   },
                   {
                       "id":  "fries",
@@ -464,42 +297,6 @@
                       "name":  "Ore-Ida Crispy Crinkles French Fries, Frozen 8 lbs."
                   },
                   {
-                      "id":  "fries",
-                      "store":  "Walmart",
-                      "reason":  "mismatch(35%)",
-                      "delta":  0.345,
-                      "board_pu":  0.092,
-                      "unit":  "oz",
-                      "link_pu":  0.1238,
-                      "link_price":  2.97,
-                      "size":  "24 oz",
-                      "name":  "Great Value Seasoned Curly Fries, 24 oz"
-                  },
-                  {
-                      "id":  "frozen-chopped-spinach",
-                      "store":  "Aldi",
-                      "reason":  "mismatch(60%)",
-                      "delta":  0.6,
-                      "board_pu":  0.1344,
-                      "unit":  "oz",
-                      "link_pu":  0.215,
-                      "link_price":  2.15,
-                      "size":  "10 oz",
-                      "name":  "Simply Nature Organic Spinach"
-                  },
-                  {
-                      "id":  "frozen-chopped-spinach",
-                      "store":  "Walmart",
-                      "reason":  "mismatch(33%)",
-                      "delta":  0.329,
-                      "board_pu":  0.079,
-                      "unit":  "oz",
-                      "link_pu":  0.105,
-                      "link_price":  1.26,
-                      "size":  "12 oz",
-                      "name":  "Great Value Chopped Spinach, 12 oz (Frozen)"
-                  },
-                  {
                       "id":  "ginger",
                       "store":  "Walmart",
                       "reason":  "uncomputable",
@@ -511,76 +308,16 @@
                       "name":  "Fresh Ginger Root, Each"
                   },
                   {
-                      "id":  "grapes",
-                      "store":  "Baker\u0027s",
-                      "reason":  "mismatch(123%)",
-                      "delta":  1.233,
-                      "board_pu":  1.99,
-                      "unit":  "lb",
-                      "link_pu":  4.4444,
-                      "link_price":  5,
-                      "size":  "18 oz",
-                      "name":  "Fresh Mixed Grape Bowl"
-                  },
-                  {
                       "id":  "greek-yogurt",
                       "store":  "Walmart",
-                      "reason":  "mismatch(17%)",
-                      "delta":  0.167,
+                      "reason":  "mismatch(16%)",
+                      "delta":  0.162,
                       "board_pu":  0.123,
                       "unit":  "oz",
-                      "link_pu":  0.1025,
-                      "link_price":  3.28,
+                      "link_pu":  0.1031,
+                      "link_price":  3.30,
                       "size":  "32 oz",
                       "name":  "Great Value Greek Plain Nonfat Yogurt, 32 oz Tub"
-                  },
-                  {
-                      "id":  "green-beans",
-                      "store":  "Hy-Vee",
-                      "reason":  "mismatch(78%)",
-                      "delta":  0.781,
-                      "board_pu":  0.0577,
-                      "unit":  "oz",
-                      "link_pu":  0.1028,
-                      "link_price":  1.49,
-                      "size":  "14.5 oz",
-                      "name":  "Green Giant Cut Green Beans"
-                  },
-                  {
-                      "id":  "green-cabbage",
-                      "store":  "Aldi",
-                      "reason":  "mismatch(200%)",
-                      "delta":  2,
-                      "board_pu":  0.79,
-                      "unit":  "lb",
-                      "link_pu":  2.37,
-                      "link_price":  2.37,
-                      "size":  "per lb",
-                      "name":  "Green Cabbage, per lb"
-                  },
-                  {
-                      "id":  "ground-beef-8020",
-                      "store":  "Baker\u0027s",
-                      "reason":  "mismatch(33%)",
-                      "delta":  0.334,
-                      "board_pu":  5.99,
-                      "unit":  "lb",
-                      "link_pu":  7.99,
-                      "link_price":  7.99,
-                      "size":  "$7.99/lb",
-                      "name":  "Kroger 80/20 Ground Beef Tray 1 LB"
-                  },
-                  {
-                      "id":  "hickory-smoked-bacon",
-                      "store":  "Walmart",
-                      "reason":  "mismatch(33%)",
-                      "delta":  0.327,
-                      "board_pu":  3.96,
-                      "unit":  "lb",
-                      "link_pu":  5.2533,
-                      "link_price":  3.94,
-                      "size":  "12 oz",
-                      "name":  "Great Value Naturally Hickory Smoked Sliced Bacon, 12 oz"
                   },
                   {
                       "id":  "hominy",
@@ -595,18 +332,6 @@
                       "name":  "Great Value White Hominy, 110.4 oz"
                   },
                   {
-                      "id":  "honey",
-                      "store":  "Hy-Vee",
-                      "reason":  "mismatch(18%)",
-                      "delta":  0.177,
-                      "board_pu":  0.3538,
-                      "unit":  "oz",
-                      "link_pu":  0.4162,
-                      "link_price":  9.99,
-                      "size":  "24 oz",
-                      "name":  "Hy-Vee Clover Honey Bear"
-                  },
-                  {
                       "id":  "ketchup",
                       "store":  "Family Fare",
                       "reason":  "mismatch(33%)",
@@ -617,54 +342,6 @@
                       "link_price":  5.99,
                       "size":  "32 oz",
                       "name":  "Heinz Tomato Ketchup 32 Oz"
-                  },
-                  {
-                      "id":  "ketchup",
-                      "store":  "Hy-Vee",
-                      "reason":  "mismatch(52%)",
-                      "delta":  0.524,
-                      "board_pu":  0.0653,
-                      "unit":  "oz",
-                      "link_pu":  0.0995,
-                      "link_price":  1.99,
-                      "size":  "20 oz",
-                      "name":  "Hy-Vee Thick \u0026 Rich Tomato Ketchup"
-                  },
-                  {
-                      "id":  "ketchup",
-                      "store":  "Walmart",
-                      "reason":  "mismatch(30%)",
-                      "delta":  0.303,
-                      "board_pu":  0.047,
-                      "unit":  "oz",
-                      "link_pu":  0.0612,
-                      "link_price":  1.47,
-                      "size":  "24 oz",
-                      "name":  "Great Value Tomato Ketchup, 24 oz"
-                  },
-                  {
-                      "id":  "kidney-beans",
-                      "store":  "Hy-Vee",
-                      "reason":  "mismatch(46%)",
-                      "delta":  0.457,
-                      "board_pu":  0.0639,
-                      "unit":  "oz",
-                      "link_pu":  0.0931,
-                      "link_price":  1.49,
-                      "size":  "16 oz",
-                      "name":  "Bush\u0027s Light Red Kidney Beans"
-                  },
-                  {
-                      "id":  "kidney-beans",
-                      "store":  "Sam\u0027s Club",
-                      "reason":  "mismatch(61%)",
-                      "delta":  0.608,
-                      "board_pu":  0.0684,
-                      "unit":  "oz",
-                      "link_pu":  0.11,
-                      "link_price":  7.28,
-                      "size":  "$0.11/oz",
-                      "name":  "Camellia Red Kidney Beans, 4 lbs"
                   },
                   {
                       "id":  "light-sour-cream",
@@ -679,28 +356,16 @@
                       "name":  "Daisy Sour Cream, 48 oz"
                   },
                   {
-                      "id":  "milk",
+                      "id":  "onions",
                       "store":  "Hy-Vee",
-                      "reason":  "mismatch(95%)",
-                      "delta":  0.954,
-                      "board_pu":  3.06,
-                      "unit":  "gallon",
-                      "link_pu":  5.98,
+                      "reason":  "mismatch(25%)",
+                      "delta":  0.251,
+                      "board_pu":  1.33,
+                      "unit":  "lb",
+                      "link_pu":  0.9967,
                       "link_price":  2.99,
-                      "size":  "0.5 gal",
-                      "name":  "Hy-Vee 2% Reduced Fat Milk"
-                  },
-                  {
-                      "id":  "olives",
-                      "store":  "Baker\u0027s",
-                      "reason":  "mismatch(21%)",
-                      "delta":  0.208,
-                      "board_pu":  0.24,
-                      "unit":  "oz",
-                      "link_pu":  0.29,
-                      "link_price":  5.99,
-                      "size":  "$0.29/oz",
-                      "name":  "Kroger Stuffed Manzanilla Olives with Pimiento"
+                      "size":  "3 lb",
+                      "name":  "Yellow Onions"
                   },
                   {
                       "id":  "paprika",
@@ -715,54 +380,6 @@
                       "name":  "Paprika Our Family"
                   },
                   {
-                      "id":  "peaches",
-                      "store":  "Baker\u0027s",
-                      "reason":  "mismatch(34%)",
-                      "delta":  0.341,
-                      "board_pu":  1.79,
-                      "unit":  "lb",
-                      "link_pu":  2.4,
-                      "link_price":  4.29,
-                      "size":  "$0.15/oz",
-                      "name":  "Del Monte Yellow Cling Sliced Peaches"
-                  },
-                  {
-                      "id":  "pork-chops",
-                      "store":  "Walmart",
-                      "reason":  "mismatch(63%)",
-                      "delta":  0.633,
-                      "board_pu":  4.17,
-                      "unit":  "lb",
-                      "link_pu":  6.81,
-                      "link_price":  6.81,
-                      "size":  "per lb",
-                      "name":  "Pork Center Cut Loin Chops, Bone-In"
-                  },
-                  {
-                      "id":  "potato",
-                      "store":  "Aldi",
-                      "reason":  "mismatch(100%)",
-                      "delta":  0.995,
-                      "board_pu":  0.44,
-                      "unit":  "lb",
-                      "link_pu":  0.878,
-                      "link_price":  4.39,
-                      "size":  "5 lb",
-                      "name":  "Red Potatoes, 5 lb Bag"
-                  },
-                  {
-                      "id":  "potato",
-                      "store":  "Hy-Vee",
-                      "reason":  "mismatch(20%)",
-                      "delta":  0.2,
-                      "board_pu":  0.49,
-                      "unit":  "lb",
-                      "link_pu":  0.588,
-                      "link_price":  5.88,
-                      "size":  "10 lb",
-                      "name":  "Hy-Vee Russet Potatoes"
-                  },
-                  {
                       "id":  "potato",
                       "store":  "Walmart",
                       "reason":  "uncomputable",
@@ -774,35 +391,11 @@
                       "name":  "Russet Potato Whole Fresh, Each"
                   },
                   {
-                      "id":  "red-bell-pepper",
-                      "store":  "Hy-Vee",
-                      "reason":  "mismatch(18%)",
-                      "delta":  0.178,
-                      "board_pu":  1.69,
-                      "unit":  "each",
-                      "link_pu":  1.99,
-                      "link_price":  1.99,
-                      "size":  "1 ct",
-                      "name":  "Red Pepper"
-                  },
-                  {
-                      "id":  "red-wine-vinegar",
-                      "store":  "Hy-Vee",
-                      "reason":  "mismatch(27%)",
-                      "delta":  0.269,
-                      "board_pu":  0.1473,
-                      "unit":  "oz",
-                      "link_pu":  0.1869,
-                      "link_price":  2.99,
-                      "size":  "16 fl oz",
-                      "name":  "Pompeian Gourmet Red Wine Vinegar"
-                  },
-                  {
                       "id":  "shredded-cheese",
                       "store":  "Baker\u0027s",
-                      "reason":  "mismatch(41%)",
-                      "delta":  0.411,
-                      "board_pu":  0.1559,
+                      "reason":  "mismatch(18%)",
+                      "delta":  0.182,
+                      "board_pu":  0.1862,
                       "unit":  "oz",
                       "link_pu":  0.22,
                       "link_price":  6.99,
@@ -820,42 +413,6 @@
                       "link_price":  3.99,
                       "size":  "16 oz",
                       "name":  "Fresh Strawberries"
-                  },
-                  {
-                      "id":  "sugar-free-maple-syrup",
-                      "store":  "Baker\u0027s",
-                      "reason":  "mismatch(43%)",
-                      "delta":  0.427,
-                      "board_pu":  0.1121,
-                      "unit":  "oz",
-                      "link_pu":  0.16,
-                      "link_price":  3.79,
-                      "size":  "$0.16/fl oz",
-                      "name":  "Maple Grove Farms Sugar Free Maple Flavor Syrup"
-                  },
-                  {
-                      "id":  "sugar-free-maple-syrup",
-                      "store":  "Hy-Vee",
-                      "reason":  "mismatch(22%)",
-                      "delta":  0.216,
-                      "board_pu":  0.1367,
-                      "unit":  "oz",
-                      "link_pu":  0.1662,
-                      "link_price":  3.99,
-                      "size":  "24 fl oz",
-                      "name":  "Hungry Jack Breakfast Syrup, Zero Sugar, Butter"
-                  },
-                  {
-                      "id":  "sweet-corn",
-                      "store":  "Baker\u0027s",
-                      "reason":  "mismatch(25%)",
-                      "delta":  0.247,
-                      "board_pu":  0.4,
-                      "unit":  "each",
-                      "link_pu":  0.4988,
-                      "link_price":  3.99,
-                      "size":  "8 ct",
-                      "name":  "Kroger Sweet Corn Mini Cobs"
                   },
                   {
                       "id":  "toasted-sesame-seeds",
@@ -882,6 +439,18 @@
                       "name":  "Happy Harvest Tomato Sauce"
                   },
                   {
+                      "id":  "watermelon",
+                      "store":  "Baker\u0027s",
+                      "reason":  "mismatch(67%)",
+                      "delta":  0.669,
+                      "board_pu":  2.99,
+                      "unit":  "each",
+                      "link_pu":  4.99,
+                      "link_price":  4.99,
+                      "size":  "1 ct",
+                      "name":  "Mini Seedless Whole Watermelon"
+                  },
+                  {
                       "id":  "white-mushrooms",
                       "store":  "Family Fare",
                       "reason":  "mismatch(30%)",
@@ -892,42 +461,6 @@
                       "link_price":  2.59,
                       "size":  "8 oz",
                       "name":  "Our Family Mushrooms, White, Sliced 8 Oz"
-                  },
-                  {
-                      "id":  "white-mushrooms",
-                      "store":  "Hy-Vee",
-                      "reason":  "mismatch(118%)",
-                      "delta":  1.176,
-                      "board_pu":  0.2488,
-                      "unit":  "oz",
-                      "link_pu":  0.5414,
-                      "link_price":  3.79,
-                      "size":  "7 oz",
-                      "name":  "Hy-Vee Sliced Mushrooms"
-                  },
-                  {
-                      "id":  "white-vinegar",
-                      "store":  "Family Fare",
-                      "reason":  "mismatch(83%)",
-                      "delta":  0.829,
-                      "board_pu":  0.034,
-                      "unit":  "oz",
-                      "link_pu":  0.0622,
-                      "link_price":  1.99,
-                      "size":  "32 oz",
-                      "name":  "Our Family Distilled White Vinegar"
-                  },
-                  {
-                      "id":  "yogurt",
-                      "store":  "Baker\u0027s",
-                      "reason":  "mismatch(28%)",
-                      "delta":  0.285,
-                      "board_pu":  0.0934,
-                      "unit":  "oz",
-                      "link_pu":  0.12,
-                      "link_price":  5.99,
-                      "size":  "$0.12/oz",
-                      "name":  "Yoplait Original Low Fat Yogurt Cups"
                   },
                   {
                       "id":  "zero-sugar-soda",

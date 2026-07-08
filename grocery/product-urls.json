@@ -1,6 +1,6 @@
 ﻿{
     "readme":  "Durable per-store direct product URLs + verified price for the Omaha grocery prices page. Keyed by commodity id -\u003e store -\u003e {url,price,size,name}. Survives weekly regeneration; build-deals-page.ps1 renders a \u0027See item\u0027 link per chip.",
-    "updated":  "2026-07-07",
+    "updated":  "2026-07-08",
     "items":  {
                   "1-3-fat-cream-cheese":  {
                                                "commodity":  "1/3 Fat Cream Cheese",
@@ -8,8 +8,7 @@
                                                             "url":  "https://www.aldi.us/store/aldi/products/20713385-happy-farms-cream-cheese-8-oz",
                                                             "price":  1.65,
                                                             "size":  "8 oz",
-                                                            "name":  "Happy Farms Cream Cheese",
-                                                            "recipe_pu":  0.1488
+                                                            "name":  "Happy Farms Cream Cheese"
                                                         },
                                                "Baker\u0027s":  {
                                                                     "url":  "https://www.bakersplus.com/p/kroger-original-cream-cheese/0001111089202",
@@ -36,15 +35,13 @@
                                                                        "url":  "https://www.samsclub.com/ip/Philadelphia-Original-Cream-Cheese-Spread-16-oz-2-pk/13753702483",
                                                                        "price":  8.97,
                                                                        "size":  "$0.28/oz",
-                                                                       "name":  "Philadelphia Cream Cheese, 2 pk",
-                                                                       "recipe_pu":  0.2275
+                                                                       "name":  "Philadelphia Cream Cheese, 2 pk"
                                                                    },
                                                "Walmart":  {
-                                                               "url":  "https://www.walmart.com/ip/10452429",
+                                                               "url":  "https://www.walmart.com/ip/10452358",
                                                                "price":  1.56,
                                                                "size":  "8 oz",
-                                                               "name":  "Great Value Cream Cheese Brick, 8 oz",
-                                                               "recipe_pu":  0.195
+                                                               "name":  "Great Value Neufchatel Cheese Brick, 8 oz"
                                                            }
                                            },
                   "93-7-ground-turkey":  {
@@ -53,8 +50,7 @@
                                                           "url":  "https://www.aldi.us/store/aldi/products/17499020-fit-active-93-lean-fresh-ground-turkey-19-2-oz",
                                                           "price":  5.19,
                                                           "size":  "19.2 oz",
-                                                          "name":  "Kirkwood Fresh 93% Lean Ground Turkey",
-                                                          "recipe_pu":  5.19
+                                                          "name":  "Kirkwood Fresh 93% Lean Ground Turkey"
                                                       },
                                              "Baker\u0027s":  {
                                                                   "url":  "https://www.bakersplus.com/p/kroger-93-7-lean-fresh-ground-turkey-1-lb/0001111096874",
@@ -82,14 +78,13 @@
                                                                      "price":  86.53,
                                                                      "size":  "20 lb",
                                                                      "name":  "Jennie-O Lean Ground Turkey, Case ( 20 lbs.)",
-                                                                     "recipe_pu":  4.55
+                                                                     "recipe_pu":  4.33
                                                                  },
                                              "Walmart":  {
                                                              "url":  "https://www.walmart.com/ip/10292757",
                                                              "price":  15.92,
                                                              "size":  "3 lb",
-                                                             "name":  "JENNIE-O Fresh Lean Ground Turkey 93/7, 3 lb",
-                                                             "recipe_pu":  4.96
+                                                             "name":  "JENNIE-O Fresh Lean Ground Turkey 93/7, 3 lb"
                                                          }
                                          },
                   "apple":  {
@@ -98,8 +93,7 @@
                                              "url":  "https://www.aldi.us/store/aldi/products/16345637-envy-apple-each",
                                              "price":  1.27,
                                              "size":  "each",
-                                             "name":  "Envy Apple, Each",
-                                             "recipe_pu":  0.43
+                                             "name":  "Envy Apple, Each"
                                          },
                                 "Baker\u0027s":  {
                                                      "url":  "https://www.bakersplus.com/p/large-gala-apple-each/0000000004134",
@@ -115,6 +109,13 @@
                                                     "name":  "Gala Apples",
                                                     "recipe_pu":  1.99
                                                 },
+                                "Hy-Vee":  {
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/8669/gala-apples",
+                                               "price":  0.79,
+                                               "size":  "each",
+                                               "name":  "Gala Apples",
+                                               "recipe_pu":  0.79
+                                           },
                                 "Walmart":  {
                                                 "url":  "https://www.walmart.com/ip/44390953",
                                                 "price":  0.39,
@@ -130,15 +131,22 @@
                                               "price":  1.27,
                                               "size":  "each",
                                               "name":  "Envy Apple, Each",
-                                              "board_pu":  1.0967
+                                              "board_pu":  1.1833
                                           },
                                  "Baker\u0027s":  {
                                                       "url":  "https://www.bakersplus.com/p/kroger-gala-apples-3-pound-bag/0001111091825",
                                                       "price":  4.49,
                                                       "size":  "3 lb",
                                                       "name":  "Kroger Gala Apples 3 Pound Bag",
-                                                      "board_pu":  1.5
+                                                      "board_pu":  1.33
                                                   },
+                                 "Hy-Vee":  {
+                                                "url":  "https://www.hy-vee.com/aisles-online/p/8665/pink-lady-apples",
+                                                "price":  1.79,
+                                                "size":  "lb",
+                                                "name":  "Pink Lady Apples",
+                                                "board_pu":  1.79
+                                            },
                                  "Sam\u0027s Club":  {
                                                          "url":  "https://www.samsclub.com/ip/Envy-Apples-4-lbs/13585869052",
                                                          "price":  5.96,
@@ -157,11 +165,11 @@
                   "avocados":  {
                                    "commodity":  "Avocados",
                                    "Aldi":  {
-                                                "url":  "https://www.aldi.us/store/aldi/products/26165632-mini-avocados-bag-6-ct",
-                                                "price":  2.89,
-                                                "size":  "6 ct",
-                                                "name":  "Mini Avocados, 6 ct",
-                                                "board_pu":  0.4817
+                                                "url":  "https://www.aldi.us/store/aldi/products/3111634-avocado-each",
+                                                "price":  0.59,
+                                                "size":  "each",
+                                                "name":  "Medium Avocado, Each",
+                                                "board_pu":  0.59
                                             },
                                    "Baker\u0027s":  {
                                                         "url":  "https://www.bakersplus.com/p/fresh-medium-ripe-avocado/0000000004046",
@@ -177,12 +185,19 @@
                                                        "name":  "Hass Avocados, Small",
                                                        "board_pu":  1.39
                                                    },
+                                   "Hy-Vee":  {
+                                                  "url":  "https://www.hy-vee.com/aisles-online/p/37190/hass-avocados",
+                                                  "price":  1.33,
+                                                  "size":  "each",
+                                                  "name":  "Hass Avocados",
+                                                  "board_pu":  1.33
+                                              },
                                    "Sam\u0027s Club":  {
                                                            "url":  "https://www.samsclub.com/ip/Avocados-5-ct/13586650560",
                                                            "price":  5.96,
                                                            "size":  "5 ct",
                                                            "name":  "Avocados, 5 ct.",
-                                                           "board_pu":  1.19
+                                                           "board_pu":  1.07
                                                        },
                                    "Walmart":  {
                                                    "url":  "https://www.walmart.com/ip/44390949",
@@ -206,28 +221,35 @@
                                                      "price":  10,
                                                      "size":  "$0.28/oz",
                                                      "name":  "Kroger Naturally Hardwood Smoked Thick Cut Bacon",
-                                                     "board_pu":  3.99
+                                                     "board_pu":  3.995
                                                  },
                                 "Family Fare":  {
                                                     "url":  "https://www.shopfamilyfare.com/shop/meat/bacon/our_family_bacon_premium_original_12_oz/p/1564405684715338225",
                                                     "price":  4.49,
                                                     "size":  "12 oz",
                                                     "name":  "Our Family Bacon, Premium, Original 12 Oz",
-                                                    "board_pu":  5.9867
+                                                    "board_pu":  5.72
                                                 },
+                                "Hy-Vee":  {
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/57278/hy-vee-double-smoked-thick-sliced-bacon",
+                                               "price":  4.89,
+                                               "size":  "16 oz",
+                                               "name":  "Hy-Vee Double Smoked Thick Sliced Bacon",
+                                               "board_pu":  4.89
+                                           },
                                 "Sam\u0027s Club":  {
                                                         "url":  "https://www.samsclub.com/ip/Member-s-Mark-Naturally-Hickory-Smoked-Bacon-3-lbs/13892064138",
                                                         "price":  11.83,
                                                         "size":  "3 lb",
                                                         "name":  "Member\u0027s Mark Naturally Hickory Smoked Bacon 3 lbs.",
-                                                        "board_pu":  3.94
+                                                        "board_pu":  3.96
                                                     },
                                 "Walmart":  {
-                                                "url":  "https://www.walmart.com/ip/44391087",
-                                                "price":  4.18,
-                                                "size":  "16 oz",
-                                                "name":  "Great Value Naturally Hickory Smoked Thick Cut Bacon, 16 oz",
-                                                "board_pu":  4.18
+                                                "url":  "https://www.walmart.com/ip/23816525",
+                                                "price":  3.94,
+                                                "size":  "12 oz",
+                                                "name":  "Great Value Naturally Hickory Smoked Sliced Bacon, 12 oz",
+                                                "board_pu":  5.2533
                                             }
                             },
                   "balsamic-vinegar":  {
@@ -250,8 +272,7 @@
                                                                "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/full_circle_market_balsamic_6_acidity_vinegar_of_modena_17_fl_oz/p/583596",
                                                                "price":  4.19,
                                                                "size":  "17 fl oz",
-                                                               "name":  "Full Circle Balsamic Vinegar",
-                                                               "recipe_pu":  0.9891
+                                                               "name":  "Full Circle Balsamic Vinegar"
                                                            },
                                            "Walmart":  {
                                                            "url":  "https://www.walmart.com/ip/128822499",
@@ -264,8 +285,8 @@
                   "bananas":  {
                                   "commodity":  "Bananas",
                                   "Aldi":  {
-                                               "url":  "https://www.aldi.us/store/aldi/products/25901190-organic-bananas-per-lb",
-                                               "price":  0.73,
+                                               "url":  "https://www.aldi.us/store/aldi/products/25720157-bananas-per-lb",
+                                               "price":  0.48,
                                                "size":  "per lb",
                                                "name":  "Bananas, per lb",
                                                "board_pu":  0.48
@@ -284,6 +305,13 @@
                                                       "name":  "Yellow Bananas",
                                                       "board_pu":  0.65
                                                   },
+                                  "Hy-Vee":  {
+                                                 "url":  "https://www.hy-vee.com/aisles-online/p/37178/fresh-chiquita-bananas",
+                                                 "price":  0.49,
+                                                 "size":  "lb",
+                                                 "name":  "Fresh Chiquita Bananas",
+                                                 "board_pu":  0.49
+                                             },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/Bananas-3-lbs/18638953319",
                                                           "price":  1.47,
@@ -293,7 +321,7 @@
                                                       },
                                   "Walmart":  {
                                                   "url":  "https://www.walmart.com/ip/44390948",
-                                                  "price":  0.2,
+                                                  "price":  0.50,
                                                   "size":  "per lb",
                                                   "name":  "Fresh Banana, Each",
                                                   "board_pu":  0.5
@@ -305,15 +333,13 @@
                                                    "url":  "https://www.aldi.us/store/aldi/products/20992234-season-s-choice-frozen-blueberries-24-oz",
                                                    "price":  4.19,
                                                    "size":  "24 oz",
-                                                   "name":  "Season\u0027s Choice Frozen Blueberries",
-                                                   "board_pu":  0.2718
+                                                   "name":  "Season\u0027s Choice Frozen Blueberries"
                                                },
                                       "Baker\u0027s":  {
                                                            "url":  "https://www.bakersplus.com/p/fresh-blueberries-18-oz-clamshell/0003338322241",
                                                            "price":  5.99,
                                                            "size":  "18 oz",
-                                                           "name":  "Fresh Blueberries 18 OZ Clamshell",
-                                                           "board_pu":  0.2772
+                                                           "name":  "Fresh Blueberries 18 OZ Clamshell"
                                                        },
                                       "Family Fare":  {
                                                           "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/berries/flavor_ripe_blueberries_18_oz/p/2341070",
@@ -326,8 +352,7 @@
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/536497/fresh-blueberries-1-pint",
                                                      "price":  4.99,
                                                      "size":  "1 pint",
-                                                     "name":  "Fresh Blueberries, 1 Pint",
-                                                     "board_pu":  0.5445
+                                                     "name":  "Fresh Blueberries, 1 Pint"
                                                  },
                                       "Sam\u0027s Club":  {
                                                               "url":  "https://www.samsclub.com/ip/Jumbo-Blueberries-16-oz/13623451926",
@@ -341,7 +366,7 @@
                                                       "price":  4.64,
                                                       "size":  "18 oz",
                                                       "name":  "Fresh Blueberries, 18 oz Container",
-                                                      "board_pu":  0.2609
+                                                      "board_pu":  0.2578
                                                   }
                                   },
                   "boneless-skinless-chicken-thigh":  {
@@ -364,14 +389,13 @@
                                                                          "url":  "https://www.hy-vee.com/aisles-online/p/289369/tyson-boneless-skinless-chicken-thighs-frozen",
                                                                          "price":  9.99,
                                                                          "size":  "2.5 lb",
-                                                                         "name":  "Tyson Boneless Skinless Chicken Thighs",
-                                                                         "recipe_pu":  1.99
+                                                                         "name":  "Tyson Boneless Skinless Chicken Thighs"
                                                                      },
                                                           "Sam\u0027s Club":  {
-                                                                                  "url":  "https://www.samsclub.com/ip/Member-s-Mark-Boneless-and-Skinless-Chicken-Thighs-priced-per-pound/5993283101",
-                                                                                  "price":  16.72,
-                                                                                  "size":  "$2.98/lb",
-                                                                                  "name":  "Member\u0027s Mark Boneless Skinless Chicken Thighs",
+                                                                                  "url":  "https://www.samsclub.com/ip/Member-s-Mark-Boneless-Skinless-Chicken-Thighs-Case-priced-per-pound/13629760942",
+                                                                                  "price":  2.48,
+                                                                                  "size":  "$2.48/lb",
+                                                                                  "name":  "Member\u0027s Mark Boneless Skinless Chicken Thighs, Case, priced per pound",
                                                                                   "recipe_pu":  2.48
                                                                               },
                                                           "Walmart":  {
@@ -379,7 +403,7 @@
                                                                           "price":  9.87,
                                                                           "size":  "3 lb",
                                                                           "name":  "Great Value All Natural Boneless Skinless Chicken Thighs, 3 lb",
-                                                                          "recipe_pu":  2.97
+                                                                          "recipe_pu":  3.22
                                                                       }
                                                       },
                   "bread":  {
@@ -392,18 +416,17 @@
                                              "board_pu":  1.65
                                          },
                                 "Baker\u0027s":  {
-                                                     "url":  "https://www.bakersplus.com/p/kroger-white-sandwich-bread/0001111008486",
-                                                     "price":  1.99,
-                                                     "size":  "$0.10/oz",
-                                                     "name":  "Kroger White Sandwich Bread",
+                                                     "url":  "https://www.bakersplus.com/p/smart-way-enriched-white-bread/0001111015125",
+                                                     "price":  1.19,
+                                                     "size":  "16 oz",
+                                                     "name":  "Smart Way Enriched White Bread",
                                                      "board_pu":  1.19
                                                  },
                                 "Family Fare":  {
                                                     "url":  "https://www.shopfamilyfare.com/shop/bakery/packaged_bread/white_bread/white_bread_our_family/p/1564405684710422587",
                                                     "price":  2.19,
                                                     "size":  "20 oz",
-                                                    "name":  "White Bread Our Family",
-                                                    "board_pu":  2.19
+                                                    "name":  "White Bread Our Family"
                                                 },
                                 "Hy-Vee":  {
                                                "url":  "https://www.hy-vee.com/aisles-online/p/1955/hy-vee-white-bread",
@@ -454,22 +477,21 @@
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/3309869/gustare-vita-italian-bread-crumbs-134-oz",
                                                       "price":  2.49,
                                                       "size":  "13.4 oz",
-                                                      "name":  "Gustare Vita Italian Bread Crumbs",
-                                                      "recipe_pu":  0.1193
+                                                      "name":  "Gustare Vita Italian Bread Crumbs"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Vigo-Italian-Style-Bread-Crumbs-5-lbs/13803520339",
                                                                "price":  5.94,
                                                                "size":  "5 lb",
                                                                "name":  "Vigo Italian Style Bread Crumbs, 5 lbs.",
-                                                               "recipe_pu":  0.0793
+                                                               "recipe_pu":  0.0744
                                                            },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/10315088",
                                                        "price":  1.22,
                                                        "size":  "15 oz",
                                                        "name":  "Great Value Italian Style Bread Crumbs, 15 oz",
-                                                       "recipe_pu":  0.0813
+                                                       "recipe_pu":  0.081
                                                    }
                                    },
                   "brown-sugar":  {
@@ -492,29 +514,27 @@
                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/sweeteners/c_h_dark_brown_pure_cane_sugar_32_oz/p/1564405684706169289",
                                                           "price":  5.39,
                                                           "size":  "32 oz",
-                                                          "name":  "C\u0026H Dark Brown Pure Cane Sugar 32 Oz",
-                                                          "recipe_pu":  0.2497
+                                                          "name":  "C\u0026H Dark Brown Pure Cane Sugar 32 Oz"
                                                       },
                                       "Hy-Vee":  {
-                                                     "url":  "https://www.hy-vee.com/aisles-online/p/22734/hy-vee-pure-cane-light-brown-sugar",
-                                                     "price":  2.99,
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/2970352/thats-smart-light-brown-sugar",
+                                                     "price":  1.88,
                                                      "size":  "32 oz",
-                                                     "name":  "Hy-Vee Pure Cane Light Brown Sugar",
+                                                     "name":  "That\u0027s Smart! Light Brown Sugar",
                                                      "recipe_pu":  0.0588
                                                  },
                                       "Sam\u0027s Club":  {
                                                               "url":  "https://www.samsclub.com/ip/Member-s-Mark-Light-Brown-Sugar-7-lbs/68113177798",
                                                               "price":  6.98,
                                                               "size":  "7 lb",
-                                                              "name":  "Member\u0027s Mark Light Brown Sugar, 7 lbs.",
-                                                              "recipe_pu":  0.03
+                                                              "name":  "Member\u0027s Mark Light Brown Sugar, 7 lbs."
                                                           },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/10315012",
                                                       "price":  1.98,
                                                       "size":  "32 oz",
                                                       "name":  "Great Value Light Brown Sugar, 32 oz",
-                                                      "recipe_pu":  0.0619
+                                                      "recipe_pu":  0.062
                                                   }
                                   },
                   "butter":  {
@@ -544,11 +564,11 @@
                                                      "recipe_pu":  0.3369
                                                  },
                                  "Hy-Vee":  {
-                                                "url":  "https://www.hy-vee.com/aisles-online/p/4160055/thats-smart-sweet-cream-butter",
-                                                "price":  3.29,
-                                                "size":  "1 lb",
-                                                "name":  "That\u0027s Smart Sweet Cream Butter",
-                                                "board_pu":  3.29,
+                                                "url":  "https://www.hy-vee.com/aisles-online/p/57018/hy-vee-sweet-cream-salted-butter-quarters",
+                                                "price":  3.99,
+                                                "size":  "16 oz",
+                                                "name":  "Hy-Vee Sweet Cream Salted Butter Quarters",
+                                                "board_pu":  3.99,
                                                 "recipe_pu":  0.2494
                                             },
                                  "Sam\u0027s Club":  {
@@ -557,7 +577,7 @@
                                                          "size":  "$2.74/lb",
                                                          "name":  "Member\u0027s Mark Salted Butter, 4 lbs",
                                                          "board_pu":  2.74,
-                                                         "recipe_pu":  0.1713
+                                                         "recipe_pu":  0.16
                                                      },
                                  "Walmart":  {
                                                  "url":  "https://www.walmart.com/ip/132893363",
@@ -565,7 +585,7 @@
                                                  "size":  "16 oz",
                                                  "name":  "Great Value Sweet Cream Salted Butter, 16 oz, 4 Sticks",
                                                  "board_pu":  3.06,
-                                                 "recipe_pu":  0.1912
+                                                 "recipe_pu":  0.186
                                              }
                              },
                   "cannellini-beans":  {
@@ -592,10 +612,10 @@
                                                                "recipe_pu":  0.0639
                                                            },
                                            "Hy-Vee":  {
-                                                          "url":  "https://www.hy-vee.com/aisles-online/p/164649/bushs-cannellini-beans",
-                                                          "price":  1.49,
-                                                          "size":  "15.5 oz",
-                                                          "name":  "Bush\u0027s Cannellini Beans",
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/337459/hy-vee-cannellini-beans",
+                                                          "price":  0.99,
+                                                          "size":  "15 oz",
+                                                          "name":  "Hy-Vee Cannellini Beans",
                                                           "recipe_pu":  0.0639
                                                       },
                                            "Walmart":  {
@@ -603,7 +623,7 @@
                                                            "price":  0.86,
                                                            "size":  "15.5 oz",
                                                            "name":  "Great Value Cannellini Beans, 15.5 oz",
-                                                           "recipe_pu":  0.0555
+                                                           "recipe_pu":  0.055
                                                        }
                                        },
                   "carrots":  {
@@ -647,8 +667,7 @@
                                                   "url":  "https://www.walmart.com/ip/10535757",
                                                   "price":  2.26,
                                                   "size":  "2 lb",
-                                                  "name":  "Fresh Whole Carrots, 2 lb Bag",
-                                                  "recipe_pu":  1.13
+                                                  "name":  "Fresh Whole Carrots, 2 lb Bag"
                                               }
                               },
                   "cashews":  {
@@ -727,18 +746,18 @@
                                                                  "recipe_pu":  0.31
                                                              },
                                                   "Sam\u0027s Club":  {
-                                                                          "url":  "https://www.samsclub.com/ip/Member-s-Mark-Sliced-Sharp-Cheddar-Cheese-2-lbs/13612912661",
-                                                                          "price":  7.84,
-                                                                          "size":  "2 lb",
-                                                                          "name":  "Member\u0027s Mark Sliced Sharp Cheddar Cheese, 2 lbs.",
-                                                                          "recipe_pu":  0.23
+                                                                          "url":  "https://www.samsclub.com/ip/Member-s-Mark-Mild-Cheddar-Shredded-Cheese-16-oz-2-pk/13771120208",
+                                                                          "price":  5.87,
+                                                                          "size":  "$0.18/oz",
+                                                                          "name":  "Member\u0027s Mark Mild Cheddar Shredded Cheese, 16 oz 2 pk",
+                                                                          "recipe_pu":  0.18
                                                                       },
                                                   "Walmart":  {
                                                                   "url":  "https://www.walmart.com/ip/10452431",
                                                                   "price":  1.97,
                                                                   "size":  "8 oz",
                                                                   "name":  "Great Value Sharp Cheddar Finely Shredded Cheese, 8 oz",
-                                                                  "recipe_pu":  0.25
+                                                                  "recipe_pu":  0.218
                                                               }
                                               },
                   "chicken-breast":  {
@@ -747,15 +766,14 @@
                                                       "url":  "https://www.aldi.us/store/aldi/products/19396954-kirkwood-frozen-chicken-breasts-48-oz",
                                                       "price":  9.89,
                                                       "size":  "48 oz",
-                                                      "name":  "Kirkwood Frozen Chicken Breasts",
-                                                      "board_pu":  3.99
+                                                      "name":  "Kirkwood Frozen Chicken Breasts"
                                                   },
                                          "Baker\u0027s":  {
                                                               "url":  "https://www.bakersplus.com/p/heritage-farm-boneless-skinless-chicken-breasts/0028334900000",
-                                                              "price":  13.01,
-                                                              "size":  "$2.89/lb",
+                                                              "price":  10.31,
+                                                              "size":  "$2.29/lb",
                                                               "name":  "Heritage Farm Boneless Skinless Chicken Breasts",
-                                                              "board_pu":  2.89
+                                                              "board_pu":  2.29
                                                           },
                                          "Family Fare":  {
                                                              "url":  "https://www.shopfamilyfare.com/shop/meat/chicken/fresh_chicken/boneless_skinless_chicken_breasts/p/1564405684713031766",
@@ -765,11 +783,11 @@
                                                              "board_pu":  2.99
                                                          },
                                          "Hy-Vee":  {
-                                                        "url":  "https://www.hy-vee.com/aisles-online/p/4186414/hy-vee-frozen-boneless-skinless-chicken-breast",
-                                                        "price":  8.99,
-                                                        "size":  "2.5 lb",
-                                                        "name":  "Hy-Vee Frozen Boneless Skinless Chicken Breast",
-                                                        "board_pu":  3.99
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/65791/boneless-skinless-chicken-breast",
+                                                        "price":  4.88,
+                                                        "size":  "lb",
+                                                        "name":  "Boneless Skinless Chicken Breast",
+                                                        "board_pu":  4.88
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/Member-s-Mark-Boneless-and-Skinless-Chicken-Breasts-Frozen-10-lbs/13896820369",
@@ -789,10 +807,10 @@
                   "chicken-thighs":  {
                                          "commodity":  "Chicken Thighs / Drumsticks",
                                          "Aldi":  {
-                                                      "url":  "https://www.aldi.us/store/aldi/products/19347700-kirkwood-boneless-skinless-chicken-thighs-48-oz",
-                                                      "price":  8.05,
-                                                      "size":  "48 oz",
-                                                      "name":  "Kirkwood Boneless Skinless Chicken Thighs",
+                                                      "url":  "https://www.aldi.us/store/aldi/products/20363180-fresh-chicken-thighs-family-pack-per-lb",
+                                                      "price":  1.55,
+                                                      "size":  "per lb",
+                                                      "name":  "Kirkwood Family Pack Bone-In Chicken Thighs, per lb",
                                                       "board_pu":  1.55
                                                   },
                                          "Baker\u0027s":  {
@@ -810,12 +828,26 @@
                                                              "board_pu":  1.99
                                                          },
                                          "Hy-Vee":  {
-                                                        "url":  "https://www.hy-vee.com/aisles-online/p/1769331/georges-chicken-leg-quarters",
-                                                        "price":  8.99,
-                                                        "size":  "10 lb",
-                                                        "name":  "George\u0027s Chicken Leg Quarters",
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/31783/hy-vee-100-natural-chicken-thighs-value-pack",
+                                                        "price":  1.99,
+                                                        "size":  "lb",
+                                                        "name":  "Hy-Vee 100% Natural Chicken Thighs Value Pack",
                                                         "board_pu":  1.99
-                                                    }
+                                                    },
+                                         "Sam\u0027s Club":  {
+                                                                 "url":  "https://www.samsclub.com/ip/Member-s-Mark-Bone-In-Chicken-Thighs-priced-per-pound/13608013618",
+                                                                 "price":  1.28,
+                                                                 "size":  "$1.28/lb",
+                                                                 "name":  "Member\u0027s Mark Bone-In Chicken Thighs, priced per pound",
+                                                                 "board_pu":  1.28
+                                                             },
+                                         "Walmart":  {
+                                                         "url":  "https://www.walmart.com/ip/51259108",
+                                                         "price":  1.77,
+                                                         "size":  "per lb",
+                                                         "name":  "Tyson All Natural Fresh Chicken Thighs, Family Pack",
+                                                         "board_pu":  1.77
+                                                     }
                                      },
                   "chickpeas":  {
                                     "commodity":  "Chickpeas",
@@ -834,10 +866,10 @@
                                                         "recipe_pu":  0.0639
                                                     },
                                     "Hy-Vee":  {
-                                                   "url":  "https://www.hy-vee.com/aisles-online/p/12347/bushs-garbanzos-chick-peas",
-                                                   "price":  1.49,
-                                                   "size":  "16 oz",
-                                                   "name":  "Bush\u0027s Garbanzo Chick Peas",
+                                                   "url":  "https://www.hy-vee.com/aisles-online/p/58074/hy-vee-garbanzo-beans",
+                                                   "price":  0.99,
+                                                   "size":  "15 oz",
+                                                   "name":  "Hy-Vee Garbanzo Beans",
                                                    "recipe_pu":  0.0639
                                                },
                                     "Sam\u0027s Club":  {
@@ -852,7 +884,7 @@
                                                     "price":  0.86,
                                                     "size":  "15.5 oz",
                                                     "name":  "Great Value Garbanzos Chick Peas, 15.5 oz",
-                                                    "recipe_pu":  0.0555
+                                                    "recipe_pu":  0.055
                                                 }
                                 },
                   "coffee":  {
@@ -869,21 +901,21 @@
                                                       "price":  13.99,
                                                       "size":  "$0.52/oz",
                                                       "name":  "Kroger Master Blend Medium Roast Ground Coffee",
-                                                      "board_pu":  0.4824
+                                                      "board_pu":  0.4997
                                                   },
                                  "Family Fare":  {
                                                      "url":  "https://www.shopfamilyfare.com/shop/beverages/coffee/ground/folgers_coffee_ground_medium_classic_roast_30_5_oz/p/2332257",
                                                      "price":  17.99,
                                                      "size":  "30.5 oz",
                                                      "name":  "Folgers Coffee, Ground, Medium, Classic Roast 30.5 Oz",
-                                                     "board_pu":  0.5898
+                                                     "board_pu":  0.5996
                                                  },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/3594226/folgers-coffee-classic-roast-ground-medium",
                                                 "price":  12.99,
                                                 "size":  "25.9 oz",
                                                 "name":  "Folgers Classic Roast Ground Coffee",
-                                                "board_pu":  0.5748
+                                                "board_pu":  0.5015
                                             },
                                  "Sam\u0027s Club":  {
                                                          "url":  "https://www.samsclub.com/ip/Folgers-Classic-Medium-Roast-Ground-Coffee-43-5-oz/13626705840",
@@ -897,7 +929,7 @@
                                                  "price":  19.77,
                                                  "size":  "40.3 oz",
                                                  "name":  "Great Value Classic Medium Roast Ground Coffee, 40.3 oz",
-                                                 "board_pu":  0.4942
+                                                 "board_pu":  0.44
                                              }
                              },
                   "cornstarch":  {
@@ -935,7 +967,7 @@
                                                              "price":  6.48,
                                                              "size":  "$0.20/oz",
                                                              "name":  "Clabber Girl Corn Starch, 2 pk",
-                                                             "recipe_pu":  0.2025
+                                                             "recipe_pu":  0.2
                                                          },
                                      "Walmart":  {
                                                      "url":  "https://www.walmart.com/ip/664106906",
@@ -955,11 +987,11 @@
                                                       "board_pu":  0.1312
                                                   },
                                          "Baker\u0027s":  {
-                                                              "url":  "https://www.bakersplus.com/p/kroger-2-low-fat-small-curd-cottage-cheese/0001111045043",
-                                                              "price":  1.67,
-                                                              "size":  "$0.10/oz",
-                                                              "name":  "Kroger 2% Low Fat Small Curd Cottage Cheese",
-                                                              "board_pu":  0.1042
+                                                              "url":  "https://www.bakersplus.com/p/kroger-4-milkfat-small-curd-cottage-cheese/0001111044400",
+                                                              "price":  3.19,
+                                                              "size":  "24 oz",
+                                                              "name":  "Kroger 4% Milkfat Small Curd Cottage Cheese",
+                                                              "board_pu":  0.1206
                                                           },
                                          "Family Fare":  {
                                                              "url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/daisy_low_fat_2_milkfat_cottage_cheese_2_ea/p/1564405684710576404",
@@ -969,11 +1001,11 @@
                                                              "board_pu":  0.1538
                                                          },
                                          "Hy-Vee":  {
-                                                        "url":  "https://www.hy-vee.com/aisles-online/p/48422/kemps-low-fat-small-curd-2-milkfat-min-cottage-cheese-22-oz",
-                                                        "price":  4.18,
-                                                        "size":  "22 oz",
-                                                        "name":  "Kemps Low Fat Small Curd 2% Milkfat Min Cottage Cheese 22 oz",
-                                                        "board_pu":  0.1869
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/629334/thats-smart-small-curd-cottage-cheese",
+                                                        "price":  3.18,
+                                                        "size":  "24 oz",
+                                                        "name":  "That\u0027s Smart! Small Curd Cottage Cheese",
+                                                        "board_pu":  0.1325
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/Darigold-Cottage-Cheese-3-lbs/15337355019",
@@ -1032,7 +1064,7 @@
                                                        "price":  1.56,
                                                        "size":  "8 oz",
                                                        "name":  "Great Value Cream Cheese Brick, 8 oz",
-                                                       "board_pu":  0.195
+                                                       "board_pu":  0.1856
                                                    }
                                    },
                   "crushed-tomatoes":  {
@@ -1065,6 +1097,13 @@
                                                           "name":  "Hy-Vee Crushed Tomatoes in Puree",
                                                           "recipe_pu":  0.0711
                                                       },
+                                           "Sam\u0027s Club":  {
+                                                                   "url":  "https://www.samsclub.com/ip/Tuttorosso-Crushed-Tomatoes-with-Basil-28-oz-8-pk/7294075605",
+                                                                   "price":  11.98,
+                                                                   "size":  "28 oz 8 pk",
+                                                                   "name":  "Tuttorosso Crushed Tomatoes with Basil, 8 pk",
+                                                                   "recipe_pu":  0.0536
+                                                               },
                                            "Walmart":  {
                                                            "url":  "https://www.walmart.com/ip/10415230",
                                                            "price":  1.52,
@@ -1146,11 +1185,18 @@
                                                         "price":  1.72,
                                                         "size":  "12 oz",
                                                         "name":  "Great Value Dijon Mustard, 12 oz",
-                                                        "recipe_pu":  0.1433
+                                                        "recipe_pu":  0.143
                                                     }
                                     },
                   "eggs":  {
                                "commodity":  "Large Eggs (dozen)",
+                               "Aldi":  {
+                                            "url":  "https://www.aldi.us/store/aldi/products/115095-goldhen-grade-a-large-eggs-12-ct",
+                                            "price":  1.65,
+                                            "size":  "12 ct",
+                                            "name":  "Goldhen Grade A Large Eggs",
+                                            "board_pu":  1.65
+                                        },
                                "Baker\u0027s":  {
                                                     "url":  "https://www.bakersplus.com/p/kroger-grade-aa-large-white-eggs/0001111085428",
                                                     "price":  1.59,
@@ -1170,7 +1216,7 @@
                                               "price":  1.45,
                                               "size":  "dozen",
                                               "name":  "That\u0027s Smart! Large Eggs",
-                                              "board_pu":  1.45
+                                              "board_pu":  1.59
                                           },
                                "Sam\u0027s Club":  {
                                                        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Cage-Free-Grade-A-Large-White-Eggs-2-dozen/13607813672",
@@ -1178,7 +1224,14 @@
                                                        "size":  "",
                                                        "name":  "Member\u0027s Mark Cage Free Grade A Large White Eggs, 2 dozen",
                                                        "board_pu":  2.31
-                                                   }
+                                                   },
+                               "Walmart":  {
+                                               "url":  "https://www.walmart.com/ip/145051970",
+                                               "price":  1.47,
+                                               "size":  "12 count",
+                                               "name":  "Great Value Large White Eggs, 12 Count",
+                                               "board_pu":  1.47
+                                           }
                            },
                   "enchilada-sauce":  {
                                           "commodity":  "Enchilada Sauce",
@@ -1197,10 +1250,10 @@
                                                               "recipe_pu":  0.339
                                                           },
                                           "Hy-Vee":  {
-                                                         "url":  "https://www.hy-vee.com/aisles-online/p/16838/old-el-paso-mild-red-enchilada-sauce",
-                                                         "price":  2.69,
-                                                         "size":  "10 oz",
-                                                         "name":  "Old El Paso Mild Red Enchilada Sauce",
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/1922968/hy-vee-mild-enchilada-sauce",
+                                                         "price":  3.19,
+                                                         "size":  "28 oz",
+                                                         "name":  "Hy-Vee Mild Enchilada Sauce",
                                                          "recipe_pu":  0.1139
                                                      },
                                           "Walmart":  {
@@ -1238,22 +1291,20 @@
                                                "url":  "https://www.hy-vee.com/aisles-online/p/4097587/hy-vee-crinkle-cut-fries",
                                                "price":  10.99,
                                                "size":  "5 lb",
-                                               "name":  "Hy-Vee Crinkle Cut Fries",
-                                               "recipe_pu":  0.1088
+                                               "name":  "Hy-Vee Crinkle Cut Fries"
                                            },
                                 "Sam\u0027s Club":  {
                                                         "url":  "https://www.samsclub.com/ip/Ore-Ida-Crispy-Crinkles-French-Fries-Frozen-8-lbs/13621707320",
                                                         "price":  8.58,
                                                         "size":  "8 lb",
-                                                        "name":  "Ore-Ida Crispy Crinkles French Fries, Frozen 8 lbs.",
-                                                        "recipe_pu":  0.0334
+                                                        "name":  "Ore-Ida Crispy Crinkles French Fries, Frozen 8 lbs."
                                                     },
                                 "Walmart":  {
-                                                "url":  "https://www.walmart.com/ip/16721550382",
-                                                "price":  2.97,
-                                                "size":  "24 oz",
-                                                "name":  "Great Value Seasoned Curly Fries, 24 oz",
-                                                "recipe_pu":  0.0928
+                                                "url":  "https://www.walmart.com/ip/10534212",
+                                                "price":  2.98,
+                                                "size":  "32 oz",
+                                                "name":  "Great Value Crinkle Cut French Fried Potatoes, 32 oz",
+                                                "recipe_pu":  0.092
                                             }
                             },
                   "frozen-chopped-spinach":  {
@@ -1261,7 +1312,7 @@
                                                  "Aldi":  {
                                                               "url":  "https://www.aldi.us/store/aldi/products/24735193-simply-nature-steamable-organic-spinach-10-oz",
                                                               "price":  2.15,
-                                                              "size":  "10 oz",
+                                                              "size":  "16 oz",
                                                               "name":  "Simply Nature Organic Spinach",
                                                               "recipe_pu":  0.1344
                                                           },
@@ -1287,11 +1338,11 @@
                                                                 "recipe_pu":  0.149
                                                             },
                                                  "Walmart":  {
-                                                                 "url":  "https://www.walmart.com/ip/431513547",
+                                                                 "url":  "https://www.walmart.com/ip/36817130",
                                                                  "price":  1.26,
-                                                                 "size":  "12 oz",
-                                                                 "name":  "Great Value Chopped Spinach, 12 oz (Frozen)",
-                                                                 "recipe_pu":  0.105
+                                                                 "size":  "16 oz",
+                                                                 "name":  "Great Value Chopped Spinach, 16 oz (Frozen)",
+                                                                 "recipe_pu":  0.079
                                                              }
                                              },
                   "frozen-green-peas":  {
@@ -1310,6 +1361,13 @@
                                                                  "name":  "Kroger Frozen Sweet Green Peas",
                                                                  "recipe_pu":  0.1075
                                                              },
+                                            "Family Fare":  {
+                                                                "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_vegetables/other_vegetables/our_family_green_peas_sweet_fresh_frozen_12_oz/p/1564405684703626585",
+                                                                "price":  1.39,
+                                                                "size":  "12 oz",
+                                                                "name":  "Our Family Green Peas, Sweet, Fresh Frozen",
+                                                                "recipe_pu":  0.1158
+                                                            },
                                             "Hy-Vee":  {
                                                            "url":  "https://www.hy-vee.com/aisles-online/p/2985059/hy-vee-frozen-sweet-peas",
                                                            "price":  3.49,
@@ -1322,7 +1380,7 @@
                                                             "price":  0.98,
                                                             "size":  "12 oz",
                                                             "name":  "Great Value Sweet Peas, 12 oz (Frozen)",
-                                                            "recipe_pu":  0.0817
+                                                            "recipe_pu":  0.078
                                                         }
                                         },
                   "ginger":  {
@@ -1377,7 +1435,7 @@
                                                     "price":  3.26,
                                                     "size":  "12.5 oz",
                                                     "name":  "bettergoods Gochujang Sauce, 12.5 oz",
-                                                    "recipe_pu":  0.2608
+                                                    "recipe_pu":  0.261
                                                 }
                                 },
                   "golden-raisins":  {
@@ -1403,12 +1461,19 @@
                                                         "name":  "Hy-Vee Raisins California Sun-Dried",
                                                         "recipe_pu":  0.27
                                                     },
+                                         "Sam\u0027s Club":  {
+                                                                 "url":  "https://www.samsclub.com/ip/Sun-Maid-California-Sun-Dried-Raisins-30-oz-2-pk/4114312907",
+                                                                 "price":  7.99,
+                                                                 "size":  "$0.13/oz",
+                                                                 "name":  "Sun-Maid California Raisins, 30 oz 2 pk",
+                                                                 "recipe_pu":  0.13
+                                                             },
                                          "Walmart":  {
                                                          "url":  "https://www.walmart.com/ip/281457287",
                                                          "price":  3.98,
                                                          "size":  "15 oz",
                                                          "name":  "Great Value Seedless Golden Raisins, 15 oz",
-                                                         "recipe_pu":  0.24
+                                                         "recipe_pu":  0.265
                                                      }
                                      },
                   "grapes":  {
@@ -1421,10 +1486,10 @@
                                               "board_pu":  1.69
                                           },
                                  "Baker\u0027s":  {
-                                                      "url":  "https://www.bakersplus.com/p/fresh-mixed-grape-bowl/0063912394020",
-                                                      "price":  5,
-                                                      "size":  "18 oz",
-                                                      "name":  "Fresh Mixed Grape Bowl",
+                                                      "url":  "https://www.bakersplus.com/p/fresh-california-seedless-red-grapes/0000000004023",
+                                                      "price":  3.98,
+                                                      "size":  "$1.99/lb",
+                                                      "name":  "Fresh California Seedless Red Grapes",
                                                       "board_pu":  1.99
                                                   },
                                  "Family Fare":  {
@@ -1434,6 +1499,13 @@
                                                      "name":  "Fresh White/Green Seedless Grapes",
                                                      "board_pu":  3.49
                                                  },
+                                 "Hy-Vee":  {
+                                                "url":  "https://www.hy-vee.com/aisles-online/p/8508/red-seedless-grapes",
+                                                "price":  3.99,
+                                                "size":  "lb",
+                                                "name":  "Red Seedless Grapes",
+                                                "board_pu":  3.99
+                                            },
                                  "Sam\u0027s Club":  {
                                                          "url":  "https://www.samsclub.com/ip/Red-Seedless-Grapes-3-lbs/13585869299",
                                                          "price":  6.87,
@@ -1446,7 +1518,7 @@
                                                  "price":  4.43,
                                                  "size":  "2.25 lb",
                                                  "name":  "Fresh Green Seedless Grapes, Bag (2.25 lbs Est.)",
-                                                 "board_pu":  1.97
+                                                 "board_pu":  1.87
                                              }
                              },
                   "greek-yogurt":  {
@@ -1488,10 +1560,9 @@
                                                            },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/26559565",
-                                                       "price":  3.28,
+                                                       "price":  3.30,
                                                        "size":  "32 oz",
-                                                       "name":  "Great Value Greek Plain Nonfat Yogurt, 32 oz Tub",
-                                                       "recipe_pu":  0.1025
+                                                       "name":  "Great Value Greek Plain Nonfat Yogurt, 32 oz Tub"
                                                    }
                                    },
                   "green-beans":  {
@@ -1518,10 +1589,10 @@
                                                           "recipe_pu":  0.2492
                                                       },
                                       "Hy-Vee":  {
-                                                     "url":  "https://www.hy-vee.com/aisles-online/p/4163939/green-giant-cut-green-beans",
-                                                     "price":  1.49,
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/58068/hy-vee-cut-green-beans",
+                                                     "price":  0.88,
                                                      "size":  "14.5 oz",
-                                                     "name":  "Green Giant Cut Green Beans",
+                                                     "name":  "Hy-Vee Cut Green Beans",
                                                      "recipe_pu":  0.0577
                                                  },
                                       "Walmart":  {
@@ -1529,16 +1600,16 @@
                                                       "price":  0.78,
                                                       "size":  "14.5 oz",
                                                       "name":  "Great Value Cut Green Beans, 14.5 oz Can",
-                                                      "recipe_pu":  0.0538
+                                                      "recipe_pu":  0.054
                                                   }
                                   },
                   "green-cabbage":  {
                                         "commodity":  "Green Cabbage",
                                         "Aldi":  {
                                                      "url":  "https://www.aldi.us/store/aldi/products/25939587-cabbage-per-lb",
-                                                     "price":  2.37,
+                                                     "price":  0.79,
                                                      "size":  "per lb",
-                                                     "name":  "Green Cabbage, per lb",
+                                                     "name":  "Cabbage, per lb",
                                                      "recipe_pu":  0.79
                                                  },
                                         "Baker\u0027s":  {
@@ -1554,7 +1625,21 @@
                                                             "size":  "lb",
                                                             "name":  "Green Cabbage",
                                                             "recipe_pu":  0.99
-                                                        }
+                                                        },
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/37257/green-cabbage",
+                                                       "price":  0.89,
+                                                       "size":  "lb",
+                                                       "name":  "Green Cabbage",
+                                                       "recipe_pu":  0.89
+                                                   },
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/44391042",
+                                                        "price":  0.85,
+                                                        "size":  "per lb",
+                                                        "name":  "Fresh Green Cabbage, Each",
+                                                        "recipe_pu":  0.85
+                                                    }
                                     },
                   "ground-beef-8020":  {
                                            "commodity":  "80/20 Ground Beef",
@@ -1562,53 +1647,58 @@
                                                         "url":  "https://www.aldi.us/store/aldi/products/19473448-simply-nature-85-lean-15-fat-100-organic-grass-fed-ground-beef-per-lb",
                                                         "price":  5.99,
                                                         "size":  "per lb",
-                                                        "name":  "Simply Nature Organic Ground Beef",
-                                                        "board_pu":  5.99
+                                                        "name":  "Simply Nature Organic Ground Beef"
                                                     },
                                            "Baker\u0027s":  {
-                                                                "url":  "https://www.bakersplus.com/p/kroger-80-20-ground-beef-tray-1-lb/0001111096972",
-                                                                "price":  7.99,
-                                                                "size":  "$7.99/lb",
-                                                                "name":  "Kroger 80/20 Ground Beef Tray 1 LB",
-                                                                "board_pu":  5.99
+                                                                "url":  "https://www.bakersplus.com/p/kroger-80-20-ground-beef-roll-1-lb/0001111097971",
+                                                                "price":  7.49,
+                                                                "size":  "$7.49/lb",
+                                                                "name":  "Kroger 80/20 Ground Beef Roll 1 LB",
+                                                                "board_pu":  7.49
                                                             },
                                            "Family Fare":  {
                                                                "url":  "https://www.shopfamilyfare.com/shop/meat/beef/ground/ground_beef_meal_deal_80_20/p/1564405684713030545",
                                                                "price":  7.99,
                                                                "size":  "lb",
-                                                               "name":  "Ground Beef Meal Deal 80/20",
-                                                               "board_pu":  7.49
+                                                               "name":  "Ground Beef Meal Deal 80/20"
                                                            },
                                            "Hy-Vee":  {
                                                           "url":  "https://www.hy-vee.com/aisles-online/p/42643/ground-beef-roll-80-lean-20-fat",
                                                           "price":  20.99,
                                                           "size":  "3 lb",
                                                           "name":  "Ground Beef Roll 80% Lean 20% Fat",
-                                                          "board_pu":  6.99
+                                                          "board_pu":  6.4
                                                       },
+                                           "Sam\u0027s Club":  {
+                                                                   "url":  "https://www.samsclub.com/ip/Member-s-Mark-80-20-Ground-Beef-Roll-Vacuum-Pack-priced-per-pound/21213000000",
+                                                                   "price":  5.56,
+                                                                   "size":  "$5.56/lb",
+                                                                   "name":  "Member\u0027s Mark 80/20 Ground Beef Roll, priced per pound",
+                                                                   "board_pu":  5.56
+                                                               },
                                            "Walmart":  {
                                                            "url":  "https://www.walmart.com/ip/959024059",
                                                            "price":  15.73,
                                                            "size":  "2.25 lb",
                                                            "name":  "All Natural 80% Lean/20% Fat Ground Beef Chuck, 2.25 lb",
-                                                           "board_pu":  6.99
+                                                           "board_pu":  6.28
                                                        }
                                        },
                   "ground-turkey":  {
                                         "commodity":  "Ground Turkey",
                                         "Aldi":  {
-                                                     "url":  "https://www.aldi.us/store/aldi/products/17499020-fit-active-93-lean-fresh-ground-turkey-19-2-oz",
-                                                     "price":  5.19,
-                                                     "size":  "19.2 oz",
-                                                     "name":  "Kirkwood Fresh 93% Lean Ground Turkey",
-                                                     "board_pu":  3.9923
+                                                     "url":  "https://www.aldi.us/store/aldi/products/41417088-kirkwood-ground-turkey-3-lb",
+                                                     "price":  7.99,
+                                                     "size":  "3 lb",
+                                                     "name":  "Kirkwood USDA Fresh Ground Turkey 85% Lean 15% Fat",
+                                                     "board_pu":  2.6633
                                                  },
                                         "Baker\u0027s":  {
-                                                             "url":  "https://www.bakersplus.com/p/kroger-93-7-lean-fresh-ground-turkey-1-lb/0001111096874",
-                                                             "price":  5.49,
-                                                             "size":  "$0.34/oz",
-                                                             "name":  "Kroger 93/7 Lean Fresh Ground Turkey 1 LB",
-                                                             "board_pu":  4.99
+                                                             "url":  "https://www.bakersplus.com/p/kroger-85-15-fresh-ground-turkey-tray-3-lb/0001111097993",
+                                                             "price":  10.00,
+                                                             "size":  "$3.33/lb",
+                                                             "name":  "Kroger 85/15 Fresh Ground Turkey Tray 3 LB",
+                                                             "board_pu":  3.33
                                                          },
                                         "Family Fare":  {
                                                             "url":  "https://www.shopfamilyfare.com/shop/meat/turkey/fresh/jennie_o_ground_turkey_85_lean_15_fat_1_lb_tray/p/2135032",
@@ -1618,11 +1708,11 @@
                                                             "board_pu":  5.99
                                                         },
                                         "Hy-Vee":  {
-                                                       "url":  "https://www.hy-vee.com/aisles-online/p/43519/carolina-turkey-ground-turkey",
-                                                       "price":  3.99,
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/147908/jennie-o-ground-turkey-85-lean-15-fat",
+                                                       "price":  4.69,
                                                        "size":  "16 oz",
-                                                       "name":  "Carolina Turkey Ground Turkey",
-                                                       "board_pu":  3.99
+                                                       "name":  "JENNIE-O Ground Turkey 85% Lean / 15% Fat",
+                                                       "board_pu":  4.69
                                                    },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/Jennie-O-Lean-Ground-Turkey-Case-20-lbs/13730411236",
@@ -1674,14 +1764,14 @@
                                                                        "price":  11.83,
                                                                        "size":  "3 lb",
                                                                        "name":  "Member\u0027s Mark Naturally Hickory Smoked Bacon 3 lbs.",
-                                                                       "recipe_pu":  3.94
+                                                                       "recipe_pu":  3.96
                                                                    },
                                                "Walmart":  {
-                                                               "url":  "https://www.walmart.com/ip/23816525",
-                                                               "price":  3.94,
-                                                               "size":  "12 oz",
-                                                               "name":  "Great Value Naturally Hickory Smoked Sliced Bacon, 12 oz",
-                                                               "recipe_pu":  5.25
+                                                               "url":  "https://www.walmart.com/ip/346866251",
+                                                               "price":  5.94,
+                                                               "size":  "24 oz",
+                                                               "name":  "Great Value Hickory Smoked Bacon, Mega Pack, 24 oz",
+                                                               "recipe_pu":  3.96
                                                            }
                                            },
                   "hoisin-sauce":  {
@@ -1712,7 +1802,7 @@
                                                        "price":  3.94,
                                                        "size":  "13.2 oz",
                                                        "name":  "Kikkoman Gluten-Free Hoisin Sauce, 13.2 oz",
-                                                       "recipe_pu":  0.2985
+                                                       "recipe_pu":  0.271
                                                    }
                                    },
                   "hominy":  {
@@ -1735,8 +1825,7 @@
                                                  "url":  "https://www.walmart.com/ip/10451514",
                                                  "price":  3.98,
                                                  "size":  "110.4 oz",
-                                                 "name":  "Great Value White Hominy, 110.4 oz",
-                                                 "recipe_pu":  0.0507
+                                                 "name":  "Great Value White Hominy, 110.4 oz"
                                              }
                              },
                   "honey":  {
@@ -1763,10 +1852,10 @@
                                                     "recipe_pu":  0.6867
                                                 },
                                 "Hy-Vee":  {
-                                               "url":  "https://www.hy-vee.com/aisles-online/p/58534/hy-vee-clover-honey-bear",
-                                               "price":  9.99,
-                                               "size":  "24 oz",
-                                               "name":  "Hy-Vee Clover Honey Bear",
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/2958571/thats-smart-100-honey",
+                                               "price":  3.99,
+                                               "size":  "12 oz",
+                                               "name":  "That\u0027s Smart! 100% Honey",
                                                "recipe_pu":  0.3538
                                            },
                                 "Walmart":  {
@@ -1774,11 +1863,18 @@
                                                 "price":  2.97,
                                                 "size":  "12 oz",
                                                 "name":  "Great Value Honey, 12 oz Plastic Bear",
-                                                "recipe_pu":  0.2475
+                                                "recipe_pu":  0.225
                                             }
                             },
                   "honey-dijon-mustard":  {
                                               "commodity":  "Honey Dijon Mustard",
+                                              "Aldi":  {
+                                                           "url":  "https://www.aldi.us/store/aldi/products/18648757-burman-s-all-natural-dijon-mustard-12-oz",
+                                                           "price":  1.65,
+                                                           "size":  "12 oz",
+                                                           "name":  "Burman\u0027s Dijon Mustard",
+                                                           "recipe_pu":  0.1375
+                                                       },
                                               "Baker\u0027s":  {
                                                                    "url":  "https://www.bakersplus.com/p/kroger-honey-mustard/0001111009619",
                                                                    "price":  1.89,
@@ -1798,7 +1894,7 @@
                                                               "price":  1.72,
                                                               "size":  "12 oz",
                                                               "name":  "Great Value Honey Dijon Mustard, 12 oz",
-                                                              "recipe_pu":  0.1433
+                                                              "recipe_pu":  0.143
                                                           }
                                           },
                   "ketchup":  {
@@ -1821,13 +1917,12 @@
                                                       "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/ketchup/heinz_tomato_ketchup_32_oz/p/2319053",
                                                       "price":  5.99,
                                                       "size":  "32 oz",
-                                                      "name":  "Heinz Tomato Ketchup 32 Oz",
-                                                      "recipe_pu":  0.1403
+                                                      "name":  "Heinz Tomato Ketchup 32 Oz"
                                                   },
                                   "Hy-Vee":  {
-                                                 "url":  "https://www.hy-vee.com/aisles-online/p/25857/hy-vee-thick-and-rich-tomato-ketchup",
-                                                 "price":  1.99,
-                                                 "size":  "20 oz",
+                                                 "url":  "https://www.hy-vee.com/aisles-online/p/769638/hy-vee-thick-and-rich-tomato-ketchup",
+                                                 "price":  2.48,
+                                                 "size":  "38 oz",
                                                  "name":  "Hy-Vee Thick \u0026 Rich Tomato Ketchup",
                                                  "recipe_pu":  0.0653
                                              },
@@ -1839,11 +1934,11 @@
                                                           "recipe_pu":  0.08
                                                       },
                                   "Walmart":  {
-                                                  "url":  "https://www.walmart.com/ip/10533375",
-                                                  "price":  1.47,
-                                                  "size":  "24 oz",
-                                                  "name":  "Great Value Tomato Ketchup, 24 oz",
-                                                  "recipe_pu":  0.061
+                                                  "url":  "https://www.walmart.com/ip/10533323",
+                                                  "price":  3.01,
+                                                  "size":  "64 oz",
+                                                  "name":  "Great Value Tomato Ketchup, 64 oz",
+                                                  "recipe_pu":  0.047
                                               }
                               },
                   "kidney-beans":  {
@@ -1870,17 +1965,17 @@
                                                            "recipe_pu":  0.0639
                                                        },
                                        "Hy-Vee":  {
-                                                      "url":  "https://www.hy-vee.com/aisles-online/p/48185/bushs-light-red-kidney-beans",
-                                                      "price":  1.49,
-                                                      "size":  "16 oz",
-                                                      "name":  "Bush\u0027s Light Red Kidney Beans",
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/2362477/hy-vee-light-red-kidney-beans",
+                                                      "price":  0.99,
+                                                      "size":  "15.5 oz",
+                                                      "name":  "Hy-Vee Light Red Kidney Beans",
                                                       "recipe_pu":  0.0639
                                                   },
                                        "Sam\u0027s Club":  {
-                                                               "url":  "https://www.samsclub.com/ip/Camellia-Red-Kidney-Beans-4-lbs/13766456631",
-                                                               "price":  7.28,
-                                                               "size":  "$0.11/oz",
-                                                               "name":  "Camellia Red Kidney Beans, 4 lbs",
+                                                               "url":  "https://www.samsclub.com/ip/Bush-s-Dark-Red-Kidney-Beans-16-oz-6-pk/3940010735",
+                                                               "price":  6.38,
+                                                               "size":  "16 oz 6 pk",
+                                                               "name":  "Bush\u0027s Dark Red Kidney Beans, 6 pk",
                                                                "recipe_pu":  0.0684
                                                            },
                                        "Walmart":  {
@@ -1888,7 +1983,7 @@
                                                        "price":  0.86,
                                                        "size":  "15.5 oz",
                                                        "name":  "Great Value Dark Red Kidney Beans, 15.5 oz",
-                                                       "recipe_pu":  0.0555
+                                                       "recipe_pu":  0.055
                                                    }
                                    },
                   "light-sour-cream":  {
@@ -1925,8 +2020,7 @@
                                                                    "url":  "https://www.samsclub.com/ip/Daisy-Brand-Pure-and-Natural-Sour-Cream-48-oz/13581873793",
                                                                    "price":  5.54,
                                                                    "size":  "$1.85/lb",
-                                                                   "name":  "Daisy Sour Cream, 48 oz",
-                                                                   "recipe_pu":  0.18
+                                                                   "name":  "Daisy Sour Cream, 48 oz"
                                                                },
                                            "Walmart":  {
                                                            "url":  "https://www.walmart.com/ip/10315017",
@@ -1971,7 +2065,7 @@
                                                          "price":  1.74,
                                                          "size":  "23 oz",
                                                          "name":  "Great Value Marinara Pasta Sauce, 23 oz",
-                                                         "recipe_pu":  0.0757
+                                                         "recipe_pu":  0.076
                                                      }
                                      },
                   "milk":  {
@@ -2001,11 +2095,11 @@
                                                    "recipe_pu":  3.69
                                                },
                                "Hy-Vee":  {
-                                              "url":  "https://www.hy-vee.com/aisles-online/p/57272/hy-vee-2-reduced-fat-milk",
-                                              "price":  2.99,
-                                              "size":  "0.5 gal",
-                                              "name":  "Hy-Vee 2% Reduced Fat Milk",
-                                              "board_pu":  3.06,
+                                              "url":  "https://www.hy-vee.com/aisles-online/p/4132830/thats-smart-2-reduced-fat-milk",
+                                              "price":  3.06,
+                                              "size":  "1 gal",
+                                              "name":  "That\u0027s Smart! 2% Reduced Fat Milk",
+                                              "board_pu":  2.99,
                                               "recipe_pu":  4.99
                                           },
                                "Sam\u0027s Club":  {
@@ -2021,7 +2115,7 @@
                                                "size":  "gallon",
                                                "name":  "Great Value Whole Vitamin D Milk, Gallon",
                                                "board_pu":  3,
-                                               "recipe_pu":  2.78
+                                               "recipe_pu":  3
                                            }
                            },
                   "olives":  {
@@ -2034,9 +2128,9 @@
                                               "recipe_pu":  0.23
                                           },
                                  "Baker\u0027s":  {
-                                                      "url":  "https://www.bakersplus.com/p/kroger-stuffed-manzanilla-olives-with-pimiento/0001111011597",
-                                                      "price":  5.99,
-                                                      "size":  "$0.29/oz",
+                                                      "url":  "https://www.bakersplus.com/p/kroger-stuffed-manzanilla-olives-with-pimiento/0001111011593",
+                                                      "price":  2.19,
+                                                      "size":  "9.3 oz",
                                                       "name":  "Kroger Stuffed Manzanilla Olives with Pimiento",
                                                       "recipe_pu":  0.24
                                                   },
@@ -2076,7 +2170,7 @@
                                                       "price":  3.49,
                                                       "size":  "3 lb",
                                                       "name":  "Kroger Yellow Onion 3 lb Bag",
-                                                      "board_pu":  1.16
+                                                      "board_pu":  1.29
                                                   },
                                  "Family Fare":  {
                                                      "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/our_family_onion_yellow/p/1764405684715786064",
@@ -2089,8 +2183,7 @@
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/46166/yellow-onions",
                                                 "price":  2.99,
                                                 "size":  "3 lb",
-                                                "name":  "Yellow Onions",
-                                                "board_pu":  1
+                                                "name":  "Yellow Onions"
                                             },
                                  "Sam\u0027s Club":  {
                                                          "url":  "https://www.samsclub.com/ip/Yellow-Onions-10-lbs/13599313206",
@@ -2124,19 +2217,26 @@
                                                             "board_pu":  0.0687
                                                         },
                                        "Family Fare":  {
-                                                           "url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/orange_juice/kemps_100_pure_orange_juice_from_concentrate_5_gal_jug/p/586867",
-                                                           "price":  4.49,
-                                                           "size":  "0.5 gal",
-                                                           "name":  "Kemps 100% Orange Juice, half gallon",
-                                                           "board_pu":  0.0702
+                                                           "url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/orange_juice/100_orange_juice_with_calcium_vitamin_d/p/1564405684704662316",
+                                                           "price":  4.79,
+                                                           "size":  "52 fl oz",
+                                                           "name":  "100% Orange Juice With Calcium \u0026 Vitamin D",
+                                                           "board_pu":  0.0921
                                                        },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/57270/hy-vee-100-orange-juice",
                                                       "price":  8.99,
                                                       "size":  "1 gal",
                                                       "name":  "Hy-Vee 100% Orange Juice",
-                                                      "board_pu":  0.0702
+                                                      "board_pu":  0.078
                                                   },
+                                       "Sam\u0027s Club":  {
+                                                               "url":  "https://www.samsclub.com/ip/Member-s-Mark-Pulp-Free-100-Orange-Juice-52-fl-oz-2-pk/13879263904",
+                                                               "price":  6.74,
+                                                               "size":  "52 fl oz 2 pk",
+                                                               "name":  "Member\u0027s Mark Pulp-Free 100% Orange Juice, 2 pk",
+                                                               "board_pu":  0.0648
+                                                           },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/403284742",
                                                        "price":  3.96,
@@ -2165,8 +2265,7 @@
                                                       "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/paprika_our_family/p/7083809",
                                                       "price":  1.79,
                                                       "size":  "2.12 oz",
-                                                      "name":  "Paprika Our Family",
-                                                      "recipe_pu":  0.668
+                                                      "name":  "Paprika Our Family"
                                                   },
                                   "Hy-Vee":  {
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/2956625/hy-vee-paprika",
@@ -2180,25 +2279,46 @@
                                                           "price":  8.44,
                                                           "size":  "18 oz",
                                                           "name":  "Member\u0027s Mark Spanish Style Paprika, 18 oz.",
-                                                          "recipe_pu":  0.47
+                                                          "recipe_pu":  0.45
                                                       },
                                   "Walmart":  {
                                                   "url":  "https://www.walmart.com/ip/559839182",
                                                   "price":  1.08,
                                                   "size":  "2.5 oz",
                                                   "name":  "Great Value Paprika, 2.5 oz",
-                                                  "recipe_pu":  0.43
+                                                  "recipe_pu":  0.432
                                               }
                               },
                   "peaches":  {
                                   "commodity":  "Peaches",
+                                  "Aldi":  {
+                                               "url":  "https://www.aldi.us/store/aldi/products/17327459-peach-bag-2-lbs",
+                                               "price":  3.85,
+                                               "size":  "2 lb",
+                                               "name":  "Peaches, Bag",
+                                               "board_pu":  1.925
+                                           },
                                   "Baker\u0027s":  {
-                                                       "url":  "https://www.bakersplus.com/p/del-monte-yellow-cling-sliced-peaches-in-heavy-syrup/0002400001062",
-                                                       "price":  4.29,
-                                                       "size":  "$0.15/oz",
-                                                       "name":  "Del Monte Yellow Cling Sliced Peaches",
+                                                       "url":  "https://www.bakersplus.com/p/fresh-southern-yellow-peach/0000000003117",
+                                                       "price":  0.63,
+                                                       "size":  "$1.79/lb",
+                                                       "name":  "Fresh Southern Yellow Peach",
                                                        "board_pu":  1.79
                                                    },
+                                  "Family Fare":  {
+                                                      "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/pears_peaches_plums/fresh_peaches/p/1564405684716121067",
+                                                      "price":  2.99,
+                                                      "size":  "lb",
+                                                      "name":  "Fresh Peaches",
+                                                      "board_pu":  2.99
+                                                  },
+                                  "Hy-Vee":  {
+                                                 "url":  "https://www.hy-vee.com/aisles-online/p/8767/white-flesh-peaches",
+                                                 "price":  3.69,
+                                                 "size":  "lb",
+                                                 "name":  "White Flesh Peaches",
+                                                 "board_pu":  3.69
+                                             },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/Yellow-Peaches-4-lbs/13713871066",
                                                           "price":  9.87,
@@ -2217,36 +2337,28 @@
                   "peanut-butter":  {
                                         "commodity":  "Peanut Butter",
                                         "Aldi":  {
-                                                     "url":  "https://www.aldi.us/store/aldi/products/18647736-peanut-delight-creamy-peanut-butter-16-oz",
-                                                     "price":  2.15,
-                                                     "size":  "16 oz",
-                                                     "name":  "Peanut Delight Creamy Peanut Butter",
-                                                     "board_pu":  0.1087,
-                                                     "recipe_pu":  0.134
+                                                     "url":  "https://www.aldi.us/store/aldi/products/18648058-peanut-delight-creamy-peanut-butter-40-oz",
+                                                     "price":  4.35,
+                                                     "size":  "40 oz",
+                                                     "name":  "Peanut Delight Creamy Peanut Butter"
                                                  },
                                         "Baker\u0027s":  {
-                                                             "url":  "https://www.bakersplus.com/p/kroger-creamy-peanut-butter/0001111009853",
-                                                             "price":  4.49,
-                                                             "size":  "$0.11/oz",
-                                                             "name":  "Kroger Creamy Peanut Butter",
-                                                             "board_pu":  0.1122,
-                                                             "recipe_pu":  0.143
+                                                             "url":  "https://www.bakersplus.com/p/creamy-peanut-butter-kroger-16-oz/0001111001618",
+                                                             "price":  2.29,
+                                                             "size":  "16 oz",
+                                                             "name":  "Kroger Creamy Peanut Butter 16 Oz"
                                                          },
                                         "Family Fare":  {
-                                                            "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/nut_butters/creamy_peanut_butter_our_family/p/7081349",
-                                                            "price":  2.29,
+                                                            "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/nut_butters/jif_creamy_peanut_butter_16_oz/p/34394",
+                                                            "price":  3.99,
                                                             "size":  "16 oz",
-                                                            "name":  "Creamy Peanut Butter Our Family",
-                                                            "board_pu":  0.1431,
-                                                            "recipe_pu":  0.25
+                                                            "name":  "Jif Creamy Peanut Butter 16 Oz"
                                                         },
                                         "Hy-Vee":  {
-                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2937067/thats-smart-creamy-peanut-butter",
-                                                       "price":  1.98,
-                                                       "size":  "16 oz",
-                                                       "name":  "That\u0027s Smart! Creamy Peanut Butter",
-                                                       "board_pu":  0.1238,
-                                                       "recipe_pu":  0.124
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/204508/hy-vee-creamy-peanut-butter",
+                                                       "price":  5.98,
+                                                       "size":  "40 oz",
+                                                       "name":  "Hy-Vee Creamy Peanut Butter"
                                                    },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/Member-s-Mark-Natural-Creamy-Peanut-Butter-40-oz-2-pk/7874219579",
@@ -2254,7 +2366,7 @@
                                                                 "size":  "40 oz 2 pk",
                                                                 "name":  "Member\u0027s Mark Natural Creamy Peanut Butter, 40 oz., 2 pk.",
                                                                 "board_pu":  0.1,
-                                                                "recipe_pu":  0.11
+                                                                "recipe_pu":  0.1
                                                             },
                                         "Walmart":  {
                                                         "url":  "https://www.walmart.com/ip/10315479",
@@ -2262,7 +2374,7 @@
                                                         "size":  "40 oz",
                                                         "name":  "Great Value Creamy Peanut Butter, 40 oz",
                                                         "board_pu":  0.0995,
-                                                        "recipe_pu":  0.124
+                                                        "recipe_pu":  0.1
                                                     }
                                     },
                   "pineapple-chunks":  {
@@ -2299,8 +2411,8 @@
                                                                    "url":  "https://www.samsclub.com/ip/Dole-Tropical-Gold-Pineapple-Chunks-15-25-oz-6-pk/13608108237",
                                                                    "price":  11.48,
                                                                    "size":  "$0.12/oz",
-                                                                   "name":  "Dole Pineapple Chunks, 6 pk",
-                                                                   "recipe_pu":  0.096
+                                                                   "name":  "Dole Tropical Gold Pineapple Chunks, 6 pk",
+                                                                   "recipe_pu":  0.12
                                                                },
                                            "Walmart":  {
                                                            "url":  "https://www.walmart.com/ip/445433131",
@@ -2324,17 +2436,17 @@
                                                           "price":  3.26,
                                                           "size":  "16 oz",
                                                           "name":  "Fresh Poblano Peppers, 16 oz",
-                                                          "recipe_pu":  3.26
+                                                          "recipe_pu":  3.264
                                                       }
                                       },
                   "pork-chops":  {
                                      "commodity":  "Pork Chops",
                                      "Aldi":  {
-                                                  "url":  "https://www.aldi.us/store/aldi/products/20985616-thin-sliced-boneless-pork-chops-family-pack-per-lb",
-                                                  "price":  2.99,
+                                                  "url":  "https://www.aldi.us/store/aldi/products/19115444-bone-in-assorted-pork-chops-per-lb",
+                                                  "price":  2.69,
                                                   "size":  "per lb",
-                                                  "name":  "Thin Sliced Boneless Pork Chops",
-                                                  "board_pu":  3.49
+                                                  "name":  "Premium Bone-In Assorted Pork Chops, per lb",
+                                                  "board_pu":  2.69
                                               },
                                      "Baker\u0027s":  {
                                                           "url":  "https://www.bakersplus.com/p/kroger-fresh-natural-pork-loin-chops-boneless/0001111064148",
@@ -2354,24 +2466,30 @@
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/71611/fresh-pork-loin-americas-cut-chop",
                                                     "price":  2.50,
                                                     "size":  "8 oz",
-                                                    "name":  "Fresh Pork Loin America\u0027s Cut Chop",
-                                                    "board_pu":  5.29
+                                                    "name":  "Fresh Pork Loin America\u0027s Cut Chop"
                                                 },
+                                     "Sam\u0027s Club":  {
+                                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Bone-In-Pork-Chops-priced-per-pound/17799324269",
+                                                             "price":  2.52,
+                                                             "size":  "$2.52/lb",
+                                                             "name":  "Member\u0027s Mark Bone-In Pork Chops, priced per pound",
+                                                             "board_pu":  2.52
+                                                         },
                                      "Walmart":  {
-                                                     "url":  "https://www.walmart.com/ip/110890254",
-                                                     "price":  6.81,
+                                                     "url":  "https://www.walmart.com/ip/20627151",
+                                                     "price":  4.17,
                                                      "size":  "per lb",
-                                                     "name":  "Pork Center Cut Loin Chops, Bone-In",
+                                                     "name":  "Boneless Pork Loin Chops, Family Pack",
                                                      "board_pu":  4.17
                                                  }
                                  },
                   "potato":  {
                                  "commodity":  "Potato",
                                  "Aldi":  {
-                                              "url":  "https://www.aldi.us/store/aldi/products/26357805-paragon-potato-farms-red-potatoes-in-bag-5-lb",
+                                              "url":  "https://www.aldi.us/store/aldi/products/16725303-russet-potato-bag-10-lbs",
                                               "price":  4.39,
-                                              "size":  "5 lb",
-                                              "name":  "Red Potatoes, 5 lb Bag",
+                                              "size":  "10 lb",
+                                              "name":  "Russet Potatoes, Bag",
                                               "recipe_pu":  0.44
                                           },
                                  "Baker\u0027s":  {
@@ -2389,10 +2507,10 @@
                                                      "recipe_pu":  0.99
                                                  },
                                  "Hy-Vee":  {
-                                                "url":  "https://www.hy-vee.com/aisles-online/p/24043/hy-vee-smart-potatoes-russet",
-                                                "price":  5.88,
-                                                "size":  "10 lb",
-                                                "name":  "Hy-Vee Russet Potatoes",
+                                                "url":  "https://www.hy-vee.com/aisles-online/p/24042/hy-vee-one-step-russet-potatoes",
+                                                "price":  2.47,
+                                                "size":  "5 lb",
+                                                "name":  "Hy-Vee One Step Russet Potatoes",
                                                 "recipe_pu":  0.49
                                             },
                                  "Sam\u0027s Club":  {
@@ -2400,7 +2518,7 @@
                                                          "price":  4.52,
                                                          "size":  "10lb",
                                                          "name":  "YELLOW POTATO 10LB 10LB BIN",
-                                                         "recipe_pu":  0.44
+                                                         "recipe_pu":  0.45
                                                      },
                                  "Walmart":  {
                                                  "url":  "https://www.walmart.com/ip/10449947",
@@ -2445,7 +2563,7 @@
                                                            "price":  1.67,
                                                            "size":  "8 oz",
                                                            "name":  "Great Value Deli Style Sliced Provolone Cheese, 8 oz",
-                                                           "recipe_pu":  0.21
+                                                           "recipe_pu":  0.209
                                                        }
                                        },
                   "red-bell-pepper":  {
@@ -2459,11 +2577,18 @@
                                                            },
                                           "Hy-Vee":  {
                                                          "url":  "https://www.hy-vee.com/aisles-online/p/8829/red-pepper",
-                                                         "price":  1.99,
-                                                         "size":  "1 ct",
+                                                         "price":  1.69,
+                                                         "size":  "each",
                                                          "name":  "Red Pepper",
                                                          "recipe_pu":  1.69
-                                                     }
+                                                     },
+                                          "Walmart":  {
+                                                          "url":  "https://www.walmart.com/ip/44391581",
+                                                          "price":  0.98,
+                                                          "size":  "each",
+                                                          "name":  "Fresh Red Bell Pepper, Each",
+                                                          "recipe_pu":  0.98
+                                                      }
                                       },
                   "red-wine-vinegar":  {
                                            "commodity":  "Red Wine Vinegar",
@@ -2482,10 +2607,10 @@
                                                                "recipe_pu":  0.1556
                                                            },
                                            "Hy-Vee":  {
-                                                          "url":  "https://www.hy-vee.com/aisles-online/p/54340/pompeian-gourmet-red-wine-vinegar",
-                                                          "price":  2.99,
-                                                          "size":  "16 fl oz",
-                                                          "name":  "Pompeian Gourmet Red Wine Vinegar",
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/55824/gustare-vita-red-wine-vinegar",
+                                                          "price":  2.49,
+                                                          "size":  "16.9 fl oz",
+                                                          "name":  "Gustare Vita Red Wine Vinegar",
                                                           "recipe_pu":  0.1473
                                                       },
                                            "Walmart":  {
@@ -2505,6 +2630,13 @@
                                                            "name":  "Tuscan Garden Roasted Red Pepper Pieces",
                                                            "recipe_pu":  0.2375
                                                        },
+                                              "Baker\u0027s":  {
+                                                                   "url":  "https://www.bakersplus.com/p/mt-olive-roasted-red-peppers/0000930000480",
+                                                                   "price":  2.50,
+                                                                   "size":  "12 fl oz",
+                                                                   "name":  "Mt. Olive Roasted Red Peppers",
+                                                                   "recipe_pu":  0.2083
+                                                               },
                                               "Hy-Vee":  {
                                                              "url":  "https://www.hy-vee.com/aisles-online/p/40586/dunbars-roasted-peppers",
                                                              "price":  2.99,
@@ -2517,7 +2649,7 @@
                                                               "price":  2.13,
                                                               "size":  "12 oz",
                                                               "name":  "Great Value Roasted Red Bell Pepper Slices, 12 oz",
-                                                              "recipe_pu":  0.1775
+                                                              "recipe_pu":  0.178
                                                           }
                                           },
                   "rotini-pasta":  {
@@ -2555,7 +2687,7 @@
                                                        "price":  1.24,
                                                        "size":  "16 oz",
                                                        "name":  "Great Value Rotini, 16 oz",
-                                                       "recipe_pu":  0.0775
+                                                       "recipe_pu":  0.078
                                                    }
                                    },
                   "russet-potatoes":  {
@@ -2572,7 +2704,7 @@
                                                                "price":  2.99,
                                                                "size":  "5 lb",
                                                                "name":  "Kroger Russet Potatoes Bag",
-                                                               "board_pu":  0.6
+                                                               "board_pu":  0.598
                                                            },
                                           "Family Fare":  {
                                                               "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/potatoes/our_family_potatoes_russet_idaho/p/2341145",
@@ -2593,7 +2725,7 @@
                                                                   "price":  4.37,
                                                                   "size":  "10 lb",
                                                                   "name":  "Russet Potatoes, 10 lbs.",
-                                                                  "board_pu":  0.44
+                                                                  "board_pu":  0.46
                                                               },
                                           "Walmart":  {
                                                           "url":  "https://www.walmart.com/ip/10447837",
@@ -2631,7 +2763,7 @@
                                                      "price":  4.98,
                                                      "size":  "8.4 fl oz",
                                                      "name":  "Oi! Extra Virgin Sesame Oil, 8.4 Fl oz",
-                                                     "recipe_pu":  0.59
+                                                     "recipe_pu":  0.536
                                                  }
                                  },
                   "shredded-cheese":  {
@@ -2647,8 +2779,7 @@
                                                                "url":  "https://www.bakersplus.com/p/kroger-colby-jack-shredded-cheese-family-size/0001111015117",
                                                                "price":  6.99,
                                                                "size":  "$0.22/oz",
-                                                               "name":  "Kroger Colby Jack Shredded Cheese Family Size",
-                                                               "board_pu":  0.1559
+                                                               "name":  "Kroger Colby Jack Shredded Cheese Family Size"
                                                            },
                                           "Family Fare":  {
                                                               "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/our_family_natural_finely_cut_italian_shredded_cheese_8_oz/p/6787437",
@@ -2662,7 +2793,7 @@
                                                          "price":  2.48,
                                                          "size":  "8 oz",
                                                          "name":  "Hy-Vee Finely Shredded Mild Cheddar Natural Cheese",
-                                                         "board_pu":  0.31
+                                                         "board_pu":  0.2809
                                                      },
                                           "Sam\u0027s Club":  {
                                                                   "url":  "https://www.samsclub.com/ip/Member-s-Mark-Standard-Shredded-3-Cheese-Blend-5-lbs/13905455421",
@@ -2689,11 +2820,11 @@
                                                   "board_pu":  0.1219
                                               },
                                      "Baker\u0027s":  {
-                                                          "url":  "https://www.bakersplus.com/p/kroger-original-sour-cream/0001111016372",
-                                                          "price":  1.67,
-                                                          "size":  "$0.10/oz",
+                                                          "url":  "https://www.bakersplus.com/p/kroger-original-sour-cream/0001111016373",
+                                                          "price":  2.89,
+                                                          "size":  "24 oz",
                                                           "name":  "Kroger Original Sour Cream",
-                                                          "board_pu":  0.1042
+                                                          "board_pu":  0.1204
                                                       },
                                      "Family Fare":  {
                                                          "url":  "https://www.shopfamilyfare.com/shop/dairy/sour_cream/our_family_sour_cream_original_24_oz/p/7081895",
@@ -2783,14 +2914,13 @@
                                                             "price":  2.99,
                                                             "size":  "1 lb",
                                                             "name":  "Fresh Strawberries 1 LB Clamshell",
-                                                            "board_pu":  0.1869
+                                                            "board_pu":  0.1716
                                                         },
                                        "Family Fare":  {
                                                            "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/berries/fresh_strawberries/p/2318460",
                                                            "price":  3.99,
                                                            "size":  "16 oz",
-                                                           "name":  "Fresh Strawberries",
-                                                           "board_pu":  0.1559
+                                                           "name":  "Fresh Strawberries"
                                                        },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/437013/wish-farms-california-strawberries",
@@ -2811,16 +2941,16 @@
                                                        "price":  2.38,
                                                        "size":  "1 lb",
                                                        "name":  "Fresh Strawberries, 1 lb Container",
-                                                       "board_pu":  0.1488
+                                                       "board_pu":  0.1475
                                                    }
                                    },
                   "sugar-free-maple-syrup":  {
                                                  "commodity":  "Sugar-Free Maple Syrup",
                                                  "Baker\u0027s":  {
-                                                                      "url":  "https://www.bakersplus.com/p/maple-grove-farms-sugar-free-maple-flavor-syrup-kosher/0007468300554",
-                                                                      "price":  3.79,
-                                                                      "size":  "$0.16/fl oz",
-                                                                      "name":  "Maple Grove Farms Sugar Free Maple Flavor Syrup",
+                                                                      "url":  "https://www.bakersplus.com/p/kroger-sugar-free-original-pancake-syrup/0001111014734",
+                                                                      "price":  2.69,
+                                                                      "size":  "24 fl oz",
+                                                                      "name":  "Kroger Sugar Free Original Pancake Syrup",
                                                                       "recipe_pu":  0.1121
                                                                   },
                                                  "Family Fare":  {
@@ -2831,10 +2961,10 @@
                                                                      "recipe_pu":  0.2079
                                                                  },
                                                  "Hy-Vee":  {
-                                                                "url":  "https://www.hy-vee.com/aisles-online/p/3902381/hungry-jack-breakfast-syrup-zero-sugar-butter",
-                                                                "price":  3.99,
+                                                                "url":  "https://www.hy-vee.com/aisles-online/p/22375/hy-vee-sugar-free-pancake-and-waffle-syrup",
+                                                                "price":  3.28,
                                                                 "size":  "24 fl oz",
-                                                                "name":  "Hungry Jack Breakfast Syrup, Zero Sugar, Butter",
+                                                                "name":  "Hy-Vee Sugar Free Pancake \u0026 Waffle Syrup",
                                                                 "recipe_pu":  0.1367
                                                             }
                                              },
@@ -2842,16 +2972,16 @@
                                      "commodity":  "Sweet Corn (ear)",
                                      "Aldi":  {
                                                   "url":  "https://www.aldi.us/store/aldi/products/16383707-yellow-sweet-corn-package-4-ct",
-                                                  "price":  2.39,
+                                                  "price":  3.25,
                                                   "size":  "4 ct",
-                                                  "name":  "Yellow Sweet Corn, 4 ct",
-                                                  "board_pu":  0.5975
+                                                  "name":  "Sweet Corn, Package",
+                                                  "board_pu":  0.81
                                               },
                                      "Baker\u0027s":  {
-                                                          "url":  "https://www.bakersplus.com/p/kroger-sweet-corn-mini-cobs/0001111069708",
-                                                          "price":  3.99,
-                                                          "size":  "8 ct",
-                                                          "name":  "Kroger Sweet Corn Mini Cobs",
+                                                          "url":  "https://www.bakersplus.com/p/fresh-sweet-corn-on-the-cob-each/0000000004590",
+                                                          "price":  0.40,
+                                                          "size":  "each",
+                                                          "name":  "Fresh Sweet Corn on the Cob-Each",
                                                           "board_pu":  0.4
                                                       },
                                      "Family Fare":  {
@@ -2904,7 +3034,7 @@
                                                  "price":  5.74,
                                                  "size":  "16 oz",
                                                  "name":  "Sadaf Pure Sesame Tahini, 16 oz Jar",
-                                                 "recipe_pu":  0.36
+                                                 "recipe_pu":  0.331
                                              }
                              },
                   "toasted-sesame-seeds":  {
@@ -2935,14 +3065,13 @@
                                                                        "price":  7.98,
                                                                        "size":  "20.5 oz",
                                                                        "name":  "Member\u0027s Mark White Sesame Seed, 20.5 oz.",
-                                                                       "recipe_pu":  0.39
+                                                                       "recipe_pu":  0.36
                                                                    },
                                                "Walmart":  {
                                                                "url":  "https://www.walmart.com/ip/721890645",
                                                                "price":  15.53,
                                                                "size":  "16 oz",
-                                                               "name":  "Kevala Organic Toasted Sesame Seeds, 16 oz",
-                                                               "recipe_pu":  0.99
+                                                               "name":  "Kevala Organic Toasted Sesame Seeds, 16 oz"
                                                            }
                                            },
                   "tomatillos":  {
@@ -2961,6 +3090,13 @@
                                                          "name":  "Tomatillos",
                                                          "recipe_pu":  1.99
                                                      },
+                                     "Hy-Vee":  {
+                                                    "url":  "https://www.hy-vee.com/aisles-online/p/37464/tomatillos",
+                                                    "price":  3.99,
+                                                    "size":  "lb",
+                                                    "name":  "Tomatillos",
+                                                    "recipe_pu":  3.99
+                                                },
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/Southern-Valley-Farm-Fresh-Peeled-Tomatillos-16-oz/19644657661",
                                                              "price":  2.96,
@@ -3027,8 +3163,7 @@
                                                     "url":  "https://www.aldi.us/store/aldi/products/20739259-happy-harvest-tomato-sauce-8-oz",
                                                     "price":  0.55,
                                                     "size":  "8 oz",
-                                                    "name":  "Happy Harvest Tomato Sauce",
-                                                    "recipe_pu":  0.0567
+                                                    "name":  "Happy Harvest Tomato Sauce"
                                                 },
                                        "Baker\u0027s":  {
                                                             "url":  "https://www.bakersplus.com/p/kroger-tomato-sauce/0001111011972",
@@ -3056,14 +3191,14 @@
                                                                "price":  5.18,
                                                                "size":  "106 oz",
                                                                "name":  "Member\u0027s Mark Tomato Sauce 106 oz.",
-                                                               "recipe_pu":  0.054
+                                                               "recipe_pu":  0.05
                                                            },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/10415500",
                                                        "price":  0.96,
                                                        "size":  "15 oz",
                                                        "name":  "Great Value Tomato Sauce, 15 oz",
-                                                       "recipe_pu":  0.064
+                                                       "recipe_pu":  0.056
                                                    }
                                    },
                   "traditional-pasta-sauce":  {
@@ -3101,7 +3236,7 @@
                                                                   "price":  1.74,
                                                                   "size":  "24 oz",
                                                                   "name":  "Great Value Traditional Pasta Sauce, 24 oz",
-                                                                  "recipe_pu":  0.0725
+                                                                  "recipe_pu":  0.073
                                                               }
                                               },
                   "watermelon":  {
@@ -3111,14 +3246,13 @@
                                                   "price":  4.65,
                                                   "size":  "each",
                                                   "name":  "Seedless Watermelon, Each",
-                                                  "board_pu":  4.65
+                                                  "board_pu":  5.15
                                               },
                                      "Baker\u0027s":  {
                                                           "url":  "https://www.bakersplus.com/p/mini-seedless-whole-watermelon/0000000003421",
                                                           "price":  4.99,
                                                           "size":  "1 ct",
-                                                          "name":  "Mini Seedless Whole Watermelon",
-                                                          "board_pu":  4.99
+                                                          "name":  "Mini Seedless Whole Watermelon"
                                                       },
                                      "Family Fare":  {
                                                          "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/melons/watermelon_mini_seedless/p/2310779",
@@ -3136,10 +3270,10 @@
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/Whole-Seedless-Watermelon/13589400933",
-                                                             "price":  4.97,
-                                                             "size":  "",
+                                                             "price":  6.97,
+                                                             "size":  "each",
                                                              "name":  "Whole Seedless Watermelon",
-                                                             "board_pu":  4.97
+                                                             "board_pu":  6.97
                                                          }
                                  },
                   "white-mushrooms":  {
@@ -3162,14 +3296,13 @@
                                                               "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/mushrooms/our_family_mushrooms_white_sliced_8_oz/p/1564405684713576547",
                                                               "price":  2.59,
                                                               "size":  "8 oz",
-                                                              "name":  "Our Family Mushrooms, White, Sliced 8 Oz",
-                                                              "recipe_pu":  0.2488
+                                                              "name":  "Our Family Mushrooms, White, Sliced 8 Oz"
                                                           },
                                           "Hy-Vee":  {
-                                                         "url":  "https://www.hy-vee.com/aisles-online/p/24707/hy-vee-sliced-mushrooms",
-                                                         "price":  3.79,
-                                                         "size":  "7 oz",
-                                                         "name":  "Hy-Vee Sliced Mushrooms",
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/3883530/highline-whole-white-mushrooms",
+                                                         "price":  1.99,
+                                                         "size":  "8 oz",
+                                                         "name":  "Highline Whole White Mushrooms",
                                                          "recipe_pu":  0.2488
                                                      },
                                           "Sam\u0027s Club":  {
@@ -3184,7 +3317,7 @@
                                                           "price":  2,
                                                           "size":  "8 oz",
                                                           "name":  "Freshness Guaranteed Sliced White Mushrooms, 8 oz",
-                                                          "recipe_pu":  0.25
+                                                          "recipe_pu":  0.236
                                                       }
                                       },
                   "white-vinegar":  {
@@ -3204,10 +3337,10 @@
                                                              "recipe_pu":  0.056
                                                          },
                                         "Family Fare":  {
-                                                            "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/our_family_vinegar_distilled_white_32_oz/p/6787078",
-                                                            "price":  1.99,
-                                                            "size":  "32 oz",
-                                                            "name":  "Our Family Distilled White Vinegar",
+                                                            "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/cooking_wines_vinegars/our_family_white_vinegar/p/1564405684716741569",
+                                                            "price":  4.29,
+                                                            "size":  "128 oz",
+                                                            "name":  "Our Family White Vinegar",
                                                             "recipe_pu":  0.034
                                                         },
                                         "Hy-Vee":  {
@@ -3242,10 +3375,10 @@
                                               "board_pu":  0.0872
                                           },
                                  "Baker\u0027s":  {
-                                                      "url":  "https://www.bakersplus.com/p/yoplait-original-low-fat-strawberry-and-harvest-peach-yogurt-cups/0007047040389",
-                                                      "price":  5.99,
-                                                      "size":  "$0.12/oz",
-                                                      "name":  "Yoplait Original Low Fat Yogurt Cups",
+                                                      "url":  "https://www.bakersplus.com/p/kroger-blended-vanilla-low-fat-yogurt/0001111006417",
+                                                      "price":  2.99,
+                                                      "size":  "32 oz",
+                                                      "name":  "Kroger Blended Vanilla Low Fat Yogurt",
                                                       "board_pu":  0.0934
                                                   },
                                  "Family Fare":  {
@@ -3256,11 +3389,11 @@
                                                      "board_pu":  0.1483
                                                  },
                                  "Hy-Vee":  {
-                                                "url":  "https://www.hy-vee.com/aisles-online/p/152291/hy-vee-low-fat-vanilla-yogurt",
-                                                "price":  3.38,
-                                                "size":  "32 oz",
-                                                "name":  "Hy-Vee Low Fat Vanilla Yogurt",
-                                                "board_pu":  0.15
+                                                "url":  "https://www.hy-vee.com/aisles-online/p/27004/yoplait-original-strawberry-low-fat-yogurt",
+                                                "price":  0.60,
+                                                "size":  "6 oz",
+                                                "name":  "Yoplait Original Strawberry Low Fat Yogurt",
+                                                "board_pu":  0.1
                                             },
                                  "Sam\u0027s Club":  {
                                                          "url":  "https://www.samsclub.com/ip/Member-s-Mark-Nonfat-Plain-Greek-Yogurt-48-oz/18097303669",
@@ -3270,11 +3403,11 @@
                                                          "board_pu":  0.1098
                                                      },
                                  "Walmart":  {
-                                                 "url":  "https://www.walmart.com/ip/26559602",
-                                                 "price":  3.28,
+                                                 "url":  "https://www.walmart.com/ip/10450127",
+                                                 "price":  2.66,
                                                  "size":  "32 oz",
-                                                 "name":  "Great Value Vanilla Nonfat Greek Yogurt, 32 oz Tub",
-                                                 "board_pu":  0.1025
+                                                 "name":  "Great Value Original Vanilla Low-fat Yogurt, 32 oz Tub",
+                                                 "board_pu":  0.0825
                                              }
                              },
                   "zero-sugar-soda":  {

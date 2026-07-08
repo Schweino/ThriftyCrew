@@ -2,271 +2,6 @@
     "generated":  "2026-07-08",
     "tolerance":  0.15,
     "stores":  {
-                   "Sam\u0027s Club":  [
-                                           {
-                                               "id":  "ground-beef-8020",
-                                               "commodity":  "80/20 Ground Beef",
-                                               "term":  "Member\u0027s Mark 80/20 Ground Beef Roll",
-                                               "board_item":  "Member\u0027s Mark 80/20 Ground Beef Roll",
-                                               "unit":  "lb",
-                                               "price_per_unit":  5.56,
-                                               "reason":  "missing"
-                                           },
-                                           {
-                                               "id":  "chicken-thighs",
-                                               "commodity":  "Chicken Thighs / Drumsticks",
-                                               "term":  "Member\u0027s Mark Bone-In Chicken Thighs",
-                                               "board_item":  "Member\u0027s Mark Bone-In Chicken Thighs",
-                                               "unit":  "lb",
-                                               "price_per_unit":  1.28,
-                                               "reason":  "missing"
-                                           },
-                                           {
-                                               "id":  "orange-juice",
-                                               "commodity":  "Orange Juice",
-                                               "term":  "Member\u0027s Mark 100% Orange Juice, 2 x 52 fl oz",
-                                               "board_item":  "Member\u0027s Mark 100% Orange Juice, 2 x 52 fl oz",
-                                               "unit":  "floz",
-                                               "price_per_unit":  0.0648,
-                                               "reason":  "missing"
-                                           },
-                                           {
-                                               "id":  "pork-chops",
-                                               "commodity":  "Pork Chops",
-                                               "term":  "Member\u0027s Mark Bone-In Pork Chops",
-                                               "board_item":  "Member\u0027s Mark Bone-In Pork Chops",
-                                               "unit":  "lb",
-                                               "price_per_unit":  2.52,
-                                               "reason":  "missing"
-                                           },
-                                           {
-                                               "id":  "boneless-skinless-chicken-thigh",
-                                               "commodity":  "Boneless Skinless Chicken Thigh",
-                                               "term":  "Boneless Skinless Chicken Thigh",
-                                               "board_item":  "",
-                                               "unit":  "lb",
-                                               "price_per_unit":  2.48,
-                                               "reason":  "mismatch(20%)"
-                                           },
-                                           {
-                                               "id":  "1-3-fat-cream-cheese",
-                                               "commodity":  "1/3 Fat Cream Cheese",
-                                               "term":  "1/3 Fat Cream Cheese",
-                                               "board_item":  "",
-                                               "unit":  "oz",
-                                               "price_per_unit":  0.2275,
-                                               "reason":  "mismatch(23%)"
-                                           },
-                                           {
-                                               "id":  "apple",
-                                               "commodity":  "Apple",
-                                               "term":  "Apple",
-                                               "board_item":  "",
-                                               "unit":  "each",
-                                               "price_per_unit":  0.62,
-                                               "reason":  "missing"
-                                           },
-                                           {
-                                               "id":  "brown-sugar",
-                                               "commodity":  "Brown Sugar",
-                                               "term":  "Brown Sugar",
-                                               "board_item":  "",
-                                               "unit":  "oz",
-                                               "price_per_unit":  0.03,
-                                               "reason":  "mismatch(108%)"
-                                           },
-                                           {
-                                               "id":  "cheddar-cheese-shredded",
-                                               "commodity":  "Cheddar Cheese, Shredded",
-                                               "term":  "Cheddar Cheese, Shredded",
-                                               "board_item":  "",
-                                               "unit":  "oz",
-                                               "price_per_unit":  0.18,
-                                               "reason":  "stale(22%)"
-                                           },
-                                           {
-                                               "id":  "crushed-tomatoes",
-                                               "commodity":  "Crushed Tomatoes",
-                                               "term":  "Crushed Tomatoes",
-                                               "board_item":  "",
-                                               "unit":  "oz",
-                                               "price_per_unit":  0.0536,
-                                               "reason":  "missing"
-                                           },
-                                           {
-                                               "id":  "fries",
-                                               "commodity":  "Fries",
-                                               "term":  "Fries",
-                                               "board_item":  "",
-                                               "unit":  "oz",
-                                               "price_per_unit":  0.0334,
-                                               "reason":  "mismatch(101%)"
-                                           },
-                                           {
-                                               "id":  "frozen-green-peas",
-                                               "commodity":  "Frozen Green Peas",
-                                               "term":  "Frozen Green Peas",
-                                               "board_item":  "",
-                                               "unit":  "oz",
-                                               "price_per_unit":  0.1442,
-                                               "reason":  "missing"
-                                           },
-                                           {
-                                               "id":  "golden-raisins",
-                                               "commodity":  "Golden Raisins",
-                                               "term":  "Golden Raisins",
-                                               "board_item":  "",
-                                               "unit":  "oz",
-                                               "price_per_unit":  0.13,
-                                               "reason":  "missing"
-                                           },
-                                           {
-                                               "id":  "kidney-beans",
-                                               "commodity":  "Kidney Beans",
-                                               "term":  "Kidney Beans",
-                                               "board_item":  "",
-                                               "unit":  "oz",
-                                               "price_per_unit":  0.0684,
-                                               "reason":  "mismatch(61%)"
-                                           },
-                                           {
-                                               "id":  "light-sour-cream",
-                                               "commodity":  "Light Sour Cream",
-                                               "term":  "Light Sour Cream",
-                                               "board_item":  "",
-                                               "unit":  "oz",
-                                               "price_per_unit":  0.18,
-                                               "reason":  "mismatch(36%)"
-                                           },
-                                           {
-                                               "id":  "pineapple-chunks",
-                                               "commodity":  "Pineapple Chunks",
-                                               "term":  "Pineapple Chunks",
-                                               "board_item":  "",
-                                               "unit":  "oz",
-                                               "price_per_unit":  0.12,
-                                               "reason":  "stale(25%)"
-                                           },
-                                           {
-                                               "id":  "red-bell-pepper",
-                                               "commodity":  "Red Bell Pepper",
-                                               "term":  "Red Bell Pepper",
-                                               "board_item":  "",
-                                               "unit":  "each",
-                                               "price_per_unit":  0.83,
-                                               "reason":  "missing"
-                                           }
-                                       ],
-                   "Baker\u0027s":  [
-                                        {
-                                            "id":  "ground-beef-8020",
-                                            "commodity":  "80/20 Ground Beef",
-                                            "term":  "Kroger 80/20 Ground Beef Roll",
-                                            "board_item":  "Kroger 80/20 Ground Beef Roll",
-                                            "unit":  "lb",
-                                            "price_per_unit":  5.99,
-                                            "reason":  "mismatch(33%)"
-                                        },
-                                        {
-                                            "id":  "blueberries",
-                                            "commodity":  "Blueberries",
-                                            "term":  "Driscoll\u0027s Blueberries",
-                                            "board_item":  "Driscoll\u0027s Blueberries",
-                                            "unit":  "oz",
-                                            "price_per_unit":  0.2772,
-                                            "reason":  "mismatch(20%)"
-                                        },
-                                        {
-                                            "id":  "bread",
-                                            "commodity":  "Bread (loaf)",
-                                            "term":  "Smart Way Enriched White Bread",
-                                            "board_item":  "Smart Way Enriched White Bread",
-                                            "unit":  "each",
-                                            "price_per_unit":  1.19,
-                                            "reason":  "mismatch(67%)"
-                                        },
-                                        {
-                                            "id":  "grapes",
-                                            "commodity":  "Grapes",
-                                            "term":  "Kroger Fresh Seedless White Grapes",
-                                            "board_item":  "Kroger Fresh Seedless White Grapes",
-                                            "unit":  "lb",
-                                            "price_per_unit":  1.99,
-                                            "reason":  "mismatch(123%)"
-                                        },
-                                        {
-                                            "id":  "peaches",
-                                            "commodity":  "Peaches",
-                                            "term":  "Fresh Southern Yellow Peach",
-                                            "board_item":  "Fresh Southern Yellow Peach",
-                                            "unit":  "lb",
-                                            "price_per_unit":  1.79,
-                                            "reason":  "mismatch(34%)"
-                                        },
-                                        {
-                                            "id":  "shredded-cheese",
-                                            "commodity":  "Shredded / Block Cheese",
-                                            "term":  "Kroger Mexican Blend Shredded or Sharp Cheddar Cheese",
-                                            "board_item":  "Kroger Mexican Blend Shredded or Sharp Cheddar Cheese",
-                                            "unit":  "oz",
-                                            "price_per_unit":  0.1559,
-                                            "reason":  "mismatch(41%)"
-                                        },
-                                        {
-                                            "id":  "sweet-corn",
-                                            "commodity":  "Sweet Corn (ear)",
-                                            "term":  "Fresh Sweet Corn on the Cob",
-                                            "board_item":  "Fresh Sweet Corn on the Cob",
-                                            "unit":  "each",
-                                            "price_per_unit":  0.4,
-                                            "reason":  "mismatch(25%)"
-                                        },
-                                        {
-                                            "id":  "yogurt",
-                                            "commodity":  "Yogurt",
-                                            "term":  "Kroger Blended Vanilla Low Fat Yogurt Tub",
-                                            "board_item":  "Kroger Blended Vanilla Low Fat Yogurt Tub",
-                                            "unit":  "oz",
-                                            "price_per_unit":  0.0934,
-                                            "reason":  "mismatch(28%)"
-                                        },
-                                        {
-                                            "id":  "olives",
-                                            "commodity":  "Olives",
-                                            "term":  "Olives",
-                                            "board_item":  "",
-                                            "unit":  "oz",
-                                            "price_per_unit":  0.24,
-                                            "reason":  "mismatch(21%)"
-                                        },
-                                        {
-                                            "id":  "peanut-butter",
-                                            "commodity":  "Peanut Butter",
-                                            "term":  "peanut butter",
-                                            "board_item":  "",
-                                            "unit":  "oz",
-                                            "price_per_unit":  0.143,
-                                            "reason":  "mismatch(23%)"
-                                        },
-                                        {
-                                            "id":  "roasted-red-peppers",
-                                            "commodity":  "Roasted Red Peppers",
-                                            "term":  "Roasted Red Peppers",
-                                            "board_item":  "",
-                                            "unit":  "oz",
-                                            "price_per_unit":  0.2083,
-                                            "reason":  "missing"
-                                        },
-                                        {
-                                            "id":  "sugar-free-maple-syrup",
-                                            "commodity":  "Sugar-Free Maple Syrup",
-                                            "term":  "Sugar-Free Maple Syrup",
-                                            "board_item":  "",
-                                            "unit":  "oz",
-                                            "price_per_unit":  0.1121,
-                                            "reason":  "mismatch(43%)"
-                                        }
-                                    ],
                    "Family Fare":  [
                                        {
                                            "id":  "apples",
@@ -278,13 +13,13 @@
                                            "reason":  "missing"
                                        },
                                        {
-                                           "id":  "peaches",
-                                           "commodity":  "Peaches",
-                                           "term":  "Fresh Peaches, Prima",
-                                           "board_item":  "Fresh Peaches, Prima",
-                                           "unit":  "lb",
-                                           "price_per_unit":  2.99,
-                                           "reason":  "missing"
+                                           "id":  "peanut-butter",
+                                           "commodity":  "Peanut Butter",
+                                           "term":  "Creamy Peanut Butter Our Family",
+                                           "board_item":  "Creamy Peanut Butter Our Family",
+                                           "unit":  "oz",
+                                           "price_per_unit":  0.1248,
+                                           "reason":  "mismatch(100%)"
                                        },
                                        {
                                            "id":  "strawberries",
@@ -323,15 +58,6 @@
                                            "reason":  "mismatch(33%)"
                                        },
                                        {
-                                           "id":  "frozen-green-peas",
-                                           "commodity":  "Frozen Green Peas",
-                                           "term":  "Frozen Green Peas",
-                                           "board_item":  "",
-                                           "unit":  "oz",
-                                           "price_per_unit":  0.1158,
-                                           "reason":  "missing"
-                                       },
-                                       {
                                            "id":  "ketchup",
                                            "commodity":  "Ketchup",
                                            "term":  "Heinz Tomato Ketchup 32 Oz",
@@ -350,15 +76,6 @@
                                            "reason":  "mismatch(26%)"
                                        },
                                        {
-                                           "id":  "peanut-butter",
-                                           "commodity":  "Peanut Butter",
-                                           "term":  "peanut butter",
-                                           "board_item":  "",
-                                           "unit":  "oz",
-                                           "price_per_unit":  0.25,
-                                           "reason":  "mismatch(43%)"
-                                       },
-                                       {
                                            "id":  "red-bell-pepper",
                                            "commodity":  "Red Bell Pepper",
                                            "term":  "Red Bell Pepper",
@@ -375,98 +92,120 @@
                                            "unit":  "oz",
                                            "price_per_unit":  0.2488,
                                            "reason":  "mismatch(30%)"
-                                       },
-                                       {
-                                           "id":  "white-vinegar",
-                                           "commodity":  "White Vinegar",
-                                           "term":  "White Vinegar",
-                                           "board_item":  "",
-                                           "unit":  "oz",
-                                           "price_per_unit":  0.034,
-                                           "reason":  "mismatch(83%)"
                                        }
                                    ],
+                   "Baker\u0027s":  [
+                                        {
+                                            "id":  "blueberries",
+                                            "commodity":  "Blueberries",
+                                            "term":  "Blueberries",
+                                            "board_item":  "Blueberries",
+                                            "unit":  "oz",
+                                            "price_per_unit":  0.2772,
+                                            "reason":  "mismatch(20%)"
+                                        },
+                                        {
+                                            "id":  "peanut-butter",
+                                            "commodity":  "Peanut Butter",
+                                            "term":  "Kroger Peanut Butter Creamy",
+                                            "board_item":  "Kroger Peanut Butter Creamy",
+                                            "unit":  "oz",
+                                            "price_per_unit":  0.1014,
+                                            "reason":  "mismatch(41%)"
+                                        },
+                                        {
+                                            "id":  "shredded-cheese",
+                                            "commodity":  "Shredded / Block Cheese",
+                                            "term":  "Kroger Shredded Cheese, Mexican Style Blend",
+                                            "board_item":  "Kroger Shredded Cheese, Mexican Style Blend",
+                                            "unit":  "oz",
+                                            "price_per_unit":  0.1862,
+                                            "reason":  "mismatch(18%)"
+                                        },
+                                        {
+                                            "id":  "watermelon",
+                                            "commodity":  "Whole Watermelon",
+                                            "term":  "Personal Watermelon",
+                                            "board_item":  "Personal Watermelon",
+                                            "unit":  "each",
+                                            "price_per_unit":  2.99,
+                                            "reason":  "mismatch(67%)"
+                                        }
+                                    ],
+                   "Walmart":  [
+                                   {
+                                       "id":  "watermelon",
+                                       "commodity":  "Whole Watermelon",
+                                       "term":  "Fresh Seedless Watermelon",
+                                       "board_item":  "Fresh Seedless Watermelon",
+                                       "unit":  "each",
+                                       "price_per_unit":  4.65,
+                                       "reason":  "missing"
+                                   },
+                                   {
+                                       "id":  "93-7-ground-turkey",
+                                       "commodity":  "93/7 Ground Turkey",
+                                       "term":  "93/7 Ground Turkey",
+                                       "board_item":  "",
+                                       "unit":  "lb",
+                                       "price_per_unit":  4.55,
+                                       "reason":  "mismatch(17%)"
+                                   },
+                                   {
+                                       "id":  "1-3-fat-cream-cheese",
+                                       "commodity":  "1/3 Fat Cream Cheese",
+                                       "term":  "1/3 Fat Cream Cheese",
+                                       "board_item":  "",
+                                       "unit":  "oz",
+                                       "price_per_unit":  0.23,
+                                       "reason":  "mismatch(15%)"
+                                   },
+                                   {
+                                       "id":  "carrots",
+                                       "commodity":  "Carrots",
+                                       "term":  "Carrots",
+                                       "board_item":  "",
+                                       "unit":  "lb",
+                                       "price_per_unit":  0.96,
+                                       "reason":  "mismatch(18%)"
+                                   },
+                                   {
+                                       "id":  "greek-yogurt",
+                                       "commodity":  "Greek Yogurt",
+                                       "term":  "Greek Yogurt",
+                                       "board_item":  "",
+                                       "unit":  "oz",
+                                       "price_per_unit":  0.123,
+                                       "reason":  "mismatch(16%)"
+                                   },
+                                   {
+                                       "id":  "hominy",
+                                       "commodity":  "Hominy",
+                                       "term":  "Hominy",
+                                       "board_item":  "",
+                                       "unit":  "oz",
+                                       "price_per_unit":  0.0507,
+                                       "reason":  "mismatch(29%)"
+                                   },
+                                   {
+                                       "id":  "toasted-sesame-seeds",
+                                       "commodity":  "Toasted Sesame Seeds",
+                                       "term":  "Toasted Sesame Seeds",
+                                       "board_item":  "",
+                                       "unit":  "oz",
+                                       "price_per_unit":  0.784,
+                                       "reason":  "mismatch(24%)"
+                                   }
+                               ],
                    "Hy-Vee":  [
                                   {
-                                      "id":  "apples",
-                                      "commodity":  "Apples",
-                                      "term":  "Gala Apples",
-                                      "board_item":  "Gala Apples",
+                                      "id":  "onions",
+                                      "commodity":  "Yellow / Sweet Onions",
+                                      "term":  "Yellow onions, 3 lb. pkg., $3.99",
+                                      "board_item":  "Yellow onions, 3 lb. pkg., $3.99",
                                       "unit":  "lb",
-                                      "price_per_unit":  1.98,
-                                      "reason":  "missing"
-                                  },
-                                  {
-                                      "id":  "avocados",
-                                      "commodity":  "Avocados",
-                                      "term":  "Hass Avocados",
-                                      "board_item":  "Hass Avocados",
-                                      "unit":  "each",
                                       "price_per_unit":  1.33,
-                                      "reason":  "missing"
-                                  },
-                                  {
-                                      "id":  "bacon",
-                                      "commodity":  "Bacon",
-                                      "term":  "Jimmy Dean bacon, 9 or 12 oz., $3.99",
-                                      "board_item":  "Jimmy Dean bacon, 9 or 12 oz., $3.99",
-                                      "unit":  "lb",
-                                      "price_per_unit":  5.32,
-                                      "reason":  "missing"
-                                  },
-                                  {
-                                      "id":  "bananas",
-                                      "commodity":  "Bananas",
-                                      "term":  "Fresh Chiquita Bananas",
-                                      "board_item":  "Fresh Chiquita Bananas",
-                                      "unit":  "lb",
-                                      "price_per_unit":  0.49,
-                                      "reason":  "missing"
-                                  },
-                                  {
-                                      "id":  "chicken-thighs",
-                                      "commodity":  "Chicken Thighs / Drumsticks",
-                                      "term":  "Smart Chicken drumsticks or thighs, $1.99 lb.",
-                                      "board_item":  "Smart Chicken drumsticks or thighs, $1.99 lb.",
-                                      "unit":  "lb",
-                                      "price_per_unit":  1.99,
-                                      "reason":  "mismatch(55%)"
-                                  },
-                                  {
-                                      "id":  "grapes",
-                                      "commodity":  "Grapes",
-                                      "term":  "Green Seedless Grapes",
-                                      "board_item":  "Green Seedless Grapes",
-                                      "unit":  "lb",
-                                      "price_per_unit":  3.99,
-                                      "reason":  "missing"
-                                  },
-                                  {
-                                      "id":  "milk",
-                                      "commodity":  "Milk (gallon)",
-                                      "term":  "That\u0027s Smart! 2% Reduced Fat Milk",
-                                      "board_item":  "That\u0027s Smart! 2% Reduced Fat Milk",
-                                      "unit":  "gallon",
-                                      "price_per_unit":  3.06,
-                                      "reason":  "mismatch(95%)"
-                                  },
-                                  {
-                                      "id":  "peaches",
-                                      "commodity":  "Peaches",
-                                      "term":  "California white flesh peaches or nectarines, $3.69 lb.",
-                                      "board_item":  "California white flesh peaches or nectarines, $3.69 lb.",
-                                      "unit":  "lb",
-                                      "price_per_unit":  3.69,
-                                      "reason":  "missing"
-                                  },
-                                  {
-                                      "id":  "yogurt",
-                                      "commodity":  "Yogurt",
-                                      "term":  "Yoplait original or protein yogurt, 4 to 6 oz., 10/ $6 .60 each",
-                                      "board_item":  "Yoplait original or protein yogurt, 4 to 6 oz., 10/ $6 .60 each",
-                                      "unit":  "oz",
-                                      "price_per_unit":  0.1,
-                                      "reason":  "stale(33%)"
+                                      "reason":  "mismatch(25%)"
                                   },
                                   {
                                       "id":  "boneless-skinless-chicken-thigh",
@@ -478,24 +217,6 @@
                                       "reason":  "mismatch(101%)"
                                   },
                                   {
-                                      "id":  "butter",
-                                      "commodity":  "Butter",
-                                      "term":  "butter",
-                                      "board_item":  "",
-                                      "unit":  "oz",
-                                      "price_per_unit":  0.2494,
-                                      "reason":  "mismatch(18%)"
-                                  },
-                                  {
-                                      "id":  "apple",
-                                      "commodity":  "Apple",
-                                      "term":  "Apple",
-                                      "board_item":  "",
-                                      "unit":  "each",
-                                      "price_per_unit":  0.79,
-                                      "reason":  "missing"
-                                  },
-                                  {
                                       "id":  "bread-crumbs",
                                       "commodity":  "Bread Crumbs",
                                       "term":  "Bread Crumbs",
@@ -503,42 +224,6 @@
                                       "unit":  "oz",
                                       "price_per_unit":  0.1193,
                                       "reason":  "mismatch(56%)"
-                                  },
-                                  {
-                                      "id":  "brown-sugar",
-                                      "commodity":  "Brown Sugar",
-                                      "term":  "That\u0027s Smart! powdered or brown sugar, 2 lb., $1.88",
-                                      "board_item":  "That\u0027s Smart! powdered or brown sugar, 2 lb., $1.88",
-                                      "unit":  "oz",
-                                      "price_per_unit":  0.0588,
-                                      "reason":  "mismatch(59%)"
-                                  },
-                                  {
-                                      "id":  "cannellini-beans",
-                                      "commodity":  "Cannellini Beans",
-                                      "term":  "Cannellini Beans",
-                                      "board_item":  "",
-                                      "unit":  "oz",
-                                      "price_per_unit":  0.0639,
-                                      "reason":  "mismatch(50%)"
-                                  },
-                                  {
-                                      "id":  "chickpeas",
-                                      "commodity":  "Chickpeas",
-                                      "term":  "Chickpeas",
-                                      "board_item":  "",
-                                      "unit":  "oz",
-                                      "price_per_unit":  0.0639,
-                                      "reason":  "mismatch(46%)"
-                                  },
-                                  {
-                                      "id":  "enchilada-sauce",
-                                      "commodity":  "Enchilada Sauce",
-                                      "term":  "Hy-Vee mild enchilada sauce, 28 oz., $3.19",
-                                      "board_item":  "Hy-Vee mild enchilada sauce, 28 oz., $3.19",
-                                      "unit":  "oz",
-                                      "price_per_unit":  0.1139,
-                                      "reason":  "mismatch(136%)"
                                   },
                                   {
                                       "id":  "fries",
@@ -559,33 +244,6 @@
                                       "reason":  "missing"
                                   },
                                   {
-                                      "id":  "green-beans",
-                                      "commodity":  "Green Beans",
-                                      "term":  "Hy-Vee corn or green beans, 14.25 to 15.25 oz., $0.88",
-                                      "board_item":  "Hy-Vee corn or green beans, 14.25 to 15.25 oz., $0.88",
-                                      "unit":  "oz",
-                                      "price_per_unit":  0.0577,
-                                      "reason":  "mismatch(78%)"
-                                  },
-                                  {
-                                      "id":  "green-cabbage",
-                                      "commodity":  "Green Cabbage",
-                                      "term":  "Green Cabbage",
-                                      "board_item":  "",
-                                      "unit":  "lb",
-                                      "price_per_unit":  0.89,
-                                      "reason":  "missing"
-                                  },
-                                  {
-                                      "id":  "honey",
-                                      "commodity":  "Honey",
-                                      "term":  "Sue Bee premium pure honey, 24 oz., $8.49",
-                                      "board_item":  "Sue Bee premium pure honey, 24 oz., $8.49",
-                                      "unit":  "oz",
-                                      "price_per_unit":  0.3538,
-                                      "reason":  "mismatch(18%)"
-                                  },
-                                  {
                                       "id":  "honey-dijon-mustard",
                                       "commodity":  "Honey Dijon Mustard",
                                       "term":  "Honey Dijon Mustard",
@@ -595,142 +253,16 @@
                                       "reason":  "missing"
                                   },
                                   {
-                                      "id":  "ketchup",
-                                      "commodity":  "Ketchup",
-                                      "term":  "Hy-Vee ketchup, 38 oz., $2.48",
-                                      "board_item":  "Hy-Vee ketchup, 38 oz., $2.48",
-                                      "unit":  "oz",
-                                      "price_per_unit":  0.0653,
-                                      "reason":  "mismatch(52%)"
-                                  },
-                                  {
-                                      "id":  "kidney-beans",
-                                      "commodity":  "Kidney Beans",
-                                      "term":  "Kidney Beans",
+                                      "id":  "peanut-butter",
+                                      "commodity":  "Peanut Butter",
+                                      "term":  "peanut butter",
                                       "board_item":  "",
                                       "unit":  "oz",
-                                      "price_per_unit":  0.0639,
-                                      "reason":  "mismatch(46%)"
-                                  },
-                                  {
-                                      "id":  "potato",
-                                      "commodity":  "Potato",
-                                      "term":  "Potato",
-                                      "board_item":  "",
-                                      "unit":  "lb",
-                                      "price_per_unit":  0.49,
-                                      "reason":  "mismatch(20%)"
-                                  },
-                                  {
-                                      "id":  "red-bell-pepper",
-                                      "commodity":  "Red Bell Pepper",
-                                      "term":  "Red Bell Pepper",
-                                      "board_item":  "",
-                                      "unit":  "each",
-                                      "price_per_unit":  1.69,
-                                      "reason":  "mismatch(18%)"
-                                  },
-                                  {
-                                      "id":  "red-wine-vinegar",
-                                      "commodity":  "Red Wine Vinegar",
-                                      "term":  "Red Wine Vinegar",
-                                      "board_item":  "",
-                                      "unit":  "oz",
-                                      "price_per_unit":  0.1473,
-                                      "reason":  "mismatch(27%)"
-                                  },
-                                  {
-                                      "id":  "sugar-free-maple-syrup",
-                                      "commodity":  "Sugar-Free Maple Syrup",
-                                      "term":  "Sugar-Free Maple Syrup",
-                                      "board_item":  "",
-                                      "unit":  "oz",
-                                      "price_per_unit":  0.1367,
-                                      "reason":  "mismatch(22%)"
-                                  },
-                                  {
-                                      "id":  "tomatillos",
-                                      "commodity":  "Tomatillos",
-                                      "term":  "Tomatillos",
-                                      "board_item":  "",
-                                      "unit":  "lb",
-                                      "price_per_unit":  3.99,
-                                      "reason":  "missing"
-                                  },
-                                  {
-                                      "id":  "white-mushrooms",
-                                      "commodity":  "White Mushrooms",
-                                      "term":  "Highline white mushrooms, whole or sliced, 8 oz. pkg., $1.99",
-                                      "board_item":  "Highline white mushrooms, whole or sliced, 8 oz. pkg., $1.99",
-                                      "unit":  "oz",
-                                      "price_per_unit":  0.2488,
-                                      "reason":  "mismatch(118%)"
+                                      "price_per_unit":  0.124,
+                                      "reason":  "mismatch(21%)"
                                   }
                               ],
                    "Aldi":  [
-                                {
-                                    "id":  "bananas",
-                                    "commodity":  "Bananas",
-                                    "term":  "Bananas",
-                                    "board_item":  "Bananas",
-                                    "unit":  "lb",
-                                    "price_per_unit":  0.48,
-                                    "reason":  "mismatch(52%)"
-                                },
-                                {
-                                    "id":  "blueberries",
-                                    "commodity":  "Blueberries",
-                                    "term":  "Blueberries, Package",
-                                    "board_item":  "Blueberries, Package",
-                                    "unit":  "oz",
-                                    "price_per_unit":  0.2718,
-                                    "reason":  "mismatch(36%)"
-                                },
-                                {
-                                    "id":  "chicken-breast",
-                                    "commodity":  "Boneless Skinless Chicken Breast",
-                                    "term":  "Never Any! Family Pack Boneless Skinless Chicken Breasts",
-                                    "board_item":  "Never Any! Family Pack Boneless Skinless Chicken Breasts",
-                                    "unit":  "lb",
-                                    "price_per_unit":  3.99,
-                                    "reason":  "mismatch(17%)"
-                                },
-                                {
-                                    "id":  "chicken-thighs",
-                                    "commodity":  "Chicken Thighs / Drumsticks",
-                                    "term":  "Kirkwood Family Pack Bone-In Chicken Thighs",
-                                    "board_item":  "Kirkwood Family Pack Bone-In Chicken Thighs",
-                                    "unit":  "lb",
-                                    "price_per_unit":  1.55,
-                                    "reason":  "mismatch(73%)"
-                                },
-                                {
-                                    "id":  "eggs",
-                                    "commodity":  "Large Eggs (dozen)",
-                                    "term":  "Goldhen Grade A Large Eggs",
-                                    "board_item":  "Goldhen Grade A Large Eggs",
-                                    "unit":  "dozen",
-                                    "price_per_unit":  1.65,
-                                    "reason":  "missing"
-                                },
-                                {
-                                    "id":  "peaches",
-                                    "commodity":  "Peaches",
-                                    "term":  "Peaches, Bag",
-                                    "board_item":  "Peaches, Bag",
-                                    "unit":  "lb",
-                                    "price_per_unit":  1.49,
-                                    "reason":  "missing"
-                                },
-                                {
-                                    "id":  "peanut-butter",
-                                    "commodity":  "Peanut Butter",
-                                    "term":  "Peanut Delight Creamy Peanut Butter",
-                                    "board_item":  "Peanut Delight Creamy Peanut Butter",
-                                    "unit":  "oz",
-                                    "price_per_unit":  0.1087,
-                                    "reason":  "mismatch(24%)"
-                                },
                                 {
                                     "id":  "93-7-ground-turkey",
                                     "commodity":  "93/7 Ground Turkey",
@@ -768,40 +300,13 @@
                                     "reason":  "missing"
                                 },
                                 {
-                                    "id":  "frozen-chopped-spinach",
-                                    "commodity":  "Frozen Chopped Spinach",
-                                    "term":  "Frozen Chopped Spinach",
+                                    "id":  "peanut-butter",
+                                    "commodity":  "Peanut Butter",
+                                    "term":  "peanut butter",
                                     "board_item":  "",
                                     "unit":  "oz",
-                                    "price_per_unit":  0.1344,
-                                    "reason":  "mismatch(60%)"
-                                },
-                                {
-                                    "id":  "green-cabbage",
-                                    "commodity":  "Green Cabbage",
-                                    "term":  "Green Cabbage",
-                                    "board_item":  "",
-                                    "unit":  "lb",
-                                    "price_per_unit":  0.79,
-                                    "reason":  "mismatch(200%)"
-                                },
-                                {
-                                    "id":  "honey-dijon-mustard",
-                                    "commodity":  "Honey Dijon Mustard",
-                                    "term":  "Honey Dijon Mustard",
-                                    "board_item":  "",
-                                    "unit":  "oz",
-                                    "price_per_unit":  0.1375,
-                                    "reason":  "missing"
-                                },
-                                {
-                                    "id":  "potato",
-                                    "commodity":  "Potato",
-                                    "term":  "Potato",
-                                    "board_item":  "",
-                                    "unit":  "lb",
-                                    "price_per_unit":  0.44,
-                                    "reason":  "mismatch(100%)"
+                                    "price_per_unit":  0.134,
+                                    "reason":  "mismatch(19%)"
                                 },
                                 {
                                     "id":  "red-bell-pepper",
@@ -831,169 +336,70 @@
                                     "reason":  "missing"
                                 }
                             ],
-                   "Walmart":  [
-                                   {
-                                       "id":  "bananas",
-                                       "commodity":  "Bananas",
-                                       "term":  "Fresh Bananas",
-                                       "board_item":  "Fresh Bananas",
-                                       "unit":  "lb",
-                                       "price_per_unit":  0.5,
-                                       "reason":  "mismatch(60%)"
-                                   },
-                                   {
-                                       "id":  "chicken-thighs",
-                                       "commodity":  "Chicken Thighs / Drumsticks",
-                                       "term":  "Tyson Fresh Chicken Thighs (bone-in)",
-                                       "board_item":  "Tyson Fresh Chicken Thighs (bone-in)",
-                                       "unit":  "lb",
-                                       "price_per_unit":  2.58,
-                                       "reason":  "missing"
-                                   },
-                                   {
-                                       "id":  "eggs",
-                                       "commodity":  "Large Eggs (dozen)",
-                                       "term":  "Great Value Large White Eggs (12 ct)",
-                                       "board_item":  "Great Value Large White Eggs (12 ct)",
-                                       "unit":  "dozen",
-                                       "price_per_unit":  1.47,
-                                       "reason":  "missing"
-                                   },
-                                   {
-                                       "id":  "pork-chops",
-                                       "commodity":  "Pork Chops",
-                                       "term":  "Pork Loin Chops Boneless (family pack)",
-                                       "board_item":  "Pork Loin Chops Boneless (family pack)",
-                                       "unit":  "lb",
-                                       "price_per_unit":  4.17,
-                                       "reason":  "mismatch(63%)"
-                                   },
-                                   {
-                                       "id":  "watermelon",
-                                       "commodity":  "Whole Watermelon",
-                                       "term":  "Fresh Seedless Watermelon",
-                                       "board_item":  "Fresh Seedless Watermelon",
-                                       "unit":  "each",
-                                       "price_per_unit":  4.65,
-                                       "reason":  "missing"
-                                   },
-                                   {
-                                       "id":  "93-7-ground-turkey",
-                                       "commodity":  "93/7 Ground Turkey",
-                                       "term":  "93/7 Ground Turkey",
-                                       "board_item":  "",
-                                       "unit":  "lb",
-                                       "price_per_unit":  4.55,
-                                       "reason":  "mismatch(17%)"
-                                   },
-                                   {
-                                       "id":  "1-3-fat-cream-cheese",
-                                       "commodity":  "1/3 Fat Cream Cheese",
-                                       "term":  "1/3 Fat Cream Cheese",
-                                       "board_item":  "",
-                                       "unit":  "oz",
-                                       "price_per_unit":  0.23,
-                                       "reason":  "stale(18%)"
-                                   },
-                                   {
-                                       "id":  "carrots",
-                                       "commodity":  "Carrots",
-                                       "term":  "Carrots",
-                                       "board_item":  "",
-                                       "unit":  "lb",
-                                       "price_per_unit":  0.96,
-                                       "reason":  "stale(15%)"
-                                   },
-                                   {
-                                       "id":  "fries",
-                                       "commodity":  "Fries",
-                                       "term":  "Fries",
-                                       "board_item":  "",
-                                       "unit":  "oz",
-                                       "price_per_unit":  0.092,
-                                       "reason":  "mismatch(35%)"
-                                   },
-                                   {
-                                       "id":  "frozen-chopped-spinach",
-                                       "commodity":  "Frozen Chopped Spinach",
-                                       "term":  "Frozen Chopped Spinach",
-                                       "board_item":  "",
-                                       "unit":  "oz",
-                                       "price_per_unit":  0.079,
-                                       "reason":  "stale(25%)"
-                                   },
-                                   {
-                                       "id":  "greek-yogurt",
-                                       "commodity":  "Greek Yogurt",
-                                       "term":  "Greek Yogurt",
-                                       "board_item":  "",
-                                       "unit":  "oz",
-                                       "price_per_unit":  0.123,
-                                       "reason":  "stale(20%)"
-                                   },
-                                   {
-                                       "id":  "green-cabbage",
-                                       "commodity":  "Green Cabbage",
-                                       "term":  "Green Cabbage",
-                                       "board_item":  "",
-                                       "unit":  "lb",
-                                       "price_per_unit":  0.85,
-                                       "reason":  "missing"
-                                   },
-                                   {
-                                       "id":  "hickory-smoked-bacon",
-                                       "commodity":  "Hickory Smoked Bacon",
-                                       "term":  "Hickory Smoked Bacon",
-                                       "board_item":  "",
-                                       "unit":  "lb",
-                                       "price_per_unit":  3.96,
-                                       "reason":  "stale(25%)"
-                                   },
-                                   {
-                                       "id":  "hominy",
-                                       "commodity":  "Hominy",
-                                       "term":  "Hominy",
-                                       "board_item":  "",
-                                       "unit":  "oz",
-                                       "price_per_unit":  0.0507,
-                                       "reason":  "mismatch(29%)"
-                                   },
-                                   {
-                                       "id":  "ketchup",
-                                       "commodity":  "Ketchup",
-                                       "term":  "Ketchup",
-                                       "board_item":  "",
-                                       "unit":  "oz",
-                                       "price_per_unit":  0.047,
-                                       "reason":  "stale(23%)"
-                                   },
-                                   {
-                                       "id":  "peanut-butter",
-                                       "commodity":  "Peanut Butter",
-                                       "term":  "peanut butter",
-                                       "board_item":  "",
-                                       "unit":  "oz",
-                                       "price_per_unit":  0.1,
-                                       "reason":  "stale(19%)"
-                                   },
-                                   {
-                                       "id":  "red-bell-pepper",
-                                       "commodity":  "Red Bell Pepper",
-                                       "term":  "Red Bell Pepper",
-                                       "board_item":  "",
-                                       "unit":  "each",
-                                       "price_per_unit":  0.98,
-                                       "reason":  "missing"
-                                   },
-                                   {
-                                       "id":  "toasted-sesame-seeds",
-                                       "commodity":  "Toasted Sesame Seeds",
-                                       "term":  "Toasted Sesame Seeds",
-                                       "board_item":  "",
-                                       "unit":  "oz",
-                                       "price_per_unit":  0.784,
-                                       "reason":  "stale(21%)"
-                                   }
-                               ]
+                   "Sam\u0027s Club":  [
+                                           {
+                                               "id":  "1-3-fat-cream-cheese",
+                                               "commodity":  "1/3 Fat Cream Cheese",
+                                               "term":  "1/3 Fat Cream Cheese",
+                                               "board_item":  "",
+                                               "unit":  "oz",
+                                               "price_per_unit":  0.2275,
+                                               "reason":  "mismatch(23%)"
+                                           },
+                                           {
+                                               "id":  "apple",
+                                               "commodity":  "Apple",
+                                               "term":  "Apple",
+                                               "board_item":  "",
+                                               "unit":  "each",
+                                               "price_per_unit":  0.62,
+                                               "reason":  "missing"
+                                           },
+                                           {
+                                               "id":  "brown-sugar",
+                                               "commodity":  "Brown Sugar",
+                                               "term":  "Brown Sugar",
+                                               "board_item":  "",
+                                               "unit":  "oz",
+                                               "price_per_unit":  0.03,
+                                               "reason":  "mismatch(108%)"
+                                           },
+                                           {
+                                               "id":  "fries",
+                                               "commodity":  "Fries",
+                                               "term":  "Fries",
+                                               "board_item":  "",
+                                               "unit":  "oz",
+                                               "price_per_unit":  0.0334,
+                                               "reason":  "mismatch(101%)"
+                                           },
+                                           {
+                                               "id":  "frozen-green-peas",
+                                               "commodity":  "Frozen Green Peas",
+                                               "term":  "Frozen Green Peas",
+                                               "board_item":  "",
+                                               "unit":  "oz",
+                                               "price_per_unit":  0.1442,
+                                               "reason":  "missing"
+                                           },
+                                           {
+                                               "id":  "light-sour-cream",
+                                               "commodity":  "Light Sour Cream",
+                                               "term":  "Light Sour Cream",
+                                               "board_item":  "",
+                                               "unit":  "oz",
+                                               "price_per_unit":  0.18,
+                                               "reason":  "mismatch(36%)"
+                                           },
+                                           {
+                                               "id":  "red-bell-pepper",
+                                               "commodity":  "Red Bell Pepper",
+                                               "term":  "Red Bell Pepper",
+                                               "board_item":  "",
+                                               "unit":  "each",
+                                               "price_per_unit":  0.83,
+                                               "reason":  "missing"
+                                           }
+                                       ]
                }
 }

@@ -1,7 +1,7 @@
 ﻿{
-    "built_at":  "2026-07-08T07:43:33",
-    "week_of":  "2026-07-06",
-    "source":  "C:\\Codex\\income\\grocery\\out\\ads-2026-07-06.json",
+    "built_at":  "2026-07-08T07:47:19",
+    "week_of":  "2026-07-08",
+    "source":  "C:\\Codex\\income\\grocery\\out\\ads-2026-07-08.json",
     "commodities_compared":  29,
     "health":  {
                    "stores_with_data":  [
@@ -14,7 +14,7 @@
                                         ],
                    "store_count":  6,
                    "commodities_compared":  29,
-                   "flagged_out_of_band":  30,
+                   "flagged_out_of_band":  32,
                    "multibuy_unpriced":  1
                },
     "comparison":  [
@@ -65,19 +65,6 @@
                                               "item":  "Ground Beef Chub 80% Lean 20% Fat (5 lb)",
                                               "ad":  "$6.40",
                                               "size":  "lb",
-                                              "basis":  "per-lb marker",
-                                              "note":  ""
-                                          },
-                                          {
-                                              "store":  "Family Fare",
-                                              "per_unit":  7.49,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  true,
-                                              "membership":  false,
-                                              "item":  "Our Certified 80% Lean / 20% Fat, Ground Chuck Beef Roll, 1 Lb. 16 Oz",
-                                              "ad":  "$7.49",
-                                              "size":  "16 oz",
                                               "basis":  "per-lb marker",
                                               "note":  ""
                                           },
@@ -192,23 +179,23 @@
                            "id":  "avocados",
                            "unit":  "each",
                            "cheapest_store":  "Aldi",
-                           "cheapest_price":  0.4817,
+                           "cheapest_price":  0.59,
                            "cheapest_type":  "sale",
                            "nomem_store":  "Aldi",
-                           "nomem_price":  0.4817,
+                           "nomem_price":  0.59,
                            "nomem_type":  "sale",
                            "stores":  [
                                           {
                                               "store":  "Aldi",
-                                              "per_unit":  0.4817,
+                                              "per_unit":  0.59,
                                               "unit":  "each",
                                               "type":  "sale",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Bagged Mini Avocados",
-                                              "ad":  "PRICE DROPS $2.89 Per 6-Pack",
+                                              "item":  "Avocados",
+                                              "ad":  "PRICE DROPS $0.59 Each",
                                               "size":  "",
-                                              "basis":  "per-6-pack",
+                                              "basis":  "per-each marker",
                                               "note":  ""
                                           },
                                           {
@@ -233,6 +220,19 @@
                                               "membership":  false,
                                               "item":  "Fresh Medium Ripe Avocado",
                                               "ad":  "$1.00",
+                                              "size":  "each",
+                                              "basis":  "per-each",
+                                              "note":  ""
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  1.07,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Avocados",
+                                              "ad":  "$1.07",
                                               "size":  "each",
                                               "basis":  "per-each",
                                               "note":  ""
@@ -343,13 +343,13 @@
                                           },
                                           {
                                               "store":  "Family Fare",
-                                              "per_unit":  5.9867,
+                                              "per_unit":  5.72,
                                               "unit":  "lb",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Our Family Bacon, Premium, Original 12 Oz",
-                                              "ad":  "$4.49",
+                                              "item":  "Plumrose Bacon, Sliced 12 Oz",
+                                              "ad":  "$4.29",
                                               "size":  "12 oz",
                                               "basis":  "size 0.75 lb",
                                               "note":  ""
@@ -665,19 +665,6 @@
                                               "size":  "each",
                                               "basis":  "per-each",
                                               "note":  ""
-                                          },
-                                          {
-                                              "store":  "Family Fare",
-                                              "per_unit":  2.19,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Our Family White Sandwich Bread",
-                                              "ad":  "$2.19",
-                                              "size":  "each",
-                                              "basis":  "per-each",
-                                              "note":  ""
                                           }
                                       ]
                        },
@@ -941,15 +928,15 @@
                                           },
                                           {
                                               "store":  "Family Fare",
-                                              "per_unit":  0.5898,
+                                              "per_unit":  0.5996,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Folgers Classic Roast Ground Coffee",
-                                              "ad":  "$17.99",
-                                              "size":  "30.5 oz",
-                                              "basis":  "size 30.5 oz",
+                                              "item":  "Maxwell House Original Roast Ground Coffee C",
+                                              "ad":  "$16.49",
+                                              "size":  "27.5 oz",
+                                              "basis":  "size 27.5 oz",
                                               "note":  ""
                                           }
                                       ]
@@ -1037,7 +1024,7 @@
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Our Family Cottage Cheese, Small Curd, 4% Milkfat Minimum 24 Oz",
+                                              "item":  "Our Family Cottage Cheese, Large Curd, 4% Milkfat Minimum 24 Oz",
                                               "ad":  "$3.69",
                                               "size":  "24 oz",
                                               "basis":  "size 24 oz",
@@ -1231,13 +1218,26 @@
                            "commodity":  "Ground Turkey",
                            "id":  "ground-turkey",
                            "unit":  "lb",
-                           "cheapest_store":  "Baker\u0027s",
-                           "cheapest_price":  3.33,
-                           "cheapest_type":  "everyday",
-                           "nomem_store":  "Baker\u0027s",
-                           "nomem_price":  3.33,
-                           "nomem_type":  "everyday",
+                           "cheapest_store":  "Aldi",
+                           "cheapest_price":  2.6633,
+                           "cheapest_type":  "sale",
+                           "nomem_store":  "Aldi",
+                           "nomem_price":  2.6633,
+                           "nomem_type":  "sale",
                            "stores":  [
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  2.6633,
+                                              "unit":  "lb",
+                                              "type":  "sale",
+                                              "bulk":  true,
+                                              "membership":  false,
+                                              "item":  "Kirkwood Fresh 85/15 Ground Turkey",
+                                              "ad":  "PRICE DROPS $7.99",
+                                              "size":  "48 oz.",
+                                              "basis":  "size 3 lb",
+                                              "note":  ""
+                                          },
                                           {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  3.33,
@@ -1249,19 +1249,6 @@
                                               "ad":  "$3.33",
                                               "size":  "lb",
                                               "basis":  "per-lb marker",
-                                              "note":  ""
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  3.65,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Kirkwood Fresh Ground Turkey 85% Lean",
-                                              "ad":  "$10.95",
-                                              "size":  "3 lb",
-                                              "basis":  "size 3 lb",
                                               "note":  ""
                                           },
                                           {
@@ -1479,7 +1466,7 @@
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Whole Milk Vitamin D Our Family",
+                                              "item":  "Our Family Lowfat Milk 1 Gal",
                                               "ad":  "$3.69",
                                               "size":  "1 gal",
                                               "basis":  "size 1 gallon",
@@ -1538,19 +1525,6 @@
                                               "note":  ""
                                           },
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.0702,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Kemps 100% Orange Juice, half gallon",
-                                              "ad":  "$4.49",
-                                              "size":  "64 fl oz",
-                                              "basis":  "size 64 floz",
-                                              "note":  ""
-                                          },
-                                          {
                                               "store":  "Walmart",
                                               "per_unit":  0.0762,
                                               "unit":  "floz",
@@ -1588,6 +1562,19 @@
                                               "size":  "52 fl oz",
                                               "basis":  "size 52 floz",
                                               "note":  ""
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.0921,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "100% Orange Juice With Calcium \u0026 Vitamin D",
+                                              "ad":  "$4.79",
+                                              "size":  "52 fl oz",
+                                              "basis":  "size 52 floz",
+                                              "note":  ""
                                           }
                                       ]
                        },
@@ -1595,26 +1582,13 @@
                            "commodity":  "Peaches",
                            "id":  "peaches",
                            "unit":  "lb",
-                           "cheapest_store":  "Aldi",
-                           "cheapest_price":  1.49,
-                           "cheapest_type":  "sale",
-                           "nomem_store":  "Aldi",
-                           "nomem_price":  1.49,
-                           "nomem_type":  "sale",
+                           "cheapest_store":  "Baker\u0027s",
+                           "cheapest_price":  1.79,
+                           "cheapest_type":  "everyday",
+                           "nomem_store":  "Baker\u0027s",
+                           "nomem_price":  1.79,
+                           "nomem_type":  "everyday",
                            "stores":  [
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  1.49,
-                                              "unit":  "lb",
-                                              "type":  "sale",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "California Peaches",
-                                              "ad":  "PRICE DROPS $1.49 Per Lb.",
-                                              "size":  "$2.98 per 2-lb. bag",
-                                              "basis":  "per-lb marker",
-                                              "note":  ""
-                                          },
                                           {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  1.79,
@@ -1639,6 +1613,19 @@
                                               "ad":  "$1.84",
                                               "size":  "lb",
                                               "basis":  "per-lb marker",
+                                              "note":  ""
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  1.925,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Peaches",
+                                              "ad":  "$3.85",
+                                              "size":  "2 lb",
+                                              "basis":  "size 2 lb",
                                               "note":  ""
                                           },
                                           {
@@ -1747,15 +1734,15 @@
                                           },
                                           {
                                               "store":  "Family Fare",
-                                              "per_unit":  0.1431,
+                                              "per_unit":  0.1248,
                                               "unit":  "oz",
                                               "type":  "everyday",
-                                              "bulk":  false,
+                                              "bulk":  true,
                                               "membership":  false,
-                                              "item":  "Our Family Creamy Peanut Butter",
-                                              "ad":  "$2.29",
-                                              "size":  "16 oz",
-                                              "basis":  "size 16 oz",
+                                              "item":  "Creamy Peanut Butter Our Family",
+                                              "ad":  "$7.99",
+                                              "size":  "64 oz",
+                                              "basis":  "size 64 oz",
                                               "note":  ""
                                           },
                                           {
@@ -2240,16 +2227,16 @@
                                               "note":  "5 for $2"
                                           },
                                           {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.5975,
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.62,
                                               "unit":  "each",
-                                              "type":  "sale",
+                                              "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
+                                              "membership":  true,
                                               "item":  "Sweet Corn",
-                                              "ad":  "PRICE DROPS $2.39 Per 4-Pack",
-                                              "size":  "",
-                                              "basis":  "per-4-pack",
+                                              "ad":  "$0.62",
+                                              "size":  "each",
+                                              "basis":  "per-each",
                                               "note":  ""
                                           },
                                           {
@@ -2261,6 +2248,19 @@
                                               "membership":  false,
                                               "item":  "Fresh Sweet Corn on the Cob",
                                               "ad":  "$0.74",
+                                              "size":  "each",
+                                              "basis":  "per-each",
+                                              "note":  ""
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.81,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Sweet Corn",
+                                              "ad":  "$0.81",
                                               "size":  "each",
                                               "basis":  "per-each",
                                               "note":  ""
@@ -2332,15 +2332,15 @@
                                           },
                                           {
                                               "store":  "Aldi",
-                                              "per_unit":  4.65,
+                                              "per_unit":  5.15,
                                               "unit":  "each",
-                                              "type":  "sale",
+                                              "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Whole Seedless Watermelon",
-                                              "ad":  "PRICE DROPS $4.65 Each",
-                                              "size":  "",
-                                              "basis":  "per-each marker",
+                                              "item":  "Large Seedless Watermelon",
+                                              "ad":  "$5.15",
+                                              "size":  "each",
+                                              "basis":  "per-each",
                                               "note":  ""
                                           },
                                           {
@@ -2558,7 +2558,7 @@
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Yoplait Low Fat Harvest Peach Yogurt 6 Oz",
+                                              "item":  "Yoplait Low Fat Strawberry Yogurt 6 Oz",
                                               "ad":  "$0.89",
                                               "size":  "6 oz",
                                               "basis":  "size 6 oz",
