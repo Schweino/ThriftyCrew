@@ -9,8 +9,9 @@ name: Daily grocery pipeline
 
 on:
   schedule:
-    - cron: '0 11 * * *'      # 11:00 UTC = 06:00 America/Chicago (CDT). GitHub cron ignores DST, so this
-                              # becomes 05:00 Central in winter (CST) - still an early-morning refresh, fine.
+    - cron: '30 11 * * *'     # 11:30 UTC = 06:30 America/Chicago (CDT). Runs AFTER the ~6:00 local browser
+                              # agents push their fresh Baker's/Sam's/Walmart data, so the cloud recomputes
+                              # with current prices. GitHub cron ignores DST -> 05:30 Central in winter, fine.
   workflow_dispatch: {}        # manual "Run workflow" button for testing
 
 permissions:
