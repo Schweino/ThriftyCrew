@@ -53,3 +53,12 @@
 [2026-07-08T15:55:12] REVIEW FLAGS: 2 -> SANITY|Sweet Corn (ear) Whole Watermelon|outlier outlier|Baker's $0.40 is 35% below runner-up Sam's Club $0.62 - verify the price/size parse Baker's $2.99 is 36% below runner-up Walmart $4.65 - verify the price/size parse ; MULTIBUY|Family Fare|Blueberries
 [2026-07-08T15:55:17] AUTO-PUBLISH: live page updated (price change/new ad)
 [2026-07-08T15:55:17] run complete; flips=1
+[2026-07-08T16:35:14] pull attempt 1 ok=True
+[2026-07-08T16:36:00] FF everyday refreshed
+[2026-07-08T16:36:04] verify-apply re-applied verdicts to fresh board
+[2026-07-08T16:36:07] recipe-overlay applied
+[2026-07-08T16:36:10] top5-weekly refreshed
+[2026-07-08T16:36:11] smp-feed exported
+[2026-07-08T16:36:13] REVIEW FLAGS: 2 -> SANITY|Sweet Corn (ear) Whole Watermelon|outlier outlier|Baker's $0.40 is 35% below runner-up Sam's Club $0.62 - verify the price/size parse Baker's $2.99 is 36% below runner-up Walmart $4.65 - verify the price/size parse ; MULTIBUY|Family Fare|Blueberries
+[2026-07-08T16:36:22] AUTO-PUBLISH: live page updated (price change mid-cycle)
+[2026-07-08T16:36:22] run complete; flips=0
