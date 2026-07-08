@@ -1,0 +1,32 @@
+{
+  "verdicts": [
+    {
+      "slug": "italian-sausage-penne",
+      "verdict": "no-gap",
+      "missing_ingredient": null,
+      "source_used": "consensus of Italian sausage penne recipes (Great Grub Delicious Treats, The Salty Marshmallow, Salt & Lavender, Hunt's One-Skillet Italian Sausage Pasta)",
+      "reasoning": "Standard versions are just sausage + penne + tomato/marinara sauce + parmesan, with garlic/onion/herbs as flavor accents baked into the sausage itself and the marinara. Our list already has Hot Italian Sausage, Penne, Marinara, and Parmesan, which supplies the full flavor base; no standalone seasoning is missing."
+    },
+    {
+      "slug": "slow-cooker-chicken-tacos-rice-bowls",
+      "verdict": "gap",
+      "missing_ingredient": "Lime juice",
+      "source_used": "https://joyfoodsunshine.com/crockpot-chicken-tacos/",
+      "reasoning": "The JoyFoodSunshine recipe builds the sauce from onion, minced garlic, salsa, lime juice and seasonings; our stored list has salsa and onion but no lime juice (or garlic), and the lime juice is called out as a defining bright/acidic flavor note in the source, not something salsa alone reliably supplies."
+    },
+    {
+      "slug": "slow-cooker-king-ranch-chicken-bowls",
+      "verdict": "gap",
+      "missing_ingredient": "Corn tortillas (or tortilla chips/strips)",
+      "source_used": "https://houseofyumm.com/slow-cooker-king-ranch-chicken-soup/ (and consensus with classic King Ranch Chicken Casserole versions)",
+      "reasoning": "King Ranch chicken is defined by layering/crushing corn tortillas or tortilla chips into the dish (House of Yumm's version has diners crush tortilla chips into the bowl before ladling soup over them; the classic casserole layers corn tortillas throughout). Our ingredient list has chicken, rice, tomatoes, cheese, and broccoli but no tortilla/corn component at all, which is the ingredient that gives the dish its identity versus a generic cheesy chicken-tomato bowl."
+    },
+    {
+      "slug": "slow-cooker-chicken-tikka-masala-rice-bowls",
+      "verdict": "gap",
+      "missing_ingredient": "Garam masala (tikka masala spice blend)",
+      "source_used": "https://ministryofcurry.com/slow-cooker-chicken-tikka-masala/",
+      "reasoning": "The source recipe relies on garam masala, turmeric, Kashmiri chili powder, ginger, and kasoori methi to create the tikka masala flavor profile alongside tomato puree and cream/coconut milk. Our list only has chicken, rice, diced tomatoes, coconut milk, and broccoli with no curry spice blend at all, so the dish would taste like plain tomato-coconut chicken rather than tikka masala."
+    }
+  ]
+}

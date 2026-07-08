@@ -5293,6 +5293,132 @@
                                               "size":  "7 oz"
                                           }
                                       ]
+                       },
+                       {
+                           "id":  "bay-leaves",
+                           "commodity":  "Bay Leaves",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  33.25,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  33.25,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Bay Leaves 0.12 Oz",
+                                              "size":  "0.12 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "garam-masala",
+                           "commodity":  "Garam Masala",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  3.6611,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  3.6611,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Finest Reserve Garam Masala 1.8 Oz",
+                                              "size":  "1.8 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "rice-vinegar",
+                           "commodity":  "Rice Vinegar",
+                           "unit":  "floz",
+                           "category":  "Sauces \u0026 Condiments",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.4492,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.4492,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Nakano Rice Vinegar, Organic, Natural 12 Fl Oz",
+                                              "size":  "12 fl oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "corn-tortillas",
+                           "commodity":  "Corn Tortillas",
+                           "unit":  "each",
+                           "category":  "Pasta, Rice \u0026 Grains",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  0.0597,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.0597,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "La Providencia Corn Tortillas 30 Ea",
+                                              "size":  "30 ea"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "jerk-seasoning",
+                           "commodity":  "Jerk Seasoning",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  1.3773,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  1.3773,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Lawry\u0027s Jerk Seasoning 4.93 Oz",
+                                              "size":  "4.93 oz"
+                                          }
+                                      ]
+                       },
+                       {
+                           "id":  "dried-oregano",
+                           "commodity":  "Dried Oregano",
+                           "unit":  "oz",
+                           "category":  "Spices \u0026 Baking",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  2.92,
+                           "cheapest_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  2.92,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Oregano Leaves 0.75 Oz",
+                                              "size":  "0.75 oz"
+                                          }
+                                      ]
                        }
                    ],
     "built_at":  "2026-07-07",

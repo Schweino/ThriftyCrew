@@ -1,0 +1,32 @@
+{
+  "verdicts": [
+    {
+      "slug": "slow-cooker-jerk-pork-bowls",
+      "verdict": "gap",
+      "missing_ingredient": "Jerk seasoning (e.g. Walkerswood jerk seasoning)",
+      "source_used": "https://www.garlicandzest.com/slow-cooker-jerk-pork/",
+      "reasoning": "The source recipe marinates the pork overnight in 1/2 cup Walker's Wood jerk seasoning before slow cooking - this is the sole flavor source for the dish and our list has zero seasoning of any kind."
+    },
+    {
+      "slug": "slow-cooker-korean-shredded-pork-bowls",
+      "verdict": "gap",
+      "missing_ingredient": "Rice vinegar (rice wine vinegar)",
+      "source_used": "https://www.slenderkitchen.com/recipe/slow-cooker-shredded-korean-pork",
+      "reasoning": "Slender Kitchen explicitly states 'the key to this dish is the sauce...made with a combination of soy sauce, brown sugar, garlic, red onion, ginger, rice vinegar, and jalapenos' - rice vinegar is a named core sauce component that is completely absent from our list, unlike the jalapeno/heat element which the recipe itself calls optional/substitutable."
+    },
+    {
+      "slug": "slow-cooker-filipino-pork-adobo-bowls",
+      "verdict": "gap",
+      "missing_ingredient": "Bay leaves",
+      "source_used": "https://www.skinnytaste.com/slow-cooker-filipino-adobo-pulled-pork/",
+      "reasoning": "Skinnytaste's recipe (soy sauce, apple cider vinegar, garlic, peppercorns, 4-6 bay leaves) uses bay leaf as a defining aromatic alongside soy+vinegar+garlic - real adobo is standardly soy sauce + vinegar + garlic + bay leaf, and bay leaf is missing entirely from our list while soy sauce/vinegar/garlic/onion are already present."
+    },
+    {
+      "slug": "beef-picadillo-rice-bowls",
+      "verdict": "gap",
+      "missing_ingredient": "Dried oregano",
+      "source_used": "https://therealfooddietitians.com/picadillo/",
+      "reasoning": "The Real Food Dietitians recipe lists 1/2 teaspoon dried oregano as a distinct seasoning alongside cumin (3/4 tsp) - oregano is a standard defining spice in Cuban-style picadillo and is completely absent from our stored list, which only has cumin as its spice."
+    }
+  ]
+}

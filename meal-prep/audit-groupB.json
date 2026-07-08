@@ -1,0 +1,32 @@
+{
+  "verdicts": [
+    {
+      "slug": "slow-cooker-chicken-adobo-rice-bowls",
+      "verdict": "gap",
+      "missing_ingredient": "Bay Leaves",
+      "source_used": "https://hungryhobby.net/slow-cooker-adobo-chicken/",
+      "reasoning": "Hungry Hobby's recipe adds vinegar, soy sauce/coconut aminos, peppercorns, brown sugar, bay leaves, onion, and garlic to the slow cooker. Bay leaves (along with whole peppercorns) are a standard, essential adobo aromatic that our list omits entirely - not just a stylistic variation of the soy/vinegar/garlic base."
+    },
+    {
+      "slug": "slow-cooker-greek-chicken-bowls",
+      "verdict": "gap",
+      "missing_ingredient": "Dried Oregano",
+      "source_used": "https://www.rachelcooks.com/slow-cooker-greek-chicken/",
+      "reasoning": "Rachel Cooks whisks olive oil, lemon juice, red wine vinegar, garlic, dried oregano, lemon zest, salt, onion powder, and pepper as the marinade. Oregano is the defining herb of a Greek marinade and is completely absent from our ingredient list."
+    },
+    {
+      "slug": "slow-cooker-cuban-mojo-pork-bowls",
+      "verdict": "gap",
+      "missing_ingredient": "Dried Oregano",
+      "source_used": "https://www.eatingonadime.com/crock-pot-cuban-mojo-pork-tenderloin/",
+      "reasoning": "Eating on a Dime's mojo sauce combines orange juice, lime juice, garlic, oregano, salt, pepper, cumin, corn starch, cilantro, and mint. Oregano is a core mojo criollo seasoning (alongside cumin, which we already have) and is missing from our list."
+    },
+    {
+      "slug": "slow-cooker-italian-pork-loin-bowls",
+      "verdict": "gap",
+      "missing_ingredient": "Italian Seasoning",
+      "source_used": "https://www.bettycrocker.com/recipes/slow-cooker-italian-pork-loin/31f8297f-3fac-494f-93af-9f101e2d9c92",
+      "reasoning": "Betty Crocker's recipe mixes the cannellini beans, onions, and bell pepper with 1 tablespoon of Italian seasoning before cooking. This seasoning blend (oregano/basil/etc.) is what makes the dish 'Italian' and is entirely absent from our stored ingredients, which otherwise just list the raw vegetables, beans, tomatoes, and cheese."
+    }
+  ]
+}

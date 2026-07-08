@@ -1,0 +1,39 @@
+{
+  "verdicts": [
+    {
+      "slug": "loaded-beef-taco-skillet-bowls",
+      "verdict": "gap",
+      "missing_ingredient": "Ground Cumin",
+      "source_used": "https://wholesomemadeeasy.com/loaded-taco-skillet/",
+      "reasoning": "The source recipe uses a full taco spice blend: chili powder, cumin, garlic powder, oregano, paprika, and red pepper flakes. Cumin is the standard companion spice to chili powder in taco seasoning and is completely absent from our list."
+    },
+    {
+      "slug": "korean-ground-turkey-bowls",
+      "verdict": "gap",
+      "missing_ingredient": "Sesame Oil",
+      "source_used": "https://nutritiontofit.com/korean-ground-turkey/",
+      "reasoning": "The source sauce is soy sauce, brown sugar, sesame oil, ground ginger, and red pepper flakes. Sesame oil is the signature Korean-flavor ingredient and is not present anywhere in our stored list (only plain olive oil is used for cooking)."
+    },
+    {
+      "slug": "curry-ground-turkey-bowls",
+      "verdict": "gap",
+      "missing_ingredient": "Curry Powder",
+      "source_used": "https://www.familyfoodonthetable.com/curry-ground-turkey-with-rice-and-peas/",
+      "reasoning": "The source recipe's defining spice is 1 tablespoon curry powder (or garam masala), plus cumin, coriander, turmeric, and ginger. Our list has chili powder and cumin but no curry powder at all, which is essential for a dish literally named 'curry'."
+    },
+    {
+      "slug": "turkey-fajita-rice-bowls",
+      "verdict": "gap",
+      "missing_ingredient": "Chili Powder (fajita seasoning blend: chili powder, cumin, coriander, paprika)",
+      "source_used": "https://lillieeatsandtells.com/macro-friendly-fajita-ground-turkey-skillet/",
+      "reasoning": "The source recipe seasons the turkey with chili powder, cumin, coriander, and paprika alongside the tomato paste, balsamic vinegar, salsa verde, and cream cheese we already have. Our stored list has zero fajita seasoning spices, which is the defining flavor of the dish."
+    },
+    {
+      "slug": "ground-beef-teriyaki-bowls",
+      "verdict": "no-gap",
+      "missing_ingredient": null,
+      "source_used": "https://www.eatyourselfskinny.com/easy-healthy-teriyaki-sauce/",
+      "reasoning": "The source teriyaki sauce is soy sauce, pineapple/orange juice, honey, rice wine vinegar, sesame oil, ginger, and garlic; our list already covers soy sauce, honey, sesame oil, ginger, garlic, plus hoisin sauce, beef broth, and cornstarch for extra depth and thickening, so the signature flavor combination is intact."
+    }
+  ]
+}
