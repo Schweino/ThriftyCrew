@@ -38,7 +38,7 @@ jobs:
         shell: powershell
         run: |
           $today = (Get-Date).ToString('yyyy-MM-dd')
-          $feed  = Get-Content grocery/public/smp-feed.json -Raw | ConvertFrom-Json
+          $feed  = Get-Content public/smp-feed.json -Raw | ConvertFrom-Json
           $gen   = ([datetime]$feed.generated).ToString('yyyy-MM-dd')
           if ($gen -ne $today) {
             Write-Error "Pipeline did NOT refresh the feed today (feed generated $gen, expected $today). A store pull likely failed from the cloud IP; nothing bad was published."
