@@ -9,7 +9,8 @@ name: Daily grocery pipeline
 
 on:
   schedule:
-    - cron: '0 13 * * *'      # 13:00 UTC = ~08:00 America/Chicago
+    - cron: '0 11 * * *'      # 11:00 UTC = 06:00 America/Chicago (CDT). GitHub cron ignores DST, so this
+                              # becomes 05:00 Central in winter (CST) - still an early-morning refresh, fine.
   workflow_dispatch: {}        # manual "Run workflow" button for testing
 
 permissions:
