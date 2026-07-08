@@ -38,9 +38,10 @@ function JsonEsc([string]$s) {
 }
 
 $db = (Get-Content (Join-Path $PSScriptRoot 'recipes-db.json') -Raw | ConvertFrom-Json).recipes
-# ingredient -> board id map (both boards): lets each widget row look up its live price in the feed
+# ingredient -> {board id, grams_per_unit}: board id finds the live price in the feed; grams_per_unit
+# converts the recipe's gram amounts into that price's unit so the widget can compute real totals
 $bidMap = @{}
-try { foreach ($m in (Get-Content (Join-Path $PSScriptRoot 'ingredient-map.json') -Raw | ConvertFrom-Json).mappings) { $bidMap[[string]$m.item] = [string]$m.board_id } } catch {}
+try { foreach ($m in (Get-Content (Join-Path $PSScriptRoot 'ingredient-map.json') -Raw | ConvertFrom-Json).mappings) { $bidMap[[string]$m.item] = @{ bid = [string]$m.board_id; gpu = [double]$m.grams_per_unit } } } catch {}
 $targets = if ($All) { @($db | Where-Object { "" + $_.published -match "^\d{4}" }) } else { @($db | Where-Object { $_.slug -eq $Slug }) }
 if (-not $targets) { Write-Output "no matching recipes"; exit 1 }
 
@@ -66,6 +67,8 @@ $widgetCore = @'
 .smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
 .smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
 .smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
 .smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
 <script>
 (function(){
@@ -88,18 +91,23 @@ function init(box){
     list.innerHTML=html;
     var tot=data.cost*f;
     cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
   }
   box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
   num.addEventListener('change',render);
   render();
-  // CURRENT CHEAPEST PRICING: its own standalone section (sibling .smp-cp box, NOT inside the scaler).
-  // Lists ALL ingredients: tracked ones get this week's live price + store + See-item link (+ sale tag);
-  // untracked pantry items get an honest note instead of an invented price.
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
   function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
-  function renderCheapest(f){
+  var feedData=null;
+  function renderCheapest(){
     var cp=document.querySelector('.smp-cp'); if(!cp) return;
     var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
-    var html='', live=0;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
     data.ing.forEach(function(it){
       var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
       var sale='';
@@ -108,17 +116,27 @@ function init(box){
         live++;
         if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
         var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
-        right='<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+link;
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+link;
       } else if(it.bid){
         right='<span class="smp-cp-un">live price unavailable right now</span>';
       }
       html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
     });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
     ul.innerHTML=html;
     var subEl=cp.querySelector('.smp-sc-livesub');
-    if(subEl){ subEl.textContent = live>0 ? 'The cheapest verified price for each ingredient across six Omaha stores this week. Updates automatically as sales start and end.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
   }
-  smpGetFeed().then(renderCheapest);
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
 }
 function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
 if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
@@ -138,7 +156,11 @@ foreach ($r in $targets) {
     # per-recipe data JSON (item/grams/buy + base + true cost)
     $ings = @()
     foreach ($i in $r.ingredients) {
-      $bid = if ($bidMap.ContainsKey([string]$i.item)) { ',"bid":"' + (JsonEsc $bidMap[[string]$i.item]) + '"' } else { '' }
+      $bid = ''
+      if ($bidMap.ContainsKey([string]$i.item)) {
+        $mm = $bidMap[[string]$i.item]
+        $bid = ',"bid":"' + (JsonEsc ([string]$mm.bid)) + '","gpu":' + ('{0:F3}' -f [double]$mm.gpu)
+      }
       $ings += ('{"item":"' + (JsonEsc ([string]$i.item)) + '","grams":' + [int]$i.grams + ',"buy":"' + (JsonEsc ([string]$i.buy)) + '"' + $bid + '}')
     }
     $cost = if ($r.cost_batch_true) { [double]$r.cost_batch_true } else { [double]$r.cost_batch }
