@@ -1,0 +1,23 @@
+{
+  "store": "Hy-Vee",
+  "week_of": "2026-07-05",
+  "price_type": "everyday",
+  "source": "hy-vee.com Aisles Online (first-party, NOT Instacart), store set to 'Omaha #1, NE'. Everyday shelf price via rendered product tiles (get_page_text / DOM extract). Weekly browser sweep 2026-07-05: 15 commodities. Cheapest everyday base item per commodity; That's Smart! = Hy-Vee value private label. Where a tile shows two prices (sale + regular), the REGULAR/everyday price is used as ad_price. Organic/grass-fed/flavored/prepared variants skipped.",
+  "deals": [
+    { "store": "Hy-Vee", "item": "That's Smart! 2% Reduced Fat Milk", "ad_price": "$3.06", "size": "1 gal", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Hy-Vee", "item": "That's Smart! Large Eggs", "ad_price": "$1.45", "size": "dozen", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Hy-Vee", "item": "That's Smart! Sweet Cream Butter", "ad_price": "$3.29", "size": "16 oz", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Hy-Vee", "item": "Hy-Vee Finely Shredded Cheese", "ad_price": "$2.48", "size": "8 oz", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Hy-Vee", "item": "Hy-Vee Cream Cheese", "ad_price": "$2.49", "size": "8 oz", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Hy-Vee", "item": "Hy-Vee 2% Small Curd Lowfat Cottage Cheese", "ad_price": "$2.99", "size": "16 oz", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Hy-Vee", "item": "Hy-Vee All Natural Sour Cream", "ad_price": "$2.68", "size": "16 oz", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Hy-Vee", "item": "Hy-Vee White Bread (20 oz loaf)", "ad_price": "$1.99", "size": "each", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Hy-Vee", "item": "Fresh Chiquita Bananas", "ad_price": "$0.49", "size": "lb", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Hy-Vee", "item": "Hy-Vee One Step Russet Potatoes (5 lb)", "ad_price": "$0.49", "size": "lb", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Hy-Vee", "item": "Yellow Onions (3 lb bag)", "ad_price": "$1.00", "size": "lb", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Hy-Vee", "item": "Gala Apples", "ad_price": "$1.98", "size": "lb", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Hy-Vee", "item": "That's Smart! Creamy Peanut Butter", "ad_price": "$1.98", "size": "16 oz", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Hy-Vee", "item": "Hy-Vee Boneless Skinless Chicken Breast Value Pack", "ad_price": "$3.99", "size": "lb", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Hy-Vee", "item": "Ground Beef Roll 80/20", "ad_price": "$6.99", "size": "lb", "regular": null, "source_ad": "everyday shelf price" }
+  ]
+}

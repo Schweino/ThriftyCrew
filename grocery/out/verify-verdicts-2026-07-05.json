@@ -1,0 +1,35 @@
+{
+  "week_of": "2026-07-05",
+  "method": "semantic verify pass - each published entry judged: is it the PLAIN commodity in a comparable form? keep / annotate / drop. Only changed entries are listed; anything not listed is kept as-is.",
+  "verdicts": [
+    { "id": "bread", "entries": [
+      { "store": "Hy-Vee", "keep": false, "annotation": null, "reason": "Dave's Killer bagels (5 ct) or bread-thins - a combined ad listing, not a standard sandwich loaf" }
+    ]},
+    { "id": "apples", "entries": [
+      { "store": "Family Fare", "keep": false, "annotation": null, "reason": "Lady apples are a small specialty/ornamental variety, not a standard eating apple" }
+    ]},
+    { "id": "sweet-corn", "entries": [
+      { "store": "Family Fare", "keep": false, "annotation": null, "reason": "4-ct pack priced at $1.50/ear looks like an undivided pack price - per-ear number is unreliable" }
+    ]},
+    { "id": "avocados", "entries": [
+      { "store": "Aldi", "keep": true, "annotation": "mini/small avocados - smaller than a standard Hass", "reason": "per-each not comparable to full-size avocados" },
+      { "store": "Family Fare", "keep": true, "annotation": "small size", "reason": "small Hass" }
+    ]},
+    { "id": "grapes", "entries": [
+      { "store": "Baker's", "keep": true, "annotation": "Cotton Candy - premium specialty variety", "reason": "not plain table grapes" },
+      { "store": "Aldi", "keep": true, "annotation": "Cotton Candy - premium specialty variety", "reason": "not plain table grapes" }
+    ]},
+    { "id": "watermelon", "entries": [
+      { "store": "Family Fare", "keep": true, "annotation": "mini watermelon - smaller than full-size", "reason": "mini size, not comparable to a full watermelon" }
+    ]},
+    { "id": "pork-chops", "entries": [
+      { "store": "Sam's Club", "keep": true, "annotation": "bone-in (the others are boneless)", "reason": "bone-in runs cheaper per lb than boneless - not strictly like-for-like" }
+    ]},
+    { "id": "peanut-butter", "entries": [
+      { "store": "Aldi", "keep": true, "annotation": "organic (premium)", "reason": "organic, priced above standard peanut butter" }
+    ]},
+    { "id": "cream-cheese", "entries": [
+      { "store": "Family Fare", "keep": true, "annotation": "soft spread, not a block", "reason": "spreadable cream cheese" }
+    ]}
+  ]
+}

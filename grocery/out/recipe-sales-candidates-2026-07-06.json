@@ -1,0 +1,1251 @@
+﻿{
+    "commodities":  [
+                        {
+                            "id":  "greek-yogurt",
+                            "label":  "Greek Yogurt",
+                            "unit":  "oz",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Chobani Greek yogurt, 5.3 oz., 10/ $10",
+                                                   "price_text":  "Chobani Greek yogurt, 5.3 oz., 10/ $10",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  0.1887,
+                                                   "basis":  "size 5.3 oz"
+                                               },
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Fage Greek Yogurt, 32 oz., $6.49",
+                                                   "price_text":  "Fage Greek Yogurt, 32 oz., $6.49",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  0.2028,
+                                                   "basis":  "size 32 oz"
+                                               },
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Chobani Flip Greek yogurt, 4 ct., 2/ $9",
+                                                   "price_text":  "Chobani Flip Greek yogurt, 4 ct., 2/ $9",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Sam\u0027s Club",
+                                                   "name":  "Member\u0027s Mark Nonfat Plain Greek Yogurt",
+                                                   "price_text":  "$5.27",
+                                                   "size_text":  "48 oz",
+                                                   "regular":  null,
+                                                   "unit_price":  0.1098,
+                                                   "basis":  "size 48 oz"
+                                               },
+                                               {
+                                                   "store":  "Aldi",
+                                                   "name":  "Friendly Farms Nonfat Plain Greek Yogurt",
+                                                   "price_text":  "$2.79",
+                                                   "size_text":  "32 oz",
+                                                   "regular":  null,
+                                                   "unit_price":  0.0872,
+                                                   "basis":  "size 32 oz"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Chobani Strawberry Banana On The Bottom Reduced Fat Greek Yogurt 5.3 Oz",
+                                                   "price_text":  "$1.89",
+                                                   "size_text":  "6 oz",
+                                                   "regular":  1.89,
+                                                   "unit_price":  0.315,
+                                                   "basis":  "size 6 oz"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Chobani Blueberry On The Bottom Nonfat Greek Yogurt 5.3 Oz",
+                                                   "price_text":  "$1.89",
+                                                   "size_text":  "5.3 oz",
+                                                   "regular":  1.89,
+                                                   "unit_price":  0.3566,
+                                                   "basis":  "size 5.3 oz"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Oikos Triple Zero Triple Zero Blueberry High Protein Nonfat Greek Yogurt 5.3 Oz",
+                                                   "price_text":  "$1.69",
+                                                   "size_text":  "5.3 oz",
+                                                   "regular":  1.69,
+                                                   "unit_price":  0.3189,
+                                                   "basis":  "size 5.3 oz"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Oikos Triple Zero Triple Zero Peach High Protein Nonfat Greek Yogurt 5.3 Oz",
+                                                   "price_text":  "$1.69",
+                                                   "size_text":  "5.3 oz",
+                                                   "regular":  1.69,
+                                                   "unit_price":  0.3189,
+                                                   "basis":  "size 5.3 oz"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "green-beans",
+                            "label":  "Green Beans",
+                            "unit":  "oz",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Hy-Vee corn or green beans, 14.25 to 15.25 oz., $0.88",
+                                                   "price_text":  "Hy-Vee corn or green beans, 14.25 to 15.25 oz., $0.88",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  0.0577,
+                                                   "basis":  "size 15.25 oz"
+                                               },
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Firecracker green beans, $6.99 lb.",
+                                                   "price_text":  "Firecracker green beans, $6.99 lb.",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  0.0625,
+                                                   "basis":  "size 111.84 oz"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Beech Nut Stage 2 (6+ Months) Sweet Corn \u0026 Green Beans 4 Oz",
+                                                   "price_text":  "$1.59",
+                                                   "size_text":  "4 oz",
+                                                   "regular":  1.59,
+                                                   "unit_price":  null,
+                                                   "basis":  "OUT-OF-BAND"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "white-mushrooms",
+                            "label":  "White Mushrooms",
+                            "unit":  "oz",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Highline white mushrooms, whole or sliced, 8 oz. pkg., $1.99",
+                                                   "price_text":  "Highline white mushrooms, whole or sliced, 8 oz. pkg., $1.99",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  0.2488,
+                                                   "basis":  "size 8 oz"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Our Family Mushrooms, White, Sliced 8 Oz",
+                                                   "price_text":  "$1.99",
+                                                   "size_text":  "8 oz",
+                                                   "regular":  2.59,
+                                                   "unit_price":  0.2488,
+                                                   "basis":  "size 8 oz"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Our Family Mushrooms, White, Whole 8 Oz",
+                                                   "price_text":  "$1.99",
+                                                   "size_text":  "8 oz",
+                                                   "regular":  2.49,
+                                                   "unit_price":  0.2488,
+                                                   "basis":  "size 8 oz"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "tomato-sauce",
+                            "label":  "Tomato Sauce",
+                            "unit":  "oz",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Hy-Vee tomato sauce, 8 oz., $0.68",
+                                                   "price_text":  "Hy-Vee tomato sauce, 8 oz., $0.68",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  0.085,
+                                                   "basis":  "size 8 oz"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "olives",
+                            "label":  "Olives",
+                            "unit":  "oz",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Hy-Vee sliced olives, 3.8 oz., $1.88",
+                                                   "price_text":  "Hy-Vee sliced olives, 3.8 oz., $1.88",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  0.4947,
+                                                   "basis":  "size 3.8 oz"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "traditional-pasta-sauce",
+                            "label":  "Traditional Pasta Sauce",
+                            "unit":  "oz",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Hunt\u0027s pasta sauce, 24 oz., $1.68",
+                                                   "price_text":  "Hunt\u0027s pasta sauce, 24 oz., $1.68",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  0.07,
+                                                   "basis":  "size 24 oz"
+                                               },
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Family Size Gustare Vita pasta sauce, 26.5 oz., $4.99",
+                                                   "price_text":  "Family Size Gustare Vita pasta sauce, 26.5 oz., $4.99",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  0.1883,
+                                                   "basis":  "size 26.5 oz"
+                                               },
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Hy-Vee pasta sauce, 45 oz., $3.59",
+                                                   "price_text":  "Hy-Vee pasta sauce, 45 oz., $3.59",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  0.0798,
+                                                   "basis":  "size 45 oz"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "peanut-butter",
+                            "label":  "Peanut Butter",
+                            "unit":  "oz",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Skippy peanut butter, SAVE! .50, $5.49",
+                                                   "price_text":  "Skippy peanut butter, SAVE! .50, $5.49",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Aldi",
+                                                   "name":  "Simply Nature Organic Creamy Peanut Butter",
+                                                   "price_text":  "$4.39",
+                                                   "size_text":  "16 oz.",
+                                                   "regular":  null,
+                                                   "unit_price":  0.2744,
+                                                   "basis":  "size 16 oz"
+                                               },
+                                               {
+                                                   "store":  "Baker\u0027s",
+                                                   "name":  "Jif Peanut Butter",
+                                                   "price_text":  "$1.99",
+                                                   "size_text":  "16 oz",
+                                                   "regular":  null,
+                                                   "unit_price":  0.1244,
+                                                   "basis":  "size 16 oz"
+                                               },
+                                               {
+                                                   "store":  "Sam\u0027s Club",
+                                                   "name":  "Member\u0027s Mark Natural Creamy Peanut Butter (40 oz, 2 pk)",
+                                                   "price_text":  "$0.10",
+                                                   "size_text":  "oz",
+                                                   "regular":  null,
+                                                   "unit_price":  0.1,
+                                                   "basis":  "size 1 oz"
+                                               },
+                                               {
+                                                   "store":  "Aldi",
+                                                   "name":  "Peanut Delight Creamy Peanut Butter",
+                                                   "price_text":  "$4.35",
+                                                   "size_text":  "40 oz",
+                                                   "regular":  null,
+                                                   "unit_price":  0.1087,
+                                                   "basis":  "size 40 oz"
+                                               },
+                                               {
+                                                   "store":  "Baker\u0027s",
+                                                   "name":  "Kroger Creamy Peanut Butter",
+                                                   "price_text":  "$4.49",
+                                                   "size_text":  "40 oz",
+                                                   "regular":  null,
+                                                   "unit_price":  0.1122,
+                                                   "basis":  "size 40 oz"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Our Family Creamy Peanut Butter",
+                                                   "price_text":  "$2.29",
+                                                   "size_text":  "16 oz",
+                                                   "regular":  "2.29",
+                                                   "unit_price":  0.1431,
+                                                   "basis":  "size 16 oz"
+                                               },
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "That\u0027s Smart! Creamy Peanut Butter",
+                                                   "price_text":  "$1.98",
+                                                   "size_text":  "16 oz",
+                                                   "regular":  null,
+                                                   "unit_price":  0.1238,
+                                                   "basis":  "size 16 oz"
+                                               },
+                                               {
+                                                   "store":  "Walmart",
+                                                   "name":  "Great Value Creamy Peanut Butter (40 oz)",
+                                                   "price_text":  "$3.98",
+                                                   "size_text":  "40 oz",
+                                                   "regular":  null,
+                                                   "unit_price":  0.0995,
+                                                   "basis":  "size 40 oz"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "potato",
+                            "label":  "Potato",
+                            "unit":  "lb",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Melissa\u0027s assorted potatoes, - .50 off with digital coupon, $3.99",
+                                                   "price_text":  "Melissa\u0027s assorted potatoes, - .50 off with digital coupon, $3.99",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Hy-Vee potatoes, 24 to 32 oz., $3.48",
+                                                   "price_text":  "Hy-Vee potatoes, 24 to 32 oz., $3.48",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  1.74,
+                                                   "basis":  "size 2 lb"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Fresh Idaho Russet Potatoes Our Family",
+                                                   "price_text":  "$2.99",
+                                                   "size_text":  "5 lb",
+                                                   "regular":  3.49,
+                                                   "unit_price":  0.598,
+                                                   "basis":  "size 5 lb"
+                                               },
+                                               {
+                                                   "store":  "Sam\u0027s Club",
+                                                   "name":  "Russet Potatoes, 10 lb bag",
+                                                   "price_text":  "$0.44",
+                                                   "size_text":  "lb",
+                                                   "regular":  null,
+                                                   "unit_price":  0.44,
+                                                   "basis":  "per-lb marker"
+                                               },
+                                               {
+                                                   "store":  "Aldi",
+                                                   "name":  "Russet Potatoes, Bag",
+                                                   "price_text":  "$4.39",
+                                                   "size_text":  "10 lb",
+                                                   "regular":  null,
+                                                   "unit_price":  0.439,
+                                                   "basis":  "size 10 lb"
+                                               },
+                                               {
+                                                   "store":  "Baker\u0027s",
+                                                   "name":  "Kroger Russet Potatoes bag",
+                                                   "price_text":  "$0.60",
+                                                   "size_text":  "lb",
+                                                   "regular":  null,
+                                                   "unit_price":  0.6,
+                                                   "basis":  "size 1 lb"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Russet Potato",
+                                                   "price_text":  "$0.99",
+                                                   "size_text":  "lb",
+                                                   "regular":  0.99,
+                                                   "unit_price":  0.99,
+                                                   "basis":  "size 1 lb"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Our Family Potatoes Russet Idaho",
+                                                   "price_text":  "$5.49",
+                                                   "size_text":  "10 lb",
+                                                   "regular":  5.49,
+                                                   "unit_price":  0.549,
+                                                   "basis":  "size 10 lb"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Fresh Russet Potatoes",
+                                                   "price_text":  "$3.99",
+                                                   "size_text":  "4 ct",
+                                                   "regular":  3.99,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Fresh Idaho Russet Potatoes Our Family",
+                                                   "price_text":  "$3.49",
+                                                   "size_text":  "5 lb",
+                                                   "regular":  3.49,
+                                                   "unit_price":  0.698,
+                                                   "basis":  "size 5 lb"
+                                               },
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Hy-Vee One Step Russet Potatoes (5 lb)",
+                                                   "price_text":  "$0.49",
+                                                   "size_text":  "lb",
+                                                   "regular":  null,
+                                                   "unit_price":  0.49,
+                                                   "basis":  "per-lb marker"
+                                               },
+                                               {
+                                                   "store":  "Walmart",
+                                                   "name":  "Fresh Whole Russet Potatoes, 5 lb",
+                                                   "price_text":  "$0.55",
+                                                   "size_text":  "lb",
+                                                   "regular":  null,
+                                                   "unit_price":  0.55,
+                                                   "basis":  "per-lb marker"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "boneless-skinless-chicken-thigh",
+                            "label":  "Boneless Skinless Chicken Thigh",
+                            "unit":  "lb",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Hy-Vee True fresh boneless skinless chicken thighs, EARN 3¢ OFF PER GALLON, $4.49 lb.",
+                                                   "price_text":  "Hy-Vee True fresh boneless skinless chicken thighs, EARN 3¢ OFF PER GALLON, $4.49 lb.",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  4.49,
+                                                   "basis":  "per-lb marker"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "carrots",
+                            "label":  "Carrots",
+                            "unit":  "lb",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Organic Grimmway Farms whole carrots, 16 oz. pkg., $1.68",
+                                                   "price_text":  "Organic Grimmway Farms whole carrots, 16 oz. pkg., $1.68",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  1.68,
+                                                   "basis":  "size 1 lb"
+                                               },
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Grimmway Farms petite carrots, 12 oz. pkg., $1.99",
+                                                   "price_text":  "Grimmway Farms petite carrots, 12 oz. pkg., $1.99",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "OUT-OF-BAND"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "cashews",
+                            "label":  "Cashews",
+                            "unit":  "oz",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Hy-Vee whole cashews or almonds, 9.5 oz., $5.99",
+                                                   "price_text":  "Hy-Vee whole cashews or almonds, 9.5 oz., $5.99",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  0.6305,
+                                                   "basis":  "size 9.5 oz"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "ketchup",
+                            "label":  "Ketchup",
+                            "unit":  "oz",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Hy-Vee ketchup, 38 oz., $2.48",
+                                                   "price_text":  "Hy-Vee ketchup, 38 oz., $2.48",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  0.0653,
+                                                   "basis":  "size 38 oz"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Heinz Tomato Ketchup 32 Oz",
+                                                   "price_text":  "$4.49",
+                                                   "size_text":  "32 oz",
+                                                   "regular":  5.99,
+                                                   "unit_price":  0.1403,
+                                                   "basis":  "size 32 oz"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "enchilada-sauce",
+                            "label":  "Enchilada Sauce",
+                            "unit":  "oz",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Hy-Vee mild enchilada sauce, 28 oz., $3.19",
+                                                   "price_text":  "Hy-Vee mild enchilada sauce, 28 oz., $3.19",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  0.1139,
+                                                   "basis":  "size 28 oz"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "brown-sugar",
+                            "label":  "Brown Sugar",
+                            "unit":  "oz",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "That\u0027s Smart! powdered or brown sugar, 2 lb., $1.88",
+                                                   "price_text":  "That\u0027s Smart! powdered or brown sugar, 2 lb., $1.88",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  0.0588,
+                                                   "basis":  "size 32 oz"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "honey",
+                            "label":  "Honey",
+                            "unit":  "oz",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Sue Bee premium pure honey, 24 oz., $8.49",
+                                                   "price_text":  "Sue Bee premium pure honey, 24 oz., $8.49",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  0.3538,
+                                                   "basis":  "size 24 oz"
+                                               },
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Hy-Vee hot honey, 12 oz., $6.68",
+                                                   "price_text":  "Hy-Vee hot honey, 12 oz., $6.68",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  0.5567,
+                                                   "basis":  "size 12 oz"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Philadelphia Honey Pecan Cream Cheese Spread 7.5 Oz",
+                                                   "price_text":  "$4.99",
+                                                   "size_text":  "7.5 oz",
+                                                   "regular":  4.99,
+                                                   "unit_price":  0.6653,
+                                                   "basis":  "size 7.5 oz"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "bread-crumbs",
+                            "label":  "Bread Crumbs",
+                            "unit":  "oz",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Gustare Vita breadcrumbs, 13.4 oz., $2.49",
+                                                   "price_text":  "Gustare Vita breadcrumbs, 13.4 oz., $2.49",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  0.1858,
+                                                   "basis":  "size 13.4 oz"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "balsamic-vinegar",
+                            "label":  "Balsamic Vinegar",
+                            "unit":  "oz",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Nothing But The Truth balsamic vinegar, 16.9 fl. oz., $2.97",
+                                                   "price_text":  "Nothing But The Truth balsamic vinegar, 16.9 fl. oz., $2.97",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "zero-sugar-soda",
+                            "label":  "Zero-Sugar Soda",
+                            "unit":  "each",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "STOCK UP FOR MATCH DAY, GET $5 AFTER REBATE on the purchase of one (1) Michael Ultra Freeya 16 pack (can or bottle) or larger with the purchase of one (1) 15 pack or larger Coca-Cola, Diet Coke® or Cocacola Zero Sugars.,",
+                                                   "price_text":  "STOCK UP FOR MATCH DAY, GET $5 AFTER REBATE on the purchase of one (1) Michael Ultra Freeya 16 pack (can or bottle) or larger with the purchase of one (1) 15 pack or larger Coca-Cola, Diet Coke® or Cocacola Zero Sugars.,",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "OUT-OF-BAND"
+                                               },
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Hy-Vee zero sugar fruit juice, 64 fl. oz., $2.49",
+                                                   "price_text":  "Hy-Vee zero sugar fruit juice, 64 fl. oz., $2.49",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Mott\u0027s Zero Sugar Apple Juice Drink From Concentrate 64 Fl Oz",
+                                                   "price_text":  "$4.29",
+                                                   "size_text":  "64 fl oz",
+                                                   "regular":  4.29,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "milk",
+                            "label":  "Milk",
+                            "unit":  "each",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Nesquik milk, 14 fl. oz., $1.88",
+                                                   "price_text":  "Nesquik milk, 14 fl. oz., $1.88",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Sam\u0027s Club",
+                                                   "name":  "Member\u0027s Mark 2% Reduced Fat Milk (1 gal)",
+                                                   "price_text":  "$3.72",
+                                                   "size_text":  "gal",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Aldi",
+                                                   "name":  "Friendly Farms 2% Milk",
+                                                   "price_text":  "$3.39",
+                                                   "size_text":  "1 gal",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Baker\u0027s",
+                                                   "name":  "Kroger 2% Reduced Fat Milk Gallon",
+                                                   "price_text":  "$3.19",
+                                                   "size_text":  "1 gal",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Kemps 1% Lowfat Milk 1 Gal",
+                                                   "price_text":  "$4.79",
+                                                   "size_text":  "1 gal",
+                                                   "regular":  4.79,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Kemps Vitamin D Milk 1 Gal",
+                                                   "price_text":  "$4.79",
+                                                   "size_text":  "128 oz",
+                                                   "regular":  4.79,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Our Family Reduced Fat Milk 1 Gal",
+                                                   "price_text":  "$3.69",
+                                                   "size_text":  "1 gal",
+                                                   "regular":  3.69,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Whole Milk Vitamin D Our Family",
+                                                   "price_text":  "$3.69",
+                                                   "size_text":  "1 gal",
+                                                   "regular":  3.69,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Our Family Lowfat Milk 1 Gal",
+                                                   "price_text":  "$3.69",
+                                                   "size_text":  "1 gal",
+                                                   "regular":  3.69,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Our Family Skim Milk 1 Gal",
+                                                   "price_text":  "$3.69",
+                                                   "size_text":  "1 gal",
+                                                   "regular":  3.69,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Our Family Whole Milk 0.5 Gal",
+                                                   "price_text":  "$1.99",
+                                                   "size_text":  "0.5 gal",
+                                                   "regular":  1.99,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Our Family Lowfat Milk 0.5 Gal",
+                                                   "price_text":  "$1.99",
+                                                   "size_text":  "0.5 gal",
+                                                   "regular":  1.99,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Our Family Skim Milk 0.5 Gal",
+                                                   "price_text":  "$1.99",
+                                                   "size_text":  "0.5 gal",
+                                                   "regular":  1.99,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Our Family Reduced Fat Milk 0.5 Gal",
+                                                   "price_text":  "$1.99",
+                                                   "size_text":  "0.5 gal",
+                                                   "regular":  1.99,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Lactaid Lactose Free 1% Lowfat Milk 0.5 Gal",
+                                                   "price_text":  "$5.99",
+                                                   "size_text":  "0.5 gal",
+                                                   "regular":  5.99,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Lactaid Lactose Free Whole Milk 0.5 Gal",
+                                                   "price_text":  "$5.99",
+                                                   "size_text":  "1/2 gal",
+                                                   "regular":  5.99,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Kemps 2% Reduced Fat Milk 0.5 Gal",
+                                                   "price_text":  "$2.99",
+                                                   "size_text":  "0.5 gal",
+                                                   "regular":  2.99,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Kemps Whole Milk 0.5 Gal",
+                                                   "price_text":  "$2.99",
+                                                   "size_text":  "0.5 gal",
+                                                   "regular":  2.99,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Lactaid Lactose Free 2% Reduced Fat Milk 0.5 Gal",
+                                                   "price_text":  "$5.99",
+                                                   "size_text":  "hg",
+                                                   "regular":  5.99,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "That\u0027s Smart! 2% Reduced Fat Milk",
+                                                   "price_text":  "$3.06",
+                                                   "size_text":  "1 gal",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Walmart",
+                                                   "name":  "Great Value 2% Reduced Fat Milk",
+                                                   "price_text":  "$3.00",
+                                                   "size_text":  "gallon",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "butter",
+                            "label":  "Butter",
+                            "unit":  "oz",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Our own ready to cook shrimp \u0026 crab boil, Snow crab clusters, crawfish, Argentine red EZ peel shrimp, red skin potato wedges, mini corn cobs, garlic herb butter pucks \u0026 Old Bay crab cajun spices, 64 oz. half shrimp \u0026 crab boil 32 oz. $17.99, $34.99",
+                                                   "price_text":  "Our own ready to cook shrimp \u0026 crab boil, Snow crab clusters, crawfish, Argentine red EZ peel shrimp, red skin potato wedges, mini corn cobs, garlic herb butter pucks \u0026 Old Bay crab cajun spices, 64 oz. half shrimp \u0026 crab boil 32 oz. $17.99, $34.99",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  0.5467,
+                                                   "basis":  "size 64 oz"
+                                               },
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Our own ready to cook shrimp boil, Argentina red EZ peel shrimp, red skin potato wedges, Zatarain\u0027s andouille smoked sausage, mini sweet corn cobs, garlic herb butter pucks \u0026 Old Bay cajun spices, 56 oz. half shrimp boil 28 oz. 12.99, $19.99",
+                                                   "price_text":  "Our own ready to cook shrimp boil, Argentina red EZ peel shrimp, red skin potato wedges, Zatarain\u0027s andouille smoked sausage, mini sweet corn cobs, garlic herb butter pucks \u0026 Old Bay cajun spices, 56 oz. half shrimp boil 28 oz. 12.99, $19.99",
+                                                   "size_text":  "",
+                                                   "regular":  null,
+                                                   "unit_price":  0.357,
+                                                   "basis":  "size 56 oz"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Land O Lakes Butter, Salted 4 Ea",
+                                                   "price_text":  "$3.99",
+                                                   "size_text":  "4 ea",
+                                                   "regular":  5.39,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Baker\u0027s",
+                                                   "name":  "Land O\u0027Lakes Butter",
+                                                   "price_text":  "$2.99",
+                                                   "size_text":  "16 oz",
+                                                   "regular":  null,
+                                                   "unit_price":  0.1869,
+                                                   "basis":  "size 16 oz"
+                                               },
+                                               {
+                                                   "store":  "Sam\u0027s Club",
+                                                   "name":  "Member\u0027s Mark Salted Sweet Cream Butter Block",
+                                                   "price_text":  "$2.74",
+                                                   "size_text":  "lb",
+                                                   "regular":  null,
+                                                   "unit_price":  0.1713,
+                                                   "basis":  "size 16 oz"
+                                               },
+                                               {
+                                                   "store":  "Aldi",
+                                                   "name":  "Countryside Creamery Salted Butter Quarters",
+                                                   "price_text":  "$3.19",
+                                                   "size_text":  "16 oz",
+                                                   "regular":  null,
+                                                   "unit_price":  0.1994,
+                                                   "basis":  "size 16 oz"
+                                               },
+                                               {
+                                                   "store":  "Baker\u0027s",
+                                                   "name":  "Kroger Salted Butter Sticks",
+                                                   "price_text":  "$3.49",
+                                                   "size_text":  "16 oz",
+                                                   "regular":  null,
+                                                   "unit_price":  0.2181,
+                                                   "basis":  "size 16 oz"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Fresh \u0026 Finest Cinnamon Butter",
+                                                   "price_text":  "$4.99",
+                                                   "size_text":  "4 oz",
+                                                   "regular":  4.99,
+                                                   "unit_price":  null,
+                                                   "basis":  "OUT-OF-BAND"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Our Family Butter, Salted 4 Ea",
+                                                   "price_text":  "$3.99",
+                                                   "size_text":  "4 ea",
+                                                   "regular":  3.99,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Our Family Butter, Unsalted 4 Ea",
+                                                   "price_text":  "$3.99",
+                                                   "size_text":  "4 ea",
+                                                   "regular":  3.99,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Land O Lakes Butter, Salted 4 Ea",
+                                                   "price_text":  "$5.39",
+                                                   "size_text":  "4 ea",
+                                                   "regular":  5.39,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Land O Lakes Butter, Salted, Half Sticks 8 Ea",
+                                                   "price_text":  "$5.39",
+                                                   "size_text":  "1 lb",
+                                                   "regular":  5.39,
+                                                   "unit_price":  0.3369,
+                                                   "basis":  "size 16 oz"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Kerrygold Butter Sticks, Pure Irish 2 Ea",
+                                                   "price_text":  "$6.29",
+                                                   "size_text":  "2 ea",
+                                                   "regular":  6.29,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Land O Lakes Butter, Unsalted 4 Ea",
+                                                   "price_text":  "$5.39",
+                                                   "size_text":  "1 lb",
+                                                   "regular":  5.39,
+                                                   "unit_price":  0.3369,
+                                                   "basis":  "size 16 oz"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Kerrygold Grass Fed Pure Irish Salted Softer Butter Tub, 8oz",
+                                                   "price_text":  "$7.49",
+                                                   "size_text":  "8 oz",
+                                                   "regular":  7.49,
+                                                   "unit_price":  null,
+                                                   "basis":  "OUT-OF-BAND"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Kerrygold Butter Sticks, Pure Irish, Unsalted 2 Ea",
+                                                   "price_text":  "$6.29",
+                                                   "size_text":  "2 ea",
+                                                   "regular":  6.29,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Kerrygold Butter, Pure Irish 8 Oz",
+                                                   "price_text":  "$6.29",
+                                                   "size_text":  "8 oz",
+                                                   "regular":  6.29,
+                                                   "unit_price":  null,
+                                                   "basis":  "OUT-OF-BAND"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Land O Lakes Butter, Unsalted, Half Sticks 8 Ea",
+                                                   "price_text":  "$5.39",
+                                                   "size_text":  "1 lb",
+                                                   "regular":  5.39,
+                                                   "unit_price":  0.3369,
+                                                   "basis":  "size 16 oz"
+                                               },
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "That\u0027s Smart! Sweet Cream Butter",
+                                                   "price_text":  "$3.29",
+                                                   "size_text":  "16 oz",
+                                                   "regular":  null,
+                                                   "unit_price":  0.2056,
+                                                   "basis":  "size 16 oz"
+                                               },
+                                               {
+                                                   "store":  "Walmart",
+                                                   "name":  "Great Value Sweet Cream Salted Butter",
+                                                   "price_text":  "$3.06",
+                                                   "size_text":  "16 oz",
+                                                   "regular":  null,
+                                                   "unit_price":  0.1912,
+                                                   "basis":  "size 16 oz"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "apple",
+                            "label":  "Apple",
+                            "unit":  "each",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Granny Smith Apples, Large",
+                                                   "price_text":  "$1.79",
+                                                   "size_text":  "lb",
+                                                   "regular":  2.19,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Lady Apples",
+                                                   "price_text":  "$1.79",
+                                                   "size_text":  "lb",
+                                                   "regular":  2.19,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Sam\u0027s Club",
+                                                   "name":  "Envy Apples (4 lb)",
+                                                   "price_text":  "$1.49",
+                                                   "size_text":  "lb",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Aldi",
+                                                   "name":  "Gala Apples, Bag",
+                                                   "price_text":  "$3.29",
+                                                   "size_text":  "3 lb",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Baker\u0027s",
+                                                   "name":  "Kroger Gala Apples bag",
+                                                   "price_text":  "$1.50",
+                                                   "size_text":  "lb",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Hy-Vee",
+                                                   "name":  "Gala Apples",
+                                                   "price_text":  "$1.98",
+                                                   "size_text":  "lb",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               },
+                                               {
+                                                   "store":  "Walmart",
+                                                   "name":  "Fresh Gala Apples, 3 lb",
+                                                   "price_text":  "$1.08",
+                                                   "size_text":  "lb",
+                                                   "regular":  null,
+                                                   "unit_price":  null,
+                                                   "basis":  "UNPRICED"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "93-7-ground-turkey",
+                            "label":  "93/7 Ground Turkey",
+                            "unit":  "lb",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Sam\u0027s Club",
+                                                   "name":  "Jennie-O 93/7 Ground Turkey (2.5 lb, 2 pk)",
+                                                   "price_text":  "$4.55",
+                                                   "size_text":  "lb",
+                                                   "regular":  null,
+                                                   "unit_price":  4.55,
+                                                   "basis":  "per-lb marker"
+                                               },
+                                               {
+                                                   "store":  "Aldi",
+                                                   "name":  "Kirkwood Fresh 93% Lean Ground Turkey",
+                                                   "price_text":  "$5.19",
+                                                   "size_text":  "20.8 oz",
+                                                   "regular":  null,
+                                                   "unit_price":  3.9923,
+                                                   "basis":  "size 1.3 lb"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Jennie O 99%/1% Fresh Ground Turkey Breast 16 Oz",
+                                                   "price_text":  "$7.99",
+                                                   "size_text":  "16 oz",
+                                                   "regular":  7.99,
+                                                   "unit_price":  7.99,
+                                                   "basis":  "size 1 lb"
+                                               },
+                                               {
+                                                   "store":  "Walmart",
+                                                   "name":  "Jennie-O Fresh Lean Ground Turkey",
+                                                   "price_text":  "$5.46",
+                                                   "size_text":  "lb",
+                                                   "regular":  null,
+                                                   "unit_price":  5.46,
+                                                   "basis":  "size 1 lb"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "hickory-smoked-bacon",
+                            "label":  "Hickory Smoked Bacon",
+                            "unit":  "lb",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Sam\u0027s Club",
+                                                   "name":  "Member\u0027s Mark Naturally Hickory Smoked Bacon (3 lb)",
+                                                   "price_text":  "$3.94",
+                                                   "size_text":  "lb",
+                                                   "regular":  null,
+                                                   "unit_price":  3.94,
+                                                   "basis":  "per-lb marker"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Farmland Thick Cut Hickory Smoked Bacon 12 Oz",
+                                                   "price_text":  "$5.99",
+                                                   "size_text":  "12 oz",
+                                                   "regular":  5.99,
+                                                   "unit_price":  7.9867,
+                                                   "basis":  "size 0.75 lb"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Farmland Classic Cut Hickory Smoked Bacon 16 Oz",
+                                                   "price_text":  "$7.49",
+                                                   "size_text":  "16 oz",
+                                                   "regular":  7.49,
+                                                   "unit_price":  7.49,
+                                                   "basis":  "size 1 lb"
+                                               },
+                                               {
+                                                   "store":  "Walmart",
+                                                   "name":  "Great Value Hickory Smoked Bacon (thick cut)",
+                                                   "price_text":  "$4.18",
+                                                   "size_text":  "lb",
+                                                   "regular":  null,
+                                                   "unit_price":  4.18,
+                                                   "basis":  "size 1 lb"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "1-3-fat-cream-cheese",
+                            "label":  "1/3 Fat Cream Cheese",
+                            "unit":  "oz",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Philadelphia Reduced Fat Cream Cheese 8 Oz",
+                                                   "price_text":  "$4.99",
+                                                   "size_text":  "8 oz",
+                                                   "regular":  4.99,
+                                                   "unit_price":  null,
+                                                   "basis":  "OUT-OF-BAND"
+                                               }
+                                           ]
+                        },
+                        {
+                            "id":  "cheddar-cheese-shredded",
+                            "label":  "Cheddar Cheese, Shredded",
+                            "unit":  "oz",
+                            "candidates":  [
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Our Family Mild Cheddar Shredded Cheese 8 Oz",
+                                                   "price_text":  "$2.59",
+                                                   "size_text":  "8 oz",
+                                                   "regular":  2.59,
+                                                   "unit_price":  0.3238,
+                                                   "basis":  "size 8 oz"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Our Family Natural Finely Cut Mild Cheddar Shredded Cheese 8 Oz",
+                                                   "price_text":  "$2.59",
+                                                   "size_text":  "8 oz",
+                                                   "regular":  2.59,
+                                                   "unit_price":  0.3238,
+                                                   "basis":  "size 8 oz"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Our Family Sharp Cheddar Shredded Cheese 8 Oz",
+                                                   "price_text":  "$2.59",
+                                                   "size_text":  "8 oz",
+                                                   "regular":  2.59,
+                                                   "unit_price":  0.3238,
+                                                   "basis":  "size 8 oz"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Our Family Extra Sharp Cheddar Shredded Cheese 8 Oz",
+                                                   "price_text":  "$2.59",
+                                                   "size_text":  "8 oz",
+                                                   "regular":  2.59,
+                                                   "unit_price":  0.3238,
+                                                   "basis":  "size 8 oz"
+                                               },
+                                               {
+                                                   "store":  "Family Fare",
+                                                   "name":  "Our Family Finely Cut Sharp Cheddar Shredded Cheese 8 Oz",
+                                                   "price_text":  "$2.59",
+                                                   "size_text":  "8 oz",
+                                                   "regular":  2.59,
+                                                   "unit_price":  0.3238,
+                                                   "basis":  "size 8 oz"
+                                               }
+                                           ]
+                        }
+                    ],
+    "week_of":  "2026-07-06"
+}

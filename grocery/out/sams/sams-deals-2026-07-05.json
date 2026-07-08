@@ -1,0 +1,27 @@
+{
+  "store": "Sam's Club",
+  "week_of": "2026-07-05",
+  "price_type": "everyday",
+  "pricing_note": "Member's Mark / national warehouse club price (Sam's has no location-specific weekly ad; prices are uniform across clubs incl. Omaha). Base commodity item chosen; organic/frozen/prepared/flavored variants skipped. Unit prices as published by samsclub.com, in-page __NEXT_DATA__ fetch. Weekly browser refresh 2026-07-05: all prior 11 items re-verified UNCHANGED; 9 clean produce/protein commodities added this run.",
+  "deals": [
+    { "store": "Sam's Club", "item": "Member's Mark Boneless Skinless Chicken Breast", "ad_price": "$2.88", "size": "lb", "regular": null, "source_ad": "samsclub.com" },
+    { "store": "Sam's Club", "item": "Member's Mark Bone-In Chicken Thighs", "ad_price": "$1.28", "size": "lb", "regular": null, "source_ad": "samsclub.com" },
+    { "store": "Sam's Club", "item": "Member's Mark 80/20 Ground Beef Roll", "ad_price": "$5.56", "size": "lb", "regular": null, "source_ad": "samsclub.com" },
+    { "store": "Sam's Club", "item": "Jennie-O 93/7 Ground Turkey (2.5 lb, 2 pk)", "ad_price": "$4.55", "size": "lb", "regular": null, "source_ad": "samsclub.com" },
+    { "store": "Sam's Club", "item": "Member's Mark Bone-In Pork Chops", "ad_price": "$2.52", "size": "lb", "regular": null, "source_ad": "samsclub.com" },
+    { "store": "Sam's Club", "item": "Member's Mark Naturally Hickory Smoked Bacon (3 lb)", "ad_price": "$3.94", "size": "lb", "regular": null, "source_ad": "samsclub.com" },
+    { "store": "Sam's Club", "item": "Member's Mark Cage Free Large White Eggs (2 dozen)", "ad_price": "$2.31", "size": "dozen", "regular": null, "source_ad": "samsclub.com" },
+    { "store": "Sam's Club", "item": "Member's Mark 2% Reduced Fat Milk (1 gal)", "ad_price": "$3.72", "size": "gal", "regular": null, "source_ad": "samsclub.com" },
+    { "store": "Sam's Club", "item": "Member's Mark Salted Sweet Cream Butter Block", "ad_price": "$2.74", "size": "lb", "regular": null, "source_ad": "samsclub.com" },
+    { "store": "Sam's Club", "item": "Darigold Cottage Cheese (3 lb)", "ad_price": "$2.19", "size": "lb", "regular": null, "source_ad": "samsclub.com" },
+    { "store": "Sam's Club", "item": "Member's Mark Colby & Monterey Jack Shredded Cheese", "ad_price": "$0.19", "size": "oz", "regular": null, "source_ad": "samsclub.com" },
+    { "store": "Sam's Club", "item": "Member's Mark Cream Cheese Brick (48 oz)", "ad_price": "$0.13", "size": "oz", "regular": null, "source_ad": "samsclub.com" },
+    { "store": "Sam's Club", "item": "Daisy Pure & Natural Sour Cream (48 oz)", "ad_price": "$0.12", "size": "oz", "regular": null, "source_ad": "samsclub.com" },
+    { "store": "Sam's Club", "item": "Member's Mark Natural Creamy Peanut Butter (40 oz, 2 pk)", "ad_price": "$0.10", "size": "oz", "regular": null, "source_ad": "samsclub.com" },
+    { "store": "Sam's Club", "item": "Bananas (3 lb)", "ad_price": "$0.49", "size": "lb", "regular": null, "source_ad": "samsclub.com" },
+    { "store": "Sam's Club", "item": "Envy Apples (4 lb)", "ad_price": "$1.49", "size": "lb", "regular": null, "source_ad": "samsclub.com" },
+    { "store": "Sam's Club", "item": "Yellow Onions (10 lb)", "ad_price": "$0.74", "size": "lb", "regular": null, "source_ad": "samsclub.com" },
+    { "store": "Sam's Club", "item": "Sweet Corn", "ad_price": "$0.62", "size": "each", "regular": null, "source_ad": "samsclub.com" },
+    { "store": "Sam's Club", "item": "Whole Seedless Watermelon", "ad_price": "$4.97", "size": "each", "regular": null, "source_ad": "samsclub.com" }
+  ]
+}

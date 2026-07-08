@@ -1,0 +1,248 @@
+﻿{
+    "store":  "Aldi",
+    "week_of":  "2026-07-06",
+    "price_type":  "everyday",
+    "source":  "aldi.us in-browser search (Aldi first-party site, real ALDI shelf prices), store set to \u0027ALDI - OLA 42 - Omaha\u0027 (zip 68137). Everyday shelf price. Base ALDI private-label item chosen per commodity (Goldhen, Friendly Farms, Countryside Creamery, Happy Farms, Kirkwood, Never Any, Appleton Farms, Nature\u0027s Nectar, L\u0027oven Fresh, Peanut Delight, Barissimo/Beaumont); organic (Simply Nature)/frozen/prepared/flavored variants skipped. Per-lb meat/produce use ALDI\u0027s shown per-lb unit price where present, else the package price + package weight. Weekly browser sweep 2026-07-06: 28 commodities.",
+    "deals":  [
+                  {
+                      "store":  "Aldi",
+                      "item":  "Never Any! Family Pack Boneless Skinless Chicken Breasts",
+                      "ad_price":  "$3.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Kirkwood Family Pack Bone-In Chicken Thighs",
+                      "ad_price":  "$1.55",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Perdue Whole Chicken, Young",
+                      "ad_price":  "$6.79",
+                      "size":  "3.75 lb",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Ground Beef, 80/20 (80% lean)",
+                      "ad_price":  "$5.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Kirkwood Fresh 93% Lean Ground Turkey",
+                      "ad_price":  "$5.19",
+                      "size":  "20.8 oz",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Appleton Farms Premium Sliced Bacon",
+                      "ad_price":  "$4.39",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Boneless Center Cut Pork Chops",
+                      "ad_price":  "$4.49",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Goldhen Grade A Large Eggs",
+                      "ad_price":  "$1.65",
+                      "size":  "dozen",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Friendly Farms 2% Milk",
+                      "ad_price":  "$3.39",
+                      "size":  "1 gal",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Countryside Creamery Salted Butter Quarters",
+                      "ad_price":  "$3.19",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Friendly Farms Regular Cottage Cheese",
+                      "ad_price":  "$3.15",
+                      "size":  "24 oz",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Friendly Farms Sour Cream",
+                      "ad_price":  "$1.95",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Happy Farms Cream Cheese",
+                      "ad_price":  "$1.65",
+                      "size":  "8 oz",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Happy Farms Shredded Mild Cheddar Cheese",
+                      "ad_price":  "$3.65",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Friendly Farms Nonfat Plain Greek Yogurt",
+                      "ad_price":  "$2.79",
+                      "size":  "32 oz",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Bananas",
+                      "ad_price":  "$0.48",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Strawberries, Package",
+                      "ad_price":  "$2.65",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Blueberries, Package",
+                      "ad_price":  "$2.99",
+                      "size":  "11 oz",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Large Avocado",
+                      "ad_price":  "$0.79",
+                      "size":  "each",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Russet Potatoes, Bag",
+                      "ad_price":  "$4.39",
+                      "size":  "10 lb",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Yellow Onions, Bag",
+                      "ad_price":  "$2.65",
+                      "size":  "3 lb",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Gala Apples, Bag",
+                      "ad_price":  "$3.29",
+                      "size":  "3 lb",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Red Grapes",
+                      "ad_price":  "$1.69",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Sweet Corn, Package",
+                      "ad_price":  "$2.39",
+                      "size":  "4 ct",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Large Seedless Watermelon",
+                      "ad_price":  "$4.65",
+                      "size":  "each",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Peaches, Bag",
+                      "ad_price":  "$2.98",
+                      "size":  "2 lb",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "L\u0027oven Fresh White Bread",
+                      "ad_price":  "$1.65",
+                      "size":  "each",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Peanut Delight Creamy Peanut Butter",
+                      "ad_price":  "$4.35",
+                      "size":  "40 oz",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Nature\u0027s Nectar Premium Orange Juice",
+                      "ad_price":  "$4.15",
+                      "size":  "52 fl oz",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Beaumont Classic Roast Ground Coffee",
+                      "ad_price":  "$13.55",
+                      "size":  "30.5 oz",
+                      "regular":  null,
+                      "source_ad":  "aldi.us everyday (Omaha OLA 42)"
+                  }
+              ]
+}

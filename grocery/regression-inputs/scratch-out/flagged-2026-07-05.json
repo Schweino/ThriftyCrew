@@ -1,0 +1,336 @@
+﻿{
+    "flagged":  [
+                    {
+                        "id":  "onions",
+                        "label":  "Yellow / Sweet Onions",
+                        "store":  "Hy-Vee",
+                        "name":  "Ultimate grilling onions, $5.99 lb.",
+                        "unit":  "lb",
+                        "unit_price":  5.99,
+                        "band":  "0.30-3.00",
+                        "price_text":  "Ultimate grilling onions, $5.99 lb.",
+                        "size_text":  ""
+                    },
+                    {
+                        "id":  "bacon",
+                        "label":  "Bacon",
+                        "store":  "Family Fare",
+                        "name":  "Hormel Fully Cooked Thick Cut Original Bacon 2.52 Oz",
+                        "unit":  "lb",
+                        "unit_price":  41.2063,
+                        "band":  "2.50-14.00",
+                        "price_text":  "$6.49",
+                        "size_text":  "2.52 oz"
+                    },
+                    {
+                        "id":  "bacon",
+                        "label":  "Bacon",
+                        "store":  "Family Fare",
+                        "name":  "Smithfield Fully Cooked Hometown Original Bacon Slices 2.1 Oz",
+                        "unit":  "lb",
+                        "unit_price":  38.019,
+                        "band":  "2.50-14.00",
+                        "price_text":  "$4.99",
+                        "size_text":  "2.1 oz"
+                    },
+                    {
+                        "id":  "eggs",
+                        "label":  "Large Eggs (dozen)",
+                        "store":  "Family Fare",
+                        "name":  "Vital Farms, Pasture Raised, Large Eggs 12 Ea",
+                        "unit":  "dozen",
+                        "unit_price":  8.99,
+                        "band":  "0.60-7.00",
+                        "price_text":  "$8.99",
+                        "size_text":  "12 ea"
+                    },
+                    {
+                        "id":  "eggs",
+                        "label":  "Large Eggs (dozen)",
+                        "store":  "Family Fare",
+                        "name":  "Vital Farms 18 Ct Pasture Raised Large Grade A Brown Eggs 18 Ea",
+                        "unit":  "dozen",
+                        "unit_price":  7.9933,
+                        "band":  "0.60-7.00",
+                        "price_text":  "$11.99",
+                        "size_text":  "18 ea"
+                    },
+                    {
+                        "id":  "eggs",
+                        "label":  "Large Eggs (dozen)",
+                        "store":  "Family Fare",
+                        "name":  "Happy Egg Co. Organic Free Range Large Eggs 12 Ea",
+                        "unit":  "dozen",
+                        "unit_price":  7.49,
+                        "band":  "0.60-7.00",
+                        "price_text":  "$7.49",
+                        "size_text":  "12 ea"
+                    },
+                    {
+                        "id":  "milk",
+                        "label":  "Milk (gallon)",
+                        "store":  "Family Fare",
+                        "name":  "Lactaid Lactose Free 1% Lowfat Milk 0.5 Gal",
+                        "unit":  "gallon",
+                        "unit_price":  11.98,
+                        "band":  "1.80-7.00",
+                        "price_text":  "$5.99",
+                        "size_text":  "0.5 gal"
+                    },
+                    {
+                        "id":  "milk",
+                        "label":  "Milk (gallon)",
+                        "store":  "Family Fare",
+                        "name":  "Lactaid Lactose Free Whole Milk 0.5 Gal",
+                        "unit":  "gallon",
+                        "unit_price":  11.98,
+                        "band":  "1.80-7.00",
+                        "price_text":  "$5.99",
+                        "size_text":  "1/2 gal"
+                    },
+                    {
+                        "id":  "milk",
+                        "label":  "Milk (gallon)",
+                        "store":  "Family Fare",
+                        "name":  "Lactaid Lactose Free 2% Reduced Fat Milk 0.5 Gal",
+                        "unit":  "gallon",
+                        "unit_price":  11.98,
+                        "band":  "1.80-7.00",
+                        "price_text":  "$5.99",
+                        "size_text":  "hg"
+                    },
+                    {
+                        "id":  "butter",
+                        "label":  "Butter",
+                        "store":  "Family Fare",
+                        "name":  "Fresh \u0026 Finest Cinnamon Butter",
+                        "unit":  "lb",
+                        "unit_price":  19.96,
+                        "band":  "1.80-9.00",
+                        "price_text":  "$4.99",
+                        "size_text":  "4 oz"
+                    },
+                    {
+                        "id":  "butter",
+                        "label":  "Butter",
+                        "store":  "Family Fare",
+                        "name":  "Kerrygold Grass Fed Pure Irish Salted Softer Butter Tub, 8oz",
+                        "unit":  "lb",
+                        "unit_price":  14.98,
+                        "band":  "1.80-9.00",
+                        "price_text":  "$7.49",
+                        "size_text":  "8 oz"
+                    },
+                    {
+                        "id":  "butter",
+                        "label":  "Butter",
+                        "store":  "Family Fare",
+                        "name":  "Kerrygold Butter, Pure Irish 8 Oz",
+                        "unit":  "lb",
+                        "unit_price":  12.58,
+                        "band":  "1.80-9.00",
+                        "price_text":  "$6.29",
+                        "size_text":  "8 oz"
+                    },
+                    {
+                        "id":  "cream-cheese",
+                        "label":  "Cream Cheese",
+                        "store":  "Family Fare",
+                        "name":  "Philadelphia Reduced Fat Cream Cheese 8 Oz",
+                        "unit":  "oz",
+                        "unit_price":  0.6238,
+                        "band":  "0.06-0.50",
+                        "price_text":  "$4.99",
+                        "size_text":  "8 oz"
+                    },
+                    {
+                        "id":  "cream-cheese",
+                        "label":  "Cream Cheese",
+                        "store":  "Family Fare",
+                        "name":  "Philadelphia Whipped Original Cream Cheese Spread 8 Oz",
+                        "unit":  "oz",
+                        "unit_price":  0.6238,
+                        "band":  "0.06-0.50",
+                        "price_text":  "$4.99",
+                        "size_text":  "8 oz"
+                    },
+                    {
+                        "id":  "cream-cheese",
+                        "label":  "Cream Cheese",
+                        "store":  "Family Fare",
+                        "name":  "Philadelphia Original Cream Cheese Spread 8 Oz",
+                        "unit":  "oz",
+                        "unit_price":  0.6238,
+                        "band":  "0.06-0.50",
+                        "price_text":  "$4.99",
+                        "size_text":  "8 oz"
+                    },
+                    {
+                        "id":  "cream-cheese",
+                        "label":  "Cream Cheese",
+                        "store":  "Family Fare",
+                        "name":  "Philadelphia Original Cream Cheese Spread 16 Oz",
+                        "unit":  "oz",
+                        "unit_price":  0.6244,
+                        "band":  "0.06-0.50",
+                        "price_text":  "$9.99",
+                        "size_text":  "16 oz"
+                    },
+                    {
+                        "id":  "cream-cheese",
+                        "label":  "Cream Cheese",
+                        "store":  "Family Fare",
+                        "name":  "Philadelphia Chive \u0026 Onion Cream Cheese Spread 7.5 Oz",
+                        "unit":  "oz",
+                        "unit_price":  0.6653,
+                        "band":  "0.06-0.50",
+                        "price_text":  "$4.99",
+                        "size_text":  "7.5 oz"
+                    },
+                    {
+                        "id":  "cream-cheese",
+                        "label":  "Cream Cheese",
+                        "store":  "Family Fare",
+                        "name":  "Philadelphia Honey Pecan Cream Cheese Spread 7.5 Oz",
+                        "unit":  "oz",
+                        "unit_price":  0.6653,
+                        "band":  "0.06-0.50",
+                        "price_text":  "$4.99",
+                        "size_text":  "7.5 oz"
+                    },
+                    {
+                        "id":  "cream-cheese",
+                        "label":  "Cream Cheese",
+                        "store":  "Family Fare",
+                        "name":  "Philadelphia Garden Vegetable Cream Cheese Spread 7.5 Oz",
+                        "unit":  "oz",
+                        "unit_price":  0.6653,
+                        "band":  "0.06-0.50",
+                        "price_text":  "$4.99",
+                        "size_text":  "7.5 oz"
+                    },
+                    {
+                        "id":  "cream-cheese",
+                        "label":  "Cream Cheese",
+                        "store":  "Family Fare",
+                        "name":  "Philadelphia Strawberry Cream Cheese Spread 7.5 Oz",
+                        "unit":  "oz",
+                        "unit_price":  0.6238,
+                        "band":  "0.06-0.50",
+                        "price_text":  "$4.99",
+                        "size_text":  "8 oz"
+                    },
+                    {
+                        "id":  "shredded-cheese",
+                        "label":  "Shredded / Block Cheese",
+                        "store":  "Family Fare",
+                        "name":  "Bel Gioioso Parmesan Freshly Shredded Cheese 8 Oz",
+                        "unit":  "oz",
+                        "unit_price":  0.8738,
+                        "band":  "0.08-0.70",
+                        "price_text":  "$6.99",
+                        "size_text":  "8 oz"
+                    },
+                    {
+                        "id":  "shredded-cheese",
+                        "label":  "Shredded / Block Cheese",
+                        "store":  "Family Fare",
+                        "name":  "Bel Gioioso Freshly Shredded Cheese, Parmesan 5 Oz",
+                        "unit":  "oz",
+                        "unit_price":  1.098,
+                        "band":  "0.08-0.70",
+                        "price_text":  "$5.49",
+                        "size_text":  "5 oz"
+                    },
+                    {
+                        "id":  "shredded-cheese",
+                        "label":  "Shredded / Block Cheese",
+                        "store":  "Family Fare",
+                        "name":  "Bel Gioioso Freshly Shredded Cheese, Four Cheese 5 Oz",
+                        "unit":  "oz",
+                        "unit_price":  1.098,
+                        "band":  "0.08-0.70",
+                        "price_text":  "$5.49",
+                        "size_text":  "5 oz"
+                    },
+                    {
+                        "id":  "shredded-cheese",
+                        "label":  "Shredded / Block Cheese",
+                        "store":  "Family Fare",
+                        "name":  "Bel Gioioso Freshly Shredded Cheese, Romano 5 Oz",
+                        "unit":  "oz",
+                        "unit_price":  1.098,
+                        "band":  "0.08-0.70",
+                        "price_text":  "$5.49",
+                        "size_text":  "5 oz"
+                    },
+                    {
+                        "id":  "bananas",
+                        "label":  "Bananas",
+                        "store":  "Family Fare",
+                        "name":  "Banana Boat Sunscreen Spray, Clear, Spf 30 1.8 Oz",
+                        "unit":  "lb",
+                        "unit_price":  44.3556,
+                        "band":  "0.25-1.50",
+                        "price_text":  "$4.99",
+                        "size_text":  "1.8 oz"
+                    },
+                    {
+                        "id":  "bananas",
+                        "label":  "Bananas",
+                        "store":  "Family Fare",
+                        "name":  "Vlasic Mild Banana Pepper Rings 12 Fl Oz",
+                        "unit":  "lb",
+                        "unit_price":  3.9867,
+                        "band":  "0.25-1.50",
+                        "price_text":  "$2.99",
+                        "size_text":  "12 oz"
+                    },
+                    {
+                        "id":  "bananas",
+                        "label":  "Bananas",
+                        "store":  "Family Fare",
+                        "name":  "Oikos Pro Pro 23g Protein Strawberry Banana Cultured Dairy Drink 7 Fl Oz",
+                        "unit":  "lb",
+                        "unit_price":  56.9948,
+                        "band":  "0.25-1.50",
+                        "price_text":  "$2.89",
+                        "size_text":  "7 fl oz"
+                    },
+                    {
+                        "id":  "sweet-corn",
+                        "label":  "Sweet Corn (ear)",
+                        "store":  "Family Fare",
+                        "name":  "Libby\u0027s Whole Kernel Sweet Corn 4 Ea",
+                        "unit":  "each",
+                        "unit_price":  2.69,
+                        "band":  "0.15-2.00",
+                        "price_text":  "$2.69",
+                        "size_text":  "4 ea"
+                    }
+                ],
+    "multibuy_unpriced":  [
+                              {
+                                  "id":  "coffee",
+                                  "label":  "Coffee (ground/beans)",
+                                  "store":  "Hy-Vee",
+                                  "name":  "Keurig coffee or cocoa, buy two, get one FREE,",
+                                  "price_text":  "Keurig coffee or cocoa, buy two, get one FREE,",
+                                  "regular":  null,
+                                  "size_text":  "",
+                                  "reason":  "missing regular price - a Buy-N-Get-K needs the \"regular retail\" number to price"
+                              },
+                              {
+                                  "id":  "blueberries",
+                                  "label":  "Blueberries",
+                                  "store":  "Family Fare",
+                                  "name":  "Fresh Blueberries",
+                                  "price_text":  "Buy 1 get 1 for $1.00",
+                                  "regular":  5.49,
+                                  "size_text":  "1 pt",
+                                  "reason":  "has regular but no unit basis - add the pack size (e.g. \"12 pk 12 fl oz\"), or \"lb\" for a per-pound item"
+                              }
+                          ],
+    "week_of":  "2026-07-05",
+    "flagged_count":  28
+}

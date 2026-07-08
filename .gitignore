@@ -1,0 +1,23 @@
+# Simple Money Playbook automation engine.
+# Allow-list: track ONLY the daily-engine directories; ignore everything else under income/.
+/*
+!/.gitignore
+!/README.md
+!/grocery/
+!/meal-prep/
+!/.github/
+
+# --- never commit, anywhere in the tree ---
+# secrets (the Ghost admin key lives here locally; it is a GitHub Actions secret in CI)
+.ghostkey
+*.secret
+*_secret*
+ghost-config.ps1
+# heavy / generated binaries
+*.mp4
+*.exe
+*.zip
+# noise
+*.log
+Thumbs.db
+.DS_Store

@@ -1,0 +1,110 @@
+# Omaha Grocery Weekly-Ad Puller
+
+Pulls the **current week's** weekly-ad deals for four Omaha grocery stores, straight from **each store's own published weekly ad** (no Instacart, no third-party markups, no online-catalog everyday prices). Every store passes two hard gates before a single deal is accepted.
+
+## The two hard gates (both must pass, or the store returns ZERO deals)
+
+1. **OMAHA** — the ad's store must resolve to the Omaha store: city Omaha + a `68xxx` zip (Hy-Vee / Aldi / Family Fare), or the "Saddlecreek" store label (Baker's, 888 S Saddle Creek Rd, Omaha 68106).
+2. **CURRENT** — today's date must fall inside the ad's `valid_from … valid_to`. A stale or next-week-only ad is rejected.
+
+Fail either gate → that store is flagged `BLOCKED` and contributes nothing. Nothing wrong-city or out-of-date can leak into the results.
+
+## Store coverage
+
+| Store | Source (its own weekly ad) | Method | Browser needed? |
+|---|---|---|---|
+| Hy-Vee | Flipp SFML (`digital-flyers/1465`) | `pull-grocery-ads.ps1` | No |
+| Aldi | Flipp flyerkit JSON (store `446-048`) | `pull-grocery-ads.ps1` | No |
+| Family Fare | Freshop circular API (store `6401`) | `pull-grocery-ads.ps1` | No |
+| Baker's (Kroger) | flyer-page JPGs on przone CDN | `pull-bakers.ps1` + Chrome | Yes (Akamai-gated) |
+
+## Running it
+
+### 1) The three server-side stores (one command, no browser)
+
+```powershell
+powershell -ExecutionPolicy Bypass -File "C:\Codex\income\grocery\pull-grocery-ads.ps1"
+```
+
+Prints a verification table (store, zip, ad dates, OMAHA, CURRENT, deals, status) and writes `out\ads-YYYY-MM-DD.json`. Only `PASS` stores contribute deals.
+
+### 2) Baker's (browser-assisted, image-based)
+
+Kroger is Akamai bot-protected, so the discovery step runs in Chrome (the agent does this):
+
+1. Open `https://www.bakersplus.com/weeklyad`. Confirm the store selector reads **"Pickup at Saddlecreek"** (the Omaha store). Read the date range shown ("July 1 - 7").
+2. Capture the flyer page image URLs: `read_network_requests` with `urlPattern=przone` → the `/anonymous/{uuid}.jpg` list. Write them (one per line, `imwidth=2400`) to `out\bakers\urls.txt`.
+3. Verify + download:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File "C:\Codex\income\grocery\pull-bakers.ps1" `
+  -StoreLabel "Pickup at Saddlecreek" -AdFrom 2026-07-01 -AdTo 2026-07-07 `
+  -UrlsFile "C:\Codex\income\grocery\out\bakers\urls.txt"
+```
+
+It re-checks both gates, then downloads the pages to `out\bakers\page-NN.jpg`. The agent vision-reads those JPGs to extract deals (the front page prints the sale dates, which independently confirm the week).
+
+## Notes / gotchas
+
+- Flipp + SFML responses must be fetched with `Invoke-WebRequest -UseBasicParsing` then UTF-8-decoded + `ConvertFrom-Json` (or `[xml]`). `Invoke-RestMethod` returns empty objects for these.
+- Aldi's store field is `merchant_store_code` (not `store_code`); the Omaha 72nd St store is `446-048` at zip `68132`. Its weekly publication id changes every week — the script always fetches the current one.
+- Family Fare's Freshop API caps ~100 items/page; the script pages by the reported `total` (~1,200 items).
+- `$PSScriptRoot` is empty inside a `param()` default under `-File` — output dirs are resolved in the script body.
+
+## Direct product-URL layer (the "See item" links + price verification)
+
+Every store price chip on the published page carries a **"See item"** link straight to that store's own
+product page, with the price **verified at the source** (not just copied from the ad). Links live in the
+durable **`product-urls.json`** (keyed `commodity id -> store -> {url, price, size, name, board_pu}`), which
+survives weekly regeneration because commodity ids are stable. `build-deals-page.ps1` renders a link for any
+chip that has one.
+
+### Weekly incremental refresh ("refresh only what changed")
+
+1. **Find the gaps.** `resolve-worklist.ps1` compares the current comparison + recipe board against
+   `product-urls.json` and writes `out\url-worklist.json` listing chips that need work, with a `reason`:
+   - **missing** - no link yet.
+   - **stale** - the *board* per-unit moved off the `board_pu` snapshot taken when the link was resolved.
+     Board-to-board (never shelf-vs-ad), so verified links don't churn. **This is also the ad-roll-off
+     trigger**: when a sale ends the board price changes, so the store's link is re-resolved to whatever
+     product is now cheapest for that commodity.
+   - **mismatch** - the linked product's own price does NOT equal the board price shown next to it (the
+     eggs bug: board is the budget-brand/sale price, link points at a pricier brand). Run `audit-links.ps1`
+     anytime for the same check as a standalone report (`out\link-audit.json`).
+   Each worklist chip's `term` is set to the board's exact source product name (`stores[].item`, e.g.
+   "That's Smart! Large Eggs") so re-resolution links the RIGHT SKU, not just any product of the commodity.
+2. **Resolve only those chips**, per store, in Chrome (methods below) - search the chip's `term` (the exact
+   board item), verify the found product's price matches the board price, write
+   `out\url-inputs\store-<store>-urls.json`. Append a number for correction/extra passes
+   (`store-hyvee2-urls.json`, `store-hyvee3-urls.json`); **later numbers override earlier for the same
+   id+store** (merge sorts base-first then numbered). Each row is `{id,url,price,size,name}`. Always eyeball
+   names and drop wrong-category picks (roasted-pepper spice for a fresh bell pepper; a prepared meal for
+   canned chickpeas). Fresh produce sold by weight often has no fixed-price page - leave it as a gap.
+3. **Merge** `merge-product-urls.ps1` (auto-discovers `out\url-inputs\store-*-urls.json`, infers the store
+   from the filename, accumulates into `product-urls.json`).
+4. **Stamp** `stamp-board-pu.ps1` (records the current board per-unit onto every link so step 1 stays quiet).
+5. **Build + publish** `build-deals-page.ps1` then `publish-deals-page.ps1`.
+
+### Per-store resolver methods (all proven)
+
+| Store | Data source | eval? | Notes |
+|---|---|---|---|
+| Walmart | `__NEXT_DATA__` `...searchResult.itemStacks[].items[]` | no (CSP) | `priceInfo.currentPrice.price` is a `$`-string; fresh produce often has no price. |
+| Sam's Club | same `__NEXT_DATA__` shape | yes | `priceInfo.linePrice`/`itemPrice` are `$`-strings; `canonicalUrl` -> `/ip/`; warehouse packs, judge by `unitPrice`. |
+| Family Fare | Freshop API `api.freshop.ncrcloud.com/1/products?app_key=family_fare&store_id=6401&q=` | n/a | `base_price` + `canonical_url`; ~350ms pacing, 400s after ~40 calls. |
+| Hy-Vee | client-rendered DOM `a[href*="/aisles-online/p/"]` | yes | price/size in card text; fresh produce priced by weight = no fixed price. |
+| Aldi | client-rendered DOM `a[href*="/store/aldi/products/"]` | yes | store-brand names; resolver body stored in `localStorage.AL_RESOLVE`. |
+| Baker's | client-rendered DOM `[data-testid^="product-card"]` | yes | Kroger banner, Akamai-gated; store = Saddlecreek; poll ~10s for render; `localStorage.BK_RESOLVE`. |
+
+Common pattern for the three eval stores: store the resolver body once in `localStorage`, then per item
+`navigate(search) -> poll until cards render -> set A={id,c,u,s} -> eval(resolver)`; it writes the best
+per-unit match to `localStorage.<prefix>_<id>`; DOM-dump + `get_page_text` to harvest past the ~1.3KB
+tool-output cap. Full method notes live in memory **grocery-product-urls.md**.
+
+Genuine long-tail gaps that resist automated matching: fresh produce sold **by weight** (no clickable
+fixed-price page) at Walmart/Hy-Vee, and **warehouse-only forms** at Sam's (no single apple / small can).
+These are listed in `out\url-worklist.json` (reason `missing`) rather than silently dropped.
+
+## Not yet built
+
+The **comparison engine**: normalize each deal to a per-unit price, match the same product across stores, and rank the true cheapest item in Omaha this week. The pulls above are the input to that.

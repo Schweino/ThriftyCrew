@@ -1,0 +1,32 @@
+{
+  "store": "Baker's",
+  "week_of": "2026-07-06",
+  "price_type": "everyday",
+  "source": "bakersplus.com search, Saddlecreek/Omaha store, everyday shelf price (get_page_text). Weekly browser sweep 2026-07-05 (19 commodities) + 2026-07-06 fill (5 more: pork-chops, yogurt, sweet-corn, orange-juice, coffee). Base store-brand item chosen per commodity; 'discounted from'/'3 for'/BIG DEAL bulk prices noted but everyday shelf price used as ad_price. Organic/grass-fed/prepared variants skipped.",
+  "deals": [
+    { "store": "Baker's", "item": "Kroger 2% Reduced Fat Milk Gallon", "ad_price": "$3.19", "size": "1 gal", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Kroger Grade AA Large White Eggs", "ad_price": "$1.59", "size": "12 ct", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Kroger Salted Butter Sticks (4 sticks)", "ad_price": "$3.49", "size": "16 oz", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Kroger Colby Jack Shredded Cheese", "ad_price": "$3.69", "size": "16 oz", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Kroger Original Cream Cheese (2 ct / 8 oz)", "ad_price": "$3.29", "size": "16 oz", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Kroger 2% Low Fat Small Curd Cottage Cheese", "ad_price": "$3.19", "size": "24 oz", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Kroger Original Sour Cream", "ad_price": "$2.89", "size": "24 oz", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Kroger White Sandwich Bread (20 oz loaf)", "ad_price": "$1.99", "size": "each", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Kroger Creamy Peanut Butter", "ad_price": "$4.49", "size": "40 oz", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Fresh Bananas", "ad_price": "$0.55", "size": "lb", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Fresh Medium Ripe Avocado", "ad_price": "$1.00", "size": "each", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Kroger Russet Potatoes (5 lb bag)", "ad_price": "$0.60", "size": "lb", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Kroger Yellow Onions (3 lb bag)", "ad_price": "$1.16", "size": "lb", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Kroger Gala Apples (3 lb bag)", "ad_price": "$1.50", "size": "lb", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Heritage Farm Boneless Skinless Chicken Breasts", "ad_price": "$2.89", "size": "lb", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Heritage Farm Boneless Skinless Chicken Thighs", "ad_price": "$3.99", "size": "lb", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Smart NAE Whole Chicken", "ad_price": "$2.99", "size": "lb", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Kroger 93/7 Lean Fresh Ground Turkey", "ad_price": "$5.49", "size": "lb", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Kroger 80/20 Ground Beef Tray", "ad_price": "$7.99", "size": "lb", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Kroger Fresh Natural Pork Loin Chops Boneless", "ad_price": "$4.00", "size": "lb", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Yoplait Original Smooth Style Low Fat Yogurt Tub", "ad_price": "$3.69", "size": "32 oz", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Fresh Sweet Corn on the Cob", "ad_price": "$0.60", "size": "each", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Kroger 100% Orange Juice Pulp Free", "ad_price": "$8.79", "size": "128 fl oz", "regular": null, "source_ad": "everyday shelf price" },
+    { "store": "Baker's", "item": "Kroger Original Medium Roast Ground Coffee", "ad_price": "$14.49", "size": "29 oz", "regular": null, "source_ad": "everyday shelf price" }
+  ]
+}

@@ -1,0 +1,457 @@
+﻿{
+    "frozen_week":  "2026-07-05",
+    "built_at":  "2026-07-07T14:34:28",
+    "source":  "regression-inputs (hermetic; engine-rebuilt)",
+    "commodities":  [
+                        {
+                            "id":  "ground-beef-8020",
+                            "unit":  "lb",
+                            "cheapest_store":  "Sam\u0027s Club",
+                            "cheapest_price":  5.56,
+                            "nomem_store":  "Baker\u0027s",
+                            "nomem_price":  5.99,
+                            "stores":  {
+                                           "Sam\u0027s Club":  5.56,
+                                           "Baker\u0027s":  5.99,
+                                           "Aldi":  5.99,
+                                           "Hy-Vee":  6.99,
+                                           "Walmart":  6.99,
+                                           "Family Fare":  7.49
+                                       }
+                        },
+                        {
+                            "id":  "apples",
+                            "unit":  "lb",
+                            "cheapest_store":  "Walmart",
+                            "cheapest_price":  1.08,
+                            "nomem_store":  "Walmart",
+                            "nomem_price":  1.08,
+                            "stores":  {
+                                           "Walmart":  1.08,
+                                           "Aldi":  1.0967,
+                                           "Sam\u0027s Club":  1.49,
+                                           "Baker\u0027s":  1.5,
+                                           "Family Fare":  1.79,
+                                           "Hy-Vee":  1.98
+                                       }
+                        },
+                        {
+                            "id":  "avocados",
+                            "unit":  "each",
+                            "cheapest_store":  "Aldi",
+                            "cheapest_price":  0.4817,
+                            "nomem_store":  "Aldi",
+                            "nomem_price":  0.4817,
+                            "stores":  {
+                                           "Aldi":  0.4817,
+                                           "Walmart":  0.73,
+                                           "Baker\u0027s":  1,
+                                           "Hy-Vee":  1.33,
+                                           "Family Fare":  1.39
+                                       }
+                        },
+                        {
+                            "id":  "bacon",
+                            "unit":  "lb",
+                            "cheapest_store":  "Sam\u0027s Club",
+                            "cheapest_price":  3.94,
+                            "nomem_store":  "Baker\u0027s",
+                            "nomem_price":  3.99,
+                            "stores":  {
+                                           "Sam\u0027s Club":  3.94,
+                                           "Baker\u0027s":  3.99,
+                                           "Walmart":  4.18,
+                                           "Aldi":  4.39,
+                                           "Family Fare":  5.9867
+                                       }
+                        },
+                        {
+                            "id":  "bananas",
+                            "unit":  "lb",
+                            "cheapest_store":  "Aldi",
+                            "cheapest_price":  0.48,
+                            "nomem_store":  "Aldi",
+                            "nomem_price":  0.48,
+                            "stores":  {
+                                           "Aldi":  0.48,
+                                           "Hy-Vee":  0.49,
+                                           "Sam\u0027s Club":  0.49,
+                                           "Walmart":  0.5,
+                                           "Baker\u0027s":  0.55,
+                                           "Family Fare":  0.65
+                                       }
+                        },
+                        {
+                            "id":  "blueberries",
+                            "unit":  "oz",
+                            "cheapest_store":  "Walmart",
+                            "cheapest_price":  0.2609,
+                            "nomem_store":  "Walmart",
+                            "nomem_price":  0.2609,
+                            "stores":  {
+                                           "Walmart":  0.2609,
+                                           "Aldi":  0.2718,
+                                           "Baker\u0027s":  0.2772,
+                                           "Family Fare":  0.3883,
+                                           "Hy-Vee":  0.5445
+                                       }
+                        },
+                        {
+                            "id":  "chicken-breast",
+                            "unit":  "lb",
+                            "cheapest_store":  "Walmart",
+                            "cheapest_price":  2.48,
+                            "nomem_store":  "Walmart",
+                            "nomem_price":  2.48,
+                            "stores":  {
+                                           "Walmart":  2.48,
+                                           "Sam\u0027s Club":  2.88,
+                                           "Baker\u0027s":  2.89,
+                                           "Family Fare":  2.99,
+                                           "Hy-Vee":  3.99,
+                                           "Aldi":  3.99
+                                       }
+                        },
+                        {
+                            "id":  "bread",
+                            "unit":  "each",
+                            "cheapest_store":  "Hy-Vee",
+                            "cheapest_price":  0.998,
+                            "nomem_store":  "Hy-Vee",
+                            "nomem_price":  0.998,
+                            "stores":  {
+                                           "Hy-Vee":  0.998,
+                                           "Baker\u0027s":  1.19,
+                                           "Walmart":  1.48,
+                                           "Aldi":  1.65,
+                                           "Family Fare":  2.19
+                                       }
+                        },
+                        {
+                            "id":  "butter",
+                            "unit":  "lb",
+                            "cheapest_store":  "Sam\u0027s Club",
+                            "cheapest_price":  2.74,
+                            "nomem_store":  "Baker\u0027s",
+                            "nomem_price":  2.99,
+                            "stores":  {
+                                           "Sam\u0027s Club":  2.74,
+                                           "Baker\u0027s":  2.99,
+                                           "Walmart":  3.06,
+                                           "Aldi":  3.19,
+                                           "Hy-Vee":  3.29,
+                                           "Family Fare":  5.39
+                                       }
+                        },
+                        {
+                            "id":  "chicken-thighs",
+                            "unit":  "lb",
+                            "cheapest_store":  "Sam\u0027s Club",
+                            "cheapest_price":  1.28,
+                            "nomem_store":  "Aldi",
+                            "nomem_price":  1.55,
+                            "stores":  {
+                                           "Sam\u0027s Club":  1.28,
+                                           "Aldi":  1.55,
+                                           "Hy-Vee":  1.77,
+                                           "Family Fare":  1.99,
+                                           "Baker\u0027s":  1.99,
+                                           "Walmart":  2.58
+                                       }
+                        },
+                        {
+                            "id":  "coffee",
+                            "unit":  "oz",
+                            "cheapest_store":  "Aldi",
+                            "cheapest_price":  0.4443,
+                            "nomem_store":  "Aldi",
+                            "nomem_price":  0.4443,
+                            "stores":  {
+                                           "Aldi":  0.4443,
+                                           "Baker\u0027s":  0.4824,
+                                           "Walmart":  0.4942,
+                                           "Family Fare":  0.5898
+                                       }
+                        },
+                        {
+                            "id":  "cottage-cheese",
+                            "unit":  "oz",
+                            "cheapest_store":  "Baker\u0027s",
+                            "cheapest_price":  0.1042,
+                            "nomem_store":  "Baker\u0027s",
+                            "nomem_price":  0.1042,
+                            "stores":  {
+                                           "Baker\u0027s":  0.1042,
+                                           "Walmart":  0.1196,
+                                           "Aldi":  0.1312,
+                                           "Sam\u0027s Club":  0.1369,
+                                           "Family Fare":  0.1538,
+                                           "Hy-Vee":  0.1869
+                                       }
+                        },
+                        {
+                            "id":  "cream-cheese",
+                            "unit":  "oz",
+                            "cheapest_store":  "Sam\u0027s Club",
+                            "cheapest_price":  0.13,
+                            "nomem_store":  "Walmart",
+                            "nomem_price":  0.195,
+                            "stores":  {
+                                           "Sam\u0027s Club":  0.13,
+                                           "Walmart":  0.195,
+                                           "Baker\u0027s":  0.2056,
+                                           "Aldi":  0.2062,
+                                           "Family Fare":  0.2908,
+                                           "Hy-Vee":  0.3113
+                                       }
+                        },
+                        {
+                            "id":  "grapes",
+                            "unit":  "lb",
+                            "cheapest_store":  "Aldi",
+                            "cheapest_price":  1.69,
+                            "nomem_store":  "Aldi",
+                            "nomem_price":  1.69,
+                            "stores":  {
+                                           "Aldi":  1.69,
+                                           "Walmart":  1.97,
+                                           "Baker\u0027s":  1.99,
+                                           "Hy-Vee":  2.99,
+                                           "Family Fare":  3.49
+                                       }
+                        },
+                        {
+                            "id":  "ground-turkey",
+                            "unit":  "lb",
+                            "cheapest_store":  "Hy-Vee",
+                            "cheapest_price":  3.99,
+                            "nomem_store":  "Hy-Vee",
+                            "nomem_price":  3.99,
+                            "stores":  {
+                                           "Hy-Vee":  3.99,
+                                           "Aldi":  3.9923,
+                                           "Sam\u0027s Club":  4.55,
+                                           "Baker\u0027s":  4.99,
+                                           "Walmart":  5.46,
+                                           "Family Fare":  5.99
+                                       }
+                        },
+                        {
+                            "id":  "eggs",
+                            "unit":  "dozen",
+                            "cheapest_store":  "Hy-Vee",
+                            "cheapest_price":  1.45,
+                            "nomem_store":  "Hy-Vee",
+                            "nomem_price":  1.45,
+                            "stores":  {
+                                           "Hy-Vee":  1.45,
+                                           "Walmart":  1.47,
+                                           "Baker\u0027s":  1.59,
+                                           "Aldi":  1.65,
+                                           "Family Fare":  2.156,
+                                           "Sam\u0027s Club":  2.31
+                                       }
+                        },
+                        {
+                            "id":  "milk",
+                            "unit":  "gallon",
+                            "cheapest_store":  "Walmart",
+                            "cheapest_price":  3,
+                            "nomem_store":  "Walmart",
+                            "nomem_price":  3,
+                            "stores":  {
+                                           "Walmart":  3,
+                                           "Hy-Vee":  3.06,
+                                           "Baker\u0027s":  3.19,
+                                           "Aldi":  3.39,
+                                           "Family Fare":  3.69,
+                                           "Sam\u0027s Club":  3.72
+                                       }
+                        },
+                        {
+                            "id":  "orange-juice",
+                            "unit":  "floz",
+                            "cheapest_store":  "Baker\u0027s",
+                            "cheapest_price":  0.0687,
+                            "nomem_store":  "Baker\u0027s",
+                            "nomem_price":  0.0687,
+                            "stores":  {
+                                           "Baker\u0027s":  0.0687,
+                                           "Hy-Vee":  0.0702,
+                                           "Family Fare":  0.0702,
+                                           "Walmart":  0.0762,
+                                           "Aldi":  0.0798
+                                       }
+                        },
+                        {
+                            "id":  "peaches",
+                            "unit":  "lb",
+                            "cheapest_store":  "Aldi",
+                            "cheapest_price":  1.49,
+                            "nomem_store":  "Aldi",
+                            "nomem_price":  1.49,
+                            "stores":  {
+                                           "Aldi":  1.49,
+                                           "Baker\u0027s":  1.79,
+                                           "Walmart":  1.84,
+                                           "Hy-Vee":  1.99,
+                                           "Family Fare":  2.99
+                                       }
+                        },
+                        {
+                            "id":  "peanut-butter",
+                            "unit":  "oz",
+                            "cheapest_store":  "Walmart",
+                            "cheapest_price":  0.0995,
+                            "nomem_store":  "Walmart",
+                            "nomem_price":  0.0995,
+                            "stores":  {
+                                           "Walmart":  0.0995,
+                                           "Sam\u0027s Club":  0.1,
+                                           "Aldi":  0.1087,
+                                           "Baker\u0027s":  0.1122,
+                                           "Hy-Vee":  0.1238,
+                                           "Family Fare":  0.1431
+                                       }
+                        },
+                        {
+                            "id":  "pork-chops",
+                            "unit":  "lb",
+                            "cheapest_store":  "Sam\u0027s Club",
+                            "cheapest_price":  2.52,
+                            "nomem_store":  "Aldi",
+                            "nomem_price":  3.49,
+                            "stores":  {
+                                           "Sam\u0027s Club":  2.52,
+                                           "Aldi":  3.49,
+                                           "Baker\u0027s":  4,
+                                           "Walmart":  4.17,
+                                           "Family Fare":  4.4925,
+                                           "Hy-Vee":  5.29
+                                       }
+                        },
+                        {
+                            "id":  "russet-potatoes",
+                            "unit":  "lb",
+                            "cheapest_store":  "Aldi",
+                            "cheapest_price":  0.439,
+                            "nomem_store":  "Aldi",
+                            "nomem_price":  0.439,
+                            "stores":  {
+                                           "Aldi":  0.439,
+                                           "Hy-Vee":  0.49,
+                                           "Family Fare":  0.549,
+                                           "Walmart":  0.55,
+                                           "Baker\u0027s":  0.6
+                                       }
+                        },
+                        {
+                            "id":  "shredded-cheese",
+                            "unit":  "oz",
+                            "cheapest_store":  "Baker\u0027s",
+                            "cheapest_price":  0.1559,
+                            "nomem_store":  "Baker\u0027s",
+                            "nomem_price":  0.1559,
+                            "stores":  {
+                                           "Baker\u0027s":  0.1559,
+                                           "Sam\u0027s Club":  0.19,
+                                           "Aldi":  0.2281,
+                                           "Walmart":  0.2462,
+                                           "Hy-Vee":  0.31,
+                                           "Family Fare":  0.3238
+                                       }
+                        },
+                        {
+                            "id":  "sour-cream",
+                            "unit":  "oz",
+                            "cheapest_store":  "Baker\u0027s",
+                            "cheapest_price":  0.1042,
+                            "nomem_store":  "Baker\u0027s",
+                            "nomem_price":  0.1042,
+                            "stores":  {
+                                           "Baker\u0027s":  0.1042,
+                                           "Walmart":  0.115,
+                                           "Sam\u0027s Club":  0.12,
+                                           "Aldi":  0.1219,
+                                           "Family Fare":  0.1246,
+                                           "Hy-Vee":  0.1675
+                                       }
+                        },
+                        {
+                            "id":  "strawberries",
+                            "unit":  "oz",
+                            "cheapest_store":  "Walmart",
+                            "cheapest_price":  0.1488,
+                            "nomem_store":  "Walmart",
+                            "nomem_price":  0.1488,
+                            "stores":  {
+                                           "Walmart":  0.1488,
+                                           "Family Fare":  0.1559,
+                                           "Aldi":  0.1656,
+                                           "Baker\u0027s":  0.1869
+                                       }
+                        },
+                        {
+                            "id":  "sweet-corn",
+                            "unit":  "each",
+                            "cheapest_store":  "Baker\u0027s",
+                            "cheapest_price":  0.4,
+                            "nomem_store":  "Baker\u0027s",
+                            "nomem_price":  0.4,
+                            "stores":  {
+                                           "Baker\u0027s":  0.4,
+                                           "Aldi":  0.5975,
+                                           "Sam\u0027s Club":  0.62,
+                                           "Hy-Vee":  0.6667,
+                                           "Walmart":  0.74,
+                                           "Family Fare":  1.4975
+                                       }
+                        },
+                        {
+                            "id":  "watermelon",
+                            "unit":  "each",
+                            "cheapest_store":  "Hy-Vee",
+                            "cheapest_price":  4.48,
+                            "nomem_store":  "Hy-Vee",
+                            "nomem_price":  4.48,
+                            "stores":  {
+                                           "Hy-Vee":  4.48,
+                                           "Walmart":  4.65,
+                                           "Aldi":  4.65,
+                                           "Sam\u0027s Club":  4.97,
+                                           "Baker\u0027s":  4.99,
+                                           "Family Fare":  5.99
+                                       }
+                        },
+                        {
+                            "id":  "onions",
+                            "unit":  "lb",
+                            "cheapest_store":  "Sam\u0027s Club",
+                            "cheapest_price":  0.74,
+                            "nomem_store":  "Aldi",
+                            "nomem_price":  0.8833,
+                            "stores":  {
+                                           "Sam\u0027s Club":  0.74,
+                                           "Aldi":  0.8833,
+                                           "Family Fare":  0.998,
+                                           "Hy-Vee":  1,
+                                           "Walmart":  1.15,
+                                           "Baker\u0027s":  1.16
+                                       }
+                        },
+                        {
+                            "id":  "yogurt",
+                            "unit":  "oz",
+                            "cheapest_store":  "Aldi",
+                            "cheapest_price":  0.0872,
+                            "nomem_store":  "Aldi",
+                            "nomem_price":  0.0872,
+                            "stores":  {
+                                           "Aldi":  0.0872,
+                                           "Baker\u0027s":  0.0934,
+                                           "Walmart":  0.1025,
+                                           "Family Fare":  0.1483
+                                       }
+                        }
+                    ]
+}

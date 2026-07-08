@@ -1,0 +1,1179 @@
+﻿{
+    "week_of":  "2026-07-05",
+    "unit_note":  "unit_price is per the commodity\u0027s unit",
+    "commodities":  [
+                        {
+                            "id":  "ground-beef-8020",
+                            "label":  "80/20 Ground Beef",
+                            "unit":  "lb",
+                            "entries":  [
+                                            {
+                                                "store":  "Sam\u0027s Club",
+                                                "item":  "Member\u0027s Mark 80/20 Ground Beef Roll",
+                                                "size":  "lb",
+                                                "unit_price":  5.56,
+                                                "type":  "everyday",
+                                                "bulk":  true
+                                            },
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "Ground Beef Roll 80/20",
+                                                "size":  "lb",
+                                                "unit_price":  6.99,
+                                                "type":  "everyday",
+                                                "bulk":  true
+                                            },
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "80/20 Ground Beef (family pack)",
+                                                "size":  "lb",
+                                                "unit_price":  6.99,
+                                                "type":  "everyday",
+                                                "bulk":  true
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Our Certified 80% Lean / 20% Fat, Ground Chuck Beef Roll, 1 Lb. 16 Oz",
+                                                "size":  "16 oz",
+                                                "unit_price":  7.49,
+                                                "type":  "everyday",
+                                                "bulk":  true
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Kroger 80/20 Ground Beef Tray",
+                                                "size":  "lb",
+                                                "unit_price":  7.99,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "apples",
+                            "label":  "Apples",
+                            "unit":  "lb",
+                            "entries":  [
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Fresh Gala Apples, 3 lb",
+                                                "size":  "lb",
+                                                "unit_price":  1.08,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Sam\u0027s Club",
+                                                "item":  "Envy Apples (4 lb)",
+                                                "size":  "lb",
+                                                "unit_price":  1.49,
+                                                "type":  "everyday",
+                                                "bulk":  true
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Kroger Gala Apples (3 lb bag)",
+                                                "size":  "lb",
+                                                "unit_price":  1.5,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Lady Apples",
+                                                "size":  "lb",
+                                                "unit_price":  1.79,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "Gala Apples",
+                                                "size":  "lb",
+                                                "unit_price":  1.98,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "avocados",
+                            "label":  "Avocados",
+                            "unit":  "each",
+                            "entries":  [
+                                            {
+                                                "store":  "Aldi",
+                                                "item":  "Bagged Mini Avocados",
+                                                "size":  "",
+                                                "unit_price":  0.4817,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Fresh Hass Avocado",
+                                                "size":  "each",
+                                                "unit_price":  0.73,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Fresh Medium Ripe Avocado",
+                                                "size":  "each",
+                                                "unit_price":  1,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Hass Avocados, Small",
+                                                "size":  "1 ct",
+                                                "unit_price":  1.39,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "bacon",
+                            "label":  "Bacon",
+                            "unit":  "lb",
+                            "entries":  [
+                                            {
+                                                "store":  "Sam\u0027s Club",
+                                                "item":  "Member\u0027s Mark Naturally Hickory Smoked Bacon (3 lb)",
+                                                "size":  "lb",
+                                                "unit_price":  3.94,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Farmland Thick Cut Bacon",
+                                                "size":  "16 oz",
+                                                "unit_price":  3.99,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Great Value Hickory Smoked Bacon (thick cut)",
+                                                "size":  "lb",
+                                                "unit_price":  4.18,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Our Family Bacon, Premium, Original 12 Oz",
+                                                "size":  "12 oz",
+                                                "unit_price":  5.9867,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "bananas",
+                            "label":  "Bananas",
+                            "unit":  "lb",
+                            "entries":  [
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "Fresh Chiquita Bananas",
+                                                "size":  "lb",
+                                                "unit_price":  0.49,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Sam\u0027s Club",
+                                                "item":  "Bananas (3 lb)",
+                                                "size":  "lb",
+                                                "unit_price":  0.49,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Fresh Bananas",
+                                                "size":  "lb",
+                                                "unit_price":  0.5,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Fresh Bananas",
+                                                "size":  "lb",
+                                                "unit_price":  0.55,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Yellow Bananas",
+                                                "size":  "lb",
+                                                "unit_price":  0.65,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "blueberries",
+                            "label":  "Blueberries",
+                            "unit":  "oz",
+                            "entries":  [
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Fresh Blueberries (1 pint)",
+                                                "size":  "11 oz",
+                                                "unit_price":  0.2609,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Driscoll\u0027s Blueberries",
+                                                "size":  "18 oz",
+                                                "unit_price":  0.2772,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Flavor Ripe Blueberries 18 Oz",
+                                                "size":  "18 oz",
+                                                "unit_price":  0.3883,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "chicken-breast",
+                            "label":  "Boneless Skinless Chicken Breast",
+                            "unit":  "lb",
+                            "entries":  [
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Freshness Guaranteed Boneless Skinless Chicken Breast",
+                                                "size":  "lb",
+                                                "unit_price":  2.48,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Sam\u0027s Club",
+                                                "item":  "Member\u0027s Mark Boneless Skinless Chicken Breast",
+                                                "size":  "lb",
+                                                "unit_price":  2.88,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Heritage Farm Boneless Skinless Chicken Breasts",
+                                                "size":  "lb",
+                                                "unit_price":  2.89,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Boneless Skinless Chicken Breasts",
+                                                "size":  "lb",
+                                                "unit_price":  2.99,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "Hy-Vee Boneless Skinless Chicken Breast Value Pack",
+                                                "size":  "lb",
+                                                "unit_price":  3.99,
+                                                "type":  "everyday",
+                                                "bulk":  true
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "bread",
+                            "label":  "Bread (loaf)",
+                            "unit":  "each",
+                            "entries":  [
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "Dave\u0027s Killer bagels 5 ct. or bread thins 20.5 oz., $4.99",
+                                                "size":  "",
+                                                "unit_price":  0.998,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Great Value White Round Top Bread (20 oz loaf)",
+                                                "size":  "each",
+                                                "unit_price":  1.48,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Kroger White Sandwich Bread (20 oz loaf)",
+                                                "size":  "each",
+                                                "unit_price":  1.99,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "butter",
+                            "label":  "Butter",
+                            "unit":  "lb",
+                            "entries":  [
+                                            {
+                                                "store":  "Sam\u0027s Club",
+                                                "item":  "Member\u0027s Mark Salted Sweet Cream Butter Block",
+                                                "size":  "lb",
+                                                "unit_price":  2.74,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Land O\u0027Lakes Butter",
+                                                "size":  "16 oz",
+                                                "unit_price":  2.99,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Great Value Sweet Cream Salted Butter",
+                                                "size":  "16 oz",
+                                                "unit_price":  3.06,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "That\u0027s Smart! Sweet Cream Butter",
+                                                "size":  "16 oz",
+                                                "unit_price":  3.29,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Land O Lakes Butter, Unsalted, Half Sticks 8 Ea",
+                                                "size":  "1 lb",
+                                                "unit_price":  5.39,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "chicken-thighs",
+                            "label":  "Chicken Thighs / Drumsticks",
+                            "unit":  "lb",
+                            "entries":  [
+                                            {
+                                                "store":  "Sam\u0027s Club",
+                                                "item":  "Member\u0027s Mark Bone-In Chicken Thighs",
+                                                "size":  "lb",
+                                                "unit_price":  1.28,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "Fresh chicken drumsticks or thighs, $1.77 lb.",
+                                                "size":  "",
+                                                "unit_price":  1.77,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Chicken Thighs, Family Pack Gold N Plump",
+                                                "size":  "lb",
+                                                "unit_price":  1.99,
+                                                "type":  "everyday",
+                                                "bulk":  true
+                                            },
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Tyson Fresh Chicken Thighs (bone-in)",
+                                                "size":  "lb",
+                                                "unit_price":  2.58,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Heritage Farm Boneless Skinless Chicken Thighs",
+                                                "size":  "lb",
+                                                "unit_price":  3.99,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "cottage-cheese",
+                            "label":  "Cottage Cheese",
+                            "unit":  "oz",
+                            "entries":  [
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Kroger Cottage Cheese",
+                                                "size":  "16 oz",
+                                                "unit_price":  0.1042,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Great Value 2% Small Curd Cottage Cheese",
+                                                "size":  "24 oz",
+                                                "unit_price":  0.1196,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Sam\u0027s Club",
+                                                "item":  "Darigold Cottage Cheese (3 lb)",
+                                                "size":  "lb",
+                                                "unit_price":  0.1369,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Our Family Cottage Cheese, Small Curd, 4% Milkfat Minimum 24 Oz",
+                                                "size":  "24 oz",
+                                                "unit_price":  0.1538,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "Hy-Vee 2% Small Curd Lowfat Cottage Cheese",
+                                                "size":  "16 oz",
+                                                "unit_price":  0.1869,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "cream-cheese",
+                            "label":  "Cream Cheese",
+                            "unit":  "oz",
+                            "entries":  [
+                                            {
+                                                "store":  "Sam\u0027s Club",
+                                                "item":  "Member\u0027s Mark Cream Cheese Brick (48 oz)",
+                                                "size":  "oz",
+                                                "unit_price":  0.13,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Great Value Cream Cheese Brick",
+                                                "size":  "8 oz",
+                                                "unit_price":  0.195,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Kroger Original Cream Cheese (2 ct / 8 oz)",
+                                                "size":  "16 oz",
+                                                "unit_price":  0.2056,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Cream Cheese Spread, Soft Our Family",
+                                                "size":  "12 oz",
+                                                "unit_price":  0.2908,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "Hy-Vee Cream Cheese",
+                                                "size":  "8 oz",
+                                                "unit_price":  0.3113,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "grapes",
+                            "label":  "Grapes",
+                            "unit":  "lb",
+                            "entries":  [
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Fresh Green Seedless Grapes",
+                                                "size":  "lb",
+                                                "unit_price":  1.97,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "Green seedless grapes, $2.99 lb.",
+                                                "size":  "",
+                                                "unit_price":  2.99,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Fresh White/Green Seedless Grapes",
+                                                "size":  "lb",
+                                                "unit_price":  3.49,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Cotton Candy or Candy Hearts Grapes",
+                                                "size":  "lb",
+                                                "unit_price":  4.99,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Aldi",
+                                                "item":  "Cotton Candy Grapes",
+                                                "size":  "tastes like cotton candy",
+                                                "unit_price":  4.99,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "ground-turkey",
+                            "label":  "Ground Turkey",
+                            "unit":  "lb",
+                            "entries":  [
+                                            {
+                                                "store":  "Sam\u0027s Club",
+                                                "item":  "Jennie-O 93/7 Ground Turkey (2.5 lb, 2 pk)",
+                                                "size":  "lb",
+                                                "unit_price":  4.55,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Jennie-O Fresh Lean Ground Turkey",
+                                                "size":  "lb",
+                                                "unit_price":  5.46,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Kroger 93/7 Lean Fresh Ground Turkey",
+                                                "size":  "lb",
+                                                "unit_price":  5.49,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Jennie O Ground Turkey 85% Lean / 15% Fat   1 Lb. Tray",
+                                                "size":  "16 oz",
+                                                "unit_price":  5.99,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "eggs",
+                            "label":  "Large Eggs (dozen)",
+                            "unit":  "dozen",
+                            "entries":  [
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "That\u0027s Smart! Large Eggs",
+                                                "size":  "dozen",
+                                                "unit_price":  1.45,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Great Value Large White Eggs (12 ct)",
+                                                "size":  "dozen",
+                                                "unit_price":  1.47,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Kroger Grade AA Large White Eggs",
+                                                "size":  "12 ct",
+                                                "unit_price":  1.59,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Large Grade A Eggs Our Family (30 Ct)",
+                                                "size":  "60 oz",
+                                                "unit_price":  2.156,
+                                                "type":  "everyday",
+                                                "bulk":  true
+                                            },
+                                            {
+                                                "store":  "Sam\u0027s Club",
+                                                "item":  "Member\u0027s Mark Cage Free Large White Eggs (2 dozen)",
+                                                "size":  "dozen",
+                                                "unit_price":  2.31,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "milk",
+                            "label":  "Milk (gallon)",
+                            "unit":  "gallon",
+                            "entries":  [
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Great Value 2% Reduced Fat Milk",
+                                                "size":  "gallon",
+                                                "unit_price":  3,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "That\u0027s Smart! 2% Reduced Fat Milk",
+                                                "size":  "1 gal",
+                                                "unit_price":  3.06,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Kroger 2% Reduced Fat Milk Gallon",
+                                                "size":  "1 gal",
+                                                "unit_price":  3.19,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Whole Milk Vitamin D Our Family",
+                                                "size":  "1 gal",
+                                                "unit_price":  3.69,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Sam\u0027s Club",
+                                                "item":  "Member\u0027s Mark 2% Reduced Fat Milk (1 gal)",
+                                                "size":  "gal",
+                                                "unit_price":  3.72,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "peaches",
+                            "label":  "Peaches",
+                            "unit":  "lb",
+                            "entries":  [
+                                            {
+                                                "store":  "Aldi",
+                                                "item":  "California Peaches",
+                                                "size":  "$2.98 per 2-lb. bag",
+                                                "unit_price":  1.49,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Fresh Yellow Peaches (2 lb bag)",
+                                                "size":  "lb",
+                                                "unit_price":  1.84,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "Georgia peaches, $1.99 lb.",
+                                                "size":  "",
+                                                "unit_price":  1.99,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "California Yellow or White Peaches",
+                                                "size":  "lb",
+                                                "unit_price":  2.49,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Fresh Peaches, Prima",
+                                                "size":  "lb",
+                                                "unit_price":  2.99,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "peanut-butter",
+                            "label":  "Peanut Butter",
+                            "unit":  "oz",
+                            "entries":  [
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Great Value Creamy Peanut Butter (40 oz)",
+                                                "size":  "40 oz",
+                                                "unit_price":  0.0995,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Sam\u0027s Club",
+                                                "item":  "Member\u0027s Mark Natural Creamy Peanut Butter (40 oz, 2 pk)",
+                                                "size":  "oz",
+                                                "unit_price":  0.1,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Kroger Creamy Peanut Butter",
+                                                "size":  "40 oz",
+                                                "unit_price":  0.1122,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "That\u0027s Smart! Creamy Peanut Butter",
+                                                "size":  "16 oz",
+                                                "unit_price":  0.1238,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Aldi",
+                                                "item":  "Simply Nature Organic Creamy Peanut Butter",
+                                                "size":  "16 oz.",
+                                                "unit_price":  0.2744,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "pork-chops",
+                            "label":  "Pork Chops",
+                            "unit":  "lb",
+                            "entries":  [
+                                            {
+                                                "store":  "Sam\u0027s Club",
+                                                "item":  "Member\u0027s Mark Bone-In Pork Chops",
+                                                "size":  "lb",
+                                                "unit_price":  2.52,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Aldi",
+                                                "item":  "Fresh Thick-Cut Boneless Pork Chops",
+                                                "size":  "",
+                                                "unit_price":  3.49,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Pork Loin Chops Boneless (family pack)",
+                                                "size":  "lb",
+                                                "unit_price":  4.17,
+                                                "type":  "everyday",
+                                                "bulk":  true
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Fresh Ny Pork Chops, Boneless Value Pack",
+                                                "size":  "lb",
+                                                "unit_price":  4.4925,
+                                                "type":  "sale",
+                                                "bulk":  true
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "russet-potatoes",
+                            "label":  "Russet Potatoes",
+                            "unit":  "lb",
+                            "entries":  [
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "Hy-Vee One Step Russet Potatoes (5 lb)",
+                                                "size":  "lb",
+                                                "unit_price":  0.49,
+                                                "type":  "everyday",
+                                                "bulk":  true
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Our Family Potatoes Russet Idaho",
+                                                "size":  "10 lb",
+                                                "unit_price":  0.549,
+                                                "type":  "everyday",
+                                                "bulk":  true
+                                            },
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Fresh Whole Russet Potatoes, 5 lb",
+                                                "size":  "lb",
+                                                "unit_price":  0.55,
+                                                "type":  "everyday",
+                                                "bulk":  true
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Kroger Russet Potatoes (5 lb bag)",
+                                                "size":  "lb",
+                                                "unit_price":  0.6,
+                                                "type":  "everyday",
+                                                "bulk":  true
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "shredded-cheese",
+                            "label":  "Shredded / Block Cheese",
+                            "unit":  "oz",
+                            "entries":  [
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Kroger Mexican Blend Shredded or Sharp Cheddar Cheese",
+                                                "size":  "32 oz",
+                                                "unit_price":  0.1559,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Sam\u0027s Club",
+                                                "item":  "Member\u0027s Mark Colby \u0026 Monterey Jack Shredded Cheese",
+                                                "size":  "oz",
+                                                "unit_price":  0.19,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Great Value Fiesta Blend Finely Shredded Cheese",
+                                                "size":  "8 oz",
+                                                "unit_price":  0.2462,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "Hy-Vee Finely Shredded Cheese",
+                                                "size":  "8 oz",
+                                                "unit_price":  0.31,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Our Family Natural Finely Cut Mozzarella Shredded Cheese 8 Oz",
+                                                "size":  "8 oz",
+                                                "unit_price":  0.3238,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "sour-cream",
+                            "label":  "Sour Cream",
+                            "unit":  "oz",
+                            "entries":  [
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Great Value Original Sour Cream",
+                                                "size":  "16 oz",
+                                                "unit_price":  0.115,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Sam\u0027s Club",
+                                                "item":  "Daisy Pure \u0026 Natural Sour Cream (48 oz)",
+                                                "size":  "oz",
+                                                "unit_price":  0.12,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Kroger Original Sour Cream",
+                                                "size":  "24 oz",
+                                                "unit_price":  0.1204,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Our Family Sour Cream, Original 24 Oz",
+                                                "size":  "24 oz",
+                                                "unit_price":  0.1246,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "Hy-Vee All Natural Sour Cream",
+                                                "size":  "16 oz",
+                                                "unit_price":  0.1675,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "strawberries",
+                            "label":  "Strawberries",
+                            "unit":  "oz",
+                            "entries":  [
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Fresh Strawberries (1 lb)",
+                                                "size":  "16 oz",
+                                                "unit_price":  0.1488,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Fresh Strawberries",
+                                                "size":  "16 oz",
+                                                "unit_price":  0.1559,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Fresh Strawberries",
+                                                "size":  "16 oz",
+                                                "unit_price":  0.1869,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "sweet-corn",
+                            "label":  "Sweet Corn (ear)",
+                            "unit":  "each",
+                            "entries":  [
+                                            {
+                                                "store":  "Aldi",
+                                                "item":  "Sweet Corn",
+                                                "size":  "",
+                                                "unit_price":  0.5975,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Sam\u0027s Club",
+                                                "item":  "Sweet Corn",
+                                                "size":  "each",
+                                                "unit_price":  0.62,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "Fresh sweet corn, 3/ $2",
+                                                "size":  "",
+                                                "unit_price":  0.6667,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Fresh Sweet Corn on the Cob",
+                                                "size":  "each",
+                                                "unit_price":  0.74,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Fresh Sweet Corn (4 Ct)",
+                                                "size":  "1 pk",
+                                                "unit_price":  1.4975,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "whole-chicken",
+                            "label":  "Whole Chicken",
+                            "unit":  "lb",
+                            "entries":  [
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Tyson Whole Chicken, Young",
+                                                "size":  "lb",
+                                                "unit_price":  1.32,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Our Family Fresh Whole Chicken",
+                                                "size":  "lb",
+                                                "unit_price":  1.79,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Smart NAE Whole Chicken",
+                                                "size":  "lb",
+                                                "unit_price":  2.99,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "watermelon",
+                            "label":  "Whole Watermelon",
+                            "unit":  "each",
+                            "entries":  [
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "Whole seedless watermelon, $4.48 each",
+                                                "size":  "",
+                                                "unit_price":  4.48,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Fresh Seedless Watermelon",
+                                                "size":  "each",
+                                                "unit_price":  4.65,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Aldi",
+                                                "item":  "Whole Seedless Watermelon",
+                                                "size":  "",
+                                                "unit_price":  4.65,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Sam\u0027s Club",
+                                                "item":  "Whole Seedless Watermelon",
+                                                "size":  "each",
+                                                "unit_price":  4.97,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Whole Seedless Watermelon",
+                                                "size":  "each",
+                                                "unit_price":  4.99,
+                                                "type":  "sale",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Watermelon Mini Seedless",
+                                                "size":  "1 ct",
+                                                "unit_price":  5.99,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        },
+                        {
+                            "id":  "onions",
+                            "label":  "Yellow / Sweet Onions",
+                            "unit":  "lb",
+                            "entries":  [
+                                            {
+                                                "store":  "Sam\u0027s Club",
+                                                "item":  "Yellow Onions (10 lb)",
+                                                "size":  "lb",
+                                                "unit_price":  0.74,
+                                                "type":  "everyday",
+                                                "bulk":  true
+                                            },
+                                            {
+                                                "store":  "Family Fare",
+                                                "item":  "Our Family Onion Yellow",
+                                                "size":  "5 lb",
+                                                "unit_price":  0.998,
+                                                "type":  "everyday",
+                                                "bulk":  true
+                                            },
+                                            {
+                                                "store":  "Hy-Vee",
+                                                "item":  "Yellow Onions (3 lb bag)",
+                                                "size":  "lb",
+                                                "unit_price":  1,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Walmart",
+                                                "item":  "Fresh Yellow Onions (3 lb bag)",
+                                                "size":  "lb",
+                                                "unit_price":  1.15,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            },
+                                            {
+                                                "store":  "Baker\u0027s",
+                                                "item":  "Kroger Yellow Onions (3 lb bag)",
+                                                "size":  "lb",
+                                                "unit_price":  1.16,
+                                                "type":  "everyday",
+                                                "bulk":  false
+                                            }
+                                        ]
+                        }
+                    ]
+}
