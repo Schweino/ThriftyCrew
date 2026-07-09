@@ -51,11 +51,11 @@ foreach ($sf in $storeFiles) {
     $newEntry = [pscustomobject]@{ store=$storeName; per_unit=[math]::Round([double]$it.per_unit,4); unit=[string]$row.unit; type='everyday'; bulk=[bool]($it.bulk); membership=($storeName -eq "Sam's Club"); item=[string]$it.item; size=[string]$it.size }
     $stores += $newEntry
     $row.stores = $stores
-    # recompute cheapest_* for this row
+    # recompute cheapest_* for this row (upsert props: some older rows lack cheapest_* fields)
     $ranked = @($stores | Sort-Object per_unit)
-    $row.cheapest_store = [string]$ranked[0].store
-    $row.cheapest_price = [double]$ranked[0].per_unit
-    if ($row.PSObject.Properties['cheapest_type']) { $row.cheapest_type = [string]$ranked[0].type } else { $row | Add-Member -NotePropertyName cheapest_type -NotePropertyValue ([string]$ranked[0].type) -Force }
+    $row | Add-Member -NotePropertyName cheapest_store -NotePropertyValue ([string]$ranked[0].store) -Force
+    $row | Add-Member -NotePropertyName cheapest_price -NotePropertyValue ([double]$ranked[0].per_unit) -Force
+    $row | Add-Member -NotePropertyName cheapest_type -NotePropertyValue ([string]$ranked[0].type) -Force
     $n++; $totalAdded++
     # product link
     if ($it.url) {

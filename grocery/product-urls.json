@@ -280,7 +280,13 @@
                                                            "size":  "8.45 fl oz",
                                                            "name":  "Great Value Balsamic Vinegar of Modena, 8.45 fl oz",
                                                            "recipe_pu":  0.4639
-                                                       }
+                                                       },
+                                           "Hy-Vee":  {
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/4126251/nothing-but-the-truth-organic-balsamic-vinegar",
+                                                          "price":  2.97,
+                                                          "size":  "16.9 fl oz",
+                                                          "name":  "Nothing But The Truth Organic Balsamic Vinegar"
+                                                      }
                                        },
                   "bananas":  {
                                   "commodity":  "Bananas",
@@ -1436,7 +1442,13 @@
                                                     "size":  "12.5 oz",
                                                     "name":  "bettergoods Gochujang Sauce, 12.5 oz",
                                                     "recipe_pu":  0.261
-                                                }
+                                                },
+                                    "Baker\u0027s":  {
+                                                         "url":  "https://www.bakersplus.com/p/sempio-gochujang-korean-chili-paste-vegan-17-63-oz/0880100552345",
+                                                         "price":  7.49,
+                                                         "size":  "17.63 oz",
+                                                         "name":  "Sempio Gochujang, Korean Chili Paste, Vegan 17.63 oz"
+                                                     }
                                 },
                   "golden-raisins":  {
                                          "commodity":  "Golden Raisins",
@@ -1474,7 +1486,13 @@
                                                          "size":  "15 oz",
                                                          "name":  "Great Value Seedless Golden Raisins, 15 oz",
                                                          "recipe_pu":  0.265
-                                                     }
+                                                     },
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/sun-maid-california-golden-raisins-dried-fruit-snack/0004114315160",
+                                                              "price":  4.99,
+                                                              "size":  "12 oz",
+                                                              "name":  "Sun-MaidÂ® California Golden Raisins Dried Fruit Snack"
+                                                          }
                                      },
                   "grapes":  {
                                  "commodity":  "Grapes",
@@ -1826,7 +1844,13 @@
                                                  "price":  3.98,
                                                  "size":  "110.4 oz",
                                                  "name":  "Great Value White Hominy, 110.4 oz"
-                                             }
+                                             },
+                                 "Hy-Vee":  {
+                                                "url":  "https://www.hy-vee.com/aisles-online/p/199151/bushs-best-golden-hominy-155-oz",
+                                                "price":  1.89,
+                                                "size":  "15.5 oz",
+                                                "name":  "Bush\u0027s Best Golden Hominy"
+                                            }
                              },
                   "honey":  {
                                 "commodity":  "Honey",
@@ -2437,7 +2461,19 @@
                                                           "size":  "16 oz",
                                                           "name":  "Fresh Poblano Peppers, 16 oz",
                                                           "recipe_pu":  3.264
-                                                      }
+                                                      },
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/37443/poblano-peppers",
+                                                         "price":  4.99,
+                                                         "size":  "0.25 lbs ($4.99/lb)",
+                                                         "name":  "Poblano Peppers"
+                                                     },
+                                          "Baker\u0027s":  {
+                                                               "url":  "https://www.bakersplus.com/p/fresh-poblano-peppers/0000000004705",
+                                                               "price":  3.49,
+                                                               "size":  "per lb",
+                                                               "name":  "Fresh Poblano Peppers"
+                                                           }
                                       },
                   "pork-chops":  {
                                      "commodity":  "Pork Chops",
@@ -2564,7 +2600,13 @@
                                                            "size":  "8 oz",
                                                            "name":  "Great Value Deli Style Sliced Provolone Cheese, 8 oz",
                                                            "recipe_pu":  0.209
-                                                       }
+                                                       },
+                                           "Hy-Vee":  {
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/60540/hy-vee-sliced-provolone-cheese-10ct",
+                                                          "price":  2.5,
+                                                          "size":  "8 oz (2/$5.00)",
+                                                          "name":  "Hy-Vee Sliced Provolone Cheese 10Ct"
+                                                      }
                                        },
                   "red-bell-pepper":  {
                                           "commodity":  "Red Bell Pepper",
@@ -2619,7 +2661,13 @@
                                                            "size":  "16 fl oz",
                                                            "name":  "Pompeian Red Wine Vinegar, 16 fl oz",
                                                            "recipe_pu":  0.1775
-                                                       }
+                                                       },
+                                           "Aldi":  {
+                                                        "url":  "https://www.aldi.us/store/aldi/products/21111029-priano-red-wine-vinegar-16-9-fl-oz",
+                                                        "price":  3.29,
+                                                        "size":  "16.9 fl oz",
+                                                        "name":  "Priano Red Wine Vinegar"
+                                                    }
                                        },
                   "roasted-red-peppers":  {
                                               "commodity":  "Roasted Red Peppers",
@@ -3928,7 +3976,13 @@
                                                            "price":  0,
                                                            "size":  "1 ct (2 for $3.00)",
                                                            "name":  "Green Bell Pepper"
-                                                       }
+                                                       },
+                                            "Aldi":  {
+                                                         "url":  "https://www.aldi.us/store/aldi/products/16560629-green-bell-pepper-3-ct",
+                                                         "price":  2.75,
+                                                         "size":  "3 ct",
+                                                         "name":  "Green Peppers, Package"
+                                                     }
                                         },
                   "ground-cumin":  {
                                        "commodity":  "Ground Cumin",
@@ -4102,7 +4156,13 @@
                                                 "price":  0,
                                                 "size":  "1 each",
                                                 "name":  "Fresh Lime"
-                                            }
+                                            },
+                                "Hy-Vee":  {
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/37191/limes",
+                                               "price":  0.88,
+                                               "size":  "1 ct",
+                                               "name":  "Limes"
+                                           }
                             },
                   "olive-oil":  {
                                     "commodity":  "Olive Oil",
@@ -4747,7 +4807,13 @@
                                                      "price":  20,
                                                      "size":  "16 oz",
                                                      "name":  "Bay Leaves (16 oz bulk)"
-                                                 }
+                                                 },
+                                     "Hy-Vee":  {
+                                                    "url":  "https://www.hy-vee.com/aisles-online/p/2210699/mccormick-gourmet-organic-turkish-bay-leaves",
+                                                    "price":  9.99,
+                                                    "size":  "0.18 oz",
+                                                    "name":  "McCormick Gourmet Organic Turkish Bay Leaves"
+                                                }
                                  },
                   "garam-masala":  {
                                        "commodity":  "Garam Masala",
@@ -4762,7 +4828,19 @@
                                                        "price":  12.23,
                                                        "size":  "12.3 oz",
                                                        "name":  "Garam Masala"
-                                                   }
+                                                   },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/400549/mccormick-gourmet-garam-masala-blend-17-oz",
+                                                      "price":  5.99,
+                                                      "size":  "1.7 oz",
+                                                      "name":  "McCormick Gourmet Garam Masala Blend"
+                                                  },
+                                       "Baker\u0027s":  {
+                                                            "url":  "https://www.bakersplus.com/p/nomad-blends-garam-masala-seasoning/0081000687205",
+                                                            "price":  7.79,
+                                                            "size":  "2.9 oz",
+                                                            "name":  "Nomad Blends Garam Masala Seasoning"
+                                                        }
                                    },
                   "rice-vinegar":  {
                                        "commodity":  "Rice Vinegar",
@@ -4777,7 +4855,25 @@
                                                        "price":  1.87,
                                                        "size":  "10 fl oz",
                                                        "name":  "Kikkoman Rice Vinegar"
-                                                   }
+                                                   },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/253153/marukan-genuine-brewed-rice-vinegar",
+                                                      "price":  4.69,
+                                                      "size":  "12 fl oz",
+                                                      "name":  "Marukan Genuine Brewed Rice Vinegar"
+                                                  },
+                                       "Aldi":  {
+                                                    "url":  "https://www.aldi.us/store/aldi/products/41211-nakano-rice-vinegar-mild-sweet-seasoned-12-fl-oz",
+                                                    "price":  3.12,
+                                                    "size":  "12 fl oz",
+                                                    "name":  "Nakano Seasoned Rice Vinegar"
+                                                },
+                                       "Baker\u0027s":  {
+                                                            "url":  "https://www.bakersplus.com/p/nakano-natural-rice-vinegar/0007357527334",
+                                                            "price":  3.29,
+                                                            "size":  "12 fl oz",
+                                                            "name":  "NakanoÂ® Natural Rice Vinegar"
+                                                        }
                                    },
                   "corn-tortillas":  {
                                          "commodity":  "Corn Tortillas",
@@ -4786,7 +4882,19 @@
                                                              "price":  1.79,
                                                              "size":  "30 ea",
                                                              "name":  "La Providencia Corn Tortillas 30 Ea"
-                                                         }
+                                                         },
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/301255/la-banderita-yellow-corn-tortilla-30-ct",
+                                                        "price":  2.99,
+                                                        "size":  "24.9 oz / 30 ct",
+                                                        "name":  "La Banderita Yellow Corn Tortilla 30 Ct"
+                                                    },
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/guerrero-white-corn-tortillas/0004856406000",
+                                                              "price":  4.49,
+                                                              "size":  "80 Count",
+                                                              "name":  "Guerrero White Corn Tortillas"
+                                                          }
                                      },
                   "jerk-seasoning":  {
                                          "commodity":  "Jerk Seasoning",
@@ -4801,7 +4909,13 @@
                                                          "price":  4.97,
                                                          "size":  "",
                                                          "name":  "Walkerswood Jamaican Jerk Seasoning"
-                                                     }
+                                                     },
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/grace-mild-jamaican-jerk-seasoning/0005527085144",
+                                                              "price":  5.79,
+                                                              "size":  "10 oz",
+                                                              "name":  "GraceÂ® Mild Jamaican Jerk Seasoning"
+                                                          }
                                      },
                   "dried-oregano":  {
                                         "commodity":  "Dried Oregano",
@@ -4816,7 +4930,25 @@
                                                         "price":  1.08,
                                                         "size":  "",
                                                         "name":  "Oregano Leaves"
-                                                    }
+                                                    },
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/4141455/hy-vee-oregano-leaves",
+                                                       "price":  3.99,
+                                                       "size":  "3.75 oz",
+                                                       "name":  "Hy-Vee Oregano Leaves"
+                                                   },
+                                        "Aldi":  {
+                                                     "url":  "https://www.aldi.us/store/aldi/products/19688300-stonemill-oregano-leaves-0-75-oz",
+                                                     "price":  1.09,
+                                                     "size":  "0.75 oz",
+                                                     "name":  "Stonemill Oregano Leaves"
+                                                 },
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/kroger-oregano-leaves-shaker/0001111001996",
+                                                             "price":  3.29,
+                                                             "size":  "1.94 oz",
+                                                             "name":  "KrogerÂ® Oregano Leaves Shaker"
+                                                         }
                                     },
                   "salt":  {
                                "commodity":  "Salt",
@@ -4831,7 +4963,25 @@
                                                "price":  0.94,
                                                "size":  "26 oz",
                                                "name":  "Great Value Iodized Salt"
-                                           }
+                                           },
+                               "Hy-Vee":  {
+                                              "url":  "https://www.hy-vee.com/aisles-online/p/5382/morton-table-salt",
+                                              "price":  2.21,
+                                              "size":  "4 lb",
+                                              "name":  "Morton Table Salt"
+                                          },
+                               "Aldi":  {
+                                            "url":  "https://www.aldi.us/store/aldi/products/18647588-stonemill-iodized-salt-26-oz",
+                                            "price":  0.89,
+                                            "size":  "26 oz",
+                                            "name":  "Stonemill Iodized Table Salt"
+                                        },
+                               "Baker\u0027s":  {
+                                                    "url":  "https://www.bakersplus.com/p/kroger-salt/0001111004807",
+                                                    "price":  0.99,
+                                                    "size":  "26 oz",
+                                                    "name":  "KrogerÂ® Salt"
+                                                }
                            },
                   "black-pepper":  {
                                        "commodity":  "Black Pepper",
@@ -4840,7 +4990,25 @@
                                                            "price":  1.39,
                                                            "size":  "2 oz",
                                                            "name":  "That\u0027s Smart! Ground Black Pepper"
-                                                       }
+                                                       },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/2928520/thats-smart-black-pepper",
+                                                      "price":  1.25,
+                                                      "size":  "2.15 oz",
+                                                      "name":  "That\u0027s Smart! Black Pepper"
+                                                  },
+                                       "Aldi":  {
+                                                    "url":  "https://www.aldi.us/store/aldi/products/18649001-stonemill-pure-ground-black-pepper-4-oz",
+                                                    "price":  3.85,
+                                                    "size":  "3 oz",
+                                                    "name":  "Stonemill Ground Black Pepper"
+                                                },
+                                       "Baker\u0027s":  {
+                                                            "url":  "https://www.bakersplus.com/p/smart-way-ground-black-pepper/0001111011742",
+                                                            "price":  1.25,
+                                                            "size":  "2.25 oz",
+                                                            "name":  "Smart Wayâ„¢ Ground Black Pepper"
+                                                        }
                                    },
                   "fresh-cilantro":  {
                                          "commodity":  "Fresh Cilantro",
@@ -4855,7 +5023,25 @@
                                                          "price":  0.93,
                                                          "size":  "",
                                                          "name":  "Fresh Cilantro Bunch"
-                                                     }
+                                                     },
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/8862/cilantro",
+                                                        "price":  0.99,
+                                                        "size":  "1 ct",
+                                                        "name":  "Cilantro"
+                                                    },
+                                         "Aldi":  {
+                                                      "url":  "https://www.aldi.us/store/aldi/products/3177720-cilantro-each",
+                                                      "price":  0.99,
+                                                      "size":  "1 each",
+                                                      "name":  "Cilantro, Package"
+                                                  },
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/cilantro/0000000004889",
+                                                              "price":  0.99,
+                                                              "size":  "1 ct",
+                                                              "name":  "Cilantro"
+                                                          }
                                      },
                   "jalapeno":  {
                                    "commodity":  "Jalapeno Pepper",
@@ -4864,7 +5050,25 @@
                                                        "price":  2.29,
                                                        "size":  "lb",
                                                        "name":  "Jalapeno Peppers"
-                                                   }
+                                                   },
+                                   "Hy-Vee":  {
+                                                  "url":  "https://www.hy-vee.com/aisles-online/p/8832/jalapeno-pepper",
+                                                  "price":  2.99,
+                                                  "size":  "0.15 lbs ($2.99/lb)",
+                                                  "name":  "Jalapeno Pepper"
+                                              },
+                                   "Aldi":  {
+                                                "url":  "https://www.aldi.us/store/aldi/products/18775019-jalapeno-pepper-package-8-oz",
+                                                "price":  0.95,
+                                                "size":  "8 oz",
+                                                "name":  "Jalapeno Peppers, Package"
+                                            },
+                                   "Baker\u0027s":  {
+                                                        "url":  "https://www.bakersplus.com/p/fresh-jalapeno-peppers/0000000004693",
+                                                        "price":  1.99,
+                                                        "size":  "per lb",
+                                                        "name":  "Fresh Jalapeno Peppers"
+                                                    }
                                },
                   "liquid-smoke":  {
                                        "commodity":  "Liquid Smoke",
@@ -4879,7 +5083,19 @@
                                                        "price":  8.88,
                                                        "size":  "",
                                                        "name":  "Liquid Smoke"
-                                                   }
+                                                   },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/19668/figaro-hickory-liquid-smoke-and-barbecue-marinade",
+                                                      "price":  2.99,
+                                                      "size":  "4 fl oz",
+                                                      "name":  "Figaro Hickory Liquid Smoke \u0026 Barbecue Marinade"
+                                                  },
+                                       "Baker\u0027s":  {
+                                                            "url":  "https://www.bakersplus.com/p/colgin-liquid-smoke-natural-hickory-flavoring/0007105300001",
+                                                            "price":  2.69,
+                                                            "size":  "4 fl oz",
+                                                            "name":  "Colgin Liquid Smoke Natural Hickory Flavoring"
+                                                        }
                                    },
                   "worcestershire-sauce":  {
                                                "commodity":  "Worcestershire Sauce",
@@ -4894,7 +5110,19 @@
                                                                "price":  1,
                                                                "size":  "",
                                                                "name":  "Worcestershire Sauce"
-                                                           }
+                                                           },
+                                               "Hy-Vee":  {
+                                                              "url":  "https://www.hy-vee.com/aisles-online/p/2916225/thats-smart-worcestershire-sauce",
+                                                              "price":  1,
+                                                              "size":  "10 fl oz",
+                                                              "name":  "That\u0027s Smart Worcestershire Sauce"
+                                                          },
+                                               "Baker\u0027s":  {
+                                                                    "url":  "https://www.bakersplus.com/p/kroger-worcestershire-sauce/0001111071928",
+                                                                    "price":  2.19,
+                                                                    "size":  "15 fl oz",
+                                                                    "name":  "KrogerÂ® Worcestershire Sauce"
+                                                                }
                                            },
                   "dried-parsley":  {
                                         "commodity":  "Dried Parsley",
@@ -4909,7 +5137,25 @@
                                                         "price":  23.03,
                                                         "size":  "",
                                                         "name":  "Parsley Flakes (bulk)"
-                                                    }
+                                                    },
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2922965/hy-vee-parsley-flakes",
+                                                       "price":  2.49,
+                                                       "size":  "0.75 oz",
+                                                       "name":  "Hy-Vee Parsley Flakes"
+                                                   },
+                                        "Aldi":  {
+                                                     "url":  "https://www.aldi.us/store/aldi/products/20182677-stonemill-parsley-flakes-0-25-oz",
+                                                     "price":  1.09,
+                                                     "size":  "0.25 oz",
+                                                     "name":  "Stonemill Parsley Flakes"
+                                                 },
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/smart-way-parsley-flakes/0001111011740",
+                                                             "price":  1.25,
+                                                             "size":  "0.5 oz",
+                                                             "name":  "Smart Wayâ„¢ Parsley Flakes"
+                                                         }
                                     },
                   "cayenne-pepper":  {
                                          "commodity":  "Cayenne Pepper",
@@ -4924,7 +5170,19 @@
                                                          "price":  4.36,
                                                          "size":  "",
                                                          "name":  "Ground Cayenne Pepper"
-                                                     }
+                                                     },
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/3225648/thats-smart-cayenne-pepper-3-oz",
+                                                        "price":  1.25,
+                                                        "size":  "3 oz",
+                                                        "name":  "That\u0027s Smart! Cayenne Pepper"
+                                                    },
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/kroger-ground-red-cayenne-pepper-shaker/0001111000316",
+                                                              "price":  6.49,
+                                                              "size":  "5.5 oz",
+                                                              "name":  "KrogerÂ® Ground Red Cayenne Pepper Shaker"
+                                                          }
                                      },
                   "vegetable-oil":  {
                                         "commodity":  "Vegetable Oil",
@@ -4939,7 +5197,25 @@
                                                         "price":  8.74,
                                                         "size":  "128 fl oz",
                                                         "name":  "Vegetable Oil (1 gal)"
-                                                    }
+                                                    },
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/55983/hy-vee-vegetable-oil",
+                                                       "price":  4.48,
+                                                       "size":  "48 fl oz",
+                                                       "name":  "Hy-Vee Vegetable Oil"
+                                                   },
+                                        "Aldi":  {
+                                                     "url":  "https://www.aldi.us/store/aldi/products/20027984-carlini-vegetable-oil-48-fl-oz",
+                                                     "price":  3.95,
+                                                     "size":  "48 fl oz",
+                                                     "name":  "Carlini Vegetable Oil"
+                                                 },
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/kroger-100-pure-vegetable-oil/0001111085606",
+                                                             "price":  9.49,
+                                                             "size":  "1 gal",
+                                                             "name":  "KrogerÂ® 100% Pure Vegetable Oil"
+                                                         }
                                     },
                   "smoked-paprika":  {
                                          "commodity":  "Smoked Paprika",
@@ -4954,7 +5230,25 @@
                                                          "price":  1.97,
                                                          "size":  "",
                                                          "name":  "Smoked Paprika"
-                                                     }
+                                                     },
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/1677554/simply-organic-smoked-paprika",
+                                                        "price":  8.99,
+                                                        "size":  "2.72 oz",
+                                                        "name":  "Simply Organic Smoked Paprika"
+                                                    },
+                                         "Aldi":  {
+                                                      "url":  "https://www.aldi.us/store/aldi/products/56526849-simply-nature-organic-smoked-paprika-1-6-oz",
+                                                      "price":  2.19,
+                                                      "size":  "1.6 oz",
+                                                      "name":  "Simply Nature Organic Smoked Paprika"
+                                                  },
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/mccormick-smoked-paprika/0005210002276",
+                                                              "price":  5.49,
+                                                              "size":  "1.75 oz",
+                                                              "name":  "McCormick Smoked Paprika"
+                                                          }
                                      },
                   "feta-cheese":  {
                                       "commodity":  "Feta Cheese",
@@ -4969,7 +5263,25 @@
                                                       "price":  6.76,
                                                       "size":  "",
                                                       "name":  "Feta Cheese"
-                                                  }
+                                                  },
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/221090/soiree-feta-traditional-chunk-cheese",
+                                                     "price":  5.99,
+                                                     "size":  "8 oz",
+                                                     "name":  "Soiree Feta Traditional Chunk Cheese"
+                                                 },
+                                      "Aldi":  {
+                                                   "url":  "https://www.aldi.us/store/aldi/products/20723849-emporium-selection-original-feta-cheese-crumbles-4-oz",
+                                                   "price":  2.09,
+                                                   "size":  "4 oz",
+                                                   "name":  "Emporium Selection Original Feta Cheese Crumbles"
+                                               },
+                                      "Baker\u0027s":  {
+                                                           "url":  "https://www.bakersplus.com/p/private-selection-traditional-feta-crumbles/0001111062856",
+                                                           "price":  4.99,
+                                                           "size":  "6 oz",
+                                                           "name":  "Private SelectionÂ® Traditional Feta Crumbles"
+                                                       }
                                   },
                   "dried-dill":  {
                                      "commodity":  "Dried Dill",
@@ -4984,7 +5296,19 @@
                                                      "price":  24.08,
                                                      "size":  "",
                                                      "name":  "Dill Weed (bulk)"
-                                                 }
+                                                 },
+                                     "Hy-Vee":  {
+                                                    "url":  "https://www.hy-vee.com/aisles-online/p/2918306/hy-vee-dill-weed",
+                                                    "price":  2.49,
+                                                    "size":  "0.75 oz",
+                                                    "name":  "Hy-Vee Dill Weed"
+                                                },
+                                     "Baker\u0027s":  {
+                                                          "url":  "https://www.bakersplus.com/p/simple-truth-organic-baby-dill/0001111001816",
+                                                          "price":  2.49,
+                                                          "size":  "0.5 oz",
+                                                          "name":  "Simple Truth OrganicÂ® Baby Dill"
+                                                      }
                                  },
                   "mozzarella-cheese":  {
                                             "commodity":  "Mozzarella Cheese",
@@ -4999,7 +5323,25 @@
                                                             "price":  6.96,
                                                             "size":  "32 oz",
                                                             "name":  "Mozzarella Cheese (32 oz)"
-                                                        }
+                                                        },
+                                            "Hy-Vee":  {
+                                                           "url":  "https://www.hy-vee.com/aisles-online/p/57077/hy-vee-shredded-low-moisture-part-skim-mozzarella-cheese",
+                                                           "price":  7.98,
+                                                           "size":  "32 oz",
+                                                           "name":  "Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Cheese"
+                                                       },
+                                            "Aldi":  {
+                                                         "url":  "https://www.aldi.us/store/aldi/products/20975185-happy-farms-mozzarella-cheese-block-8-oz",
+                                                         "price":  1.95,
+                                                         "size":  "8 oz",
+                                                         "name":  "Happy Farms Mozzarella Cheese Block"
+                                                     },
+                                            "Baker\u0027s":  {
+                                                                 "url":  "https://www.bakersplus.com/p/kroger-mozzarella-shredded-cheese-family-size/0001111015028",
+                                                                 "price":  7.29,
+                                                                 "size":  "32 oz",
+                                                                 "name":  "KrogerÂ® Mozzarella Shredded Cheese Family Size"
+                                                             }
                                         },
                   "cucumber":  {
                                    "commodity":  "Cucumber",
@@ -5014,7 +5356,25 @@
                                                    "price":  0.76,
                                                    "size":  "",
                                                    "name":  "Fresh Cucumber, Each"
-                                               }
+                                               },
+                                   "Hy-Vee":  {
+                                                  "url":  "https://www.hy-vee.com/aisles-online/p/8648/cucumber",
+                                                  "price":  0.99,
+                                                  "size":  "1 ct",
+                                                  "name":  "Cucumber"
+                                              },
+                                   "Aldi":  {
+                                                "url":  "https://www.aldi.us/store/aldi/products/3253345-cucumber-each",
+                                                "price":  0.65,
+                                                "size":  "1 each",
+                                                "name":  "Cucumber"
+                                            },
+                                   "Baker\u0027s":  {
+                                                        "url":  "https://www.bakersplus.com/p/cucumber/0000000004062",
+                                                        "price":  0.89,
+                                                        "size":  "1 ct",
+                                                        "name":  "Cucumber"
+                                                    }
                                },
                   "dried-basil":  {
                                       "commodity":  "Dried Basil",
@@ -5029,7 +5389,19 @@
                                                       "price":  11.99,
                                                       "size":  "",
                                                       "name":  "Basil Leaves (bulk)"
-                                                  }
+                                                  },
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/3225608/thats-smart-basil-leaves-1-oz",
+                                                     "price":  1.25,
+                                                     "size":  "1 oz",
+                                                     "name":  "That\u0027s Smart! Basil Leaves"
+                                                 },
+                                      "Baker\u0027s":  {
+                                                           "url":  "https://www.bakersplus.com/p/kroger-basil-leaves-shaker/0001111000296",
+                                                           "price":  1.99,
+                                                           "size":  "0.43 oz",
+                                                           "name":  "KrogerÂ® Basil Leaves Shaker"
+                                                       }
                                   },
                   "apple-cider":  {
                                       "commodity":  "Apple Cider",
@@ -5038,7 +5410,19 @@
                                                           "price":  0.067,
                                                           "size":  "64 fl oz",
                                                           "name":  "Our Family Apple Cider Juice 64 Fl Oz"
-                                                      }
+                                                      },
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/2122497/hy-vee-100-apple-cider",
+                                                     "price":  3.59,
+                                                     "size":  "64 fl oz",
+                                                     "name":  "Hy-Vee 100% Apple Cider"
+                                                 },
+                                      "Baker\u0027s":  {
+                                                           "url":  "https://www.bakersplus.com/p/martinelli-s-sparkling-apple-cider/0004124400006",
+                                                           "price":  4.39,
+                                                           "size":  "25.4 fl oz",
+                                                           "name":  "Martinelli\u0027s Sparkling Apple Cider"
+                                                       }
                                   },
                   "celery":  {
                                  "commodity":  "Celery",
@@ -5053,7 +5437,25 @@
                                                  "price":  2.37,
                                                  "size":  "",
                                                  "name":  "Fresh Whole Celery, 1 ea"
-                                             }
+                                             },
+                                 "Hy-Vee":  {
+                                                "url":  "https://www.hy-vee.com/aisles-online/p/8653/celery",
+                                                "price":  1.88,
+                                                "size":  "1 ct",
+                                                "name":  "Celery"
+                                            },
+                                 "Aldi":  {
+                                              "url":  "https://www.aldi.us/store/aldi/products/16606112-celery-package-per-lb",
+                                              "price":  2.09,
+                                              "size":  "1 lb package",
+                                              "name":  "Celery, Package"
+                                          },
+                                 "Baker\u0027s":  {
+                                                      "url":  "https://www.bakersplus.com/p/sleeved-celery/0000000004070",
+                                                      "price":  2.59,
+                                                      "size":  "1 ct",
+                                                      "name":  "Sleeved Celery"
+                                                  }
                              },
                   "ground-ginger":  {
                                         "commodity":  "Ground Ginger",
@@ -5068,7 +5470,19 @@
                                                         "price":  12.94,
                                                         "size":  "",
                                                         "name":  "Ground Ginger (bulk)"
-                                                    }
+                                                    },
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2925188/hy-vee-ground-ginger",
+                                                       "price":  2.99,
+                                                       "size":  "2 oz",
+                                                       "name":  "Hy-Vee Ground Ginger"
+                                                   },
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/simple-truth-organic-ground-ginger-shaker/0001111002381",
+                                                             "price":  3.99,
+                                                             "size":  "1.41 oz",
+                                                             "name":  "Simple Truth OrganicÂ® Ground Ginger Shaker"
+                                                         }
                                     },
                   "au-jus-gravy-mix":  {
                                            "commodity":  "Au Jus Gravy Mix",
@@ -5083,7 +5497,19 @@
                                                            "price":  0.98,
                                                            "size":  "1 oz",
                                                            "name":  "Au Jus Gravy Mix"
-                                                       }
+                                                       },
+                                           "Hy-Vee":  {
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/58547/hy-vee-au-jus-sauce-mix",
+                                                          "price":  0.99,
+                                                          "size":  "1 oz",
+                                                          "name":  "Hy-Vee Au Jus Sauce Mix"
+                                                      },
+                                           "Baker\u0027s":  {
+                                                                "url":  "https://www.bakersplus.com/p/kroger-au-jus-gravy-mix/0001111071977",
+                                                                "price":  0.99,
+                                                                "size":  "1 oz",
+                                                                "name":  "KrogerÂ® Au Jus Gravy Mix"
+                                                            }
                                        },
                   "dried-rosemary":  {
                                          "commodity":  "Dried Rosemary",
@@ -5098,7 +5524,19 @@
                                                          "price":  10.1,
                                                          "size":  "",
                                                          "name":  "Rosemary Leaves"
-                                                     }
+                                                     },
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/3008016/hy-vee-rosemary-leaves-075-oz",
+                                                        "price":  2.99,
+                                                        "size":  "0.75 oz",
+                                                        "name":  "Hy-Vee Rosemary Leaves"
+                                                    },
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/rosemary-leaves-kroger-0-75-oz/0001111068413",
+                                                              "price":  1.99,
+                                                              "size":  "0.75 oz",
+                                                              "name":  "KrogerÂ® Rosemary Leaves"
+                                                          }
                                      },
                   "green-onions":  {
                                        "commodity":  "Green Onions",
@@ -5107,7 +5545,25 @@
                                                            "price":  1.29,
                                                            "size":  "1 ct",
                                                            "name":  "Fresh Green Onions/Scallions"
-                                                       }
+                                                       },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/8652/green-onions-scallions",
+                                                      "price":  1.5,
+                                                      "size":  "1 ct (2/$3.00)",
+                                                      "name":  "Green Onions (Scallions)"
+                                                  },
+                                       "Aldi":  {
+                                                    "url":  "https://www.aldi.us/store/aldi/products/17736837-green-onions-scallions-5-5-oz",
+                                                    "price":  1.19,
+                                                    "size":  "5.5 oz",
+                                                    "name":  "Green Onions, Bag"
+                                                },
+                                       "Baker\u0027s":  {
+                                                            "url":  "https://www.bakersplus.com/p/green-onions/0000000004068",
+                                                            "price":  1.19,
+                                                            "size":  "1 ct",
+                                                            "name":  "Green Onions"
+                                                        }
                                    },
                   "ground-coriander":  {
                                            "commodity":  "Ground Coriander",
@@ -5122,7 +5578,19 @@
                                                            "price":  5.09,
                                                            "size":  "",
                                                            "name":  "Ground Coriander"
-                                                       }
+                                                       },
+                                           "Hy-Vee":  {
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/4141466/hy-vee-ground-coriander",
+                                                          "price":  1.99,
+                                                          "size":  "0.5 oz",
+                                                          "name":  "Hy-Vee Ground Coriander"
+                                                      },
+                                           "Baker\u0027s":  {
+                                                                "url":  "https://www.bakersplus.com/p/ground-coriander-simple-truth-organic-1-49-oz/0001111006721",
+                                                                "price":  3.99,
+                                                                "size":  "1.49 oz",
+                                                                "name":  "Simple Truth OrganicÂ® Ground Coriander"
+                                                            }
                                        },
                   "lemon-juice":  {
                                       "commodity":  "Lemon Juice",
@@ -5137,7 +5605,25 @@
                                                       "price":  4.53,
                                                       "size":  "",
                                                       "name":  "ReaLemon Lemon Juice (gal)"
-                                                  }
+                                                  },
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/24367/hy-vee-reconstituted-lemon-100-juice",
+                                                     "price":  3.99,
+                                                     "size":  "32 fl oz",
+                                                     "name":  "Hy-Vee Reconstituted Lemon 100% Juice"
+                                                 },
+                                      "Aldi":  {
+                                                   "url":  "https://www.aldi.us/store/aldi/products/20240790-nature-s-nectar-100-lemon-juice-32-fl-oz",
+                                                   "price":  2.45,
+                                                   "size":  "32 fl oz",
+                                                   "name":  "Nature\u0027s Nectar 100% Lemon Juice"
+                                               },
+                                      "Baker\u0027s":  {
+                                                           "url":  "https://www.bakersplus.com/p/kroger-100-lemon-juice/0001111070207",
+                                                           "price":  3.29,
+                                                           "size":  "32 fl oz",
+                                                           "name":  "KrogerÂ® 100% Lemon Juice"
+                                                       }
                                   },
                   "condensed-french-onion-soup":  {
                                                       "commodity":  "Condensed French Onion Soup",
@@ -5152,7 +5638,19 @@
                                                                       "price":  1.12,
                                                                       "size":  "",
                                                                       "name":  "Great Value Condensed French Onion Soup, 10.5 oz"
-                                                                  }
+                                                                  },
+                                                      "Hy-Vee":  {
+                                                                     "url":  "https://www.hy-vee.com/aisles-online/p/50124/campbells-condensed-french-onion-soup-105-oz-can",
+                                                                     "price":  1.96,
+                                                                     "size":  "10.5 oz can",
+                                                                     "name":  "Campbell\u0027s Condensed French Onion Soup"
+                                                                 },
+                                                      "Baker\u0027s":  {
+                                                                           "url":  "https://www.bakersplus.com/p/campbell-s-condensed-french-onion-soup/0005100001177",
+                                                                           "price":  1.99,
+                                                                           "size":  "10.5 oz",
+                                                                           "name":  "Campbell\u0027sÂ® Condensed French Onion Soup"
+                                                                       }
                                                   },
                   "celery-salt":  {
                                       "commodity":  "Celery Salt",
@@ -5167,7 +5665,19 @@
                                                       "price":  6.54,
                                                       "size":  "",
                                                       "name":  "Great Value Celery Salt 3pk, 5.25 oz"
-                                                  }
+                                                  },
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/4141460/hy-vee-celery-salt",
+                                                     "price":  1.99,
+                                                     "size":  "1.2 oz",
+                                                     "name":  "Hy-Vee Celery Salt"
+                                                 },
+                                      "Baker\u0027s":  {
+                                                           "url":  "https://www.bakersplus.com/p/kroger-celery-salt-shaker/0001111000297",
+                                                           "price":  3.29,
+                                                           "size":  "3.75 oz",
+                                                           "name":  "KrogerÂ® Celery Salt Shaker"
+                                                       }
                                   },
                   "sweet-chili-sauce":  {
                                             "commodity":  "Sweet Chili Sauce",
@@ -5182,7 +5692,19 @@
                                                             "price":  5.97,
                                                             "size":  "",
                                                             "name":  "Mae Ploy Sweet Chili Sauce, 32 oz"
-                                                        }
+                                                        },
+                                            "Hy-Vee":  {
+                                                           "url":  "https://www.hy-vee.com/aisles-online/p/4140237/hy-vee-thai-sweet-chili-sauce",
+                                                           "price":  3.99,
+                                                           "size":  "14.5 oz",
+                                                           "name":  "Hy-Vee Thai Sweet Chili Sauce"
+                                                       },
+                                            "Baker\u0027s":  {
+                                                                 "url":  "https://www.bakersplus.com/p/kroger-sweet-chili-sauce/0001111085196",
+                                                                 "price":  2.29,
+                                                                 "size":  "10 fl oz",
+                                                                 "name":  "KrogerÂ® Sweet Chili Sauce"
+                                                             }
                                         },
                   "swiss-cheese":  {
                                        "commodity":  "Swiss Cheese",
@@ -5197,7 +5719,25 @@
                                                        "price":  1.67,
                                                        "size":  "",
                                                        "name":  "Great Value Swiss Sliced, 8 oz"
-                                                   }
+                                                   },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/26257/hy-vee-sliced-swiss-cheese-10ct",
+                                                      "price":  2.5,
+                                                      "size":  "8 oz (2/$5.00)",
+                                                      "name":  "Hy-Vee Sliced Swiss Cheese 10Ct"
+                                                  },
+                                       "Aldi":  {
+                                                    "url":  "https://www.aldi.us/store/aldi/products/20986385-happy-farms-swiss-cheese-block-8-oz",
+                                                    "price":  1.95,
+                                                    "size":  "8 oz",
+                                                    "name":  "Happy Farms Swiss Cheese Block"
+                                                },
+                                       "Baker\u0027s":  {
+                                                            "url":  "https://www.bakersplus.com/p/kroger-swiss-sliced-cheese/0001111050505",
+                                                            "price":  3.99,
+                                                            "size":  "12 oz",
+                                                            "name":  "KrogerÂ® Swiss Sliced Cheese"
+                                                        }
                                    },
                   "half-and-half":  {
                                         "commodity":  "Half and Half",
@@ -5212,7 +5752,25 @@
                                                         "price":  4.98,
                                                         "size":  "",
                                                         "name":  "Great Value Half and Half, 64 fl oz"
-                                                    }
+                                                    },
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/23944/hy-vee-half-and-half",
+                                                       "price":  3.49,
+                                                       "size":  "1 qt (32 fl oz)",
+                                                       "name":  "Hy-Vee Half \u0026 Half"
+                                                   },
+                                        "Aldi":  {
+                                                     "url":  "https://www.aldi.us/store/aldi/products/18647825-countryside-creamery-rich-creamy-half-half-32-fl-oz",
+                                                     "price":  2.75,
+                                                     "size":  "32 fl oz",
+                                                     "name":  "Friendly Farms Half \u0026 Half"
+                                                 },
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/kroger-half-and-half-half-gallon/0001111050074",
+                                                             "price":  4.99,
+                                                             "size":  "64 fl oz",
+                                                             "name":  "KrogerÂ® Half and Half Half Gallon"
+                                                         }
                                     },
                   "white-wine-vinegar":  {
                                              "commodity":  "White Wine Vinegar",
@@ -5227,7 +5785,25 @@
                                                              "price":  2.84,
                                                              "size":  "",
                                                              "name":  "Pompeian White Wine Vinegar, 16 fl oz"
-                                                         }
+                                                         },
+                                             "Hy-Vee":  {
+                                                            "url":  "https://www.hy-vee.com/aisles-online/p/22373/gustare-vita-white-wine-vinegar",
+                                                            "price":  2.49,
+                                                            "size":  "16.9 fl oz",
+                                                            "name":  "Gustare Vita White Wine Vinegar"
+                                                        },
+                                             "Aldi":  {
+                                                          "url":  "https://www.aldi.us/store/aldi/products/19321103-carlini-white-wine-vinegar-16-9-fl-oz",
+                                                          "price":  3.29,
+                                                          "size":  "16.9 fl oz",
+                                                          "name":  "Priano White Wine Vinegar"
+                                                      },
+                                             "Baker\u0027s":  {
+                                                                  "url":  "https://www.bakersplus.com/p/pompeian-white-wine-vinegar/0007040400149",
+                                                                  "price":  2.49,
+                                                                  "size":  "16 fl oz",
+                                                                  "name":  "Pompeian White Wine Vinegar"
+                                                              }
                                          },
                   "ground-nutmeg":  {
                                         "commodity":  "Ground Nutmeg",
@@ -5242,7 +5818,19 @@
                                                         "price":  2.46,
                                                         "size":  "",
                                                         "name":  "Great Value Ground Nutmeg, 1.5 oz"
-                                                    }
+                                                    },
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2973757/hy-vee-ground-nutmeg-212-oz",
+                                                       "price":  2.49,
+                                                       "size":  "2.12 oz",
+                                                       "name":  "Hy-Vee Ground Nutmeg"
+                                                   },
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/ground-nutmeg-kroger-1-85-oz/0001111001055",
+                                                             "price":  4.29,
+                                                             "size":  "1.85 oz",
+                                                             "name":  "KrogerÂ® Ground Nutmeg"
+                                                         }
                                     },
                   "pineapple-juice":  {
                                           "commodity":  "Pineapple Juice",
@@ -5251,7 +5839,25 @@
                                                               "price":  0.1302,
                                                               "size":  "46 oz",
                                                               "name":  "Dole 100% Juice, Pineapple 46 Fl Oz"
-                                                          }
+                                                          },
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/4103330/dole-pineapple-juice-100-juice-no-sugar-added",
+                                                         "price":  3.98,
+                                                         "size":  "52 fl oz",
+                                                         "name":  "Dole Pineapple Juice, 100% Juice, No Sugar Added"
+                                                     },
+                                          "Aldi":  {
+                                                       "url":  "https://www.aldi.us/store/aldi/products/30343914-nature-s-nectar-pineapple-juice-52-fl-oz",
+                                                       "price":  5.49,
+                                                       "size":  "52 fl oz",
+                                                       "name":  "Nature\u0027s Nectar Not From Concentrate Pineapple Juice"
+                                                   },
+                                          "Baker\u0027s":  {
+                                                               "url":  "https://www.bakersplus.com/p/simply-pineapple-juice-drink-bottle/0002500013405",
+                                                               "price":  3.29,
+                                                               "size":  "52 fl oz",
+                                                               "name":  "SimplyÂ® Pineapple Juice"
+                                                           }
                                       },
                   "sugar":  {
                                 "commodity":  "Sugar",
@@ -5266,7 +5872,25 @@
                                                 "price":  8,
                                                 "size":  "",
                                                 "name":  "Great Value Granulated Sugar, 10 lb"
-                                            }
+                                            },
+                                "Hy-Vee":  {
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/2970350/thats-smart-granulated-sugar",
+                                               "price":  3.12,
+                                               "size":  "4 lb",
+                                               "name":  "That\u0027s Smart! Granulated Sugar"
+                                           },
+                                "Aldi":  {
+                                             "url":  "https://www.aldi.us/store/aldi/products/17498770-baker-s-corner-granulated-sugar-4-lb",
+                                             "price":  3.19,
+                                             "size":  "4 lb",
+                                             "name":  "Baker\u0027s Corner Granulated Sugar"
+                                         },
+                                "Baker\u0027s":  {
+                                                     "url":  "https://www.bakersplus.com/p/smart-way-granulated-sugar/0001111011888",
+                                                     "price":  3.29,
+                                                     "size":  "4 lb",
+                                                     "name":  "Smart Wayâ„¢ Granulated Sugar"
+                                                 }
                             },
                   "fish-sauce":  {
                                      "commodity":  "Fish Sauce",
@@ -5281,7 +5905,19 @@
                                                      "price":  2.84,
                                                      "size":  "",
                                                      "name":  "Kikkoman Fish Sauce, 6.8 fl oz"
-                                                 }
+                                                 },
+                                     "Hy-Vee":  {
+                                                    "url":  "https://www.hy-vee.com/aisles-online/p/2425544/dynasty-premium-fish-sauce",
+                                                    "price":  3.49,
+                                                    "size":  "6.7 oz",
+                                                    "name":  "Dynasty Premium Fish Sauce"
+                                                },
+                                     "Baker\u0027s":  {
+                                                          "url":  "https://www.bakersplus.com/p/thai-kitchen-gluten-free-premium-fish-sauce/0073762800100",
+                                                          "price":  6.49,
+                                                          "size":  "6.76 fl oz",
+                                                          "name":  "Thai Kitchen Gluten Free Premium Fish Sauce"
+                                                      }
                                  },
                   "apple-cider-vinegar":  {
                                               "commodity":  "Apple Cider Vinegar",
@@ -5296,7 +5932,25 @@
                                                               "price":  6.67,
                                                               "size":  "",
                                                               "name":  "Great Value Apple Cider Vinegar, 128 fl oz"
-                                                          }
+                                                          },
+                                              "Hy-Vee":  {
+                                                             "url":  "https://www.hy-vee.com/aisles-online/p/22368/hy-vee-apple-cider-flavored-distilled-vinegar",
+                                                             "price":  2.99,
+                                                             "size":  "32 fl oz",
+                                                             "name":  "Hy-Vee Apple Cider Flavored Distilled Vinegar"
+                                                         },
+                                              "Aldi":  {
+                                                           "url":  "https://www.aldi.us/store/aldi/products/20144288-simply-nature-organic-apple-cider-vinegar-33-8-fl-oz",
+                                                           "price":  4.95,
+                                                           "size":  "33.8 fl oz",
+                                                           "name":  "Simply Nature Organic Apple Cider Vinegar"
+                                                       },
+                                              "Baker\u0027s":  {
+                                                                   "url":  "https://www.bakersplus.com/p/kroger-5-apple-cider-vinegar/0001111086200",
+                                                                   "price":  1.69,
+                                                                   "size":  "16 fl oz",
+                                                                   "name":  "KrogerÂ® 5% Apple Cider Vinegar"
+                                                               }
                                           },
                   "ground-allspice":  {
                                           "commodity":  "Ground Allspice",
@@ -5311,7 +5965,19 @@
                                                           "price":  2.12,
                                                           "size":  "",
                                                           "name":  "Great Value Ground Allspice, 2 oz"
-                                                      }
+                                                      },
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/4884/morton-and-bassett-ground-allspice",
+                                                         "price":  9.99,
+                                                         "size":  "2.3 oz",
+                                                         "name":  "Morton \u0026 Bassett Ground Allspice"
+                                                     },
+                                          "Baker\u0027s":  {
+                                                               "url":  "https://www.bakersplus.com/p/kroger-ground-allspice-shaker/0001111068437",
+                                                               "price":  4.29,
+                                                               "size":  "1.62 oz",
+                                                               "name":  "KrogerÂ® Ground Allspice Shaker"
+                                                           }
                                       },
                   "cheddar-cheese":  {
                                          "commodity":  "Cheddar Cheese",
@@ -5326,7 +5992,25 @@
                                                          "price":  13.46,
                                                          "size":  "",
                                                          "name":  "Great Value Sharp Cheddar Block, 64 oz"
-                                                     }
+                                                     },
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/2626400/hy-vee-cheese-sharp-cheddar-chunk",
+                                                        "price":  7.98,
+                                                        "size":  "32 oz",
+                                                        "name":  "Hy-Vee Cheese Sharp Cheddar Chunk"
+                                                    },
+                                         "Aldi":  {
+                                                      "url":  "https://www.aldi.us/store/aldi/products/18647864-happy-farms-mild-cheddar-cheese-block-8-oz",
+                                                      "price":  1.95,
+                                                      "size":  "8 oz",
+                                                      "name":  "Happy Farms Mild Cheddar Cheese Block"
+                                                  },
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/kroger-sharp-cheddar-shredded-cheese-family-size/0001111015120",
+                                                              "price":  7.29,
+                                                              "size":  "32 oz",
+                                                              "name":  "KrogerÂ® Sharp Cheddar Shredded Cheese Family Size"
+                                                          }
                                      },
                   "dried-thyme":  {
                                       "commodity":  "Dried Thyme",
@@ -5341,7 +6025,19 @@
                                                       "price":  9.24,
                                                       "size":  "",
                                                       "name":  "Badia Thyme Leaves, 8 oz"
-                                                  }
+                                                  },
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/22591/hy-vee-thyme",
+                                                     "price":  2.99,
+                                                     "size":  "0.75 oz",
+                                                     "name":  "Hy-Vee Thyme"
+                                                 },
+                                      "Baker\u0027s":  {
+                                                           "url":  "https://www.bakersplus.com/p/private-selection-thyme-leaves-shaker/0001111072970",
+                                                           "price":  3.79,
+                                                           "size":  "0.78 oz",
+                                                           "name":  "Private SelectionÂ® Thyme Leaves Shaker"
+                                                       }
                                   },
                   "ground-turmeric":  {
                                           "commodity":  "Ground Turmeric",
@@ -5356,7 +6052,25 @@
                                                           "price":  13.04,
                                                           "size":  "",
                                                           "name":  "Badia Ground Turmeric, 16 oz"
-                                                      }
+                                                      },
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/29239/simply-organic-turmeric",
+                                                         "price":  6.99,
+                                                         "size":  "2.38 oz",
+                                                         "name":  "Simply Organic Turmeric"
+                                                     },
+                                          "Aldi":  {
+                                                       "url":  "https://www.aldi.us/store/aldi/products/21461855-simply-nature-organic-ground-turmeric-1-37-oz",
+                                                       "price":  2.19,
+                                                       "size":  "1.37 oz",
+                                                       "name":  "Simply Nature Organic Ground Turmeric"
+                                                   },
+                                          "Baker\u0027s":  {
+                                                               "url":  "https://www.bakersplus.com/p/simple-truth-organic-ground-turmeric-shaker/0001111002376",
+                                                               "price":  3.99,
+                                                               "size":  "2.04 oz",
+                                                               "name":  "Simple Truth OrganicÂ® Ground Turmeric Shaker"
+                                                           }
                                       },
                   "red-pepper-flakes":  {
                                             "commodity":  "Red Pepper Flakes",
@@ -5371,7 +6085,25 @@
                                                             "price":  7.14,
                                                             "size":  "",
                                                             "name":  "Great Value Crushed Red Pepper, 12 oz"
-                                                        }
+                                                        },
+                                            "Hy-Vee":  {
+                                                           "url":  "https://www.hy-vee.com/aisles-online/p/3225646/thats-smart-crushed-red-pepper",
+                                                           "price":  1.25,
+                                                           "size":  "2 oz",
+                                                           "name":  "That\u0027s Smart! Crushed Red Pepper"
+                                                       },
+                                            "Aldi":  {
+                                                         "url":  "https://www.aldi.us/store/aldi/products/19688295-stonemill-crushed-red-pepper-1-5-oz",
+                                                         "price":  1.09,
+                                                         "size":  "1.5 oz",
+                                                         "name":  "Stonemill Crushed Red Pepper"
+                                                     },
+                                            "Baker\u0027s":  {
+                                                                 "url":  "https://www.bakersplus.com/p/smart-way-crushed-red-pepper/0001111011745",
+                                                                 "price":  1.25,
+                                                                 "size":  "1.5 oz",
+                                                                 "name":  "Smart Wayâ„¢ Crushed Red Pepper"
+                                                             }
                                         },
                   "all-purpose-flour":  {
                                             "commodity":  "All-Purpose Flour",
@@ -5386,7 +6118,25 @@
                                                             "price":  10.77,
                                                             "size":  "",
                                                             "name":  "Great Value All-Purpose Flour, 25 lb"
-                                                        }
+                                                        },
+                                            "Hy-Vee":  {
+                                                           "url":  "https://www.hy-vee.com/aisles-online/p/56001/hy-vee-bleached-all-purpose-flour",
+                                                           "price":  2.99,
+                                                           "size":  "5 lb",
+                                                           "name":  "Hy-Vee Bleached All Purpose Flour"
+                                                       },
+                                            "Aldi":  {
+                                                         "url":  "https://www.aldi.us/store/aldi/products/18648338-baker-s-corner-all-purpose-flour-5-lb",
+                                                         "price":  2.15,
+                                                         "size":  "5 lb",
+                                                         "name":  "Baker\u0027s Corner All Purpose Flour"
+                                                     },
+                                            "Baker\u0027s":  {
+                                                                 "url":  "https://www.bakersplus.com/p/kroger-bleached-all-purpose-flour/0001111085402",
+                                                                 "price":  2.59,
+                                                                 "size":  "5 lb",
+                                                                 "name":  "KrogerÂ® Bleached All Purpose Flour"
+                                                             }
                                         },
                   "sriracha":  {
                                    "commodity":  "Sriracha",
@@ -5395,7 +6145,19 @@
                                                        "price":  0.3524,
                                                        "size":  "17 oz",
                                                        "name":  "Tuong Ot Sriracha Hot Chili Sauce 17 Oz"
-                                                   }
+                                                   },
+                                   "Hy-Vee":  {
+                                                  "url":  "https://www.hy-vee.com/aisles-online/p/147659/tuong-sriracha-hot-chili-sauce",
+                                                  "price":  7.99,
+                                                  "size":  "28 oz",
+                                                  "name":  "Tuong Sriracha Hot Chili Sauce"
+                                              },
+                                   "Baker\u0027s":  {
+                                                        "url":  "https://www.bakersplus.com/p/huy-fong-sriracha-hot-chili-sauce/0002446306116",
+                                                        "price":  5.99,
+                                                        "size":  "28 oz",
+                                                        "name":  "Huy Fong Sriracha Hot Chili Sauce"
+                                                    }
                                },
                   "breadcrumbs":  {
                                       "commodity":  "Panko Breadcrumbs",
@@ -5410,7 +6172,25 @@
                                                       "price":  6.96,
                                                       "size":  "",
                                                       "name":  "Kikkoman Panko Breadcrumbs 2pk, 16 oz"
-                                                  }
+                                                  },
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/58554/hy-vee-plain-panko-bread-crumbs",
+                                                     "price":  2.99,
+                                                     "size":  "6 oz",
+                                                     "name":  "Hy-Vee Plain Panko Bread Crumbs"
+                                                 },
+                                      "Aldi":  {
+                                                   "url":  "https://www.aldi.us/store/aldi/products/18649615-chef-s-cupboard-panko-bread-crumbs-8-oz",
+                                                   "price":  2.05,
+                                                   "size":  "8 oz",
+                                                   "name":  "Chef\u0027s Cupboard Panko Breadcrumbs"
+                                               },
+                                      "Baker\u0027s":  {
+                                                           "url":  "https://www.bakersplus.com/p/kikkoman-panko-japanese-style-bread-crumbs/0004139005004",
+                                                           "price":  2.49,
+                                                           "size":  "8 oz",
+                                                           "name":  "KikkomanÂ® Panko Japanese Style Bread Crumbs"
+                                                       }
                                   },
                   "frozen-peas":  {
                                       "commodity":  "Frozen Peas",
@@ -5425,7 +6205,25 @@
                                                       "price":  0.98,
                                                       "size":  "",
                                                       "name":  "Great Value Frozen Sweet Peas, 16 oz"
-                                                  }
+                                                  },
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/2985050/hy-vee-simple-source-fresh-steam-peas-10-oz",
+                                                     "price":  1.28,
+                                                     "size":  "10 oz",
+                                                     "name":  "Hy-Vee Simple Source Fresh Steam Peas"
+                                                 },
+                                      "Aldi":  {
+                                                   "url":  "https://www.aldi.us/store/aldi/products/19871879-season-s-choice-steamed-sweet-garden-peas-12-oz",
+                                                   "price":  1.09,
+                                                   "size":  "12 oz",
+                                                   "name":  "Season\u0027s Choice Steamable Sweet Peas"
+                                               },
+                                      "Baker\u0027s":  {
+                                                           "url":  "https://www.bakersplus.com/p/kroger-traditional-favorites-frozen-green-peas-big-deal-/0001111012835",
+                                                           "price":  5.49,
+                                                           "size":  "60 oz",
+                                                           "name":  "KrogerÂ® Traditional Favorites Frozen Green Peas"
+                                                       }
                                   },
                   "ground-cinnamon":  {
                                           "commodity":  "Ground Cinnamon",
@@ -5440,7 +6238,52 @@
                                                           "price":  1.27,
                                                           "size":  "",
                                                           "name":  "Great Value Ground Cinnamon, 2.5 oz"
+                                                      },
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/2950925/thats-smart-ground-cinnamon",
+                                                         "price":  1.25,
+                                                         "size":  "2.5 oz",
+                                                         "name":  "That\u0027s Smart Ground Cinnamon"
+                                                     },
+                                          "Aldi":  {
+                                                       "url":  "https://www.aldi.us/store/aldi/products/19688299-stonemill-ground-cinnamon-2-37-oz",
+                                                       "price":  1.09,
+                                                       "size":  "2.37 oz",
+                                                       "name":  "Stonemill Ground Cinnamon"
+                                                   },
+                                          "Baker\u0027s":  {
+                                                               "url":  "https://www.bakersplus.com/p/smart-way-ground-cinnamon/0001111011748",
+                                                               "price":  1.25,
+                                                               "size":  "1.94 oz",
+                                                               "name":  "Smart Wayâ„¢ Ground Cinnamon"
+                                                           }
+                                      },
+                  "capers":  {
+                                 "commodity":  "Capers",
+                                 "Family Fare":  {
+                                                     "url":  "",
+                                                     "price":  3.59,
+                                                     "size":  "3.5 fl oz",
+                                                     "name":  "Reese Non Pareil Capers, 3.5 fl oz"
+                                                 }
+                             },
+                  "five-spice-powder":  {
+                                            "commodity":  "Five-Spice Powder",
+                                            "Baker\u0027s":  {
+                                                                 "url":  "",
+                                                                 "price":  5.99,
+                                                                 "size":  "1.65 oz",
+                                                                 "name":  "Private Selection Chinese Five Spice Blend, 1.65 oz"
+                                                             }
+                                        },
+                  "fresh-mint":  {
+                                     "commodity":  "Fresh Mint",
+                                     "Baker\u0027s":  {
+                                                          "url":  "",
+                                                          "price":  2.49,
+                                                          "size":  "0.5 oz",
+                                                          "name":  "Simple Truth Organic Mint, 0.5 oz"
                                                       }
-                                      }
+                                 }
               }
 }
