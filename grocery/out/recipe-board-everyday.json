@@ -5322,6 +5322,16 @@
                                               "membership":  false,
                                               "item":  "Bay Leaves (16 oz bulk)",
                                               "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  4.27,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Whole Bay Leaves, 2 oz",
+                                              "size":  "2 oz"
                                           }
                                       ]
                        },
@@ -5444,8 +5454,8 @@
                            "commodity":  "Dried Oregano",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Walmart",
-                           "cheapest_price":  1.24,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  1.0873,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5467,6 +5477,16 @@
                                               "membership":  false,
                                               "item":  "Oregano Leaves",
                                               "size":  ""
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  1.0873,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Oregano, 5.5 oz",
+                                              "size":  "5.5 oz"
                                           }
                                       ]
                        },
@@ -5498,6 +5518,16 @@
                                               "membership":  false,
                                               "item":  "Great Value Iodized Salt",
                                               "size":  "26 oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.0372,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Morton Iodized Salt, 64 oz",
+                                              "size":  "64 oz"
                                           }
                                       ]
                        },
@@ -5506,8 +5536,8 @@
                            "commodity":  "Black Pepper",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.695,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.4433,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5519,6 +5549,16 @@
                                               "membership":  false,
                                               "item":  "That\u0027s Smart! Ground Black Pepper",
                                               "size":  "2 oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.4433,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Fine Ground Black Pepper, 18 oz",
+                                              "size":  "18 oz"
                                           }
                                       ]
                        },
@@ -5527,8 +5567,8 @@
                            "commodity":  "Fresh Cilantro",
                            "unit":  "each",
                            "category":  "Produce",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.99,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.93,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5540,6 +5580,16 @@
                                               "membership":  false,
                                               "item":  "Cilantro (Chinese Parsley/Coriander)",
                                               "size":  "1 ct"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.93,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Cilantro Bunch",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -5600,8 +5650,8 @@
                            "commodity":  "Worcestershire Sauce",
                            "unit":  "floz",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Walmart",
-                           "cheapest_price":  0.1,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.0686,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5623,6 +5673,16 @@
                                               "membership":  false,
                                               "item":  "Worcestershire Sauce",
                                               "size":  ""
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.0686,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "French\u0027s Worcestershire Sauce, 1 gal",
+                                              "size":  "1 gal"
                                           }
                                       ]
                        },
@@ -5654,6 +5714,16 @@
                                               "membership":  false,
                                               "item":  "Parsley Flakes (bulk)",
                                               "size":  ""
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  2.0125,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Parsley Flakes, 3.2 oz",
+                                              "size":  "3.2 oz"
                                           }
                                       ]
                        },
@@ -5662,8 +5732,8 @@
                            "commodity":  "Cayenne Pepper",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Walmart",
-                           "cheapest_price":  0.838,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.4738,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5685,6 +5755,16 @@
                                               "membership":  false,
                                               "item":  "Ground Cayenne Pepper",
                                               "size":  ""
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.4738,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Cayenne Pepper, 16 oz",
+                                              "size":  "16 oz"
                                           }
                                       ]
                        },
@@ -5716,6 +5796,16 @@
                                               "membership":  false,
                                               "item":  "Vegetable Oil (1 gal)",
                                               "size":  "128 fl oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.0723,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Vegetable Oil, 192 oz",
+                                              "size":  "192 oz"
                                           }
                                       ]
                        },
@@ -5755,8 +5845,8 @@
                            "commodity":  "Feta Cheese",
                            "unit":  "oz",
                            "category":  "Dairy \u0026 Cheese",
-                           "cheapest_store":  "Walmart",
-                           "cheapest_price":  0.563,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.3033,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5778,6 +5868,16 @@
                                               "membership":  false,
                                               "item":  "Feta Cheese",
                                               "size":  ""
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.3033,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Athenos Crumbled Feta, 24 oz",
+                                              "size":  "24 oz"
                                           }
                                       ]
                        },
@@ -5817,8 +5917,8 @@
                            "commodity":  "Mozzarella Cheese",
                            "unit":  "oz",
                            "category":  "Dairy \u0026 Cheese",
-                           "cheapest_store":  "Walmart",
-                           "cheapest_price":  0.218,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.1521,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5840,6 +5940,16 @@
                                               "membership":  false,
                                               "item":  "Mozzarella Cheese (32 oz)",
                                               "size":  "32 oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.1521,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Part-Skim Mozzarella, 5 lb",
+                                              "size":  "5 lb"
                                           }
                                       ]
                        },
@@ -5848,8 +5958,8 @@
                            "commodity":  "Cucumber",
                            "unit":  "each",
                            "category":  "Produce",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.89,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.76,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5861,6 +5971,26 @@
                                               "membership":  false,
                                               "item":  "Fresh Cucumbers",
                                               "size":  "1 ea"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.76,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Cucumber, Each",
+                                              "size":  ""
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  1.09,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Seedless English Cucumbers, 3 ct",
+                                              "size":  "3 ct"
                                           }
                                       ]
                        },
@@ -5921,8 +6051,8 @@
                            "commodity":  "Celery",
                            "unit":  "each",
                            "category":  "Produce",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  2.49,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  2.37,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5934,6 +6064,16 @@
                                               "membership":  false,
                                               "item":  "Fresh Celery",
                                               "size":  "1 ea"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  2.37,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Whole Celery, 1 ea",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -5942,8 +6082,8 @@
                            "commodity":  "Ground Ginger",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Walmart",
-                           "cheapest_price":  0.809,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.7971,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5965,6 +6105,16 @@
                                               "membership":  false,
                                               "item":  "Ground Ginger (bulk)",
                                               "size":  ""
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.7971,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Organic Ground Ginger, 7 oz",
+                                              "size":  "7 oz"
                                           }
                                       ]
                        },
@@ -6110,6 +6260,16 @@
                                               "membership":  false,
                                               "item":  "ReaLemon Lemon Juice (gal)",
                                               "size":  ""
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.135,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "ReaLemon 100% Lemon Juice, 48 fl oz 2pk",
+                                              "size":  "48 fl oz"
                                           }
                                       ]
                        },
@@ -6118,8 +6278,8 @@
                            "commodity":  "Condensed French Onion Soup",
                            "unit":  "each",
                            "category":  "Canned \u0026 Jarred",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  1.99,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  1.12,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6131,6 +6291,16 @@
                                               "membership":  false,
                                               "item":  "Campbell\u0027s French Onion Soup 10.5 Oz",
                                               "size":  "10.5 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  1.12,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Condensed French Onion Soup, 10.5 oz",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -6139,8 +6309,8 @@
                            "commodity":  "Celery Salt",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.4158,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.415,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6152,6 +6322,16 @@
                                               "membership":  false,
                                               "item":  "Dan\u0027s Pantry Celery Salt 12 Oz",
                                               "size":  "12 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.415,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Celery Salt 3pk, 5.25 oz",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -6160,8 +6340,8 @@
                            "commodity":  "Sweet Chili Sauce",
                            "unit":  "floz",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.3193,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.187,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6173,6 +6353,16 @@
                                               "membership":  false,
                                               "item":  "La Choy Sauce, Sweet Chili 15 Oz",
                                               "size":  "15 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.187,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Mae Ploy Sweet Chili Sauce, 32 oz",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -6181,8 +6371,8 @@
                            "commodity":  "Swiss Cheese",
                            "unit":  "oz",
                            "category":  "Dairy \u0026 Cheese",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.3238,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.209,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6194,6 +6384,26 @@
                                               "membership":  false,
                                               "item":  "Our Family Natural Swiss Cheese 8 Oz",
                                               "size":  "8 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.209,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Swiss Sliced, 8 oz",
+                                              "size":  ""
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.2444,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Baby Swiss Slices, 2 lb",
+                                              "size":  "2 lb"
                                           }
                                       ]
                        },
@@ -6202,8 +6412,8 @@
                            "commodity":  "Half and Half",
                            "unit":  "floz",
                            "category":  "Dairy \u0026 Cheese",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.1369,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.0675,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6215,6 +6425,26 @@
                                               "membership":  false,
                                               "item":  "Our Family Half And Half 16 Fl Oz",
                                               "size":  "16 fl oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.078,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Half and Half, 64 fl oz",
+                                              "size":  ""
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.0675,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Half and Half, 32 fl oz",
+                                              "size":  "32 fl oz"
                                           }
                                       ]
                        },
@@ -6223,8 +6453,8 @@
                            "commodity":  "White Wine Vinegar",
                            "unit":  "floz",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.2825,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.178,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6236,6 +6466,16 @@
                                               "membership":  false,
                                               "item":  "Holland House White Wine Vinegar 12 Fl Oz",
                                               "size":  "12 fl oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.178,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Pompeian White Wine Vinegar, 16 fl oz",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -6244,8 +6484,8 @@
                            "commodity":  "Ground Nutmeg",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  3.0613,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  1.64,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6257,6 +6497,16 @@
                                               "membership":  false,
                                               "item":  "Our Family Nutmeg, Ground 2.12 Oz",
                                               "size":  "2.12 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  1.64,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Ground Nutmeg, 1.5 oz",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -6286,8 +6536,8 @@
                            "commodity":  "Sugar",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.0903,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.0411,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6299,6 +6549,26 @@
                                               "membership":  false,
                                               "item":  "Our Family Sugar, Granulated 32 Oz",
                                               "size":  "32 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.05,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Granulated Sugar, 10 lb",
+                                              "size":  ""
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.0411,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Granulated Sugar, 10 lb",
+                                              "size":  "10 lb"
                                           }
                                       ]
                        },
@@ -6307,8 +6577,8 @@
                            "commodity":  "Fish Sauce",
                            "unit":  "floz",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.9601,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.284,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6320,6 +6590,16 @@
                                               "membership":  false,
                                               "item":  "Thai Gluten Free Premium Fish Sauce 6.76 Fl Oz",
                                               "size":  "6.76 fl oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.284,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Kikkoman Fish Sauce, 6.8 fl oz",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -6328,8 +6608,8 @@
                            "commodity":  "Apple Cider Vinegar",
                            "unit":  "floz",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.1119,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.052,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6341,6 +6621,26 @@
                                               "membership":  false,
                                               "item":  "Apple Cider Vinegar Our Family 16 Fl Oz",
                                               "size":  "16 fl oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.052,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Apple Cider Vinegar, 128 fl oz",
+                                              "size":  ""
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.1327,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Bragg Organic Apple Cider Vinegar, 128 fl oz",
+                                              "size":  "128 fl oz"
                                           }
                                       ]
                        },
@@ -6349,8 +6649,8 @@
                            "commodity":  "Ground Allspice",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  3.3167,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  1.06,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6362,6 +6662,16 @@
                                               "membership":  false,
                                               "item":  "Tone\u0027s Allspice, Ground 0.6 Oz",
                                               "size":  "0.6 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  1.06,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Ground Allspice, 2 oz",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -6370,8 +6680,8 @@
                            "commodity":  "Cheddar Cheese",
                            "unit":  "oz",
                            "category":  "Dairy \u0026 Cheese",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.3238,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.1763,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6383,6 +6693,26 @@
                                               "membership":  false,
                                               "item":  "Our Family Natural Medium Cheddar Cheese 8 Oz",
                                               "size":  "8 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.21,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Sharp Cheddar Block, 64 oz",
+                                              "size":  ""
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.1763,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Sharp Cheddar, 32 oz",
+                                              "size":  "32 oz"
                                           }
                                       ]
                        },
@@ -6391,8 +6721,8 @@
                            "commodity":  "Dried Thyme",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  3.3333,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.8776,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6404,6 +6734,26 @@
                                               "membership":  false,
                                               "item":  "Spice Supreme Thyme Leaves 1.5 Oz",
                                               "size":  "1.5 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  1.16,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Badia Thyme Leaves, 8 oz",
+                                              "size":  ""
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.8776,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Thyme Leaves, 8.25 oz",
+                                              "size":  "8.25 oz"
                                           }
                                       ]
                        },
@@ -6412,8 +6762,8 @@
                            "commodity":  "Ground Turmeric",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  1.345,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.399,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6425,6 +6775,26 @@
                                               "membership":  false,
                                               "item":  "Sugar \u0027N Spice Turmeric Ground 2 Oz",
                                               "size":  "2 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.815,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Badia Ground Turmeric, 16 oz",
+                                              "size":  ""
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.399,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Ground Turmeric, 20 oz",
+                                              "size":  "20 oz"
                                           }
                                       ]
                        },
@@ -6433,8 +6803,8 @@
                            "commodity":  "Red Pepper Flakes",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  1.9933,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.433,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6446,6 +6816,26 @@
                                               "membership":  false,
                                               "item":  "Our Family Red Pepper, Crushed 1.5 Oz",
                                               "size":  "1.5 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.595,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Crushed Red Pepper, 12 oz",
+                                              "size":  ""
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.433,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Crushed Red Pepper, 3.75 lb",
+                                              "size":  "3.75 lb"
                                           }
                                       ]
                        },
@@ -6454,8 +6844,8 @@
                            "commodity":  "All-Purpose Flour",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.0374,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.0212,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6467,6 +6857,26 @@
                                               "membership":  false,
                                               "item":  "Our Family All Purpose Flour, Unbleached 5 Lb",
                                               "size":  "5 lb"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.027,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value All-Purpose Flour, 25 lb",
+                                              "size":  ""
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.0212,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark All Purpose Flour, 25 lb",
+                                              "size":  "25 lb"
                                           }
                                       ]
                        },
@@ -6475,8 +6885,8 @@
                            "commodity":  "Sriracha",
                            "unit":  "floz",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.3524,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.3207,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6488,6 +6898,16 @@
                                               "membership":  false,
                                               "item":  "Tuong Ot Sriracha Hot Chili Sauce 17 Oz",
                                               "size":  "17 oz"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.3207,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Huy Fong Sriracha, 28 oz 2pk",
+                                              "size":  "28 oz"
                                           }
                                       ]
                        },
@@ -6496,8 +6916,8 @@
                            "commodity":  "Panko Breadcrumbs",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.3488,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.218,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6509,6 +6929,16 @@
                                               "membership":  false,
                                               "item":  "Our Family Bread Crumbs, Panko, Plain 8 Oz",
                                               "size":  "8 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.218,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Kikkoman Panko Breadcrumbs 2pk, 16 oz",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -6517,8 +6947,8 @@
                            "commodity":  "Frozen Peas",
                            "unit":  "oz",
                            "category":  "Frozen",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.1158,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.065,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6530,6 +6960,16 @@
                                               "membership":  false,
                                               "item":  "Our Family Green Peas, Sweet, Frozen 12 Oz",
                                               "size":  "12 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.065,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Frozen Sweet Peas, 16 oz",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -6538,8 +6978,8 @@
                            "commodity":  "Ground Cinnamon",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.676,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.4433,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -6551,6 +6991,26 @@
                                               "membership":  false,
                                               "item":  "That\u0027s Smart! Ground Cinnamon 2.5 Oz",
                                               "size":  "2.5 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.508,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Ground Cinnamon, 2.5 oz",
+                                              "size":  ""
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.4433,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Ground Cinnamon, 18 oz",
+                                              "size":  "18 oz"
                                           }
                                       ]
                        }
