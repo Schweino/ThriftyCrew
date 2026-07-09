@@ -5299,8 +5299,8 @@
                            "commodity":  "Bay Leaves",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  33.25,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  1.25,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5312,6 +5312,16 @@
                                               "membership":  false,
                                               "item":  "Our Family Bay Leaves 0.12 Oz",
                                               "size":  "0.12 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  1.25,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Bay Leaves (16 oz bulk)",
+                                              "size":  "16 oz"
                                           }
                                       ]
                        },
@@ -5320,8 +5330,8 @@
                            "commodity":  "Garam Masala",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  3.6611,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.994,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5333,6 +5343,16 @@
                                               "membership":  false,
                                               "item":  "Finest Reserve Garam Masala 1.8 Oz",
                                               "size":  "1.8 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.994,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Garam Masala",
+                                              "size":  "12.3 oz"
                                           }
                                       ]
                        },
@@ -5341,8 +5361,8 @@
                            "commodity":  "Rice Vinegar",
                            "unit":  "floz",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.4492,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.187,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5354,6 +5374,16 @@
                                               "membership":  false,
                                               "item":  "Nakano Rice Vinegar, Organic, Natural 12 Fl Oz",
                                               "size":  "12 fl oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.187,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Kikkoman Rice Vinegar",
+                                              "size":  "10 fl oz"
                                           }
                                       ]
                        },
@@ -5383,8 +5413,8 @@
                            "commodity":  "Jerk Seasoning",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  1.3773,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.497,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5396,6 +5426,16 @@
                                               "membership":  false,
                                               "item":  "Lawry\u0027s Jerk Seasoning 4.93 Oz",
                                               "size":  "4.93 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.497,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Walkerswood Jamaican Jerk Seasoning",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -5404,8 +5444,8 @@
                            "commodity":  "Dried Oregano",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  2.92,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  1.24,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5417,6 +5457,16 @@
                                               "membership":  false,
                                               "item":  "Our Family Oregano Leaves 0.75 Oz",
                                               "size":  "0.75 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  1.24,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Oregano Leaves",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -5425,8 +5475,8 @@
                            "commodity":  "Salt",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.0381,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.036,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5437,6 +5487,16 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "Iodized Salt Our Family",
+                                              "size":  "26 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.036,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Iodized Salt",
                                               "size":  "26 oz"
                                           }
                                       ]
@@ -5509,8 +5569,8 @@
                            "commodity":  "Liquid Smoke",
                            "unit":  "floz",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.8725,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.423,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5522,6 +5582,16 @@
                                               "membership":  false,
                                               "item":  "Colgin Original Recipe Hickory Liquid Smoke 4 Fl Oz",
                                               "size":  "4 fl oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.423,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Liquid Smoke",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -5530,8 +5600,8 @@
                            "commodity":  "Worcestershire Sauce",
                            "unit":  "floz",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.169,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.1,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5543,6 +5613,16 @@
                                               "membership":  false,
                                               "item":  "Our Family Worcestershire Sauce 10 Fl Oz",
                                               "size":  "10 fl oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.1,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Worcestershire Sauce",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -5551,8 +5631,8 @@
                            "commodity":  "Dried Parsley",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  5.58,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  1.44,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5564,6 +5644,16 @@
                                               "membership":  false,
                                               "item":  "Mc Cormick Parsley Flakes 0.5 Oz",
                                               "size":  "0.5 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  1.44,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Parsley Flakes (bulk)",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -5572,8 +5662,8 @@
                            "commodity":  "Cayenne Pepper",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  1.8663,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.838,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5585,6 +5675,16 @@
                                               "membership":  false,
                                               "item":  "Lawry\u0027s Ground Cayenne Pepper 1.87 Oz",
                                               "size":  "1.87 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.838,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Ground Cayenne Pepper",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -5593,8 +5693,8 @@
                            "commodity":  "Vegetable Oil",
                            "unit":  "floz",
                            "category":  "Oils",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.1248,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.068,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5606,6 +5706,16 @@
                                               "membership":  false,
                                               "item":  "Our Family Vegetable Oil 100% Pure 40 Oz",
                                               "size":  "40 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.068,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Vegetable Oil (1 gal)",
+                                              "size":  "128 fl oz"
                                           }
                                       ]
                        },
@@ -5614,8 +5724,8 @@
                            "commodity":  "Smoked Paprika",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.9986,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.631,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5627,6 +5737,16 @@
                                               "membership":  false,
                                               "item":  "Sugar \u0027N Spice Smoked Paprika 7 Oz",
                                               "size":  "7 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.631,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Smoked Paprika",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -5635,8 +5755,8 @@
                            "commodity":  "Feta Cheese",
                            "unit":  "oz",
                            "category":  "Dairy \u0026 Cheese",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.8113,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.563,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5648,6 +5768,16 @@
                                               "membership":  false,
                                               "item":  "Culinary Tours Feta Chunk Cheese 8 Oz",
                                               "size":  "8 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.563,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Feta Cheese",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -5656,8 +5786,8 @@
                            "commodity":  "Dried Dill",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  4.4464,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  1.51,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5669,6 +5799,16 @@
                                               "membership":  false,
                                               "item":  "Our Family Dill Weed 0.56 Oz",
                                               "size":  "0.56 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  1.51,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Dill Weed (bulk)",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -5677,8 +5817,8 @@
                            "commodity":  "Mozzarella Cheese",
                            "unit":  "oz",
                            "category":  "Dairy \u0026 Cheese",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.2494,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.218,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5690,6 +5830,16 @@
                                               "membership":  false,
                                               "item":  "Our Family Low Moisture Part Skim Mozzarella 16 Oz",
                                               "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.218,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Mozzarella Cheese (32 oz)",
+                                              "size":  "32 oz"
                                           }
                                       ]
                        },
@@ -5719,8 +5869,8 @@
                            "commodity":  "Dried Basil",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  4.8226,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  1.2,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5732,6 +5882,16 @@
                                               "membership":  false,
                                               "item":  "Our Family Basil Leaves 0.62 Oz",
                                               "size":  "0.62 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  1.2,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Basil Leaves (bulk)",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -5782,8 +5942,8 @@
                            "commodity":  "Ground Ginger",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  2.8063,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.809,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5795,6 +5955,16 @@
                                               "membership":  false,
                                               "item":  "Full Circle Market Ground Ginger 1.6 Oz",
                                               "size":  "1.6 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.809,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Ground Ginger (bulk)",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -5803,8 +5973,8 @@
                            "commodity":  "Au Jus Gravy Mix",
                            "unit":  "oz",
                            "category":  "Sauces \u0026 Condiments",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  1.09,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.98,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5816,6 +5986,16 @@
                                               "membership":  false,
                                               "item":  "Our Family Au Jus Gravy Mix 1 Oz",
                                               "size":  "1 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.98,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Au Jus Gravy Mix",
+                                              "size":  "1 oz"
                                           }
                                       ]
                        },
@@ -5824,8 +6004,8 @@
                            "commodity":  "Dried Rosemary",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  9.3387,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  1.3,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5837,6 +6017,16 @@
                                               "membership":  false,
                                               "item":  "Mc Cormick Whole Rosemary Leaves 0.62 Oz",
                                               "size":  "0.62 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  1.3,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Rosemary Leaves",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -5866,8 +6056,8 @@
                            "commodity":  "Ground Coriander",
                            "unit":  "oz",
                            "category":  "Spices \u0026 Baking",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  3.2071,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  1.96,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5879,6 +6069,16 @@
                                               "membership":  false,
                                               "item":  "Full Circle Market Ground Coriander 1.4 Oz",
                                               "size":  "1.4 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  1.96,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Ground Coriander",
+                                              "size":  ""
                                           }
                                       ]
                        },
@@ -5887,8 +6087,8 @@
                            "commodity":  "Lemon Juice",
                            "unit":  "floz",
                            "category":  "Beverages",
-                           "cheapest_store":  "Family Fare",
-                           "cheapest_price":  0.1247,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  0.035,
                            "cheapest_type":  "everyday",
                            "stores":  [
                                           {
@@ -5900,6 +6100,16 @@
                                               "membership":  false,
                                               "item":  "Our Family Lemon 100% Juice 32 Fl Oz",
                                               "size":  "32 fl oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.035,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "ReaLemon Lemon Juice (gal)",
+                                              "size":  ""
                                           }
                                       ]
                        },
