@@ -7,6 +7,7 @@
 !/meal-prep/
 !/.github/
 !/public/
+!/worker/
 !/wrangler.jsonc
 
 # --- regenerable pipeline OUTPUTS: recomputed every run from the raw inputs, so never tracked. This lets
