@@ -1,0 +1,130 @@
+<div id="smpirf-root">
+<style>
+#smpirf-root{--navy:#16263f;--gold:#e2a43c;--gold-d:#8a6d1f;--cream:#f6f1e7;--ink:#3a4658;--line:#e2e8f0;--err:#b23b2e;--ok:#1f7a4d;
+  max-width:640px;margin:0 auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+#smpirf-root *{box-sizing:border-box;}
+.smpirf-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px 26px;box-shadow:0 8px 30px rgba(22,38,63,.08);}
+.smpirf-h{color:var(--navy);font-size:1.5rem;line-height:1.25;font-weight:800;margin:0 0 6px;}
+.smpirf-sub{color:var(--ink);font-size:1rem;line-height:1.5;margin:0 0 20px;}
+.smpirf-field{margin:0 0 16px;}
+.smpirf-field label{display:block;color:var(--navy);font-weight:700;font-size:.92rem;margin:0 0 6px;}
+.smpirf-req{color:var(--err);font-weight:700;}
+.smpirf-field input,.smpirf-field select{width:100%;padding:12px 13px;font-size:1rem;color:var(--navy);background:#fff;
+  border:1.5px solid var(--line);border-radius:10px;transition:border-color .15s,box-shadow .15s;appearance:none;}
+.smpirf-field select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2316263f' stroke-width='2.5'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 13px center;padding-right:38px;}
+.smpirf-field input:focus,.smpirf-field select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,164,60,.22);}
+.smpirf-note{color:var(--ink);font-size:.83rem;line-height:1.45;margin:6px 2px 0;}
+.smpirf-hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;overflow:hidden;}
+.smpirf-btn{width:100%;margin-top:4px;padding:14px 18px;font-size:1.05rem;font-weight:800;color:var(--navy);
+  background:var(--gold);border:none;border-radius:10px;cursor:pointer;transition:filter .15s,transform .05s;}
+.smpirf-btn:hover{filter:brightness(1.04);}
+.smpirf-btn:active{transform:translateY(1px);}
+.smpirf-btn:disabled{opacity:.6;cursor:default;}
+.smpirf-msg{margin-top:14px;padding:12px 14px;border-radius:10px;font-size:.95rem;line-height:1.45;display:none;}
+.smpirf-msg.ok{display:block;background:#eaf6ef;color:var(--ok);border:1px solid #bfe3cd;}
+.smpirf-msg.bad{display:block;background:#fbeceb;color:var(--err);border:1px solid #f2c9c5;}
+.smpirf-hide{display:none!important;}
+@media (max-width:520px){.smpirf-card{padding:22px 18px;border-radius:14px;}.smpirf-h{font-size:1.3rem;}}
+</style>
+
+<div class="smpirf-card">
+  <h3 class="smpirf-h">Suggest an item for the grocery list</h3>
+  <p class="smpirf-sub">Found a deal we should be tracking? Send it over and we'll look at adding it to the board.</p>
+
+  <form id="smpirf-form" novalidate>
+    <div class="smpirf-field">
+      <label for="smpirf-store">Store <span class="smpirf-req">*</span></label>
+      <select id="smpirf-store" name="store" required>
+        <option value="" disabled selected>Select a store</option>
+        <option>Walmart</option>
+        <option>Baker's</option>
+        <option>Family Fare</option>
+        <option>Hy-Vee</option>
+        <option>Aldi</option>
+        <option>Sam's Club</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="smpirf-field smpirf-hide" id="smpirf-otherwrap">
+      <label for="smpirf-storeother">Store name <span class="smpirf-req">*</span></label>
+      <input type="text" id="smpirf-storeother" name="storeOther" placeholder="Which store?" maxlength="120" autocomplete="off">
+    </div>
+
+    <div class="smpirf-field">
+      <label for="smpirf-item">Item name <span class="smpirf-req">*</span></label>
+      <input type="text" id="smpirf-item" name="item" placeholder="e.g. Boneless chicken breast, 5 lb" maxlength="300" required autocomplete="off">
+    </div>
+
+    <div class="smpirf-field">
+      <label for="smpirf-url">Item URL <span class="smpirf-req">*</span></label>
+      <input type="url" id="smpirf-url" name="url" placeholder="https://..." maxlength="2000" required autocomplete="off" inputmode="url">
+      <p class="smpirf-note"><strong>Required.</strong> The exact product link lets us match the precise item (brand, size) and pull its real price.</p>
+    </div>
+
+    <div class="smpirf-hp" aria-hidden="true">
+      <label>Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+    </div>
+
+    <button type="submit" class="smpirf-btn" id="smpirf-btn">Send it in</button>
+    <div class="smpirf-msg" id="smpirf-msg" role="status" aria-live="polite"></div>
+  </form>
+</div>
+
+<script>
+(function(){
+  var ENDPOINT = "https://smp-feed.ancient-snow-93df.workers.dev/submit";
+  var root = document.getElementById("smpirf-root");
+  if(!root) return;
+  var form = root.querySelector("#smpirf-form");
+  var storeSel = root.querySelector("#smpirf-store");
+  var otherWrap = root.querySelector("#smpirf-otherwrap");
+  var otherInput = root.querySelector("#smpirf-storeother");
+  var itemInput = root.querySelector("#smpirf-item");
+  var urlInput = root.querySelector("#smpirf-url");
+  var hp = form.querySelector("input[name=website]");
+  var btn = root.querySelector("#smpirf-btn");
+  var msg = root.querySelector("#smpirf-msg");
+
+  function show(kind, text){ msg.className = "smpirf-msg " + kind; msg.textContent = text; }
+  function clearMsg(){ msg.className = "smpirf-msg"; msg.textContent = ""; }
+
+  storeSel.addEventListener("change", function(){
+    var other = storeSel.value === "Other";
+    otherWrap.classList.toggle("smpirf-hide", !other);
+    otherInput.required = other;
+    if(other){ otherInput.focus(); }
+  });
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    clearMsg();
+    var store = storeSel.value;
+    var storeOther = (otherInput.value || "").trim();
+    var item = (itemInput.value || "").trim();
+    var url = (urlInput.value || "").trim();
+
+    if(!store){ show("bad","Please choose a store."); storeSel.focus(); return; }
+    if(store === "Other" && !storeOther){ show("bad","Please enter the store name."); otherInput.focus(); return; }
+    if(!item){ show("bad","Please enter the item name."); itemInput.focus(); return; }
+    if(!/^https?:\/\/.+/i.test(url)){ show("bad","Please paste the item's URL (it must start with http)."); urlInput.focus(); return; }
+
+    btn.disabled = true; var label = btn.textContent; btn.textContent = "Sending...";
+    fetch(ENDPOINT, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ store:store, storeOther:storeOther, item:item, url:url, website: hp ? hp.value : "" })
+    }).then(function(r){ return r.json().catch(function(){ return {ok:false}; }); })
+      .then(function(res){
+        if(res && res.ok){
+          form.reset(); otherWrap.classList.add("smpirf-hide"); otherInput.required=false;
+          show("ok","Thanks! Got it. We'll take a look at adding it to the board.");
+        } else {
+          show("bad", (res && res.error) ? res.error : "Something went wrong. Please try again.");
+        }
+      }).catch(function(){ show("bad","Could not send right now. Please try again in a moment."); })
+      .then(function(){ btn.disabled=false; btn.textContent=label; });
+  });
+})();
+</script>
+</div>
