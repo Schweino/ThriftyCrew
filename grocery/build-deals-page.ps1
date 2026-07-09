@@ -194,7 +194,7 @@ $sb = New-Object System.Text.StringBuilder
 if (-not $Embed) { [void]$sb.Append("<h1>Omaha's Cheapest Groceries This Week</h1>") }   # Embed: Ghost post title is the H1
 [void]$sb.Append("<p class='pg-sub'>The cheapest place to buy every grocery staple in Omaha this week. Six stores, checked every morning, ranked cheapest first.</p>")
 [void]$sb.Append("<p class='pg-note'>Lowest verified price at each store, sale or everyday, checked against the store's own ad or site. Sam's Club prices need a membership.</p>")
-[void]$sb.Append("<p class='pg-suggest'>See a cheaper price somewhere? <a href='/suggest-an-item/'>Suggest an item &rarr;</a></p></header>")
+[void]$sb.Append("<p class='pg-suggest'><a href='/suggest-an-item/'>Suggest an item for us to start tracking! &rarr;</a></p></header>")
 
 # store-status strip is built here but rendered at the BOTTOM of the page (it is transparency fine print;
 # it was costing ~200px of prime space above the first price). See the footer section.
