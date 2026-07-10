@@ -7,6 +7,8 @@
 //   Optional var: NOTIFY_TO (defaults to contact@simplemoneyplaybook.com)
 
 const ALLOWED_ORIGINS = [
+  "https://www.thriftycrew.com",
+  "https://thriftycrew.com",
   "https://www.simplemoneyplaybook.com",
   "https://simplemoneyplaybook.com",
   "https://map-to-success.ghost.io",
