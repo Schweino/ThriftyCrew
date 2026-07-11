@@ -23,12 +23,37 @@ function NewestAgeDays($globs) {
   if ($null -eq $m) { return 9999 }
   return [math]::Round(((Get-Date) - $m).TotalDays, 1)
 }
-# Baker's = daily flash agent (daily except Wed; Wed covered by the weekly agent) -> should be <= ~2 days.
+# Baker's: the daily flash agent is now EVENT-DRIVEN (it only scans on a sale-boundary day), so Baker's
+#   data files legitimately sit unchanged for days between boundaries. The real staleness signal is the
+#   WEEKLY ad pull: if the ad-schedule Baker's window has expired (current.to is in the past) the Wednesday
+#   pull was genuinely missed. We read that window and only flag on a missed weekly pull, with a generous
+#   file-age backstop (>9d) in case ad-schedule.json itself is missing/broken.
 # Sam's/Walmart = weekly browser refresh (Wed-Sat) -> should be <= ~9 days.
 $bakersAge = NewestAgeDays @('bakers\bakers-deals-*.json','regular\bakers-regular-*.json')
 $weeklyAge = NewestAgeDays @('sams\sams-deals-*.json','regular\walmart-regular-*.json')
+
+# Read the Baker's ad window from the schedule; stale only if that window has expired past a 1-day grace.
+$bakersWindowExpired = $false
+$bakersTo = $null
+try {
+  $sched = Get-Content (Join-Path $root 'ad-schedule.json') -Raw | ConvertFrom-Json
+  $b = $sched.stores | Where-Object { $_.store -eq "Baker's" } | Select-Object -First 1
+  if ($b -and $b.current -and $b.current.to) {
+    $bakersTo = $b.current.to
+    if (((Get-Date).Date - ([datetime]$bakersTo).Date).TotalDays -gt 1) { $bakersWindowExpired = $true }
+  } else {
+    # No usable window in the schedule -> fall back to the file-age backstop below.
+    $bakersWindowExpired = $bakersAge -gt 9
+  }
+} catch {
+  $bakersWindowExpired = $bakersAge -gt 9
+}
+
 $stale = @()
-if ($bakersAge -gt 2) { $stale += ("Baker's data is " + $bakersAge + " days old - the daily Baker's flash agent is not refreshing (PC asleep/off, or the Claude app is not running the agent).") }
+if ($bakersWindowExpired -or $bakersAge -gt 9) {
+  $detail = if ($bakersTo) { "ad window ended " + $bakersTo + ", newest data " + $bakersAge + " days old" } else { "newest data " + $bakersAge + " days old" }
+  $stale += ("Baker's weekly ad pull looks missed (" + $detail + ") - the Wednesday Baker's browser agent is not refreshing (PC asleep/off, or the Claude app is not running the agent).")
+}
 if ($weeklyAge -gt 9) { $stale += ("Sam's/Walmart data is " + $weeklyAge + " days old - the weekly browser refresh has not run.") }
 
 $sig = ($stale -join ' | ')
