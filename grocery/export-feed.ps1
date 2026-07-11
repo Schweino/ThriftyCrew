@@ -30,6 +30,20 @@ try {
     $purl[[string]$p.Name] = $m
   }
 } catch {}
+# sale windows: id|store -> sale_end, so the feed can carry "sale ends <date>" for the cheapest chip.
+# sale-windows.json is gitignored + regenerated daily on both local and cloud (check-ad-cycles runs
+# build-sale-windows BEFORE export-feed) - if it is missing we just emit no sale_end fields.
+$saleEnd = @{}
+try {
+  $sw = Get-Content (Join-Path $root 'sale-windows.json') -Raw | ConvertFrom-Json
+  $todayS = (Get-Date).ToString('yyyy-MM-dd')
+  foreach ($w in $sw.windows) {
+    if (-not $w.sale_end) { continue }
+    if ([string]$w.sale_end -lt $todayS) { continue }   # expired window: no badge
+    $saleEnd[([string]$w.id + '|' + [string]$w.store)] = [string]$w.sale_end
+  }
+} catch {}
+
 $ing = [ordered]@{}
 function AddBoard($rows) {
   foreach ($r in $rows) {
@@ -47,7 +61,10 @@ function AddBoard($rows) {
         # n = how many of the 6 stores actually have a price for this ingredient - so the UI never overclaims
         # "checked at 6 stores" for an item only 1-2 stores have been priced at yet (new adds, or an item some
         # stores simply don't carry).
-        $ing[$id] = [ordered]@{ unit=[string]$r.unit; cheapest=[math]::Round($lo,4); store=$los; type=$lot; url=$u; n=$nStores }
+        $row = [ordered]@{ unit=[string]$r.unit; cheapest=[math]::Round($lo,4); store=$los; type=$lot; url=$u; n=$nStores }
+        # attach the sale's end date when the winning chip IS the sale and its window is known
+        if ($lot -eq 'sale') { $sk = $id + '|' + $los; if ($saleEnd.ContainsKey($sk)) { $row['sale_end'] = $saleEnd[$sk] } }
+        $ing[$id] = $row
       }
     }
   }

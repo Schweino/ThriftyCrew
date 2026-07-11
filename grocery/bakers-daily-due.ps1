@@ -1,10 +1,21 @@
 <#
-  bakers-daily-due.ps1 - idempotency guard for the DAILY Baker's flash-sale check agent.
+  bakers-daily-due.ps1 - idempotency + WINDOW-AWARE guard for the DAILY Baker's flash-sale check agent.
+
   Baker's is the only BROWSER store with a weekly ad cycle, so a flash/weekend sale that starts or ends
-  mid-cycle can't be seen by the headless daily job. This lets a tiny daily Chrome agent catch it, WITHOUT
-  redundant work: it prints FRESH (skip, already refreshed today) or DUE (run the scan). Also prints ADFLIP
-  when Baker's weekly ad has rolled (today >= next_pull) so the agent knows to pull the flyer too, not just
-  the everyday scan. Prints one line; the agent reads the first token.
+  mid-cycle can't be seen by the headless daily job. This decides whether the tiny daily Chrome agent needs
+  to run at all. It prints ONE line; the agent reads the FIRST token:
+    FRESH   - Baker's already refreshed today (weekly Wed agent, a prior run, or manual) -> STOP, nothing to do.
+    IDLE    - nothing due: no ad flip and no Baker's sale starts or rolls off today -> STOP (skip the scan).
+    DUE     - a Baker's sale boundary is due today (a sale ends+reverts, or a new sale starts) -> run the scan.
+    DUE ... ADFLIP - the weekly ad has rolled (today >= next_pull) -> also pull the flyer (step B), not just the scan.
+
+  WINDOW-AWARE (2026-07-09): instead of scanning Baker's blindly every single day, we read sale-windows.json
+  (built by build-sale-windows.ps1) and only scan when an item's KNOWN sale window actually opens or closes.
+  refresh_on = sale_end + 1 = the day a sale's price reverts, so that's the day to re-check. This turns "poll
+  daily just in case" into "re-check exactly on the days a Baker's price is scheduled to move."
+  HONEST GAP: a brand-new UNADVERTISED flash sale (no date in any feed) can't be predicted, so an undated
+  Baker's flash START is only caught on the weekly Wednesday pull. Every DATED sale (the vast majority) is
+  caught precisely. If the log is missing/unreadable we fail SAFE (DUE) so we never silently stop scanning.
 #>
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
@@ -26,6 +37,27 @@ if (Test-Path $sf) {
   if (-not $deals -or $deals.LastWriteTime.Date -lt $today.AddDays(-6)) { $adflip = $true }
 }
 
+# Is a Baker's DATED sale boundary due today? (a sale reverts today = refresh_on == today; or a new sale
+# starts today = sale_start == today). Read from the per-item sale-window log.
+$boundary = $false; $bReason = ''
+$logFile = Join-Path $root 'sale-windows.json'
+if (Test-Path $logFile) {
+  try {
+    $log = Get-Content $logFile -Raw | ConvertFrom-Json
+    foreach ($w in $log.windows) {
+      if ([string]$w.store -ne "Baker's") { continue }
+      $ro = $null; $ss = $null
+      try { $ro = [datetime]$w.refresh_on } catch {}
+      try { $ss = [datetime]$w.sale_start } catch {}
+      if ($ro -ne $null -and $ro.Date -eq $today) { $boundary = $true; $bReason = ($w.commodity + " sale reverts today"); break }
+      if ($ss -ne $null -and $ss.Date -eq $today) { $boundary = $true; $bReason = ($w.commodity + " sale starts today"); break }
+    }
+  } catch { $boundary = $true; $bReason = 'sale-window log unreadable - failing safe' }
+} else {
+  # no log yet -> we can't know boundaries, so fail SAFE and scan (also seeds the log via step C).
+  $boundary = $true; $bReason = 'no sale-window log yet - failing safe'
+}
+
 # the flyer freshness is judged on the DEALS file, not the everyday file: an agent that finished the
 # everyday scan but died before the flyer pull must still get sent back for the flyer.
 $flyerFresh = ($deals -and $deals.LastWriteTime.Date -eq $today)
@@ -33,6 +65,10 @@ if ($fresh -and $adflip -and (-not $flyerFresh)) {
   Write-Output "FRESH ADFLIP  everyday scan done today, but the weekly FLYER still needs pulling (step B only)"
 } elseif ($fresh) {
   Write-Output ("FRESH  Baker's already refreshed today (" + $reg.LastWriteTime.ToString('MM-dd HH:mm') + ") - nothing to do")
+} elseif ($adflip) {
+  Write-Output "DUE ADFLIP  Baker's weekly ad has rolled - pull the flyer + everyday"
+} elseif ($boundary) {
+  Write-Output ("DUE  Baker's sale boundary today (" + $bReason + ") - re-check the everyday prices")
 } else {
-  Write-Output ("DUE" + $(if ($adflip) { " ADFLIP  Baker's weekly ad has rolled - pull the flyer + everyday" } else { "  everyday flash scan (ad still current)" }))
+  Write-Output "IDLE  no ad flip and no Baker's sale starts/reverts today - skip the scan (event-driven)"
 }

@@ -1,4 +1,4 @@
-# Simple Money Playbook — 52 Weekly Lessons
+# Thrifty Crew — 52 Weekly Lessons
 
 A year of weekly lessons for **parents teaching teens about money + life success**, inspired by
 the book *From the Bottom, Now I'm Here* but written as a standalone, broadly-welcoming product

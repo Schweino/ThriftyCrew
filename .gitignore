@@ -29,6 +29,8 @@
 /grocery/out/url-worklist.json
 /grocery/out/smp-feed.json
 /grocery/out/recipe-board-everyday.bak-*.json
+# per-item sale-window log (sale price + start/end dates): derived from the board daily, self-heals, not tracked
+/grocery/sale-windows.json
 # heavy Baker's flyer captures (intermediate; parsed into bakers-deals-*.json, then not needed)
 /grocery/out/bakers/*.jpg
 /grocery/out/bakers/meta.json

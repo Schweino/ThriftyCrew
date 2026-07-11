@@ -1,0 +1,234 @@
+<div id="tcst">
+<style>
+#tcst{--navy:#16263f;--gold:#e2a43c;--gold-d:#8a6d1f;--ink:#3a4658;--line:#e2e8f0;--green:#1f7a4d;--red:#b23b2e;--soft:#fbfcfe;
+  max-width:760px;margin:0 auto;font-size:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);}
+#tcst *{box-sizing:border-box;}
+#tcst .tb-privacy{display:flex;gap:.7em;align-items:flex-start;background:#fdf8ec;border:1px solid #eee3c8;border-radius:12px;padding:.9em 1.1em;font-size:.92em;line-height:1.5;margin:0 0 1.6em;}
+#tcst .tb-privacy b{color:var(--navy);}
+#tcst .tb-lock{flex:0 0 auto;width:1.6em;height:1.6em;border-radius:50%;background:var(--gold);color:var(--navy);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.95em;}
+#tcst .tb-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.6em 1.4em;margin:0 0 1.5em;box-shadow:0 6px 24px rgba(22,38,63,.06);}
+#tcst h2{font-size:1.3em;color:var(--navy);margin:0 0 .3em;}
+#tcst .tb-sub{font-size:.95em;margin:.2em 0 1.1em;line-height:1.5;}
+#tcst .st-search{width:100%;padding:.72em .9em;font-size:1em;color:var(--navy);background:#fff;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;margin:0 0 1em;}
+#tcst .st-search:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,164,60,.22);}
+#tcst .st-cat{margin:0 0 1.1em;}
+#tcst .st-cat-h{font-size:.78em;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-d);margin:0 0 .45em;}
+#tcst .st-chips{display:flex;flex-wrap:wrap;gap:.45em;}
+#tcst .st-chip{padding:.42em .85em;border:1.5px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);font-size:.88em;font-weight:600;cursor:pointer;font-family:inherit;line-height:1.2;}
+#tcst .st-chip:hover{border-color:var(--gold);}
+#tcst .st-chip.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+#tcst .st-chip.on::before{content:"\2713\00a0";color:var(--gold);font-weight:800;}
+#tcst .st-more{padding:.42em .85em;border:1.5px dashed #cbd5e1;border-radius:999px;background:#fff;color:#68748a;font-size:.85em;font-weight:700;cursor:pointer;font-family:inherit;}
+#tcst .st-more:hover{border-color:var(--gold);color:var(--gold-d);}
+#tcst .st-bar{display:flex;align-items:center;justify-content:space-between;gap:1em;margin:1.1em 0 0;flex-wrap:wrap;}
+#tcst .st-count{font-size:.92em;font-weight:800;color:var(--navy);}
+#tcst .st-clear{background:none;border:none;color:var(--red);font-size:.88em;font-weight:700;cursor:pointer;font-family:inherit;padding:0;}
+#tcst .st-row{display:flex;align-items:baseline;gap:.7em;padding:.6em 0;border-bottom:1px solid #eef1f5;flex-wrap:wrap;}
+#tcst .st-row:last-child{border-bottom:none;}
+#tcst .st-l{flex:1 1 auto;font-weight:700;color:var(--navy);min-width:9em;}
+#tcst .st-p{font-weight:800;color:var(--green);white-space:nowrap;}
+#tcst .st-s{font-size:.85em;color:#68748a;white-space:nowrap;}
+#tcst .st-low{display:inline-block;background:var(--green);color:#fff;font-size:.62em;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:999px;vertical-align:2px;}
+#tcst .st-tr{font-size:.78em;color:var(--gold-d);text-decoration:none;font-weight:700;white-space:nowrap;}
+#tcst .st-tr:hover{color:var(--navy);}
+#tcst .st-split{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:1em 1.1em;margin:1.2em 0 0;}
+#tcst .st-split-h{font-size:.8em;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--gold-d);margin:0 0 .6em;}
+#tcst .st-split-r{display:flex;justify-content:space-between;gap:.8em;font-size:.95em;padding:.3em 0;}
+#tcst .st-split-r b{color:var(--navy);}
+#tcst .st-split-r span{color:#68748a;}
+#tcst .st-total{display:flex;justify-content:space-between;align-items:baseline;border-top:2px solid var(--line);margin-top:.6em;padding-top:.7em;font-weight:800;color:var(--navy);}
+#tcst .st-total b{font-size:1.25em;color:var(--green);}
+#tcst .st-note{font-size:.8em;color:#8a94a6;line-height:1.5;margin:.7em 0 0;}
+#tcst .st-fresh{text-align:center;font-size:.82em;color:#8a94a6;margin:.8em 0 0;}
+#tcst .tb-actions{display:flex;gap:.8em;flex-wrap:wrap;justify-content:center;margin:1.6em 0 .4em;}
+#tcst .tb-btn{padding:.9em 1.7em;border:none;border-radius:10px;font-size:1em;font-weight:800;cursor:pointer;font-family:inherit;}
+#tcst .tb-btn-gold{background:var(--gold);color:var(--navy);}
+#tcst .tb-btn-ghost{background:#fff;color:var(--red);border:1.5px solid #f2c9c5;}
+#tcst .tb-saved{text-align:center;font-size:.85em;color:#8a94a6;margin:.4em 0 0;min-height:1.3em;}
+@media (max-width:560px){ #tcst .tb-card{padding:1.2em 1em;} }
+</style>
+
+<p style="font-size:1.05em;line-height:1.6;margin:0 0 1.2em;">You buy the same fifteen things every week. Tap them once, and every time you come back this page shows the cheapest store for each one, flags anything sitting at its tracked low, and splits your list by store. Check it before every run; it does the price-shopping for you.</p>
+<div class="tb-privacy"><span class="tb-lock">&#128274;</span><span><b>Your list stays on this device.</b> It saves automatically in your browser, so next visit your staples are already loaded with fresh prices. Hit &ldquo;Erase my list&rdquo; anytime.</span></div>
+
+<div class="tb-card">
+  <h2>Pick your staples</h2>
+  <p class="tb-sub">Everything we price-check in Omaha, 184 items. Tap what you actually buy.</p>
+  <input type="text" class="st-search" id="st-search" placeholder="Search items (eggs, chicken, coffee...)" maxlength="40">
+  <div id="st-cats"></div>
+  <div class="st-bar">
+    <span class="st-count" id="st-count"></span>
+    <button class="st-clear" id="st-clearsel" type="button">Clear all</button>
+  </div>
+</div>
+
+<div class="tb-card">
+  <h2>Your staples this week</h2>
+  <p class="tb-sub" id="st-sub"></p>
+  <div id="st-list"></div>
+  <div id="st-splitbox"></div>
+  <p class="st-fresh" id="st-fresh"></p>
+</div>
+
+<div class="tb-actions">
+  <button class="tb-btn tb-btn-gold" id="st-print" type="button">Print my shopping list</button>
+  <button class="tb-btn tb-btn-ghost" id="st-erase" type="button">Erase my list</button>
+</div>
+<p class="tb-saved" id="st-saved"></p>
+
+<script>
+//__DATA__
+(function(){
+  var root = document.getElementById('tcst');
+  if (!root || typeof ST === 'undefined') return;
+  var KEY = 'tcst-v1';
+  var FEED_URL = 'https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json';
+  var GROUPS = [
+    {t:'Meat & poultry', rx:/Meat|Poultry/},
+    {t:'Dairy, eggs & cheese', rx:/Dairy|Cheese|Egg/},
+    {t:'Produce', rx:/Fruit|Vegetable|Produce/},
+    {t:'Pantry & everything else', rx:/./}
+  ];
+  var SHOW_N = 12;
+  var S;
+  try { S = JSON.parse(localStorage.getItem(KEY)) || null; } catch(e){ S = null; }
+  if (!S || !S.have) S = { have: [] };
+  var have = {};
+  for (var i = 0; i < S.have.length; i++) have[S.have[i]] = true;
+  var expanded = {};
+  var weekOf = ST.week, liveLoaded = false;
+  var byKey = {};
+  for (i = 0; i < ST.items.length; i++) byKey[ST.items[i].k] = ST.items[i];
+
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function money(x){ return '$' + (Math.round(x*100)/100).toFixed(2); }
+  function priceStr(it){ var p = it.f < 1 ? '$' + it.f.toFixed(it.f < 0.2 ? 3 : 2) : money(it.f); return p + (it.u === 'each' ? ' each' : '/' + it.u); }
+  function groupOf(cat){ for (var g = 0; g < GROUPS.length; g++) if (GROUPS[g].rx.test(cat)) return g; return GROUPS.length - 1; }
+
+  var saveT = null;
+  function save(){ clearTimeout(saveT); saveT = setTimeout(function(){ try { S.have = []; for (var k in have) if (have[k]) S.have.push(k); localStorage.setItem(KEY, JSON.stringify(S)); var el = document.getElementById('st-saved'); el.textContent = 'Saved on this device just now.'; setTimeout(function(){ el.textContent = ''; }, 2200); } catch(e){} }, 400); }
+
+  function renderCats(){
+    var q = document.getElementById('st-search').value.trim().toLowerCase();
+    var buckets = [[],[],[],[]];
+    for (var i = 0; i < ST.items.length; i++){ var it = ST.items[i];
+      if (q && it.l.toLowerCase().indexOf(q) < 0) continue;
+      buckets[groupOf(it.c)].push(it);
+    }
+    var h = '';
+    for (var g = 0; g < GROUPS.length; g++){
+      var items = buckets[g];
+      if (!items.length) continue;
+      items.sort(function(a,b){ if (a.w !== b.w) return b.w - a.w; return a.l < b.l ? -1 : 1; });
+      var lim = (q || expanded[g]) ? items.length : SHOW_N;
+      var shown = [], hid = 0;
+      for (i = 0; i < items.length; i++){ if (i < lim || have[items[i].k]) shown.push(items[i]); else hid++; }
+      h += '<div class="st-cat"><p class="st-cat-h">' + GROUPS[g].t + '</p><div class="st-chips">';
+      for (i = 0; i < shown.length; i++){ var s2 = shown[i];
+        h += '<button type="button" class="st-chip' + (have[s2.k] ? ' on' : '') + '" data-k="' + esc(s2.k) + '" aria-pressed="' + (have[s2.k] ? 'true' : 'false') + '">' + esc(s2.l) + '</button>';
+      }
+      if (hid > 0) h += '<button type="button" class="st-more" data-g="' + g + '">+ ' + hid + ' more</button>';
+      h += '</div></div>';
+    }
+    document.getElementById('st-cats').innerHTML = h || '<p class="tb-sub">Nothing matches that search.</p>';
+    var n = 0; for (var k in have) if (have[k]) n++;
+    document.getElementById('st-count').textContent = n ? (n + ' staple' + (n > 1 ? 's' : '') + ' on your list') : 'Nothing picked yet';
+  }
+
+  function selected(){
+    var out = [];
+    for (var k in have) if (have[k] && byKey[k]) out.push(byKey[k]);
+    out.sort(function(a,b){ return a.l < b.l ? -1 : 1; });
+    return out;
+  }
+
+  function renderList(){
+    var sel = selected();
+    var sub = document.getElementById('st-sub');
+    var box = document.getElementById('st-list');
+    var split = document.getElementById('st-splitbox');
+    if (!sel.length){
+      sub.textContent = 'Tap your usual buys above and this fills in with the cheapest store for each, updated as the ads change.';
+      box.innerHTML = ''; split.innerHTML = '';
+      return;
+    }
+    sub.textContent = 'The cheapest place in Omaha for each of your staples right now.';
+    var h = '', total = 0, lows = 0;
+    var byStore = {};
+    for (var i = 0; i < sel.length; i++){ var it = sel[i];
+      total += it.f;
+      var isLow = (it.rec !== null && it.f <= it.rec + 0.0001);
+      if (isLow) lows++;
+      if (!byStore[it.fs]) byStore[it.fs] = { n: 0, sum: 0 };
+      byStore[it.fs].n++; byStore[it.fs].sum += it.f;
+      h += '<div class="st-row"><span class="st-l">' + esc(it.l) + (isLow ? ' <span class="st-low">At its low</span>' : '') + '</span>' +
+           '<span class="st-p">' + priceStr(it) + '</span><span class="st-s">at ' + esc(it.fs) + '</span>' +
+           (it.t ? '<a class="st-tr" href="/' + esc(it.t) + '/?ref=staples">history &rarr;</a>' : '') + '</div>';
+    }
+    box.innerHTML = h;
+    var stores = [];
+    for (var s2 in byStore) stores.push({ s: s2, n: byStore[s2].n, sum: byStore[s2].sum });
+    stores.sort(function(a,b){ return b.n - a.n; });
+    var sh = '<div class="st-split"><p class="st-split-h">Your trip, split by store</p>';
+    for (i = 0; i < stores.length; i++) sh += '<div class="st-split-r"><b>' + esc(stores[i].s) + '</b><span>' + stores[i].n + ' item' + (stores[i].n > 1 ? 's' : '') + ' &middot; ' + money(stores[i].sum) + '</span></div>';
+    sh += '<div class="st-total"><span>One of each, at the cheapest stores</span><b>' + money(total) + '</b></div>';
+    if (lows > 0) sh += '<p class="st-note">' + lows + ' of your staples ' + (lows > 1 ? 'are' : 'is') + ' at the lowest price we have tracked. Good week for those.</p>';
+    sh += '<p class="st-note">Total counts one unit of each item (a dozen eggs, a pound of chicken, and so on). Your cart will differ; the store split is the useful part.</p></div>';
+    split.innerHTML = sh;
+  }
+
+  function renderAll(){ renderCats(); renderList(); }
+
+  root.addEventListener('click', function(e){
+    var chip = e.target.closest('.st-chip');
+    if (chip){ var k = chip.getAttribute('data-k'); if (have[k]) delete have[k]; else have[k] = true; renderAll(); save(); return; }
+    var more = e.target.closest('.st-more');
+    if (more){ expanded[more.getAttribute('data-g')] = true; renderCats(); return; }
+    if (e.target.id === 'st-clearsel'){ have = {}; renderAll(); save(); return; }
+    if (e.target.id === 'st-erase'){ if (confirm('Erase your saved staples list from this device?')){ try { localStorage.removeItem(KEY); } catch(err){} have = {}; S = { have: [] }; document.getElementById('st-search').value = ''; renderAll(); } return; }
+    if (e.target.id === 'st-print'){ doPrint(); }
+  });
+  root.addEventListener('input', function(e){ if (e.target.id === 'st-search') renderCats(); });
+
+  function doPrint(){
+    var sel = selected();
+    if (!sel.length){ alert('Pick a few staples first, then print.'); return; }
+    var byStore = {};
+    for (var i = 0; i < sel.length; i++){ var it = sel[i]; if (!byStore[it.fs]) byStore[it.fs] = []; byStore[it.fs].push(it); }
+    var body = '';
+    for (var s2 in byStore){
+      body += '<h2 style="font-size:1.05em;margin:1.2em 0 .3em">' + esc(s2) + '</h2><table>';
+      for (i = 0; i < byStore[s2].length; i++){ var x = byStore[s2][i];
+        body += '<tr><td>&#9744; ' + esc(x.l) + '</td><td class="r">' + priceStr(x) + '</td></tr>';
+      }
+      body += '</table>';
+    }
+    var w = window.open('', '_blank');
+    if (!w){ alert('Your browser blocked the print window. Allow pop-ups for this site and try again.'); return; }
+    w.document.write('<html><head><title>My Staples - Thrifty Crew</title><style>body{font-family:Georgia,serif;color:#16263f;max-width:640px;margin:2em auto;padding:0 1em;}h1{font-size:1.5em;border-bottom:2px solid #e2a43c;padding-bottom:.3em;}table{width:100%;border-collapse:collapse;font-size:.95em;}td{padding:.3em 0;border-bottom:1px dotted #ccc;}td.r{text-align:right;}.foot{margin-top:2em;font-size:.8em;color:#777;}</style></head><body>' +
+      '<h1>My staples, cheapest stores this week</h1>' + body +
+      '<p class="foot">Prices checked for the week of ' + esc(weekOf) + '. Printed from the Thrifty Crew staples watchlist. thriftycrew.com</p>' +
+      '</body></html>');
+    w.document.close();
+    setTimeout(function(){ w.print(); }, 350);
+  }
+
+  renderAll();
+
+  try {
+    fetch(FEED_URL).then(function(r){ return r.json(); }).then(function(f){
+      if (!f || !f.ingredients) return;
+      for (var i = 0; i < ST.items.length; i++){ var it = ST.items[i]; var g = f.ingredients[it.k];
+        if (g && Number(g.cheapest) > 0 && g.unit === it.u){ it.f = Number(g.cheapest); it.fs = String(g.store); }
+      }
+      if (f.week_of) weekOf = f.week_of;
+      liveLoaded = true;
+      document.getElementById('st-fresh').textContent = 'Live prices checked across six Omaha stores for the week of ' + weekOf + '.';
+      renderList();
+    }).catch(function(){
+      document.getElementById('st-fresh').textContent = 'Showing our most recent saved prices (week of ' + weekOf + ').';
+    });
+  } catch(e){}
+})();
+</script>
+</div>

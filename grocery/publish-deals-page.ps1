@@ -85,7 +85,7 @@ $pubArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'publish-resou
   '-Slug',$slug,
   '-HtmlFile',$embed,
   '-Excerpt',"Every grocery staple, compared across six Omaha stores and ranked cheapest to priciest. Updated weekly.",
-  '-MetaTitle',"Omaha's Cheapest Groceries This Week | Simple Money Playbook",
+  '-MetaTitle',"Omaha's Cheapest Groceries This Week | Thrifty Crew",
   '-MetaDesc',"See the cheapest Omaha store for milk, eggs, chicken, produce and more this week. 29 staples compared across Aldi, Walmart, Hy-Vee, Baker's, Sam's Club and Family Fare.",
   '-Visibility',$vis)
 if ($Draft) { $pubArgs += '-Draft' }
@@ -96,4 +96,19 @@ if ($prc -ne 0) {
   exit 1
 }
 Write-Output ("PUBLISHED omaha-grocery-prices  (visibility=$vis, $commCount commodities, week " + [string]$doc.week_of + ")")
+
+# ---- companion page: the per-store guide rides every board publish (non-fatal; its own coverage gate applies) ----
+try {
+  & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-store-guide.ps1') | Out-Null
+  if ($LASTEXITCODE -eq 0) { Write-Output "store guide republished alongside the board" }
+  else { Write-Output ("store guide HELD/skipped (rc=$LASTEXITCODE) - board publish unaffected") }
+} catch { Write-Output ("store guide publish threw: " + $_.Exception.Message + " - board publish unaffected") }
+
+# ---- trend pages: self-gated weekly (stamp check makes daily calls a no-op until a new week lands) ----
+try {
+  & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-trend-pages.ps1') | Out-Null
+  & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-trend-index.ps1') | Out-Null
+  & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-trend-pages.ps1') | Out-Null
+  Write-Output "trend pages checked (weekly stamp gate applies)"
+} catch { Write-Output ("trend pages step threw: " + $_.Exception.Message + " - board publish unaffected") }
 exit 0

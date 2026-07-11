@@ -210,6 +210,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
     } else {
       & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'update-history.ps1') | Out-Null
       & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'sanity-check.ps1') | Out-Null   # exit 1 = flags (expected), not a crash -> guards-<week>.json
+      # Refresh the per-item sale-window log (sale price + start/end dates from the fresh board) so the daily
+      # Baker's guard fires only when a sale actually reverts/starts, not blindly. Headless-safe, non-fatal.
+      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-sale-windows.ps1') | Out-Null; Log 'sale-windows refreshed' } catch { Log ('build-sale-windows threw: ' + $_.Exception.Message) }
       # Keep the product-URL worklist current: after prices move, flag any "See item" link whose board price
       # changed (stale) or whose linked product no longer matches (mismatch), so the weekly browser agent
       # re-resolves it. Headless-safe (detection only); the actual re-resolution needs Chrome. Non-fatal.

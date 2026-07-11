@@ -27,6 +27,60 @@ $week = [string]$doc.week_of
 # comparison rows keyed by commodity id
 $byId = @{}; foreach ($r in $doc.comparison) { $byId[[string]$r.id] = $r }
 
+# ---- price-record badges, computed at BUILD time against the exact prices being rendered ----
+# update-history.ps1 (and its records-<week>.json snapshot) only refreshes on ad-flip days, but this
+# page republishes daily; recomputing here means a badge can never disagree with the chip next to it.
+# Rules mirror update-history.ps1: prior cycles = history strictly BEFORE this board's ad week (a
+# same-cycle daily upsert must not compete with itself), and 2+ prior weeks required before we are
+# willing to call anything a record in public.
+$recBadge = @{}   # id -> @{cls; label; title; rank}
+$verdict  = @{}   # id -> @{cls; label; title}   Buy-or-Wait layer (only when no record badge is showing)
+$weeksOnRecord = 0
+# stock-up set: commodities that keep (freezer/pantry) - a record price on one of these earns a "Stock up" tag
+$stockup = @{}
+$suFile = Join-Path $root 'stockup-items.json'
+if (Test-Path $suFile) { try { $suDoc = Get-Content $suFile -Raw | ConvertFrom-Json; foreach ($p in $suDoc.items.PSObject.Properties) { $stockup[[string]$p.Name] = [string]$p.Value } } catch {} }
+$histFile = Join-Path $root 'price-history.json'
+if (Test-Path $histFile) {
+  try {
+    $histDoc = Get-Content $histFile -Raw | ConvertFrom-Json
+    $weeksOnRecord = [int]$histDoc.weeks_on_record
+    $histById = @{}; foreach ($h in $histDoc.commodities) { $histById[[string]$h.id] = $h }
+    foreach ($r in $doc.comparison) {
+      $h = $histById[[string]$r.id]; if (-not $h) { continue }
+      $P = [double]$r.cheapest_price
+      # outlier guard: a price >30% below the runner-up store is exactly what sanity-check.ps1 flags
+      # for human review ("verify the price/size parse") - never headline one as a record until a
+      # later week confirms it. Mirrors the sanity threshold; legit sale records are typically 5-25% below.
+      $rank2 = @($r.stores | Sort-Object per_unit)
+      if ($rank2.Count -ge 2) { $ru = [double]$rank2[1].per_unit; if ($ru -gt 0 -and (($ru - $P) / $ru) -gt 0.30) { continue } }
+      $prior = @($h.history | Where-Object { try { [datetime]$_.week_of -lt [datetime]$week } catch { $false } })
+      if (@($prior).Count -lt 2) { continue }
+      $priorMin = $null; $priorMinStore = ''
+      foreach ($e in $prior) { $ep = [double]$e.cheapest_price; if ($priorMin -eq $null -or $ep -lt $priorMin) { $priorMin = $ep; $priorMinStore = [string]$e.cheapest_store } }
+      $wkN = @($prior).Count + 1
+      $suNote = if ($stockup.ContainsKey([string]$r.id)) { [string]$stockup[[string]$r.id] } else { $null }
+      if ($P -lt $priorMin) {
+        $recBadge[[string]$r.id] = @{ cls='pg-rec-low'; label='Record low'; rank=0; su=$suNote; title=("Cheapest we have seen in " + $wkN + " weeks of tracking. Previous best " + ('${0:N2}' -f $priorMin) + "/" + $r.unit + ".") }
+      } elseif ($P -eq $priorMin) {
+        $recBadge[[string]$r.id] = @{ cls='pg-rec-tie'; label='Ties record'; rank=1; su=$suNote; title=("Matches the lowest price in " + $wkN + " weeks of tracking.") }
+      } else {
+        $weeksAbove = 0; $since = $null
+        foreach ($e in ($prior | Sort-Object week_of -Descending)) { if ([double]$e.cheapest_price -gt $P) { $weeksAbove++ } else { $since = $e.week_of; break } }
+        if ($weeksAbove -ge 2) { $recBadge[[string]$r.id] = @{ cls='pg-rec-dip'; label=('Lowest in ' + $weeksAbove + ' wks'); rank=2; su=$suNote; title=("Cheapest since " + $since + ".") } }
+        elseif ($P -le ($priorMin * 1.05)) {
+          # Buy-or-Wait layer: within 5% of the tracked low = a good week to buy
+          $verdict[[string]$r.id] = @{ cls='pg-verd-buy'; label='Good price'; title=("Within 5% of the lowest we have tracked (" + ('${0:N2}' -f $priorMin) + "/" + $r.unit + "). A fine week to buy.") }
+        }
+        elseif ($P -gt ($priorMin * 1.15)) {
+          # >15% above the tracked low = it usually comes back down
+          $verdict[[string]$r.id] = @{ cls='pg-verd-wait'; label='Usually cheaper'; title=("Lowest we have tracked: " + ('${0:N2}' -f $priorMin) + "/" + $r.unit + " at " + $priorMinStore + ". If it can wait, it usually comes back down.") }
+        }
+      }
+    }
+  } catch { $recBadge = @{} }
+}
+
 # optional: recipe-ingredient board (the 100 meal-prep recipes' ingredients, all 6 stores). Additive; renders below the weekly staples when present.
 $riDoc = $null; $riCats = @()
 $riFile = Join-Path $OutDir 'recipe-board.json'
@@ -222,6 +276,23 @@ foreach ($s in $storeOrder) {
   [void]$sb.Append("<div class='" + $cls + "' data-store=`"" + (HtmlEnc $s) + "`"><span class='pg-score-n'>" + $n + "</span><span class='pg-score-s'>" + (HtmlEnc $shortName[$s]) + "</span></div>")
 }
 [void]$sb.Append("</div></div>")
+# ---- price-records band: this week's record lows / ties / dips, from the badge pass up top ----
+if ($recBadge.Count -gt 0) {
+  $recList = @()
+  foreach ($k in $recBadge.Keys) { $rr = $byId[$k]; if ($rr) { $recList += ,@{ b = $recBadge[$k]; r = $rr } } }
+  $recList = @($recList | Sort-Object { $_.b.rank }, { [double]$_.r.cheapest_price })
+  $shown = @($recList | Select-Object -First 8)
+  [void]$sb.Append("<div class='pg-recband'><span class='pg-recband-h'>Price records this week</span><div class='pg-recband-row'>")
+  foreach ($e in $shown) {
+    $rr = $e.r; $bb = $e.b
+    $suTag = if ($bb.su) { " &middot; stock up" } else { "" }
+    [void]$sb.Append("<div class='pg-recchip' title=`"" + (HtmlEnc $bb.title) + "`"><b>" + (Fmt-Price ([double]$rr.cheapest_price) ([string]$rr.unit)) + "</b><span>" + (HtmlEnc $rr.commodity) + "</span><em>" + $bb.label + " &middot; " + (HtmlEnc $shortName[[string]$rr.cheapest_store]) + $suTag + "</em></div>")
+  }
+  [void]$sb.Append("</div>")
+  $more = $recList.Count - $shown.Count
+  $tail = if ($more -gt 0) { "+" + $more + " more marked in the list below. " } else { "" }
+  [void]$sb.Append("<span class='pg-recband-sub'>" + $tail + "From " + $weeksOnRecord + " weeks of Omaha price tracking, and counting.</span></div>")
+}
 # ---- trip planner home: ALWAYS visible right under the scoreboard so shoppers know it exists ----
 [void]$sb.Append("<div class='pg-tripbox' id='pg-tripbox'><h3>Plan your shopping trip</h3>")
 [void]$sb.Append("<p class='pg-tripbox-sub' id='pg-tripbox-sub'>Tick the box next to each item you want to buy, then come back here. Tell us how many stores you are willing to visit and we will split your list for the cheapest trip.</p>")
@@ -268,7 +339,14 @@ foreach ($c in $cats) {
     $totalCommodities++
     $unit = [string]$r.unit
     [void]$sb.Append("<article class='pg-row' data-cat='" + $c.key + "'>")
-    [void]$sb.Append("<div class='pg-rowhead'><label class='pg-pickl' title='Add to my shopping list'><input type='checkbox' class='pg-pick' aria-label='Add to my shopping list'></label><span class='pg-name'>" + (HtmlEnc $r.commodity) + "</span><span class='pg-unit'>" + (UnitLabel $unit) + "</span></div>")
+    $rb = $recBadge[[string]$r.id]
+    $rbHtml = if ($rb) { "<span class='pg-rec " + $rb.cls + "' title=`"" + (HtmlEnc $rb.title) + "`">" + $rb.label + "</span>" } else { "" }
+    # stock-up tag rides a record/tie/dip badge on a commodity that keeps (freezer/pantry)
+    if ($rb -and $rb.su) { $rbHtml += "<span class='pg-rec pg-stockup' title=`"" + (HtmlEnc ("At or near its tracked low and it keeps: " + $rb.su + ". Worth buying extra.")) + "`">Stock up</span>" }
+    # Buy-or-Wait verdict shows only when no record badge is on the row
+    $vd = $verdict[[string]$r.id]
+    if (-not $rb -and $vd) { $rbHtml += "<span class='pg-rec " + $vd.cls + "' title=`"" + (HtmlEnc $vd.title) + "`">" + $vd.label + "</span>" }
+    [void]$sb.Append("<div class='pg-rowhead'><label class='pg-pickl' title='Add to my shopping list'><input type='checkbox' class='pg-pick' aria-label='Add to my shopping list'></label><span class='pg-name'>" + (HtmlEnc $r.commodity) + "</span><span class='pg-unit'>" + (UnitLabel $unit) + "</span>" + $rbHtml + "</div>")
     [void]$sb.Append("<div class='pg-stores'>")
     $i = 0
     foreach ($s in $ranked) {
@@ -373,6 +451,23 @@ $css = @'
 .pg-head h1{font-size:2em;line-height:1.12;margin:.1em 0 .12em;color:var(--ink);text-wrap:balance;letter-spacing:-.01em}
 .pg-sub{font-size:1.08em;line-height:1.4;color:var(--mut);margin:.2em 0 .5em;max-width:60ch}
 .pg-note{font-size:.83em;color:var(--mut);opacity:.85;margin:.2em 0 0;max-width:66ch}
+/* price records */
+.pg-recband{margin:12px 0 6px;padding:14px 16px 12px;border:1px solid #ecd9ae;border-radius:14px;background:#fdf8ec}
+.pg-recband-h{display:block;font-size:.7em;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#8a6d1f;margin-bottom:11px}
+.pg-recband-row{display:flex;flex-wrap:wrap;gap:9px}
+.pg-recchip{display:flex;flex-direction:column;gap:2px;min-width:112px;padding:9px 12px 8px;border-radius:10px;background:#fff;border:1px solid #eee3c8}
+.pg-recchip b{font-size:1.12em;font-weight:800;line-height:1.1;color:var(--green-d)}
+.pg-recchip span{font-size:.82em;font-weight:700;color:var(--ink)}
+.pg-recchip em{font-style:normal;font-size:.7em;font-weight:700;letter-spacing:.03em;color:#8a6d1f}
+.pg-recband-sub{display:block;margin-top:9px;font-size:.74em;color:var(--mut)}
+.pg-rec{display:inline-block;margin-left:7px;padding:2px 9px 2px;border-radius:999px;font-size:.6em;font-weight:800;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;vertical-align:2px}
+.pg-rec-low{background:var(--green);color:#fff}
+.pg-rec-tie{background:var(--green-t);color:var(--green-d);border:1px solid var(--green)}
+.pg-rec-dip{background:#fdf8ec;color:#8a6d1f;border:1px solid #ecd9ae}
+.pg-stockup{background:#e2a43c;color:#16263f}
+.pg-verd-buy{background:#fff;color:var(--green-d);border:1px solid var(--green)}
+.pg-verd-wait{background:#f4f6f9;color:#68748a;border:1px solid #d5dbe4}
+@media(max-width:560px){.pg-recchip{min-width:calc(50% - 5px);flex:1 1 calc(50% - 5px)}}
 /* scoreboard */
 .pg-board{margin:20px 0 6px;padding:15px 16px 14px;border:1px solid var(--bd);border-radius:14px;background:var(--green-t)}
 .pg-board-h{display:block;font-size:.7em;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--green-d);margin-bottom:11px}

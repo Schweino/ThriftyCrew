@@ -1,0 +1,242 @@
+<div id="tcdin">
+<style>
+#tcdin{--navy:#16263f;--gold:#e2a43c;--gold-d:#8a6d1f;--ink:#3a4658;--line:#e2e8f0;--green:#1f7a4d;--red:#b23b2e;--soft:#fbfcfe;
+  max-width:760px;margin:0 auto;font-size:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);}
+#tcdin *{box-sizing:border-box;}
+#tcdin .tb-privacy{display:flex;gap:.7em;align-items:flex-start;background:#fdf8ec;border:1px solid #eee3c8;border-radius:12px;padding:.9em 1.1em;font-size:.92em;line-height:1.5;margin:0 0 1.6em;}
+#tcdin .tb-privacy b{color:var(--navy);}
+#tcdin .tb-lock{flex:0 0 auto;width:1.6em;height:1.6em;border-radius:50%;background:var(--gold);color:var(--navy);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.95em;}
+#tcdin .tb-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.6em 1.4em;margin:0 0 1.5em;box-shadow:0 6px 24px rgba(22,38,63,.06);}
+#tcdin h2{font-size:1.3em;color:var(--navy);margin:0 0 .3em;}
+#tcdin .tb-sub{font-size:.95em;margin:.2em 0 1.1em;line-height:1.5;}
+#tcdin .td-search{width:100%;padding:.72em .9em;font-size:1em;color:var(--navy);background:#fff;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;margin:0 0 1em;}
+#tcdin .td-search:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,164,60,.22);}
+#tcdin .td-cat{margin:0 0 1.1em;}
+#tcdin .td-cat-h{font-size:.78em;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-d);margin:0 0 .45em;}
+#tcdin .td-chips{display:flex;flex-wrap:wrap;gap:.45em;}
+#tcdin .td-chip{padding:.42em .85em;border:1.5px solid var(--line);border-radius:999px;background:#fff;color:var(--ink);font-size:.88em;font-weight:600;cursor:pointer;font-family:inherit;line-height:1.2;}
+#tcdin .td-chip:hover{border-color:var(--gold);}
+#tcdin .td-chip.on{background:var(--navy);border-color:var(--navy);color:#fff;}
+#tcdin .td-chip.on::before{content:"\2713\00a0";color:var(--gold);font-weight:800;}
+#tcdin .td-more{padding:.42em .85em;border:1.5px dashed #cbd5e1;border-radius:999px;background:#fff;color:#68748a;font-size:.85em;font-weight:700;cursor:pointer;font-family:inherit;}
+#tcdin .td-more:hover{border-color:var(--gold);color:var(--gold-d);}
+#tcdin .td-staple{display:flex;gap:.7em;align-items:flex-start;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:.85em 1em;margin:1.1em 0 0;font-size:.92em;line-height:1.45;}
+#tcdin .td-staple input{margin-top:.2em;width:1.15em;height:1.15em;accent-color:#e2a43c;cursor:pointer;flex:0 0 auto;}
+#tcdin .td-staple b{color:var(--navy);}
+#tcdin .td-bar{display:flex;align-items:center;justify-content:space-between;gap:1em;margin:1.1em 0 0;flex-wrap:wrap;}
+#tcdin .td-count{font-size:.92em;font-weight:800;color:var(--navy);}
+#tcdin .td-clear{background:none;border:none;color:var(--red);font-size:.88em;font-weight:700;cursor:pointer;font-family:inherit;padding:0;}
+#tcdin .td-res{border:1px solid var(--line);border-radius:12px;padding:1em 1.1em;margin:0 0 .8em;background:var(--soft);}
+#tcdin .td-res-top{display:flex;align-items:baseline;justify-content:space-between;gap:.8em;flex-wrap:wrap;}
+#tcdin .td-res a{color:var(--navy);font-weight:800;font-size:1.05em;text-decoration:none;border-bottom:2px solid var(--gold);}
+#tcdin .td-res a:hover{color:var(--gold-d);}
+#tcdin .td-cost{font-weight:800;color:var(--green);white-space:nowrap;font-size:1.02em;}
+#tcdin .td-meta{font-size:.82em;color:#68748a;margin:.25em 0 0;}
+#tcdin .td-havebar{display:flex;align-items:center;gap:.6em;margin:.55em 0 0;font-size:.85em;color:var(--navy);font-weight:700;}
+#tcdin .td-havebar i{flex:0 0 8em;height:.65em;background:#e8ecf2;border-radius:99px;overflow:hidden;position:relative;display:block;}
+#tcdin .td-havebar i em{position:absolute;left:0;top:0;bottom:0;background:var(--gold);border-radius:99px;display:block;}
+#tcdin .td-ready{display:inline-block;background:#eaf6ef;border:1px solid #bfe3cd;color:var(--green);font-size:.78em;font-weight:800;letter-spacing:.04em;padding:.25em .7em;border-radius:999px;margin:.55em 0 0;}
+#tcdin .td-need{margin:.55em 0 0;display:flex;flex-wrap:wrap;gap:.4em;}
+#tcdin .td-need-chip{background:#fff;border:1px solid #f2c9c5;color:var(--ink);font-size:.8em;padding:.3em .7em;border-radius:999px;line-height:1.35;}
+#tcdin .td-need-chip b{color:var(--red);font-weight:700;}
+#tcdin .td-need-chip span{color:var(--green);font-weight:700;}
+#tcdin .td-empty{text-align:center;padding:.5em 0;}
+#tcdin .td-empty p{margin:.3em 0;line-height:1.55;}
+#tcdin .td-fresh{text-align:center;font-size:.82em;color:#8a94a6;margin:.8em 0 0;}
+#tcdin .tb-actions{display:flex;gap:.8em;flex-wrap:wrap;justify-content:center;margin:1.6em 0 .4em;}
+#tcdin .tb-btn{padding:.9em 1.7em;border:none;border-radius:10px;font-size:1em;font-weight:800;cursor:pointer;font-family:inherit;}
+#tcdin .tb-btn-ghost{background:#fff;color:var(--red);border:1.5px solid #f2c9c5;}
+#tcdin .tb-saved{text-align:center;font-size:.85em;color:#8a94a6;margin:.4em 0 0;min-height:1.3em;}
+@media (max-width:560px){
+  #tcdin .tb-card{padding:1.2em 1em;}
+  #tcdin .td-havebar i{flex:0 0 5.5em;}
+}
+</style>
+
+<p style="font-size:1.05em;line-height:1.6;margin:0 0 1.2em;">It&rsquo;s 5 o&rsquo;clock, everyone&rsquo;s hungry, and you don&rsquo;t want to spend money you didn&rsquo;t plan to. Tap what you already have in the kitchen, and this tool tells you which of our costed recipes you can make <b>tonight</b> &mdash; and for the ones you&rsquo;re close on, exactly what&rsquo;s missing and the cheapest store in town to grab it this week.</p>
+<div class="tb-privacy"><span class="tb-lock">&#128274;</span><span><b>Your kitchen list stays on this device.</b> It saves automatically in your browser so it&rsquo;s waiting for you tomorrow night, and it never leaves your browser. Hit &ldquo;Erase my list&rdquo; anytime.</span></div>
+
+<div class="tb-card">
+  <h2>What&rsquo;s in your kitchen?</h2>
+  <p class="tb-sub">Tap everything you have. Start with your protein and go from there. Tomorrow, just adjust what changed.</p>
+  <input type="text" class="td-search" id="td-search" placeholder="Search ingredients (chicken, rice, broccoli...)" maxlength="40">
+  <div id="td-cats"></div>
+  <div class="td-staple">
+    <input type="checkbox" id="td-st" checked>
+    <label for="td-st"><b>I keep the basic staples on hand</b> &mdash; salt, pepper, cooking oil, everyday spices, flour, sugar. (Uncheck this and they become tappable like everything else.)</label>
+  </div>
+  <div class="td-bar">
+    <span class="td-count" id="td-count"></span>
+    <button class="td-clear" id="td-clearsel" type="button">Clear all selections</button>
+  </div>
+</div>
+
+<div class="tb-card">
+  <h2 id="td-res-h">Tonight&rsquo;s options</h2>
+  <p class="tb-sub" id="td-res-sub"></p>
+  <div id="td-results"></div>
+  <p class="td-fresh" id="td-fresh"></p>
+</div>
+
+<div class="tb-actions">
+  <button class="tb-btn tb-btn-ghost" id="td-erase" type="button">Erase my list</button>
+</div>
+<p class="tb-saved" id="td-saved"></p>
+
+<script>
+//__DATA__
+(function(){
+  var root = document.getElementById('tcdin');
+  if (!root || typeof DIN === 'undefined') return;
+  var KEY = 'tcdin-v1';
+  var FEED_URL = 'https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json';
+  var CATS = [ {k:'P',t:'Proteins'}, {k:'V',t:'Veggies & fresh'}, {k:'G',t:'Pantry, grains & canned'}, {k:'D',t:'Dairy & eggs'}, {k:'S',t:'Sauces & condiments'}, {k:'T',t:'Staples'} ];
+  var SHOW_N = 12;
+  var S;
+  try { S = JSON.parse(localStorage.getItem(KEY)) || null; } catch(e){ S = null; }
+  if (!S || !S.have) S = { have: [], st: true };
+  var haveSet = {};
+  for (var i = 0; i < S.have.length; i++) haveSet[S.have[i]] = true;
+  var expanded = {};
+  var feedRec = null, feedIng = null, weekOf = null;
+
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function money2(x){ return '$' + (Math.round(x*100)/100).toFixed(2); }
+
+  var saveT = null;
+  function save(){ clearTimeout(saveT); saveT = setTimeout(function(){ try { S.have = []; for (var n in haveSet) if (haveSet[n]) S.have.push(n); localStorage.setItem(KEY, JSON.stringify(S)); var el = document.getElementById('td-saved'); el.textContent = 'Saved on this device just now.'; setTimeout(function(){ el.textContent = ''; }, 2200); } catch(e){} }, 400); }
+
+  function chipHtml(g){
+    return '<button type="button" class="td-chip'+(haveSet[g.n]?' on':'')+'" data-n="'+esc(g.n)+'" aria-pressed="'+(haveSet[g.n]?'true':'false')+'">'+esc(g.n)+'</button>';
+  }
+
+  function renderCats(){
+    var q = document.getElementById('td-search').value.trim().toLowerCase();
+    var h = '';
+    for (var c = 0; c < CATS.length; c++){
+      var cat = CATS[c];
+      if (cat.k === 'T' && S.st) continue;
+      var items = [];
+      for (var i = 0; i < DIN.ing.length; i++){ var g = DIN.ing[i];
+        if (g.c !== cat.k) continue;
+        if (q && g.n.toLowerCase().indexOf(q) < 0) continue;
+        items.push(g);
+      }
+      if (!items.length) continue;
+      var lim = (q || expanded[cat.k]) ? items.length : SHOW_N;
+      var shown = [], hid = 0;
+      for (i = 0; i < items.length; i++){
+        if (i < lim || haveSet[items[i].n]) shown.push(items[i]); else hid++;
+      }
+      h += '<div class="td-cat"><p class="td-cat-h">'+cat.t+'</p><div class="td-chips">';
+      for (i = 0; i < shown.length; i++) h += chipHtml(shown[i]);
+      if (hid > 0) h += '<button type="button" class="td-more" data-cat="'+cat.k+'">+ '+hid+' more</button>';
+      h += '</div></div>';
+    }
+    document.getElementById('td-cats').innerHTML = h || '<p class="tb-sub">Nothing matches that search.</p>';
+    var n = 0; for (var k in haveSet) if (haveSet[k]) n++;
+    document.getElementById('td-count').textContent = n ? (n + ' item' + (n>1?'s':'') + ' in your kitchen') : 'Nothing tapped yet';
+  }
+
+  function liveCost(r){
+    if (feedRec && feedRec[r.s] && feedRec[r.s].per_serving) return feedRec[r.s].per_serving;
+    return r.c;
+  }
+
+  function needPrice(g){
+    if (feedIng && g.b && feedIng[g.b] && feedIng[g.b].cheapest){
+      var f = feedIng[g.b];
+      return ' <span>' + money2(f.cheapest) + '/' + esc(f.unit) + ' at ' + esc(f.store) + '</span>';
+    }
+    return '';
+  }
+
+  function rank(){
+    var out = [];
+    for (var r = 0; r < DIN.rec.length; r++){ var rec = DIN.rec[r];
+      var got = 0, tot = 0, need = [];
+      for (var j = 0; j < rec.i.length; j++){ var g = DIN.ing[rec.i[j]];
+        if (g.c === 'T' && S.st) continue;
+        tot++;
+        if (haveSet[g.n]) got++; else need.push(g);
+      }
+      if (got >= 1) out.push({ rec: rec, got: got, tot: tot, need: need });
+    }
+    out.sort(function(a,b){
+      if (a.need.length !== b.need.length) return a.need.length - b.need.length;
+      if (a.got !== b.got) return b.got - a.got;
+      return liveCost(a.rec) - liveCost(b.rec);
+    });
+    return out.slice(0, 10);
+  }
+
+  function renderResults(){
+    var box = document.getElementById('td-results');
+    var sub = document.getElementById('td-res-sub');
+    var picked = 0; for (var k in haveSet) if (haveSet[k]) picked++;
+    if (!picked){
+      sub.textContent = 'Tap a few ingredients above and your options appear here. No ideas? These are the cheapest dinners in town this week:';
+      var cheap = DIN.rec.slice().sort(function(a,b){ return liveCost(a) - liveCost(b); }).slice(0,5);
+      var h = '';
+      for (var i = 0; i < cheap.length; i++){ var r = cheap[i];
+        h += '<div class="td-res"><div class="td-res-top"><a href="/'+esc(r.s)+'/?ref=dinner-tool">'+esc(r.n)+'</a><span class="td-cost">'+money2(liveCost(r))+'/serving</span></div>'+
+             '<p class="td-meta">'+r.cal+' cal &bull; '+r.p+'g protein per serving &bull; makes '+r.sv+'</p></div>';
+      }
+      box.innerHTML = h;
+      return;
+    }
+    var res = rank();
+    if (!res.length){ sub.textContent = ''; box.innerHTML = '<div class="td-empty"><p>No matches yet &mdash; tap a protein or a base like rice or pasta and this fills right up.</p></div>'; return; }
+    sub.textContent = S.st ? 'Ranked by how close you are, assuming your staples. Cheapest first when it&rsquo;s a tie.' : 'Ranked by how close you are. Cheapest first when it&rsquo;s a tie.';
+    sub.innerHTML = sub.textContent;
+    var h = '';
+    for (var i = 0; i < res.length; i++){ var e = res[i]; var r = e.rec;
+      var pct = e.tot ? Math.round(e.got / e.tot * 100) : 0;
+      h += '<div class="td-res"><div class="td-res-top"><a href="/'+esc(r.s)+'/?ref=dinner-tool">'+esc(r.n)+'</a><span class="td-cost">'+money2(liveCost(r))+'/serving</span></div>';
+      h += '<p class="td-meta">'+r.cal+' cal &bull; '+r.p+'g protein per serving &bull; makes '+r.sv+'</p>';
+      h += '<div class="td-havebar"><i><em style="width:'+pct+'%"></em></i>You have '+e.got+' of '+e.tot+'</div>';
+      if (!e.need.length){
+        h += '<span class="td-ready">&#10003; You can make this tonight</span>';
+      } else {
+        h += '<div class="td-need">';
+        for (var j = 0; j < e.need.length; j++){ var g = e.need[j];
+          h += '<span class="td-need-chip"><b>Need:</b> '+esc(g.n)+needPrice(g)+'</span>';
+        }
+        h += '</div>';
+      }
+      h += '</div>';
+    }
+    box.innerHTML = h;
+  }
+
+  function renderAll(){ renderCats(); renderResults(); }
+
+  root.addEventListener('click', function(e){
+    var chip = e.target.closest('.td-chip');
+    if (chip){ var n = chip.getAttribute('data-n'); haveSet[n] = !haveSet[n]; if(!haveSet[n]) delete haveSet[n]; renderAll(); save(); return; }
+    var more = e.target.closest('.td-more');
+    if (more){ expanded[more.getAttribute('data-cat')] = true; renderCats(); return; }
+    if (e.target.id === 'td-clearsel'){ haveSet = {}; renderAll(); save(); return; }
+    if (e.target.id === 'td-erase'){ if (confirm('Erase your saved kitchen list from this device?')){ try { localStorage.removeItem(KEY); } catch(err){} haveSet = {}; S = { have: [], st: true }; document.getElementById('td-st').checked = true; document.getElementById('td-search').value=''; renderAll(); } return; }
+  });
+  root.addEventListener('input', function(e){
+    if (e.target.id === 'td-search'){ renderCats(); }
+  });
+  root.addEventListener('change', function(e){
+    if (e.target.id === 'td-st'){ S.st = e.target.checked; renderAll(); save(); }
+  });
+
+  document.getElementById('td-st').checked = S.st !== false;
+  renderAll();
+
+  try {
+    fetch(FEED_URL).then(function(r){ return r.json(); }).then(function(f){
+      if (f && f.recipes){ feedRec = f.recipes; feedIng = f.ingredients || null; weekOf = f.week_of || null;
+        document.getElementById('td-fresh').textContent = weekOf ? ('Prices checked across Omaha stores for the week of ' + weekOf + '.') : '';
+        renderResults();
+      }
+    }).catch(function(){});
+  } catch(e){}
+})();
+</script>
+</div>

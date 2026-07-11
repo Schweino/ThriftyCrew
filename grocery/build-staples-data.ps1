@@ -1,0 +1,61 @@
+# build-staples-data.ps1 - emits the embedded dataset for the My Staples watchlist tool.
+# Combines: the 29 weekly commodities (commodities.json + categories.json), the recipe-board
+# everyday items (recipe-board.json), record lows (price-history.json), trend-page slugs,
+# and bakes current feed prices as the offline fallback. Output: staples-data.js
+# Splice into my-staples-template.html at //__DATA__ -> C:\Codex\income\my-staples-tool.html
+$ErrorActionPreference = 'Stop'
+$root = 'C:\Codex\income\grocery'
+$raw = (Invoke-WebRequest -Uri "https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json" -UseBasicParsing -TimeoutSec 30).Content.TrimStart([char]0xFEFF)
+$feed = $raw | ConvertFrom-Json
+$feedIng = @{}
+foreach ($p in $feed.ingredients.PSObject.Properties) { $feedIng[[string]$p.Name] = $p.Value }
+
+$cats = (Get-Content "$root\categories.json" -Raw | ConvertFrom-Json).categories
+$catOf = @{}
+foreach ($c in $cats) { foreach ($cid in $c.commodities) { $catOf[[string]$cid] = [string]$c.label } }
+$comms = Get-Content "$root\commodities.json" -Raw | ConvertFrom-Json
+
+# records (only the weekly commodities have history)
+$recOf = @{}
+try { foreach ($h in ((Get-Content "$root\price-history.json" -Raw | ConvertFrom-Json).commodities)) { if ($h.record_low) { $recOf[[string]$h.id] = [double]$h.record_low.price } } } catch {}
+
+# trend slugs = ids with >=3 weeks history (mirror build-trend-pages rule)
+$trendIds = @{}
+try { foreach ($h in ((Get-Content "$root\price-history.json" -Raw | ConvertFrom-Json).commodities)) { if (@($h.history).Count -ge 3) { $trendIds[[string]$h.id] = $true } } } catch {}
+
+$items = @(); $seen = @{}
+foreach ($c in $comms) {
+  $id = [string]$c.id
+  if (-not $feedIng.ContainsKey($id)) { continue }
+  $f = $feedIng[$id]
+  $cat = if ($catOf.ContainsKey($id)) { $catOf[$id] } else { 'Pantry & Beverages' }
+  $rec = if ($recOf.ContainsKey($id)) { $recOf[$id] } else { $null }
+  $t = if ($trendIds.ContainsKey($id)) { $id + '-price-omaha' } else { $null }
+  $items += ,@{ k=$id; l=[string]$c.label; u=[string]$f.unit; c=$cat; f=[double]$f.cheapest; fs=[string]$f.store; rec=$rec; t=$t; w=1 }
+  $seen[$id] = $true
+}
+$ri = Get-Content "$root\out\recipe-board.json" -Raw | ConvertFrom-Json
+foreach ($r in $ri.comparison) {
+  $id = [string]$r.id
+  if ($seen.ContainsKey($id) -or -not $feedIng.ContainsKey($id)) { continue }
+  $f = $feedIng[$id]
+  $items += ,@{ k=$id; l=[string]$r.commodity; u=[string]$f.unit; c=[string]$r.category; f=[double]$f.cheapest; fs=[string]$f.store; rec=$null; t=$null; w=0 }
+  $seen[$id] = $true
+}
+
+function JStr([string]$s){ '"' + ($s -replace '\\','\\\\' -replace '"','\"') + '"' }
+$sb = New-Object System.Text.StringBuilder
+[void]$sb.Append('var ST={week:' + (JStr ([string]$feed.week_of)) + ',items:[')
+$first = $true
+foreach ($i in $items) {
+  if (-not $first) { [void]$sb.Append(',') }; $first = $false
+  $recJ = if ($i.rec -ne $null) { [string]([math]::Round($i.rec,4)) } else { 'null' }
+  $tJ = if ($i.t) { JStr $i.t } else { 'null' }
+  [void]$sb.Append('{"k":' + (JStr $i.k) + ',"l":' + (JStr $i.l) + ',"u":' + (JStr $i.u) + ',"c":' + (JStr $i.c) + ',"f":' + ([string]$i.f) + ',"fs":' + (JStr $i.fs) + ',"rec":' + $recJ + ',"t":' + $tJ + ',"w":' + $i.w + '}')
+}
+[void]$sb.Append(']};')
+[IO.File]::WriteAllText("$root\staples-data.js", $sb.ToString(), (New-Object System.Text.UTF8Encoding($false)))
+"WROTE staples-data.js  items=$($items.Count)  ($([math]::Round((Get-Item "$root\staples-data.js").Length/1KB,1)) KB)"
+"weekly(w=1): " + (@($items | Where-Object { $_.w -eq 1 }).Count) + "   recipe(w=0): " + (@($items | Where-Object { $_.w -eq 0 }).Count)
+"with records: " + (@($items | Where-Object { $_.rec -ne $null }).Count) + "   with trend links: " + (@($items | Where-Object { $_.t }).Count)
+"categories: " + ((@($items | ForEach-Object { $_.c }) | Select-Object -Unique) -join ' | ')

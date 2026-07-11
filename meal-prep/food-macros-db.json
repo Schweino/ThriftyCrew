@@ -1,5 +1,5 @@
-﻿{
-    "readme":  "Food macro database for Simple Money Playbook meal prep. Each item\u0027s calories/protein_g/carbs_g/fat_g are PER SERVING. serving_grams = grams in one serving (used to scale by weight, e.g. pounds). For count or volume items (eggs, tbsp), serving_qty + serving_unit describe the serving. Conversions: 1 lb = 453.592 g, 1 oz = 28.3495 g. Note raw vs cooked for meats. brand empty string = not specified yet. null macro = pending label.",
+{
+    "readme":  "Food macro database for Thrifty Crew meal prep. Each item\u0027s calories/protein_g/carbs_g/fat_g are PER SERVING. serving_grams = grams in one serving (used to scale by weight, e.g. pounds). For count or volume items (eggs, tbsp), serving_qty + serving_unit describe the serving. Conversions: 1 lb = 453.592 g, 1 oz = 28.3495 g. Note raw vs cooked for meats. brand empty string = not specified yet. null macro = pending label.",
     "items":  [
                   {
                       "item":  "Boneless Skinless Chicken Breast",

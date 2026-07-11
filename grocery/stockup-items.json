@@ -1,0 +1,21 @@
+{
+  "note": "Commodities that KEEP (freezer or pantry, weeks+). Used by build-deals-page.ps1 to add a 'Stock up' tag when one of these hits a record/near-record price. Honest bar: only items a normal household can genuinely buy ahead without waste. Fresh short-life produce and open-dairy stay out.",
+  "items": {
+    "chicken-breast":   "freezes well",
+    "chicken-thighs":   "freezes well",
+    "ground-beef-8020": "freezes well",
+    "ground-turkey":    "freezes well",
+    "bacon":            "freezes well",
+    "pork-chops":       "freezes well",
+    "butter":           "freezes for months",
+    "shredded-cheese":  "freezes fine for cooking",
+    "cream-cheese":     "long fridge life",
+    "eggs":             "keeps 3+ weeks in the fridge",
+    "bread":            "freezes well",
+    "peanut-butter":    "pantry staple",
+    "coffee":           "pantry staple",
+    "russet-potatoes":  "keeps for weeks in a cool dark spot",
+    "onions":           "keeps for weeks in a cool dark spot",
+    "apples":           "keeps for weeks in the fridge"
+  }
+}
