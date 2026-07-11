@@ -29,6 +29,10 @@
 #tcst .st-p{font-weight:800;color:var(--green);white-space:nowrap;}
 #tcst .st-s{font-size:.85em;color:#68748a;white-space:nowrap;}
 #tcst .st-low{display:inline-block;background:var(--green);color:#fff;font-size:.62em;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:999px;vertical-align:2px;}
+#tcst .st-ends{display:inline-block;background:#fdf8ec;color:var(--gold-d);border:1px solid #ecd9ae;font-size:.62em;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;vertical-align:2px;}
+#tcst .st-ends.st-urgent{background:var(--red);border-color:var(--red);color:#fff;}
+#tcst .st-ics{font-size:.76em;color:#68748a;text-decoration:underline;cursor:pointer;white-space:nowrap;font-weight:600;}
+#tcst .st-ics:hover{color:var(--gold-d);}
 #tcst .st-tr{font-size:.78em;color:var(--gold-d);text-decoration:none;font-weight:700;white-space:nowrap;}
 #tcst .st-tr:hover{color:var(--navy);}
 #tcst .st-split{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:1em 1.1em;margin:1.2em 0 0;}
@@ -104,6 +108,18 @@
   function money(x){ return '$' + (Math.round(x*100)/100).toFixed(2); }
   function priceStr(it){ var p = it.f < 1 ? '$' + it.f.toFixed(it.f < 0.2 ? 3 : 2) : money(it.f); return p + (it.u === 'each' ? ' each' : '/' + it.u); }
   function groupOf(cat){ for (var g = 0; g < GROUPS.length; g++) if (GROUPS[g].rx.test(cat)) return g; return GROUPS.length - 1; }
+  function endsChip(it){
+    if (!it.se) return '';
+    var end = new Date(it.se + 'T23:59:59');
+    var now = new Date();
+    if (isNaN(end.getTime()) || end < now) return '';
+    var days = Math.floor((end - now) / 86400000);
+    var label, urgent = false;
+    if (days <= 0){ label = 'Sale ends today'; urgent = true; }
+    else if (days === 1){ label = 'Sale ends tomorrow'; urgent = true; }
+    else { label = 'Sale thru ' + ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][end.getDay()]; }
+    return ' <span class="st-ends' + (urgent ? ' st-urgent' : '') + '" title="This price is a sale that runs through ' + it.se + '. After that it goes back up.">' + label + '</span>';
+  }
 
   var saveT = null;
   function save(){ clearTimeout(saveT); saveT = setTimeout(function(){ try { S.have = []; for (var k in have) if (have[k]) S.have.push(k); localStorage.setItem(KEY, JSON.stringify(S)); var el = document.getElementById('st-saved'); el.textContent = 'Saved on this device just now.'; setTimeout(function(){ el.textContent = ''; }, 2200); } catch(e){} }, 400); }
@@ -161,8 +177,9 @@
       if (isLow) lows++;
       if (!byStore[it.fs]) byStore[it.fs] = { n: 0, sum: 0 };
       byStore[it.fs].n++; byStore[it.fs].sum += it.f;
-      h += '<div class="st-row"><span class="st-l">' + esc(it.l) + (isLow ? ' <span class="st-low">At its low</span>' : '') + '</span>' +
+      h += '<div class="st-row"><span class="st-l">' + esc(it.l) + (isLow ? ' <span class="st-low">At its low</span>' : '') + endsChip(it) + '</span>' +
            '<span class="st-p">' + priceStr(it) + '</span><span class="st-s">at ' + esc(it.fs) + '</span>' +
+           (it.se ? '<span class="st-ics" data-k="' + esc(it.k) + '" title="Download a calendar reminder for the last day of this sale">remind me</span>' : '') +
            (it.t ? '<a class="st-tr" href="/' + esc(it.t) + '/?ref=staples">history &rarr;</a>' : '') + '</div>';
     }
     box.innerHTML = h;
@@ -187,7 +204,35 @@
     if (e.target.id === 'st-clearsel'){ have = {}; renderAll(); save(); return; }
     if (e.target.id === 'st-erase'){ if (confirm('Erase your saved staples list from this device?')){ try { localStorage.removeItem(KEY); } catch(err){} have = {}; S = { have: [] }; document.getElementById('st-search').value = ''; renderAll(); } return; }
     if (e.target.id === 'st-print'){ doPrint(); }
+    var ics = e.target.closest('.st-ics');
+    if (ics){ downloadIcs(ics.getAttribute('data-k')); return; }
   });
+
+  function downloadIcs(k){
+    var it = byKey[k];
+    if (!it || !it.se) return;
+    var d = it.se.replace(/-/g, '');
+    var stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
+    var uid = 'tc-' + k + '-' + it.se + '@thriftycrew.com';
+    var summary = 'Last day: ' + it.l + ' ' + priceStr(it) + ' at ' + it.fs;
+    var lines = [
+      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Thrifty Crew//My Staples//EN',
+      'BEGIN:VEVENT',
+      'UID:' + uid,
+      'DTSTAMP:' + stamp,
+      'DTSTART;VALUE=DATE:' + d,
+      'SUMMARY:' + summary.replace(/[,;\\]/g, ' '),
+      'DESCRIPTION:Sale ends today. From your Thrifty Crew staples list: https://www.thriftycrew.com/my-staples/',
+      'END:VEVENT', 'END:VCALENDAR'
+    ];
+    try {
+      var blob = new Blob([lines.join('\r\n')], { type: 'text/calendar' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'sale-reminder-' + k + '.ics';
+      document.body.appendChild(a); a.click(); a.parentNode.removeChild(a);
+    } catch(err){}
+  }
   root.addEventListener('input', function(e){ if (e.target.id === 'st-search') renderCats(); });
 
   function doPrint(){
@@ -219,7 +264,7 @@
     fetch(FEED_URL).then(function(r){ return r.json(); }).then(function(f){
       if (!f || !f.ingredients) return;
       for (var i = 0; i < ST.items.length; i++){ var it = ST.items[i]; var g = f.ingredients[it.k];
-        if (g && Number(g.cheapest) > 0 && g.unit === it.u){ it.f = Number(g.cheapest); it.fs = String(g.store); }
+        if (g && Number(g.cheapest) > 0 && g.unit === it.u){ it.f = Number(g.cheapest); it.fs = String(g.store); it.se = g.sale_end ? String(g.sale_end) : null; }
       }
       if (f.week_of) weekOf = f.week_of;
       liveLoaded = true;

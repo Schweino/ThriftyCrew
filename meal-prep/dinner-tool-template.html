@@ -97,6 +97,23 @@
   if (!S || !S.have) S = { have: [], st: true };
   var haveSet = {};
   for (var i = 0; i < S.have.length; i++) haveSet[S.have[i]] = true;
+  // cross-tool seed: first visit with an empty pantry, but a My Staples list exists on this device ->
+  // start the pantry with those staples (by feed board_id -> ingredient name). One-time convenience;
+  // the user's own edits always win after that.
+  var seededFromStaples = false;
+  try {
+    if (!S.have.length) {
+      var stRaw = JSON.parse(localStorage.getItem('tcst-v1'));
+      if (stRaw && stRaw.have && stRaw.have.length) {
+        var stKeys = {};
+        for (i = 0; i < stRaw.have.length; i++) stKeys[stRaw.have[i]] = true;
+        for (i = 0; i < DIN.ing.length; i++) {
+          var gi = DIN.ing[i];
+          if (gi.b && stKeys[gi.b] && gi.c !== 'T') { haveSet[gi.n] = true; seededFromStaples = true; }
+        }
+      }
+    }
+  } catch(e){}
   var expanded = {};
   var feedRec = null, feedIng = null, weekOf = null;
 
@@ -228,6 +245,15 @@
 
   document.getElementById('td-st').checked = S.st !== false;
   renderAll();
+  if (seededFromStaples) {
+    save();
+    // save()'s own "Saved" toast fires at ~400ms and clears at ~2.6s; place this note after it
+    setTimeout(function(){
+      var note = document.getElementById('td-saved');
+      note.textContent = 'We started your kitchen with your My Staples list. Tap to adjust; your changes stick.';
+      setTimeout(function(){ if (note.textContent.indexOf('My Staples') >= 0) note.textContent = ''; }, 9000);
+    }, 2900);
+  }
 
   try {
     fetch(FEED_URL).then(function(r){ return r.json(); }).then(function(f){

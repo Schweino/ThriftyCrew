@@ -5,7 +5,10 @@
 # Splice into my-staples-template.html at //__DATA__ -> C:\Codex\income\my-staples-tool.html
 $ErrorActionPreference = 'Stop'
 $root = 'C:\Codex\income\grocery'
-$raw = (Invoke-WebRequest -Uri "https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json" -UseBasicParsing -TimeoutSec 30).Content.TrimStart([char]0xFEFF)
+# prefer the freshly-exported local feed (has the newest schema, e.g. sale_end) over the edge-cached worker copy
+$localFeed = "$root\out\smp-feed.json"
+if (Test-Path $localFeed) { $raw = (Get-Content $localFeed -Raw).TrimStart([char]0xFEFF) }
+else { $raw = (Invoke-WebRequest -Uri "https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json" -UseBasicParsing -TimeoutSec 30).Content.TrimStart([char]0xFEFF) }
 $feed = $raw | ConvertFrom-Json
 $feedIng = @{}
 foreach ($p in $feed.ingredients.PSObject.Properties) { $feedIng[[string]$p.Name] = $p.Value }
@@ -31,7 +34,8 @@ foreach ($c in $comms) {
   $cat = if ($catOf.ContainsKey($id)) { $catOf[$id] } else { 'Pantry & Beverages' }
   $rec = if ($recOf.ContainsKey($id)) { $recOf[$id] } else { $null }
   $t = if ($trendIds.ContainsKey($id)) { $id + '-price-omaha' } else { $null }
-  $items += ,@{ k=$id; l=[string]$c.label; u=[string]$f.unit; c=$cat; f=[double]$f.cheapest; fs=[string]$f.store; rec=$rec; t=$t; w=1 }
+  $se = if ($f.sale_end) { [string]$f.sale_end } else { $null }
+  $items += ,@{ k=$id; l=[string]$c.label; u=[string]$f.unit; c=$cat; f=[double]$f.cheapest; fs=[string]$f.store; rec=$rec; t=$t; w=1; se=$se }
   $seen[$id] = $true
 }
 $ri = Get-Content "$root\out\recipe-board.json" -Raw | ConvertFrom-Json
@@ -39,7 +43,8 @@ foreach ($r in $ri.comparison) {
   $id = [string]$r.id
   if ($seen.ContainsKey($id) -or -not $feedIng.ContainsKey($id)) { continue }
   $f = $feedIng[$id]
-  $items += ,@{ k=$id; l=[string]$r.commodity; u=[string]$f.unit; c=[string]$r.category; f=[double]$f.cheapest; fs=[string]$f.store; rec=$null; t=$null; w=0 }
+  $se2 = if ($f.sale_end) { [string]$f.sale_end } else { $null }
+  $items += ,@{ k=$id; l=[string]$r.commodity; u=[string]$f.unit; c=[string]$r.category; f=[double]$f.cheapest; fs=[string]$f.store; rec=$null; t=$null; w=0; se=$se2 }
   $seen[$id] = $true
 }
 
@@ -51,7 +56,8 @@ foreach ($i in $items) {
   if (-not $first) { [void]$sb.Append(',') }; $first = $false
   $recJ = if ($i.rec -ne $null) { [string]([math]::Round($i.rec,4)) } else { 'null' }
   $tJ = if ($i.t) { JStr $i.t } else { 'null' }
-  [void]$sb.Append('{"k":' + (JStr $i.k) + ',"l":' + (JStr $i.l) + ',"u":' + (JStr $i.u) + ',"c":' + (JStr $i.c) + ',"f":' + ([string]$i.f) + ',"fs":' + (JStr $i.fs) + ',"rec":' + $recJ + ',"t":' + $tJ + ',"w":' + $i.w + '}')
+  $seJ = if ($i.se) { JStr $i.se } else { 'null' }
+  [void]$sb.Append('{"k":' + (JStr $i.k) + ',"l":' + (JStr $i.l) + ',"u":' + (JStr $i.u) + ',"c":' + (JStr $i.c) + ',"f":' + ([string]$i.f) + ',"fs":' + (JStr $i.fs) + ',"rec":' + $recJ + ',"t":' + $tJ + ',"w":' + $i.w + ',"se":' + $seJ + '}')
 }
 [void]$sb.Append(']};')
 [IO.File]::WriteAllText("$root\staples-data.js", $sb.ToString(), (New-Object System.Text.UTF8Encoding($false)))
