@@ -89,6 +89,10 @@
   var root = document.getElementById('tcdin');
   if (!root || typeof DIN === 'undefined') return;
   var KEY = 'tcdin-v1';
+  // dinner means dinner: only real dinner-sized portions (550+ calories per serving),
+  // never the lunch-sized meal-prep bowls.
+  var DINNER_MIN_CAL = 550;
+  var RECIPES = DIN.rec.filter(function(r){ return r.cal >= DINNER_MIN_CAL; });
   var FEED_URL = 'https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json';
   var CATS = [ {k:'P',t:'Proteins'}, {k:'V',t:'Veggies & fresh'}, {k:'G',t:'Pantry, grains & canned'}, {k:'D',t:'Dairy & eggs'}, {k:'S',t:'Sauces & condiments'}, {k:'T',t:'Staples'} ];
   var SHOW_N = 12;
@@ -170,7 +174,7 @@
 
   function rank(){
     var out = [];
-    for (var r = 0; r < DIN.rec.length; r++){ var rec = DIN.rec[r];
+    for (var r = 0; r < RECIPES.length; r++){ var rec = RECIPES[r];
       var got = 0, tot = 0, need = [];
       for (var j = 0; j < rec.i.length; j++){ var g = DIN.ing[rec.i[j]];
         if (g.c === 'T' && S.st) continue;
@@ -193,7 +197,7 @@
     var picked = 0; for (var k in haveSet) if (haveSet[k]) picked++;
     if (!picked){
       sub.textContent = 'Tap a few ingredients above and your options appear here. No ideas? These are the cheapest dinners in town this week:';
-      var cheap = DIN.rec.slice().sort(function(a,b){ return liveCost(a) - liveCost(b); }).slice(0,5);
+      var cheap = RECIPES.slice().sort(function(a,b){ return liveCost(a) - liveCost(b); }).slice(0,5);
       var h = '';
       for (var i = 0; i < cheap.length; i++){ var r = cheap[i];
         h += '<div class="td-res"><div class="td-res-top"><a href="/'+esc(r.s)+'/?ref=dinner-tool">'+esc(r.n)+'</a><span class="td-cost">'+money2(liveCost(r))+'/serving</span></div>'+
