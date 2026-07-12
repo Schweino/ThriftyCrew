@@ -20,8 +20,8 @@
     "exclude": ["bits", "ranch", "bacon\\s+cheese", "canadian", "turkey bacon"] },
 
   { "id": "pork-chops", "label": "Pork Chops", "unit": "lb",
-    "include": ["pork\\s+chop", "pork\\s+loin\\s+chop"],
-    "exclude": ["breaded", "stuffed", "cooked"] },
+    "include": ["pork\\b.{0,25}\\bchops?\\b", "\\bchops?\\b.{0,20}\\bpork\\b"],
+    "exclude": ["breaded", "stuffed", "cooked", "seasoned", "marinated"] },
 
   { "id": "eggs", "label": "Large Eggs (dozen)", "unit": "dozen",
     "include": ["\\beggs?\\b", "dozen\\s+egg", "grade\\s*a\\s+egg"],

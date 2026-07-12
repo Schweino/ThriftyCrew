@@ -27,6 +27,7 @@ $commod = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Js
 $validSet = @{}; $unitMap = @{}; foreach ($c in $commod) { $validSet[[string]$c.id] = $true; $unitMap[[string]$c.id] = [string]$c.unit }
 
 $byId = [ordered]@{}
+$byUrl = [ordered]@{}
 foreach ($f in $In) {
   if (-not (Test-Path $f)) { continue }
   foreach ($r in (Get-Content $f -Raw | ConvertFrom-Json)) {
@@ -60,6 +61,9 @@ foreach ($f in $In) {
       }
     $reg = if ($r.orig -and "$($r.orig)" -ne '') { '$' + [string]$r.orig } else { '' }
     $byId[$id] = [ordered]@{ store='Fareway'; item=$name; ad_price=$adp; size=$sz; regular=$reg; source_ad='shop.fareway.com' }
+    # emit the product-URL input using the SAME price+size the board uses, so the "See item" link's per-unit
+    # equals the board per-unit by construction (a Fareway price can never render without a matching link).
+    if ($r.url -and "$($r.url)" -ne '') { $byUrl[$id] = [ordered]@{ id=$id; url=[string]$r.url; price=($adp -replace '[^0-9.]',''); size=$sz; name=$name } }
   }
 }
 $deals = @($byId.Values)
@@ -67,5 +71,13 @@ $doc = [ordered]@{ store='Fareway'; price_type='everyday'; source='shop.fareway.
 $regDir = Join-Path $OutDir 'regular'
 New-Item -ItemType Directory -Force -Path $regDir | Out-Null
 $doc | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $regDir "fareway-regular-$asofS.json") -Encoding UTF8
+# product-URL input for merge-product-urls.ps1 (store key 'fareway'): every priced Fareway cell that has a
+# storefront product page gets a link whose price+size match the board exactly.
+$urlRows = @($byUrl.Values)
+if ($urlRows.Count) {
+  $uiDir = Join-Path $OutDir 'url-inputs'; New-Item -ItemType Directory -Force -Path $uiDir | Out-Null
+  ($urlRows | ConvertTo-Json -Depth 4) | Set-Content (Join-Path $uiDir 'store-fareway1-urls.json') -Encoding UTF8
+  Write-Output ("store-fareway1-urls.json: $($urlRows.Count) Fareway product links")
+}
 Write-Output ("fareway-regular-$asofS.json: $($deals.Count) commodities")
 $deals | ForEach-Object { "  {0,-20} {1,-8} {2}" -f $_.item.Substring(0,[Math]::Min(20,$_.item.Length)), $_.ad_price, $_.size }

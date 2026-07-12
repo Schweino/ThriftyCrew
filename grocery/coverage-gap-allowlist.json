@@ -1,0 +1,7 @@
+{
+  "readme": "Reviewed, legitimate reasons a store that appears to carry a commodity is NOT on the board. audit-coverage-gaps.ps1 skips these so it only alerts on NEW/unreviewed gaps. Remove an entry to force a re-review (e.g. once we can price it).",
+  "allow": [
+    { "commodity": "blueberries", "store": "Hy-Vee", "reason": "Only appears in a combined 'blueberries, raspberries, strawberries or berry medley' ad line - no clean per-berry price/size to compare. Revisit if Hy-Vee everyday pull captures a standalone blueberry pack." },
+    { "commodity": "blueberries", "store": "Fareway", "reason": "Sold by the '1 pint container' (a volume, not a weight) at $4.99; no comparable per-ounce weight without guessing. Revisit if the product page exposes a net weight." }
+  ]
+}

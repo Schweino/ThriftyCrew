@@ -76,18 +76,25 @@ foreach ($it in $all) { $id=[string]$it.id; $unit=[string]$it.unit
   }
 }
 
-# NO-LINK coverage: parse the freshly-built embed
-$noLink = 0
+# NO-LINK: a priced chip that renders NEITHER a "See item" link NOR a "Does not carry" cell = a price with no
+# way to verify it. HARD INVARIANT (Brad: a displayed price MUST have a matching link). We record the exact
+# {id,store} of each so the automation can name them and the URL step can resolve them - not just a count.
+$noLinkList = New-Object System.Collections.Generic.List[object]
 if (Test-Path $Embed) {
   $html = Get-Content $Embed -Raw
-  foreach ($row in [regex]::Matches($html, "data-id='[^']+'(.*?)</article>", 'Singleline')) {
-    foreach ($ch in [regex]::Matches($row.Groups[1].Value, "<div class='pg-chip[^']*' data-store=`"[^`"]+`" data-pu='[^']*'>(.*?)</div>", 'Singleline')) {
-      if ($ch.Groups[1].Value -notmatch 'pg-see') { $noLink++ }
+  foreach ($row in [regex]::Matches($html, "data-id='([^']+)'(.*?)</article>", 'Singleline')) {
+    $rid = $row.Groups[1].Value
+    foreach ($ch in [regex]::Matches($row.Groups[2].Value, "<div class='pg-chip[^']*' data-store=`"([^`"]+)`" data-pu='[^']*'>(.*?)</div>", 'Singleline')) {
+      $cstore = $ch.Groups[1].Value -replace '&#39;',"'"
+      $body = $ch.Groups[2].Value
+      if ($body -notmatch 'pg-see' -and $body -notmatch 'pg-none') { $noLinkList.Add([pscustomobject]@{ id=$rid; store=$cstore }) }
     }
   }
 }
+$noLink = $noLinkList.Count
+$byStore = $noLinkList | Group-Object store | ForEach-Object { [pscustomobject]@{ store=$_.Name; count=$_.Count } } | Sort-Object count -Descending
 
-$report = [ordered]@{ generated=(Get-Date -Format 'yyyy-MM-dd HH:mm'); tol=$Tol; no_link_count=$noLink; max_no_link=$MaxNoLink; mismatch_count=$mismatch.Count; mismatch=$mismatch }
+$report = [ordered]@{ generated=(Get-Date -Format 'yyyy-MM-dd HH:mm'); tol=$Tol; no_link_count=$noLink; max_no_link=$MaxNoLink; no_link_by_store=$byStore; no_link=$noLinkList; mismatch_count=$mismatch.Count; mismatch=$mismatch }
 $report | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $OutDir 'consistency-report.json') -Encoding UTF8
 
 # Live-visible health = NO-LINK coverage (how many priced chips fall back to a name). A spike means links are

@@ -212,6 +212,27 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
     } else {
       & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'update-history.ps1') | Out-Null
       & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'sanity-check.ps1') | Out-Null   # exit 1 = flags (expected), not a crash -> guards-<week>.json
+      # ---- COVERAGE GAP GUARD: a store SILENTLY dropped from a commodity it actually carries (a too-strict
+      # include regex not matching that store's real product name - the Hy-Vee "Pork Loin TOP Loin Chops" bug).
+      # audit-coverage-gaps.ps1 scans each missing store's raw pull for a loosened-include match; a hit = fix the
+      # commodity's include (or allowlist it). Alert Brad ONCE per distinct gap-set (signature de-dup) so it is
+      # never silent but never spams. Advisory (we still publish the current board).
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-coverage-gaps.ps1') | Out-Null
+        $cg = try { Get-Content (Join-Path $OutDir 'coverage-gaps.json') -Raw | ConvertFrom-Json } catch { $null }
+        if ($cg -and [int]$cg.gap_count -gt 0) {
+          $cgSig = (@($cg.gaps | ForEach-Object { $_.commodity + '|' + $_.store } | Sort-Object) -join ';')
+          $cgF = Join-Path $OutDir 'coverage-gap-alert.sig'
+          $cgPrev = if (Test-Path $cgF) { (Get-Content $cgF -Raw).Trim() } else { '' }
+          $cgList = (@($cg.gaps | ForEach-Object { $_.commodity + ' @ ' + $_.store }) -join '; ')
+          Log ("coverage-gaps: $($cg.gap_count) store(s) carry an item but are off the board - $cgList")
+          $summary += "REVIEW    coverage gaps: $($cg.gap_count) store(s) dropped despite carrying the item - see coverage-gaps.json"
+          if ($cgSig -ne $cgPrev) {
+            try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: $($cg.gap_count) store(s) dropped from a commodity they carry - $asofS" -Body "audit-coverage-gaps found stores that HAVE a matching product but are missing from the board (usually a too-strict include regex): $cgList. Fix that commodity's include in commodities.json (or add a reviewed exception to coverage-gap-allowlist.json). Details: grocery/out/coverage-gaps.json." | Out-Null
+                  if ($LASTEXITCODE -eq 0) { Set-Content -Path $cgF -Value $cgSig -Encoding UTF8; Log 'coverage-gap alert sent' } } catch { Log ('coverage-gap alert threw: ' + $_.Exception.Message) }
+          } else { Log 'coverage-gaps unchanged since last alert - not re-alerting' }
+        } else { if (Test-Path (Join-Path $OutDir 'coverage-gap-alert.sig')) { Remove-Item (Join-Path $OutDir 'coverage-gap-alert.sig') -ErrorAction SilentlyContinue } }
+      } catch { Log ('coverage-gap guard threw: ' + $_.Exception.Message) }
       # Refresh the per-item sale-window log (sale price + start/end dates from the fresh board) so the daily
       # Baker's guard fires only when a sale actually reverts/starts, not blindly. Headless-safe, non-fatal.
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-sale-windows.ps1') | Out-Null; Log 'sale-windows refreshed' } catch { Log ('build-sale-windows threw: ' + $_.Exception.Message) }
