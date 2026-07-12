@@ -1,6 +1,20 @@
-{
-  "readme": "Commodity x store cells confirmed (by manual verification) that the store genuinely does not carry a comparable product. build-deals-page.ps1 renders these as a 'Does not carry' cell with a 'See it? Let us know!' link to /suggest-an-item/. Keyed list of {id, store}.",
-  "cells": [
-    { "id": "frozen-green-peas", "store": "Sam's Club", "note": "Sam's stocks frozen broccoli/corn/green beans/mixes but no plain frozen peas (checked 2026-07-12)" }
-  ]
+﻿{
+    "readme":  "Commodity x store cells confirmed (by manual verification) that the store genuinely does not carry a comparable product. build-deals-page.ps1 renders these as a \u0027Does not carry\u0027 cell with a \u0027See it? Let us know!\u0027 link to /suggest-an-item/. Keyed list of {id, store}.",
+    "cells":  [
+                  {
+                      "id":  "frozen-green-peas",
+                      "store":  "Sam\u0027s Club",
+                      "note":  "Sam\u0027s stocks frozen broccoli/corn/green beans/mixes but no plain frozen peas (checked 2026-07-12)"
+                  },
+                  {
+                      "id":  "laundry-detergent",
+                      "store":  "Sam\u0027s Club",
+                      "note":  "No A\u0026H laundry detergent at the Omaha club - only Gain/Tide/Persil/Era/Member\u0027s Mark; A\u0026H hits are baking soda only (checked 2026-07-12)"
+                  },
+                  {
+                      "id":  "laundry-detergent",
+                      "store":  "Aldi",
+                      "note":  "Aldi catalog: No results for arm hammer detergent - Tandil private label + Tide/Gain only (checked 2026-07-12)"
+                  }
+              ]
 }

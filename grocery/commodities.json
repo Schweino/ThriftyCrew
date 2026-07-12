@@ -113,5 +113,9 @@
 
   { "id": "coffee", "label": "Coffee (ground/beans)", "unit": "oz",
     "include": ["\\bcoffee\\b", "ground\\s+coffee", "coffee\\s+beans"],
-    "exclude": ["creamer", "filter", "\\bmug\\b", "iced\\s+coffee", "\\bpod", "k-?cup", "ready\\s+to\\s+drink", "\\brtd\\b", "cold\\s+brew\\s+can"] }
+    "exclude": ["creamer", "filter", "\\bmug\\b", "iced\\s+coffee", "\\bpod", "k-?cup", "ready\\s+to\\s+drink", "\\brtd\\b", "cold\\s+brew\\s+can"] },
+
+  { "id": "laundry-detergent", "label": "Laundry Detergent (Arm & Hammer OxiClean)", "unit": "floz",
+    "include": ["arm\\s*(?:&|&amp;|and)\\s*hammer.{0,60}(?:oxi\\s*-?\\s*clean|odor\\s*blasters?)", "(?:oxi\\s*-?\\s*clean|odor\\s*blasters?).{0,60}arm\\s*(?:&|&amp;|and)\\s*hammer"],
+    "exclude": ["\\bpods?\\b", "\\bpaks?\\b", "\\bpacs?\\b", "\\bpowder\\b", "\\bsheets?\\b", "stain\\s*remover", "\\bspray\\b", "\\bscent\\s*booster", "in-?wash", "\\bdish\\b", "unit\\s*dose", "\\btabs?\\b"] }
 ]

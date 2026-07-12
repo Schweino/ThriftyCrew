@@ -1,10 +1,77 @@
-{
-  "note": "Food-category grouping for the public deals page. order = display order of the category section + its filter button.",
-  "categories": [
-    { "key": "meat",    "label": "Meat & Poultry",      "order": 1, "commodities": ["chicken-breast","chicken-thighs","ground-beef-8020","ground-turkey","bacon","pork-chops"] },
-    { "key": "dairy",   "label": "Dairy & Eggs",         "order": 2, "commodities": ["eggs","milk","butter","cottage-cheese","sour-cream","cream-cheese","shredded-cheese","yogurt"] },
-    { "key": "fruit",   "label": "Fruit",                "order": 3, "commodities": ["bananas","strawberries","blueberries","grapes","apples","peaches","watermelon","avocados"] },
-    { "key": "veg",     "label": "Vegetables",           "order": 4, "commodities": ["russet-potatoes","onions","sweet-corn"] },
-    { "key": "pantry",  "label": "Pantry & Beverages",   "order": 5, "commodities": ["bread","peanut-butter","orange-juice","coffee"] }
-  ]
+﻿{
+    "note":  "Food-category grouping for the public deals page. order = display order of the category section + its filter button.",
+    "categories":  [
+                       {
+                           "key":  "meat",
+                           "label":  "Meat \u0026 Poultry",
+                           "order":  1,
+                           "commodities":  [
+                                               "chicken-breast",
+                                               "chicken-thighs",
+                                               "ground-beef-8020",
+                                               "ground-turkey",
+                                               "bacon",
+                                               "pork-chops"
+                                           ]
+                       },
+                       {
+                           "key":  "dairy",
+                           "label":  "Dairy \u0026 Eggs",
+                           "order":  2,
+                           "commodities":  [
+                                               "eggs",
+                                               "milk",
+                                               "butter",
+                                               "cottage-cheese",
+                                               "sour-cream",
+                                               "cream-cheese",
+                                               "shredded-cheese",
+                                               "yogurt"
+                                           ]
+                       },
+                       {
+                           "key":  "fruit",
+                           "label":  "Fruit",
+                           "order":  3,
+                           "commodities":  [
+                                               "bananas",
+                                               "strawberries",
+                                               "blueberries",
+                                               "grapes",
+                                               "apples",
+                                               "peaches",
+                                               "watermelon",
+                                               "avocados"
+                                           ]
+                       },
+                       {
+                           "key":  "veg",
+                           "label":  "Vegetables",
+                           "order":  4,
+                           "commodities":  [
+                                               "russet-potatoes",
+                                               "onions",
+                                               "sweet-corn"
+                                           ]
+                       },
+                       {
+                           "key":  "pantry",
+                           "label":  "Pantry \u0026 Beverages",
+                           "order":  5,
+                           "commodities":  [
+                                               "bread",
+                                               "peanut-butter",
+                                               "orange-juice",
+                                               "coffee"
+                                           ]
+                       },
+                       {
+                           "order":  6,
+                           "key":  "household",
+                           "label":  "Household",
+                           "commodities":  [
+                                               "laundry-detergent"
+                                           ]
+                       }
+                   ]
 }
