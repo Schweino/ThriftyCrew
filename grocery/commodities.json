@@ -1,15 +1,15 @@
 [
   { "id": "chicken-breast", "label": "Boneless Skinless Chicken Breast", "unit": "lb",
-    "include": ["boneless,?\\s*skinless\\s+chicken\\s+breast", "chicken\\s+breast[^,]*boneless", "b\\.?s\\.?b\\.?\\s+chicken"],
-    "exclude": ["thigh", "tender", "strip", "nugget", "breaded", "canned", "salad", "cooked", "wing", "patty", "patties", "ground"] },
+    "include": ["boneless,?\\s*skinless\\s+chicken\\s+breast", "chicken\\s+breast[^,]*boneless", "b\\.?s\\.?b\\.?\\s+chicken", "\\bchicken\\s+breasts?\\b"],
+    "exclude": ["thigh", "tender", "strip", "nugget", "breaded", "canned", "salad", "cooked", "wing", "patty", "patties", "ground", "thin[\\s-]*sliced", "skewer", "twister"] },
 
   { "id": "chicken-thighs", "label": "Chicken Thighs / Drumsticks", "unit": "lb",
     "include": ["chicken\\s+(thigh|drumstick|leg)", "(thigh|drumstick)s?[^,]*chicken"],
     "exclude": ["boneless skinless.*breast", "breaded", "cooked", "nugget"] },
 
   { "id": "ground-beef-8020", "label": "80/20 Ground Beef", "unit": "lb",
-    "include": ["ground\\s+beef[^.]*80", "80%?\\s*lean[^.]*20%?\\s*fat", "80/20\\s+ground", "ground\\s+chuck"],
-    "exclude": ["turkey", "meatball", "patty", "patties", "93%", "90%", "96%"] },
+    "include": ["ground\\s+beef[^.]*80", "80%?\\s*lean[^.]*20%?\\s*fat", "80/20\\s+ground", "ground\\s+chuck", "80%?\\s*lean\\s+ground"],
+    "exclude": ["turkey", "meatball", "patty", "patties", "93%", "90%", "96%", "85%", "85/15", "organic", "grass[\\s-]*fed"] },
 
   { "id": "ground-turkey", "label": "Ground Turkey", "unit": "lb",
     "include": ["ground\\s+turkey"],
