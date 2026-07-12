@@ -24,7 +24,7 @@ if (-not $In -or $In.Count -eq 0) {
   $In = @(Get-ChildItem (Join-Path $OutDir 'fareway\fareway-shop-*.json') -ErrorAction SilentlyContinue | Sort-Object Name | ForEach-Object { $_.FullName })
 }
 $commod = Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json
-$validSet = @{}; $unitMap = @{}; foreach ($c in $commod) { $validSet[[string]$c.id] = $true; $unitMap[[string]$c.id] = [string]$c.unit }
+$validSet = @{}; $unitMap = @{}; $pintMap = @{}; foreach ($c in $commod) { $validSet[[string]$c.id] = $true; $unitMap[[string]$c.id] = [string]$c.unit; if ($c.PSObject.Properties['pint_oz'] -and $c.pint_oz) { $pintMap[[string]$c.id] = [double]$c.pint_oz } }
 
 $byId = [ordered]@{}
 $byUrl = [ordered]@{}
@@ -59,6 +59,15 @@ foreach ($f in $In) {
         if ($ct.Success) { $n=[double]$ct.Groups[1].Value; if ($n -gt 0) { $adp = '$' + ([math]::Round([double]$price / ($n/12), 2)); $sz = 'dozen' } }
         else { $sz = 'dozen' }
       }
+    # by-VOLUME container -> canonical dry weight: a fresh-berry "pint" is a dry clamshell with no weight on the
+    # label, so normalize it to the commodity's declared pint_oz (blueberries = 11.2 oz, US retail standard). This
+    # makes BOTH the board price and the "See item" link size a real weight, so it prices per-ounce like the
+    # 18-oz clamshells and the link's per-unit matches the board by construction. Only bare pints, never a size
+    # that already states a weight.
+    if ($pintMap.ContainsKey($id) -and ($sz.ToLower() -match '\b(pt|pint)s?\b') -and ($sz.ToLower() -notmatch '\b(oz|ounce|ounces|lb|lbs|pound|pounds|gram|grams|\bg\b|ml|liter|litre)\b')) {
+      $pnM = [regex]::Match($sz.ToLower(), '(\d+(?:\.\d+)?)\s*(?:pt|pint)s?\b'); $pn = if ($pnM.Success) { [double]$pnM.Groups[1].Value } else { 1 }
+      $sz = ('{0} oz' -f ($pn * $pintMap[$id]))
+    }
     $reg = if ($r.orig -and "$($r.orig)" -ne '') { '$' + [string]$r.orig } else { '' }
     $byId[$id] = [ordered]@{ store='Fareway'; item=$name; ad_price=$adp; size=$sz; regular=$reg; source_ad='shop.fareway.com' }
     # emit the product-URL input using the SAME price+size the board uses, so the "See item" link's per-unit

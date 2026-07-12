@@ -144,6 +144,21 @@ function NoneCells([string]$id) {
   }
   return $out
 }
+# EVERY store gets a tile for EVERY staple commodity - a shopper must never see a commodity with a store
+# silently missing. For each store in $storeOrder that has NO priced tile: show a muted card. A store confirmed
+# absent (not-carried.json) reads "Doesn't carry"; a store we simply have no comparable price for reads "No
+# price yet". Both carry the "See it? Let us know!" link to the suggest-an-item form so a real sighting gets
+# reported (and becomes a pricing to-do). $pricedStores = the stores that already got a price tile on this row.
+function MissingCells([string]$id, $pricedStores) {
+  $have = @{}; foreach ($p in @($pricedStores)) { $have[[string]$p] = $true }
+  $out = ''
+  foreach ($st in $storeOrder) {
+    if ($have.ContainsKey($st)) { continue }
+    $label = if (IsNoneCarry $id $st) { 'Doesn&rsquo;t carry' } else { 'No price yet' }
+    $out += "<div class='pg-chip pg-chip-none' data-store=`"" + (HtmlEnc $st) + "`"><span class='pg-store'>" + (HtmlEnc $shortName[$st]) + "</span><span class='pg-none'>" + $label + "</span><a class='pg-see pg-see-none' href='/suggest-an-item/'>See it? Let us know! &rarr;</a></div>"
+  }
+  return $out
+}
 # per-unit of a stored link, in the board's $unit, from {price,size} - used to SUPPRESS a clearly-wrong link.
 function LinkPU([string]$size, [string]$unit, [double]$price) {
   $s = ([string]$size).ToLower().Trim()
@@ -428,6 +443,9 @@ foreach ($c in $cats) {
     if (-not $r) { continue }
     $ranked = @($r.stores | Where-Object { -not (IsNoneCarry ([string]$r.id) ([string]$_.store)) } | Sort-Object per_unit)
     if ($ranked.Count -eq 0) { continue }
+    # 7-STORE GUARANTEE: every priced store MUST be a known store in $storeOrder, else MissingCells would ALSO
+    # emit a "No price yet" card for it (a duplicate/wrong-name store on the row). Fail the build before publish.
+    foreach ($chk in $ranked) { if ($storeOrder -notcontains [string]$chk.store) { throw ("build-deals-page: commodity '" + $r.id + "' is priced at unknown store '" + [string]$chk.store + "' (not in storeOrder) - would break the all-stores-shown guarantee. Fix the store name in the data.") } }
     $totalCommodities++
     $unit = [string]$r.unit
     [void]$sb.Append("<article class='pg-row' data-cat='" + $c.key + "' data-id='" + [string]$r.id + "'>")
@@ -459,7 +477,7 @@ foreach ($c in $cats) {
       [void]$sb.Append("</div>")
       $i++
     }
-    [void]$sb.Append((NoneCells ([string]$r.id)))
+    [void]$sb.Append((MissingCells ([string]$r.id) (@($ranked | ForEach-Object { [string]$_.store }))))
     [void]$sb.Append("</div></article>")
   }
   [void]$sb.Append("</section>")

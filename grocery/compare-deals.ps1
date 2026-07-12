@@ -229,7 +229,22 @@ function Get-UnitPrice($deal, $cat) {
   if ($unit -eq 'lb' -and $pr.kind.perlb)     { return @{ unit_price=$pr.per_item; basis='per-lb marker'; note=$pr.note } }
   if ($unit -eq 'each' -and $pr.kind.pereach) { return @{ unit_price=$pr.per_item; basis='per-each marker'; note=$pr.note } }
   if ($unit -in @('lb','oz','floz','gallon','dozen')) {
-    $amt = Get-SizeAmount $deal.size_text $unit
+    # By-VOLUME container with a commodity-declared dry weight: fresh berries sold by the "pint" are a dry-volume
+    # clamshell, not a liquid pint, so their label carries no weight and Convert-ToUnit (which reads pint as 16
+    # fl oz) can't rank them against the weight-labeled 18-oz clamshells. When commodities.json declares pint_oz
+    # (e.g. blueberries = 11.2, the US retail blueberry-pint standard) and the size is a bare pint with NO weight
+    # token, substitute the canonical weight so it prices per-ounce like every other store. Scoped to declaring
+    # commodities only, so milk/other liquid pints are never touched.
+    $sizeForAmt = [string]$deal.size_text
+    if ($cat.PSObject.Properties['pint_oz'] -and $cat.pint_oz -and ($unit -eq 'oz' -or $unit -eq 'lb')) {
+      $sl = $sizeForAmt.ToLower()
+      if ($sl -match '\b(pt|pint)s?\b' -and $sl -notmatch '\b(oz|ounce|ounces|lb|lbs|pound|pounds|gram|grams|\bg\b|ml|liter|litre)\b') {
+        $pnM = [regex]::Match($sl, '(\d+(?:\.\d+)?)\s*(?:pt|pint)s?\b')
+        $pn = if ($pnM.Success) { [double]$pnM.Groups[1].Value } else { 1 }
+        $sizeForAmt = ('{0} oz' -f ($pn * [double]$cat.pint_oz))
+      }
+    }
+    $amt = Get-SizeAmount $sizeForAmt $unit
     if (($amt -eq $null) -and $deal.name) { $amt = Get-SizeAmount $deal.name $unit }
     if ($amt -ne $null -and $amt -gt 0) { return @{ unit_price=($pr.per_item/$amt); basis="size $([math]::Round($amt,3)) $unit"; note=$pr.note } }
     return $null

@@ -63,7 +63,7 @@
     "include": ["strawberr"],
     "exclude": ["cream", "\\bjam\\b", "preserve", "flavored", "yog(?:h)?urt", "\\bbar\\b", "spread"] },
 
-  { "id": "blueberries", "label": "Blueberries", "unit": "oz",
+  { "id": "blueberries", "label": "Blueberries", "unit": "oz", "pint_oz": 11.2,
     "include": ["blueberr"],
     "exclude": ["muffin", "waffle", "pancake", "\\bjam\\b", "preserve", "yog(?:h)?urt", "\\bbar\\b", "spread", "syrup"] },
 

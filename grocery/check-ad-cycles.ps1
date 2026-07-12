@@ -360,6 +360,30 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           } else { Log 'consistency OK - every shown link matches its price' }
         } catch { Log ('consistency guard threw: ' + $_.Exception.Message) }
       }
+
+      # ---- ALL-STORES-SHOWN MONITOR: re-assert on the freshly BUILT board that every staple commodity shows a
+      # tile for all 7 stores (a price, or a "Doesn't carry / No price yet - See it? Let us know!" card). This is
+      # the blueberries drop-off invariant. build-deals-page renders it by construction + publish HARD-GATES on
+      # it, so a failure here means a render regression slipped through; we name the exact commodity+store and
+      # alert ONCE per distinct violation set (sig de-dup) even under -NoAlert, so a silent store-drop can't recur.
+      if (-not $NoPublish) {
+        try {
+          & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-store-coverage.ps1') | Out-Null
+          if ($LASTEXITCODE -eq 2) {
+            $sc = try { Get-Content (Join-Path $OutDir 'store-coverage-report.json') -Raw | ConvertFrom-Json } catch { $null }
+            $scList = if ($sc) { (@($sc.violations | ForEach-Object { $_.commodity + ' [missing: ' + $_.missing + ']' }) -join '; ') } else { '?' }
+            $scSig  = if ($sc) { (@($sc.violations | ForEach-Object { $_.commodity + '|' + $_.missing } | Sort-Object) -join ';') } else { '' }
+            $scF = Join-Path $OutDir 'store-coverage-alert.sig'
+            $scPrev = if (Test-Path $scF) { (Get-Content $scF -Raw).Trim() } else { '' }
+            Log ("store-coverage FAIL: $($sc.violations.Count) commodity(ies) missing a store tile - $scList")
+            $summary += "REVIEW    store-coverage: $($sc.violations.Count) commodity(ies) not showing all 7 stores - see store-coverage-report.json"
+            if ($scSig -ne $scPrev -and (-not $NoAlert)) {
+              try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: a store dropped off a commodity tile - $asofS" -Body "audit-store-coverage found staple commodities NOT showing all 7 stores (a store tile is missing entirely - not even a 'Doesn't carry' card): $scList. The board is built to render all 7 by construction, so this is a render regression - check MissingCells / storeOrder in build-deals-page.ps1. Details: grocery/out/store-coverage-report.json." | Out-Null
+                    if ($LASTEXITCODE -eq 0) { Set-Content -Path $scF -Value $scSig -Encoding UTF8; Log 'store-coverage alert sent' } } catch { Log ('store-coverage alert threw: ' + $_.Exception.Message) }
+            } else { Log 'store-coverage violation unchanged since last alert - not re-alerting' }
+          } else { Log 'store-coverage OK - every staple commodity shows all 7 stores'; if (Test-Path (Join-Path $OutDir 'store-coverage-alert.sig')) { Remove-Item (Join-Path $OutDir 'store-coverage-alert.sig') -ErrorAction SilentlyContinue } }
+        } catch { Log ('store-coverage guard threw: ' + $_.Exception.Message) }
+      }
     }
   } catch { Log ("downstream FAILED: " + $_.Exception.Message) }
 } elseif ($hardFail -and (-not $NoDownstream)) {

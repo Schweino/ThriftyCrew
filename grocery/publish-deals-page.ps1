@@ -77,6 +77,12 @@ try {
   if ($nl -gt 15) { Write-Output ("WARN: $nl chips missing links (>15) - check name-drift.json / product-urls / price guard in build-deals-page.ps1") }
 } catch {}
 
+# ---- ALL-STORES-SHOWN invariant (HARD gate): every staple commodity must render a tile for ALL 7 stores - a
+# price, or a "Doesn't carry / No price yet - See it? Let us know!" card. A store missing from a commodity row
+# is the exact blueberries drop-off Brad caught; do NOT ship a board that hides a store. -Force overrides.
+& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-store-coverage.ps1') -Embed $embed -OutDir $OutDir
+if ($LASTEXITCODE -eq 2 -and -not $Force) { Write-Output 'HELD: a staple commodity is missing a store tile (see out\store-coverage-report.json). NOT publishing (run -Force to override once the render is fixed).'; exit 2 }
+
 # ---- preserve the live post's current visibility (so a weekly refresh never reverts a manual paid-gate) ----
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $secretHex=$p[1]
