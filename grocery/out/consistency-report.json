@@ -1,10 +1,20 @@
 ﻿{
-    "generated":  "2026-07-12 10:41",
+    "generated":  "2026-07-12 11:43",
     "tol":  0.3,
-    "no_link_count":  6,
-    "max_no_link":  20,
-    "mismatch_count":  6,
+    "no_link_count":  36,
+    "max_no_link":  45,
+    "mismatch_count":  9,
     "mismatch":  [
+                     {
+                         "id":  "chicken-breast",
+                         "store":  "Family Fare",
+                         "unit":  "lb",
+                         "board":  1.99,
+                         "link":  2.99,
+                         "off_pct":  50,
+                         "product":  "Boneless Skinless Chicken Breasts",
+                         "size":  "lb"
+                     },
                      {
                          "id":  "milk",
                          "store":  "Hy-Vee",
@@ -26,6 +36,16 @@
                          "size":  "16 oz"
                      },
                      {
+                         "id":  "pork-chops",
+                         "store":  "Family Fare",
+                         "unit":  "lb",
+                         "board":  2.49,
+                         "link":  4.79,
+                         "off_pct":  92,
+                         "product":  "Fresh Assorted Bone In Pork Chops",
+                         "size":  "lb"
+                     },
+                     {
                          "id":  "strawberries",
                          "store":  "Family Fare",
                          "unit":  "oz",
@@ -34,6 +54,16 @@
                          "off_pct":  60,
                          "product":  "Fresh Strawberries",
                          "size":  "16 oz"
+                     },
+                     {
+                         "id":  "sweet-corn",
+                         "store":  "Family Fare",
+                         "unit":  "each",
+                         "board":  0.9975,
+                         "link":  1.4975,
+                         "off_pct":  50,
+                         "product":  "Fresh Corn Bicolor Tray Pack Usa",
+                         "size":  "4 ct"
                      },
                      {
                          "id":  "watermelon",

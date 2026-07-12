@@ -173,6 +173,19 @@ function LinkPU([string]$size, [string]$unit, [double]$price) {
 $formFlip = @{}
 $ndFile = Join-Path $OutDir 'name-drift.json'
 if (Test-Path $ndFile) { try { $nd = Get-Content $ndFile -Raw | ConvertFrom-Json; foreach ($f in $nd.flags) { if ($f.reason -eq 'form-flip') { $formFlip[([string]$f.id + '|' + [string]$f.store)] = $true } } } catch {} }
+# Does the linked product's NAME describe the SAME product the board priced? Used to validate a SALE cell's
+# link (where the price gate can't, because a sale price legitimately differs from the everyday snapshot). We
+# require the board item's distinctive words (>3 chars, minus generic filler) to mostly appear in the link name,
+# so board "Sara Lee Honey Wheat Bread" won't accept a link to "Our Family White Bread".
+function NameMatch([string]$boardItem, [string]$linkName) {
+  $norm = { param($s) (([string]$s).ToLower() -replace '[^a-z0-9 ]',' ' -replace '\s+',' ').Trim() }
+  $filler = 'fresh|assorted|premium|natural|large|small|medium|value|pack|original|our|family|brand|select|the|and|with|each|lb|oz|count|\d+'
+  $bw = @((& $norm $boardItem) -split ' ' | Where-Object { $_.Length -gt 3 -and $_ -notmatch ('^(?:' + $filler + ')$') })
+  if ($bw.Count -eq 0) { return $true }   # nothing distinctive to check against -> don't block on name
+  $ln = & $norm $linkName
+  $hit = 0; foreach ($w in $bw) { if ($ln -match ('\b' + [regex]::Escape($w) + '\b')) { $hit++ } }
+  return (($hit / $bw.Count) -ge 0.5)
+}
 # Tidy a raw board item name for on-chip display: drop trailing ad-price/size fluff, cap length.
 function CleanItemName([string]$item) {
   if (-not $item) { return '' }
@@ -186,19 +199,37 @@ function CleanItemName([string]$item) {
 # Chip footer: a "See item" LINK when we have a price-consistent product URL; otherwise the ITEM NAME as
 # plain text (so a shopper still knows exactly WHAT the price is for - by-weight produce/meat and flyer-only
 # sales that have no clickable product page). Empty only when we have neither a link nor a name.
-function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$boardPU, [string]$unit) {
+function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$boardPU, [string]$unit, [string]$cellType) {
   $url = $null
   if (($purls.ContainsKey($id)) -and ($purls[$id].ContainsKey($store)) -and (-not $formFlip.ContainsKey($id + '|' + $store))) {
     $lnk = $purls[$id][$store]
     if ($lnk.url) {
       $ok = $true
-      # A "See item" link must land on the SAME product the price on the card is for. So suppress the link unless
-      # the linked product's per-unit matches the board price within ~30%. Looser than this and the link points at
-      # a DIFFERENT pack/size/product than the price shown (e.g. board = Aldi in-store $2.29 family pack, link =
-      # aldi.us $3.29 per-lb tray) - which misleads the shopper. When suppressed we fall back to the product name.
-      # The fix for a suppressed cell is to re-resolve its URL to the product whose price matches the board (see
-      # audit-link-price-match.ps1), NOT to loosen this gate. Missing beats wrong.
-      if ($boardPU -gt 0) { $lprice = 0.0; [void][double]::TryParse((([string]$lnk.price) -replace '[^0-9.]',''), [ref]$lprice); $lpu = LinkPU ([string]$lnk.size) $unit $lprice; if (($null -ne $lpu) -and ([math]::Abs($lpu - $boardPU) / $boardPU -gt 0.30)) { $ok = $false } }
+      # A "See item" link must land on the SAME product the price on the card is for. The linked product's stored
+      # price is its EVERYDAY shelf price (that is what the resolver captured). How we validate depends on whether
+      # THIS week the board is showing an everyday price or a SALE:
+      #   EVERYDAY cell: board and the snapshot are both everyday, so they must match within ~30%; a bigger gap
+      #     means a DIFFERENT pack/size/product (e.g. board = Aldi in-store $2.29 family pack, link = aldi.us $3.29
+      #     per-lb tray) and we suppress -> fall back to the product name. This is the strict identity gate.
+      #   SALE cell: the board shows a markdown while the snapshot is the everyday price, so for the SAME product the
+      #     snapshot legitimately sits ABOVE the sale (that is what a sale IS). Hiding it here was the bug that made
+      #     every on-sale item lose its link (FF chicken breast: board $1.99 sale, correct link snapshot $2.99
+      #     everyday -> 50% "gap" -> wrongly hidden). So for a sale we accept a snapshot in a sane band around the
+      #     sale (>= ~0.85x, up to 3x = a 67%-off sale) and rely on name-drift to catch a genuinely wrong product.
+      # Missing beats wrong; the fix for a truly wrong link is still to re-resolve its URL, not to loosen this.
+      if ($boardPU -gt 0) {
+        $lprice = 0.0; [void][double]::TryParse((([string]$lnk.price) -replace '[^0-9.]',''), [ref]$lprice)
+        $lpu = LinkPU ([string]$lnk.size) $unit $lprice
+        if ($cellType -eq 'sale') {
+          # SALE: validate product IDENTITY by name ALWAYS (a sale price can't confirm identity, and the name check
+          # must run even when the size can't be priced into a per-unit, e.g. a "20 oz" loaf on an each-based board -
+          # that null-price gap is exactly how a wrong link like Our Family White for a Sara Lee board slipped through).
+          # Then, when the per-unit IS computable, also require the everyday snapshot to sit in a sane band around the sale.
+          if (-not (NameMatch $boardItem ([string]$lnk.name))) { $ok = $false }
+          elseif (($null -ne $lpu) -and ($lpu -lt $boardPU * 0.85 -or $lpu -gt $boardPU * 3.0)) { $ok = $false }
+        }
+        elseif (($null -ne $lpu) -and ([math]::Abs($lpu - $boardPU) / $boardPU -gt 0.30)) { $ok = $false }
+      }
       if ($ok) { $url = [string]$lnk.url }
     }
   }
@@ -417,7 +448,7 @@ foreach ($c in $cats) {
       [void]$sb.Append("<span class='pg-price'>" + (Fmt-Price ([double]$s.per_unit) $unit) + "</span>")
       [void]$sb.Append("<span class='pg-meta'>" + $typeTag + ($(if ($notes.Count) { " <span class='pg-note2'>" + (HtmlEnc ($notes -join ', ')) + "</span>" } else { '' })) + "</span>")
       [void]$sb.Append((SaleBadge $s ([string]$s.store)))
-      [void]$sb.Append((SeeLink ([string]$r.id) ([string]$s.store) ([string]$s.item) ([double]$s.per_unit) $unit))
+      [void]$sb.Append((SeeLink ([string]$r.id) ([string]$s.store) ([string]$s.item) ([double]$s.per_unit) $unit ([string]$s.type)))
       [void]$sb.Append("</div>")
       $i++
     }
@@ -462,7 +493,7 @@ if ($riDoc) {
         $riTag = if ([string]$s.type -eq 'sale') { "<span class='pg-tag pg-tag-sale'>sale</span>" } else { "<span class='pg-tag'>everyday</span>" }
         [void]$sb.Append("<span class='pg-meta'>" + $riTag + ($(if ($notes.Count) { " <span class='pg-note2'>" + (HtmlEnc ($notes -join ', ')) + "</span>" } else { '' })) + "</span>")
         [void]$sb.Append((SaleBadge $s ([string]$s.store)))
-        [void]$sb.Append((SeeLink ([string]$r.id) ([string]$s.store) ([string]$s.item) ([double]$s.per_unit) $unit))
+        [void]$sb.Append((SeeLink ([string]$r.id) ([string]$s.store) ([string]$s.item) ([double]$s.per_unit) $unit ([string]$s.type)))
         [void]$sb.Append("</div>")
         $i++
       }
