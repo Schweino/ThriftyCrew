@@ -122,15 +122,30 @@ foreach ($c in $candidates) {
     '<p style="color:#8a94a6;font-size:.9em">You get this because you signed up for price alerts on this item at thriftycrew.com. Unsubscribing below stops all price-alert emails.</p>'
   if ($DryRun) { Write-Output ("  DRYRUN would email " + $total + "+ subscriber(s): " + $title); continue }
 
+  # Ghost only queues the newsletter email on the draft->published TRANSITION via PUT; creating a
+  # post directly as published silently ignores ?newsletter= (post says "sent", no email exists).
+  # So: 1) create DRAFT, 2) PUT status published WITH the newsletter + segment params, 3) verify the
+  # email object actually exists before claiming success.
   $lex = '{"root":{"children":[{"type":"html","version":1,"html":' + (JStr $bodyHtml) + '}],"direction":null,"format":"","indent":0,"type":"root","version":1}}'
-  $postJson = '{"posts":[{"title":' + (JStr $title) + ',"lexical":' + (JStr $lex) + ',"status":"published","email_only":true,"tags":[{"name":"#price-alerts"}]}]}'
-  $jwt2 = New-GhostJWT
-  $uri = "$apiUrl/ghost/api/admin/posts/?newsletter=price-alerts&email_segment=" + [uri]::EscapeDataString("label:" + $labelName)
+  $draftJson = '{"posts":[{"title":' + (JStr $title) + ',"lexical":' + (JStr $lex) + ',"status":"draft","email_only":true,"tags":[{"name":"#price-alerts"}]}]}'
   try {
-    $pr = Invoke-RestMethod -Uri $uri -Method Post -Headers @{Authorization="Ghost $jwt2";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body ([Text.Encoding]::UTF8.GetBytes($postJson)) -TimeoutSec 30
-    Write-Output ("  SENT " + $c.id + " -> " + $total + "+ subscriber(s): " + $title)
-    $state[$c.id] = @{ price = $c.price; date = $today; store = $c.store }
-    $sent++
+    $jwt2 = New-GhostJWT
+    $draft = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/" -Method Post -Headers @{Authorization="Ghost $jwt2";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body ([Text.Encoding]::UTF8.GetBytes($draftJson)) -TimeoutSec 30).posts[0]
+    $pubJson = '{"posts":[{"status":"published","updated_at":' + (JStr ([string]$draft.updated_at)) + '}]}'
+    $pubUri = "$apiUrl/ghost/api/admin/posts/" + $draft.id + "/?newsletter=price-alerts&email_segment=" + [uri]::EscapeDataString("label:" + $labelName)
+    $jwt3 = New-GhostJWT
+    $pub = (Invoke-RestMethod -Uri $pubUri -Method Put -Headers @{Authorization="Ghost $jwt3";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body ([Text.Encoding]::UTF8.GetBytes($pubJson)) -TimeoutSec 30).posts[0]
+    # verify the email actually queued
+    $jwt4 = New-GhostJWT
+    $chk = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/$($draft.id)/?include=email" -Headers @{Authorization="Ghost $jwt4";'Accept-Version'='v5.0'} -TimeoutSec 30).posts[0]
+    if ($chk.email -and $chk.email.status -ne 'failed') {
+      Write-Output ("  SENT " + $c.id + " -> " + $chk.email.email_count + " recipient(s), email status " + $chk.email.status + ": " + $title)
+      $state[$c.id] = @{ price = $c.price; date = $today; store = $c.store }
+      $sent++
+    } else {
+      Write-Output ("  " + $c.id + ": post published but EMAIL DID NOT QUEUE (status=" + $(if ($chk.email) { $chk.email.status } else { 'none' }) + ") - deleting the dead post, will retry next run")
+      try { $jwt5 = New-GhostJWT; Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/$($draft.id)/" -Method Delete -Headers @{Authorization="Ghost $jwt5";'Accept-Version'='v5.0'} -TimeoutSec 30 | Out-Null } catch {}
+    }
   } catch {
     $errBody = ''
     try { $resp = $_.Exception.Response; if ($resp) { $sr = New-Object IO.StreamReader($resp.GetResponseStream()); $full = $sr.ReadToEnd(); $errBody = $full.Substring(0, [Math]::Min(400, $full.Length)) } } catch {}
