@@ -228,7 +228,14 @@ function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$board
           if (-not (NameMatch $boardItem ([string]$lnk.name))) { $ok = $false }
           elseif (($null -ne $lpu) -and ($lpu -lt $boardPU * 0.85 -or $lpu -gt $boardPU * 3.0)) { $ok = $false }
         }
-        elseif (($null -ne $lpu) -and ([math]::Abs($lpu - $boardPU) / $boardPU -gt 0.30)) { $ok = $false }
+        elseif ($null -ne $lpu -and ([math]::Abs($lpu - $boardPU) / $boardPU -gt 0.30)) {
+          # >30% off the board on an EVERYDAY cell normally means a DIFFERENT product -> hide. The one exception is
+          # AD-ROLLOFF: a sale just ended and the board reverted UP to everyday, but the stored snapshot still holds
+          # the lower SALE price of the SAME product. That shape is snapshot CHEAPER than the board (within a floor)
+          # with a matching NAME -> keep the link. A snapshot PRICIER than the board is a wrong pricier SKU (the Aldi
+          # tray) -> stay hidden. Purely additive: only rescues a rolled-off link, never shows a pricier mismatch.
+          if (-not (($lpu -lt $boardPU) -and ($lpu -ge $boardPU * 0.3) -and (NameMatch $boardItem ([string]$lnk.name)))) { $ok = $false }
+        }
       }
       if ($ok) { $url = [string]$lnk.url }
     }
