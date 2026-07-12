@@ -23,6 +23,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $here = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+$tcChartJs = [IO.File]::ReadAllText((Join-Path $here 'tc-chart.js'), [Text.Encoding]::UTF8)
 if ([string]::IsNullOrWhiteSpace($HistoryFile)) { $HistoryFile = Join-Path $here 'price-history.json' }
 if ([string]::IsNullOrWhiteSpace($OutDir))      { $OutDir      = Join-Path $here 'out\trend' }
 
@@ -126,8 +127,15 @@ $tpCss = @'
 .tp-where{font-size:1.02rem;color:#374151;margin-top:3px}
 .tp-record{margin:0 0 14px;color:#374151}
 .tp-read{background:#eef5f0;border-left:4px solid #1f7a4d;padding:10px 14px;border-radius:0 8px 8px 0;margin:0 0 20px;color:#1f3b2c}
-.tp-chartwrap{margin:6px 0 4px}
+.tp-chartwrap{margin:6px 0 4px;max-width:560px}
 .tp-svg{width:100%;max-width:560px;height:auto;display:block}
+.tcc-none{font-size:.9rem;color:#8a94a6;text-align:center;padding:2.2em 0}
+.tcc-leg{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tcc-chip{display:inline-flex;align-items:center;gap:7px;border:1px solid #e2e8f0;background:#fff;border-radius:999px;padding:5px 12px;font-size:.82rem;color:#3a4658;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+.tcc-chip i{width:16px;height:3px;border-radius:2px;display:inline-block}
+.tcc-chip.is-off{opacity:.4}
+.tcc-chip.is-off i{background:#c3cad6!important}
+.tcc-chip:hover{border-color:#E2A43C}
 .tp-note{font-size:.9rem;color:#6b7280;margin:4px 0 20px}
 .tp-table{width:100%;border-collapse:collapse;margin:6px 0 22px;font-size:.95rem}
 .tp-table th{text-align:left;border-bottom:2px solid #e5e7eb;padding:6px 8px;font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;color:#6b7280}
@@ -244,14 +252,38 @@ foreach ($c in $data.commodities) {
   # honest read
   [void]$sb.AppendLine('<p class="tp-read">' + $read + '</p>')
 
-  # chart
+  # chart: interactive per-store LINE chart (2026-07-11, Brad's spec: line graph + tappable store
+  # legend to hide/show lines, all on by default). Data embedded per page; tc-chart.js inlined once.
   [void]$sb.AppendLine('<h2>Price history</h2>')
-  [void]$sb.AppendLine('<div class="tp-chartwrap">')
-  [void]$sb.AppendLine((New-TrendSvg -entries $chartEntries -currentIsRecord $isRecordNow))
-  [void]$sb.AppendLine('</div>')
-  $noteTxt = '' + $hist.Count + ' weeks of tracking so far, growing every week.'
-  if ($hist.Count -gt $MaxBars) { $noteTxt = 'Showing the latest ' + $MaxBars + ' of ' + $hist.Count + ' tracked weeks, growing every week.' }
-  [void]$sb.AppendLine('<p class="tp-note">' + $noteTxt + ' Bars show the cheapest price we found across all six stores that week.</p>')
+  $cEntries = $hist
+  if ($hist.Count -gt 40) { $cEntries = @($hist | Select-Object -Last 40) }
+  $cw = @($cEntries | ForEach-Object { ([string]$_.week_of).Substring(5) })
+  $cStores = [ordered]@{}
+  foreach ($e in $cEntries) { if ($e.per_store) { foreach ($p in $e.per_store.PSObject.Properties) { $cStores[[string]$p.Name] = $true } } }
+  if ($cStores.Count -gt 0) {
+    $sParts = @()
+    foreach ($sn in $cStores.Keys) {
+      $vals = @()
+      foreach ($e in $cEntries) {
+        $v = $null
+        if ($e.per_store) { $pp = $e.per_store.PSObject.Properties | Where-Object { $_.Name -eq $sn } | Select-Object -First 1; if ($pp) { $v = [double]$pp.Value } }
+        if ($null -ne $v -and $v -gt 0) { $vals += ,([string]([math]::Round($v, 4))) } else { $vals += ,'null' }
+      }
+      $sParts += ('"' + ($sn -replace '\\','\\\\' -replace '"','\"') + '":[' + ($vals -join ',') + ']')
+    }
+    $cJson = '{"u":"' + $unit + '","w":[' + ((@($cw | ForEach-Object { '"' + $_ + '"' })) -join ',') + '],"s":{' + ($sParts -join ',') + '}}'
+    [void]$sb.AppendLine('<div class="tp-chartwrap" id="tp-chart"></div>')
+    [void]$sb.AppendLine('<script>')
+    [void]$sb.AppendLine($tcChartJs)
+    [void]$sb.AppendLine('(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, ' + $cJson + '); })();')
+    [void]$sb.AppendLine('</script>')
+    [void]$sb.AppendLine('<p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>')
+  } else {
+    [void]$sb.AppendLine('<div class="tp-chartwrap">')
+    [void]$sb.AppendLine((New-TrendSvg -entries $chartEntries -currentIsRecord $isRecordNow))
+    [void]$sb.AppendLine('</div>')
+    [void]$sb.AppendLine('<p class="tp-note">' + $hist.Count + ' weeks of tracking so far, growing every week.</p>')
+  }
 
   # weekly table, newest first
   [void]$sb.AppendLine('<h2>Week by week</h2>')
