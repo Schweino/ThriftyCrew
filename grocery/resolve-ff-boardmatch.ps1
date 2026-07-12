@@ -10,7 +10,10 @@ param([string]$OutDir = "")
 $ErrorActionPreference='Stop'; $ProgressPreference='SilentlyContinue'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
-$mm = @(Get-Content (Join-Path $OutDir 'link-price-mismatch.json') -Raw | ConvertFrom-Json) | Where-Object { $_.store -eq 'Family Fare' }
+# read the canonical consistency report (falls back to the old mismatch file for manual runs)
+$mmFile = Join-Path $OutDir 'consistency-report.json'
+if (Test-Path $mmFile) { $mm = @((Get-Content $mmFile -Raw | ConvertFrom-Json).mismatch) | Where-Object { $_.store -eq 'Family Fare' } }
+else { $mm = @(Get-Content (Join-Path $OutDir 'link-price-mismatch.json') -Raw | ConvertFrom-Json) | Where-Object { $_.store -eq 'Family Fare' } }
 # board item per (id) from recipe-board + comparison
 $board = @{}
 foreach ($bf in @('comparison','recipe-board')) {

@@ -56,6 +56,12 @@ Remove-Item $embed -ErrorAction SilentlyContinue
 # a link stays wrongly hidden after its URL is fixed (this bit us: chicken breast at Aldi/Sam's stayed unlinked
 # after the frozen->fresh fix until this audit was re-run). Running it here keeps suppression in sync every build.
 try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null } catch {}
+# Derive board-price overrides from the verified links (gated by the fresh name-drift audit above): any EVERYDAY
+# board cell whose price disagrees >30% with the product its See-item link opens gets pinned to the link's
+# correct per-unit, so the number shown and the product linked are always the same. This is what makes a stale
+# board price self-heal at build time instead of leaving the chip silently unlinked. Runs BEFORE the build so
+# the corrections are in board-price-overrides.json when build-deals-page applies them.
+try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'generate-board-overrides.ps1') | Out-Null } catch {}
 & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-deals-page.ps1') -CompareFile $CompareFile -Out $embed -Embed | Out-Null
 if ($LASTEXITCODE -ne 0) { Write-Output ("ERROR: page build FAILED (rc=$LASTEXITCODE) - not publishing"); exit 1 }
 if (-not (Test-Path $embed) -or ((Get-Item $embed).Length -lt 2000)) { Write-Output 'ERROR: page build produced no/short file'; exit 1 }

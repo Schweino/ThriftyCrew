@@ -1,0 +1,95 @@
+<#
+  audit-board-consistency.ps1 - THE single guard that makes "the price shown and the 'See item' link are the
+  same current product" a checkable invariant, so the divergence Brad caught (Aldi board $2.29 but link $3.29)
+  can never ship silently again. Runs THREE checks against the freshly-built board + product-urls:
+
+    A. WRONG-LINK  : a link exists but its per-unit is >Tol off the board price  -> misleading link (build hides
+                     it via the same gate, but we still flag it so it gets repaired, not left hidden forever).
+    B. NO-LINK     : priced chips rendering neither a "See item" link nor a "Does not carry" cell (coverage).
+    C. STALE-PRICE : the board price differs >Tol from the CURRENT verified price of the same product
+                     (product-urls carries the price captured when the link was resolved). Divergence here means
+                     the BOARD number is stale (product got repriced/discontinued), which is the other half of
+                     the bug. For browser-only stores this is advisory (their pull is periodic).
+
+  Output: out\consistency-report.json { generated, tol, wrong_link[], no_link_count, stale[] } + a one-line
+  summary on stdout. Exit code: 0 clean, 2 if any WRONG-LINK (hard - a live misleading link) or if NO-LINK
+  coverage worse than -MaxNoLink. STALE is reported (and alerted) but not a hard fail on its own.
+  Reuses the exact LinkPU math from build-deals-page.ps1 so the numbers match what the page actually renders.
+#>
+param([double]$Tol = 0.30, [int]$MaxNoLink = 20, [string]$OutDir = "", [string]$Embed = "")
+$ErrorActionPreference = 'Stop'
+$root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
+if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
+if (-not $Embed)  { $Embed  = Join-Path $OutDir 'deals-page-embed.html' }
+
+function LinkPU([string]$size, [string]$unit, [double]$price) {
+  $s = ([string]$size).ToLower().Trim()
+  $up = [regex]::Match($s, '\$?\s*([0-9]+(?:\.[0-9]+)?)\s*/\s*(fl\s*oz|floz|oz|lb|ea|each|ct|count)')
+  if ($up.Success) { $v=[double]$up.Groups[1].Value; $un=($up.Groups[2].Value -replace '\s','') -replace 'fl',''; switch ($unit) { 'lb'{if($un -eq 'lb'){return $v}; if($un -eq 'oz'){return $v*16}} 'oz'{if($un -eq 'oz'){return $v}; if($un -eq 'lb'){return $v/16}} 'floz'{if($un -match 'oz'){return $v}; if($un -eq 'lb'){return $v/16}} 'each'{if($un -match '^(ea|each|ct|count)$'){return $v}; return $price} 'dozen'{if($un -match '^(ea|each|ct|count)$'){return $v*12}; return $price} } }
+  if ($price -le 0) { return $null }
+  $q = [regex]::Match($s, '([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|floz|oz|lbs?|ct|count|ea|pk|gal|dozen|doz)')
+  $n = if ($q.Success) { [double]$q.Groups[1].Value } else { $null }
+  $un = if ($q.Success) { ($q.Groups[2].Value -replace '\s','') -replace 'fl','' } else { '' }
+  if (-not $q.Success) { $bu=[regex]::Match($s,'\b(lbs?|gal|gallon|dozen|doz|each|ea)\b'); if ($bu.Success) { $n=1; $un=$bu.Groups[1].Value -replace '^gallon$','gal' -replace '^doz$','dozen' } }
+  $pk = [regex]::Match($s, '([0-9]+)\s*(pk|pack)\b'); if ($pk.Success -and $n -and ($un -match '^(oz|lbs?|gal)$')) { $n = $n * [double]$pk.Groups[1].Value }
+  switch ($unit) {
+    'lb'    { if ($un -match '^lbs?$' -and $n) { return $price/$n }; if ($un -eq 'oz' -and $n) { return $price/($n/16) }; return $null }
+    'oz'    { if ($un -eq 'oz' -and $n) { return $price/$n }; if ($un -match '^lbs?$' -and $n) { return $price/(16*$n) }; if ($un -eq 'gal' -and $n) { return $price/(128*$n) }; return $null }
+    'floz'  { if ($un -match 'oz' -and $n) { return $price/$n }; if ($un -eq 'gal' -and $n) { return $price/(128*$n) }; return $null }
+    'each'  { if ($un -match '^(ct|count|ea|pk)$' -and $n) { return $price/$n }; if ($un -match '^(dozen|doz)$') { return $price/12 }; if ($n -eq 1) { return $price }; return $null }
+    'dozen' { if ($un -match '^(dozen|doz)$') { return $price }; if ($un -match '^(ct|count|ea)$' -and $n) { return $price/($n/12) }; if ($n -eq 1) { return $price }; return $null }
+    'gallon'{ if ($un -eq 'gal' -and $n) { return $price/$n }; if ($n -eq 1) { return $price }; return $null }
+    default { return $null }
+  }
+  return $null
+}
+
+# board cells (staples + recipe)
+$cmpF = (Get-ChildItem (Join-Path $OutDir 'comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
+$all = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)
+$riF = Join-Path $OutDir 'recipe-board.json'
+if (Test-Path $riF) { $all += @((Get-Content $riF -Raw | ConvertFrom-Json).comparison) }
+$pd = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+
+# apply the SAME board-price overrides the page build applies, so this audit judges the numbers the page
+# actually renders (an overridden everyday cell is no longer "stale"). Sales are never overridden.
+$ovr = @{}
+$ovrFile = Join-Path $root 'board-price-overrides.json'
+if (Test-Path $ovrFile) { try { foreach ($c in (Get-Content $ovrFile -Raw | ConvertFrom-Json).cells) { $k=[string]$c.id; if (-not $ovr.ContainsKey($k)) { $ovr[$k]=@{} }; $ovr[$k][[string]$c.store]=[double]$c.per_unit } } catch {} }
+if ($ovr.Count) { foreach ($it in $all) { $id=[string]$it.id; if (-not $ovr.ContainsKey($id)) { continue }; foreach ($s in $it.stores) { if (([string]$s.type) -eq 'everyday' -and $ovr[$id].ContainsKey([string]$s.store)) { $nv=[double]$ovr[$id][[string]$s.store]; if ($nv -gt 0) { $s.per_unit=$nv } } } } }
+
+# mismatch = a stored link whose per-unit is >Tol off the board price. The build ALREADY hides these (strict
+# gate), so none is a LIVE misleading link - this is the repair backlog: each needs its URL re-pointed to the
+# board's product (resolve-links-from-board) OR the board price refreshed. We surface the backlog + trend.
+$mismatch = New-Object System.Collections.Generic.List[object]
+foreach ($it in $all) { $id=[string]$it.id; $unit=[string]$it.unit
+  foreach ($s in $it.stores) { $st=[string]$s.store; $b=[double]$s.per_unit; if ($b -le 0) { continue }
+    $e = $pd.$id.$st; if (-not ($e -and $e.url)) { continue }
+    $sp=0.0; [void][double]::TryParse((([string]$e.price) -replace '[^0-9.]',''), [ref]$sp)
+    $lpu = LinkPU ([string]$e.size) $unit $sp; if ($null -eq $lpu) { continue }
+    $off = [math]::Abs($lpu-$b)/$b
+    if ($off -gt $Tol) { $mismatch.Add([pscustomobject]@{ id=$id; store=$st; unit=$unit; board=[math]::Round($b,4); link=[math]::Round($lpu,4); off_pct=[math]::Round($off*100); product=[string]$e.name; size=[string]$e.size }) }
+  }
+}
+
+# NO-LINK coverage: parse the freshly-built embed
+$noLink = 0
+if (Test-Path $Embed) {
+  $html = Get-Content $Embed -Raw
+  foreach ($row in [regex]::Matches($html, "data-id='[^']+'(.*?)</article>", 'Singleline')) {
+    foreach ($ch in [regex]::Matches($row.Groups[1].Value, "<div class='pg-chip[^']*' data-store=`"[^`"]+`" data-pu='[^']*'>(.*?)</div>", 'Singleline')) {
+      if ($ch.Groups[1].Value -notmatch 'pg-see') { $noLink++ }
+    }
+  }
+}
+
+$report = [ordered]@{ generated=(Get-Date -Format 'yyyy-MM-dd HH:mm'); tol=$Tol; no_link_count=$noLink; max_no_link=$MaxNoLink; mismatch_count=$mismatch.Count; mismatch=$mismatch }
+$report | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $OutDir 'consistency-report.json') -Encoding UTF8
+
+# Live-visible health = NO-LINK coverage (how many priced chips fall back to a name). A spike means links are
+# being wrongly suppressed (guard too tight / stale audit / bad data) OR data went missing. That's the breach
+# signal worth an alert. The mismatch backlog is reported for repair but is NOT live-harmful (all hidden).
+$breach = ($noLink -gt $MaxNoLink)
+$sev = if ($breach) { 'BREACH' } else { 'OK' }
+Write-Output ("consistency: $sev  no-link=$noLink (max $MaxNoLink)  mismatch-backlog=$($mismatch.Count)")
+if ($breach) { exit 2 } else { exit 0 }

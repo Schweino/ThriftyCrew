@@ -44,6 +44,13 @@ try {
   }
 } catch {}
 
+# board-price overrides (same file the page build + audit use): pin an EVERYDAY cell to the verified per-unit
+# of the product its link opens, so the PUBLIC feed (CF Worker -> 113 recipe widgets) never serves a stale
+# board price either. Sales are never overridden.
+$ovr = @{}
+$ovrFile = Join-Path $root 'board-price-overrides.json'
+if (Test-Path $ovrFile) { try { foreach ($c in (Get-Content $ovrFile -Raw | ConvertFrom-Json).cells) { $k=[string]$c.id; if (-not $ovr.ContainsKey($k)) { $ovr[$k]=@{} }; $ovr[$k][[string]$c.store]=[double]$c.per_unit } } catch {} }
+
 $ing = [ordered]@{}
 function AddBoard($rows) {
   foreach ($r in $rows) {
@@ -51,6 +58,7 @@ function AddBoard($rows) {
     $lo = $null; $los = ''; $lot = ''; $nStores = 0
     foreach ($s in $r.stores) {
       $p = [double]$s.per_unit
+      if (([string]$s.type) -eq 'everyday' -and $ovr.ContainsKey($id) -and $ovr[$id].ContainsKey([string]$s.store)) { $ov=[double]$ovr[$id][[string]$s.store]; if ($ov -gt 0) { $p = $ov } }
       if ($p -gt 0) { $nStores++ }
       if ($p -gt 0 -and ($null -eq $lo -or $p -lt $lo)) { $lo = $p; $los = [string]$s.store; $lot = [string]$s.type }
     }

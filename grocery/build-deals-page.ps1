@@ -24,6 +24,40 @@ $doc  = Get-Content $CompareFile -Raw | ConvertFrom-Json
 $cats = (Get-Content (Join-Path $root 'categories.json') -Raw | ConvertFrom-Json).categories | Sort-Object order
 $week = [string]$doc.week_of
 
+# ---- BOARD-PRICE OVERRIDES: pin the verified current per-unit for cells whose periodic source pull went
+# stale (so the number stopped matching the product the "See item" link opens). Applied to EVERYDAY cells
+# only - a live weekly-ad SALE always wins - and the row's cheapest/nomem winners are recomputed so the
+# headline can never disagree with the chip. This is what makes a stale board price self-correct at build
+# time and survive daily regeneration; audit-board-consistency re-checks it and boardmatch keeps it honest.
+$ovr = @{}
+$ovrFile = Join-Path $root 'board-price-overrides.json'
+if (Test-Path $ovrFile) { try { foreach ($c in (Get-Content $ovrFile -Raw | ConvertFrom-Json).cells) { $k=[string]$c.id; if (-not $ovr.ContainsKey($k)) { $ovr[$k]=@{} }; $ovr[$k][[string]$c.store]=[double]$c.per_unit } } catch {} }
+function Apply-Overrides($rows) {
+  if (-not $rows -or $ovr.Count -eq 0) { return 0 }
+  $n = 0
+  foreach ($r in $rows) {
+    $id=[string]$r.id; if (-not $ovr.ContainsKey($id)) { continue }
+    foreach ($s in $r.stores) {
+      if (([string]$s.type) -ne 'everyday') { continue }         # never clobber a live sale
+      $st=[string]$s.store; if (-not $ovr[$id].ContainsKey($st)) { continue }
+      $new=[double]$ovr[$id][$st]; if ($new -le 0) { continue }
+      if ([math]::Abs([double]$s.per_unit - $new) -gt 0.0001) { $s.per_unit = $new; $n++ }
+    }
+    # recompute winners so cheapest_*/nomem_* stay consistent with the overridden per_units
+    $live = @($r.stores | Where-Object { [double]$_.per_unit -gt 0 })
+    if ($live.Count) {
+      $w = $live | Sort-Object { [double]$_.per_unit } | Select-Object -First 1
+      if ($r.PSObject.Properties.Name -contains 'cheapest_price') { $r.cheapest_price=[double]$w.per_unit; $r.cheapest_store=[string]$w.store; if ($r.PSObject.Properties.Name -contains 'cheapest_type') { $r.cheapest_type=[string]$w.type } }
+      if ($r.PSObject.Properties.Name -contains 'nomem_price') {
+        $nm = @($live | Where-Object { -not $_.membership }) | Sort-Object { [double]$_.per_unit } | Select-Object -First 1
+        if ($nm) { $r.nomem_price=[double]$nm.per_unit; $r.nomem_store=[string]$nm.store; if ($r.PSObject.Properties.Name -contains 'nomem_type') { $r.nomem_type=[string]$nm.type } }
+      }
+    }
+  }
+  return $n
+}
+$ovrN = Apply-Overrides $doc.comparison
+
 # comparison rows keyed by commodity id
 $byId = @{}; foreach ($r in $doc.comparison) { $byId[[string]$r.id] = $r }
 
@@ -84,7 +118,7 @@ if (Test-Path $histFile) {
 # optional: recipe-ingredient board (the 100 meal-prep recipes' ingredients, all 6 stores). Additive; renders below the weekly staples when present.
 $riDoc = $null; $riCats = @()
 $riFile = Join-Path $OutDir 'recipe-board.json'
-if (Test-Path $riFile) { $riDoc = Get-Content $riFile -Raw | ConvertFrom-Json; $riCats = @($riDoc.comparison | ForEach-Object { [string]$_.category } | Select-Object -Unique) }
+if (Test-Path $riFile) { $riDoc = Get-Content $riFile -Raw | ConvertFrom-Json; $riCats = @($riDoc.comparison | ForEach-Object { [string]$_.category } | Select-Object -Unique); $ovrN += (Apply-Overrides $riDoc.comparison) }
 
 # durable per-store product URLs (survives weekly regeneration). Keyed by commodity id -> store name -> {url,price,size,name}.
 $purls = @{}

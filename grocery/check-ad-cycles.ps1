@@ -280,6 +280,41 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         }
         else { Log "AUTO-PUBLISH ERROR (rc=$pubrc) - Ghost upsert or build failed; live page NOT updated"; $summary += 'ERROR     auto-publish failed (page NOT updated) - see ad-cycle-log.txt'; if (-not $NoAlert) { try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery publish FAILED (rc=$pubrc) - $asofS" -Body "publish-deals-page.ps1 returned $pubrc on $asofS (Ghost upsert or page build failed). The live page was NOT updated with today's price change. Check ad-cycle-log.txt." | Out-Null } catch {} } }
       }
+
+      # ---- CONSISTENCY GUARD: enforce "the price shown == the product the 'See item' link opens", every day.
+      # audit-board-consistency.ps1 returns 2 when too many chips fall back to a name (a link was suppressed
+      # because its price no longer matches - divergence or a stale board price). On breach we AUTO-REPAIR the
+      # Family Fare links (re-point each to the exact product the board priced, at today's price - the API path
+      # that can run headless in the cloud), re-merge, republish, and re-audit. A breach that survives repair =
+      # a browser-store shelf price drifted from the board (needs a re-pull); we alert Brad ONCE per distinct
+      # drift set (signature de-dup, so a stable backlog never spams) even under -NoAlert.
+      if (-not $NoPublish) {
+        try {
+          & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-board-consistency.ps1') | Out-Null
+          if ($LASTEXITCODE -eq 2) {
+            Log 'consistency BREACH - auto-repairing Family Fare links + republishing'
+            try {
+              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'resolve-ff-boardmatch.ps1') | Out-Null
+              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'merge-product-urls.ps1')     | Out-Null
+              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1')     | Out-Null
+            } catch { Log ('consistency auto-repair threw: ' + $_.Exception.Message) }
+            & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-board-consistency.ps1') | Out-Null
+            if ($LASTEXITCODE -eq 2) {
+              $cr = try { Get-Content (Join-Path $OutDir 'consistency-report.json') -Raw | ConvertFrom-Json } catch { $null }
+              $nl = if ($cr) { [string]$cr.no_link_count } else { '?' }
+              $driftSig = if ($cr) { (@($cr.mismatch | ForEach-Object { $_.id + '|' + $_.store } | Sort-Object) -join ';') } else { '' }
+              $csigF = Join-Path $OutDir 'consistency-alert.sig'
+              $prevSig = if (Test-Path $csigF) { (Get-Content $csigF -Raw).Trim() } else { '' }
+              Log ("consistency STILL breached after repair - no-link=$nl (browser-store price drift, needs re-pull)")
+              $summary += "REVIEW    board-link drift: $nl chips show a name not a link - see consistency-report.json"
+              if ($driftSig -ne $prevSig) {
+                try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: board-link price drift ($nl chips) - $asofS" -Body "$nl priced chips fall back to a product name (no 'See item' link) after auto-repair on $asofS, because a store's shelf price drifted from the board. NO misleading link is shown. Re-pull the flagged store(s). Details: grocery/out/consistency-report.json." | Out-Null
+                      if ($LASTEXITCODE -eq 0) { Set-Content -Path $csigF -Value $driftSig -Encoding UTF8; Log 'consistency drift alert sent' } } catch { Log ('consistency alert threw: ' + $_.Exception.Message) }
+              } else { Log 'consistency drift unchanged since last alert - not re-alerting' }
+            } else { Log 'consistency repaired - all shown links match their price'; if (Test-Path (Join-Path $OutDir 'consistency-alert.sig')) { Remove-Item (Join-Path $OutDir 'consistency-alert.sig') -ErrorAction SilentlyContinue } }
+          } else { Log 'consistency OK - every shown link matches its price' }
+        } catch { Log ('consistency guard threw: ' + $_.Exception.Message) }
+      }
     }
   } catch { Log ("downstream FAILED: " + $_.Exception.Message) }
 } elseif ($hardFail -and (-not $NoDownstream)) {

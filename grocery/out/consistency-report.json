@@ -1,0 +1,69 @@
+﻿{
+    "generated":  "2026-07-12 10:41",
+    "tol":  0.3,
+    "no_link_count":  6,
+    "max_no_link":  20,
+    "mismatch_count":  6,
+    "mismatch":  [
+                     {
+                         "id":  "milk",
+                         "store":  "Hy-Vee",
+                         "unit":  "gallon",
+                         "board":  2.99,
+                         "link":  4.99,
+                         "off_pct":  67,
+                         "product":  "Hy-Vee 2% Reduced Fat Milk",
+                         "size":  "gallon"
+                     },
+                     {
+                         "id":  "peanut-butter",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  0.1248,
+                         "link":  0.2494,
+                         "off_pct":  100,
+                         "product":  "Jif Creamy Peanut Butter 16 Oz",
+                         "size":  "16 oz"
+                     },
+                     {
+                         "id":  "strawberries",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  0.1559,
+                         "link":  0.2494,
+                         "off_pct":  60,
+                         "product":  "Fresh Strawberries",
+                         "size":  "16 oz"
+                     },
+                     {
+                         "id":  "watermelon",
+                         "store":  "Baker\u0027s",
+                         "unit":  "each",
+                         "board":  2.99,
+                         "link":  4.99,
+                         "off_pct":  67,
+                         "product":  "Mini Seedless Whole Watermelon",
+                         "size":  "1 ct"
+                     },
+                     {
+                         "id":  "cheddar-cheese-shredded",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  0.2158,
+                         "link":  0.3238,
+                         "off_pct":  50,
+                         "product":  "Our Family Natural Sharp Cheddar Cheese 8 Oz",
+                         "size":  "8 oz"
+                     },
+                     {
+                         "id":  "fries",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  0.1184,
+                         "link":  0.1559,
+                         "off_pct":  32,
+                         "product":  "Ore Ida Crispy Straight Cut Fries 32 Oz",
+                         "size":  "32 oz"
+                     }
+                 ]
+}

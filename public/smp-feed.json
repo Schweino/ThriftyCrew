@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-12T12:13:47",
-    "week_of":  "2026-07-12",
+    "generated":  "2026-07-12T10:41:46",
+    "week_of":  "2026-07-11",
     "ingredient_count":  184,
     "recipe_count":  113,
     "ingredients":  {
@@ -18,7 +18,7 @@
                                        "store":  "Aldi",
                                        "type":  "everyday",
                                        "url":  "https://www.aldi.us/store/aldi/products/16345637-envy-apple-each",
-                                       "n":  6
+                                       "n":  5
                                    },
                         "avocados":  {
                                          "unit":  "each",
@@ -54,12 +54,11 @@
                                         },
                         "chicken-breast":  {
                                                "unit":  "lb",
-                                               "cheapest":  1.99,
-                                               "store":  "Family Fare",
-                                               "type":  "sale",
-                                               "url":  "https://www.shopfamilyfare.com/shop/meat/chicken/fresh_chicken/boneless_skinless_chicken_breasts/p/1564405684713031766",
-                                               "n":  6,
-                                               "sale_end":  "2026-07-18"
+                                               "cheapest":  2.29,
+                                               "store":  "Aldi",
+                                               "type":  "everyday",
+                                               "url":  "https://www.aldi.us/store/aldi/products/19554637-fresh-family-pack-chicken-breasts-per-lb",
+                                               "n":  6
                                            },
                         "bread":  {
                                       "unit":  "each",
@@ -67,7 +66,7 @@
                                       "store":  "Baker\u0027s",
                                       "type":  "everyday",
                                       "url":  "https://www.bakersplus.com/p/smart-way-enriched-white-bread/0001111015125",
-                                      "n":  6
+                                      "n":  5
                                   },
                         "butter":  {
                                        "unit":  "lb",
@@ -138,7 +137,7 @@
                                      "cheapest":  2.99,
                                      "store":  "Hy-Vee",
                                      "type":  "everyday",
-                                     "url":  "https://www.hy-vee.com/aisles-online/p/4132830/thats-smart-2-reduced-fat-milk",
+                                     "url":  "https://www.hy-vee.com/aisles-online/p/23936/hy-vee-2-reduced-fat-milk",
                                      "n":  6
                                  },
                         "orange-juice":  {
@@ -167,12 +166,11 @@
                                           },
                         "pork-chops":  {
                                            "unit":  "lb",
-                                           "cheapest":  2.49,
-                                           "store":  "Family Fare",
-                                           "type":  "sale",
-                                           "url":  "https://www.shopfamilyfare.com/shop/meat/pork/fresh/fresh_assorted_bone_in_pork_chops/p/1564405684713031263",
-                                           "n":  5,
-                                           "sale_end":  "2026-07-18"
+                                           "cheapest":  2.52,
+                                           "store":  "Sam\u0027s Club",
+                                           "type":  "everyday",
+                                           "url":  "https://www.samsclub.com/ip/Member-s-Mark-Bone-In-Pork-Chops-priced-per-pound/17799324269",
+                                           "n":  5
                                        },
                         "russet-potatoes":  {
                                                 "unit":  "lb",
@@ -251,10 +249,10 @@
                                                },
                         "boneless-skinless-chicken-thigh":  {
                                                                 "unit":  "lb",
-                                                                "cheapest":  1.99,
-                                                                "store":  "Hy-Vee",
+                                                                "cheapest":  2.48,
+                                                                "store":  "Sam\u0027s Club",
                                                                 "type":  "everyday",
-                                                                "url":  "https://www.hy-vee.com/aisles-online/p/289369/tyson-boneless-skinless-chicken-thighs-frozen",
+                                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-Boneless-Skinless-Chicken-Thighs-Case-priced-per-pound/13629760942",
                                                                 "n":  6
                                                             },
                         "1-3-fat-cream-cheese":  {
@@ -262,7 +260,7 @@
                                                      "cheapest":  0.1488,
                                                      "store":  "Aldi",
                                                      "type":  "everyday",
-                                                     "url":  "https://www.aldi.us/store/aldi/products/20713385-happy-farms-cream-cheese-8-oz",
+                                                     "url":  "https://www.aldi.us/store/aldi/products/20733557-happy-farms-neufchatel-cheese-8-oz",
                                                      "n":  6
                                                  },
                         "apple":  {
@@ -291,10 +289,10 @@
                                          },
                         "brown-sugar":  {
                                             "unit":  "oz",
-                                            "cheapest":  0.03,
-                                            "store":  "Sam\u0027s Club",
-                                            "type":  "everyday",
-                                            "url":  "https://www.samsclub.com/ip/Member-s-Mark-Light-Brown-Sugar-7-lbs/68113177798",
+                                            "cheapest":  0.0588,
+                                            "store":  "Hy-Vee",
+                                            "type":  "sale",
+                                            "url":  "https://www.hy-vee.com/aisles-online/p/2970352/thats-smart-light-brown-sugar",
                                             "n":  6
                                         },
                         "cannellini-beans":  {
@@ -379,7 +377,7 @@
                                             },
                         "fries":  {
                                       "unit":  "oz",
-                                      "cheapest":  0.0334,
+                                      "cheapest":  0.067,
                                       "store":  "Sam\u0027s Club",
                                       "type":  "everyday",
                                       "url":  "https://www.samsclub.com/ip/Ore-Ida-Crispy-Crinkles-French-Fries-Frozen-8-lbs/13621707320",
@@ -571,10 +569,10 @@
                                              },
                         "red-bell-pepper":  {
                                                 "unit":  "each",
-                                                "cheapest":  0.83,
-                                                "store":  "Sam\u0027s Club",
+                                                "cheapest":  0.98,
+                                                "store":  "Walmart",
                                                 "type":  "everyday",
-                                                "url":  "",
+                                                "url":  "https://www.walmart.com/ip/44391581",
                                                 "n":  6
                                             },
                         "red-wine-vinegar":  {
@@ -766,7 +764,7 @@
                                                   "cheapest":  0.21,
                                                   "store":  "Baker\u0027s",
                                                   "type":  "everyday",
-                                                  "url":  "",
+                                                  "url":  "https://www.bakersplus.com/p/la-coste-a-chipotle-peppers-in-adobo-sauce/0007639700407",
                                                   "n":  4
                                               },
                         "coconut-milk":  {
@@ -1030,7 +1028,7 @@
                                                    "cheapest":  0.01,
                                                    "store":  "Baker\u0027s",
                                                    "type":  "everyday",
-                                                   "url":  "",
+                                                   "url":  "https://www.bakersplus.com/p/diet-big-k-cola-no-calorie-soda-bottle/0001111049198",
                                                    "n":  5
                                                },
                         "zucchini":  {
@@ -1118,7 +1116,7 @@
                                              "cheapest":  0.4433,
                                              "store":  "Sam\u0027s Club",
                                              "type":  "everyday",
-                                             "url":  "",
+                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Fine-Ground-Black-Pepper-18-oz/13623460491",
                                              "n":  5
                                          },
                         "fresh-cilantro":  {
@@ -1150,7 +1148,7 @@
                                                      "cheapest":  0.0686,
                                                      "store":  "Sam\u0027s Club",
                                                      "type":  "everyday",
-                                                     "url":  "",
+                                                     "url":  "https://www.samsclub.com/ip/French-s-Classic-Regular-Worcestershire-Sauce-1-gal/4150073831",
                                                      "n":  5
                                                  },
                         "dried-parsley":  {
@@ -1190,7 +1188,7 @@
                                             "cheapest":  0.3033,
                                             "store":  "Sam\u0027s Club",
                                             "type":  "everyday",
-                                            "url":  "",
+                                            "url":  "https://www.samsclub.com/ip/Athenos-Crumbled-Traditional-Feta-Cheese-24-oz/13874852267",
                                             "n":  6
                                         },
                         "dried-dill":  {
@@ -1206,7 +1204,7 @@
                                                   "cheapest":  0.1521,
                                                   "store":  "Sam\u0027s Club",
                                                   "type":  "everyday",
-                                                  "url":  "",
+                                                  "url":  "https://www.samsclub.com/ip/Member-s-Mark-Part-Skim-Shredded-Mozzarella-Cheese-5-lbs/13857173387",
                                                   "n":  6
                                               },
                         "cucumber":  {
@@ -1246,7 +1244,7 @@
                                               "cheapest":  0.7971,
                                               "store":  "Sam\u0027s Club",
                                               "type":  "everyday",
-                                              "url":  "",
+                                              "url":  "https://www.samsclub.com/ip/Member-s-Mark-Organic-Ground-Ginger-7-oz/13591373069",
                                               "n":  5
                                           },
                         "au-jus-gravy-mix":  {
@@ -1326,7 +1324,7 @@
                                               "cheapest":  0.0675,
                                               "store":  "Sam\u0027s Club",
                                               "type":  "everyday",
-                                              "url":  "",
+                                              "url":  "https://www.samsclub.com/ip/Member-s-Mark-Half-and-Half-32-fl-oz/13620210942",
                                               "n":  6
                                           },
                         "white-wine-vinegar":  {
@@ -1358,7 +1356,7 @@
                                       "cheapest":  0.0411,
                                       "store":  "Sam\u0027s Club",
                                       "type":  "everyday",
-                                      "url":  "",
+                                      "url":  "https://www.samsclub.com/ip/Member-s-Mark-Premium-Cane-Sugar-25-lbs/13624255514",
                                       "n":  6
                                   },
                         "fish-sauce":  {
@@ -1390,7 +1388,7 @@
                                                "cheapest":  0.1763,
                                                "store":  "Sam\u0027s Club",
                                                "type":  "everyday",
-                                               "url":  "",
+                                               "url":  "https://www.samsclub.com/ip/Member-s-Mark-Standard-Shredded-Mild-Yellow-Cheddar-Cheese-5-lbs/13589400932",
                                                "n":  6
                                            },
                         "dried-thyme":  {
@@ -1398,7 +1396,7 @@
                                             "cheapest":  0.8776,
                                             "store":  "Sam\u0027s Club",
                                             "type":  "everyday",
-                                            "url":  "",
+                                            "url":  "https://www.samsclub.com/ip/Member-s-Mark-Thyme-Leaves-8-25-oz/13908405858",
                                             "n":  5
                                         },
                         "ground-turmeric":  {
@@ -1406,7 +1404,7 @@
                                                 "cheapest":  0.399,
                                                 "store":  "Sam\u0027s Club",
                                                 "type":  "everyday",
-                                                "url":  "",
+                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-Ground-Turmeric-20-oz/13590169266",
                                                 "n":  6
                                             },
                         "red-pepper-flakes":  {
@@ -1414,7 +1412,7 @@
                                                   "cheapest":  0.433,
                                                   "store":  "Sam\u0027s Club",
                                                   "type":  "everyday",
-                                                  "url":  "",
+                                                  "url":  "https://www.samsclub.com/ip/Member-s-Mark-Crushed-Red-Pepper-13.5-oz/13614254893",
                                                   "n":  6
                                               },
                         "all-purpose-flour":  {
@@ -1422,7 +1420,7 @@
                                                   "cheapest":  0.0212,
                                                   "store":  "Sam\u0027s Club",
                                                   "type":  "everyday",
-                                                  "url":  "",
+                                                  "url":  "https://www.samsclub.com/ip/Member-s-Mark-All-Purpose-Flour-25-lbs/13602764464",
                                                   "n":  6
                                               },
                         "sriracha":  {
@@ -1435,10 +1433,10 @@
                                      },
                         "breadcrumbs":  {
                                             "unit":  "oz",
-                                            "cheapest":  0.218,
-                                            "store":  "Walmart",
+                                            "cheapest":  0.126,
+                                            "store":  "Family Fare",
                                             "type":  "everyday",
-                                            "url":  "https://www.walmart.com/ip/15968655995",
+                                            "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/other_baking_necessities/our_family_bread_crumbs_plain_15_oz/p/7081531",
                                             "n":  5
                                         },
                         "frozen-peas":  {
@@ -1451,10 +1449,10 @@
                                         },
                         "ground-cinnamon":  {
                                                 "unit":  "oz",
-                                                "cheapest":  0.4433,
-                                                "store":  "Sam\u0027s Club",
+                                                "cheapest":  0.2704,
+                                                "store":  "Family Fare",
                                                 "type":  "everyday",
-                                                "url":  "",
+                                                "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/that_s_smart_ground_cinnamon/p/1564405684704741127",
                                                 "n":  6
                                             },
                         "capers":  {
@@ -1462,7 +1460,7 @@
                                        "cheapest":  1.0257,
                                        "store":  "Family Fare",
                                        "type":  "everyday",
-                                       "url":  "",
+                                       "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/pickled_vegetables_fruits/reese_non_pareil_capers_3_5_fl_oz/p/37554",
                                        "n":  1
                                    },
                         "five-spice-powder":  {
@@ -1470,7 +1468,7 @@
                                                   "cheapest":  3.63,
                                                   "store":  "Baker\u0027s",
                                                   "type":  "everyday",
-                                                  "url":  "",
+                                                  "url":  "https://www.bakersplus.com/p/private-selection-chinese-five-spice-blend-shaker/0001111002371",
                                                   "n":  1
                                               },
                         "fresh-mint":  {
@@ -1478,7 +1476,7 @@
                                            "cheapest":  2.49,
                                            "store":  "Baker\u0027s",
                                            "type":  "everyday",
-                                           "url":  "",
+                                           "url":  "https://www.bakersplus.com/p/simple-truth-organic-mint/0001111001818",
                                            "n":  1
                                        }
                     },
