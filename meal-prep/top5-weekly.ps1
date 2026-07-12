@@ -132,11 +132,19 @@ $jwt = New-GhostJWT
 $g = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/pages/slug/meal-prep-recipes/?formats=html" -Headers @{Authorization="Ghost $jwt"}
 $page = $g.pages[0]
 $html = [string]$page.html
-if ($html -match '<!--SMP-TOP5-->[\s\S]*?<!--/SMP-TOP5-->') {
-  if ($html.Contains($sec)) { Write-Output "hub section unchanged - no publish"; exit 0 }
-  $html = [regex]::Replace($html, '<!--SMP-TOP5-->[\s\S]*?<!--/SMP-TOP5-->', '')
+# Replace IN PLACE between the markers so the section keeps its position in the redesigned page
+# (the 2026-07-11 landing redesign put the Top-5 slot after the hero; the old remove-then-PREPEND
+# behavior would shove it back above the hero every morning). Prepend only when no marker block exists.
+$si = $html.IndexOf('<!--SMP-TOP5-->')
+$ei = $html.IndexOf('<!--/SMP-TOP5-->')
+if ($si -ge 0 -and $ei -gt $si) {
+  $endLen = '<!--/SMP-TOP5-->'.Length
+  $old = $html.Substring($si, $ei - $si + $endLen)
+  if ($old -eq $sec) { Write-Output "hub section unchanged - no publish"; exit 0 }
+  $html = $html.Substring(0, $si) + $sec + $html.Substring($ei + $endLen)
+} else {
+  $html = $sec + $html
 }
-$html = $sec + $html
 $lexObj = @{root=[ordered]@{children=@([ordered]@{type='html';version=1;html=$html});direction=$null;format='';indent=0;type='root';version=1}}
 $lex = ConvertTo-Json $lexObj -Depth 12 -Compress
 $body = [Text.Encoding]::UTF8.GetBytes((ConvertTo-Json @{pages=@(@{lexical=$lex;updated_at=$page.updated_at})} -Depth 6))
