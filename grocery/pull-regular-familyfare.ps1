@@ -23,6 +23,18 @@ function Get-FreshToken {
 }
 $tok = Get-FreshToken
 
+# OMAHA GUARD (Brad's rule: every store source must be a verified Omaha location). Store 6401 is
+# "Family Fare - 50th & Grover St, 5019 Grover St, Omaha NE 68106" (verified 2026-07-12). Assert it on
+# every run: if Freshop ever remaps the id to a different city, FAIL LOUD rather than pull wrong prices.
+# An API error on the metadata call is NOT fatal (throttle) - only a NON-Omaha answer is.
+try {
+  $meta = Invoke-RestMethod -Uri "$b/stores/$sid`?app_key=$ak" -Headers $UA -TimeoutSec 20
+  if ($meta -and $meta.city -and ([string]$meta.city) -notmatch '^Omaha$') {
+    Write-Output ("FATAL: Freshop store $sid resolves to '" + $meta.city + "', NOT Omaha - refusing to pull wrong-city prices. Fix `$sid.")
+    exit 2
+  }
+} catch { }
+
 # ROOT-CAUSE FIX: Freshop rate-limits a reused token and then returns 200 with ZERO items (not an error),
 # which silently dropped the last terms. Retry on EMPTY as well as on error, with a FRESH token each retry.
 function Get-FreshopItems($term) {

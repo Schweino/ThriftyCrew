@@ -105,6 +105,27 @@ Genuine long-tail gaps that resist automated matching: fresh produce sold **by w
 fixed-price page) at Walmart/Hy-Vee, and **warehouse-only forms** at Sam's (no single apple / small can).
 These are listed in `out\url-worklist.json` (reason `missing`) rather than silently dropped.
 
+## Omaha store registry (EVERY price must come from one of these locations)
+
+Brad's hard rule: every source, headless or browser, must be pinned to a verified OMAHA location.
+A wrong-city session produces plausible-looking wrong prices (it happened: a fresh shop.fareway.com
+session silently defaulted to Des Moines). Canonical identities + where each is enforced:
+
+| Store | Omaha identity | Enforced by |
+|---|---|---|
+| Hy-Vee (ads) | Flipp collection 1465, zip 68106 | pull-grocery-ads.ps1 hard zip gate (`Test-OmahaZip`) |
+| Hy-Vee (everyday) | Aisles Online store "Omaha #1, NE" | weekly SKILL step D verify |
+| Aldi (ads) | Flipp merchant_store_code 446-048 (Omaha) | pull-grocery-ads.ps1 hard zip gate |
+| Aldi (everyday) | aldi.us "ALDI - OLA 42 - Omaha", 68137 | weekly SKILL step F2 verify |
+| Family Fare | Freshop store_id **6401** = 50th & Grover St, 5019 Grover St, Omaha 68106 | pull-regular-familyfare.ps1 runtime city assertion (exit 2 on non-Omaha) + ads gate |
+| Baker's | "Pickup at Saddlecreek", 888 S Saddle Creek Rd, Omaha 68106 | weekly steps A + C verify, daily SKILL hard rule |
+| Walmart | "Omaha L St Supercenter", 12850 L St, 68137 | weekly SKILL step E verify |
+| Sam's Club | "Omaha Sam's Club", 13130 L St, 68137 | weekly SKILL step B verify |
+| Fareway (storefront) | shopId **16668805** / postalCode **68136** = 17070 Audrey St, Omaha | daily + weekly SKILLs: graphql network-param check (label alone is NOT proof) |
+| Fareway (ads) | OmahaGroup_*.jpg filenames | pull-fareway-ads.ps1 Omaha+current gates |
+
+If a store moves/renames, update this table AND the enforcing script/SKILL together.
+
 ## Adding a NEW commodity (the /suggest-an-item/ playbook)
 
 Proven end-to-end 2026-07-12 with `laundry-detergent` (the first reader-suggested item: A&H Plus OxiClean).
