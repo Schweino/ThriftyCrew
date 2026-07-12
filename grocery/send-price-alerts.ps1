@@ -34,7 +34,9 @@ function New-GhostJWT {
   $sb=New-Object byte[] ($secret.Length/2); for($i=0;$i -lt $sb.Length;$i++){$sb[$i]=[Convert]::ToByte($secret.Substring($i*2,2),16)}
   $hm=New-Object System.Security.Cryptography.HMACSHA256 (,$sb); return $si+'.'+(& $b64 ($hm.ComputeHash([Text.Encoding]::UTF8.GetBytes($si))))
 }
-function JStr([string]$s){ return '"' + ($s -replace '\\','\\\\' -replace '"','\"') + '"' }
+# ordinal .Replace, NOT -replace: regex replacement treats backslashes literally in .NET, so
+# -replace '\\','\\\\' inserts FOUR backslashes and corrupts double-encoded JSON (the 422 bug).
+function JStr([string]$s){ return '"' + $s.Replace('\','\\').Replace('"','\"') + '"' }
 function Fmt([double]$v){ if ($v -lt 1) { return ('$' + $v.ToString('0.000')) } else { return ('$' + $v.ToString('0.00')) } }
 
 # ---- boards + history + state ----
@@ -129,7 +131,11 @@ foreach ($c in $candidates) {
     Write-Output ("  SENT " + $c.id + " -> " + $total + "+ subscriber(s): " + $title)
     $state[$c.id] = @{ price = $c.price; date = $today; store = $c.store }
     $sent++
-  } catch { Write-Output ("  " + $c.id + ": SEND FAILED - " + $_.Exception.Message) }
+  } catch {
+    $errBody = ''
+    try { $resp = $_.Exception.Response; if ($resp) { $sr = New-Object IO.StreamReader($resp.GetResponseStream()); $full = $sr.ReadToEnd(); $errBody = $full.Substring(0, [Math]::Min(400, $full.Length)) } } catch {}
+    Write-Output ("  " + $c.id + ": SEND FAILED - " + $_.Exception.Message + " | " + $errBody)
+  }
 }
 
 if (-not $DryRun) {
