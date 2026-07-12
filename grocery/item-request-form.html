@@ -9,6 +9,7 @@
 .smpirf-field{margin:0 0 16px;}
 .smpirf-field label{display:block;color:var(--navy);font-weight:700;font-size:.92em;margin:0 0 6px;}
 .smpirf-req{color:var(--err);font-weight:700;}
+.smpirf-opt{color:var(--ink);font-weight:400;font-size:.85em;opacity:.75;}
 .smpirf-field input,.smpirf-field select{width:100%;padding:12px 13px;font-size:1em;color:var(--navy);background:#fff;
   border:1.5px solid var(--line);border-radius:10px;transition:border-color .15s,box-shadow .15s;appearance:none;}
 .smpirf-field select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2316263f' stroke-width='2.5'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 13px center;padding-right:38px;}
@@ -42,6 +43,7 @@
         <option>Hy-Vee</option>
         <option>Aldi</option>
         <option>Sam's Club</option>
+        <option>Fareway</option>
         <option value="Other">Other</option>
       </select>
     </div>
@@ -60,6 +62,11 @@
       <label for="smpirf-url">Item URL <span class="smpirf-req">*</span></label>
       <input type="url" id="smpirf-url" name="url" placeholder="https://..." maxlength="2000" required autocomplete="off" inputmode="url">
       <p class="smpirf-note"><strong>Required.</strong> The exact product link lets us match the precise item (brand, size) and pull its real price.</p>
+    </div>
+
+    <div class="smpirf-field">
+      <label for="smpirf-email">Enter email to be notified when item is added <span class="smpirf-opt">(optional)</span></label>
+      <input type="email" id="smpirf-email" name="email" placeholder="you@example.com" maxlength="200" autocomplete="email" inputmode="email">
     </div>
 
     <div class="smpirf-hp" aria-hidden="true">
@@ -82,6 +89,7 @@
   var otherInput = root.querySelector("#smpirf-storeother");
   var itemInput = root.querySelector("#smpirf-item");
   var urlInput = root.querySelector("#smpirf-url");
+  var emailInput = root.querySelector("#smpirf-email");
   var hp = form.querySelector("input[name=website]");
   var btn = root.querySelector("#smpirf-btn");
   var msg = root.querySelector("#smpirf-msg");
@@ -103,22 +111,24 @@
     var storeOther = (otherInput.value || "").trim();
     var item = (itemInput.value || "").trim();
     var url = (urlInput.value || "").trim();
+    var email = emailInput ? (emailInput.value || "").trim() : "";
 
     if(!store){ show("bad","Please choose a store."); storeSel.focus(); return; }
     if(store === "Other" && !storeOther){ show("bad","Please enter the store name."); otherInput.focus(); return; }
     if(!item){ show("bad","Please enter the item name."); itemInput.focus(); return; }
     if(!/^https?:\/\/.+/i.test(url)){ show("bad","Please paste the item's URL (it must start with http)."); urlInput.focus(); return; }
+    if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ show("bad","That email doesn't look right. Fix it or leave it blank."); emailInput.focus(); return; }
 
     btn.disabled = true; var label = btn.textContent; btn.textContent = "Sending...";
     fetch(ENDPOINT, {
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body: JSON.stringify({ store:store, storeOther:storeOther, item:item, url:url, website: hp ? hp.value : "" })
+      body: JSON.stringify({ store:store, storeOther:storeOther, item:item, url:url, email:email, website: hp ? hp.value : "" })
     }).then(function(r){ return r.json().catch(function(){ return {ok:false}; }); })
       .then(function(res){
         if(res && res.ok){
           form.reset(); otherWrap.classList.add("smpirf-hide"); otherInput.required=false;
-          show("ok","Thanks! Got it. We'll take a look at adding it to the board.");
+          show("ok", email ? "Thanks! Got it. We'll email you when it's on the board." : "Thanks! Got it. We'll take a look at adding it to the board.");
         } else {
           show("bad", (res && res.error) ? res.error : "Something went wrong. Please try again.");
         }

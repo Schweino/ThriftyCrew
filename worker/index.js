@@ -1,10 +1,12 @@
 // smp-feed Worker
 // - GET /smp-feed.json and all other paths: served from static ./public assets (ASSETS binding)
-// - POST /submit: item-request form handler -> emails contact@simplemoneyplaybook.com via Gmail API
+// - POST /submit: item-request form handler -> emails contact@thriftycrew.com via Gmail API
 //   Reuses the Work Google OAuth (same refresh-token flow as send-alert.ps1).
 //   Secrets (set in Cloudflare dashboard, NOT in this repo):
 //     GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN
-//   Optional var: NOTIFY_TO (defaults to contact@simplemoneyplaybook.com)
+//   Optional var: NOTIFY_TO (defaults to contact@thriftycrew.com)
+//   Optional field: email (requester wants to be notified when the item is added; included in
+//   the notification body + set as Reply-To so Brad can just hit Reply when it goes live)
 // - POST /alert: price-alert signup {email, item, weekly} -> Ghost member gets label alert-<item>
 //   (member created as FREE member if new; subscribed to the "Price Alerts" newsletter, plus the
 //   default newsletter when weekly=true). The daily pipeline emails label segments on record lows.
@@ -17,7 +19,7 @@ const ALLOWED_ORIGINS = [
   "https://simplemoneyplaybook.com",
   "https://map-to-success.ghost.io",
 ];
-const STORES = ["Walmart", "Baker's", "Family Fare", "Hy-Vee", "Aldi", "Sam's Club"];
+const STORES = ["Walmart", "Baker's", "Family Fare", "Hy-Vee", "Aldi", "Sam's Club", "Fareway"];
 
 function corsHeaders(origin) {
   const allow = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
@@ -63,18 +65,21 @@ async function getAccessToken(env) {
   return j.access_token;
 }
 
-async function sendEmail(env, { store, item, url }) {
-  const to = env.NOTIFY_TO || "contact@simplemoneyplaybook.com";
+async function sendEmail(env, { store, item, url, notifyEmail }) {
+  const to = env.NOTIFY_TO || "contact@thriftycrew.com";
   const token = await getAccessToken(env);
   const text =
     "A visitor submitted an item for the grocery list:\r\n\r\n" +
     "Store: " + store + "\r\n" +
     "Item:  " + item + "\r\n" +
-    "URL:   " + url + "\r\n\r\n" +
-    "(Submitted via the website item-request form.)";
+    "URL:   " + url + "\r\n" +
+    (notifyEmail ? "Notify when added: " + notifyEmail + "\r\n" : "") +
+    "\r\n(Submitted via the website item-request form." +
+    (notifyEmail ? " Reply to this email to reach the requester." : "") + ")";
   const raw =
     "To: " + to + "\r\n" +
-    "Subject: New Item Request\r\n" +
+    (notifyEmail ? "Reply-To: " + notifyEmail + "\r\n" : "") +
+    "Subject: New Item Request" + (notifyEmail ? " (wants notification)" : "") + "\r\n" +
     "Content-Type: text/plain; charset=UTF-8\r\n\r\n" +
     text;
   const r = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", {
@@ -207,6 +212,11 @@ export default {
       const storeOther = (data.storeOther || "").toString().trim();
       const item = (data.item || "").toString().trim();
       const itemUrl = (data.url || "").toString().trim();
+      // optional: requester wants a heads-up when the item goes live
+      const notifyEmail = (data.email || "").toString().trim().toLowerCase();
+      if (notifyEmail && (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(notifyEmail) || notifyEmail.length > 200)) {
+        return json({ ok: false, error: "That notification email doesn't look valid. Fix it or leave it blank." }, 400, origin);
+      }
 
       if (store === "Other") store = storeOther;
       if (!store) return json({ ok: false, error: "Please choose a store." }, 400, origin);
@@ -223,7 +233,7 @@ export default {
       }
 
       try {
-        await sendEmail(env, { store, item, url: itemUrl });
+        await sendEmail(env, { store, item, url: itemUrl, notifyEmail });
         return json({ ok: true }, 200, origin);
       } catch (e) {
         return json({ ok: false, error: "Could not send right now. Please try again later." }, 502, origin);
