@@ -96,6 +96,19 @@ if (Test-Path $purlFile) {
     $purls[[string]$p.Name] = $sm
   }
 }
+# "Does not carry" cells: commodity x store confirmed absent (manual verification). Rendered as a muted chip
+# with a "See it? Let us know!" link to the suggest-an-item form, so a genuine gap reads as intentional.
+$notCarry = @{}
+$ncFile = Join-Path $root 'not-carried.json'
+if (Test-Path $ncFile) { $ncd = Get-Content $ncFile -Raw | ConvertFrom-Json; foreach ($e in @($ncd.cells)) { $ncid = [string]$e.id; if (-not $notCarry.ContainsKey($ncid)) { $notCarry[$ncid] = @{} }; $notCarry[$ncid][[string]$e.store] = $true } }
+function NoneCells([string]$id) {
+  if (-not $notCarry.ContainsKey($id)) { return '' }
+  $out = ''
+  foreach ($st in ($notCarry[$id].Keys | Sort-Object)) {
+    $out += "<div class='pg-chip pg-chip-none' data-store=`"" + (HtmlEnc $st) + "`"><span class='pg-store'>" + (HtmlEnc $shortName[$st]) + "</span><span class='pg-none'>Doesn&rsquo;t carry</span><a class='pg-see pg-see-none' href='/suggest-an-item/'>See it? Let us know! &rarr;</a></div>"
+  }
+  return $out
+}
 # per-unit of a stored link, in the board's $unit, from {price,size} - used to SUPPRESS a clearly-wrong link.
 function LinkPU([string]$size, [string]$unit, [double]$price) {
   $s = ([string]$size).ToLower().Trim()
@@ -367,6 +380,7 @@ foreach ($c in $cats) {
       [void]$sb.Append("</div>")
       $i++
     }
+    [void]$sb.Append((NoneCells ([string]$r.id)))
     [void]$sb.Append("</div></article>")
   }
   [void]$sb.Append("</section>")
@@ -411,7 +425,8 @@ if ($riDoc) {
         [void]$sb.Append("</div>")
         $i++
       }
-      [void]$sb.Append("</div></article>")
+      [void]$sb.Append((NoneCells ([string]$r.id)))
+    [void]$sb.Append("</div></article>")
     }
     [void]$sb.Append("</section>")
   }
@@ -510,6 +525,10 @@ $css = @'
 .pg-unit{font-size:.72em;color:var(--mut);opacity:.8;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
 .pg-stores{display:flex;flex-wrap:wrap;gap:8px}
 .pg-chip{position:relative;display:flex;flex-direction:column;gap:3px;min-width:118px;padding:10px 13px 9px;border:1px solid var(--bd);border-radius:11px;background:#fcfdfc}
+.pg-chip-none{background:repeating-linear-gradient(135deg,#f7f7f5,#f7f7f5 7px,#f2f2ef 7px,#f2f2ef 14px);border-style:dashed;justify-content:center}
+.pg-chip-none .pg-store{opacity:.7}
+.pg-none{font-size:.92em;font-weight:600;color:#8a8a80}
+.pg-see-none{color:var(--accent,#2f6bb0);font-weight:600}
 .pg-chip.is-best{border-color:var(--green);background:var(--green-t);box-shadow:inset 0 0 0 1px var(--green)}
 .pg-best{position:absolute;top:-9px;left:11px;background:var(--green);color:#fff;font-size:.6em;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px}
 .pg-store{font-size:.8em;font-weight:600;color:var(--mut)}
