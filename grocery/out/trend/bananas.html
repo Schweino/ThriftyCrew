@@ -29,7 +29,7 @@
 <div class="tp-hero">
   <p class="tp-kicker">This week in Omaha</p>
   <div class="tp-price">$0.49<span class="tp-unit">/lb</span></div>
-  <div class="tp-where">Cheapest at Hy-Vee, week of Jul 12</div>
+  <div class="tp-where">Cheapest at Aldi, week of Jul 12</div>
 </div>
 <p class="tp-record"><strong>Record low we have tracked:</strong> $0.48 per lb at Aldi (week of Jul 6). This week is about 2 percent above that low.</p>
 <p class="tp-read">$0.49 is close to the tracked low of $0.48, so this is a fine week to buy.</p>
@@ -125,14 +125,14 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-05","07-06","07-08","07-09","07-10","07-11","07-12"],"s":{"Hy-Vee":[0.49,0.49,0.49,0.49,0.49,0.49,0.49],"Sam's Club":[0.49,0.49,0.49,0.49,0.49,0.49,0.49],"Walmart":[0.5,0.5,0.5,0.5,0.5,0.5,0.5],"Baker's":[0.55,0.55,0.55,0.55,0.55,0.55,0.55],"Family Fare":[0.65,0.65,0.65,0.65,0.65,0.65,0.65],"Aldi":[null,0.48,0.48,0.48,0.48,0.48,0.49]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-05","07-06","07-08","07-09","07-10","07-11","07-12"],"s":{"Hy-Vee":[0.49,0.49,0.49,0.49,0.49,0.49,0.49],"Sam's Club":[0.49,0.49,0.49,0.49,0.49,0.49,0.49],"Walmart":[0.5,0.5,0.5,0.5,0.5,0.5,0.5],"Baker's":[0.55,0.55,0.55,0.55,0.55,0.55,0.55],"Family Fare":[0.65,0.65,0.65,0.65,0.65,0.65,0.65],"Aldi":[null,0.48,0.48,0.48,0.48,0.48,0.49],"Fareway":[null,null,null,null,null,null,0.49]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
 <table class="tp-table">
 <thead><tr><th>Week of</th><th>Cheapest price</th><th>Store</th></tr></thead>
 <tbody>
-<tr><td>Jul 12</td><td>$0.49 per lb</td><td>Hy-Vee</td></tr>
+<tr><td>Jul 12</td><td>$0.49 per lb</td><td>Aldi</td></tr>
 <tr class="tp-low"><td>Jul 11</td><td>$0.48 per lb</td><td>Aldi</td></tr>
 <tr class="tp-low"><td>Jul 10</td><td>$0.48 per lb</td><td>Aldi</td></tr>
 <tr class="tp-low"><td>Jul 9</td><td>$0.48 per lb</td><td>Aldi</td></tr>
@@ -145,6 +145,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Aldi</td><td>$0.49 per lb</td><td><span class="tp-item">Bananas</span></td></tr>
+<tr><td>Fareway</td><td>$0.49 per lb</td><td><span class="tp-item">Banana</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.49 per lb</td><td><span class="tp-item">Fresh Chiquita Bananas</span></td></tr>
 <tr><td>Sam&#39;s Club</td><td>$0.49 per lb</td><td><span class="tp-item">Bananas (3 lb)</span></td></tr>
 <tr><td>Walmart</td><td>$0.50 per lb</td><td><span class="tp-item">Fresh Banana</span></td></tr>

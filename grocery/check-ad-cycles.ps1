@@ -94,7 +94,10 @@ if ($serverDue) {
         try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery pull FAILED (server stores) - $asofS" -Body $bdy | Out-Null } catch { Log ("alert send threw: " + $_.Exception.Message) }
       }
     }
-    # Family Fare EVERYDAY column (headless Freshop catalog) - refresh alongside the ad pull; nothing else pulls it. Non-fatal.
+    # Family Fare EVERYDAY column (headless Freshop catalog) - refresh alongside the ad pull; nothing else pulls it.
+    # NOTE: this writes ALL search results and lets compare-deals apply the full include/exclude+per-unit filter and
+    # pick the cheapest VALID one. Do NOT swap in a "pick one cheapest here" researcher - pre-filtering with a lesser
+    # rule dropped FF from milk/butter/blueberries (it picked Butter Beans / Blueberry Soda). Non-fatal.
     try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'pull-regular-familyfare.ps1') | Out-Null; Log 'FF everyday refreshed' } catch { Log ('FF everyday pull threw: ' + $_.Exception.Message) }
   }
   # read verification from TODAY's file (real runs); in -NoPull test mode fall back to the newest ads file
@@ -193,11 +196,6 @@ if (-not $NoAlert) {
 # board price signature, so an unchanged day is a no-op. This is what keeps pricing current relative to ad
 # dates every day, not just on the weekly ad flip.
 if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
-  # Keep Family Fare's EVERYDAY fallback current (headless Freshop base_price) BEFORE the compare, so the moment
-  # an FF sale ends the board reverts to the next-cheapest FF everyday item, not a vanished cell. FF is the only
-  # fully-API store; browser stores get the same via the weekly agent + research-worklist.json. Non-fatal
-  # (carry-forward inside the script preserves prior entries on a transient rate-limit).
-  try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'research-familyfare-everyday.ps1') | Out-Null; Log 'FF everyday fallback researched' } catch { Log ('research-familyfare threw: ' + $_.Exception.Message) }
   $bakers = Get-ChildItem (Join-Path $OutDir 'bakers\bakers-deals-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
   $sams   = Get-ChildItem (Join-Path $OutDir 'sams\sams-deals-*.json')     -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
   $fareway = Get-ChildItem (Join-Path $OutDir 'fareway\fareway-deals-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
@@ -232,7 +230,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           $cgList = (@($cg.gaps | ForEach-Object { $_.commodity + ' @ ' + $_.store }) -join '; ')
           Log ("coverage-gaps: $($cg.gap_count) store(s) carry an item but are off the board - $cgList")
           $summary += "REVIEW    coverage gaps: $($cg.gap_count) store(s) dropped despite carrying the item - see coverage-gaps.json"
-          if ($cgSig -ne $cgPrev) {
+          if ($cgSig -ne $cgPrev -and (-not $NoAlert)) {
             try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: $($cg.gap_count) store(s) dropped from a commodity they carry - $asofS" -Body "audit-coverage-gaps found stores that HAVE a matching product but are missing from the board (usually a too-strict include regex): $cgList. Fix that commodity's include in commodities.json (or add a reviewed exception to coverage-gap-allowlist.json). Details: grocery/out/coverage-gaps.json." | Out-Null
                   if ($LASTEXITCODE -eq 0) { Set-Content -Path $cgF -Value $cgSig -Encoding UTF8; Log 'coverage-gap alert sent' } } catch { Log ('coverage-gap alert threw: ' + $_.Exception.Message) }
           } else { Log 'coverage-gaps unchanged since last alert - not re-alerting' }
@@ -251,7 +249,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           $sfList = (@($sf.gaps | ForEach-Object { $_.commodity + ' @ ' + $_.store }) -join '; ')
           Log ("sale-fallback: $($sf.gap_count) on-sale cell(s) with no everyday fallback - $sfList")
           $summary += "REVIEW    sale-fallback: $($sf.gap_count) on-sale cell(s) would vanish when the sale ends - see sale-fallback-gaps.json"
-          if ($sfSig -ne $sfPrev) {
+          if ($sfSig -ne $sfPrev -and (-not $NoAlert)) {
             try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: $($sf.gap_count) on-sale item(s) have no everyday fallback - $asofS" -Body "These commodity+store cells are on SALE with no everyday item to revert to, so the store DROPS OFF that commodity when the sale ends: $sfList. Browser stores are queued in grocery/out/research-worklist.json for the weekly agent to research the next-cheapest everyday item; Family Fare self-heals daily." | Out-Null
                   if ($LASTEXITCODE -eq 0) { Set-Content -Path $sfF -Value $sfSig -Encoding UTF8; Log 'sale-fallback alert sent' } } catch { Log ('sale-fallback alert threw: ' + $_.Exception.Message) }
           } else { Log 'sale-fallback gaps unchanged - not re-alerting' }
@@ -354,7 +352,7 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
               $prevSig = if (Test-Path $csigF) { (Get-Content $csigF -Raw).Trim() } else { '' }
               Log ("consistency STILL breached after repair - no-link=$nl (browser-store price drift, needs re-pull)")
               $summary += "REVIEW    board-link drift: $nl chips show a name not a link - see consistency-report.json"
-              if ($driftSig -ne $prevSig) {
+              if ($driftSig -ne $prevSig -and (-not $NoAlert)) {
                 try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: board-link price drift ($nl chips) - $asofS" -Body "$nl priced chips fall back to a product name (no 'See item' link) after auto-repair on $asofS, because a store's shelf price drifted from the board. NO misleading link is shown. Re-pull the flagged store(s). Details: grocery/out/consistency-report.json." | Out-Null
                       if ($LASTEXITCODE -eq 0) { Set-Content -Path $csigF -Value $driftSig -Encoding UTF8; Log 'consistency drift alert sent' } } catch { Log ('consistency alert threw: ' + $_.Exception.Message) }
               } else { Log 'consistency drift unchanged since last alert - not re-alerting' }

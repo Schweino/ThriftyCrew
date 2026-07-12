@@ -55,7 +55,9 @@ foreach ($r in (Get-Content $CompareFile -Raw | ConvertFrom-Json).comparison) { 
 $gaps = New-Object System.Collections.Generic.List[object]
 foreach ($c in $commods) {
   $id = [string]$c.id
-  $probes = @($c.include | ForEach-Object { ($_ -replace '\\s\+', '.{0,25}') -replace '\\s', '.{0,25}' })
+  # loosen the include: allow up to 25 chars where it required whitespace. Handle \s* and \s+ BEFORE bare \s,
+  # or "\s*" becomes ".{0,25}*" (a nested quantifier that throws). Order matters.
+  $probes = @($c.include | ForEach-Object { ((($_ -replace '\\s\*', '.{0,25}') -replace '\\s\+', '.{0,25}') -replace '\\s', '.{0,25}') })
   $excl = @($c.exclude)
   foreach ($st in $stores) {
     if ($present.ContainsKey($id + '|' + $st)) { continue }

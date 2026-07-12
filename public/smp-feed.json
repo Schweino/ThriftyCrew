@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-07-12T12:49:32",
+    "generated":  "2026-07-12T13:58:48",
     "week_of":  "2026-07-12",
     "ingredient_count":  184,
     "recipe_count":  113,
@@ -50,7 +50,7 @@
                                             "store":  "Aldi",
                                             "type":  "everyday",
                                             "url":  "https://www.aldi.us/store/aldi/products/20992234-season-s-choice-frozen-blueberries-24-oz",
-                                            "n":  4
+                                            "n":  5
                                         },
                         "chicken-breast":  {
                                                "unit":  "lb",
@@ -58,7 +58,8 @@
                                                "store":  "Family Fare",
                                                "type":  "sale",
                                                "url":  "https://www.shopfamilyfare.com/shop/meat/chicken/fresh_chicken/boneless_skinless_chicken_breasts/p/1564405684713031766",
-                                               "n":  7
+                                               "n":  7,
+                                               "sale_end":  "2026-07-18"
                                            },
                         "bread":  {
                                       "unit":  "each",
@@ -74,7 +75,7 @@
                                        "store":  "Sam\u0027s Club",
                                        "type":  "everyday",
                                        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Salted-Sweet-Cream-Butter-Block-1-lb-4-lbs/15365221245",
-                                       "n":  5
+                                       "n":  7
                                    },
                         "chicken-thighs":  {
                                                "unit":  "lb",
@@ -138,7 +139,7 @@
                                      "store":  "Hy-Vee",
                                      "type":  "everyday",
                                      "url":  "https://www.hy-vee.com/aisles-online/p/23936/hy-vee-2-reduced-fat-milk",
-                                     "n":  6
+                                     "n":  7
                                  },
                         "orange-juice":  {
                                              "unit":  "floz",
@@ -170,7 +171,8 @@
                                            "store":  "Family Fare",
                                            "type":  "sale",
                                            "url":  "https://www.shopfamilyfare.com/shop/meat/pork/fresh/fresh_assorted_bone_in_pork_chops/p/1564405684713031263",
-                                           "n":  7
+                                           "n":  7,
+                                           "sale_end":  "2026-07-18"
                                        },
                         "russet-potatoes":  {
                                                 "unit":  "lb",

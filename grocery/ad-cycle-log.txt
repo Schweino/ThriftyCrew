@@ -99,3 +99,13 @@
 [2026-07-12T12:13:54] REVIEW FLAGS: 2 -> SANITY|Sweet Corn (ear) Whole Watermelon|outlier outlier|Baker's $0.40 is 35% below runner-up Sam's Club $0.62 - verify the price/size parse Baker's $2.99 is 36% below runner-up Walmart $4.65 - verify the price/size parse ; MULTIBUY|Family Fare|Milk (gallon)
 [2026-07-12T12:14:32] AUTO-PUBLISH: live page updated (price change/new ad)
 [2026-07-12T12:14:32] run complete; flips=1
+[2026-07-12T13:37:14] FF everyday fallback researched
+[2026-07-12T13:37:16] coverage-gaps: 4 store(s) carry an item but are off the board - milk @ Family Fare; butter @ Family Fare; butter @ Fareway; blueberries @ Family Fare
+[2026-07-12T13:37:18] coverage-gap alert sent
+[2026-07-12T13:37:18] sale-windows refreshed
+[2026-07-12T13:37:19] recipe-overlay applied
+[2026-07-12T13:37:21] top5-weekly refreshed
+[2026-07-12T13:37:22] smp-feed exported
+[2026-07-12T13:37:25] price-alerts: price-alerts done: 0 email(s) sent
+[2026-07-12T13:37:26] REVIEW FLAGS: 2 -> SANITY|Sweet Corn (ear) Whole Watermelon|outlier outlier|Baker's $0.40 is 35% below runner-up Sam's Club $0.62 - verify the price/size parse Baker's $2.99 is 36% below runner-up Walmart $4.65 - verify the price/size parse ; MULTIBUY|Family Fare|Milk (gallon)
+[2026-07-12T13:37:26] run complete; flips=0
