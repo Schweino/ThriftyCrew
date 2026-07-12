@@ -109,3 +109,15 @@
 [2026-07-12T13:37:25] price-alerts: price-alerts done: 0 email(s) sent
 [2026-07-12T13:37:26] REVIEW FLAGS: 2 -> SANITY|Sweet Corn (ear) Whole Watermelon|outlier outlier|Baker's $0.40 is 35% below runner-up Sam's Club $0.62 - verify the price/size parse Baker's $2.99 is 36% below runner-up Walmart $4.65 - verify the price/size parse ; MULTIBUY|Family Fare|Milk (gallon)
 [2026-07-12T13:37:26] run complete; flips=0
+[2026-07-12T14:36:22] sale-fallback: 4 on-sale cell(s) with no everyday fallback - apples @ Family Fare; grapes @ Family Fare; sweet-corn @ Family Fare; watermelon @ Family Fare
+[2026-07-12T14:36:22] sale-fallback gaps unchanged - not re-alerting
+[2026-07-12T14:36:22] sale-windows refreshed
+[2026-07-12T14:36:23] recipe-overlay applied
+[2026-07-12T14:36:26] top5-weekly refreshed
+[2026-07-12T14:36:26] smp-feed exported
+[2026-07-12T14:36:29] price-alerts: price-alerts done: 0 email(s) sent
+[2026-07-12T14:36:30] REVIEW FLAGS: 2 -> SANITY|Sweet Corn (ear) Whole Watermelon|outlier outlier|Baker's $0.40 is 35% below runner-up Sam's Club $0.62 - verify the price/size parse Baker's $2.99 is 36% below runner-up Walmart $4.65 - verify the price/size parse ; MULTIBUY|Family Fare|Milk (gallon)
+[2026-07-12T14:36:40] AUTO-PUBLISH: live page updated (price change mid-cycle)
+[2026-07-12T14:36:40] consistency OK - every shown link matches its price
+[2026-07-12T14:36:41] store-coverage OK - every staple commodity shows all 7 stores
+[2026-07-12T14:36:41] run complete; flips=0

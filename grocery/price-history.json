@@ -591,7 +591,10 @@
                                                                   "Aldi":  0.1809,
                                                                   "Walmart":  0.2578,
                                                                   "Baker\u0027s":  0.2772,
-                                                                  "Sam\u0027s Club":  0.4719
+                                                                  "Family Fare":  0.3563,
+                                                                  "Fareway":  0.4455,
+                                                                  "Sam\u0027s Club":  0.4719,
+                                                                  "Hy-Vee":  0.5348
                                                               }
                                             }
                                         ]
@@ -888,7 +891,9 @@
                                                                   "Aldi":  2.89,
                                                                   "Baker\u0027s":  2.99,
                                                                   "Walmart":  3.06,
-                                                                  "Hy-Vee":  3.99
+                                                                  "Fareway":  3.48,
+                                                                  "Hy-Vee":  3.99,
+                                                                  "Family Fare":  5.39
                                                               }
                                             }
                                         ]
@@ -1080,7 +1085,7 @@
                                                                   "Aldi":  0.4443,
                                                                   "Baker\u0027s":  0.4997,
                                                                   "Hy-Vee":  0.5015,
-                                                                  "Family Fare":  0.5898
+                                                                  "Family Fare":  0.5996
                                                               }
                                             }
                                         ]
@@ -1285,7 +1290,7 @@
                                                                   "Aldi":  0.1862,
                                                                   "Baker\u0027s":  0.2056,
                                                                   "Fareway":  0.2488,
-                                                                  "Family Fare":  0.2494,
+                                                                  "Family Fare":  0.2908,
                                                                   "Hy-Vee":  0.3113
                                                               }
                                             }
@@ -1692,6 +1697,7 @@
                                                                   "Aldi":  2.99,
                                                                   "Walmart":  3,
                                                                   "Baker\u0027s":  3.19,
+                                                                  "Family Fare":  3.59,
                                                                   "Sam\u0027s Club":  3.72,
                                                                   "Fareway":  4.99
                                                               }
