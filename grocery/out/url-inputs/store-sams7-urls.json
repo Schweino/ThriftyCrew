@@ -1,0 +1,443 @@
+﻿[
+    {
+        "id":  "breakfast-sausage",
+        "url":  "https://www.samsclub.com/ip/Jimmy-Dean-Premium-Pork-Sausage-Roll-2-lbs/13620410188",
+        "price":  "7.34",
+        "size":  "32 oz",
+        "name":  "Jimmy Dean Premium Pork Sausage Roll, 2-Pound"
+    },
+    {
+        "id":  "hot-dogs",
+        "url":  "https://www.samsclub.com/ip/Bar-S-Franks-Family-Pack-5-lbs/13857369106",
+        "price":  "6.68",
+        "size":  "80 oz",
+        "name":  "Bar-S Franks, Family Pack 5-Pound"
+    },
+    {
+        "id":  "deli-ham",
+        "url":  "https://www.samsclub.com/ip/Extra-Lean-Premium-Ham-1-25-lbs-each-2-pk/13727672617",
+        "price":  "8.24",
+        "size":  "40 oz",
+        "name":  "Extra Lean Premium Ham, 2 pk"
+    },
+    {
+        "id":  "salmon",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Skinless-and-Boneless-Atlantic-Salmon-Fillet-Portions-Frozen-2-5-lbs/13566472856",
+        "price":  "24.94",
+        "size":  "40 oz",
+        "name":  "Member\u0027s Mark Skinless and Boneless Atlantic Salmon Fillet Portions, Frozen, 2.5-Pound"
+    },
+    {
+        "id":  "canned-tuna",
+        "url":  "https://www.samsclub.com/ip/StarKist-Chunk-Light-Tuna-in-Water-5-oz-12-pk/8000051596",
+        "price":  "9.98",
+        "size":  "60 oz",
+        "name":  "StarKist Chunk Light Tuna in Water, 12 pk"
+    },
+    {
+        "id":  "shrimp",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Farm-Raised-Large-Raw-Shrimp-Frozen-31-40-ct-per-pound-3-lbs/13939167608",
+        "price":  "20.97",
+        "size":  "48 oz",
+        "name":  "Member\u0027s Mark Farm Raised Large Raw Shrimp, Frozen, 31-40 ct, 3-Pound"
+    },
+    {
+        "id":  "sliced-cheese",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-American-Cheese-5-lbs-160-slices/13578123437",
+        "price":  "12.17",
+        "size":  "80 oz",
+        "name":  "Member\u0027s Mark American Cheese, 160 Slices"
+    },
+    {
+        "id":  "oranges",
+        "url":  "https://www.samsclub.com/ip/California-Navel-Oranges-8-lbs/13608106019",
+        "price":  "7.35",
+        "size":  "8 lb",
+        "name":  "California Navel Oranges, 8-Pound Bag"
+    },
+    {
+        "id":  "lemons",
+        "url":  "https://www.samsclub.com/ip/Lemons-3-lbs/13762551112",
+        "price":  "3.76",
+        "size":  "3 lb",
+        "name":  "Lemons, 3-Pound Bag"
+    },
+    {
+        "id":  "limes",
+        "url":  "https://www.samsclub.com/ip/Limes-3-lbs/13821165423",
+        "price":  "3.67",
+        "size":  "3 lb",
+        "name":  "Limes, 3-Pound Bag"
+    },
+    {
+        "id":  "tomatoes",
+        "url":  "https://www.samsclub.com/ip/Tomatoes-on-the-Vine-3-lbs/13595863391",
+        "price":  "4.97",
+        "size":  "3 lb",
+        "name":  "Tomatoes on the Vine, 3-Pound"
+    },
+    {
+        "id":  "lettuce",
+        "url":  "https://www.samsclub.com/ip/Iceberg-Lettuce-2-heads/13725751832",
+        "price":  "2.97",
+        "size":  "2 ct",
+        "name":  "Iceberg Lettuce, 2 Heads"
+    },
+    {
+        "id":  "bell-peppers",
+        "url":  "https://www.samsclub.com/ip/Green-Bell-Peppers-6-ct/13888070896",
+        "price":  "4.97",
+        "size":  "6 ct",
+        "name":  "Green Bell Peppers, 6 ct"
+    },
+    {
+        "id":  "cucumbers",
+        "url":  "https://www.samsclub.com/ip/Seedless-English-Cucumbers-3-ct/13589450722",
+        "price":  "3.27",
+        "size":  "3 ct",
+        "name":  "Seedless English Cucumbers, 3 ct"
+    },
+    {
+        "id":  "garlic",
+        "url":  "https://www.samsclub.com/ip/Fresh-Garlic-Bulbs-2-lbs/13612912758",
+        "price":  "5.94",
+        "size":  "2 lb",
+        "name":  "Fresh Garlic Bulbs, 2-Pound"
+    },
+    {
+        "id":  "mushrooms",
+        "url":  "https://www.samsclub.com/ip/Whole-White-Mushrooms-24-oz/13894703507",
+        "price":  "3.97",
+        "size":  "24 oz",
+        "name":  "Whole White Mushrooms"
+    },
+    {
+        "id":  "sweet-potatoes",
+        "url":  "https://www.samsclub.com/ip/Sweet-Potatoes-5-lbs/16864967254",
+        "price":  "4.87",
+        "size":  "5 lb",
+        "name":  "Sweet Potatoes, 5-Pound"
+    },
+    {
+        "id":  "tortillas",
+        "url":  "https://www.samsclub.com/ip/Mission-6-Fajita-Flour-Tortillas-40-ct/13863750250",
+        "price":  "4.92",
+        "size":  "40 ct",
+        "name":  "Mission 6 Inch Fajita Flour Tortillas, 40 ct"
+    },
+    {
+        "id":  "hamburger-buns",
+        "url":  "https://www.samsclub.com/ip/Sara-Lee-Restaurant-Style-White-Hamburger-Buns-16-ct/13693772702",
+        "price":  "3.88",
+        "size":  "16 ct",
+        "name":  "Sara Lee Restaurant Style White Hamburger Buns, 16 ct"
+    },
+    {
+        "id":  "bagels",
+        "url":  "https://www.samsclub.com/ip/Thomas-Plain-Bagels-12-pk/19599173494",
+        "price":  "6.98",
+        "size":  "12 ct",
+        "name":  "Thomas\u0027 Plain Bagels, 12 pk"
+    },
+    {
+        "id":  "rice",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Long-Grain-White-Rice-25-lbs/7874220242",
+        "price":  "11.48",
+        "size":  "25 lb",
+        "name":  "Member\u0027s Mark Long Grain White Rice, 25-Pound"
+    },
+    {
+        "id":  "pasta",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Spaghetti-Pasta-Pantry-Pack-1-lb-6-pk/17863853694",
+        "price":  "5.48",
+        "size":  "96 oz",
+        "name":  "Member\u0027s Mark Spaghetti Pasta Pantry Pack, 6 x 1-Pound"
+    },
+    {
+        "id":  "pasta-sauce",
+        "url":  "https://www.samsclub.com/ip/Ragu-Old-World-Style-Traditional-Pasta-Sauce-45-oz-3-pk/3620001381",
+        "price":  "8.98",
+        "size":  "135 oz",
+        "name":  "Ragu Old World Style Traditional Pasta Sauce, 3 pk"
+    },
+    {
+        "id":  "mac-and-cheese",
+        "url":  "https://www.samsclub.com/ip/Kraft-Original-Macaroni-and-Cheese-Dinner-18-pk/2100005553",
+        "price":  "14.96",
+        "size":  "18 ct",
+        "name":  "Kraft Original Macaroni and Cheese Dinner, 18 pk"
+    },
+    {
+        "id":  "ramen",
+        "url":  "https://www.samsclub.com/ip/Nissin-Top-Ramen-Chicken-24-pk/18239212180",
+        "price":  "6.98",
+        "size":  "24 ct",
+        "name":  "Nissin Top Ramen, Chicken, 24 pk"
+    },
+    {
+        "id":  "flour",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-All-Purpose-Flour-25-lbs/13602764464",
+        "price":  "8.48",
+        "size":  "25 lb",
+        "name":  "Member\u0027s Mark All Purpose Flour, 25-Pound"
+    },
+    {
+        "id":  "sugar",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Granulated-Sugar-10-lbs/7874221690",
+        "price":  "6.58",
+        "size":  "10 lb",
+        "name":  "Member\u0027s Mark Granulated Sugar, 10-Pound"
+    },
+    {
+        "id":  "brown-sugar",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Light-Brown-Sugar-7-lbs/68113177798",
+        "price":  "6.98",
+        "size":  "7 lb",
+        "name":  "Member\u0027s Mark Light Brown Sugar, 7-Pound"
+    },
+    {
+        "id":  "olive-oil",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Pure-Olive-Oil-101-fl-oz/13894506105",
+        "price":  "18.98",
+        "size":  "101 fl oz",
+        "name":  "Member\u0027s Mark Pure Olive Oil"
+    },
+    {
+        "id":  "vegetable-oil",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Vegetable-Oil-192-oz/13588950739",
+        "price":  "13.88",
+        "size":  "192 fl oz",
+        "name":  "Member\u0027s Mark Vegetable Oil"
+    },
+    {
+        "id":  "cereal",
+        "url":  "https://www.samsclub.com/ip/Cap-n-Crunch-s-Crunch-Berries-Cereal-40-oz/3000043769",
+        "price":  "5.98",
+        "size":  "40 oz",
+        "name":  "Cap\u0027n Crunch\u0027s Crunch Berries Cereal"
+    },
+    {
+        "id":  "oatmeal",
+        "url":  "https://www.samsclub.com/ip/Quaker-Old-Fashioned-Oats-160-oz/3000041000",
+        "price":  "7.98",
+        "size":  "160 oz",
+        "name":  "Quaker Old Fashioned Oats"
+    },
+    {
+        "id":  "jelly",
+        "url":  "https://www.samsclub.com/ip/Welch-s-Concord-Grape-Jelly-30-oz-2-pk/13612962795",
+        "price":  "4.98",
+        "size":  "60 oz",
+        "name":  "Welch\u0027s Concord Grape Jelly, 2 pk"
+    },
+    {
+        "id":  "honey",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Wildflower-Pure-Premium-Honey-48-oz/15006863838",
+        "price":  "7.98",
+        "size":  "48 oz",
+        "name":  "Member\u0027s Mark Wildflower Pure Premium Honey"
+    },
+    {
+        "id":  "canned-black-beans",
+        "url":  "https://www.samsclub.com/ip/Bush-s-Black-Beans-15-oz-6-pk/3940010881",
+        "price":  "6.64",
+        "size":  "90 oz",
+        "name":  "Bush\u0027s Black Beans, 6 pk"
+    },
+    {
+        "id":  "canned-corn",
+        "url":  "https://www.samsclub.com/ip/Del-Monte-Golden-Sweet-Whole-Kernel-Corn-15-25-oz-8-pk/13596361849",
+        "price":  "8.42",
+        "size":  "122 oz",
+        "name":  "Del Monte Golden Sweet Whole Kernel Corn, 8 pk"
+    },
+    {
+        "id":  "diced-tomatoes",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Diced-Tomatoes-in-Tomato-Juice-14-5-oz-12-pk/19396803121",
+        "price":  "9.68",
+        "size":  "174 oz",
+        "name":  "Member\u0027s Mark Diced Tomatoes in Tomato Juice, 12 pk"
+    },
+    {
+        "id":  "chicken-broth",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Chicken-Broth-32-oz-6-pk/7874211840",
+        "price":  "7.98",
+        "size":  "192 fl oz",
+        "name":  "Member\u0027s Mark Chicken Broth, 6 pk"
+    },
+    {
+        "id":  "ketchup",
+        "url":  "https://www.samsclub.com/ip/Heinz-Original-Tomato-Ketchup-114-oz/15225818636",
+        "price":  "9.98",
+        "size":  "114 oz",
+        "name":  "Heinz Original Tomato Ketchup"
+    },
+    {
+        "id":  "mustard",
+        "url":  "https://www.samsclub.com/ip/French-s-100-Natural-Classic-Yellow-Mustard-105-oz/17495871004",
+        "price":  "5.38",
+        "size":  "105 oz",
+        "name":  "French\u0027s 100% Natural Classic Yellow Mustard"
+    },
+    {
+        "id":  "mayonnaise",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Foodservice-Extra-Heavy-Mayonnaise-128-fl-oz/7874204362",
+        "price":  "11.98",
+        "size":  "128 fl oz",
+        "name":  "Member\u0027s Mark Foodservice Extra Heavy Mayonnaise"
+    },
+    {
+        "id":  "ranch-dressing",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Ranch-Dressing-1-gal/7874227011",
+        "price":  "10.82",
+        "size":  "128 fl oz",
+        "name":  "Member\u0027s Mark Ranch Dressing, 1 gal"
+    },
+    {
+        "id":  "salsa",
+        "url":  "https://www.samsclub.com/ip/Pace-Chunky-Salsa-Medium-38-oz-2-ct/4156518836",
+        "price":  "7.48",
+        "size":  "76 oz",
+        "name":  "Pace Chunky Salsa, Medium, 2 ct"
+    },
+    {
+        "id":  "salt",
+        "url":  "https://www.samsclub.com/ip/Morton-Iodized-Salt-64-oz/13589509673",
+        "price":  "2.38",
+        "size":  "64 oz",
+        "name":  "Morton Iodized Salt"
+    },
+    {
+        "id":  "black-pepper",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Coarse-Black-Pepper-5-lbs/13610868830",
+        "price":  "38.48",
+        "size":  "80 oz",
+        "name":  "Member\u0027s Mark Coarse Black Pepper, 5-Pound"
+    },
+    {
+        "id":  "tortilla-chips",
+        "url":  "https://www.samsclub.com/ip/On-The-Border-Cafe-Tortilla-Chips-23-5-oz/13897220250",
+        "price":  "4.48",
+        "size":  "23.5 oz",
+        "name":  "On The Border Cafe Tortilla Chips"
+    },
+    {
+        "id":  "potato-chips",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Wavy-Potato-Chips-16-oz/13865869287",
+        "price":  "2.98",
+        "size":  "16 oz",
+        "name":  "Member\u0027s Mark Wavy Potato Chips"
+    },
+    {
+        "id":  "soda",
+        "url":  "https://www.samsclub.com/ip/Coca-Cola-Soft-Drink-12-fl-oz-35-pk/13857469882",
+        "price":  "18.48",
+        "size":  "420 fl oz",
+        "name":  "Coca-Cola Soft Drink, 35 pk"
+    },
+    {
+        "id":  "bottled-water",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Purified-Water-16-9-fl-oz-40-pk/7874202847",
+        "price":  "3.98",
+        "size":  "40 ct",
+        "name":  "Member\u0027s Mark Purified Water, 40 pk"
+    },
+    {
+        "id":  "sirloin-steak",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-USDA-Choice-Angus-Beef-Boneless-Top-Sirloin-Steaks-priced-per-pound/13764906948",
+        "price":  "9.97",
+        "size":  "lb",
+        "name":  "Member\u0027s Mark USDA Choice Angus Beef Boneless Top Sirloin Steaks"
+    },
+    {
+        "id":  "frozen-pizza",
+        "url":  "https://www.samsclub.com/ip/Jack-s-Original-Thin-Pepperoni-Frozen-Pizza-4-pk/13860174379",
+        "price":  "11.88",
+        "size":  "4 ct",
+        "name":  "Jack\u0027s Original Thin Pepperoni Frozen Pizza, 4 pk"
+    },
+    {
+        "id":  "ice-cream",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Vanilla-Ice-Cream-Pail-5-qts/13877802816",
+        "price":  "8.12",
+        "size":  "160 fl oz",
+        "name":  "Member\u0027s Mark Vanilla Ice Cream Pail, 5 qt"
+    },
+    {
+        "id":  "frozen-fries",
+        "url":  "https://www.samsclub.com/ip/Ore-Ida-Crispy-Crinkles-French-Fries-Frozen-8-lbs/13621707320",
+        "price":  "8.58",
+        "size":  "128 oz",
+        "name":  "Ore-Ida Crispy Crinkles French Fries, Frozen, 8-Pound"
+    },
+    {
+        "id":  "chicken-nuggets",
+        "url":  "https://www.samsclub.com/ip/Country-Pride-Tempura-Chicken-Nuggets-Frozen-5-lbs/18008462815",
+        "price":  "13.67",
+        "size":  "80 oz",
+        "name":  "Country Pride Tempura Chicken Nuggets, Frozen, 5-Pound"
+    },
+    {
+        "id":  "paper-towels",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Select-Tear-2-Ply-Paper-Towel-15-rolls-150-sheets-roll/15390012477",
+        "price":  "20.93",
+        "size":  "15 ct",
+        "name":  "Member\u0027s Mark Select \u0026 Tear 2-Ply Paper Towels, 15 Rolls (150 Sheets/Roll)"
+    },
+    {
+        "id":  "toilet-paper",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Ultra-Premium-2-Ply-Toilet-Paper-45-rolls-235-sheets-roll/14179359401",
+        "price":  "24.76",
+        "size":  "45 ct",
+        "name":  "Member\u0027s Mark Ultra Premium 2-Ply Toilet Paper, 45 Rolls (235 Sheets/Roll)"
+    },
+    {
+        "id":  "dish-soap",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Platinum-Performance-Liquid-Dish-Soap-Fresh-Clean-100-fl-oz/13892164761",
+        "price":  "8.98",
+        "size":  "100 fl oz",
+        "name":  "Member\u0027s Mark Platinum Performance Liquid Dish Soap, Fresh Clean"
+    },
+    {
+        "id":  "dishwasher-detergent",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Platinum-Clean-Automatic-Dishwasher-Pacs-Fresh-Clean-110-ct/18766722402",
+        "price":  "14.98",
+        "size":  "110 ct",
+        "name":  "Member\u0027s Mark Platinum Clean Automatic Dishwasher Pacs"
+    },
+    {
+        "id":  "trash-bags",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Power-Flex-13-Gallon-Tall-Kitchen-Trash-Bags-200-ct/7874222509",
+        "price":  "18.98",
+        "size":  "200 ct",
+        "name":  "Member\u0027s Mark Power Flex 13-Gallon Tall Kitchen Trash Bags"
+    },
+    {
+        "id":  "aluminum-foil",
+        "url":  "https://www.samsclub.com/ip/Reynolds-Wrap-Heavy-Duty-18-Aluminum-Foil-120-sq-ft-2-pk/15409719345",
+        "price":  "19.98",
+        "size":  "2 ct",
+        "name":  "Reynolds Wrap Heavy Duty 18 Inch Aluminum Foil, 2 pk"
+    },
+    {
+        "id":  "storage-bags",
+        "url":  "https://www.samsclub.com/ip/Ziploc-Brand-Gallon-Freezer-Storage-Bags-Stay-Open-Design-Easy-to-Fill-152-ct/2570014887",
+        "price":  "15.48",
+        "size":  "152 ct",
+        "name":  "Ziploc Gallon Freezer Storage Bags, 152 ct"
+    },
+    {
+        "id":  "all-purpose-cleaner",
+        "url":  "https://www.samsclub.com/ip/Fabuloso-2X-Concentrated-Multi-Purpose-Cleaner-Lavender-210-fl-oz/13597517906",
+        "price":  "10.98",
+        "size":  "210 fl oz",
+        "name":  "Fabuloso 2X Concentrated Multi-Purpose Cleaner, Lavender"
+    },
+    {
+        "id":  "hand-soap",
+        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Aloe-Vera-Moisturizing-Hand-Soap-80-fl-oz/13952103236",
+        "price":  "7.98",
+        "size":  "80 fl oz",
+        "name":  "Member\u0027s Mark Aloe Vera Moisturizing Hand Soap"
+    }
+]

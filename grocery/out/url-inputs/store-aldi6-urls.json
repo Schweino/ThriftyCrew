@@ -1,0 +1,492 @@
+﻿[
+    {
+        "id":  "whole-chicken",
+        "url":  "https://www.aldi.us/store/aldi/products/25897817-perdue-reserve-whole-young-chicken-60-oz",
+        "price":  "6.79",
+        "size":  "60 oz",
+        "name":  "Perdue Reserve Whole Young Chicken"
+    },
+    {
+        "id":  "breakfast-sausage",
+        "url":  "https://www.aldi.us/store/aldi/products/19673939-appleton-farms-premium-pork-sausage-roll-16-oz",
+        "price":  "3.19",
+        "size":  "16 oz",
+        "name":  "Appleton Farms Premium Pork Sausage Roll"
+    },
+    {
+        "id":  "hot-dogs",
+        "url":  "https://www.aldi.us/store/aldi/products/19936007-parkview-hot-dogs-12-oz",
+        "price":  "1.09",
+        "size":  "12 oz",
+        "name":  "Parkview Classic Hot Dogs"
+    },
+    {
+        "id":  "deli-ham",
+        "url":  "https://www.aldi.us/store/aldi/products/20019634-lunch-mate-black-forest-ham-16-oz",
+        "price":  "4.59",
+        "size":  "16 oz",
+        "name":  "Lunch Mate Black Forest Ham"
+    },
+    {
+        "id":  "salmon",
+        "url":  "https://www.aldi.us/store/aldi/products/20385442-fremont-fish-market-value-pack-wild-caught-salmon-32-oz",
+        "price":  "11.39",
+        "size":  "32 oz",
+        "name":  "Fremont Fish Market Value Pack Wild Caught Salmon"
+    },
+    {
+        "id":  "canned-tuna",
+        "url":  "https://www.aldi.us/store/aldi/products/115250-northern-catch-chunk-tuna-in-water-5-oz",
+        "price":  "1.05",
+        "size":  "5 oz",
+        "name":  "Northern Catch Chunk Light Tuna in Water"
+    },
+    {
+        "id":  "shrimp",
+        "url":  "https://www.aldi.us/store/aldi/products/41417737-fremont-fish-market-value-pack-large-raw-peeled-shrimp-32-oz",
+        "price":  "18.15",
+        "size":  "32 oz",
+        "name":  "Fremont Fish Market Value Pack Large Raw Peeled Shrimp"
+    },
+    {
+        "id":  "sirloin-steak",
+        "url":  "https://www.aldi.us/store/aldi/products/19115493-black-angus-choice-petite-sirloin-steak-per-lb",
+        "price":  "8.99",
+        "size":  "lb",
+        "name":  "USDA Choice Black Angus Petite Sirloin Steak"
+    },
+    {
+        "id":  "sliced-cheese",
+        "url":  "https://www.aldi.us/store/aldi/products/18649581-happy-farms-american-cheese-singles-12-oz",
+        "price":  "2.05",
+        "size":  "12 oz",
+        "name":  "Happy Farms American Cheese Singles"
+    },
+    {
+        "id":  "oranges",
+        "url":  "https://www.aldi.us/store/aldi/products/16553260-navel-orange-bag-4-lbs",
+        "price":  "4.85",
+        "size":  "4 lb",
+        "name":  "Navel Oranges, Bag"
+    },
+    {
+        "id":  "lemons",
+        "url":  "https://www.aldi.us/store/aldi/products/455048-lemon-2-lbs",
+        "price":  "4.09",
+        "size":  "2 lb",
+        "name":  "Lemons, Bag"
+    },
+    {
+        "id":  "limes",
+        "url":  "https://www.aldi.us/store/aldi/products/25945595-limes-bag-16-oz",
+        "price":  "2.75",
+        "size":  "1 lb",
+        "name":  "Limes, Bag"
+    },
+    {
+        "id":  "tomatoes",
+        "url":  "https://www.aldi.us/store/aldi/products/17763870-tomatoes-roma-per-lb",
+        "price":  "1.15",
+        "size":  "lb",
+        "name":  "Roma Tomatoes"
+    },
+    {
+        "id":  "lettuce",
+        "url":  "https://www.aldi.us/store/aldi/products/3293710-iceberg-lettuce-each",
+        "price":  "2.19",
+        "size":  "1 each",
+        "name":  "Iceberg Lettuce"
+    },
+    {
+        "id":  "carrots",
+        "url":  "https://www.aldi.us/store/aldi/products/17837662-carrot-2-lbs",
+        "price":  "2.19",
+        "size":  "2 lb",
+        "name":  "Carrots, Package"
+    },
+    {
+        "id":  "broccoli",
+        "url":  "https://www.aldi.us/store/aldi/products/20206250-broccoli-crowns-per-lb",
+        "price":  "2.39",
+        "size":  "lb",
+        "name":  "Broccoli Crowns"
+    },
+    {
+        "id":  "bell-peppers",
+        "url":  "https://www.aldi.us/store/aldi/products/16560629-green-bell-pepper-3-ct",
+        "price":  "2.75",
+        "size":  "3 ct",
+        "name":  "Green Bell Peppers, Package"
+    },
+    {
+        "id":  "celery",
+        "url":  "https://www.aldi.us/store/aldi/products/16606112-celery-package-per-lb",
+        "price":  "2.09",
+        "size":  "each",
+        "name":  "Celery, Package"
+    },
+    {
+        "id":  "cucumbers",
+        "url":  "https://www.aldi.us/store/aldi/products/3253345-cucumber-each",
+        "price":  "0.65",
+        "size":  "1 each",
+        "name":  "Cucumber"
+    },
+    {
+        "id":  "garlic",
+        "url":  "https://www.aldi.us/store/aldi/products/17819978-garlic-3-ct",
+        "price":  "1.89",
+        "size":  "3 ct",
+        "name":  "Garlic, Package"
+    },
+    {
+        "id":  "spinach",
+        "url":  "https://www.aldi.us/store/aldi/products/20041343-little-salad-bar-spinach-8-oz",
+        "price":  "2.09",
+        "size":  "8 oz",
+        "name":  "Little Salad Bar Spinach"
+    },
+    {
+        "id":  "mushrooms",
+        "url":  "https://www.aldi.us/store/aldi/products/18598732-white-mushroom-8-oz",
+        "price":  "1.65",
+        "size":  "8 oz",
+        "name":  "White Mushrooms, Package"
+    },
+    {
+        "id":  "sweet-potatoes",
+        "url":  "https://www.aldi.us/store/aldi/products/16614403-sweet-potato-yam-each",
+        "price":  "1.05",
+        "size":  "lb",
+        "name":  "Sweet Potatoes"
+    },
+    {
+        "id":  "tortillas",
+        "url":  "https://www.aldi.us/store/aldi/products/19589827-pueblo-lindo-fajita-flour-tortillas-20-ct",
+        "price":  "2.05",
+        "size":  "20 ct",
+        "name":  "Pueblo Lindo Fajita Flour Tortillas"
+    },
+    {
+        "id":  "hamburger-buns",
+        "url":  "https://www.aldi.us/store/aldi/products/20873280-l-oven-fresh-hamburger-buns-12-oz",
+        "price":  "1.55",
+        "size":  "11 oz",
+        "name":  "L\u0027oven Fresh Hamburger Buns"
+    },
+    {
+        "id":  "bagels",
+        "url":  "https://www.aldi.us/store/aldi/products/20230820-l-oven-fresh-plain-bagels-20-oz",
+        "price":  "2.19",
+        "size":  "20 oz",
+        "name":  "L\u0027oven Fresh Plain Bagels"
+    },
+    {
+        "id":  "rice",
+        "url":  "https://www.aldi.us/store/aldi/products/20968019-earthly-grains-long-grain-white-rice-3-lb",
+        "price":  "2.95",
+        "size":  "3 lb",
+        "name":  "Earthly Grains Long Grain White Rice"
+    },
+    {
+        "id":  "pasta",
+        "url":  "https://www.aldi.us/store/aldi/products/19507517-reggano-spaghetti-enriched-macaroni-product-pastas-32-oz",
+        "price":  "2.09",
+        "size":  "32 oz",
+        "name":  "Reggano Spaghetti"
+    },
+    {
+        "id":  "pasta-sauce",
+        "url":  "https://www.aldi.us/store/aldi/products/19061977-reggano-sauces-traditional-pasta-sauce-24-oz",
+        "price":  "1.89",
+        "size":  "24 oz",
+        "name":  "Reggano Traditional Pasta Sauce"
+    },
+    {
+        "id":  "ramen",
+        "url":  "https://www.aldi.us/store/aldi/products/37315-maruchan-ramen-noodle-soup-chicken-flavor-3-oz",
+        "price":  "4.25",
+        "size":  "12 ct",
+        "name":  "Maruchan Ramen Noodle Soup Chicken Flavor"
+    },
+    {
+        "id":  "flour",
+        "url":  "https://www.aldi.us/store/aldi/products/18648338-baker-s-corner-all-purpose-flour-5-lb",
+        "price":  "2.15",
+        "size":  "5 lb",
+        "name":  "Baker\u0027s Corner All Purpose Flour"
+    },
+    {
+        "id":  "sugar",
+        "url":  "https://www.aldi.us/store/aldi/products/17498770-baker-s-corner-granulated-sugar-4-lb",
+        "price":  "3.19",
+        "size":  "4 lb",
+        "name":  "Baker\u0027s Corner Granulated Sugar"
+    },
+    {
+        "id":  "brown-sugar",
+        "url":  "https://www.aldi.us/store/aldi/products/18647602-baker-s-corner-light-brown-sugar-32-oz",
+        "price":  "2.05",
+        "size":  "32 oz",
+        "name":  "Baker\u0027s Corner Brown Sugar"
+    },
+    {
+        "id":  "olive-oil",
+        "url":  "https://www.aldi.us/store/aldi/products/36517317-priano-extra-virgin-olive-oil-16-9-fl-oz",
+        "price":  "6.39",
+        "size":  "16.9 fl oz",
+        "name":  "Priano Extra Virgin Olive Oil"
+    },
+    {
+        "id":  "vegetable-oil",
+        "url":  "https://www.aldi.us/store/aldi/products/20027984-carlini-vegetable-oil-48-fl-oz",
+        "price":  "3.95",
+        "size":  "48 fl oz",
+        "name":  "Carlini Vegetable Oil"
+    },
+    {
+        "id":  "cereal",
+        "url":  "https://www.aldi.us/store/aldi/products/20215391-millville-fruit-rounds-cereal-12-2-oz",
+        "price":  "2.05",
+        "size":  "12.2 oz",
+        "name":  "Millville Fruit Rounds Cereal"
+    },
+    {
+        "id":  "oatmeal",
+        "url":  "https://www.aldi.us/store/aldi/products/18647728-millville-hearty-100-whole-grain-old-fashioned-rolled-oats-42-oz",
+        "price":  "4.39",
+        "size":  "42 oz",
+        "name":  "Millville Old Fashioned Oats"
+    },
+    {
+        "id":  "jelly",
+        "url":  "https://www.aldi.us/store/aldi/products/20363212-berryhill-grape-jelly-30-oz",
+        "price":  "2.75",
+        "size":  "30 oz",
+        "name":  "Berryhill Grape Jelly"
+    },
+    {
+        "id":  "honey",
+        "url":  "https://www.aldi.us/store/aldi/products/20197919-berryhill-100-natural-clover-honey-24-oz",
+        "price":  "5.49",
+        "size":  "24 oz",
+        "name":  "Berryhill Honey"
+    },
+    {
+        "id":  "canned-black-beans",
+        "url":  "https://www.aldi.us/store/aldi/products/18648531-dakota-s-black-beans-15-oz",
+        "price":  "0.95",
+        "size":  "15 oz",
+        "name":  "Dakota\u0027s Pride Black Beans"
+    },
+    {
+        "id":  "canned-corn",
+        "url":  "https://www.aldi.us/store/aldi/products/20363173-happy-harvest-whole-kernel-corn-15-25-oz",
+        "price":  "0.89",
+        "size":  "15.25 oz",
+        "name":  "Happy Harvest Whole Kernel Corn"
+    },
+    {
+        "id":  "diced-tomatoes",
+        "url":  "https://www.aldi.us/store/aldi/products/20752467-happy-harvest-diced-tomatoes-14-5-oz",
+        "price":  "0.99",
+        "size":  "14.5 oz",
+        "name":  "Happy Harvest Diced Tomatoes"
+    },
+    {
+        "id":  "chicken-broth",
+        "url":  "https://www.aldi.us/store/aldi/products/18647945-chef-s-cupboard-chicken-broth-32-fl-oz",
+        "price":  "1.39",
+        "size":  "32 fl oz",
+        "name":  "Chef\u0027s Cupboard Chicken Broth"
+    },
+    {
+        "id":  "ketchup",
+        "url":  "https://www.aldi.us/store/aldi/products/20761645-burman-s-ketchup-38-oz",
+        "price":  "2.15",
+        "size":  "38 oz",
+        "name":  "Burman\u0027s Ketchup"
+    },
+    {
+        "id":  "mustard",
+        "url":  "https://www.aldi.us/store/aldi/products/20038808-burman-s-traditional-yellow-mustard-20-oz",
+        "price":  "1.09",
+        "size":  "20 oz",
+        "name":  "Burman\u0027s Yellow Mustard"
+    },
+    {
+        "id":  "mayonnaise",
+        "url":  "https://www.aldi.us/store/aldi/products/19283303-burman-s-real-mayonnaise-30-fl-oz",
+        "price":  "3.19",
+        "size":  "30 fl oz",
+        "name":  "Burman\u0027s Real Mayonnaise"
+    },
+    {
+        "id":  "ranch-dressing",
+        "url":  "https://www.aldi.us/store/aldi/products/20969508-tuscan-garden-ranch-dressing-16-oz",
+        "price":  "2.15",
+        "size":  "16 fl oz",
+        "name":  "Tuscan Garden Ranch Dressing"
+    },
+    {
+        "id":  "salsa",
+        "url":  "https://www.aldi.us/store/aldi/products/19796199-casa-mamita-ancient-grains-habanero-salse-24-oz",
+        "price":  "2.85",
+        "size":  "24 oz",
+        "name":  "Casa Mamita Mild Salsa"
+    },
+    {
+        "id":  "salt",
+        "url":  "https://www.aldi.us/store/aldi/products/18647588-stonemill-iodized-salt-26-oz",
+        "price":  "0.89",
+        "size":  "26 oz",
+        "name":  "Stonemill Iodized Table Salt"
+    },
+    {
+        "id":  "black-pepper",
+        "url":  "https://www.aldi.us/store/aldi/products/18649001-stonemill-pure-ground-black-pepper-4-oz",
+        "price":  "3.85",
+        "size":  "3 oz",
+        "name":  "Stonemill Ground Black Pepper"
+    },
+    {
+        "id":  "tortilla-chips",
+        "url":  "https://www.aldi.us/store/aldi/products/18648712-clancy-s-restaurant-style-tortilla-chips-13-oz",
+        "price":  "2.39",
+        "size":  "13 oz",
+        "name":  "Clancy\u0027s Restaurant Style Tortilla Chips"
+    },
+    {
+        "id":  "potato-chips",
+        "url":  "https://www.aldi.us/store/aldi/products/18648308-clancy-s-original-potato-chips-10-oz",
+        "price":  "1.99",
+        "size":  "10 oz",
+        "name":  "Clancy\u0027s Original Potato Chips"
+    },
+    {
+        "id":  "soda",
+        "url":  "https://www.aldi.us/store/aldi/products/18648441-summit-cola-12-fl-oz",
+        "price":  "4.19",
+        "size":  "144 fl oz",
+        "name":  "Summit Cola 12 Pack"
+    },
+    {
+        "id":  "bottled-water",
+        "url":  "https://www.aldi.us/store/aldi/products/23123337-puraqua-purified-water-16-9-fl-oz",
+        "price":  "3.55",
+        "size":  "24 ct",
+        "name":  "PurAqua Purified Water 24 Pack"
+    },
+    {
+        "id":  "mac-and-cheese",
+        "url":  "https://www.aldi.us/store/aldi/products/18648161-cheese-club-macaroni-cheese-dinner-7-25-oz",
+        "price":  "0.65",
+        "size":  "7.25 oz box",
+        "name":  "Cheese Club Macaroni and Cheese Dinner"
+    },
+    {
+        "id":  "frozen-pizza",
+        "url":  "https://www.aldi.us/store/aldi/products/25821485-mama-cozzimama-cozzi-s-pizza-kitchen-s-pizza-kitchen-original-thin-crust-cheese-pizza-13-8-oz",
+        "price":  "3.29",
+        "size":  "each",
+        "name":  "Mama Cozzi\u0027s Pizza Kitchen Original Thin Crust Cheese Pizza"
+    },
+    {
+        "id":  "ice-cream",
+        "url":  "https://www.aldi.us/store/aldi/products/19719374-belmont-vanilla-bean-ice-cream-48-fl-oz",
+        "price":  "2.75",
+        "size":  "48 fl oz",
+        "name":  "Sundae Shoppe Vanilla Bean Ice Cream"
+    },
+    {
+        "id":  "frozen-vegetables",
+        "url":  "https://www.aldi.us/store/aldi/products/19793641-season-s-choice-steamed-mixed-vegetables-12-oz",
+        "price":  "1.09",
+        "size":  "12 oz",
+        "name":  "Season\u0027s Choice Steamable Frozen Mixed Vegetables"
+    },
+    {
+        "id":  "frozen-fries",
+        "url":  "https://www.aldi.us/store/aldi/products/21111041-season-s-choice-crinkle-cut-french-fried-potatoes-32-oz",
+        "price":  "3.19",
+        "size":  "32 oz",
+        "name":  "Season\u0027s Choice Crinkle Cut French Fried Potatoes"
+    },
+    {
+        "id":  "chicken-nuggets",
+        "url":  "https://www.aldi.us/store/aldi/products/19283276-kirkwood-family-size-chicken-nuggets-48-oz",
+        "price":  "7.25",
+        "size":  "48 oz",
+        "name":  "Kirkwood Family Pack Chicken Nuggets"
+    },
+    {
+        "id":  "paper-towels",
+        "url":  "https://www.aldi.us/store/aldi/products/43070165-boulder-sheets-paper-towel-6-ct",
+        "price":  "5.95",
+        "size":  "6 ct",
+        "name":  "Boulder 6 Roll Paper Towels (110 Sheets)"
+    },
+    {
+        "id":  "toilet-paper",
+        "url":  "https://www.aldi.us/store/aldi/products/20110069-willow-1000-sheet-bath-tissue-12-ct",
+        "price":  "8.49",
+        "size":  "12 ct",
+        "name":  "Willow 1000 Sheet Bath Tissue"
+    },
+    {
+        "id":  "dish-soap",
+        "url":  "https://www.aldi.us/store/aldi/products/81169106-power-force-original-blue-dishwashing-detergent-24-fl-oz",
+        "price":  "2.35",
+        "size":  "24 fl oz",
+        "name":  "Power Force Original Blue Dishwashing Liquid"
+    },
+    {
+        "id":  "dishwasher-detergent",
+        "url":  "https://www.aldi.us/store/aldi/products/69927479-radiance-triple-chamber-dish-pacs-18-ct",
+        "price":  "3.75",
+        "size":  "18 ct",
+        "name":  "Power Force Triple Chamber Dishwasher Pacs"
+    },
+    {
+        "id":  "trash-bags",
+        "url":  "https://www.aldi.us/store/aldi/products/19492154-boulder-drawstring-kitchen-bag-45-ct",
+        "price":  "6.59",
+        "size":  "45 ct",
+        "name":  "Boulder Drawstring Kitchen Trash Bags"
+    },
+    {
+        "id":  "aluminum-foil",
+        "url":  "https://www.aldi.us/store/aldi/products/19324923-boulder-75-regular-aluminum-foil-each",
+        "price":  "4.85",
+        "size":  "each",
+        "name":  "Boulder Regular Aluminum Foil (75 ft)"
+    },
+    {
+        "id":  "storage-bags",
+        "url":  "https://www.aldi.us/store/aldi/products/19646529-boulder-twin-lock-storage-bags-40-ct",
+        "price":  "2.05",
+        "size":  "40 ct",
+        "name":  "Boulder Gallon Storage Bags"
+    },
+    {
+        "id":  "all-purpose-cleaner",
+        "url":  "https://www.aldi.us/store/aldi/products/68852221-power-force-lemon-scented-all-purpose-cleaner",
+        "price":  "2.99",
+        "size":  "32 fl oz",
+        "name":  "Power Force Lemon Scented All Purpose Cleaner"
+    },
+    {
+        "id":  "bleach",
+        "url":  "https://www.aldi.us/store/aldi/products/18647607-tandil-concentrated-liquid-bleach-121-fl-oz",
+        "price":  "6.45",
+        "size":  "121 fl oz",
+        "name":  "Tandil Concentrated Liquid Bleach"
+    },
+    {
+        "id":  "hand-soap",
+        "url":  "https://www.aldi.us/store/aldi/products/24109418-source-aquarium-liquid-hand-soap-7-5-fl-oz",
+        "price":  "1.09",
+        "size":  "7.5 fl oz",
+        "name":  "Lacura Aquarium Liquid Hand Soap"
+    }
+]

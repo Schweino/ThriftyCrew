@@ -122,6 +122,30 @@
                                          },
                   "all-purpose-cleaner":  {
                                               "commodity":  "all-purpose-cleaner",
+                                              "Aldi":  {
+                                                           "url":  "https://www.aldi.us/store/aldi/products/68852221-power-force-lemon-scented-all-purpose-cleaner",
+                                                           "price":  2.99,
+                                                           "size":  "32 fl oz",
+                                                           "name":  "Power Force Lemon Scented All Purpose Cleaner"
+                                                       },
+                                              "Fareway":  {
+                                                              "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/27083529",
+                                                              "price":  2.94,
+                                                              "size":  "32 fl oz",
+                                                              "name":  "Bright Essentials All Purpose Cleaner, Citrus Scent"
+                                                          },
+                                              "Hy-Vee":  {
+                                                             "url":  "https://www.hy-vee.com/aisles-online/p/5272/lysol-lemon-breeze-all-purpose-cleaner",
+                                                             "price":  5.99,
+                                                             "size":  "32 fl oz",
+                                                             "name":  "Lysol Lemon Breeze All Purpose Cleaner"
+                                                         },
+                                              "Sam\u0027s Club":  {
+                                                                      "url":  "https://www.samsclub.com/ip/Fabuloso-2X-Concentrated-Multi-Purpose-Cleaner-Lavender-210-fl-oz/13597517906",
+                                                                      "price":  10.98,
+                                                                      "size":  "210 fl oz",
+                                                                      "name":  "Fabuloso 2X Concentrated Multi-Purpose Cleaner, Lavender"
+                                                                  },
                                               "Walmart":  {
                                                               "url":  "https://www.walmart.com/ip/Great-Value-Bleach-FREE-Lemon-Scented-All-Purpose-Cleaner-32-floz/2560978912",
                                                               "price":  2.97,
@@ -170,6 +194,30 @@
                                         },
                   "aluminum-foil":  {
                                         "commodity":  "aluminum-foil",
+                                        "Aldi":  {
+                                                     "url":  "https://www.aldi.us/store/aldi/products/19324923-boulder-75-regular-aluminum-foil-each",
+                                                     "price":  4.85,
+                                                     "size":  "each",
+                                                     "name":  "Boulder Regular Aluminum Foil (75 ft)"
+                                                 },
+                                        "Fareway":  {
+                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3313655",
+                                                        "price":  2.99,
+                                                        "size":  "each",
+                                                        "name":  "Reynolds Everyday Aluminum Foil"
+                                                    },
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2924912/thats-smart-aluminum-foil",
+                                                       "price":  1.82,
+                                                       "size":  "25 sq ft",
+                                                       "name":  "That\u0027s Smart Aluminum Foil"
+                                                   },
+                                        "Sam\u0027s Club":  {
+                                                                "url":  "https://www.samsclub.com/ip/Reynolds-Wrap-Heavy-Duty-18-Aluminum-Foil-120-sq-ft-2-pk/15409719345",
+                                                                "price":  19.98,
+                                                                "size":  "2 ct",
+                                                                "name":  "Reynolds Wrap Heavy Duty 18 Inch Aluminum Foil, 2 pk"
+                                                            },
                                         "Walmart":  {
                                                         "url":  "https://www.walmart.com/ip/Great-Value-75-sq-ft-Aluminum-Foil/121815660",
                                                         "price":  4.83,
@@ -437,6 +485,36 @@
                             },
                   "bagels":  {
                                  "commodity":  "bagels",
+                                 "Aldi":  {
+                                              "url":  "https://www.aldi.us/store/aldi/products/20230820-l-oven-fresh-plain-bagels-20-oz",
+                                              "price":  2.19,
+                                              "size":  "20 oz",
+                                              "name":  "L\u0027oven Fresh Plain Bagels"
+                                          },
+                                 "Baker\u0027s":  {
+                                                      "url":  "https://www.bakersplus.com/p/kroger-plain-bagels/0001111008416",
+                                                      "price":  2.49,
+                                                      "size":  "6 ct",
+                                                      "name":  "Kroger Plain Bagels"
+                                                  },
+                                 "Fareway":  {
+                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84388751",
+                                                 "price":  2,
+                                                 "size":  "each",
+                                                 "name":  "Fareway Pre-Sliced Original Bagels"
+                                             },
+                                 "Hy-Vee":  {
+                                                "url":  "https://www.hy-vee.com/aisles-online/p/23552/hy-vee-plain-bagels-5-count-pre-split",
+                                                "price":  2.28,
+                                                "size":  "5 ct",
+                                                "name":  "Hy-Vee Plain Bagels 5 Count Pre-Split"
+                                            },
+                                 "Sam\u0027s Club":  {
+                                                         "url":  "https://www.samsclub.com/ip/Thomas-Plain-Bagels-12-pk/19599173494",
+                                                         "price":  6.98,
+                                                         "size":  "12 ct",
+                                                         "name":  "Thomas\u0027 Plain Bagels, 12 pk"
+                                                     },
                                  "Walmart":  {
                                                  "url":  "https://www.walmart.com/ip/Great-Value-Pre-Sliced-Plain-Bagels-RTE-20-oz-6-Count/667056737",
                                                  "price":  2.08,
@@ -624,6 +702,36 @@
                                        },
                   "bell-peppers":  {
                                        "commodity":  "bell-peppers",
+                                       "Aldi":  {
+                                                    "url":  "https://www.aldi.us/store/aldi/products/16560629-green-bell-pepper-3-ct",
+                                                    "price":  2.75,
+                                                    "size":  "3 ct",
+                                                    "name":  "Green Bell Peppers, Package"
+                                                },
+                                       "Baker\u0027s":  {
+                                                            "url":  "https://www.bakersplus.com/p/fresh-red-bell-pepper/0000000004088",
+                                                            "price":  1.66,
+                                                            "size":  "1 ct",
+                                                            "name":  "Fresh Red Bell Pepper"
+                                                        },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3256531",
+                                                       "price":  1.17,
+                                                       "size":  "each",
+                                                       "name":  "Green Bell Pepper"
+                                                   },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/8650/green-bell-pepper",
+                                                      "price":  1.5,
+                                                      "size":  "1 ct",
+                                                      "name":  "Green Bell Pepper"
+                                                  },
+                                       "Sam\u0027s Club":  {
+                                                               "url":  "https://www.samsclub.com/ip/Green-Bell-Peppers-6-ct/13888070896",
+                                                               "price":  4.97,
+                                                               "size":  "6 ct",
+                                                               "name":  "Green Bell Peppers, 6 ct"
+                                                           },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/Fresh-Green-Bell-Pepper-Each/44390945",
                                                        "price":  0.86,
@@ -651,6 +759,12 @@
                                                            "size":  "2 oz",
                                                            "name":  "That\u0027s Smart! Ground Black Pepper"
                                                        },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1469136",
+                                                       "price":  7.99,
+                                                       "size":  "16 oz",
+                                                       "name":  "Badia Spices Ground Black Pepper"
+                                                   },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2928520/thats-smart-black-pepper",
                                                       "price":  1.25,
@@ -658,10 +772,10 @@
                                                       "name":  "That\u0027s Smart! Black Pepper"
                                                   },
                                        "Sam\u0027s Club":  {
-                                                               "url":  "https://www.samsclub.com/ip/Member-s-Mark-Fine-Ground-Black-Pepper-18-oz/13623460491",
-                                                               "price":  7.98,
-                                                               "size":  "18 oz",
-                                                               "name":  "Member\u0027s Mark Fine Ground Black Pepper"
+                                                               "url":  "https://www.samsclub.com/ip/Member-s-Mark-Coarse-Black-Pepper-5-lbs/13610868830",
+                                                               "price":  38.48,
+                                                               "size":  "80 oz",
+                                                               "name":  "Member\u0027s Mark Coarse Black Pepper, 5-Pound"
                                                            },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/Great-Value-Ground-Black-Pepper-3-oz/44662573",
@@ -672,6 +786,24 @@
                                    },
                   "bleach":  {
                                  "commodity":  "bleach",
+                                 "Aldi":  {
+                                              "url":  "https://www.aldi.us/store/aldi/products/18647607-tandil-concentrated-liquid-bleach-121-fl-oz",
+                                              "price":  6.45,
+                                              "size":  "121 fl oz",
+                                              "name":  "Tandil Concentrated Liquid Bleach"
+                                          },
+                                 "Fareway":  {
+                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21286519",
+                                                 "price":  3.99,
+                                                 "size":  "128 fl oz",
+                                                 "name":  "Sun Brite Ultra Bleach"
+                                             },
+                                 "Hy-Vee":  {
+                                                "url":  "https://www.hy-vee.com/aisles-online/p/3113940/thats-smart-bleach-2-qt",
+                                                "price":  2.18,
+                                                "size":  "64 fl oz",
+                                                "name":  "That\u0027s Smart! Bleach 2 qt"
+                                            },
                                  "Walmart":  {
                                                  "url":  "https://www.walmart.com/ip/Great-Value-Bleach-121-fl-oz/629539844",
                                                  "price":  5.88,
@@ -766,6 +898,30 @@
                                                       },
                   "bottled-water":  {
                                         "commodity":  "bottled-water",
+                                        "Aldi":  {
+                                                     "url":  "https://www.aldi.us/store/aldi/products/23123337-puraqua-purified-water-16-9-fl-oz",
+                                                     "price":  3.55,
+                                                     "size":  "24 ct",
+                                                     "name":  "PurAqua Purified Water 24 Pack"
+                                                 },
+                                        "Fareway":  {
+                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22152070",
+                                                        "price":  3.87,
+                                                        "size":  "each",
+                                                        "name":  "Fareway 24 Pack Purified Drinking Water"
+                                                    },
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/56357/hy-vee-spring-water-24pk",
+                                                       "price":  2.99,
+                                                       "size":  "24 x 16.9 fl oz",
+                                                       "name":  "Hy-Vee Spring Water 24Pk"
+                                                   },
+                                        "Sam\u0027s Club":  {
+                                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-Purified-Water-16-9-fl-oz-40-pk/7874202847",
+                                                                "price":  3.98,
+                                                                "size":  "40 ct",
+                                                                "name":  "Member\u0027s Mark Purified Water, 40 pk"
+                                                            },
                                         "Walmart":  {
                                                         "url":  "https://www.walmart.com/ip/Great-Value-Purified-Drinking-Water-16-9-fl-oz-24-Count/13448854",
                                                         "price":  3.68,
@@ -893,6 +1049,36 @@
                                    },
                   "breakfast-sausage":  {
                                             "commodity":  "breakfast-sausage",
+                                            "Aldi":  {
+                                                         "url":  "https://www.aldi.us/store/aldi/products/19673939-appleton-farms-premium-pork-sausage-roll-16-oz",
+                                                         "price":  3.19,
+                                                         "size":  "16 oz",
+                                                         "name":  "Appleton Farms Premium Pork Sausage Roll"
+                                                     },
+                                            "Baker\u0027s":  {
+                                                                 "url":  "https://www.bakersplus.com/p/kroger-mild-pork-sausage-roll/0001111097298",
+                                                                 "price":  3.29,
+                                                                 "size":  "16 oz",
+                                                                 "name":  "Kroger Mild Pork Sausage Roll"
+                                                             },
+                                            "Fareway":  {
+                                                            "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2663295",
+                                                            "price":  2.99,
+                                                            "size":  "12 oz",
+                                                            "name":  "Farmland Original Pork Sausage"
+                                                        },
+                                            "Hy-Vee":  {
+                                                           "url":  "https://www.hy-vee.com/aisles-online/p/2870240/hy-vee-midwest-pork-mild-spice-pork-sausage",
+                                                           "price":  4.88,
+                                                           "size":  "16 oz",
+                                                           "name":  "Hy-Vee Midwest Pork Mild Spice Pork Sausage"
+                                                       },
+                                            "Sam\u0027s Club":  {
+                                                                    "url":  "https://www.samsclub.com/ip/Jimmy-Dean-Premium-Pork-Sausage-Roll-2-lbs/13620410188",
+                                                                    "price":  7.34,
+                                                                    "size":  "32 oz",
+                                                                    "name":  "Jimmy Dean Premium Pork Sausage Roll, 2-Pound"
+                                                                },
                                             "Walmart":  {
                                                             "url":  "https://www.walmart.com/ip/Farmland-Original-Pork-Breakfast-Sausage-Roll-16-oz/10403368",
                                                             "price":  2.87,
@@ -902,6 +1088,30 @@
                                         },
                   "broccoli":  {
                                    "commodity":  "broccoli",
+                                   "Aldi":  {
+                                                "url":  "https://www.aldi.us/store/aldi/products/20206250-broccoli-crowns-per-lb",
+                                                "price":  2.39,
+                                                "size":  "lb",
+                                                "name":  "Broccoli Crowns"
+                                            },
+                                   "Baker\u0027s":  {
+                                                        "url":  "https://www.bakersplus.com/p/broccoli-crown/0000000003082",
+                                                        "price":  2.49,
+                                                        "size":  "lb",
+                                                        "name":  "Broccoli Crown"
+                                                    },
+                                   "Fareway":  {
+                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16345915",
+                                                   "price":  2.48,
+                                                   "size":  "lb",
+                                                   "name":  "Broccoli Crown"
+                                               },
+                                   "Hy-Vee":  {
+                                                  "url":  "https://www.hy-vee.com/aisles-online/p/8801/broccoli-florettes",
+                                                  "price":  2.69,
+                                                  "size":  "lb",
+                                                  "name":  "Broccoli Florettes"
+                                              },
                                    "Walmart":  {
                                                    "url":  "https://www.walmart.com/ip/Fresh-Broccoli-Crowns-Each/51259378",
                                                    "price":  2.47,
@@ -915,12 +1125,12 @@
                                                    "url":  "https://www.aldi.us/store/aldi/products/18647602-baker-s-corner-light-brown-sugar-32-oz",
                                                    "price":  2.05,
                                                    "size":  "32 oz",
-                                                   "name":  "Baker\u0027s Corner Light Brown Sugar"
+                                                   "name":  "Baker\u0027s Corner Brown Sugar"
                                                },
                                       "Baker\u0027s":  {
                                                            "url":  "https://www.bakersplus.com/p/kroger-light-brown-sugar/0001111085585",
                                                            "price":  2.29,
-                                                           "size":  "$0.07/oz",
+                                                           "size":  "32 oz",
                                                            "name":  "Kroger Light Brown Sugar"
                                                        },
                                       "Family Fare":  {
@@ -929,9 +1139,15 @@
                                                           "size":  "32 oz",
                                                           "name":  "C\u0026H Dark Brown Pure Cane Sugar 32 Oz"
                                                       },
+                                      "Fareway":  {
+                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24215500",
+                                                      "price":  2.39,
+                                                      "size":  "32 oz",
+                                                      "name":  "Corner Store Sugar, Brown"
+                                                  },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/2970352/thats-smart-light-brown-sugar",
-                                                     "price":  1.88,
+                                                     "price":  1.97,
                                                      "size":  "32 oz",
                                                      "name":  "That\u0027s Smart! Light Brown Sugar"
                                                  },
@@ -939,7 +1155,7 @@
                                                               "url":  "https://www.samsclub.com/ip/Member-s-Mark-Light-Brown-Sugar-7-lbs/68113177798",
                                                               "price":  6.98,
                                                               "size":  "7 lb",
-                                                              "name":  "Member\u0027s Mark Light Brown Sugar, 7 lbs."
+                                                              "name":  "Member\u0027s Mark Light Brown Sugar, 7-Pound"
                                                           },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/Great-Value-Light-Brown-Sugar-32-oz/10315012",
@@ -1036,6 +1252,36 @@
                              },
                   "canned-black-beans":  {
                                              "commodity":  "canned-black-beans",
+                                             "Aldi":  {
+                                                          "url":  "https://www.aldi.us/store/aldi/products/18648531-dakota-s-black-beans-15-oz",
+                                                          "price":  0.95,
+                                                          "size":  "15 oz",
+                                                          "name":  "Dakota\u0027s Pride Black Beans"
+                                                      },
+                                             "Baker\u0027s":  {
+                                                                  "url":  "https://www.bakersplus.com/p/kroger-black-bean-each/0001111012114",
+                                                                  "price":  1,
+                                                                  "size":  "15.5 oz",
+                                                                  "name":  "Kroger Black Beans"
+                                                              },
+                                             "Fareway":  {
+                                                             "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25806571",
+                                                             "price":  0.99,
+                                                             "size":  "15.25 oz",
+                                                             "name":  "Fareway Black Beans"
+                                                         },
+                                             "Hy-Vee":  {
+                                                            "url":  "https://www.hy-vee.com/aisles-online/p/58082/hy-vee-black-beans",
+                                                            "price":  0.99,
+                                                            "size":  "15 oz",
+                                                            "name":  "Hy-Vee Black Beans"
+                                                        },
+                                             "Sam\u0027s Club":  {
+                                                                     "url":  "https://www.samsclub.com/ip/Bush-s-Black-Beans-15-oz-6-pk/3940010881",
+                                                                     "price":  6.64,
+                                                                     "size":  "90 oz",
+                                                                     "name":  "Bush\u0027s Black Beans, 6 pk"
+                                                                 },
                                              "Walmart":  {
                                                              "url":  "https://www.walmart.com/ip/Great-Value-Black-Beans-15-oz-Can/10534038",
                                                              "price":  0.86,
@@ -1045,6 +1291,36 @@
                                          },
                   "canned-corn":  {
                                       "commodity":  "canned-corn",
+                                      "Aldi":  {
+                                                   "url":  "https://www.aldi.us/store/aldi/products/20363173-happy-harvest-whole-kernel-corn-15-25-oz",
+                                                   "price":  0.89,
+                                                   "size":  "15.25 oz",
+                                                   "name":  "Happy Harvest Whole Kernel Corn"
+                                               },
+                                      "Baker\u0027s":  {
+                                                           "url":  "https://www.bakersplus.com/p/kroger-whole-kernel-sweet-golden-corn/0001111011383",
+                                                           "price":  1,
+                                                           "size":  "15.25 oz",
+                                                           "name":  "Kroger Whole Kernel Sweet Golden Corn"
+                                                       },
+                                      "Fareway":  {
+                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20628216",
+                                                      "price":  0.77,
+                                                      "size":  "15.25 oz",
+                                                      "name":  "Corner Store Corn, Kernel, Whole"
+                                                  },
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/2968066/thats-smart-whole-kernel-golden-corn",
+                                                     "price":  0.76,
+                                                     "size":  "15.25 oz",
+                                                     "name":  "That\u0027s Smart! Whole Kernel Golden Corn"
+                                                 },
+                                      "Sam\u0027s Club":  {
+                                                              "url":  "https://www.samsclub.com/ip/Del-Monte-Golden-Sweet-Whole-Kernel-Corn-15-25-oz-8-pk/13596361849",
+                                                              "price":  8.42,
+                                                              "size":  "122 oz",
+                                                              "name":  "Del Monte Golden Sweet Whole Kernel Corn, 8 pk"
+                                                          },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/Great-Value-No-Salt-Added-Golden-Sweet-Whole-Kernel-Corn-15-25-oz/589659824",
                                                       "price":  0.78,
@@ -1093,6 +1369,36 @@
                                         },
                   "canned-tuna":  {
                                       "commodity":  "canned-tuna",
+                                      "Aldi":  {
+                                                   "url":  "https://www.aldi.us/store/aldi/products/115250-northern-catch-chunk-tuna-in-water-5-oz",
+                                                   "price":  1.05,
+                                                   "size":  "5 oz",
+                                                   "name":  "Northern Catch Chunk Light Tuna in Water"
+                                               },
+                                      "Baker\u0027s":  {
+                                                           "url":  "https://www.bakersplus.com/p/kroger-wild-caught-chunk-light-tuna-in-water/0001111089084",
+                                                           "price":  0.97,
+                                                           "size":  "5 oz",
+                                                           "name":  "Kroger Wild Caught Chunk Light Tuna in Water"
+                                                       },
+                                      "Fareway":  {
+                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24072245",
+                                                      "price":  0.97,
+                                                      "size":  "5 oz",
+                                                      "name":  "Fareway Chunk Light Tuna in Water"
+                                                  },
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/2402871/hy-vee-chunk-light-tuna-in-water-free-school-caught",
+                                                     "price":  0.95,
+                                                     "size":  "5 oz",
+                                                     "name":  "Hy-Vee Chunk Light Tuna in Water Free-School Caught"
+                                                 },
+                                      "Sam\u0027s Club":  {
+                                                              "url":  "https://www.samsclub.com/ip/StarKist-Chunk-Light-Tuna-in-Water-5-oz-12-pk/8000051596",
+                                                              "price":  9.98,
+                                                              "size":  "60 oz",
+                                                              "name":  "StarKist Chunk Light Tuna in Water, 12 pk"
+                                                          },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/Great-Value-Chunk-Light-Tuna-in-Water-5-oz/11965048",
                                                       "price":  0.96,
@@ -1146,16 +1452,16 @@
                   "carrots":  {
                                   "commodity":  "Carrots",
                                   "Aldi":  {
-                                               "url":  "https://www.aldi.us/store/aldi/products/18649562-happy-harvest-sliced-carrots-15-oz",
-                                               "price":  1.09,
-                                               "size":  "15 oz",
-                                               "name":  "Happy Harvest Sliced Carrots"
+                                               "url":  "https://www.aldi.us/store/aldi/products/17837662-carrot-2-lbs",
+                                               "price":  2.19,
+                                               "size":  "2 lb",
+                                               "name":  "Carrots, Package"
                                            },
                                   "Baker\u0027s":  {
-                                                       "url":  "https://www.bakersplus.com/p/kroger-cut-and-peeled-baby-carrots/0001111091621",
+                                                       "url":  "https://www.bakersplus.com/p/kroger-whole-carrots/0001111091622",
                                                        "price":  2.29,
                                                        "size":  "2 lb",
-                                                       "name":  "Kroger Cut and Peeled Baby Carrots"
+                                                       "name":  "Kroger Whole Carrots"
                                                    },
                                   "Family Fare":  {
                                                       "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/carrots/our_family_whole_carrots_32_oz/p/1564405684712676657",
@@ -1164,11 +1470,17 @@
                                                       "name":  "Our Family Whole Carrots 32 Oz",
                                                       "recipe_pu":  1.15
                                                   },
+                                  "Fareway":  {
+                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16553288",
+                                                  "price":  4.99,
+                                                  "size":  "5 lb",
+                                                  "name":  "Carrot"
+                                              },
                                   "Hy-Vee":  {
-                                                 "url":  "https://www.hy-vee.com/aisles-online/p/46184/grimmway-farms-bunny-luv-organic-whole-carrots",
-                                                 "price":  2.99,
-                                                 "size":  "2 lb",
-                                                 "name":  "Grimmway Farms Bunny-Luv Organic Whole Carrots"
+                                                 "url":  "https://www.hy-vee.com/aisles-online/p/107974/grimmway-whole-carrots",
+                                                 "price":  2.49,
+                                                 "size":  "32 oz",
+                                                 "name":  "Grimmway Whole Carrots"
                                              },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/Organic-Tender-Sweet-Carrots-5-lbs/13585974324",
@@ -1261,7 +1573,7 @@
                                  "Aldi":  {
                                               "url":  "https://www.aldi.us/store/aldi/products/16606112-celery-package-per-lb",
                                               "price":  2.09,
-                                              "size":  "1 lb package",
+                                              "size":  "each",
                                               "name":  "Celery, Package"
                                           },
                                  "Baker\u0027s":  {
@@ -1276,6 +1588,12 @@
                                                      "size":  "1 ea",
                                                      "name":  "Fresh Celery"
                                                  },
+                                 "Fareway":  {
+                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2717598",
+                                                 "price":  1.99,
+                                                 "size":  "each",
+                                                 "name":  "Celery"
+                                             },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/8653/celery",
                                                 "price":  1.88,
@@ -1318,6 +1636,36 @@
                                   },
                   "cereal":  {
                                  "commodity":  "cereal",
+                                 "Aldi":  {
+                                              "url":  "https://www.aldi.us/store/aldi/products/20215391-millville-fruit-rounds-cereal-12-2-oz",
+                                              "price":  2.05,
+                                              "size":  "12.2 oz",
+                                              "name":  "Millville Fruit Rounds Cereal"
+                                          },
+                                 "Baker\u0027s":  {
+                                                      "url":  "https://www.bakersplus.com/p/cap-n-crunch-s-crunch-berries-cereal/0003000057322",
+                                                      "price":  3.49,
+                                                      "size":  "11.7 oz",
+                                                      "name":  "Cap\u0027n Crunch\u0027s Crunch Berries Cereal"
+                                                  },
+                                 "Fareway":  {
+                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/89314391",
+                                                 "price":  1.99,
+                                                 "size":  "18 oz",
+                                                 "name":  "Fareway Bran Flakes Cereal"
+                                             },
+                                 "Hy-Vee":  {
+                                                "url":  "https://www.hy-vee.com/aisles-online/p/3938994/hy-vee-whole-grain-raisin-bran",
+                                                "price":  2.99,
+                                                "size":  "16.6 oz",
+                                                "name":  "Hy-Vee Whole Grain Raisin Bran"
+                                            },
+                                 "Sam\u0027s Club":  {
+                                                         "url":  "https://www.samsclub.com/ip/Cap-n-Crunch-s-Crunch-Berries-Cereal-40-oz/3000043769",
+                                                         "price":  5.98,
+                                                         "size":  "40 oz",
+                                                         "name":  "Cap\u0027n Crunch\u0027s Crunch Berries Cereal"
+                                                     },
                                  "Walmart":  {
                                                  "url":  "https://www.walmart.com/ip/Great-Value-Honey-Nut-O-s-Oat-Breakfast-Cereal-12-25-oz/108922787",
                                                  "price":  1.94,
@@ -1453,7 +1801,7 @@
                                         "commodity":  "Chicken Broth",
                                         "Aldi":  {
                                                      "url":  "https://www.aldi.us/store/aldi/products/18647945-chef-s-cupboard-chicken-broth-32-fl-oz",
-                                                     "price":  0,
+                                                     "price":  1.39,
                                                      "size":  "32 fl oz",
                                                      "name":  "Chef\u0027s Cupboard Chicken Broth"
                                                  },
@@ -1469,17 +1817,23 @@
                                                             "size":  "32 fl oz",
                                                             "name":  "Our Family Chicken Broth 32 Fl Oz"
                                                         },
+                                        "Fareway":  {
+                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387716",
+                                                        "price":  1.84,
+                                                        "size":  "32 fl oz",
+                                                        "name":  "Fareway Fat Free Chicken Broth"
+                                                    },
                                         "Hy-Vee":  {
-                                                       "url":  "https://www.hy-vee.com/aisles-online/p/24868/hy-vee-chicken-broth-33-less-sodium-fat-free-gluten-free",
-                                                       "price":  0,
-                                                       "size":  "32 oz",
-                                                       "name":  "Hy-Vee Chicken Broth 33% Less Sodium Fat Free Gluten Free"
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/24848/hy-vee-chicken-broth-fat-free-gluten-free",
+                                                       "price":  1.99,
+                                                       "size":  "32 fl oz",
+                                                       "name":  "Hy-Vee Chicken Broth, Fat Free, Gluten Free"
                                                    },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/Member-s-Mark-Chicken-Broth-32-oz-6-pk/7874211840",
-                                                                "price":  0,
-                                                                "size":  "32 oz., 6 pk.",
-                                                                "name":  "Member\u0027s Mark Chicken Broth"
+                                                                "price":  7.98,
+                                                                "size":  "192 fl oz",
+                                                                "name":  "Member\u0027s Mark Chicken Broth, 6 pk"
                                                             },
                                         "Walmart":  {
                                                         "url":  "https://www.walmart.com/ip/Great-Value-Chicken-Broth-32-oz-Carton-Shelf-Stable-Ambient-Gluten-Free/10899013",
@@ -1490,6 +1844,30 @@
                                     },
                   "chicken-nuggets":  {
                                           "commodity":  "chicken-nuggets",
+                                          "Aldi":  {
+                                                       "url":  "https://www.aldi.us/store/aldi/products/19283276-kirkwood-family-size-chicken-nuggets-48-oz",
+                                                       "price":  7.25,
+                                                       "size":  "48 oz",
+                                                       "name":  "Kirkwood Family Pack Chicken Nuggets"
+                                                   },
+                                          "Fareway":  {
+                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/56813142",
+                                                          "price":  13.94,
+                                                          "size":  "4 lb",
+                                                          "name":  "Tyson Frozen Chicken Nuggets Family Pack, 4-Pound"
+                                                      },
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/1877533/hy-vee-chicken-nuggets",
+                                                         "price":  8.27,
+                                                         "size":  "29 oz",
+                                                         "name":  "Hy-Vee Chicken Nuggets"
+                                                     },
+                                          "Sam\u0027s Club":  {
+                                                                  "url":  "https://www.samsclub.com/ip/Country-Pride-Tempura-Chicken-Nuggets-Frozen-5-lbs/18008462815",
+                                                                  "price":  13.67,
+                                                                  "size":  "80 oz",
+                                                                  "name":  "Country Pride Tempura Chicken Nuggets, Frozen, 5-Pound"
+                                                              },
                                           "Walmart":  {
                                                           "url":  "https://www.walmart.com/ip/Great-Value-Fully-Cooked-Chicken-Nuggets-32-oz-Frozen/51259447",
                                                           "price":  5.97,
@@ -1984,6 +2362,36 @@
                                },
                   "cucumbers":  {
                                     "commodity":  "cucumbers",
+                                    "Aldi":  {
+                                                 "url":  "https://www.aldi.us/store/aldi/products/3253345-cucumber-each",
+                                                 "price":  0.65,
+                                                 "size":  "1 each",
+                                                 "name":  "Cucumber"
+                                             },
+                                    "Baker\u0027s":  {
+                                                         "url":  "https://www.bakersplus.com/p/cucumber/0000000004062",
+                                                         "price":  0.89,
+                                                         "size":  "1 ct",
+                                                         "name":  "Cucumber"
+                                                     },
+                                    "Fareway":  {
+                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3253345",
+                                                    "price":  1.17,
+                                                    "size":  "each",
+                                                    "name":  "Cucumber"
+                                                },
+                                    "Hy-Vee":  {
+                                                   "url":  "https://www.hy-vee.com/aisles-online/p/8648/cucumber",
+                                                   "price":  0.99,
+                                                   "size":  "1 ct",
+                                                   "name":  "Cucumber"
+                                               },
+                                    "Sam\u0027s Club":  {
+                                                            "url":  "https://www.samsclub.com/ip/Seedless-English-Cucumbers-3-ct/13589450722",
+                                                            "price":  3.27,
+                                                            "size":  "3 ct",
+                                                            "name":  "Seedless English Cucumbers, 3 ct"
+                                                        },
                                     "Walmart":  {
                                                     "url":  "https://www.walmart.com/ip/Fresh-Cucumber-Each/44390954",
                                                     "price":  0.76,
@@ -2027,6 +2435,36 @@
                                    },
                   "deli-ham":  {
                                    "commodity":  "deli-ham",
+                                   "Aldi":  {
+                                                "url":  "https://www.aldi.us/store/aldi/products/20019634-lunch-mate-black-forest-ham-16-oz",
+                                                "price":  4.59,
+                                                "size":  "16 oz",
+                                                "name":  "Lunch Mate Black Forest Ham"
+                                            },
+                                   "Baker\u0027s":  {
+                                                        "url":  "https://www.bakersplus.com/p/land-o-frost-premium-sliced-honey-ham/0005190001603",
+                                                        "price":  5.99,
+                                                        "size":  "16 oz",
+                                                        "name":  "Land O\u0027 Frost Premium Sliced Honey Ham"
+                                                    },
+                                   "Fareway":  {
+                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387209",
+                                                   "price":  5.99,
+                                                   "size":  "lb",
+                                                   "name":  "Cedar Hollow Foods Cherry Wood Ham"
+                                               },
+                                   "Hy-Vee":  {
+                                                  "url":  "https://www.hy-vee.com/aisles-online/p/73880/smithfield-sliced-deli-ham",
+                                                  "price":  4.99,
+                                                  "size":  "lb",
+                                                  "name":  "Smithfield Sliced Deli Ham"
+                                              },
+                                   "Sam\u0027s Club":  {
+                                                           "url":  "https://www.samsclub.com/ip/Extra-Lean-Premium-Ham-1-25-lbs-each-2-pk/13727672617",
+                                                           "price":  8.24,
+                                                           "size":  "40 oz",
+                                                           "name":  "Extra Lean Premium Ham, 2 pk"
+                                                       },
                                    "Walmart":  {
                                                    "url":  "https://www.walmart.com/ip/Land-O-Frost-Premium-Meat-Sandwich-Sliced-Deli-Lunch-Meat-Black-Forest-Ham-1-lb/19276135",
                                                    "price":  6.24,
@@ -2071,7 +2509,7 @@
                                          "commodity":  "Diced Tomatoes",
                                          "Aldi":  {
                                                       "url":  "https://www.aldi.us/store/aldi/products/20752467-happy-harvest-diced-tomatoes-14-5-oz",
-                                                      "price":  0,
+                                                      "price":  0.99,
                                                       "size":  "14.5 oz",
                                                       "name":  "Happy Harvest Diced Tomatoes"
                                                   },
@@ -2087,17 +2525,23 @@
                                                              "size":  "14.5 oz",
                                                              "name":  "Our Family Tomatoes, Diced 14.5 Oz"
                                                          },
+                                         "Fareway":  {
+                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20636300",
+                                                         "price":  0.99,
+                                                         "size":  "14.5 oz",
+                                                         "name":  "Fareway Diced Tomatoes in Tomato Juice"
+                                                     },
                                          "Hy-Vee":  {
-                                                        "url":  "https://www.hy-vee.com/aisles-online/p/58152/hy-vee-diced-tomatoes",
-                                                        "price":  0,
-                                                        "size":  "14.5 oz",
-                                                        "name":  "Hy-Vee Diced Tomatoes"
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/58157/hy-vee-petite-cut-diced-tomatoes",
+                                                        "price":  1.99,
+                                                        "size":  "28 oz",
+                                                        "name":  "Hy-Vee Petite Cut Diced Tomatoes"
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/Member-s-Mark-Diced-Tomatoes-in-Tomato-Juice-14-5-oz-12-pk/19396803121",
-                                                                 "price":  0,
-                                                                 "size":  "14.5 oz., 12 pk. ($0.81/can)",
-                                                                 "name":  "Member\u0027s Mark Diced Tomatoes in Tomato Juice"
+                                                                 "price":  9.68,
+                                                                 "size":  "174 oz",
+                                                                 "name":  "Member\u0027s Mark Diced Tomatoes in Tomato Juice, 12 pk"
                                                              },
                                          "Walmart":  {
                                                          "url":  "https://www.walmart.com/ip/Great-Value-Diced-Tomatoes-in-Tomato-Juice-14-5-oz-Can/10450990",
@@ -2142,6 +2586,30 @@
                                     },
                   "dish-soap":  {
                                     "commodity":  "dish-soap",
+                                    "Aldi":  {
+                                                 "url":  "https://www.aldi.us/store/aldi/products/81169106-power-force-original-blue-dishwashing-detergent-24-fl-oz",
+                                                 "price":  2.35,
+                                                 "size":  "24 fl oz",
+                                                 "name":  "Power Force Original Blue Dishwashing Liquid"
+                                             },
+                                    "Fareway":  {
+                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387746",
+                                                    "price":  5.94,
+                                                    "size":  "58 fl oz",
+                                                    "name":  "Bright Essentials Original Scent Dish Soap"
+                                                },
+                                    "Hy-Vee":  {
+                                                   "url":  "https://www.hy-vee.com/aisles-online/p/2955856/simply-done-fresh-scent-dish-soap",
+                                                   "price":  2.69,
+                                                   "size":  "19.4 fl oz",
+                                                   "name":  "Simply Done Fresh Scent Dish Soap"
+                                               },
+                                    "Sam\u0027s Club":  {
+                                                            "url":  "https://www.samsclub.com/ip/Member-s-Mark-Platinum-Performance-Liquid-Dish-Soap-Fresh-Clean-100-fl-oz/13892164761",
+                                                            "price":  8.98,
+                                                            "size":  "100 fl oz",
+                                                            "name":  "Member\u0027s Mark Platinum Performance Liquid Dish Soap, Fresh Clean"
+                                                        },
                                     "Walmart":  {
                                                     "url":  "https://www.walmart.com/ip/Dawn-Ultra-Liquid-Dish-Soap-Dishwashing-Liquid-Grease-Removal-Original-18oz/1095568875",
                                                     "price":  2.94,
@@ -2151,6 +2619,30 @@
                                 },
                   "dishwasher-detergent":  {
                                                "commodity":  "dishwasher-detergent",
+                                               "Aldi":  {
+                                                            "url":  "https://www.aldi.us/store/aldi/products/69927479-radiance-triple-chamber-dish-pacs-18-ct",
+                                                            "price":  3.75,
+                                                            "size":  "18 ct",
+                                                            "name":  "Power Force Triple Chamber Dishwasher Pacs"
+                                                        },
+                                               "Fareway":  {
+                                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/63167618",
+                                                               "price":  14.99,
+                                                               "size":  "each",
+                                                               "name":  "Bright Essentials Dishwasher Pacs, Fresh Scent, Triple Action"
+                                                           },
+                                               "Hy-Vee":  {
+                                                              "url":  "https://www.hy-vee.com/aisles-online/p/4060425/cascade-platinum-action-pacs-fresh-scent-71ct",
+                                                              "price":  22.99,
+                                                              "size":  "71 ct",
+                                                              "name":  "Cascade Platinum Action Pacs Fresh Scent, 71Ct"
+                                                          },
+                                               "Sam\u0027s Club":  {
+                                                                       "url":  "https://www.samsclub.com/ip/Member-s-Mark-Platinum-Clean-Automatic-Dishwasher-Pacs-Fresh-Clean-110-ct/18766722402",
+                                                                       "price":  14.98,
+                                                                       "size":  "110 ct",
+                                                                       "name":  "Member\u0027s Mark Platinum Clean Automatic Dishwasher Pacs"
+                                                                   },
                                                "Walmart":  {
                                                                "url":  "https://www.walmart.com/ip/Cascade-Platinum-Plus-Dishwasher-Pods-Action-Pacs-Dishwasher-Detergent-Tabs-Fresh-57-Count/8921608735",
                                                                "price":  22.94,
@@ -2549,6 +3041,36 @@
                                         },
                   "flour":  {
                                 "commodity":  "flour",
+                                "Aldi":  {
+                                             "url":  "https://www.aldi.us/store/aldi/products/18648338-baker-s-corner-all-purpose-flour-5-lb",
+                                             "price":  2.15,
+                                             "size":  "5 lb",
+                                             "name":  "Baker\u0027s Corner All Purpose Flour"
+                                         },
+                                "Baker\u0027s":  {
+                                                     "url":  "https://www.bakersplus.com/p/kroger-bleached-all-purpose-flour/0001111085402",
+                                                     "price":  2.59,
+                                                     "size":  "5 lb",
+                                                     "name":  "Kroger Bleached All Purpose Flour"
+                                                 },
+                                "Fareway":  {
+                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386425",
+                                                "price":  4.99,
+                                                "size":  "10 lb",
+                                                "name":  "Fareway Flour, All Purpose"
+                                            },
+                                "Hy-Vee":  {
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/2970327/thats-smart-bleached-enriched-all-purpose-flour",
+                                               "price":  2.38,
+                                               "size":  "5 lb",
+                                               "name":  "That\u0027s Smart! Bleached Enriched All-Purpose Flour"
+                                           },
+                                "Sam\u0027s Club":  {
+                                                        "url":  "https://www.samsclub.com/ip/Member-s-Mark-All-Purpose-Flour-25-lbs/13602764464",
+                                                        "price":  8.48,
+                                                        "size":  "25 lb",
+                                                        "name":  "Member\u0027s Mark All Purpose Flour, 25-Pound"
+                                                    },
                                 "Walmart":  {
                                                 "url":  "https://www.walmart.com/ip/Great-Value-All-Purpose-Enriched-Flour-5LB-Bag/10403017",
                                                 "price":  2.38,
@@ -2713,6 +3235,30 @@
                                              },
                   "frozen-fries":  {
                                        "commodity":  "frozen-fries",
+                                       "Aldi":  {
+                                                    "url":  "https://www.aldi.us/store/aldi/products/21111041-season-s-choice-crinkle-cut-french-fried-potatoes-32-oz",
+                                                    "price":  3.19,
+                                                    "size":  "32 oz",
+                                                    "name":  "Season\u0027s Choice Crinkle Cut French Fried Potatoes"
+                                                },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389279",
+                                                       "price":  2.99,
+                                                       "size":  "32 oz",
+                                                       "name":  "Fareway Crinkle Fries"
+                                                   },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/4153223/hy-vee-straight-cut-french-fried-potatoes",
+                                                      "price":  4.48,
+                                                      "size":  "32 oz",
+                                                      "name":  "Hy-Vee Straight Cut French Fried Potatoes"
+                                                  },
+                                       "Sam\u0027s Club":  {
+                                                               "url":  "https://www.samsclub.com/ip/Ore-Ida-Crispy-Crinkles-French-Fries-Frozen-8-lbs/13621707320",
+                                                               "price":  8.58,
+                                                               "size":  "128 oz",
+                                                               "name":  "Ore-Ida Crispy Crinkles French Fries, Frozen, 8-Pound"
+                                                           },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/Great-Value-Crinkle-Cut-French-Fried-Potatoes-32-oz-Bag-Frozen/10534212",
                                                        "price":  2.97,
@@ -2821,6 +3367,30 @@
                                   },
                   "frozen-pizza":  {
                                        "commodity":  "frozen-pizza",
+                                       "Aldi":  {
+                                                    "url":  "https://www.aldi.us/store/aldi/products/25821485-mama-cozzimama-cozzi-s-pizza-kitchen-s-pizza-kitchen-original-thin-crust-cheese-pizza-13-8-oz",
+                                                    "price":  3.29,
+                                                    "size":  "each",
+                                                    "name":  "Mama Cozzi\u0027s Pizza Kitchen Original Thin Crust Cheese Pizza"
+                                                },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/205448",
+                                                       "price":  3.33,
+                                                       "size":  "each",
+                                                       "name":  "Jack\u0027s Original Thin Cheese Pizza"
+                                                   },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/2878487/tombstone-pepperoni-pizza-original-crust-frozen-pizza",
+                                                      "price":  4.99,
+                                                      "size":  "19.3 oz",
+                                                      "name":  "Tombstone Pepperoni Pizza, Original Crust Frozen Pizza"
+                                                  },
+                                       "Sam\u0027s Club":  {
+                                                               "url":  "https://www.samsclub.com/ip/Jack-s-Original-Thin-Pepperoni-Frozen-Pizza-4-pk/13860174379",
+                                                               "price":  11.88,
+                                                               "size":  "4 ct",
+                                                               "name":  "Jack\u0027s Original Thin Pepperoni Frozen Pizza, 4 pk"
+                                                           },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/Red-Baron-Four-Cheese-Classic-Crust-Frozen-Pizza-21-06-oz/10292879",
                                                        "price":  4.82,
@@ -2830,6 +3400,24 @@
                                    },
                   "frozen-vegetables":  {
                                             "commodity":  "frozen-vegetables",
+                                            "Aldi":  {
+                                                         "url":  "https://www.aldi.us/store/aldi/products/19793641-season-s-choice-steamed-mixed-vegetables-12-oz",
+                                                         "price":  1.09,
+                                                         "size":  "12 oz",
+                                                         "name":  "Season\u0027s Choice Steamable Frozen Mixed Vegetables"
+                                                     },
+                                            "Fareway":  {
+                                                            "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20665194",
+                                                            "price":  2.94,
+                                                            "size":  "32 oz",
+                                                            "name":  "Fareway Mixed Vegetables"
+                                                        },
+                                            "Hy-Vee":  {
+                                                           "url":  "https://www.hy-vee.com/aisles-online/p/2964777/thats-smart-mixed-vegetables-with-carrots-corn-peas-and-green-beans",
+                                                           "price":  0.98,
+                                                           "size":  "12 oz",
+                                                           "name":  "That\u0027s Smart! Mixed Vegetables With Carrots, Corn, Peas \u0026 Green Beans"
+                                                       },
                                             "Walmart":  {
                                                             "url":  "https://www.walmart.com/ip/Green-Giant-Simply-Steam-Garden-Vegetable-Medley-10-oz-Bag-Frozen/14974031",
                                                             "price":  1.87,
@@ -2868,7 +3456,7 @@
                                  "commodity":  "Garlic (Bulb)",
                                  "Aldi":  {
                                               "url":  "https://www.aldi.us/store/aldi/products/17819978-garlic-3-ct",
-                                              "price":  0,
+                                              "price":  1.89,
                                               "size":  "3 ct",
                                               "name":  "Garlic, Package"
                                           },
@@ -2884,12 +3472,24 @@
                                                      "size":  "1 ea",
                                                      "name":  "Fresh Garlic"
                                                  },
+                                 "Fareway":  {
+                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/123173",
+                                                 "price":  1.99,
+                                                 "size":  "each",
+                                                 "name":  "Spice World Fresh Garlic"
+                                             },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/8812/jumbo-garlic",
-                                                "price":  0,
+                                                "price":  0.79,
                                                 "size":  "1 ct",
                                                 "name":  "Jumbo Garlic"
                                             },
+                                 "Sam\u0027s Club":  {
+                                                         "url":  "https://www.samsclub.com/ip/Fresh-Garlic-Bulbs-2-lbs/13612912758",
+                                                         "price":  5.94,
+                                                         "size":  "2 lb",
+                                                         "name":  "Fresh Garlic Bulbs, 2-Pound"
+                                                     },
                                  "Walmart":  {
                                                  "url":  "https://www.walmart.com/ip/Garlic-Bulb-Fresh-Whole-Each/44391100",
                                                  "price":  0.72,
@@ -3620,6 +4220,36 @@
                                     },
                   "hamburger-buns":  {
                                          "commodity":  "hamburger-buns",
+                                         "Aldi":  {
+                                                      "url":  "https://www.aldi.us/store/aldi/products/20873280-l-oven-fresh-hamburger-buns-12-oz",
+                                                      "price":  1.55,
+                                                      "size":  "11 oz",
+                                                      "name":  "L\u0027oven Fresh Hamburger Buns"
+                                                  },
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/smart-way-hamburger-buns/0001111011689",
+                                                              "price":  1.49,
+                                                              "size":  "8 ct",
+                                                              "name":  "Smart Way Hamburger Buns"
+                                                          },
+                                         "Fareway":  {
+                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24222138",
+                                                         "price":  1.99,
+                                                         "size":  "each",
+                                                         "name":  "Fareway Premium Hamburger Buns"
+                                                     },
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/77056/hy-vee-white-hamburger-buns-8-count",
+                                                        "price":  1.99,
+                                                        "size":  "8 ct",
+                                                        "name":  "Hy-Vee White Hamburger Buns 8 Count"
+                                                    },
+                                         "Sam\u0027s Club":  {
+                                                                 "url":  "https://www.samsclub.com/ip/Sara-Lee-Restaurant-Style-White-Hamburger-Buns-16-ct/13693772702",
+                                                                 "price":  3.88,
+                                                                 "size":  "16 ct",
+                                                                 "name":  "Sara Lee Restaurant Style White Hamburger Buns, 16 ct"
+                                                             },
                                          "Walmart":  {
                                                          "url":  "https://www.walmart.com/ip/Great-Value-Hamburger-Buns-8-Count-11-oz/10450104",
                                                          "price":  1.48,
@@ -3629,6 +4259,30 @@
                                      },
                   "hand-soap":  {
                                     "commodity":  "hand-soap",
+                                    "Aldi":  {
+                                                 "url":  "https://www.aldi.us/store/aldi/products/24109418-source-aquarium-liquid-hand-soap-7-5-fl-oz",
+                                                 "price":  1.09,
+                                                 "size":  "7.5 fl oz",
+                                                 "name":  "Lacura Aquarium Liquid Hand Soap"
+                                             },
+                                    "Fareway":  {
+                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19613282",
+                                                    "price":  5.97,
+                                                    "size":  "50 fl oz",
+                                                    "name":  "Softsoap Aquarium Liquid Hand Soap Refill"
+                                                },
+                                    "Hy-Vee":  {
+                                                   "url":  "https://www.hy-vee.com/aisles-online/p/4196260/hy-vee-clear-hands-soap",
+                                                   "price":  5.99,
+                                                   "size":  "50 fl oz",
+                                                   "name":  "Hy-Vee Clear Hands Soap"
+                                               },
+                                    "Sam\u0027s Club":  {
+                                                            "url":  "https://www.samsclub.com/ip/Member-s-Mark-Aloe-Vera-Moisturizing-Hand-Soap-80-fl-oz/13952103236",
+                                                            "price":  7.98,
+                                                            "size":  "80 fl oz",
+                                                            "name":  "Member\u0027s Mark Aloe Vera Moisturizing Hand Soap"
+                                                        },
                                     "Walmart":  {
                                                     "url":  "https://www.walmart.com/ip/Equate-Clear-Liquid-Hand-Soap-50-fl-oz/1783955214",
                                                     "price":  2.97,
@@ -3735,16 +4389,16 @@
                   "honey":  {
                                 "commodity":  "Honey",
                                 "Aldi":  {
-                                             "url":  "https://www.aldi.us/store/aldi/products/20249704-berryhill-honey-bear-12-oz",
-                                             "price":  3.25,
-                                             "size":  "12 oz",
-                                             "name":  "Berryhill Honey Bear"
+                                             "url":  "https://www.aldi.us/store/aldi/products/20197919-berryhill-100-natural-clover-honey-24-oz",
+                                             "price":  5.49,
+                                             "size":  "24 oz",
+                                             "name":  "Berryhill Honey"
                                          },
                                 "Baker\u0027s":  {
-                                                     "url":  "https://www.bakersplus.com/p/kroger-clover-honey-bear/0001111086170",
-                                                     "price":  3.99,
-                                                     "size":  "$0.33/oz",
-                                                     "name":  "Kroger Clover Honey Bear"
+                                                     "url":  "https://www.bakersplus.com/p/smart-way-honey/0001111012316",
+                                                     "price":  5.79,
+                                                     "size":  "24 oz",
+                                                     "name":  "Smart Way Honey"
                                                  },
                                 "Family Fare":  {
                                                     "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/honey/local_hive_midwest_raw_unfiltered_honey_blend_16_oz/p/1564405684703701976",
@@ -3753,12 +4407,24 @@
                                                     "name":  "Local Hive Midwest Raw \u0026 Unfiltered Honey Blend 16 Oz",
                                                     "recipe_pu":  0.6867
                                                 },
+                                "Fareway":  {
+                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/92934906",
+                                                "price":  14.99,
+                                                "size":  "48 oz",
+                                                "name":  "Fareway Pure Honey"
+                                            },
                                 "Hy-Vee":  {
                                                "url":  "https://www.hy-vee.com/aisles-online/p/2958571/thats-smart-100-honey",
                                                "price":  3.99,
                                                "size":  "12 oz",
                                                "name":  "That\u0027s Smart! 100% Honey"
                                            },
+                                "Sam\u0027s Club":  {
+                                                        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Wildflower-Pure-Premium-Honey-48-oz/15006863838",
+                                                        "price":  7.98,
+                                                        "size":  "48 oz",
+                                                        "name":  "Member\u0027s Mark Wildflower Pure Premium Honey"
+                                                    },
                                 "Walmart":  {
                                                 "url":  "https://www.walmart.com/ip/Great-Value-Honey-12-oz-Plastic-Bear/20647992",
                                                 "price":  2.97,
@@ -3802,6 +4468,36 @@
                                           },
                   "hot-dogs":  {
                                    "commodity":  "hot-dogs",
+                                   "Aldi":  {
+                                                "url":  "https://www.aldi.us/store/aldi/products/19936007-parkview-hot-dogs-12-oz",
+                                                "price":  1.09,
+                                                "size":  "12 oz",
+                                                "name":  "Parkview Classic Hot Dogs"
+                                            },
+                                   "Baker\u0027s":  {
+                                                        "url":  "https://www.bakersplus.com/p/bar-s-classic-franks-8-count-12-oz/0001590013401",
+                                                        "price":  1,
+                                                        "size":  "12 oz",
+                                                        "name":  "Bar-S Classic Franks, 8-Count"
+                                                    },
+                                   "Fareway":  {
+                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16376939",
+                                                   "price":  1.17,
+                                                   "size":  "12 oz",
+                                                   "name":  "Bar-S Classic Franks Hot Dogs"
+                                               },
+                                   "Hy-Vee":  {
+                                                  "url":  "https://www.hy-vee.com/aisles-online/p/39291/bar-s-classic-franks-12oz",
+                                                  "price":  1.28,
+                                                  "size":  "12 oz",
+                                                  "name":  "Bar-S Classic Franks 12oz"
+                                              },
+                                   "Sam\u0027s Club":  {
+                                                           "url":  "https://www.samsclub.com/ip/Bar-S-Franks-Family-Pack-5-lbs/13857369106",
+                                                           "price":  6.68,
+                                                           "size":  "80 oz",
+                                                           "name":  "Bar-S Franks, Family Pack 5-Pound"
+                                                       },
                                    "Walmart":  {
                                                    "url":  "https://www.walmart.com/ip/Ball-Park-Classic-Bun-Size-Hot-Dogs-15-oz-8-Count/34632371",
                                                    "price":  2.84,
@@ -3922,6 +4618,30 @@
                                 },
                   "ice-cream":  {
                                     "commodity":  "ice-cream",
+                                    "Aldi":  {
+                                                 "url":  "https://www.aldi.us/store/aldi/products/19719374-belmont-vanilla-bean-ice-cream-48-fl-oz",
+                                                 "price":  2.75,
+                                                 "size":  "48 fl oz",
+                                                 "name":  "Sundae Shoppe Vanilla Bean Ice Cream"
+                                             },
+                                    "Fareway":  {
+                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20986822",
+                                                    "price":  7.68,
+                                                    "size":  "1 gal",
+                                                    "name":  "Fareway Vanilla Flavored Ice Cream"
+                                                },
+                                    "Hy-Vee":  {
+                                                   "url":  "https://www.hy-vee.com/aisles-online/p/1910331/hy-vee-we-all-scream-vanilla-ice-cream",
+                                                   "price":  7.48,
+                                                   "size":  "1 gal",
+                                                   "name":  "Hy-Vee We All Scream! Vanilla Ice Cream"
+                                               },
+                                    "Sam\u0027s Club":  {
+                                                            "url":  "https://www.samsclub.com/ip/Member-s-Mark-Vanilla-Ice-Cream-Pail-5-qts/13877802816",
+                                                            "price":  8.12,
+                                                            "size":  "160 fl oz",
+                                                            "name":  "Member\u0027s Mark Vanilla Ice Cream Pail, 5 qt"
+                                                        },
                                     "Walmart":  {
                                                     "url":  "https://www.walmart.com/ip/Great-Value-Cookies-Cream-Ice-Cream-48-fl-oz/12329735",
                                                     "price":  2.5,
@@ -4036,6 +4756,36 @@
                                    },
                   "jelly":  {
                                 "commodity":  "jelly",
+                                "Aldi":  {
+                                             "url":  "https://www.aldi.us/store/aldi/products/20363212-berryhill-grape-jelly-30-oz",
+                                             "price":  2.75,
+                                             "size":  "30 oz",
+                                             "name":  "Berryhill Grape Jelly"
+                                         },
+                                "Baker\u0027s":  {
+                                                     "url":  "https://www.bakersplus.com/p/smart-way-grape-jelly/0001111011953",
+                                                     "price":  2.79,
+                                                     "size":  "32 oz",
+                                                     "name":  "Smart Way Grape Jelly"
+                                                 },
+                                "Fareway":  {
+                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24229193",
+                                                "price":  2.78,
+                                                "size":  "32 oz",
+                                                "name":  "Fareway Concord Grape Jelly"
+                                            },
+                                "Hy-Vee":  {
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/2970353/thats-smart-grape-jelly",
+                                               "price":  2.62,
+                                               "size":  "32 oz",
+                                               "name":  "That\u0027s Smart! Grape Jelly"
+                                           },
+                                "Sam\u0027s Club":  {
+                                                        "url":  "https://www.samsclub.com/ip/Welch-s-Concord-Grape-Jelly-30-oz-2-pk/13612962795",
+                                                        "price":  4.98,
+                                                        "size":  "60 oz",
+                                                        "name":  "Welch\u0027s Concord Grape Jelly, 2 pk"
+                                                    },
                                 "Walmart":  {
                                                 "url":  "https://www.walmart.com/ip/Great-Value-Concord-Grape-Jelly-30-oz/364924551",
                                                 "price":  2.74,
@@ -4073,9 +4823,9 @@
                                                "name":  "Burman\u0027s Ketchup"
                                            },
                                   "Baker\u0027s":  {
-                                                       "url":  "https://www.bakersplus.com/p/kroger-original-tomato-ketchup/0001111084467",
-                                                       "price":  1.25,
-                                                       "size":  "$0.05/oz",
+                                                       "url":  "https://www.bakersplus.com/p/kroger-original-tomato-ketchup/0001111080580",
+                                                       "price":  2.19,
+                                                       "size":  "38 oz",
                                                        "name":  "Kroger Original Tomato Ketchup"
                                                    },
                                   "Family Fare":  {
@@ -4084,9 +4834,15 @@
                                                       "size":  "32 oz",
                                                       "name":  "Heinz Tomato Ketchup 32 Oz"
                                                   },
+                                  "Fareway":  {
+                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20548311",
+                                                  "price":  1.97,
+                                                  "size":  "32 oz",
+                                                  "name":  "Fareway Tomato Ketchup"
+                                              },
                                   "Hy-Vee":  {
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/769638/hy-vee-thick-and-rich-tomato-ketchup",
-                                                 "price":  2.48,
+                                                 "price":  2.98,
                                                  "size":  "38 oz",
                                                  "name":  "Hy-Vee Thick \u0026 Rich Tomato Ketchup"
                                              },
@@ -4094,7 +4850,7 @@
                                                           "url":  "https://www.samsclub.com/ip/Heinz-Original-Tomato-Ketchup-114-oz/15225818636",
                                                           "price":  9.98,
                                                           "size":  "114 oz",
-                                                          "name":  "Heinz Original Tomato Ketchup, 114 oz."
+                                                          "name":  "Heinz Original Tomato Ketchup"
                                                       },
                                   "Walmart":  {
                                                   "url":  "https://www.walmart.com/ip/Great-Value-Tomato-Ketchup-32-oz/172196409",
@@ -4211,6 +4967,36 @@
                                   },
                   "lemons":  {
                                  "commodity":  "lemons",
+                                 "Aldi":  {
+                                              "url":  "https://www.aldi.us/store/aldi/products/455048-lemon-2-lbs",
+                                              "price":  4.09,
+                                              "size":  "2 lb",
+                                              "name":  "Lemons, Bag"
+                                          },
+                                 "Baker\u0027s":  {
+                                                      "url":  "https://www.bakersplus.com/p/fresh-large-lemon-each/0000000004053",
+                                                      "price":  0.85,
+                                                      "size":  "1 each",
+                                                      "name":  "Fresh Large Lemon - Each"
+                                                  },
+                                 "Fareway":  {
+                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3259496",
+                                                 "price":  0.99,
+                                                 "size":  "each",
+                                                 "name":  "Lemon"
+                                             },
+                                 "Hy-Vee":  {
+                                                "url":  "https://www.hy-vee.com/aisles-online/p/37192/lemons",
+                                                "price":  0.99,
+                                                "size":  "1 ct",
+                                                "name":  "Lemons"
+                                            },
+                                 "Sam\u0027s Club":  {
+                                                         "url":  "https://www.samsclub.com/ip/Lemons-3-lbs/13762551112",
+                                                         "price":  3.76,
+                                                         "size":  "3 lb",
+                                                         "name":  "Lemons, 3-Pound Bag"
+                                                     },
                                  "Walmart":  {
                                                  "url":  "https://www.walmart.com/ip/Fresh-Lemon-Each/41752773",
                                                  "price":  0.5,
@@ -4220,6 +5006,36 @@
                              },
                   "lettuce":  {
                                   "commodity":  "lettuce",
+                                  "Aldi":  {
+                                               "url":  "https://www.aldi.us/store/aldi/products/3293710-iceberg-lettuce-each",
+                                               "price":  2.19,
+                                               "size":  "1 each",
+                                               "name":  "Iceberg Lettuce"
+                                           },
+                                  "Baker\u0027s":  {
+                                                       "url":  "https://www.bakersplus.com/p/wrapped-iceberg-lettuce/0000000004061",
+                                                       "price":  2.29,
+                                                       "size":  "1 ct",
+                                                       "name":  "Wrapped Iceberg Lettuce"
+                                                   },
+                                  "Fareway":  {
+                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17680402",
+                                                  "price":  2.49,
+                                                  "size":  "each",
+                                                  "name":  "Iceberg Lettuce"
+                                              },
+                                  "Hy-Vee":  {
+                                                 "url":  "https://www.hy-vee.com/aisles-online/p/4237222/bud-iceberg-lettuce",
+                                                 "price":  2.49,
+                                                 "size":  "1 ct",
+                                                 "name":  "Bud Iceberg Lettuce"
+                                             },
+                                  "Sam\u0027s Club":  {
+                                                          "url":  "https://www.samsclub.com/ip/Iceberg-Lettuce-2-heads/13725751832",
+                                                          "price":  2.97,
+                                                          "size":  "2 ct",
+                                                          "name":  "Iceberg Lettuce, 2 Heads"
+                                                      },
                                   "Walmart":  {
                                                   "url":  "https://www.walmart.com/ip/Fresh-Iceberg-Lettuce-Each/10402650",
                                                   "price":  2.28,
@@ -4269,10 +5085,16 @@
                                        },
                   "limes":  {
                                 "commodity":  "Limes",
+                                "Aldi":  {
+                                             "url":  "https://www.aldi.us/store/aldi/products/25945595-limes-bag-16-oz",
+                                             "price":  2.75,
+                                             "size":  "1 lb",
+                                             "name":  "Limes, Bag"
+                                         },
                                 "Baker\u0027s":  {
                                                      "url":  "https://www.bakersplus.com/p/fresh-limes-each/0000000004048",
                                                      "price":  0.69,
-                                                     "size":  "each",
+                                                     "size":  "1 each",
                                                      "name":  "Fresh Limes - Each"
                                                  },
                                 "Family Fare":  {
@@ -4281,12 +5103,24 @@
                                                     "size":  "1 ct",
                                                     "name":  "Fresh Limes"
                                                 },
+                                "Fareway":  {
+                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2677342",
+                                                "price":  0.99,
+                                                "size":  "each",
+                                                "name":  "Limes"
+                                            },
                                 "Hy-Vee":  {
                                                "url":  "https://www.hy-vee.com/aisles-online/p/37191/limes",
-                                               "price":  0.88,
+                                               "price":  0.99,
                                                "size":  "1 ct",
                                                "name":  "Limes"
                                            },
+                                "Sam\u0027s Club":  {
+                                                        "url":  "https://www.samsclub.com/ip/Limes-3-lbs/13821165423",
+                                                        "price":  3.67,
+                                                        "size":  "3 lb",
+                                                        "name":  "Limes, 3-Pound Bag"
+                                                    },
                                 "Walmart":  {
                                                 "url":  "https://www.walmart.com/ip/Fresh-Lime-Each/44391008",
                                                 "price":  0.25,
@@ -4323,6 +5157,36 @@
                                    },
                   "mac-and-cheese":  {
                                          "commodity":  "mac-and-cheese",
+                                         "Aldi":  {
+                                                      "url":  "https://www.aldi.us/store/aldi/products/18648161-cheese-club-macaroni-cheese-dinner-7-25-oz",
+                                                      "price":  0.65,
+                                                      "size":  "7.25 oz box",
+                                                      "name":  "Cheese Club Macaroni and Cheese Dinner"
+                                                  },
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/kroger-original-macaroni-and-cheese/0001111010011",
+                                                              "price":  0.79,
+                                                              "size":  "7.25 oz box",
+                                                              "name":  "Kroger Original Macaroni and Cheese"
+                                                          },
+                                         "Fareway":  {
+                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/69966184",
+                                                         "price":  0.68,
+                                                         "size":  "each",
+                                                         "name":  "Fareway Original Macaroni \u0026 Cheese Dinner"
+                                                     },
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/55931/hy-vee-original-macaroni-and-cheese-dinner",
+                                                        "price":  0.69,
+                                                        "size":  "7.25 oz",
+                                                        "name":  "Hy-Vee Original Macaroni \u0026 Cheese Dinner"
+                                                    },
+                                         "Sam\u0027s Club":  {
+                                                                 "url":  "https://www.samsclub.com/ip/Kraft-Original-Macaroni-and-Cheese-Dinner-18-pk/2100005553",
+                                                                 "price":  14.96,
+                                                                 "size":  "18 ct",
+                                                                 "name":  "Kraft Original Macaroni and Cheese Dinner, 18 pk"
+                                                             },
                                          "Walmart":  {
                                                          "url":  "https://www.walmart.com/ip/Kraft-Original-Mac-N-Cheese-Macaroni-and-Cheese-Dinner-5-ct-Pack-7-25-oz-Boxes/14869676",
                                                          "price":  4.88,
@@ -4366,6 +5230,36 @@
                                      },
                   "mayonnaise":  {
                                      "commodity":  "mayonnaise",
+                                     "Aldi":  {
+                                                  "url":  "https://www.aldi.us/store/aldi/products/19283303-burman-s-real-mayonnaise-30-fl-oz",
+                                                  "price":  3.19,
+                                                  "size":  "30 fl oz",
+                                                  "name":  "Burman\u0027s Real Mayonnaise"
+                                              },
+                                     "Baker\u0027s":  {
+                                                          "url":  "https://www.bakersplus.com/p/kroger-real-mayo/0001111001988",
+                                                          "price":  3.79,
+                                                          "size":  "30 fl oz",
+                                                          "name":  "Kroger Real Mayo"
+                                                      },
+                                     "Fareway":  {
+                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/110144179",
+                                                     "price":  3.79,
+                                                     "size":  "30 oz",
+                                                     "name":  "Fareway Mayonnaise, Homestyle"
+                                                 },
+                                     "Hy-Vee":  {
+                                                    "url":  "https://www.hy-vee.com/aisles-online/p/25821/hy-vee-mayonnaise",
+                                                    "price":  3.98,
+                                                    "size":  "30 fl oz",
+                                                    "name":  "Hy-Vee Mayonnaise"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Foodservice-Extra-Heavy-Mayonnaise-128-fl-oz/7874204362",
+                                                             "price":  11.98,
+                                                             "size":  "128 fl oz",
+                                                             "name":  "Member\u0027s Mark Foodservice Extra Heavy Mayonnaise"
+                                                         },
                                      "Walmart":  {
                                                      "url":  "https://www.walmart.com/ip/Great-Value-Mayonnaise-30-fl-oz/17056888",
                                                      "price":  2.97,
@@ -4461,6 +5355,36 @@
                                         },
                   "mushrooms":  {
                                     "commodity":  "mushrooms",
+                                    "Aldi":  {
+                                                 "url":  "https://www.aldi.us/store/aldi/products/18598732-white-mushroom-8-oz",
+                                                 "price":  1.65,
+                                                 "size":  "8 oz",
+                                                 "name":  "White Mushrooms, Package"
+                                             },
+                                    "Baker\u0027s":  {
+                                                         "url":  "https://www.bakersplus.com/p/kroger-whole-white-mushrooms/0001111091011",
+                                                         "price":  2.39,
+                                                         "size":  "8 oz",
+                                                         "name":  "Kroger Whole White Mushrooms"
+                                                     },
+                                    "Fareway":  {
+                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18545165",
+                                                    "price":  1.99,
+                                                    "size":  "8 oz",
+                                                    "name":  "Highline Sliced White Mushrooms"
+                                                },
+                                    "Hy-Vee":  {
+                                                   "url":  "https://www.hy-vee.com/aisles-online/p/3883530/highline-whole-white-mushrooms",
+                                                   "price":  2.99,
+                                                   "size":  "8 oz",
+                                                   "name":  "Highline Whole White Mushrooms"
+                                               },
+                                    "Sam\u0027s Club":  {
+                                                            "url":  "https://www.samsclub.com/ip/Whole-White-Mushrooms-24-oz/13894703507",
+                                                            "price":  3.97,
+                                                            "size":  "24 oz",
+                                                            "name":  "Whole White Mushrooms"
+                                                        },
                                     "Walmart":  {
                                                     "url":  "https://www.walmart.com/ip/Fresh-Whole-White-Mushrooms-16-oz/10451903",
                                                     "price":  3.77,
@@ -4470,6 +5394,36 @@
                                 },
                   "mustard":  {
                                   "commodity":  "mustard",
+                                  "Aldi":  {
+                                               "url":  "https://www.aldi.us/store/aldi/products/20038808-burman-s-traditional-yellow-mustard-20-oz",
+                                               "price":  1.09,
+                                               "size":  "20 oz",
+                                               "name":  "Burman\u0027s Yellow Mustard"
+                                           },
+                                  "Baker\u0027s":  {
+                                                       "url":  "https://www.bakersplus.com/p/kroger-yellow-mustard/0001111081240",
+                                                       "price":  1.99,
+                                                       "size":  "20 oz",
+                                                       "name":  "Kroger Yellow Mustard"
+                                                   },
+                                  "Fareway":  {
+                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/28423626",
+                                                  "price":  1.97,
+                                                  "size":  "20 oz",
+                                                  "name":  "Fareway Yellow Mustard"
+                                              },
+                                  "Hy-Vee":  {
+                                                 "url":  "https://www.hy-vee.com/aisles-online/p/2935611/thats-smart-yellow-mustard",
+                                                 "price":  0.97,
+                                                 "size":  "14 oz",
+                                                 "name":  "That\u0027s Smart! Yellow Mustard"
+                                             },
+                                  "Sam\u0027s Club":  {
+                                                          "url":  "https://www.samsclub.com/ip/French-s-100-Natural-Classic-Yellow-Mustard-105-oz/17495871004",
+                                                          "price":  5.38,
+                                                          "size":  "105 oz",
+                                                          "name":  "French\u0027s 100% Natural Classic Yellow Mustard"
+                                                      },
                                   "Walmart":  {
                                                   "url":  "https://www.walmart.com/ip/Great-Value-Yellow-Mustard-20-oz-Squeeze-Bottle/43711099",
                                                   "price":  1,
@@ -4479,6 +5433,36 @@
                               },
                   "oatmeal":  {
                                   "commodity":  "oatmeal",
+                                  "Aldi":  {
+                                               "url":  "https://www.aldi.us/store/aldi/products/18647728-millville-hearty-100-whole-grain-old-fashioned-rolled-oats-42-oz",
+                                               "price":  4.39,
+                                               "size":  "42 oz",
+                                               "name":  "Millville Old Fashioned Oats"
+                                           },
+                                  "Baker\u0027s":  {
+                                                       "url":  "https://www.bakersplus.com/p/kroger-100-whole-grain-old-fashioned-oats/0001111076655",
+                                                       "price":  3.99,
+                                                       "size":  "42 oz",
+                                                       "name":  "Kroger 100% Whole Grain Old Fashioned Oats"
+                                                   },
+                                  "Fareway":  {
+                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21871106",
+                                                  "price":  5.59,
+                                                  "size":  "42 oz",
+                                                  "name":  "Ralston Foods Oats, Quick"
+                                              },
+                                  "Hy-Vee":  {
+                                                 "url":  "https://www.hy-vee.com/aisles-online/p/4073899/hy-vee-oatmeal-old-fashioned-oats",
+                                                 "price":  4.99,
+                                                 "size":  "42 oz",
+                                                 "name":  "Hy-Vee Oatmeal Old Fashioned Oats"
+                                             },
+                                  "Sam\u0027s Club":  {
+                                                          "url":  "https://www.samsclub.com/ip/Quaker-Old-Fashioned-Oats-160-oz/3000041000",
+                                                          "price":  7.98,
+                                                          "size":  "160 oz",
+                                                          "name":  "Quaker Old Fashioned Oats"
+                                                      },
                                   "Walmart":  {
                                                   "url":  "https://www.walmart.com/ip/Great-Value-Instant-100-Whole-Grain-Old-Fashioned-Oats-Cup-42-oz/10314925",
                                                   "price":  4.18,
@@ -4489,10 +5473,10 @@
                   "olive-oil":  {
                                     "commodity":  "Olive Oil",
                                     "Aldi":  {
-                                                 "url":  "https://www.aldi.us/store/aldi/products/120133024-carlini-pure-olive-oil-33-8-fl-oz",
-                                                 "price":  0,
-                                                 "size":  "33.8 fl oz",
-                                                 "name":  "Carlini Pure Olive Oil"
+                                                 "url":  "https://www.aldi.us/store/aldi/products/36517317-priano-extra-virgin-olive-oil-16-9-fl-oz",
+                                                 "price":  6.39,
+                                                 "size":  "16.9 fl oz",
+                                                 "name":  "Priano Extra Virgin Olive Oil"
                                              },
                                     "Baker\u0027s":  {
                                                          "url":  "https://www.bakersplus.com/p/kroger-extra-virgin-olive-oil/0001111015145",
@@ -4506,16 +5490,22 @@
                                                         "size":  "33.8 fl oz",
                                                         "name":  "Our Family Olive Oil, 100% Pure, Imported 33.8 Fl Oz"
                                                     },
+                                    "Fareway":  {
+                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24228128",
+                                                    "price":  19.98,
+                                                    "size":  "67.6 fl oz",
+                                                    "name":  "Fareway Extra Virgin Olive Oil"
+                                                },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/55988/gustare-vita-classic-olive-oil",
-                                                   "price":  0,
+                                                   "price":  5.99,
                                                    "size":  "17 fl oz",
                                                    "name":  "Gustare Vita Classic Olive Oil"
                                                },
                                     "Sam\u0027s Club":  {
                                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Pure-Olive-Oil-101-fl-oz/13894506105",
-                                                            "price":  0,
-                                                            "size":  "101 fl. oz.",
+                                                            "price":  18.98,
+                                                            "size":  "101 fl oz",
                                                             "name":  "Member\u0027s Mark Pure Olive Oil"
                                                         },
                                     "Walmart":  {
@@ -4691,6 +5681,36 @@
                                    },
                   "oranges":  {
                                   "commodity":  "oranges",
+                                  "Aldi":  {
+                                               "url":  "https://www.aldi.us/store/aldi/products/16553260-navel-orange-bag-4-lbs",
+                                               "price":  4.85,
+                                               "size":  "4 lb",
+                                               "name":  "Navel Oranges, Bag"
+                                           },
+                                  "Baker\u0027s":  {
+                                                       "url":  "https://www.bakersplus.com/p/kroger-fresh-navel-oranges-bag/0001111018199",
+                                                       "price":  8.99,
+                                                       "size":  "8 lb",
+                                                       "name":  "Kroger Fresh Navel Oranges Bag"
+                                                   },
+                                  "Fareway":  {
+                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2779964",
+                                                  "price":  5.99,
+                                                  "size":  "4 lb",
+                                                  "name":  "Navel Orange"
+                                              },
+                                  "Hy-Vee":  {
+                                                 "url":  "https://www.hy-vee.com/aisles-online/p/3792829/kings-river-navels-premium-oranges",
+                                                 "price":  5.99,
+                                                 "size":  "4 lb",
+                                                 "name":  "Kings River Navels Premium Oranges"
+                                             },
+                                  "Sam\u0027s Club":  {
+                                                          "url":  "https://www.samsclub.com/ip/California-Navel-Oranges-8-lbs/13608106019",
+                                                          "price":  7.35,
+                                                          "size":  "8 lb",
+                                                          "name":  "California Navel Oranges, 8-Pound Bag"
+                                                      },
                                   "Walmart":  {
                                                   "url":  "https://www.walmart.com/ip/Fresh-Navel-Oranges-4-lb-Bag/44391012",
                                                   "price":  4.97,
@@ -4700,6 +5720,30 @@
                               },
                   "paper-towels":  {
                                        "commodity":  "paper-towels",
+                                       "Aldi":  {
+                                                    "url":  "https://www.aldi.us/store/aldi/products/43070165-boulder-sheets-paper-towel-6-ct",
+                                                    "price":  5.95,
+                                                    "size":  "6 ct",
+                                                    "name":  "Boulder 6 Roll Paper Towels (110 Sheets)"
+                                                },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/57983486",
+                                                       "price":  6.99,
+                                                       "size":  "each",
+                                                       "name":  "Scott One-Ply Choose-A-Sheet Fast Absorbing Double Rolls Paper Towels"
+                                                   },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/4008790/thats-smart-paper-towels-2-ply",
+                                                      "price":  2.98,
+                                                      "size":  "3 ct",
+                                                      "name":  "That\u0027s Smart! Paper Towels, 2-Ply"
+                                                  },
+                                       "Sam\u0027s Club":  {
+                                                               "url":  "https://www.samsclub.com/ip/Member-s-Mark-Select-Tear-2-Ply-Paper-Towel-15-rolls-150-sheets-roll/15390012477",
+                                                               "price":  20.93,
+                                                               "size":  "15 ct",
+                                                               "name":  "Member\u0027s Mark Select \u0026 Tear 2-Ply Paper Towels, 15 Rolls (150 Sheets/Roll)"
+                                                           },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/Scott-Paper-Towels-Choose-A-Sheet-6-Double-Rolls/8886020987",
                                                        "price":  6.84,
@@ -4787,6 +5831,36 @@
                                       },
                   "pasta":  {
                                 "commodity":  "pasta",
+                                "Aldi":  {
+                                             "url":  "https://www.aldi.us/store/aldi/products/19507517-reggano-spaghetti-enriched-macaroni-product-pastas-32-oz",
+                                             "price":  2.09,
+                                             "size":  "32 oz",
+                                             "name":  "Reggano Spaghetti"
+                                         },
+                                "Baker\u0027s":  {
+                                                     "url":  "https://www.bakersplus.com/p/kroger-spaghetti/0001111085004",
+                                                     "price":  1.33,
+                                                     "size":  "16 oz",
+                                                     "name":  "Kroger Spaghetti"
+                                                 },
+                                "Fareway":  {
+                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24461263",
+                                                "price":  0.99,
+                                                "size":  "16 oz",
+                                                "name":  "Fareway Long Spaghetti"
+                                            },
+                                "Hy-Vee":  {
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/3771493/hy-vee-spaghetti",
+                                               "price":  1.19,
+                                               "size":  "15 oz",
+                                               "name":  "Hy-Vee Spaghetti"
+                                           },
+                                "Sam\u0027s Club":  {
+                                                        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Spaghetti-Pasta-Pantry-Pack-1-lb-6-pk/17863853694",
+                                                        "price":  5.48,
+                                                        "size":  "96 oz",
+                                                        "name":  "Member\u0027s Mark Spaghetti Pasta Pantry Pack, 6 x 1-Pound"
+                                                    },
                                 "Walmart":  {
                                                 "url":  "https://www.walmart.com/ip/Great-Value-Spaghetti-32-oz/10534105",
                                                 "price":  1.94,
@@ -4796,6 +5870,36 @@
                             },
                   "pasta-sauce":  {
                                       "commodity":  "pasta-sauce",
+                                      "Aldi":  {
+                                                   "url":  "https://www.aldi.us/store/aldi/products/19061977-reggano-sauces-traditional-pasta-sauce-24-oz",
+                                                   "price":  1.89,
+                                                   "size":  "24 oz",
+                                                   "name":  "Reggano Traditional Pasta Sauce"
+                                               },
+                                      "Baker\u0027s":  {
+                                                           "url":  "https://www.bakersplus.com/p/kroger-marinara-pasta-sauce/0001111013408",
+                                                           "price":  3.29,
+                                                           "size":  "43 oz",
+                                                           "name":  "Kroger Marinara Pasta Sauce"
+                                                       },
+                                      "Fareway":  {
+                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21848727",
+                                                      "price":  1.88,
+                                                      "size":  "24 oz",
+                                                      "name":  "Fareway Traditional Pasta Sauce"
+                                                  },
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/1351300/hy-vee-traditional-pasta-sauce",
+                                                     "price":  1.99,
+                                                     "size":  "24 oz",
+                                                     "name":  "Hy-Vee Traditional Pasta Sauce"
+                                                 },
+                                      "Sam\u0027s Club":  {
+                                                              "url":  "https://www.samsclub.com/ip/Ragu-Old-World-Style-Traditional-Pasta-Sauce-45-oz-3-pk/3620001381",
+                                                              "price":  8.98,
+                                                              "size":  "135 oz",
+                                                              "name":  "Ragu Old World Style Traditional Pasta Sauce, 3 pk"
+                                                          },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/Great-Value-Traditional-Pasta-Sauce-24-oz/19758051",
                                                       "price":  1.74,
@@ -5214,6 +6318,30 @@
                              },
                   "potato-chips":  {
                                        "commodity":  "potato-chips",
+                                       "Aldi":  {
+                                                    "url":  "https://www.aldi.us/store/aldi/products/18648308-clancy-s-original-potato-chips-10-oz",
+                                                    "price":  1.99,
+                                                    "size":  "10 oz",
+                                                    "name":  "Clancy\u0027s Original Potato Chips"
+                                                },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25557168",
+                                                       "price":  3.98,
+                                                       "size":  "16 oz",
+                                                       "name":  "Fareway Original Potato Chips"
+                                                   },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/3511155/hy-vee-wavy-potato-chips",
+                                                      "price":  2.69,
+                                                      "size":  "8 oz",
+                                                      "name":  "Hy-Vee Wavy Potato Chips"
+                                                  },
+                                       "Sam\u0027s Club":  {
+                                                               "url":  "https://www.samsclub.com/ip/Member-s-Mark-Wavy-Potato-Chips-16-oz/13865869287",
+                                                               "price":  2.98,
+                                                               "size":  "16 oz",
+                                                               "name":  "Member\u0027s Mark Wavy Potato Chips"
+                                                           },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/Great-Value-Party-Size-Original-Potato-Chips-13oz-bag/686470097",
                                                        "price":  2.5,
@@ -5263,6 +6391,36 @@
                                        },
                   "ramen":  {
                                 "commodity":  "ramen",
+                                "Aldi":  {
+                                             "url":  "https://www.aldi.us/store/aldi/products/37315-maruchan-ramen-noodle-soup-chicken-flavor-3-oz",
+                                             "price":  4.25,
+                                             "size":  "12 ct",
+                                             "name":  "Maruchan Ramen Noodle Soup Chicken Flavor"
+                                         },
+                                "Baker\u0027s":  {
+                                                     "url":  "https://www.bakersplus.com/p/maruchan-ramen-noodle-soup-chicken/0004178900211",
+                                                     "price":  0.55,
+                                                     "size":  "1 ct",
+                                                     "name":  "Maruchan Ramen Noodle Soup, Chicken"
+                                                 },
+                                "Fareway":  {
+                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3384061",
+                                                "price":  0.37,
+                                                "size":  "each",
+                                                "name":  "Maruchan Ramen Noodle Soup, Chicken"
+                                            },
+                                "Hy-Vee":  {
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/14304/maruchan-chicken-flavor-ramen-noodle-soup",
+                                               "price":  0.49,
+                                               "size":  "3 oz",
+                                               "name":  "Maruchan Chicken Flavor Ramen Noodle Soup"
+                                           },
+                                "Sam\u0027s Club":  {
+                                                        "url":  "https://www.samsclub.com/ip/Nissin-Top-Ramen-Chicken-24-pk/18239212180",
+                                                        "price":  6.98,
+                                                        "size":  "24 ct",
+                                                        "name":  "Nissin Top Ramen, Chicken, 24 pk"
+                                                    },
                                 "Walmart":  {
                                                 "url":  "https://www.walmart.com/ip/Maruchan-Ramen-Noodle-Chicken-Flavor-Soup-3-oz-12-Count-Shelf-Stable-Package/10450904",
                                                 "price":  3.87,
@@ -5272,6 +6430,36 @@
                             },
                   "ranch-dressing":  {
                                          "commodity":  "ranch-dressing",
+                                         "Aldi":  {
+                                                      "url":  "https://www.aldi.us/store/aldi/products/20969508-tuscan-garden-ranch-dressing-16-oz",
+                                                      "price":  2.15,
+                                                      "size":  "16 fl oz",
+                                                      "name":  "Tuscan Garden Ranch Dressing"
+                                                  },
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/kroger-creamy-ranch-salad-dressing/0001111066912",
+                                                              "price":  2,
+                                                              "size":  "16 fl oz",
+                                                              "name":  "Kroger Creamy Ranch Salad Dressing"
+                                                          },
+                                         "Fareway":  {
+                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068057",
+                                                         "price":  0.99,
+                                                         "size":  "16 fl oz",
+                                                         "name":  "Fareway Ranch Dressing"
+                                                     },
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/3923781/hy-vee-ranch-dressing",
+                                                        "price":  4.99,
+                                                        "size":  "36 fl oz",
+                                                        "name":  "Hy-Vee Ranch Dressing"
+                                                    },
+                                         "Sam\u0027s Club":  {
+                                                                 "url":  "https://www.samsclub.com/ip/Member-s-Mark-Ranch-Dressing-1-gal/7874227011",
+                                                                 "price":  10.82,
+                                                                 "size":  "128 fl oz",
+                                                                 "name":  "Member\u0027s Mark Ranch Dressing, 1 gal"
+                                                             },
                                          "Walmart":  {
                                                          "url":  "https://www.walmart.com/ip/Great-Value-Classic-Ranch-Dressing-36-fl-oz/22282307",
                                                          "price":  3.82,
@@ -5459,6 +6647,36 @@
                                        },
                   "rice":  {
                                "commodity":  "rice",
+                               "Aldi":  {
+                                            "url":  "https://www.aldi.us/store/aldi/products/20968019-earthly-grains-long-grain-white-rice-3-lb",
+                                            "price":  2.95,
+                                            "size":  "3 lb",
+                                            "name":  "Earthly Grains Long Grain White Rice"
+                                        },
+                               "Baker\u0027s":  {
+                                                    "url":  "https://www.bakersplus.com/p/kroger-long-grain-rice/0001111084703",
+                                                    "price":  3.79,
+                                                    "size":  "5 lb",
+                                                    "name":  "Kroger Long Grain Rice"
+                                                },
+                               "Fareway":  {
+                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18015756",
+                                               "price":  7.99,
+                                               "size":  "10 lb",
+                                               "name":  "ParExcellence Premium Long Grain Rice"
+                                           },
+                               "Hy-Vee":  {
+                                              "url":  "https://www.hy-vee.com/aisles-online/p/254671/hy-vee-enriched-long-grain-white-rice",
+                                              "price":  4.69,
+                                              "size":  "80 oz",
+                                              "name":  "Hy-Vee Enriched Long Grain White Rice"
+                                          },
+                               "Sam\u0027s Club":  {
+                                                       "url":  "https://www.samsclub.com/ip/Member-s-Mark-Long-Grain-White-Rice-25-lbs/7874220242",
+                                                       "price":  11.48,
+                                                       "size":  "25 lb",
+                                                       "name":  "Member\u0027s Mark Long Grain White Rice, 25-Pound"
+                                                   },
                                "Walmart":  {
                                                "url":  "https://www.walmart.com/ip/Great-Value-Long-Grain-Enriched-Rice-5-lbs/10315395",
                                                "price":  3.37,
@@ -5608,6 +6826,36 @@
                                       },
                   "salmon":  {
                                  "commodity":  "salmon",
+                                 "Aldi":  {
+                                              "url":  "https://www.aldi.us/store/aldi/products/20385442-fremont-fish-market-value-pack-wild-caught-salmon-32-oz",
+                                              "price":  11.39,
+                                              "size":  "32 oz",
+                                              "name":  "Fremont Fish Market Value Pack Wild Caught Salmon"
+                                          },
+                                 "Baker\u0027s":  {
+                                                      "url":  "https://www.bakersplus.com/p/aqua-star-wild-pacific-salmon-fillet/0073114951527",
+                                                      "price":  8.99,
+                                                      "size":  "20 oz",
+                                                      "name":  "Aqua Star Wild Pacific Salmon Fillet"
+                                                  },
+                                 "Fareway":  {
+                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/31544575",
+                                                 "price":  14.99,
+                                                 "size":  "2 lb",
+                                                 "name":  "Northern Fisheries Salmon Portions"
+                                             },
+                                 "Hy-Vee":  {
+                                                "url":  "https://www.hy-vee.com/aisles-online/p/4056989/trident-seafoods-alaska-salmon-fillet",
+                                                "price":  8.99,
+                                                "size":  "20 oz",
+                                                "name":  "Trident Seafoods Alaska Salmon Fillet"
+                                            },
+                                 "Sam\u0027s Club":  {
+                                                         "url":  "https://www.samsclub.com/ip/Member-s-Mark-Skinless-and-Boneless-Atlantic-Salmon-Fillet-Portions-Frozen-2-5-lbs/13566472856",
+                                                         "price":  24.94,
+                                                         "size":  "40 oz",
+                                                         "name":  "Member\u0027s Mark Skinless and Boneless Atlantic Salmon Fillet Portions, Frozen, 2.5-Pound"
+                                                     },
                                  "Walmart":  {
                                                  "url":  "https://www.walmart.com/ip/Marketside-Fresh-Coho-Salmon-3-95-1-05-lb/9179862572",
                                                  "price":  8.97,
@@ -5619,7 +6867,7 @@
                                 "commodity":  "Salsa",
                                 "Aldi":  {
                                              "url":  "https://www.aldi.us/store/aldi/products/19796199-casa-mamita-ancient-grains-habanero-salse-24-oz",
-                                             "price":  0,
+                                             "price":  2.85,
                                              "size":  "24 oz",
                                              "name":  "Casa Mamita Mild Salsa"
                                          },
@@ -5635,17 +6883,23 @@
                                                     "size":  "16 oz",
                                                     "name":  "Mild Thick \u0026 Chunky Salsa Our Family"
                                                 },
+                                "Fareway":  {
+                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/104557563",
+                                                "price":  2.99,
+                                                "size":  "24 oz",
+                                                "name":  "Fareway Chunky Mild Salsa"
+                                            },
                                 "Hy-Vee":  {
-                                               "url":  "https://www.hy-vee.com/aisles-online/p/3183527/hy-vee-mild-salsa-thick-and-chunky",
-                                               "price":  0,
-                                               "size":  "45 oz",
-                                               "name":  "Hy-Vee Mild Salsa Thick \u0026 Chunky"
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/58174/hy-vee-mild-thick-and-chunky-salsa",
+                                               "price":  2.69,
+                                               "size":  "16 oz",
+                                               "name":  "Hy-Vee Mild Thick \u0026 Chunky Salsa"
                                            },
                                 "Sam\u0027s Club":  {
                                                         "url":  "https://www.samsclub.com/ip/Pace-Chunky-Salsa-Medium-38-oz-2-ct/4156518836",
-                                                        "price":  0,
-                                                        "size":  "38 oz., 2 ct.",
-                                                        "name":  "Pace Chunky Salsa, Medium (closest match; no \u0027Mild\u0027 thick \u0026 chunky variant found at Sam\u0027s Club)"
+                                                        "price":  7.48,
+                                                        "size":  "76 oz",
+                                                        "name":  "Pace Chunky Salsa, Medium, 2 ct"
                                                     },
                                 "Walmart":  {
                                                 "url":  "https://www.walmart.com/ip/Great-Value-Thick-and-Chunky-Salsa-Mild-16-oz/1959652540",
@@ -5707,11 +6961,17 @@
                                                    "size":  "26 oz",
                                                    "name":  "Iodized Salt Our Family"
                                                },
+                               "Fareway":  {
+                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2691028",
+                                               "price":  1.97,
+                                               "size":  "26 oz",
+                                               "name":  "Morton Iodized Salt"
+                                           },
                                "Hy-Vee":  {
-                                              "url":  "https://www.hy-vee.com/aisles-online/p/5382/morton-table-salt",
-                                              "price":  2.21,
-                                              "size":  "4 lb",
-                                              "name":  "Morton Table Salt"
+                                              "url":  "https://www.hy-vee.com/aisles-online/p/55969/hy-vee-iodized-salt",
+                                              "price":  1.58,
+                                              "size":  "26 oz",
+                                              "name":  "Hy-Vee Iodized Salt"
                                           },
                                "Sam\u0027s Club":  {
                                                        "url":  "https://www.samsclub.com/ip/Morton-Iodized-Salt-64-oz/13589509673",
@@ -5855,6 +7115,36 @@
                                       },
                   "shrimp":  {
                                  "commodity":  "shrimp",
+                                 "Aldi":  {
+                                              "url":  "https://www.aldi.us/store/aldi/products/41417737-fremont-fish-market-value-pack-large-raw-peeled-shrimp-32-oz",
+                                              "price":  18.15,
+                                              "size":  "32 oz",
+                                              "name":  "Fremont Fish Market Value Pack Large Raw Peeled Shrimp"
+                                          },
+                                 "Baker\u0027s":  {
+                                                      "url":  "https://www.bakersplus.com/p/kroger-peeled-deveined-tail-off-white-raw-shrimp/0001111065386",
+                                                      "price":  13.98,
+                                                      "size":  "32 oz",
+                                                      "name":  "Kroger Peeled \u0026 Deveined Tail Off White Raw Shrimp"
+                                                  },
+                                 "Fareway":  {
+                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20743090",
+                                                 "price":  6.49,
+                                                 "size":  "12 oz",
+                                                 "name":  "Supreme Choice Raw Shrimp Shell-On 51-60 ct"
+                                             },
+                                 "Hy-Vee":  {
+                                                "url":  "https://www.hy-vee.com/aisles-online/p/1579791/fish-market-raw-shrimp-4150-count",
+                                                "price":  7.99,
+                                                "size":  "12 oz",
+                                                "name":  "Fish Market Raw Shrimp 41/50 Count"
+                                            },
+                                 "Sam\u0027s Club":  {
+                                                         "url":  "https://www.samsclub.com/ip/Member-s-Mark-Farm-Raised-Large-Raw-Shrimp-Frozen-31-40-ct-per-pound-3-lbs/13939167608",
+                                                         "price":  20.97,
+                                                         "size":  "48 oz",
+                                                         "name":  "Member\u0027s Mark Farm Raised Large Raw Shrimp, Frozen, 31-40 ct, 3-Pound"
+                                                     },
                                  "Walmart":  {
                                                  "url":  "https://www.walmart.com/ip/Great-Value-Frozen-Raw-Large-Peeled-Deveined-Tail-off-Shrimp-2-lb-31-40-Count-per-lb-Value-Bag/791288879",
                                                  "price":  15.96,
@@ -5864,6 +7154,36 @@
                              },
                   "sirloin-steak":  {
                                         "commodity":  "sirloin-steak",
+                                        "Aldi":  {
+                                                     "url":  "https://www.aldi.us/store/aldi/products/19115493-black-angus-choice-petite-sirloin-steak-per-lb",
+                                                     "price":  8.99,
+                                                     "size":  "lb",
+                                                     "name":  "USDA Choice Black Angus Petite Sirloin Steak"
+                                                 },
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/national-beef-choice-top-sirloin-steak/0029258000000",
+                                                             "price":  14.99,
+                                                             "size":  "lb",
+                                                             "name":  "National Beef Choice Top Sirloin Steak"
+                                                         },
+                                        "Fareway":  {
+                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387764",
+                                                        "price":  7.99,
+                                                        "size":  "lb",
+                                                        "name":  "USDA Choice Sirloin Tip Steak"
+                                                    },
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/31803/hy-vee-angus-reserve-beef-loin-boneless-sirloin-steak",
+                                                       "price":  13.99,
+                                                       "size":  "lb",
+                                                       "name":  "Hy-Vee Angus Reserve Beef Loin Boneless Sirloin Steak"
+                                                   },
+                                        "Sam\u0027s Club":  {
+                                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-USDA-Choice-Angus-Beef-Boneless-Top-Sirloin-Steaks-priced-per-pound/13764906948",
+                                                                "price":  9.97,
+                                                                "size":  "lb",
+                                                                "name":  "Member\u0027s Mark USDA Choice Angus Beef Boneless Top Sirloin Steaks"
+                                                            },
                                         "Walmart":  {
                                                         "url":  "https://www.walmart.com/ip/Beef-Choice-Angus-Thin-Sliced-Sirloin-Tip-Steak-0-85-1-6-lb-Tray/179426904",
                                                         "price":  8.82,
@@ -5873,6 +7193,36 @@
                                     },
                   "sliced-cheese":  {
                                         "commodity":  "sliced-cheese",
+                                        "Aldi":  {
+                                                     "url":  "https://www.aldi.us/store/aldi/products/18649581-happy-farms-american-cheese-singles-12-oz",
+                                                     "price":  2.05,
+                                                     "size":  "12 oz",
+                                                     "name":  "Happy Farms American Cheese Singles"
+                                                 },
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/kroger-singles-american-sliced-cheese/0001111009435",
+                                                             "price":  3.29,
+                                                             "size":  "16 oz",
+                                                             "name":  "Kroger Singles American Sliced Cheese (24 Slices)"
+                                                         },
+                                        "Fareway":  {
+                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24458201",
+                                                        "price":  2.48,
+                                                        "size":  "16 oz",
+                                                        "name":  "Fareway American Cheese Slices"
+                                                    },
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/57061/hy-vee-singles-american-cheese-24ct",
+                                                       "price":  3.99,
+                                                       "size":  "16 oz",
+                                                       "name":  "Hy-Vee Singles American Cheese 24Ct"
+                                                   },
+                                        "Sam\u0027s Club":  {
+                                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-American-Cheese-5-lbs-160-slices/13578123437",
+                                                                "price":  12.17,
+                                                                "size":  "80 oz",
+                                                                "name":  "Member\u0027s Mark American Cheese, 160 Slices"
+                                                            },
                                         "Walmart":  {
                                                         "url":  "https://www.walmart.com/ip/Great-Value-Singles-American-Pasteurized-Prepared-Cheese-Product-16-oz-24-Count/10452423",
                                                         "price":  2.48,
@@ -5915,6 +7265,30 @@
                                      },
                   "soda":  {
                                "commodity":  "soda",
+                               "Aldi":  {
+                                            "url":  "https://www.aldi.us/store/aldi/products/18648441-summit-cola-12-fl-oz",
+                                            "price":  4.19,
+                                            "size":  "144 fl oz",
+                                            "name":  "Summit Cola 12 Pack"
+                                        },
+                               "Fareway":  {
+                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/250940",
+                                               "price":  4.97,
+                                               "size":  "12 pk 12 fl oz",
+                                               "name":  "Shasta Cola"
+                                           },
+                               "Hy-Vee":  {
+                                              "url":  "https://www.hy-vee.com/aisles-online/p/3993381/hy-vee-cola-12pk",
+                                              "price":  4.72,
+                                              "size":  "12 x 12 fl oz",
+                                              "name":  "Hy-Vee Cola 12Pk"
+                                          },
+                               "Sam\u0027s Club":  {
+                                                       "url":  "https://www.samsclub.com/ip/Coca-Cola-Soft-Drink-12-fl-oz-35-pk/13857469882",
+                                                       "price":  18.48,
+                                                       "size":  "420 fl oz",
+                                                       "name":  "Coca-Cola Soft Drink, 35 pk"
+                                                   },
                                "Walmart":  {
                                                "url":  "https://www.walmart.com/ip/Sam-s-Cola-Soda-Pop-12-fl-oz-12-Pack-Cans/10794693",
                                                "price":  3.97,
@@ -6010,6 +7384,30 @@
                                 },
                   "spinach":  {
                                   "commodity":  "spinach",
+                                  "Aldi":  {
+                                               "url":  "https://www.aldi.us/store/aldi/products/20041343-little-salad-bar-spinach-8-oz",
+                                               "price":  2.09,
+                                               "size":  "8 oz",
+                                               "name":  "Little Salad Bar Spinach"
+                                           },
+                                  "Baker\u0027s":  {
+                                                       "url":  "https://www.bakersplus.com/p/kroger-tender-baby-spinach-bag-salad/0001111091649",
+                                                       "price":  2.49,
+                                                       "size":  "10 oz",
+                                                       "name":  "Kroger Tender Baby Spinach Bag Salad"
+                                                   },
+                                  "Fareway":  {
+                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/41716",
+                                                  "price":  2.99,
+                                                  "size":  "6 oz",
+                                                  "name":  "Dole Salad Baby Spinach"
+                                              },
+                                  "Hy-Vee":  {
+                                                 "url":  "https://www.hy-vee.com/aisles-online/p/21179/dole-spinach",
+                                                 "price":  2.99,
+                                                 "size":  "8 oz",
+                                                 "name":  "Dole Spinach"
+                                             },
                                   "Walmart":  {
                                                   "url":  "https://www.walmart.com/ip/Marketside-Fresh-Spinach-10-oz-Bag-Fresh/13893738",
                                                   "price":  2,
@@ -6046,6 +7444,30 @@
                                },
                   "storage-bags":  {
                                        "commodity":  "storage-bags",
+                                       "Aldi":  {
+                                                    "url":  "https://www.aldi.us/store/aldi/products/19646529-boulder-twin-lock-storage-bags-40-ct",
+                                                    "price":  2.05,
+                                                    "size":  "40 ct",
+                                                    "name":  "Boulder Gallon Storage Bags"
+                                                },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/41992985",
+                                                       "price":  2.28,
+                                                       "size":  "each",
+                                                       "name":  "Bright Essentials Freezer Bags, Double Zipper, Gallon Size"
+                                                   },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/2913524/thats-smart-reclosable-freezer-storage-bags-1-gallon",
+                                                      "price":  1,
+                                                      "size":  "12 ct",
+                                                      "name":  "That\u0027s Smart! Reclosable Freezer Storage Bags 1 Gallon"
+                                                  },
+                                       "Sam\u0027s Club":  {
+                                                               "url":  "https://www.samsclub.com/ip/Ziploc-Brand-Gallon-Freezer-Storage-Bags-Stay-Open-Design-Easy-to-Fill-152-ct/2570014887",
+                                                               "price":  15.48,
+                                                               "size":  "152 ct",
+                                                               "name":  "Ziploc Gallon Freezer Storage Bags, 152 ct"
+                                                           },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/Great-Value-Freezer-Guard-Double-Zipper-Freezer-Bags-Gallon-40-Count/808599731",
                                                        "price":  2.82,
@@ -6110,7 +7532,7 @@
                                                      "url":  "https://www.bakersplus.com/p/smart-way-granulated-sugar/0001111011888",
                                                      "price":  3.29,
                                                      "size":  "4 lb",
-                                                     "name":  "Smart Wayâ„¢ Granulated Sugar"
+                                                     "name":  "Smart Way Granulated Sugar"
                                                  },
                                 "Family Fare":  {
                                                     "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/sweeteners/our_family_sugar_granulated_160_oz/p/6787188",
@@ -6118,6 +7540,12 @@
                                                     "size":  "160 oz",
                                                     "name":  "Our Family Sugar, Granulated 160 Oz"
                                                 },
+                                "Fareway":  {
+                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20679513",
+                                                "price":  3.24,
+                                                "size":  "64 oz",
+                                                "name":  "Corner Store Sugar, Granulated"
+                                            },
                                 "Hy-Vee":  {
                                                "url":  "https://www.hy-vee.com/aisles-online/p/2970350/thats-smart-granulated-sugar",
                                                "price":  3.12,
@@ -6125,10 +7553,10 @@
                                                "name":  "That\u0027s Smart! Granulated Sugar"
                                            },
                                 "Sam\u0027s Club":  {
-                                                        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Premium-Cane-Sugar-25-lbs/13624255514",
-                                                        "price":  14.98,
-                                                        "size":  "25 lb",
-                                                        "name":  "Member\u0027s Mark Premium Cane Sugar"
+                                                        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Granulated-Sugar-10-lbs/7874221690",
+                                                        "price":  6.58,
+                                                        "size":  "10 lb",
+                                                        "name":  "Member\u0027s Mark Granulated Sugar, 10-Pound"
                                                     },
                                 "Walmart":  {
                                                 "url":  "https://www.walmart.com/ip/Great-Value-Pure-Granulated-Sugar-4-lb/10315162",
@@ -6300,6 +7728,36 @@
                                  },
                   "sweet-potatoes":  {
                                          "commodity":  "sweet-potatoes",
+                                         "Aldi":  {
+                                                      "url":  "https://www.aldi.us/store/aldi/products/16614403-sweet-potato-yam-each",
+                                                      "price":  1.05,
+                                                      "size":  "lb",
+                                                      "name":  "Sweet Potatoes"
+                                                  },
+                                         "Baker\u0027s":  {
+                                                              "url":  "https://www.bakersplus.com/p/kroger-sweet-potato/0001111022299",
+                                                              "price":  3.99,
+                                                              "size":  "3 lb",
+                                                              "name":  "Kroger Sweet Potato Bag"
+                                                          },
+                                         "Fareway":  {
+                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17626656",
+                                                         "price":  1.49,
+                                                         "size":  "lb",
+                                                         "name":  "Sweet Potato (Yam)"
+                                                     },
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/37466/golden-sweet-potato",
+                                                        "price":  1.49,
+                                                        "size":  "lb",
+                                                        "name":  "Golden Sweet Potato"
+                                                    },
+                                         "Sam\u0027s Club":  {
+                                                                 "url":  "https://www.samsclub.com/ip/Sweet-Potatoes-5-lbs/16864967254",
+                                                                 "price":  4.87,
+                                                                 "size":  "5 lb",
+                                                                 "name":  "Sweet Potatoes, 5-Pound"
+                                                             },
                                          "Walmart":  {
                                                          "url":  "https://www.walmart.com/ip/Sweet-Potatoes-Whole-Fresh-3-lb-Bag/132720824",
                                                          "price":  4.44,
@@ -6481,6 +7939,30 @@
                                            },
                   "toilet-paper":  {
                                        "commodity":  "toilet-paper",
+                                       "Aldi":  {
+                                                    "url":  "https://www.aldi.us/store/aldi/products/20110069-willow-1000-sheet-bath-tissue-12-ct",
+                                                    "price":  8.49,
+                                                    "size":  "12 ct",
+                                                    "name":  "Willow 1000 Sheet Bath Tissue"
+                                                },
+                                       "Fareway":  {
+                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18481761",
+                                                       "price":  5.97,
+                                                       "size":  "each",
+                                                       "name":  "Scott ComfortPlus Toilet Paper, 1-Ply"
+                                                   },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/4223503/hy-vee-soft-and-strong-bath-tissue",
+                                                      "price":  8.99,
+                                                      "size":  "12 ct",
+                                                      "name":  "Hy-Vee Soft and Strong Bath Tissue"
+                                                  },
+                                       "Sam\u0027s Club":  {
+                                                               "url":  "https://www.samsclub.com/ip/Member-s-Mark-Ultra-Premium-2-Ply-Toilet-Paper-45-rolls-235-sheets-roll/14179359401",
+                                                               "price":  24.76,
+                                                               "size":  "45 ct",
+                                                               "name":  "Member\u0027s Mark Ultra Premium 2-Ply Toilet Paper, 45 Rolls (235 Sheets/Roll)"
+                                                           },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/Scott-ComfortPlus-Toilet-Paper-12-Mega-Rolls/14944866035",
                                                        "price":  8.47,
@@ -6524,6 +8006,36 @@
                                  },
                   "tomatoes":  {
                                    "commodity":  "tomatoes",
+                                   "Aldi":  {
+                                                "url":  "https://www.aldi.us/store/aldi/products/17763870-tomatoes-roma-per-lb",
+                                                "price":  1.15,
+                                                "size":  "lb",
+                                                "name":  "Roma Tomatoes"
+                                            },
+                                   "Baker\u0027s":  {
+                                                        "url":  "https://www.bakersplus.com/p/fresh-roma-tomato/0000000004087",
+                                                        "price":  1.49,
+                                                        "size":  "lb",
+                                                        "name":  "Fresh Roma Tomato"
+                                                    },
+                                   "Fareway":  {
+                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17330187",
+                                                   "price":  1.29,
+                                                   "size":  "lb",
+                                                   "name":  "Roma Tomato"
+                                               },
+                                   "Hy-Vee":  {
+                                                  "url":  "https://www.hy-vee.com/aisles-online/p/8657/roma-tomatoes",
+                                                  "price":  3,
+                                                  "size":  "lb",
+                                                  "name":  "Roma Tomatoes"
+                                              },
+                                   "Sam\u0027s Club":  {
+                                                           "url":  "https://www.samsclub.com/ip/Tomatoes-on-the-Vine-3-lbs/13595863391",
+                                                           "price":  4.97,
+                                                           "size":  "3 lb",
+                                                           "name":  "Tomatoes on the Vine, 3-Pound"
+                                                       },
                                    "Walmart":  {
                                                    "url":  "https://www.walmart.com/ip/Fresh-Roma-Tomato-Each/44390944",
                                                    "price":  1.27,
@@ -6613,6 +8125,30 @@
                                    },
                   "tortilla-chips":  {
                                          "commodity":  "tortilla-chips",
+                                         "Aldi":  {
+                                                      "url":  "https://www.aldi.us/store/aldi/products/18648712-clancy-s-restaurant-style-tortilla-chips-13-oz",
+                                                      "price":  2.39,
+                                                      "size":  "13 oz",
+                                                      "name":  "Clancy\u0027s Restaurant Style Tortilla Chips"
+                                                  },
+                                         "Fareway":  {
+                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84388354",
+                                                         "price":  2.98,
+                                                         "size":  "14 oz",
+                                                         "name":  "Fareway Restaurant Style White Corn Tortilla Chips"
+                                                     },
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/909300/hy-vee-white-corn-restaurant-style-tortilla-chips",
+                                                        "price":  2.69,
+                                                        "size":  "13 oz",
+                                                        "name":  "Hy-Vee White Corn Restaurant Style Tortilla Chips"
+                                                    },
+                                         "Sam\u0027s Club":  {
+                                                                 "url":  "https://www.samsclub.com/ip/On-The-Border-Cafe-Tortilla-Chips-23-5-oz/13897220250",
+                                                                 "price":  4.48,
+                                                                 "size":  "23.5 oz",
+                                                                 "name":  "On The Border Cafe Tortilla Chips"
+                                                             },
                                          "Walmart":  {
                                                          "url":  "https://www.walmart.com/ip/Great-Value-Restaurant-Style-White-Corn-Tortilla-Chips-13-oz/12335104",
                                                          "price":  2.17,
@@ -6622,6 +8158,36 @@
                                      },
                   "tortillas":  {
                                     "commodity":  "tortillas",
+                                    "Aldi":  {
+                                                 "url":  "https://www.aldi.us/store/aldi/products/19589827-pueblo-lindo-fajita-flour-tortillas-20-ct",
+                                                 "price":  2.05,
+                                                 "size":  "20 ct",
+                                                 "name":  "Pueblo Lindo Fajita Flour Tortillas"
+                                             },
+                                    "Baker\u0027s":  {
+                                                         "url":  "https://www.bakersplus.com/p/kroger-fajita-size-flour-tortillas/0001111013951",
+                                                         "price":  2.29,
+                                                         "size":  "20 ct",
+                                                         "name":  "Kroger Fajita Size Flour Tortillas"
+                                                     },
+                                    "Fareway":  {
+                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/28069015",
+                                                    "price":  1.99,
+                                                    "size":  "each",
+                                                    "name":  "Frescados Flour Taco Style Tortillas"
+                                                },
+                                    "Hy-Vee":  {
+                                                   "url":  "https://www.hy-vee.com/aisles-online/p/3915294/hy-vee-flour-tortilla-great-for-fajitas-10ct",
+                                                   "price":  1.99,
+                                                   "size":  "10 ct",
+                                                   "name":  "Hy-Vee Flour Tortilla Great for Fajitas 10Ct"
+                                               },
+                                    "Sam\u0027s Club":  {
+                                                            "url":  "https://www.samsclub.com/ip/Mission-6-Fajita-Flour-Tortillas-40-ct/13863750250",
+                                                            "price":  4.92,
+                                                            "size":  "40 ct",
+                                                            "name":  "Mission 6 Inch Fajita Flour Tortillas, 40 ct"
+                                                        },
                                     "Walmart":  {
                                                     "url":  "https://www.walmart.com/ip/Great-Value-Medium-Soft-Taco-Flour-Tortillas-17-5-oz-Bag-10-Count-Shelf-Stable/953466267",
                                                     "price":  1.98,
@@ -6665,6 +8231,30 @@
                                               },
                   "trash-bags":  {
                                      "commodity":  "trash-bags",
+                                     "Aldi":  {
+                                                  "url":  "https://www.aldi.us/store/aldi/products/19492154-boulder-drawstring-kitchen-bag-45-ct",
+                                                  "price":  6.59,
+                                                  "size":  "45 ct",
+                                                  "name":  "Boulder Drawstring Kitchen Trash Bags"
+                                              },
+                                     "Fareway":  {
+                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/42479892",
+                                                     "price":  12.99,
+                                                     "size":  "each",
+                                                     "name":  "Bright Essentials Trash Bags, Tall Kitchen, Drawstring, Unscented"
+                                                 },
+                                     "Hy-Vee":  {
+                                                    "url":  "https://www.hy-vee.com/aisles-online/p/2913522/tall-kitchen-bags-with-twist-ties",
+                                                    "price":  3.98,
+                                                    "size":  "70 ct",
+                                                    "name":  "Tall Kitchen Bags With Twist Ties"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Power-Flex-13-Gallon-Tall-Kitchen-Trash-Bags-200-ct/7874222509",
+                                                             "price":  18.98,
+                                                             "size":  "200 ct",
+                                                             "name":  "Member\u0027s Mark Power Flex 13-Gallon Tall Kitchen Trash Bags"
+                                                         },
                                      "Walmart":  {
                                                      "url":  "https://www.walmart.com/ip/Great-Value-13-Gallon-Drawstring-Tall-Kitchen-Trash-Bags-Unscented-40-Bags/344638043",
                                                      "price":  6.48,
@@ -6716,8 +8306,8 @@
                                         "Baker\u0027s":  {
                                                              "url":  "https://www.bakersplus.com/p/kroger-100-pure-vegetable-oil/0001111085606",
                                                              "price":  9.49,
-                                                             "size":  "1 gal",
-                                                             "name":  "KrogerÂ® 100% Pure Vegetable Oil"
+                                                             "size":  "128 fl oz",
+                                                             "name":  "Kroger 100% Pure Vegetable Oil"
                                                          },
                                         "Family Fare":  {
                                                             "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/oils_sprays/our_family_vegetable_oil_100_pure_1_gal/p/7081453",
@@ -6725,6 +8315,12 @@
                                                             "size":  "1 gal",
                                                             "name":  "Our Family Vegetable Oil, 100% Pure 1 Gal"
                                                         },
+                                        "Fareway":  {
+                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068982",
+                                                        "price":  3.99,
+                                                        "size":  "48 fl oz",
+                                                        "name":  "Fareway Vegetable Oil"
+                                                    },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/55983/hy-vee-vegetable-oil",
                                                        "price":  4.48,
@@ -6902,6 +8498,30 @@
                                          },
                   "whole-chicken":  {
                                         "commodity":  "whole-chicken",
+                                        "Aldi":  {
+                                                     "url":  "https://www.aldi.us/store/aldi/products/25897817-perdue-reserve-whole-young-chicken-60-oz",
+                                                     "price":  6.79,
+                                                     "size":  "60 oz",
+                                                     "name":  "Perdue Reserve Whole Young Chicken"
+                                                 },
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/heritage-farm-bone-in-skin-on-whole-young-chicken/0028334850000",
+                                                             "price":  1.49,
+                                                             "size":  "lb",
+                                                             "name":  "Heritage Farm Bone In Skin On Whole Young Chicken"
+                                                         },
+                                        "Fareway":  {
+                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386703",
+                                                        "price":  2.49,
+                                                        "size":  "lb",
+                                                        "name":  "Whole Chicken"
+                                                    },
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/31777/hy-vee-fresh-young-whole-chicken",
+                                                       "price":  2.49,
+                                                       "size":  "lb",
+                                                       "name":  "Hy-Vee Fresh Young Whole Chicken"
+                                                   },
                                         "Walmart":  {
                                                         "url":  "https://www.walmart.com/ip/Tyson-All-Natural-Fresh-Premium-Young-Whole-Chicken-5-0-6-5-lb/19400244",
                                                         "price":  1.46,
