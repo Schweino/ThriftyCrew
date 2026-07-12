@@ -101,6 +101,7 @@ if (Test-Path $purlFile) {
 $notCarry = @{}
 $ncFile = Join-Path $root 'not-carried.json'
 if (Test-Path $ncFile) { $ncd = Get-Content $ncFile -Raw | ConvertFrom-Json; foreach ($e in @($ncd.cells)) { $ncid = [string]$e.id; if (-not $notCarry.ContainsKey($ncid)) { $notCarry[$ncid] = @{} }; $notCarry[$ncid][[string]$e.store] = $true } }
+function IsNoneCarry([string]$id, [string]$store) { return ($notCarry.ContainsKey($id) -and $notCarry[$id].ContainsKey($store)) }
 function NoneCells([string]$id) {
   if (-not $notCarry.ContainsKey($id)) { return '' }
   $out = ''
@@ -347,7 +348,7 @@ foreach ($c in $cats) {
   foreach ($cid in $c.commodities) {
     $r = $byId[[string]$cid]
     if (-not $r) { continue }
-    $ranked = @($r.stores | Sort-Object per_unit)
+    $ranked = @($r.stores | Where-Object { -not (IsNoneCarry ([string]$r.id) ([string]$_.store)) } | Sort-Object per_unit)
     if ($ranked.Count -eq 0) { continue }
     $totalCommodities++
     $unit = [string]$r.unit
@@ -399,7 +400,7 @@ if ($riDoc) {
     $riKey = RiCatKey $rc
     [void]$sb.Append("<section class='pg-cat' data-cat='" + (HtmlEnc $riKey) + "'><h2 class='pg-cath'>" + (HtmlEnc $rc) + "</h2>")
     foreach ($r in ($riDoc.comparison | Where-Object { [string]$_.category -eq $rc })) {
-      $ranked = @($r.stores | Sort-Object per_unit)
+      $ranked = @($r.stores | Where-Object { -not (IsNoneCarry ([string]$r.id) ([string]$_.store)) } | Sort-Object per_unit)
       if ($ranked.Count -eq 0) { continue }
       $totalCommodities++
       $unit = [string]$r.unit
