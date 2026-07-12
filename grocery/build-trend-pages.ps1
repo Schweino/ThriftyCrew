@@ -163,6 +163,9 @@ $generated = @()
 $skipped = @()
 
 foreach ($c in $data.commodities) {
+  # recipe-board items (src='recipe', tracked since 2026-07-11 for the history popup) do NOT get
+  # trend pages yet - expanding to ~155 more public pages is a deliberate decision for later.
+  if ($c.src -eq 'recipe') { continue }
   $hist = @($c.history | Sort-Object week_of)
   if ($hist.Count -lt $MinWeeks) {
     $skipped += ('{0} ({1} weeks)' -f $c.id, $hist.Count)

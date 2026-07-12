@@ -24,7 +24,7 @@ try { foreach ($h in ((Get-Content "$root\price-history.json" -Raw | ConvertFrom
 
 # trend slugs = ids with >=3 weeks history (mirror build-trend-pages rule)
 $trendIds = @{}
-try { foreach ($h in ((Get-Content "$root\price-history.json" -Raw | ConvertFrom-Json).commodities)) { if (@($h.history).Count -ge 3) { $trendIds[[string]$h.id] = $true } } } catch {}
+try { foreach ($h in ((Get-Content "$root\price-history.json" -Raw | ConvertFrom-Json).commodities)) { if (@($h.history).Count -ge 3 -and $h.src -ne 'recipe') { $trendIds[[string]$h.id] = $true } } } catch {}
 
 $items = @(); $seen = @{}
 foreach ($c in $comms) {

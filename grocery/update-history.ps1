@@ -78,6 +78,32 @@ foreach ($row in $rows) {
   $updatedIds[$id] = $true
 }
 
+# ---- ALSO track the recipe-ingredient board (added 2026-07-11 for the per-item history popup) ----
+# Same weekly upsert, marked src='recipe' so trend-page generation and staples trend-links can
+# exclude them until we choose to expand. NO badges for these (they'd flood records-<week>.json).
+$riFile = Join-Path $OutDir 'recipe-board.json'
+if (Test-Path $riFile) {
+  foreach ($row in @((Get-Content $riFile -Raw | ConvertFrom-Json).comparison)) {
+    $id = [string]$row.id
+    if ($updatedIds.ContainsKey($id)) { continue }   # weekly board already recorded this id
+    $P = $null; foreach ($s in $row.stores) { $sp = [double]$s.per_unit; if ($sp -gt 0 -and ($null -eq $P -or $sp -lt $P)) { $P = $sp } }
+    if ($null -eq $P) { continue }
+    $cs = ''; foreach ($s in $row.stores) { if ([double]$s.per_unit -eq $P) { $cs = [string]$s.store; break } }
+    $ec = $existing | Where-Object { $_.id -eq $id } | Select-Object -First 1
+    $prior = @()
+    if ($ec) { $prior = @($ec.history | Where-Object { $_.week_of -ne $week }) }
+    $ps = [ordered]@{}; foreach ($s in $row.stores) { if ([double]$s.per_unit -gt 0) { $ps[[string]$s.store] = $s.per_unit } }
+    $thisWeek = [ordered]@{ week_of=$week; cheapest_price=$P; cheapest_store=$cs; per_store=$ps }
+    $newHistory = @()
+    foreach ($h in $prior) { $newHistory += ,$h }
+    $newHistory += ,$thisWeek
+    $rl = $null
+    foreach ($h in $newHistory) { $hp=[double]$h.cheapest_price; if ($rl -eq $null -or $hp -lt $rl.price) { $rl=[ordered]@{ price=$hp; store=$h.cheapest_store; week_of=$h.week_of } } }
+    $updated += ,([ordered]@{ id=$id; label=[string]$row.commodity; unit=[string]$row.unit; src='recipe'; record_low=$rl; history=$newHistory })
+    $updatedIds[$id] = $true
+  }
+}
+
 # ---- carry forward commodities that had no ad this week (unchanged) ----
 foreach ($ec in $existing) { if (-not $updatedIds.ContainsKey([string]$ec.id)) { $updated += ,$ec } }
 

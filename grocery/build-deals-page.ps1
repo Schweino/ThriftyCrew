@@ -338,7 +338,7 @@ foreach ($c in $cats) {
     if ($ranked.Count -eq 0) { continue }
     $totalCommodities++
     $unit = [string]$r.unit
-    [void]$sb.Append("<article class='pg-row' data-cat='" + $c.key + "'>")
+    [void]$sb.Append("<article class='pg-row' data-cat='" + $c.key + "' data-id='" + [string]$r.id + "'>")
     $rb = $recBadge[[string]$r.id]
     $rbHtml = if ($rb) { "<span class='pg-rec " + $rb.cls + "' title=`"" + (HtmlEnc $rb.title) + "`">" + $rb.label + "</span>" } else { "" }
     # stock-up tag rides a record/tie/dip badge on a commodity that keeps (freezer/pantry)
@@ -389,7 +389,7 @@ if ($riDoc) {
       if ($ranked.Count -eq 0) { continue }
       $totalCommodities++
       $unit = [string]$r.unit
-      [void]$sb.Append("<article class='pg-row' data-cat='" + (HtmlEnc $riKey) + "'>")
+      [void]$sb.Append("<article class='pg-row' data-cat='" + (HtmlEnc $riKey) + "' data-id='" + [string]$r.id + "'>")
       [void]$sb.Append("<div class='pg-rowhead'><label class='pg-pickl' title='Add to my shopping list'><input type='checkbox' class='pg-pick' aria-label='Add to my shopping list'></label><span class='pg-name'>" + (HtmlEnc $r.commodity) + "</span><span class='pg-unit'>" + (UnitLabel $unit) + "</span></div>")
       [void]$sb.Append("<div class='pg-stores'>")
       $i = 0
@@ -764,6 +764,125 @@ $js = @'
 </script>
 '@
 
-($css + $body + $js) | Set-Content $Out -Encoding UTF8
-Write-Output ("deals page -> " + $Out + "  (" + $totalCommodities + " commodities, " + $totalPrices + " prices)")
+# ---- per-item PRICE-HISTORY POPUP (2026-07-11, Brad's ask): every board row with >=2 tracked weeks
+# gets a "history" pill that opens a modal showing each store's price week by week. Data is embedded
+# at build time from price-history.json (weekly staples have per_store history now; recipe-board items
+# started accruing history the same day, so their pills light up automatically as weeks land).
+$histBlock = ''
+if ($histDoc) {
+  $onPage = @{}
+  foreach ($r in $doc.comparison) { $onPage[[string]$r.id] = $true }
+  if ($riDoc) { foreach ($r in $riDoc.comparison) { $onPage[[string]$r.id] = $true } }
+  function JStr2([string]$s){ return '"' + ($s -replace '\\','\\\\' -replace '"','\"') + '"' }
+  $entries = @()
+  foreach ($h in $histDoc.commodities) {
+    $id = [string]$h.id
+    if (-not $onPage.ContainsKey($id)) { continue }
+    $hist = @($h.history | Sort-Object week_of)
+    if ($hist.Count -lt 2) { continue }
+    if ($hist.Count -gt 8) { $hist = @($hist | Select-Object -Last 8) }
+    $weeks = @($hist | ForEach-Object { ([string]$_.week_of).Substring(5) })
+    $storeSet = [ordered]@{}
+    foreach ($hw in $hist) { if ($hw.per_store) { foreach ($p in $hw.per_store.PSObject.Properties) { $storeSet[[string]$p.Name] = $true } } }
+    if ($storeSet.Count -eq 0) { continue }
+    $sParts = @()
+    foreach ($sn in $storeSet.Keys) {
+      $vals = @()
+      foreach ($hw in $hist) {
+        $v = $null
+        if ($hw.per_store) { $pp = $hw.per_store.PSObject.Properties | Where-Object { $_.Name -eq $sn } | Select-Object -First 1; if ($pp) { $v = [double]$pp.Value } }
+        if ($null -ne $v -and $v -gt 0) { $vals += ,([string]([math]::Round($v,4))) } else { $vals += ,'null' }
+      }
+      $sParts += ((JStr2 $sn) + ':[' + ($vals -join ',') + ']')
+    }
+    $t = 'null'
+    if (@($h.history).Count -ge 3 -and $h.src -ne 'recipe') { $t = JStr2 ($id + '-price-omaha') }
+    $entries += ((JStr2 $id) + ':{"l":' + (JStr2 ([string]$h.label)) + ',"u":' + (JStr2 ([string]$h.unit)) + ',"t":' + $t + ',"w":[' + ((@($weeks | ForEach-Object { JStr2 $_ })) -join ',') + '],"s":{' + ($sParts -join ',') + '}}')
+  }
+  if ($entries.Count -gt 0) {
+    $histJson = '{' + ($entries -join ',') + '}'
+    $histBlock = @'
+<style>
+.pg-hist{border:1px solid #d5dbe4;background:#fff;color:#68748a;border-radius:999px;padding:2px 10px;font-size:.62em;font-weight:800;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;font-family:inherit;margin-left:7px;vertical-align:2px}
+.pg-hist:hover{border-color:#E2A43C;color:#8a6d1f}
+.pg-hx-ov{position:fixed;inset:0;background:rgba(22,38,63,.55);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px}
+.pg-hx{background:#fff;border-radius:16px;max-width:640px;width:100%;max-height:85vh;overflow:auto;padding:22px 22px 18px;box-shadow:0 24px 64px rgba(0,0,0,.3)}
+.pg-hx-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:4px}
+.pg-hx h3{margin:0;font-size:1.25em;color:#16263F}
+.pg-hx-x{border:none;background:#f1f4f8;color:#68748a;border-radius:8px;width:30px;height:30px;font-size:1.05em;font-weight:800;cursor:pointer;line-height:1;flex:0 0 auto}
+.pg-hx-x:hover{background:#fbeceb;color:#b23b2e}
+.pg-hx-sub{font-size:.82em;color:#8a94a6;margin:0 0 12px}
+.pg-hx-wrap{overflow-x:auto}
+.pg-hx table{border-collapse:collapse;width:100%;font-size:.85em;font-variant-numeric:tabular-nums}
+.pg-hx th,.pg-hx td{padding:6px 9px;text-align:right;border-bottom:1px solid #eef1f5;white-space:nowrap}
+.pg-hx th:first-child,.pg-hx td:first-child{text-align:left;font-weight:700;color:#16263F}
+.pg-hx thead th{font-size:.78em;text-transform:uppercase;letter-spacing:.04em;color:#8a94a6;border-bottom:2px solid #e2e8f0}
+.pg-hx td.lo{background:#eaf6ef;color:#1f7a4d;font-weight:800;border-radius:4px}
+.pg-hx td.na{color:#c3cad6}
+.pg-hx-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+.pg-hx-note{font-size:.75em;color:#8a94a6}
+.pg-hx-trend{font-size:.85em;font-weight:700;color:#8a6d1f;text-decoration:none}
+.pg-hx-trend:hover{color:#16263F}
+</style>
+<script>
+(function(){
+  var TCH = __TCH_JSON__;
+  function fmt(v){ if (v === null || v === undefined) return ''; return v < 1 ? '$' + v.toFixed(3) : '$' + v.toFixed(2); }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  // add a history pill to every row we have data for
+  var rows = document.querySelectorAll('.pg-row[data-id]');
+  for (var i = 0; i < rows.length; i++){
+    var id = rows[i].getAttribute('data-id');
+    if (!TCH[id]) continue;
+    var head = rows[i].querySelector('.pg-rowhead');
+    if (!head) continue;
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'pg-hist'; b.setAttribute('data-hid', id); b.textContent = 'history';
+    b.title = "Every store's price for this item, week by week";
+    head.appendChild(b);
+  }
+  var ov = null;
+  function close(){ if (ov && ov.parentNode) ov.parentNode.removeChild(ov); ov = null; }
+  function open(id){
+    var d = TCH[id]; if (!d) return;
+    close();
+    var stores = [];
+    for (var sn in d.s){ var arr = d.s[sn]; var last = null; for (var k = arr.length - 1; k >= 0; k--){ if (arr[k] !== null){ last = arr[k]; break; } } stores.push({ n: sn, a: arr, last: last }); }
+    stores.sort(function(a,b){ var x = a.last === null ? 1e9 : a.last, y = b.last === null ? 1e9 : b.last; return x - y; });
+    var lows = [];
+    for (var w = 0; w < d.w.length; w++){ var m = null; for (var s2 = 0; s2 < stores.length; s2++){ var v = stores[s2].a[w]; if (v !== null && (m === null || v < m)) m = v; } lows.push(m); }
+    var h = '<div class="pg-hx"><div class="pg-hx-top"><h3>' + esc(d.l) + '</h3><button type="button" class="pg-hx-x" aria-label="Close">&times;</button></div>';
+    h += '<p class="pg-hx-sub">Price per ' + esc(d.u) + ' at each store, week by week. Green = that week&rsquo;s cheapest.</p>';
+    h += '<div class="pg-hx-wrap"><table><thead><tr><th>Store</th>';
+    for (w = 0; w < d.w.length; w++) h += '<th>' + esc(d.w[w]) + '</th>';
+    h += '</tr></thead><tbody>';
+    for (s2 = 0; s2 < stores.length; s2++){
+      h += '<tr><td>' + esc(stores[s2].n) + '</td>';
+      for (w = 0; w < d.w.length; w++){
+        var v2 = stores[s2].a[w];
+        if (v2 === null) h += '<td class="na">&ndash;</td>';
+        else h += '<td' + (lows[w] !== null && v2 === lows[w] ? ' class="lo"' : '') + '>' + fmt(v2) + '</td>';
+      }
+      h += '</tr>';
+    }
+    h += '</tbody></table></div><div class="pg-hx-foot"><span class="pg-hx-note">From our daily Omaha price checks. History deepens every week.</span>';
+    if (d.t) h += '<a class="pg-hx-trend" href="/' + d.t + '/?ref=board-history">Full history page &rarr;</a>';
+    h += '</div></div>';
+    ov = document.createElement('div');
+    ov.className = 'pg-hx-ov';
+    ov.innerHTML = h;
+    document.body.appendChild(ov);
+    ov.addEventListener('click', function(e){ if (e.target === ov || e.target.closest('.pg-hx-x')) close(); });
+  }
+  document.addEventListener('click', function(e){ var b = e.target.closest('.pg-hist'); if (b) open(b.getAttribute('data-hid')); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });
+})();
+</script>
+'@
+    $histBlock = $histBlock.Replace('__TCH_JSON__', $histJson)
+  }
+}
+
+($css + $body + $js + $histBlock) | Set-Content $Out -Encoding UTF8
+Write-Output ("deals page -> " + $Out + "  (" + $totalCommodities + " commodities, " + $totalPrices + " prices, history popup on " + $(if ($entries) { $entries.Count } else { 0 }) + " items)")
 
