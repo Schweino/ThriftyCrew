@@ -780,7 +780,7 @@ if ($histDoc) {
     if (-not $onPage.ContainsKey($id)) { continue }
     $hist = @($h.history | Sort-Object week_of)
     if ($hist.Count -lt 2) { continue }
-    if ($hist.Count -gt 8) { $hist = @($hist | Select-Object -Last 8) }
+    if ($hist.Count -gt 40) { $hist = @($hist | Select-Object -Last 40) }   # 21 daily + weekly tail (update-history compacts)
     $weeks = @($hist | ForEach-Object { ([string]$_.week_of).Substring(5) })
     $storeSet = [ordered]@{}
     foreach ($hw in $hist) { if ($hw.per_store) { foreach ($p in $hw.per_store.PSObject.Properties) { $storeSet[[string]$p.Name] = $true } } }
@@ -812,13 +812,10 @@ if ($histDoc) {
 .pg-hx-x{border:none;background:#f1f4f8;color:#68748a;border-radius:8px;width:30px;height:30px;font-size:1.05em;font-weight:800;cursor:pointer;line-height:1;flex:0 0 auto}
 .pg-hx-x:hover{background:#fbeceb;color:#b23b2e}
 .pg-hx-sub{font-size:.82em;color:#8a94a6;margin:0 0 12px}
-.pg-hx-wrap{overflow-x:auto}
-.pg-hx table{border-collapse:collapse;width:100%;font-size:.85em;font-variant-numeric:tabular-nums}
-.pg-hx th,.pg-hx td{padding:6px 9px;text-align:right;border-bottom:1px solid #eef1f5;white-space:nowrap}
-.pg-hx th:first-child,.pg-hx td:first-child{text-align:left;font-weight:700;color:#16263F}
-.pg-hx thead th{font-size:.78em;text-transform:uppercase;letter-spacing:.04em;color:#8a94a6;border-bottom:2px solid #e2e8f0}
-.pg-hx td.lo{background:#eaf6ef;color:#1f7a4d;font-weight:800;border-radius:4px}
-.pg-hx td.na{color:#c3cad6}
+.pg-hx-chart svg{width:100%;height:auto;display:block}
+.pg-hx-leg{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:10px}
+.pg-hx-leg span{display:inline-flex;align-items:center;gap:6px;font-size:.8em;color:#3a4658;font-weight:600;white-space:nowrap}
+.pg-hx-leg i{width:16px;height:3px;border-radius:2px;display:inline-block}
 .pg-hx-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
 .pg-hx-note{font-size:.75em;color:#8a94a6}
 .pg-hx-trend{font-size:.85em;font-weight:700;color:#8a6d1f;text-decoration:none}
@@ -843,29 +840,56 @@ if ($histDoc) {
   }
   var ov = null;
   function close(){ if (ov && ov.parentNode) ov.parentNode.removeChild(ov); ov = null; }
+  var COLORS = {"Baker's":'#2f6bb0','Walmart':'#E2A43C','Aldi':'#1f7a4d','Hy-Vee':'#b23b2e','Family Fare':'#7c5cbf',"Sam's Club":'#8a6d1f'};
   function open(id){
     var d = TCH[id]; if (!d) return;
     close();
     var stores = [];
-    for (var sn in d.s){ var arr = d.s[sn]; var last = null; for (var k = arr.length - 1; k >= 0; k--){ if (arr[k] !== null){ last = arr[k]; break; } } stores.push({ n: sn, a: arr, last: last }); }
-    stores.sort(function(a,b){ var x = a.last === null ? 1e9 : a.last, y = b.last === null ? 1e9 : b.last; return x - y; });
-    var lows = [];
-    for (var w = 0; w < d.w.length; w++){ var m = null; for (var s2 = 0; s2 < stores.length; s2++){ var v = stores[s2].a[w]; if (v !== null && (m === null || v < m)) m = v; } lows.push(m); }
-    var h = '<div class="pg-hx"><div class="pg-hx-top"><h3>' + esc(d.l) + '</h3><button type="button" class="pg-hx-x" aria-label="Close">&times;</button></div>';
-    h += '<p class="pg-hx-sub">Price per ' + esc(d.u) + ' at each store, week by week. Green = that week&rsquo;s cheapest.</p>';
-    h += '<div class="pg-hx-wrap"><table><thead><tr><th>Store</th>';
-    for (w = 0; w < d.w.length; w++) h += '<th>' + esc(d.w[w]) + '</th>';
-    h += '</tr></thead><tbody>';
-    for (s2 = 0; s2 < stores.length; s2++){
-      h += '<tr><td>' + esc(stores[s2].n) + '</td>';
-      for (w = 0; w < d.w.length; w++){
-        var v2 = stores[s2].a[w];
-        if (v2 === null) h += '<td class="na">&ndash;</td>';
-        else h += '<td' + (lows[w] !== null && v2 === lows[w] ? ' class="lo"' : '') + '>' + fmt(v2) + '</td>';
-      }
-      h += '</tr>';
+    for (var sn in d.s){ var arr = d.s[sn]; var last = null; for (var k = arr.length - 1; k >= 0; k--){ if (arr[k] !== null){ last = arr[k]; break; } } if (last !== null) stores.push({ n: sn, a: arr, last: last, c: COLORS[sn] || '#68748a' }); }
+    stores.sort(function(a,b){ return a.last - b.last; });
+    var n = d.w.length;
+    // y range over every plotted value, padded so lines never kiss the frame
+    var ymin = null, ymax = null;
+    for (var s2 = 0; s2 < stores.length; s2++) for (var w = 0; w < n; w++){ var v = stores[s2].a[w]; if (v !== null){ if (ymin === null || v < ymin) ymin = v; if (ymax === null || v > ymax) ymax = v; } }
+    var pad = (ymax - ymin) * 0.1; if (pad <= 0) pad = Math.max(0.05, ymax * 0.05);
+    ymin -= pad; ymax += pad; if (ymin < 0) ymin = 0;
+    var W = 560, H = 280, L = 50, R = 12, T = 12, B = 34, pw = W - L - R, ph = H - T - B;
+    function X(i){ return n > 1 ? L + i * (pw / (n - 1)) : L + pw / 2; }
+    function Y(v){ return T + (ymax - v) / (ymax - ymin) * ph; }
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Price history chart">';
+    for (var g = 0; g <= 3; g++){
+      var gv = ymin + (ymax - ymin) * g / 3, gy = Y(gv);
+      svg += '<line x1="' + L + '" y1="' + gy.toFixed(1) + '" x2="' + (W - R) + '" y2="' + gy.toFixed(1) + '" stroke="#eef1f5" stroke-width="1"/>';
+      svg += '<text x="' + (L - 6) + '" y="' + (gy + 3.5).toFixed(1) + '" text-anchor="end" font-size="10.5" fill="#8a94a6">' + fmt(gv) + '</text>';
     }
-    h += '</tbody></table></div><div class="pg-hx-foot"><span class="pg-hx-note">From our daily Omaha price checks. History deepens every week.</span>';
+    var step = Math.max(1, Math.ceil(n / 6));
+    for (w = 0; w < n; w++){
+      if (w % step !== 0 && w !== n - 1) continue;
+      svg += '<text x="' + X(w).toFixed(1) + '" y="' + (H - 10) + '" text-anchor="middle" font-size="10.5" fill="#8a94a6">' + esc(d.w[w]) + '</text>';
+    }
+    for (s2 = 0; s2 < stores.length; s2++){
+      var st = stores[s2], path = '', run = false;
+      for (w = 0; w < n; w++){
+        var v2 = st.a[w];
+        if (v2 === null){ run = false; continue; }
+        path += (run ? 'L' : 'M') + X(w).toFixed(1) + ' ' + Y(v2).toFixed(1) + ' ';
+        run = true;
+      }
+      if (path) svg += '<path d="' + path + '" fill="none" stroke="' + st.c + '" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" opacity=".9"/>';
+      for (w = 0; w < n; w++){
+        v2 = st.a[w];
+        if (v2 === null) continue;
+        svg += '<circle cx="' + X(w).toFixed(1) + '" cy="' + Y(v2).toFixed(1) + '" r="3" fill="' + st.c + '"><title>' + esc(st.n) + ' ' + esc(d.w[w]) + ': ' + fmt(v2) + '</title></circle>';
+      }
+    }
+    svg += '</svg>';
+    var h = '<div class="pg-hx"><div class="pg-hx-top"><h3>' + esc(d.l) + '</h3><button type="button" class="pg-hx-x" aria-label="Close">&times;</button></div>';
+    h += '<p class="pg-hx-sub">Price per ' + esc(d.u) + ' at each store over time. Tap a dot for the exact price.</p>';
+    h += '<div class="pg-hx-chart">' + svg + '</div>';
+    h += '<div class="pg-hx-leg">';
+    for (s2 = 0; s2 < stores.length; s2++) h += '<span><i style="background:' + stores[s2].c + '"></i>' + esc(stores[s2].n) + '</span>';
+    h += '</div>';
+    h += '<div class="pg-hx-foot"><span class="pg-hx-note">Daily checks for the last three weeks, weekly before that. History deepens as we track.</span>';
     if (d.t) h += '<a class="pg-hx-trend" href="/' + d.t + '/?ref=board-history">Full history page &rarr;</a>';
     h += '</div></div>';
     ov = document.createElement('div');

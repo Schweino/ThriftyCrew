@@ -107,6 +107,29 @@ if (Test-Path $riFile) {
 # ---- carry forward commodities that had no ad this week (unchanged) ----
 foreach ($ec in $existing) { if (-not $updatedIds.ContainsKey([string]$ec.id)) { $updated += ,$ec } }
 
+# ---- compaction (Brad 2026-07-11): keep DAILY granularity for the last 21 days, then collapse
+# older entries to ONE per calendar week. We keep each old week's LOWEST-cheapest entry (not the
+# last one) so a mid-week record low is never erased and record_low recomputation stays honest.
+$dailyCut = (Get-Date).AddDays(-21).ToString('yyyy-MM-dd')
+$compacted = @()
+foreach ($u in $updated) {
+  $recent = @(); $old = @()
+  foreach ($h in $u.history) { if ([string]$h.week_of -ge $dailyCut) { $recent += ,$h } else { $old += ,$h } }
+  if (@($old).Count -gt 0) {
+    $byWeek = @{}
+    foreach ($h in $old) {
+      try { $d = [datetime]$h.week_of } catch { continue }
+      $ws = $d.AddDays(-((([int]$d.DayOfWeek) + 6) % 7)).ToString('yyyy-MM-dd')   # Monday of that week
+      if (-not $byWeek.ContainsKey($ws) -or [double]$h.cheapest_price -lt [double]$byWeek[$ws].cheapest_price) { $byWeek[$ws] = $h }
+    }
+    $keptOld = @(); foreach ($k in ($byWeek.Keys | Sort-Object)) { $keptOld += ,$byWeek[$k] }
+    $newHist = @(); foreach ($h in $keptOld) { $newHist += ,$h }; foreach ($h in $recent) { $newHist += ,$h }
+    $u.history = @($newHist | Sort-Object week_of)
+  }
+  $compacted += ,$u
+}
+$updated = $compacted
+
 # ---- persist ----
 $maxWeeks = 0; foreach ($u in $updated) { $hc = @($u.history).Count; if ($hc -gt $maxWeeks) { $maxWeeks = $hc } }
 ([ordered]@{ updated=$week; weeks_on_record=$maxWeeks; commodities=$updated } | ConvertTo-Json -Depth 9) | Set-Content $HistoryFile -Encoding UTF8
