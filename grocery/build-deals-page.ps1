@@ -158,8 +158,14 @@ function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$board
     $lnk = $purls[$id][$store]
     if ($lnk.url) {
       $ok = $true
-      # suppress a link whose product per-unit is clearly off the board price shown (>30%) - missing beats wrong
-      if ($boardPU -gt 0) { $lprice = 0.0; [void][double]::TryParse((([string]$lnk.price) -replace '[^0-9.]',''), [ref]$lprice); $lpu = LinkPU ([string]$lnk.size) $unit $lprice; if (($null -ne $lpu) -and ([math]::Abs($lpu - $boardPU) / $boardPU -gt 0.30)) { $ok = $false } }
+      # Suppress a link ONLY when the linked product's per-unit is GROSSLY off the board (likely a wrong product
+      # or a size we can't parse) - not for normal variation. A tight guard (the old 30%) wrongly hid CORRECT
+      # links whenever the board showed a sale, a bulk/multi-pack, or a different pack size than the product page
+      # (e.g. Baker's chicken at a $2.29 sale vs a $4.51 everyday product page). Product correctness is enforced
+      # at resolution time (each URL is verified against the commodity); here we only reject gross outliers.
+      # Bounds: hide if pricier than ~2.6x board (fancier/organic/frozen wrong product) or under ~0.22x board
+      # (a much smaller item or an unparseable size). Everything in between - sales, 2-packs, warehouse sizes - shows.
+      if ($boardPU -gt 0) { $lprice = 0.0; [void][double]::TryParse((([string]$lnk.price) -replace '[^0-9.]',''), [ref]$lprice); $lpu = LinkPU ([string]$lnk.size) $unit $lprice; if (($null -ne $lpu) -and ($lpu -gt $boardPU * 2.6 -or $lpu -lt $boardPU * 0.22)) { $ok = $false } }
       if ($ok) { $url = [string]$lnk.url }
     }
   }

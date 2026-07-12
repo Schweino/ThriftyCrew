@@ -51,9 +51,25 @@ try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-dr
 # the price change was silently lost forever.
 $embed = Join-Path $OutDir 'deals-page-embed.html'
 Remove-Item $embed -ErrorAction SilentlyContinue
+# Regenerate the name-drift audit against the CURRENT product-urls FIRST. It flags cells whose stored link is a
+# wrong product (fresh->frozen etc.), which the builder uses to suppress that "See item" link. If it goes stale,
+# a link stays wrongly hidden after its URL is fixed (this bit us: chicken breast at Aldi/Sam's stayed unlinked
+# after the frozen->fresh fix until this audit was re-run). Running it here keeps suppression in sync every build.
+try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null } catch {}
 & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-deals-page.ps1') -CompareFile $CompareFile -Out $embed -Embed | Out-Null
 if ($LASTEXITCODE -ne 0) { Write-Output ("ERROR: page build FAILED (rc=$LASTEXITCODE) - not publishing"); exit 1 }
 if (-not (Test-Path $embed) -or ((Get-Item $embed).Length -lt 2000)) { Write-Output 'ERROR: page build produced no/short file'; exit 1 }
+# Link-coverage self-check: how many priced chips render NO "See item" link (or Does-not-carry cell)? A spike
+# means links are being wrongly suppressed (a stale audit, an over-tight price guard, or wrong-product data).
+# Surfaced, never fatal - the board still publishes; this is an early-warning so it can't silently regress again.
+try {
+  $eh = Get-Content $embed -Raw
+  $nl = 0; foreach ($rw in [regex]::Matches($eh, "data-id='[^']+'(.*?)</article>", 'Singleline')) {
+    foreach ($cp in [regex]::Matches($rw.Groups[1].Value, "<div class='pg-chip[^']*' data-store=`"[^`"]+`" data-pu='[^']*'>(.*?)</div>", 'Singleline')) { if ($cp.Groups[1].Value -notmatch 'pg-see') { $nl++ } }
+  }
+  Write-Output ("link-coverage: $nl priced chip(s) with no See-item link")
+  if ($nl -gt 15) { Write-Output ("WARN: $nl chips missing links (>15) - check name-drift.json / product-urls / price guard in build-deals-page.ps1") }
+} catch {}
 
 # ---- preserve the live post's current visibility (so a weekly refresh never reverts a manual paid-gate) ----
 function New-GhostJWT { param($key)
