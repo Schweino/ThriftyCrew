@@ -16,11 +16,11 @@
   coverage worse than -MaxNoLink. STALE is reported (and alerted) but not a hard fail on its own.
   Reuses the exact LinkPU math from build-deals-page.ps1 so the numbers match what the page actually renders.
 #>
-# MaxNoLink raised 20 -> 45 on 2026-07-12 when Fareway (store #7) launched: its ~27 priced chips have no
-# product-urls "See item" links resolved yet, so they legitimately render name-only until the weekly agent's
-# URL step (K) covers them. 45 keeps headroom for the sale-hidden links while still catching a REAL spike
-# (a store's data going missing). Lower this back toward ~20 once Fareway's links are resolved.
-param([double]$Tol = 0.30, [int]$MaxNoLink = 45, [string]$OutDir = "", [string]$Embed = "")
+# MaxNoLink = 0 since 2026-07-12 (Brad's invariant: a displayed price ALWAYS has a matching link - ZERO
+# tolerance). Any no-link chip = breach -> check-ad-cycles auto-repairs Family Fare headlessly and alerts ONCE
+# per distinct set (sig-deduped) for browser stores until their next re-pull fixes the stored price. The
+# temporary 45 headroom for the Fareway launch is obsolete (all Fareway links resolved same-day).
+param([double]$Tol = 0.30, [int]$MaxNoLink = 0, [string]$OutDir = "", [string]$Embed = "")
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }

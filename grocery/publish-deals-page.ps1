@@ -74,7 +74,7 @@ try {
     foreach ($cp in [regex]::Matches($rw.Groups[1].Value, "<div class='pg-chip[^']*' data-store=`"[^`"]+`" data-pu='[^']*'>(.*?)</div>", 'Singleline')) { if ($cp.Groups[1].Value -notmatch 'pg-see') { $nl++ } }
   }
   Write-Output ("link-coverage: $nl priced chip(s) with no See-item link")
-  if ($nl -gt 15) { Write-Output ("WARN: $nl chips missing links (>15) - check name-drift.json / product-urls / price guard in build-deals-page.ps1") }
+  if ($nl -gt 0) { Write-Output ("WARN: $nl chips missing links (target 0 - Brad's invariant: every price has a link) - check consistency-report.json no_link / product-urls / the identity gate in build-deals-page.ps1") }
 } catch {}
 
 # ---- ALL-STORES-SHOWN invariant (HARD gate): every staple commodity must render a tile for ALL 7 stores - a

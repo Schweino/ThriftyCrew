@@ -347,7 +347,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
             if ($LASTEXITCODE -eq 2) {
               $cr = try { Get-Content (Join-Path $OutDir 'consistency-report.json') -Raw | ConvertFrom-Json } catch { $null }
               $nl = if ($cr) { [string]$cr.no_link_count } else { '?' }
-              $driftSig = if ($cr) { (@($cr.mismatch | ForEach-Object { $_.id + '|' + $_.store } | Sort-Object) -join ';') } else { '' }
+              # signature covers BOTH failure kinds: price-drift mismatches AND no-link chips (a pure no-link
+              # breach used to hash to '' and could never de-dup properly)
+              $driftSig = if ($cr) { (@(@($cr.mismatch) + @($cr.no_link) | Where-Object { $_ } | ForEach-Object { $_.id + '|' + $_.store } | Sort-Object -Unique) -join ';') } else { '' }
               $csigF = Join-Path $OutDir 'consistency-alert.sig'
               $prevSig = if (Test-Path $csigF) { (Get-Content $csigF -Raw).Trim() } else { '' }
               Log ("consistency STILL breached after repair - no-link=$nl (browser-store price drift, needs re-pull)")

@@ -933,7 +933,10 @@
                                             "muscle",
                                             "protein",
                                             "\\bshake\\b",
-                                            "\\bbar\\b"
+                                            "\\bbar\\b",
+                                            "mozzarella",
+                                            "\\bcheese\\b",
+                                            "yog(?:h)?urt"
                                         ],
                             "band_min":  1,
                             "band_max":  6,

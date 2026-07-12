@@ -201,6 +201,22 @@ function NameMatch([string]$boardItem, [string]$linkName) {
   $hit = 0; foreach ($w in $bw) { if ($ln -match ('\b' + [regex]::Escape($w) + '\b')) { $hit++ } }
   return (($hit / $bw.Count) -ge 0.5)
 }
+# Commodity-identity fallback for SALE links: flyer names carry descriptive fluff ("Tree Ripened Yellow Flesh
+# Peaches, Small") that a storefront product name ("Fresh Peaches") never repeats, so word-overlap NameMatch
+# alone can wrongly hide a correct, price-consistent link. If the LINK name matches the commodity's own
+# include patterns (and none of its excludes) it IS an instance of the same commodity; combined with a
+# band-passing per-unit that's safe to show. Never used without the band (a generic include like "bread"
+# matches any brand, so identity-by-include alone could bless a wrong product).
+$cmIdent = @{}
+try { foreach ($cdef in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) { $cmIdent[[string]$cdef.id] = @{ inc = @($cdef.include); exc = @($cdef.exclude) } } } catch {}
+function CommodityIdent([string]$id, [string]$linkName) {
+  if (-not $cmIdent.ContainsKey($id) -or -not $linkName) { return $false }
+  $inc = $false
+  foreach ($p in $cmIdent[$id].inc) { if ($p -and $linkName -imatch $p) { $inc = $true; break } }
+  if (-not $inc) { return $false }
+  foreach ($x in $cmIdent[$id].exc) { if ($x -and $linkName -imatch $x) { return $false } }
+  return $true
+}
 # Tidy a raw board item name for on-chip display: drop trailing ad-price/size fluff, cap length.
 function CleanItemName([string]$item) {
   if (-not $item) { return '' }
@@ -240,7 +256,15 @@ function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$board
           # must run even when the size can't be priced into a per-unit, e.g. a "20 oz" loaf on an each-based board -
           # that null-price gap is exactly how a wrong link like Our Family White for a Sara Lee board slipped through).
           # Then, when the per-unit IS computable, also require the everyday snapshot to sit in a sane band around the sale.
-          if (-not (NameMatch $boardItem ([string]$lnk.name))) { $ok = $false }
+          $ident = (NameMatch $boardItem ([string]$lnk.name))
+          # flyer-fluff rescue: word-overlap failed, but the link IS the same commodity (its own include/exclude)
+          # AND its per-unit is computable and inside the sale band AND the link name is a GENERIC SUBSET of the
+          # board's (every distinctive link word appears in the board item). The subset test is what stops a
+          # brand swap: "Fresh Peaches" ⊂ "Tree Ripened Yellow Flesh Peaches, Small" -> show (same commodity,
+          # less flowery), but "Kroger Thick Cut Bacon" ⊄ "Oscar Mayer Bacon" -> still hidden (different brand,
+          # even at a plausible price). Band is REQUIRED here.
+          if (-not $ident -and ($null -ne $lpu) -and ($lpu -ge $boardPU * 0.85) -and ($lpu -le $boardPU * 3.0) -and (CommodityIdent $id ([string]$lnk.name)) -and (NameMatch ([string]$lnk.name) $boardItem)) { $ident = $true }
+          if (-not $ident) { $ok = $false }
           elseif (($null -ne $lpu) -and ($lpu -lt $boardPU * 0.85 -or $lpu -gt $boardPU * 3.0)) { $ok = $false }
         }
         elseif ($null -ne $lpu -and ([math]::Abs($lpu - $boardPU) / $boardPU -gt 0.30)) {
