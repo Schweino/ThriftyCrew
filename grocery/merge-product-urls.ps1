@@ -35,7 +35,10 @@ foreach($fn in $ordered){
     if(-not $r.url){ continue }
     $id=[string]$r.id
     if(-not $items.ContainsKey($id)){ $items[$id]=@{} }
-    $items[$id][$store]=[ordered]@{ url=[string]$r.url; price=$r.price; size=[string]$r.size; name=[string]$r.name }
+    # normalize price to a NUMBER (resolver inputs use "$2.29" strings; store numeric so every consumer -
+    # audit-links / resolve-worklist / audit-name-drift LinkPerUnit - can cast it without a $-sign crash)
+    $pnum = $r.price; if ($r.price -is [string]) { $tmp=0.0; if ([double]::TryParse((([string]$r.price) -replace '[^0-9.]',''), [ref]$tmp)) { $pnum = $tmp } }
+    $items[$id][$store]=[ordered]@{ url=[string]$r.url; price=$pnum; size=[string]$r.size; name=[string]$r.name }
     $added++; $storesSeen[$store]=$true
   }
 }
