@@ -36,6 +36,10 @@
 /grocery/out/bakers/meta.json
 /grocery/out/bakers/urls.txt
 
+# heavy Fareway ad-page captures (intermediate; vision-read into fareway-deals-*.json, then not needed)
+/grocery/out/fareway/weekly/
+/grocery/out/fareway/monthly/
+
 # --- never commit, anywhere in the tree ---
 # secrets (the Ghost admin key lives here locally; it is a GitHub Actions secret in CI)
 .ghostkey

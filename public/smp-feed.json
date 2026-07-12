@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-12T10:41:46",
-    "week_of":  "2026-07-11",
+    "generated":  "2026-07-12T11:25:44",
+    "week_of":  "2026-07-12",
     "ingredient_count":  184,
     "recipe_count":  113,
     "ingredients":  {
@@ -18,7 +18,7 @@
                                        "store":  "Aldi",
                                        "type":  "everyday",
                                        "url":  "https://www.aldi.us/store/aldi/products/16345637-envy-apple-each",
-                                       "n":  5
+                                       "n":  7
                                    },
                         "avocados":  {
                                          "unit":  "each",
@@ -26,7 +26,7 @@
                                          "store":  "Aldi",
                                          "type":  "everyday",
                                          "url":  "https://www.aldi.us/store/aldi/products/3111634-avocado-each",
-                                         "n":  6
+                                         "n":  7
                                      },
                         "bacon":  {
                                       "unit":  "lb",
@@ -34,15 +34,15 @@
                                       "store":  "Sam\u0027s Club",
                                       "type":  "everyday",
                                       "url":  "https://www.samsclub.com/ip/Member-s-Mark-Naturally-Hickory-Smoked-Bacon-3-lbs/13892064138",
-                                      "n":  6
+                                      "n":  7
                                   },
                         "bananas":  {
                                         "unit":  "lb",
                                         "cheapest":  0.49,
-                                        "store":  "Hy-Vee",
+                                        "store":  "Aldi",
                                         "type":  "everyday",
-                                        "url":  "https://www.hy-vee.com/aisles-online/p/37178/fresh-chiquita-bananas",
-                                        "n":  6
+                                        "url":  "https://www.aldi.us/store/aldi/products/25720157-bananas-per-lb",
+                                        "n":  7
                                     },
                         "blueberries":  {
                                             "unit":  "oz",
@@ -54,11 +54,11 @@
                                         },
                         "chicken-breast":  {
                                                "unit":  "lb",
-                                               "cheapest":  2.29,
-                                               "store":  "Aldi",
-                                               "type":  "everyday",
-                                               "url":  "https://www.aldi.us/store/aldi/products/19554637-fresh-family-pack-chicken-breasts-per-lb",
-                                               "n":  6
+                                               "cheapest":  1.99,
+                                               "store":  "Family Fare",
+                                               "type":  "sale",
+                                               "url":  "https://www.shopfamilyfare.com/shop/meat/chicken/fresh_chicken/boneless_skinless_chicken_breasts/p/1564405684713031766",
+                                               "n":  7
                                            },
                         "bread":  {
                                       "unit":  "each",
@@ -66,7 +66,7 @@
                                       "store":  "Baker\u0027s",
                                       "type":  "everyday",
                                       "url":  "https://www.bakersplus.com/p/smart-way-enriched-white-bread/0001111015125",
-                                      "n":  5
+                                      "n":  7
                                   },
                         "butter":  {
                                        "unit":  "lb",
@@ -74,7 +74,7 @@
                                        "store":  "Sam\u0027s Club",
                                        "type":  "everyday",
                                        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Salted-Sweet-Cream-Butter-Block-1-lb-4-lbs/15365221245",
-                                       "n":  6
+                                       "n":  7
                                    },
                         "chicken-thighs":  {
                                                "unit":  "lb",
@@ -82,7 +82,7 @@
                                                "store":  "Sam\u0027s Club",
                                                "type":  "everyday",
                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-Bone-In-Chicken-Thighs-priced-per-pound/13608013618",
-                                               "n":  6
+                                               "n":  7
                                            },
                         "coffee":  {
                                        "unit":  "oz",
@@ -90,7 +90,7 @@
                                        "store":  "Sam\u0027s Club",
                                        "type":  "everyday",
                                        "url":  "https://www.samsclub.com/ip/Folgers-Classic-Medium-Roast-Ground-Coffee-43-5-oz/13626705840",
-                                       "n":  6
+                                       "n":  7
                                    },
                         "cottage-cheese":  {
                                                "unit":  "oz",
@@ -98,7 +98,7 @@
                                                "store":  "Aldi",
                                                "type":  "everyday",
                                                "url":  "https://www.aldi.us/store/aldi/products/18648946-friendly-farms-cottage-cheese-24-oz",
-                                               "n":  6
+                                               "n":  7
                                            },
                         "cream-cheese":  {
                                              "unit":  "oz",
@@ -106,7 +106,7 @@
                                              "store":  "Sam\u0027s Club",
                                              "type":  "everyday",
                                              "url":  "https://www.samsclub.com/ip/Member-s-Mark-Cream-Cheese-Brick-48-oz/13865569340",
-                                             "n":  6
+                                             "n":  7
                                          },
                         "grapes":  {
                                        "unit":  "lb",
@@ -114,7 +114,7 @@
                                        "store":  "Aldi",
                                        "type":  "everyday",
                                        "url":  "https://www.aldi.us/store/aldi/products/305371-red-grapes-each",
-                                       "n":  6
+                                       "n":  7
                                    },
                         "ground-turkey":  {
                                               "unit":  "lb",
@@ -122,15 +122,15 @@
                                               "store":  "Aldi",
                                               "type":  "everyday",
                                               "url":  "https://www.aldi.us/store/aldi/products/41417088-kirkwood-ground-turkey-3-lb",
-                                              "n":  6
+                                              "n":  7
                                           },
                         "eggs":  {
                                      "unit":  "dozen",
-                                     "cheapest":  1.46,
-                                     "store":  "Aldi",
+                                     "cheapest":  1.45,
+                                     "store":  "Fareway",
                                      "type":  "everyday",
-                                     "url":  "https://www.aldi.us/store/aldi/products/115095-goldhen-grade-a-large-eggs-12-ct",
-                                     "n":  6
+                                     "url":  "",
+                                     "n":  7
                                  },
                         "milk":  {
                                      "unit":  "gallon",
@@ -138,7 +138,7 @@
                                      "store":  "Hy-Vee",
                                      "type":  "everyday",
                                      "url":  "https://www.hy-vee.com/aisles-online/p/23936/hy-vee-2-reduced-fat-milk",
-                                     "n":  6
+                                     "n":  7
                                  },
                         "orange-juice":  {
                                              "unit":  "floz",
@@ -146,7 +146,7 @@
                                              "store":  "Sam\u0027s Club",
                                              "type":  "everyday",
                                              "url":  "https://www.samsclub.com/ip/Member-s-Mark-Pulp-Free-100-Orange-Juice-52-fl-oz-2-pk/13879263904",
-                                             "n":  6
+                                             "n":  7
                                          },
                         "peaches":  {
                                         "unit":  "lb",
@@ -154,7 +154,7 @@
                                         "store":  "Baker\u0027s",
                                         "type":  "everyday",
                                         "url":  "https://www.bakersplus.com/p/fresh-southern-yellow-peach/0000000003117",
-                                        "n":  6
+                                        "n":  7
                                     },
                         "peanut-butter":  {
                                               "unit":  "oz",
@@ -162,15 +162,15 @@
                                               "store":  "Walmart",
                                               "type":  "everyday",
                                               "url":  "https://www.walmart.com/ip/10315479",
-                                              "n":  6
+                                              "n":  7
                                           },
                         "pork-chops":  {
                                            "unit":  "lb",
-                                           "cheapest":  2.52,
-                                           "store":  "Sam\u0027s Club",
-                                           "type":  "everyday",
-                                           "url":  "https://www.samsclub.com/ip/Member-s-Mark-Bone-In-Pork-Chops-priced-per-pound/17799324269",
-                                           "n":  5
+                                           "cheapest":  2.49,
+                                           "store":  "Family Fare",
+                                           "type":  "sale",
+                                           "url":  "https://www.shopfamilyfare.com/shop/meat/pork/fresh/fresh_assorted_bone_in_pork_chops/p/1564405684713031263",
+                                           "n":  6
                                        },
                         "russet-potatoes":  {
                                                 "unit":  "lb",
@@ -178,7 +178,7 @@
                                                 "store":  "Aldi",
                                                 "type":  "everyday",
                                                 "url":  "https://www.aldi.us/store/aldi/products/16725303-russet-potato-bag-10-lbs",
-                                                "n":  6
+                                                "n":  7
                                             },
                         "shredded-cheese":  {
                                                 "unit":  "oz",
@@ -186,7 +186,7 @@
                                                 "store":  "Baker\u0027s",
                                                 "type":  "sale",
                                                 "url":  "https://www.bakersplus.com/p/kroger-colby-jack-shredded-cheese-family-size/0001111015117",
-                                                "n":  6,
+                                                "n":  7,
                                                 "sale_end":  "2026-07-14"
                                             },
                         "sour-cream":  {
@@ -195,7 +195,7 @@
                                            "store":  "Aldi",
                                            "type":  "everyday",
                                            "url":  "https://www.aldi.us/store/aldi/products/18647633-friendly-farms-sour-cream-16-oz",
-                                           "n":  6
+                                           "n":  7
                                        },
                         "strawberries":  {
                                              "unit":  "oz",
@@ -203,7 +203,7 @@
                                              "store":  "Sam\u0027s Club",
                                              "type":  "everyday",
                                              "url":  "https://www.samsclub.com/ip/Strawberries-2-lbs/13612870276",
-                                             "n":  6
+                                             "n":  7
                                          },
                         "sweet-corn":  {
                                            "unit":  "each",
@@ -211,7 +211,7 @@
                                            "store":  "Baker\u0027s",
                                            "type":  "sale",
                                            "url":  "https://www.bakersplus.com/p/fresh-sweet-corn-on-the-cob-each/0000000004590",
-                                           "n":  6,
+                                           "n":  7,
                                            "sale_end":  "2026-07-14"
                                        },
                         "watermelon":  {
@@ -220,7 +220,7 @@
                                            "store":  "Baker\u0027s",
                                            "type":  "sale",
                                            "url":  "https://www.bakersplus.com/p/mini-seedless-whole-watermelon/0000000003421",
-                                           "n":  6,
+                                           "n":  7,
                                            "sale_end":  "2026-07-14"
                                        },
                         "onions":  {
@@ -229,7 +229,7 @@
                                        "store":  "Sam\u0027s Club",
                                        "type":  "everyday",
                                        "url":  "https://www.samsclub.com/ip/Yellow-Onions-10-lbs/13599313206",
-                                       "n":  6
+                                       "n":  7
                                    },
                         "yogurt":  {
                                        "unit":  "oz",
@@ -237,7 +237,7 @@
                                        "store":  "Walmart",
                                        "type":  "everyday",
                                        "url":  "https://www.walmart.com/ip/10450127",
-                                       "n":  6
+                                       "n":  7
                                    },
                         "93-7-ground-turkey":  {
                                                    "unit":  "lb",

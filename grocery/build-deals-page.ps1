@@ -209,13 +209,13 @@ function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$board
 }
 
 # store scoreboard: how many commodities each store is the outright cheapest on (the summary a shopper wants first)
-$storeOrder = @('Hy-Vee','Aldi','Family Fare',"Baker's","Sam's Club",'Walmart')
+$storeOrder = @('Hy-Vee','Aldi','Family Fare','Fareway',"Baker's","Sam's Club",'Walmart')
 $wins = [ordered]@{}; foreach ($s in $storeOrder) { $wins[$s] = 0 }
 foreach ($r in $doc.comparison) { $cs = [string]$r.cheapest_store; if ($wins.Contains($cs)) { $wins[$cs]++ } }
 if ($riDoc) { foreach ($r in $riDoc.comparison) { $cs = [string]$r.cheapest_store; if ($wins.Contains($cs)) { $wins[$cs]++ } } }
 
 # short store display names + stable column color accents
-$shortName = @{ 'Hy-Vee'='Hy-Vee'; 'Aldi'='Aldi'; 'Family Fare'='Family Fare'; "Baker's"="Baker's"; "Sam's Club"="Sam's Club"; 'Walmart'='Walmart' }
+$shortName = @{ 'Hy-Vee'='Hy-Vee'; 'Aldi'='Aldi'; 'Family Fare'='Family Fare'; 'Fareway'='Fareway'; "Baker's"="Baker's"; "Sam's Club"="Sam's Club"; 'Walmart'='Walmart' }
 
 # NOTE: must escape single quotes too - several attributes (title='...', href='...') are single-quoted,
 # and store-brand names routinely contain apostrophes (Member's Mark, Driscoll's, Land O'Lakes, Baker's).
@@ -291,6 +291,7 @@ $storeFiles = @{
   "Baker's"     = @('bakers\bakers-deals-*.json','regular\bakers-regular-*.json')
   "Sam's Club"  = @('sams\sams-deals-*.json')
   'Walmart'     = @('regular\walmart-regular-*.json')
+  'Fareway'     = @('fareway\fareway-deals-*.json','regular\fareway-regular-*.json')
 }
 function NewestUpd($globs) { $m=$null; foreach ($g in $globs) { $f = Get-ChildItem (Join-Path $OutDir $g) -ErrorAction SilentlyContinue | Sort-Object LastWriteTime -Descending | Select-Object -First 1; if ($f -and (($null -eq $m) -or ($f.LastWriteTime -gt $m))) { $m = $f.LastWriteTime } }; return $m }
 
@@ -299,7 +300,7 @@ $sb = New-Object System.Text.StringBuilder
 [void]$sb.Append("<div class='pg-wrap'>")
 [void]$sb.Append("<header class='pg-head'>")
 if (-not $Embed) { [void]$sb.Append("<h1>Omaha's Cheapest Groceries This Week</h1>") }   # Embed: Ghost post title is the H1
-[void]$sb.Append("<p class='pg-sub'>The cheapest place to buy every grocery staple in Omaha this week. Six stores, checked every morning, ranked cheapest first.</p>")
+[void]$sb.Append("<p class='pg-sub'>The cheapest place to buy every grocery staple in Omaha this week. Seven stores, checked every morning, ranked cheapest first.</p>")
 [void]$sb.Append("<p class='pg-note'>Lowest verified price at each store, sale or everyday, checked against the store's own ad or site. Sam's Club prices need a membership.</p>")
 [void]$sb.Append("<p class='pg-suggest'><a href='/suggest-an-item/'>Suggest an item for us to start tracking! &rarr;</a></p></header>")
 

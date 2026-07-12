@@ -195,9 +195,11 @@ if (-not $NoAlert) {
 if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
   $bakers = Get-ChildItem (Join-Path $OutDir 'bakers\bakers-deals-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
   $sams   = Get-ChildItem (Join-Path $OutDir 'sams\sams-deals-*.json')     -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
+  $fareway = Get-ChildItem (Join-Path $OutDir 'fareway\fareway-deals-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
   $args = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'compare-deals.ps1'),'-MinStores','1')
-  if ($bakers) { $args += @('-BakersFile', $bakers.FullName) }
-  if ($sams)   { $args += @('-SamsFile',   $sams.FullName) }
+  if ($bakers)  { $args += @('-BakersFile',  $bakers.FullName) }
+  if ($sams)    { $args += @('-SamsFile',    $sams.FullName) }
+  if ($fareway) { $args += @('-FarewayFile', $fareway.FullName) }
   try {
     $sigBefore = BoardSignature
     & powershell @args | Out-Null

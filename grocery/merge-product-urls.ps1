@@ -12,7 +12,7 @@ foreach($f in @($cmpF)){ if($f){ $c=(Get-Content $f.FullName -Raw|ConvertFrom-Js
 $riF=Join-Path $g 'out\recipe-board.json'
 if(Test-Path $riF){ $c=(Get-Content $riF -Raw|ConvertFrom-Json).comparison; foreach($it in $c){ if(-not $cmap.ContainsKey([string]$it.id)){ $cmap[[string]$it.id]=[string]$it.commodity } } }
 # store inferred from filename: store-<key>-... or store-<key>N-...
-$storeKey=@{ walmart="Walmart"; sams="Sam's Club"; ff="Family Fare"; familyfare="Family Fare"; hyvee="Hy-Vee"; bakers="Baker's"; aldi="Aldi" }
+$storeKey=@{ walmart="Walmart"; sams="Sam's Club"; ff="Family Fare"; familyfare="Family Fare"; hyvee="Hy-Vee"; bakers="Baker's"; aldi="Aldi"; fareway="Fareway" }
 function StoreOf($fn){ $m=[regex]::Match($fn,'^store-([a-z]+?)[0-9]*-urls\.json$'); if($m.Success -and $storeKey.ContainsKey($m.Groups[1].Value)){ return $storeKey[$m.Groups[1].Value] }; return $null }
 $fileStore=@{}
 foreach($f in (Get-ChildItem (Join-Path $dir 'store-*-urls.json') -ErrorAction SilentlyContinue)){ $s=StoreOf $f.Name; if($s){ $fileStore[$f.Name]=$s } }

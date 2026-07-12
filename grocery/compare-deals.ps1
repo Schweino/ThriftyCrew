@@ -15,6 +15,7 @@ param(
   [string]$AdsFile = "",
   [string]$BakersFile = "",
   [string]$SamsFile = "",
+  [string]$FarewayFile = "",
   [int]$MinStores = 2,
   [string]$OutDir = "",
   [string]$CommoditiesFile = "",
@@ -308,8 +309,10 @@ foreach ($d in $ads.deals) {                                                    
     default       { Add-Norm $d.store $d.item ($d.ad_price + ' ' + $d.item) $d.size $d.regular $d.source_ad 'sale' }
   }
 }
-# ad-based extra files (Baker's ad, Sam's). Each file may declare price_type (Sam's warehouse price = everyday); default sale.
-foreach ($extra in @($BakersFile,$SamsFile)) {
+# ad-based extra files (Baker's ad, Sam's, Fareway weekly-ad sales). Each file may declare price_type (Sam's
+# warehouse price = everyday); default sale. Fareway's EVERYDAY storefront prices load from out\regular\ above;
+# -FarewayFile is only its weekly-ad SALE supplement (vision-read promos the storefront may not show online).
+foreach ($extra in @($BakersFile,$SamsFile,$FarewayFile)) {
   if ($extra -and (Test-Path $extra)) {
     $ex = Get-Content $extra -Raw | ConvertFrom-Json
     $pt = if ($ex.price_type) { [string]$ex.price_type } else { 'sale' }
