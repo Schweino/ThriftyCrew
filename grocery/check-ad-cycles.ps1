@@ -193,6 +193,11 @@ if (-not $NoAlert) {
 # board price signature, so an unchanged day is a no-op. This is what keeps pricing current relative to ad
 # dates every day, not just on the weekly ad flip.
 if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
+  # Keep Family Fare's EVERYDAY fallback current (headless Freshop base_price) BEFORE the compare, so the moment
+  # an FF sale ends the board reverts to the next-cheapest FF everyday item, not a vanished cell. FF is the only
+  # fully-API store; browser stores get the same via the weekly agent + research-worklist.json. Non-fatal
+  # (carry-forward inside the script preserves prior entries on a transient rate-limit).
+  try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'research-familyfare-everyday.ps1') | Out-Null; Log 'FF everyday fallback researched' } catch { Log ('research-familyfare threw: ' + $_.Exception.Message) }
   $bakers = Get-ChildItem (Join-Path $OutDir 'bakers\bakers-deals-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
   $sams   = Get-ChildItem (Join-Path $OutDir 'sams\sams-deals-*.json')     -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
   $fareway = Get-ChildItem (Join-Path $OutDir 'fareway\fareway-deals-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
@@ -233,6 +238,25 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           } else { Log 'coverage-gaps unchanged since last alert - not re-alerting' }
         } else { if (Test-Path (Join-Path $OutDir 'coverage-gap-alert.sig')) { Remove-Item (Join-Path $OutDir 'coverage-gap-alert.sig') -ErrorAction SilentlyContinue } }
       } catch { Log ('coverage-gap guard threw: ' + $_.Exception.Message) }
+      # ---- SALE-FALLBACK GUARD: an on-sale cell with NO everyday item to revert to VANISHES when the sale ends.
+      # audit-sale-fallback flags them; FF self-heals daily (researched above), browser-store gaps go to
+      # research-worklist.json for the weekly agent to research the next-cheapest everyday item. De-duped alert.
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-sale-fallback.ps1') | Out-Null
+        $sf = try { Get-Content (Join-Path $OutDir 'sale-fallback-gaps.json') -Raw | ConvertFrom-Json } catch { $null }
+        if ($sf -and [int]$sf.gap_count -gt 0) {
+          $sfSig = (@($sf.gaps | ForEach-Object { $_.commodity + '|' + $_.store } | Sort-Object) -join ';')
+          $sfF = Join-Path $OutDir 'sale-fallback-alert.sig'
+          $sfPrev = if (Test-Path $sfF) { (Get-Content $sfF -Raw).Trim() } else { '' }
+          $sfList = (@($sf.gaps | ForEach-Object { $_.commodity + ' @ ' + $_.store }) -join '; ')
+          Log ("sale-fallback: $($sf.gap_count) on-sale cell(s) with no everyday fallback - $sfList")
+          $summary += "REVIEW    sale-fallback: $($sf.gap_count) on-sale cell(s) would vanish when the sale ends - see sale-fallback-gaps.json"
+          if ($sfSig -ne $sfPrev) {
+            try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: $($sf.gap_count) on-sale item(s) have no everyday fallback - $asofS" -Body "These commodity+store cells are on SALE with no everyday item to revert to, so the store DROPS OFF that commodity when the sale ends: $sfList. Browser stores are queued in grocery/out/research-worklist.json for the weekly agent to research the next-cheapest everyday item; Family Fare self-heals daily." | Out-Null
+                  if ($LASTEXITCODE -eq 0) { Set-Content -Path $sfF -Value $sfSig -Encoding UTF8; Log 'sale-fallback alert sent' } } catch { Log ('sale-fallback alert threw: ' + $_.Exception.Message) }
+          } else { Log 'sale-fallback gaps unchanged - not re-alerting' }
+        } else { if (Test-Path (Join-Path $OutDir 'sale-fallback-alert.sig')) { Remove-Item (Join-Path $OutDir 'sale-fallback-alert.sig') -ErrorAction SilentlyContinue } }
+      } catch { Log ('sale-fallback guard threw: ' + $_.Exception.Message) }
       # Refresh the per-item sale-window log (sale price + start/end dates from the fresh board) so the daily
       # Baker's guard fires only when a sale actually reverts/starts, not blindly. Headless-safe, non-fatal.
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-sale-windows.ps1') | Out-Null; Log 'sale-windows refreshed' } catch { Log ('build-sale-windows threw: ' + $_.Exception.Message) }
