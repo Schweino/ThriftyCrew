@@ -87,3 +87,15 @@
 [2026-07-11T12:13:55] REVIEW FLAGS: 2 -> SANITY|Large Eggs (dozen) Sweet Corn (ear) Whole Watermelon|wow outlier outlier|cheapest moved up 47% vs last week ($1.00 -> $1.47) Baker's $0.40 is 35% below runner-up Sam's Club $0.62 - verify the price/size parse Baker's $2.99 is 36% below runner-up Walmart $4.65 - verify the price/size parse ; MULTIBUY|Family Fare|Blueberries
 [2026-07-11T12:14:31] AUTO-PUBLISH: live page updated (price change mid-cycle)
 [2026-07-11T12:14:31] run complete; flips=0
+[2026-07-12T12:11:31] pull attempt 1 ok=True
+[2026-07-12T12:13:37] FF everyday refreshed
+[2026-07-12T12:13:37] NEW AD Family Fare 2026-07-12..2026-07-18
+[2026-07-12T12:13:41] sale-windows refreshed
+[2026-07-12T12:13:44] recipe-overlay applied
+[2026-07-12T12:13:47] top5-weekly refreshed
+[2026-07-12T12:13:47] smp-feed exported
+[2026-07-12T12:13:53] price-alerts: price-alerts done: 1 email(s) sent
+[2026-07-12T12:13:54] downstream refreshed after flips: Family Fare
+[2026-07-12T12:13:54] REVIEW FLAGS: 2 -> SANITY|Sweet Corn (ear) Whole Watermelon|outlier outlier|Baker's $0.40 is 35% below runner-up Sam's Club $0.62 - verify the price/size parse Baker's $2.99 is 36% below runner-up Walmart $4.65 - verify the price/size parse ; MULTIBUY|Family Fare|Milk (gallon)
+[2026-07-12T12:14:32] AUTO-PUBLISH: live page updated (price change/new ad)
+[2026-07-12T12:14:32] run complete; flips=1

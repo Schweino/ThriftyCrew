@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-11T12:13:53",
-    "week_of":  "2026-07-11",
+    "generated":  "2026-07-12T12:13:47",
+    "week_of":  "2026-07-12",
     "ingredient_count":  184,
     "recipe_count":  113,
     "ingredients":  {
@@ -10,24 +10,23 @@
                                                  "store":  "Sam\u0027s Club",
                                                  "type":  "everyday",
                                                  "url":  "https://www.samsclub.com/ip/Member-s-Mark-80-20-Ground-Beef-Roll-Vacuum-Pack-priced-per-pound/21213000000",
-                                                 "n":  5
+                                                 "n":  6
                                              },
                         "apples":  {
                                        "unit":  "lb",
-                                       "cheapest":  1.08,
-                                       "store":  "Walmart",
+                                       "cheapest":  0.9967,
+                                       "store":  "Aldi",
                                        "type":  "everyday",
-                                       "url":  "https://www.walmart.com/ip/44390958",
-                                       "n":  5
+                                       "url":  "https://www.aldi.us/store/aldi/products/16345637-envy-apple-each",
+                                       "n":  6
                                    },
                         "avocados":  {
                                          "unit":  "each",
                                          "cheapest":  0.59,
                                          "store":  "Aldi",
-                                         "type":  "sale",
+                                         "type":  "everyday",
                                          "url":  "https://www.aldi.us/store/aldi/products/3111634-avocado-each",
-                                         "n":  6,
-                                         "sale_end":  "2026-07-14"
+                                         "n":  6
                                      },
                         "bacon":  {
                                       "unit":  "lb",
@@ -39,28 +38,28 @@
                                   },
                         "bananas":  {
                                         "unit":  "lb",
-                                        "cheapest":  0.48,
-                                        "store":  "Aldi",
+                                        "cheapest":  0.49,
+                                        "store":  "Hy-Vee",
                                         "type":  "everyday",
-                                        "url":  "https://www.aldi.us/store/aldi/products/25720157-bananas-per-lb",
+                                        "url":  "https://www.hy-vee.com/aisles-online/p/37178/fresh-chiquita-bananas",
                                         "n":  6
                                     },
                         "blueberries":  {
                                             "unit":  "oz",
-                                            "cheapest":  0.2578,
-                                            "store":  "Walmart",
+                                            "cheapest":  0.1809,
+                                            "store":  "Aldi",
                                             "type":  "everyday",
-                                            "url":  "https://www.walmart.com/ip/161115457",
-                                            "n":  4
+                                            "url":  "https://www.aldi.us/store/aldi/products/20992234-season-s-choice-frozen-blueberries-24-oz",
+                                            "n":  5
                                         },
                         "chicken-breast":  {
                                                "unit":  "lb",
-                                               "cheapest":  2.29,
-                                               "store":  "Baker\u0027s",
+                                               "cheapest":  1.99,
+                                               "store":  "Family Fare",
                                                "type":  "sale",
-                                               "url":  "https://www.bakersplus.com/p/heritage-farm-boneless-skinless-chicken-breasts/0028334900000",
-                                               "n":  5,
-                                               "sale_end":  "2026-07-14"
+                                               "url":  "https://www.shopfamilyfare.com/shop/meat/chicken/fresh_chicken/boneless_skinless_chicken_breasts/p/1564405684713031766",
+                                               "n":  6,
+                                               "sale_end":  "2026-07-18"
                                            },
                         "bread":  {
                                       "unit":  "each",
@@ -68,7 +67,7 @@
                                       "store":  "Baker\u0027s",
                                       "type":  "everyday",
                                       "url":  "https://www.bakersplus.com/p/smart-way-enriched-white-bread/0001111015125",
-                                      "n":  5
+                                      "n":  6
                                   },
                         "butter":  {
                                        "unit":  "lb",
@@ -96,10 +95,10 @@
                                    },
                         "cottage-cheese":  {
                                                "unit":  "oz",
-                                               "cheapest":  0.1196,
-                                               "store":  "Walmart",
+                                               "cheapest":  0.1188,
+                                               "store":  "Aldi",
                                                "type":  "everyday",
-                                               "url":  "https://www.walmart.com/ip/10315022",
+                                               "url":  "https://www.aldi.us/store/aldi/products/18648946-friendly-farms-cottage-cheese-24-oz",
                                                "n":  6
                                            },
                         "cream-cheese":  {
@@ -122,17 +121,16 @@
                                               "unit":  "lb",
                                               "cheapest":  2.6633,
                                               "store":  "Aldi",
-                                              "type":  "sale",
+                                              "type":  "everyday",
                                               "url":  "https://www.aldi.us/store/aldi/products/41417088-kirkwood-ground-turkey-3-lb",
-                                              "n":  6,
-                                              "sale_end":  "2026-07-14"
+                                              "n":  6
                                           },
                         "eggs":  {
                                      "unit":  "dozen",
-                                     "cheapest":  1.47,
-                                     "store":  "Walmart",
+                                     "cheapest":  1.46,
+                                     "store":  "Aldi",
                                      "type":  "everyday",
-                                     "url":  "https://www.walmart.com/ip/145051970",
+                                     "url":  "https://www.aldi.us/store/aldi/products/115095-goldhen-grade-a-large-eggs-12-ct",
                                      "n":  6
                                  },
                         "milk":  {
@@ -169,11 +167,12 @@
                                           },
                         "pork-chops":  {
                                            "unit":  "lb",
-                                           "cheapest":  2.52,
-                                           "store":  "Sam\u0027s Club",
-                                           "type":  "everyday",
-                                           "url":  "https://www.samsclub.com/ip/Member-s-Mark-Bone-In-Pork-Chops-priced-per-pound/17799324269",
-                                           "n":  5
+                                           "cheapest":  2.49,
+                                           "store":  "Family Fare",
+                                           "type":  "sale",
+                                           "url":  "https://www.shopfamilyfare.com/shop/meat/pork/fresh/fresh_assorted_bone_in_pork_chops/p/1564405684713031263",
+                                           "n":  5,
+                                           "sale_end":  "2026-07-18"
                                        },
                         "russet-potatoes":  {
                                                 "unit":  "lb",
@@ -194,10 +193,10 @@
                                             },
                         "sour-cream":  {
                                            "unit":  "oz",
-                                           "cheapest":  0.115,
-                                           "store":  "Walmart",
+                                           "cheapest":  0.1094,
+                                           "store":  "Aldi",
                                            "type":  "everyday",
-                                           "url":  "https://www.walmart.com/ip/12335111",
+                                           "url":  "https://www.aldi.us/store/aldi/products/18647633-friendly-farms-sour-cream-16-oz",
                                            "n":  6
                                        },
                         "strawberries":  {
