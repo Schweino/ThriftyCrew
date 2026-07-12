@@ -105,6 +105,36 @@ Genuine long-tail gaps that resist automated matching: fresh produce sold **by w
 fixed-price page) at Walmart/Hy-Vee, and **warehouse-only forms** at Sam's (no single apple / small can).
 These are listed in `out\url-worklist.json` (reason `missing`) rather than silently dropped.
 
-## Not yet built
+## Adding a NEW commodity (the /suggest-an-item/ playbook)
 
-The **comparison engine**: normalize each deal to a per-unit price, match the same product across stores, and rank the true cheapest item in Omaha this week. The pulls above are the input to that.
+Proven end-to-end 2026-07-12 with `laundry-detergent` (the first reader-suggested item: A&H Plus OxiClean).
+Once registered, EVERY automation picks the item up with no further wiring (all pulls iterate
+`commodity-search.json`; the board/guards/feed/history/alerts key off `commodities.json`).
+
+1. **`commodities.json`** - id, label, unit, include/exclude. Write the include to tolerate every store's
+   REAL naming (test it against actual product names first: Family Fare calls the A&H OxiClean line
+   "Odor Blasters, Stain Fighters" without the word OxiClean). Never require `\s+` between words that a
+   store might separate. NEVER leave a bare `lb` token in a deal's item NAME (per-lb marker trap).
+2. **`categories.json`** - add the id to a category (create one if needed; `household` was added this way).
+3. **`commodity-search.json`** - the search term every store pull uses. TEST it: an over-specific term
+   ("arm hammer oxiclean") can return nothing while a broader one ("arm and hammer detergent") finds the
+   product; prefer broad + let include/exclude filter.
+4. **Same-day pricing at all 7 stores** (each price needs a matching product URL in `out\url-inputs\`):
+   Walmart = product page in the browser (`__NEXT_DATA__`; raw fetch gets bot-walled); Sam's = browser
+   search; Hy-Vee = Aisles Online (verify "Omaha #1, NE"); Family Fare = Freshop API (base_price everyday,
+   sale_price -> `extra-deals-<date>.json`); Fareway = storefront browser (VERIFY shopId 16668805 /
+   postalCode 68136 in the graphql network params - a fresh session can default to a NON-Omaha store);
+   Baker's = browser (Akamai; if blocked, skip - the term is registered so the daily/weekly agents fill it).
+5. **Confirmed not carried** (actually searched the store, product absent) -> `not-carried.json`
+   ("Doesn't carry" card). **Couldn't verify today** -> do nothing (the board auto-renders a
+   "No price yet" card; the agents fill it on their next run).
+6. Run: compare-deals -> recipe-overlay -> publish-deals-page (the store-coverage + consistency gates run
+   inside). `notify-item-added.ps1` then emails any /suggest-an-item/ requester who asked for the item and
+   left an email.
+
+## The comparison engine (built)
+
+`compare-deals.ps1` normalizes every deal to a per-unit price, buckets by commodity (include/exclude rules),
+and ranks the cheapest per store; `build-deals-page.ps1` renders the board (every staple shows ALL 7 stores:
+a price, or a "Doesn't carry / No price yet" card); `publish-deals-page.ps1` gates (coverage, store-coverage,
+consistency) and upserts to Ghost. `check-ad-cycles.ps1` orchestrates it daily.
