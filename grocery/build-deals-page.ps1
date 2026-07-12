@@ -505,9 +505,9 @@ $css = @'
 .pg-cath{font-family:Georgia,'Times New Roman',serif;font-size:1.22em;color:var(--ink);margin:26px 0 4px;padding-bottom:6px;border-bottom:2px solid var(--bd)}
 .pg-refnote{margin:26px 0 4px;padding:9px 13px;font-size:.82em;line-height:1.4;color:var(--mut);background:var(--amber-t);border:1px solid var(--bd);border-radius:8px}
 .pg-row{padding:15px 0 16px;border-bottom:1px solid #eef1ee}
-.pg-rowhead{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+.pg-rowhead{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap}
 .pg-name{font-size:1.09em;font-weight:700;color:var(--ink)}
-.pg-unit{font-size:.72em;color:var(--mut);opacity:.8;text-transform:uppercase;letter-spacing:.05em}
+.pg-unit{font-size:.72em;color:var(--mut);opacity:.8;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
 .pg-stores{display:flex;flex-wrap:wrap;gap:8px}
 .pg-chip{position:relative;display:flex;flex-direction:column;gap:3px;min-width:118px;padding:10px 13px 9px;border:1px solid var(--bd);border-radius:11px;background:#fcfdfc}
 .pg-chip.is-best{border-color:var(--green);background:var(--green-t);box-shadow:inset 0 0 0 1px var(--green)}
