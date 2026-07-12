@@ -68,7 +68,9 @@ foreach ($c in $commods) {
       if (-not $hit) { continue }
       $bad = $false
       foreach ($x in $excl)   { if ($x -and $nm -imatch $x) { $bad = $true; break } }
-      if (-not $bad) { foreach ($x in $GLOBAL) { if ($nm -imatch $x) { $bad = $true; break } } }
+      # honor the commodity's relax_global waivers (pasta-sauce IS a sauce etc.) so those commodities still
+      # get coverage-gap protection instead of every candidate being silently global-excluded
+      if (-not $bad) { $relax = @($c.relax_global | Where-Object { $_ }); foreach ($x in $GLOBAL) { if ($relax -notcontains $x -and $nm -imatch $x) { $bad = $true; break } } }
       if ($bad) { continue }
       $gaps.Add([pscustomobject]@{ commodity = $id; store = $st; candidate = $nm }); break
     }

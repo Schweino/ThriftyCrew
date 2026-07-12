@@ -1,121 +1,2000 @@
-[
-  { "id": "chicken-breast", "label": "Boneless Skinless Chicken Breast", "unit": "lb",
-    "include": ["boneless,?\\s*skinless\\s+chicken\\s+breast", "chicken\\s+breast[^,]*boneless", "b\\.?s\\.?b\\.?\\s+chicken"],
-    "exclude": ["thigh", "tender", "strip", "nugget", "breaded", "canned", "salad", "cooked", "wing", "patty", "patties", "ground", "thin[\\s-]*sliced", "skewer", "twister", "bone[\\s-]*in", "split"] },
+﻿[
+    {
+        "id":  "chicken-breast",
+        "label":  "Boneless Skinless Chicken Breast",
+        "unit":  "lb",
+        "include":  [
+                        "boneless,?\\s*skinless\\s+chicken\\s+breast",
+                        "chicken\\s+breast[^,]*boneless",
+                        "b\\.?s\\.?b\\.?\\s+chicken"
+                    ],
+        "exclude":  [
+                        "thigh",
+                        "tender",
+                        "strip",
+                        "nugget",
+                        "breaded",
+                        "canned",
+                        "salad",
+                        "cooked",
+                        "wing",
+                        "patty",
+                        "patties",
+                        "ground",
+                        "thin[\\s-]*sliced",
+                        "skewer",
+                        "twister",
+                        "bone[\\s-]*in",
+                        "split"
+                    ]
+    },
+    {
+        "id":  "chicken-thighs",
+        "label":  "Chicken Thighs / Drumsticks",
+        "unit":  "lb",
+        "include":  [
+                        "chicken\\s+(thigh|drumstick|leg)",
+                        "(thigh|drumstick)s?[^,]*chicken"
+                    ],
+        "exclude":  [
+                        "boneless skinless.*breast",
+                        "breaded",
+                        "cooked",
+                        "nugget"
+                    ]
+    },
+    {
+        "id":  "ground-beef-8020",
+        "label":  "80/20 Ground Beef",
+        "unit":  "lb",
+        "include":  [
+                        "ground\\s+beef[^.]*80",
+                        "80%?\\s*lean[^.]*20%?\\s*fat",
+                        "80/20\\s+ground",
+                        "ground\\s+chuck"
+                    ],
+        "exclude":  [
+                        "turkey",
+                        "meatball",
+                        "patty",
+                        "patties",
+                        "93%",
+                        "90%",
+                        "96%",
+                        "85%",
+                        "85/15",
+                        "organic",
+                        "grass[\\s-]*fed"
+                    ]
+    },
+    {
+        "id":  "ground-turkey",
+        "label":  "Ground Turkey",
+        "unit":  "lb",
+        "include":  [
+                        "ground\\s+turkey"
+                    ],
+        "exclude":  [
+                        "beef",
+                        "patty",
+                        "patties"
+                    ]
+    },
+    {
+        "id":  "bacon",
+        "label":  "Bacon",
+        "unit":  "lb",
+        "include":  [
+                        "\\bbacon\\b"
+                    ],
+        "exclude":  [
+                        "bits",
+                        "ranch",
+                        "bacon\\s+cheese",
+                        "canadian",
+                        "turkey bacon"
+                    ]
+    },
+    {
+        "id":  "pork-chops",
+        "label":  "Pork Chops",
+        "unit":  "lb",
+        "include":  [
+                        "pork\\b.{0,25}\\bchops?\\b",
+                        "\\bchops?\\b.{0,20}\\bpork\\b"
+                    ],
+        "exclude":  [
+                        "breaded",
+                        "stuffed",
+                        "cooked",
+                        "seasoned",
+                        "marinated"
+                    ]
+    },
+    {
+        "id":  "eggs",
+        "label":  "Large Eggs (dozen)",
+        "unit":  "dozen",
+        "include":  [
+                        "\\beggs?\\b",
+                        "dozen\\s+egg",
+                        "grade\\s*a\\s+egg"
+                    ],
+        "exclude":  [
+                        "eggo",
+                        "eggplant",
+                        "egg\\s+roll",
+                        "noodle",
+                        "egg\\s+bite",
+                        "egg\\s+white",
+                        "substitute",
+                        "scrambl",
+                        "deviled",
+                        "\\bnog\\b",
+                        "hard[\\s-]?cooked",
+                        "peeled",
+                        "salad"
+                    ]
+    },
+    {
+        "id":  "milk",
+        "label":  "Milk (gallon)",
+        "unit":  "gallon",
+        "include":  [
+                        "\\bmilk\\b",
+                        "gallon\\s+milk"
+                    ],
+        "exclude":  [
+                        "almond",
+                        "\\boat\\b",
+                        "\\bsoy\\b",
+                        "coconut",
+                        "chocolate\\s+milk",
+                        "evaporated",
+                        "condensed",
+                        "buttermilk",
+                        "milkbone",
+                        "cream"
+                    ]
+    },
+    {
+        "id":  "butter",
+        "label":  "Butter",
+        "unit":  "lb",
+        "include":  [
+                        "\\bbutter\\b"
+                    ],
+        "exclude":  [
+                        "peanut",
+                        "almond\\s+butter",
+                        "cashew",
+                        "body",
+                        "cookie",
+                        "buttermilk",
+                        "butterscotch",
+                        "apple\\s+butter",
+                        "bread",
+                        "pickle",
+                        "plant",
+                        "crock",
+                        "brummel",
+                        "imperial",
+                        "\\bballs?\\b",
+                        "not\\s+butter",
+                        "spread",
+                        "canola",
+                        "\\boil\\b"
+                    ]
+    },
+    {
+        "id":  "cottage-cheese",
+        "label":  "Cottage Cheese",
+        "unit":  "oz",
+        "include":  [
+                        "cottage\\s+cheese"
+                    ],
+        "exclude":  [
 
-  { "id": "chicken-thighs", "label": "Chicken Thighs / Drumsticks", "unit": "lb",
-    "include": ["chicken\\s+(thigh|drumstick|leg)", "(thigh|drumstick)s?[^,]*chicken"],
-    "exclude": ["boneless skinless.*breast", "breaded", "cooked", "nugget"] },
-
-  { "id": "ground-beef-8020", "label": "80/20 Ground Beef", "unit": "lb",
-    "include": ["ground\\s+beef[^.]*80", "80%?\\s*lean[^.]*20%?\\s*fat", "80/20\\s+ground", "ground\\s+chuck"],
-    "exclude": ["turkey", "meatball", "patty", "patties", "93%", "90%", "96%", "85%", "85/15", "organic", "grass[\\s-]*fed"] },
-
-  { "id": "ground-turkey", "label": "Ground Turkey", "unit": "lb",
-    "include": ["ground\\s+turkey"],
-    "exclude": ["beef", "patty", "patties"] },
-
-  { "id": "bacon", "label": "Bacon", "unit": "lb",
-    "include": ["\\bbacon\\b"],
-    "exclude": ["bits", "ranch", "bacon\\s+cheese", "canadian", "turkey bacon"] },
-
-  { "id": "pork-chops", "label": "Pork Chops", "unit": "lb",
-    "include": ["pork\\b.{0,25}\\bchops?\\b", "\\bchops?\\b.{0,20}\\bpork\\b"],
-    "exclude": ["breaded", "stuffed", "cooked", "seasoned", "marinated"] },
-
-  { "id": "eggs", "label": "Large Eggs (dozen)", "unit": "dozen",
-    "include": ["\\beggs?\\b", "dozen\\s+egg", "grade\\s*a\\s+egg"],
-    "exclude": ["eggo", "eggplant", "egg\\s+roll", "noodle", "egg\\s+bite", "egg\\s+white", "substitute", "scrambl", "deviled", "\\bnog\\b", "hard[\\s-]?cooked", "peeled", "salad"] },
-
-  { "id": "milk", "label": "Milk (gallon)", "unit": "gallon",
-    "include": ["\\bmilk\\b", "gallon\\s+milk"],
-    "exclude": ["almond", "\\boat\\b", "\\bsoy\\b", "coconut", "chocolate\\s+milk", "evaporated", "condensed", "buttermilk", "milkbone", "cream"] },
-
-  { "id": "butter", "label": "Butter", "unit": "lb",
-    "include": ["\\bbutter\\b"],
-    "exclude": ["peanut", "almond\\s+butter", "cashew", "body", "cookie", "buttermilk", "butterscotch", "apple\\s+butter", "bread", "pickle", "plant", "crock", "brummel", "imperial", "\\bballs?\\b", "not\\s+butter", "spread", "canola", "\\boil\\b"] },
-
-  { "id": "cottage-cheese", "label": "Cottage Cheese", "unit": "oz",
-    "include": ["cottage\\s+cheese"],
-    "exclude": [] },
-
-  { "id": "sour-cream", "label": "Sour Cream", "unit": "oz",
-    "include": ["sour\\s+cream"],
-    "exclude": ["dip"] },
-
-  { "id": "cream-cheese", "label": "Cream Cheese", "unit": "oz",
-    "include": ["cream\\s+cheese"],
-    "exclude": ["frosting"] },
-
-  { "id": "shredded-cheese", "label": "Shredded / Block Cheese", "unit": "oz",
-    "include": ["shredded\\s+cheese", "chunk\\s+cheese", "cheese\\s+chunk", "block\\s+cheese", "(cheddar|mozzarella|colby|monterey|jack)\\s+cheese", "cheese[^,]*(cheddar|mozzarella|colby)"],
-    "exclude": ["cottage", "cream\\s+cheese", "cheesecake", "cheese\\s+cake", "macaroni", "cracker", "string", "cheese\\s+dip", "sauce", "slice", "spread", "snack"] },
-
-  { "id": "yogurt", "label": "Yogurt", "unit": "oz",
-    "include": ["yog(?:h)?urt"],
-    "exclude": ["covered", "bar", "pretzel", "raisin", "cheese", "shred"] },
-
-  { "id": "bananas", "label": "Bananas", "unit": "lb",
-    "include": ["banana"],
-    "exclude": ["bread", "pudding", "chip", "muffin"] },
-
-  { "id": "strawberries", "label": "Strawberries", "unit": "oz",
-    "include": ["strawberr"],
-    "exclude": ["cream", "\\bjam\\b", "preserve", "flavored", "yog(?:h)?urt", "\\bbar\\b", "spread"] },
-
-  { "id": "blueberries", "label": "Blueberries", "unit": "oz", "pint_oz": 11.2,
-    "include": ["blueberr"],
-    "exclude": ["muffin", "waffle", "pancake", "\\bjam\\b", "preserve", "yog(?:h)?urt", "\\bbar\\b", "spread", "syrup"] },
-
-  { "id": "avocados", "label": "Avocados", "unit": "each",
-    "include": ["avocado"],
-    "exclude": ["\\boil\\b", "guacamole"] },
-
-  { "id": "russet-potatoes", "label": "Russet Potatoes", "unit": "lb",
-    "include": ["russet\\s+potato", "potato[^,]*russet", "baker\\s+potato", "\\brusset\\b"],
-    "exclude": ["sweet\\s+potato", "chip", "\\btot\\b", "salad", "tater", "frozen", "instant"] },
-
-  { "id": "onions", "label": "Yellow / Sweet Onions", "unit": "lb",
-    "include": ["\\bonion", "vidalia"],
-    "exclude": ["green\\s+onion", "onion\\s+ring", "onion\\s+powder", "red\\s+onion", "soup"] },
-
-  { "id": "apples", "label": "Apples", "unit": "lb",
-    "include": ["\\bapple(s)?\\b", "honeycrisp", "gala\\s+apple", "fuji\\s+apple"],
-    "exclude": ["pineapple", "apple\\s+juice", "applesauce", "apple\\s+sauce", "caramel", "\\bpie\\b", "cider"] },
-
-  { "id": "grapes", "label": "Grapes", "unit": "lb",
-    "include": ["\\bgrape(s)?\\b"],
-    "exclude": ["grapefruit", "grape\\s+juice", "grape\\s+tomato", "jelly", "\\bjam\\b"] },
-
-  { "id": "sweet-corn", "label": "Sweet Corn (ear)", "unit": "each",
-    "include": ["sweet\\s+corn", "corn\\s+on\\s+the\\s+cob", "fresh\\s+corn"],
-    "exclude": ["popcorn", "corn\\s+bread", "cornbread", "cornflake", "tortilla", "corn\\s+dog", "canned", "cream\\s+corn", "corn\\s+chip", "syrup", "starch", "firecracker", "jamaican", "street", "rice\\s+cake", "steam", "crisp", "grill\\s+ready", "green\\s+giant"] },
-
-  { "id": "watermelon", "label": "Whole Watermelon", "unit": "each",
-    "include": ["whole.*watermelon", "seedless\\s+watermelon", "watermelon"],
-    "exclude": ["cut", "sliced", "chunk", "cup", "candy", "flavored"] },
-
-  { "id": "peaches", "label": "Peaches", "unit": "lb",
-    "include": ["peach(es)?"],
-    "exclude": ["ring", "cobbler", "canned", "\\bpie\\b", "yogurt", "flavored", "cling", "sliced", "\\bjar\\b", "preserve", "\\bcup"] },
-
-  { "id": "bread", "label": "Bread (loaf)", "unit": "each",
-    "include": ["\\bbread\\b", "sandwich\\s+loaf", "white\\s+loaf", "wheat\\s+loaf"],
-    "exclude": ["breadstick", "cornbread", "crumb", "pita", "naan", "\\bbun", "banana\\s+bread", "garlic\\s+bread", "pudding", "flatbread", "dough"] },
-
-  { "id": "peanut-butter", "label": "Peanut Butter", "unit": "oz",
-    "include": ["peanut\\s+butter"],
-    "exclude": ["\\bcup", "cookie", "cracker", "\\bbar\\b", "cereal", "pretzel", "filled", "\\bball", "granola"] },
-
-  { "id": "orange-juice", "label": "Orange Juice", "unit": "floz",
-    "include": ["orange\\s+juice"],
-    "exclude": ["drink", "punch", "soda"] },
-
-  { "id": "coffee", "label": "Coffee (ground/beans)", "unit": "oz",
-    "include": ["\\bcoffee\\b", "ground\\s+coffee", "coffee\\s+beans"],
-    "exclude": ["creamer", "filter", "\\bmug\\b", "iced\\s+coffee", "\\bpod", "k-?cup", "ready\\s+to\\s+drink", "\\brtd\\b", "cold\\s+brew\\s+can"] },
-
-  { "id": "laundry-detergent", "label": "Laundry Detergent (Arm & Hammer OxiClean)", "unit": "floz",
-    "include": ["arm\\s*(?:&|&amp;|and)\\s*hammer.{0,60}(?:oxi\\s*-?\\s*clean|odor\\s*blasters?)", "(?:oxi\\s*-?\\s*clean|odor\\s*blasters?).{0,60}arm\\s*(?:&|&amp;|and)\\s*hammer"],
-    "exclude": ["\\bpods?\\b", "\\bpaks?\\b", "\\bpacs?\\b", "\\bpowder\\b", "\\bsheets?\\b", "stain\\s*remover", "\\bspray\\b", "\\bscent\\s*booster", "in-?wash", "\\bdish\\b", "unit\\s*dose", "\\btabs?\\b"] }
+                    ]
+    },
+    {
+        "id":  "sour-cream",
+        "label":  "Sour Cream",
+        "unit":  "oz",
+        "include":  [
+                        "sour\\s+cream"
+                    ],
+        "exclude":  [
+                        "dip"
+                    ]
+    },
+    {
+        "id":  "cream-cheese",
+        "label":  "Cream Cheese",
+        "unit":  "oz",
+        "include":  [
+                        "cream\\s+cheese"
+                    ],
+        "exclude":  [
+                        "frosting"
+                    ]
+    },
+    {
+        "id":  "shredded-cheese",
+        "label":  "Shredded / Block Cheese",
+        "unit":  "oz",
+        "include":  [
+                        "shredded\\s+cheese",
+                        "chunk\\s+cheese",
+                        "cheese\\s+chunk",
+                        "block\\s+cheese",
+                        "(cheddar|mozzarella|colby|monterey|jack)\\s+cheese",
+                        "cheese[^,]*(cheddar|mozzarella|colby)"
+                    ],
+        "exclude":  [
+                        "cottage",
+                        "cream\\s+cheese",
+                        "cheesecake",
+                        "cheese\\s+cake",
+                        "macaroni",
+                        "cracker",
+                        "string",
+                        "cheese\\s+dip",
+                        "sauce",
+                        "slice",
+                        "spread",
+                        "snack"
+                    ]
+    },
+    {
+        "id":  "yogurt",
+        "label":  "Yogurt",
+        "unit":  "oz",
+        "include":  [
+                        "yog(?:h)?urt"
+                    ],
+        "exclude":  [
+                        "covered",
+                        "bar",
+                        "pretzel",
+                        "raisin",
+                        "cheese",
+                        "shred"
+                    ]
+    },
+    {
+        "id":  "bananas",
+        "label":  "Bananas",
+        "unit":  "lb",
+        "include":  [
+                        "banana"
+                    ],
+        "exclude":  [
+                        "bread",
+                        "pudding",
+                        "chip",
+                        "muffin"
+                    ]
+    },
+    {
+        "id":  "strawberries",
+        "label":  "Strawberries",
+        "unit":  "oz",
+        "include":  [
+                        "strawberr"
+                    ],
+        "exclude":  [
+                        "cream",
+                        "\\bjam\\b",
+                        "preserve",
+                        "flavored",
+                        "yog(?:h)?urt",
+                        "\\bbar\\b",
+                        "spread"
+                    ]
+    },
+    {
+        "id":  "blueberries",
+        "label":  "Blueberries",
+        "unit":  "oz",
+        "pint_oz":  11.2,
+        "include":  [
+                        "blueberr"
+                    ],
+        "exclude":  [
+                        "muffin",
+                        "waffle",
+                        "pancake",
+                        "\\bjam\\b",
+                        "preserve",
+                        "yog(?:h)?urt",
+                        "\\bbar\\b",
+                        "spread",
+                        "syrup"
+                    ]
+    },
+    {
+        "id":  "avocados",
+        "label":  "Avocados",
+        "unit":  "each",
+        "include":  [
+                        "avocado"
+                    ],
+        "exclude":  [
+                        "\\boil\\b",
+                        "guacamole"
+                    ]
+    },
+    {
+        "id":  "russet-potatoes",
+        "label":  "Russet Potatoes",
+        "unit":  "lb",
+        "include":  [
+                        "russet\\s+potato",
+                        "potato[^,]*russet",
+                        "baker\\s+potato",
+                        "\\brusset\\b"
+                    ],
+        "exclude":  [
+                        "sweet\\s+potato",
+                        "chip",
+                        "\\btot\\b",
+                        "salad",
+                        "tater",
+                        "frozen",
+                        "instant"
+                    ]
+    },
+    {
+        "id":  "onions",
+        "label":  "Yellow / Sweet Onions",
+        "unit":  "lb",
+        "include":  [
+                        "\\bonion",
+                        "vidalia"
+                    ],
+        "exclude":  [
+                        "green\\s+onion",
+                        "onion\\s+ring",
+                        "onion\\s+powder",
+                        "red\\s+onion",
+                        "soup"
+                    ]
+    },
+    {
+        "id":  "apples",
+        "label":  "Apples",
+        "unit":  "lb",
+        "include":  [
+                        "\\bapple(s)?\\b",
+                        "honeycrisp",
+                        "gala\\s+apple",
+                        "fuji\\s+apple"
+                    ],
+        "exclude":  [
+                        "pineapple",
+                        "apple\\s+juice",
+                        "applesauce",
+                        "apple\\s+sauce",
+                        "caramel",
+                        "\\bpie\\b",
+                        "cider"
+                    ]
+    },
+    {
+        "id":  "grapes",
+        "label":  "Grapes",
+        "unit":  "lb",
+        "include":  [
+                        "\\bgrape(s)?\\b"
+                    ],
+        "exclude":  [
+                        "grapefruit",
+                        "grape\\s+juice",
+                        "grape\\s+tomato",
+                        "jelly",
+                        "\\bjam\\b"
+                    ]
+    },
+    {
+        "id":  "sweet-corn",
+        "label":  "Sweet Corn (ear)",
+        "unit":  "each",
+        "include":  [
+                        "sweet\\s+corn",
+                        "corn\\s+on\\s+the\\s+cob",
+                        "fresh\\s+corn"
+                    ],
+        "exclude":  [
+                        "popcorn",
+                        "corn\\s+bread",
+                        "cornbread",
+                        "cornflake",
+                        "tortilla",
+                        "corn\\s+dog",
+                        "canned",
+                        "cream\\s+corn",
+                        "corn\\s+chip",
+                        "syrup",
+                        "starch",
+                        "firecracker",
+                        "jamaican",
+                        "street",
+                        "rice\\s+cake",
+                        "steam",
+                        "crisp",
+                        "grill\\s+ready",
+                        "green\\s+giant",
+                        "kernel"
+                    ]
+    },
+    {
+        "id":  "watermelon",
+        "label":  "Whole Watermelon",
+        "unit":  "each",
+        "include":  [
+                        "whole.*watermelon",
+                        "seedless\\s+watermelon",
+                        "watermelon"
+                    ],
+        "exclude":  [
+                        "cut",
+                        "sliced",
+                        "chunk",
+                        "cup",
+                        "candy",
+                        "flavored"
+                    ]
+    },
+    {
+        "id":  "peaches",
+        "label":  "Peaches",
+        "unit":  "lb",
+        "include":  [
+                        "peach(es)?"
+                    ],
+        "exclude":  [
+                        "ring",
+                        "cobbler",
+                        "canned",
+                        "\\bpie\\b",
+                        "yogurt",
+                        "flavored",
+                        "cling",
+                        "sliced",
+                        "\\bjar\\b",
+                        "preserve",
+                        "\\bcup"
+                    ]
+    },
+    {
+        "id":  "bread",
+        "label":  "Bread (loaf)",
+        "unit":  "each",
+        "include":  [
+                        "\\bbread\\b",
+                        "sandwich\\s+loaf",
+                        "white\\s+loaf",
+                        "wheat\\s+loaf"
+                    ],
+        "exclude":  [
+                        "breadstick",
+                        "cornbread",
+                        "crumb",
+                        "pita",
+                        "naan",
+                        "\\bbun",
+                        "banana\\s+bread",
+                        "garlic\\s+bread",
+                        "pudding",
+                        "flatbread",
+                        "dough"
+                    ]
+    },
+    {
+        "id":  "peanut-butter",
+        "label":  "Peanut Butter",
+        "unit":  "oz",
+        "include":  [
+                        "peanut\\s+butter"
+                    ],
+        "exclude":  [
+                        "\\bcup",
+                        "cookie",
+                        "cracker",
+                        "\\bbar\\b",
+                        "cereal",
+                        "pretzel",
+                        "filled",
+                        "\\bball",
+                        "granola"
+                    ]
+    },
+    {
+        "id":  "orange-juice",
+        "label":  "Orange Juice",
+        "unit":  "floz",
+        "include":  [
+                        "orange\\s+juice"
+                    ],
+        "exclude":  [
+                        "drink",
+                        "punch",
+                        "soda"
+                    ]
+    },
+    {
+        "id":  "coffee",
+        "label":  "Coffee (ground/beans)",
+        "unit":  "oz",
+        "include":  [
+                        "\\bcoffee\\b",
+                        "ground\\s+coffee",
+                        "coffee\\s+beans"
+                    ],
+        "exclude":  [
+                        "creamer",
+                        "filter",
+                        "\\bmug\\b",
+                        "iced\\s+coffee",
+                        "\\bpod",
+                        "k-?cup",
+                        "ready\\s+to\\s+drink",
+                        "\\brtd\\b",
+                        "cold\\s+brew\\s+can"
+                    ]
+    },
+    {
+        "id":  "laundry-detergent",
+        "label":  "Laundry Detergent (Arm \u0026 Hammer OxiClean)",
+        "unit":  "floz",
+        "include":  [
+                        "arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer.{0,60}(?:oxi\\s*-?\\s*clean|odor\\s*blasters?)",
+                        "(?:oxi\\s*-?\\s*clean|odor\\s*blasters?).{0,60}arm\\s*(?:\u0026|\u0026amp;|and)\\s*hammer"
+                    ],
+        "exclude":  [
+                        "\\bpods?\\b",
+                        "\\bpaks?\\b",
+                        "\\bpacs?\\b",
+                        "\\bpowder\\b",
+                        "\\bsheets?\\b",
+                        "stain\\s*remover",
+                        "\\bspray\\b",
+                        "\\bscent\\s*booster",
+                        "in-?wash",
+                        "\\bdish\\b",
+                        "unit\\s*dose",
+                        "\\btabs?\\b"
+                    ]
+    },
+    {
+        "id":  "whole-chicken",
+        "label":  "Whole Chicken",
+        "unit":  "lb",
+        "band_min":  0.79,
+        "band_max":  3.5,
+        "include":  [
+                        "whole\\s+(?:young\\s+)?chicken",
+                        "chicken\\b.{0,15}\\bwhole\\b"
+                    ],
+        "exclude":  [
+                        "rotisserie",
+                        "wing",
+                        "breast",
+                        "thigh",
+                        "tender",
+                        "patt",
+                        "cooked",
+                        "smoked"
+                    ]
+    },
+    {
+        "id":  "breakfast-sausage",
+        "label":  "Breakfast Sausage (pork)",
+        "unit":  "lb",
+        "band_min":  1.5,
+        "band_max":  9,
+        "include":  [
+                        "breakfast\\s+sausage",
+                        "pork\\s+sausage\\s+(?:roll|links?|patties)",
+                        "\\bpork\\s+sausage\\b"
+                    ],
+        "exclude":  [
+                        "italian",
+                        "smoked",
+                        "polish",
+                        "kielbasa",
+                        "bratwurst",
+                        "chicken\\s+sausage",
+                        "turkey\\s+sausage",
+                        "corn\\s*dog",
+                        "biscuit",
+                        "sandwich",
+                        "pizza"
+                    ]
+    },
+    {
+        "id":  "hot-dogs",
+        "label":  "Hot Dogs",
+        "unit":  "oz",
+        "band_min":  0.05,
+        "band_max":  0.7,
+        "include":  [
+                        "hot\\s*dogs?",
+                        "wieners?",
+                        "beef\\s+franks?"
+                    ],
+        "exclude":  [
+                        "\\bbuns?\\b",
+                        "corn\\s*dog",
+                        "chili",
+                        "\\bsauce\\b",
+                        "relish"
+                    ]
+    },
+    {
+        "id":  "deli-ham",
+        "label":  "Ham (deli / sliced)",
+        "unit":  "oz",
+        "band_min":  0.12,
+        "band_max":  1.0,
+        "include":  [
+                        "\\bham\\b"
+                    ],
+        "exclude":  [
+                        "spiral",
+                        "\\bwhole\\b",
+                        "bone-?in",
+                        "\\bsteak\\b",
+                        "salad",
+                        "glaze",
+                        "hamburger",
+                        "graham",
+                        "\\bhock\\b"
+                    ]
+    },
+    {
+        "id":  "salmon",
+        "label":  "Salmon (fillets)",
+        "unit":  "lb",
+        "band_min":  3.5,
+        "band_max":  18,
+        "relax_global":  [
+                             "\\bfrozen\\b"
+                         ],
+        "include":  [
+                        "salmon"
+                    ],
+        "exclude":  [
+                        "\\bcanned\\b",
+                        "smoked",
+                        "pouch",
+                        "\\bcat\\b",
+                        "patt",
+                        "burger",
+                        "jerky",
+                        "\\bdip\\b"
+                    ]
+    },
+    {
+        "id":  "canned-tuna",
+        "label":  "Canned Tuna",
+        "unit":  "oz",
+        "band_min":  0.08,
+        "band_max":  0.7,
+        "relax_global":  [
+                             "\\bcanned\\b"
+                         ],
+        "include":  [
+                        "\\btuna\\b"
+                    ],
+        "exclude":  [
+                        "\\bsteak\\b",
+                        "fresh",
+                        "\\bahi\\b",
+                        "sushi",
+                        "\\bcat\\b",
+                        "creations",
+                        "salad",
+                        "pouch",
+                        "helper"
+                    ]
+    },
+    {
+        "id":  "shrimp",
+        "label":  "Shrimp (frozen, raw)",
+        "unit":  "lb",
+        "band_min":  2.5,
+        "band_max":  16,
+        "relax_global":  [
+                             "\\bfrozen\\b"
+                         ],
+        "include":  [
+                        "shrimp"
+                    ],
+        "exclude":  [
+                        "breaded",
+                        "popcorn",
+                        "cocktail\\s+sauce",
+                        "alfredo",
+                        "fried",
+                        "\\bscampi\\b",
+                        "\\bramen\\b",
+                        "poppers"
+                    ]
+    },
+    {
+        "id":  "sirloin-steak",
+        "label":  "Sirloin Steak",
+        "unit":  "lb",
+        "band_min":  3.5,
+        "band_max":  16,
+        "include":  [
+                        "(?:beef\\s+)?sirloin"
+                    ],
+        "exclude":  [
+                        "\\bpork\\b",
+                        "burger",
+                        "ground",
+                        "\\btips\\b.{0,15}gravy"
+                    ]
+    },
+    {
+        "id":  "sliced-cheese",
+        "label":  "Sliced Cheese",
+        "unit":  "oz",
+        "band_min":  0.08,
+        "band_max":  0.7,
+        "relax_global":  [
+                             "wrapped"
+                         ],
+        "include":  [
+                        "cheese\\s+slices?",
+                        "sliced\\b.{0,25}cheese",
+                        "\\bsingles\\b.{0,20}cheese",
+                        "cheese\\b.{0,15}\\bsingles\\b",
+                        "american\\s+slices?"
+                    ],
+        "exclude":  [
+                        "shredded",
+                        "cream\\s*cheese",
+                        "string",
+                        "\\bblock\\b",
+                        "cracker\\s+cuts?"
+                    ]
+    },
+    {
+        "id":  "oranges",
+        "label":  "Oranges",
+        "unit":  "lb",
+        "band_min":  0.4,
+        "band_max":  3.5,
+        "include":  [
+                        "\\bnavel\\s+oranges?\\b",
+                        "\\boranges?\\b"
+                    ],
+        "exclude":  [
+                        "\\bjuice\\b",
+                        "mandarin",
+                        "clementine",
+                        "cutie",
+                        "\\bsoda\\b",
+                        "chocolate",
+                        "chicken",
+                        "cranberry",
+                        "\\broll\\b",
+                        "\\bscente?d?\\b",
+                        "cleaner",
+                        "\\bsoap\\b",
+                        "detergent",
+                        "wipes"
+                    ]
+    },
+    {
+        "id":  "lemons",
+        "label":  "Lemons",
+        "unit":  "each",
+        "band_min":  0.2,
+        "band_max":  1.8,
+        "include":  [
+                        "\\blemons?\\b"
+                    ],
+        "exclude":  [
+                        "juice",
+                        "\\bade\\b",
+                        "pepper",
+                        "\\bbar\\b",
+                        "cake",
+                        "seasoning",
+                        "cookie",
+                        "\\bpie\\b",
+                        "yog",
+                        "\\bscente?d?\\b",
+                        "cleaner",
+                        "\\bsoap\\b",
+                        "detergent",
+                        "wipes",
+                        "polish",
+                        "spray"
+                    ]
+    },
+    {
+        "id":  "limes",
+        "label":  "Limes",
+        "unit":  "each",
+        "band_min":  0.12,
+        "band_max":  1.5,
+        "include":  [
+                        "\\blimes?\\b"
+                    ],
+        "exclude":  [
+                        "juice",
+                        "\\bade\\b",
+                        "key\\s*lime\\s*pie",
+                        "sparkling",
+                        "chili",
+                        "\\bsalt\\b",
+                        "yog",
+                        "\\bscente?d?\\b",
+                        "cleaner",
+                        "\\bsoap\\b",
+                        "detergent",
+                        "wipes"
+                    ]
+    },
+    {
+        "id":  "tomatoes",
+        "label":  "Tomatoes (fresh)",
+        "unit":  "lb",
+        "band_min":  0.6,
+        "band_max":  4.5,
+        "include":  [
+                        "\\btomato(?:es)?\\b"
+                    ],
+        "exclude":  [
+                        "\\bcanned\\b",
+                        "\\bsauce\\b",
+                        "paste",
+                        "diced",
+                        "crushed",
+                        "\\bsoup\\b",
+                        "juice",
+                        "ketchup",
+                        "sun-?dried",
+                        "stewed",
+                        "\\bpeeled\\b",
+                        "fire\\s*roasted"
+                    ]
+    },
+    {
+        "id":  "lettuce",
+        "label":  "Lettuce (head)",
+        "unit":  "each",
+        "band_min":  0.8,
+        "band_max":  4.5,
+        "include":  [
+                        "\\blettuce\\b",
+                        "\\biceberg\\b",
+                        "\\bromaine\\b"
+                    ],
+        "exclude":  [
+                        "\\bkit\\b",
+                        "\\bblend\\b",
+                        "shredded",
+                        "chopped",
+                        "salad\\s+mix",
+                        "\\bhearts\\b.{0,10}\\b3\\b"
+                    ]
+    },
+    {
+        "id":  "carrots",
+        "label":  "Carrots",
+        "unit":  "lb",
+        "band_min":  0.3,
+        "band_max":  3,
+        "include":  [
+                        "\\bcarrots?\\b"
+                    ],
+        "exclude":  [
+                        "cake",
+                        "juice",
+                        "chips",
+                        "\\bdip\\b",
+                        "glazed"
+                    ]
+    },
+    {
+        "id":  "broccoli",
+        "label":  "Broccoli (fresh)",
+        "unit":  "lb",
+        "band_min":  0.8,
+        "band_max":  4.5,
+        "include":  [
+                        "broccoli"
+                    ],
+        "exclude":  [
+                        "\\bfrozen\\b",
+                        "cheese",
+                        "\\bsoup\\b",
+                        "slaw",
+                        "\\btots\\b",
+                        "steam"
+                    ]
+    },
+    {
+        "id":  "bell-peppers",
+        "label":  "Bell Peppers",
+        "unit":  "each",
+        "band_min":  0.4,
+        "band_max":  3,
+        "include":  [
+                        "bell\\s+peppers?",
+                        "green\\s+bell",
+                        "red\\s+bell"
+                    ],
+        "exclude":  [
+                        "roasted",
+                        "\\bjar\\b",
+                        "mini\\s+sweet",
+                        "stuffed",
+                        "\\bfrozen\\b"
+                    ]
+    },
+    {
+        "id":  "celery",
+        "label":  "Celery",
+        "unit":  "each",
+        "band_min":  0.8,
+        "band_max":  4,
+        "include":  [
+                        "\\bcelery\\b"
+                    ],
+        "exclude":  [
+                        "\\bseed\\b",
+                        "\\bsalt\\b",
+                        "\\bsoup\\b",
+                        "\\bdip\\b",
+                        "sticks\\s+with"
+                    ]
+    },
+    {
+        "id":  "cucumbers",
+        "label":  "Cucumbers",
+        "unit":  "each",
+        "band_min":  0.3,
+        "band_max":  2.5,
+        "include":  [
+                        "cucumbers?"
+                    ],
+        "exclude":  [
+                        "pickle",
+                        "\\bkit\\b",
+                        "salad",
+                        "\\bdip\\b"
+                    ]
+    },
+    {
+        "id":  "garlic",
+        "label":  "Garlic (fresh)",
+        "unit":  "each",
+        "band_min":  0.25,
+        "band_max":  2.5,
+        "include":  [
+                        "\\bgarlic\\b"
+                    ],
+        "exclude":  [
+                        "powder",
+                        "\\bsalt\\b",
+                        "minced",
+                        "bread",
+                        "butter",
+                        "\\bsauce\\b",
+                        "seasoning",
+                        "toast",
+                        "spread",
+                        "\\bknots\\b",
+                        "press"
+                    ]
+    },
+    {
+        "id":  "spinach",
+        "label":  "Spinach (fresh)",
+        "unit":  "oz",
+        "band_min":  0.1,
+        "band_max":  0.9,
+        "include":  [
+                        "spinach"
+                    ],
+        "exclude":  [
+                        "\\bfrozen\\b",
+                        "creamed",
+                        "\\bdip\\b",
+                        "artichoke",
+                        "\\bwrap\\b",
+                        "ravioli",
+                        "tortellini"
+                    ]
+    },
+    {
+        "id":  "mushrooms",
+        "label":  "Mushrooms (white / baby bella)",
+        "unit":  "oz",
+        "band_min":  0.1,
+        "band_max":  0.9,
+        "include":  [
+                        "mushrooms?",
+                        "baby\\s*bella",
+                        "cremini"
+                    ],
+        "exclude":  [
+                        "\\bcanned\\b",
+                        "\\bsoup\\b",
+                        "stuffed",
+                        "gravy",
+                        "\\bjar\\b",
+                        "\\bdried\\b",
+                        "pieces\\s+and\\s+stems"
+                    ]
+    },
+    {
+        "id":  "sweet-potatoes",
+        "label":  "Sweet Potatoes",
+        "unit":  "lb",
+        "band_min":  0.4,
+        "band_max":  3,
+        "include":  [
+                        "sweet\\s+potato(?:es)?\\b",
+                        "\\byams?\\b"
+                    ],
+        "exclude":  [
+                        "fries",
+                        "\\bcanned\\b",
+                        "casserole",
+                        "chips",
+                        "puffs",
+                        "\\btots\\b",
+                        "\\bcut\\b",
+                        "\\bfrozen\\b"
+                    ]
+    },
+    {
+        "id":  "tortillas",
+        "label":  "Tortillas (flour)",
+        "unit":  "each",
+        "band_min":  0.1,
+        "band_max":  1.2,
+        "relax_global":  [
+                             "\\bwrap\\b"
+                         ],
+        "include":  [
+                        "tortillas?"
+                    ],
+        "exclude":  [
+                        "chips",
+                        "\\bsoup\\b",
+                        "\\bbowl\\b",
+                        "crusts?"
+                    ]
+    },
+    {
+        "id":  "hamburger-buns",
+        "label":  "Hamburger Buns",
+        "unit":  "each",
+        "band_min":  0.1,
+        "band_max":  1.2,
+        "include":  [
+                        "hamburger\\s+buns?",
+                        "sandwich\\s+buns?"
+                    ],
+        "exclude":  [
+                        "hot\\s*dog",
+                        "brioche\\s+sliders?"
+                    ]
+    },
+    {
+        "id":  "bagels",
+        "label":  "Bagels",
+        "unit":  "each",
+        "band_min":  0.25,
+        "band_max":  1.8,
+        "include":  [
+                        "bagels?"
+                    ],
+        "exclude":  [
+                        "\\bbites\\b",
+                        "\\bmini\\b",
+                        "seasoning",
+                        "\\bdogs?\\b",
+                        "pizza"
+                    ]
+    },
+    {
+        "id":  "rice",
+        "label":  "White Rice",
+        "unit":  "lb",
+        "band_min":  0.4,
+        "band_max":  4,
+        "include":  [
+                        "long\\s+grain\\s+(?:white\\s+)?rice",
+                        "white\\s+rice",
+                        "jasmine\\s+rice",
+                        "\\brice\\b"
+                    ],
+        "exclude":  [
+                        "krisp",
+                        "\\bcake\\b",
+                        "cereal",
+                        "pudding",
+                        "fried",
+                        "seasoned",
+                        "pilaf",
+                        "vinegar",
+                        "noodle",
+                        "\\bmilk\\b",
+                        "brown\\s+rice",
+                        "\\bbowl\\b",
+                        "\\ba\\s*roni\\b",
+                        "wild"
+                    ]
+    },
+    {
+        "id":  "pasta",
+        "label":  "Pasta (dry)",
+        "unit":  "oz",
+        "band_min":  0.03,
+        "band_max":  0.3,
+        "include":  [
+                        "spaghetti",
+                        "\\bpenne\\b",
+                        "\\brotini\\b",
+                        "elbow\\s+macaroni",
+                        "\\bfettuccine\\b",
+                        "\\bpasta\\b"
+                    ],
+        "exclude":  [
+                        "\\bsauce\\b",
+                        "cheese",
+                        "\\bcanned\\b",
+                        "ravioli",
+                        "tortellini",
+                        "salad",
+                        "\\bfrozen\\b",
+                        "\\bcup\\b",
+                        "sides?\\b",
+                        "\\bo\u0027s\\b",
+                        "rice"
+                    ]
+    },
+    {
+        "id":  "pasta-sauce",
+        "label":  "Pasta Sauce (marinara)",
+        "unit":  "oz",
+        "band_min":  0.03,
+        "band_max":  0.4,
+        "relax_global":  [
+                             "\\bsauce\\b"
+                         ],
+        "include":  [
+                        "pasta\\s+sauce",
+                        "marinara",
+                        "spaghetti\\s+sauce",
+                        "traditional\\s+sauce"
+                    ],
+        "exclude":  [
+                        "alfredo",
+                        "pesto",
+                        "pizza",
+                        "\\bmix\\b"
+                    ]
+    },
+    {
+        "id":  "mac-and-cheese",
+        "label":  "Macaroni \u0026 Cheese (boxed)",
+        "unit":  "each",
+        "band_min":  0.4,
+        "band_max":  4,
+        "include":  [
+                        "mac(?:aroni)?\\s*(?:\u0026|and)?\\s*cheese"
+                    ],
+        "exclude":  [
+                        "\\bfrozen\\b",
+                        "\\bbites\\b",
+                        "\\bcup\\b.{0,10}\\b4\\b",
+                        "velveeta\\s+skillets"
+                    ]
+    },
+    {
+        "id":  "ramen",
+        "label":  "Ramen Noodles",
+        "unit":  "each",
+        "band_min":  0.15,
+        "band_max":  2,
+        "relax_global":  [
+                             "\\bsoup\\b"
+                         ],
+        "include":  [
+                        "\\bramen\\b"
+                    ],
+        "exclude":  [
+                        "\\bshrimp\\b.{0,20}\\bfresh\\b",
+                        "restaurant"
+                    ]
+    },
+    {
+        "id":  "flour",
+        "label":  "All-Purpose Flour",
+        "unit":  "lb",
+        "band_min":  0.25,
+        "band_max":  2.5,
+        "include":  [
+                        "all[\\s-]*purpose\\s+flour",
+                        "\\bflour\\b"
+                    ],
+        "exclude":  [
+                        "tortilla",
+                        "almond",
+                        "coconut",
+                        "bread\\s+flour",
+                        "self[\\s-]*rising",
+                        "gluten",
+                        "\\bcake\\b",
+                        "whole\\s+wheat",
+                        "\\bmix\\b"
+                    ]
+    },
+    {
+        "id":  "sugar",
+        "label":  "Granulated Sugar",
+        "unit":  "lb",
+        "band_min":  0.4,
+        "band_max":  3,
+        "include":  [
+                        "granulated\\s+sugar",
+                        "pure\\s+cane\\s+sugar",
+                        "\\bsugar\\b"
+                    ],
+        "exclude":  [
+                        "brown",
+                        "powdered",
+                        "confectioner",
+                        "\\bfree\\b",
+                        "substitute",
+                        "\\braw\\b",
+                        "cookie",
+                        "turbinado",
+                        "\\bcones?\\b",
+                        "wafer"
+                    ]
+    },
+    {
+        "id":  "brown-sugar",
+        "label":  "Brown Sugar",
+        "unit":  "lb",
+        "band_min":  0.5,
+        "band_max":  3.5,
+        "include":  [
+                        "brown\\s+sugar"
+                    ],
+        "exclude":  [
+                        "oatmeal",
+                        "\\btart\\b",
+                        "syrup",
+                        "cereal",
+                        "\\bham\\b",
+                        "cinnamon\\s+roll"
+                    ]
+    },
+    {
+        "id":  "olive-oil",
+        "label":  "Olive Oil",
+        "unit":  "floz",
+        "band_min":  0.12,
+        "band_max":  1.2,
+        "include":  [
+                        "olive\\s+oil"
+                    ],
+        "exclude":  [
+                        "\\bmayo\\b",
+                        "mayonnaise",
+                        "\\bspray\\b",
+                        "dressing",
+                        "\\bsoap\\b"
+                    ]
+    },
+    {
+        "id":  "vegetable-oil",
+        "label":  "Vegetable / Canola Oil",
+        "unit":  "floz",
+        "band_min":  0.04,
+        "band_max":  0.4,
+        "include":  [
+                        "vegetable\\s+oil",
+                        "canola\\s+oil"
+                    ],
+        "exclude":  [
+                        "\\bspray\\b",
+                        "shortening",
+                        "\\bmayo\\b",
+                        "mayonnaise"
+                    ]
+    },
+    {
+        "id":  "cereal",
+        "label":  "Breakfast Cereal",
+        "unit":  "oz",
+        "band_min":  0.08,
+        "band_max":  0.7,
+        "relax_global":  [
+                             "cereal"
+                         ],
+        "include":  [
+                        "\\bcereal\\b",
+                        "toasted\\s+oats",
+                        "corn\\s+flakes",
+                        "raisin\\s+bran",
+                        "crispy\\s+rice\\s+cereal"
+                    ],
+        "exclude":  [
+                        "\\bbar\\b",
+                        "\\bbaby\\b",
+                        "\\bhot\\b",
+                        "granola"
+                    ]
+    },
+    {
+        "id":  "oatmeal",
+        "label":  "Oats / Oatmeal",
+        "unit":  "oz",
+        "band_min":  0.04,
+        "band_max":  0.5,
+        "include":  [
+                        "oatmeal",
+                        "rolled\\s+oats",
+                        "quick\\s+oats",
+                        "old\\s+fashioned\\s+oats",
+                        "\\boats\\b"
+                    ],
+        "exclude":  [
+                        "cookie",
+                        "cream\\s+pie",
+                        "\\bbar\\b",
+                        "\\bsoap\\b",
+                        "\\bbath\\b",
+                        "granola",
+                        "honey"
+                    ]
+    },
+    {
+        "id":  "jelly",
+        "label":  "Jelly / Jam",
+        "unit":  "oz",
+        "band_min":  0.06,
+        "band_max":  0.6,
+        "include":  [
+                        "\\bjelly\\b",
+                        "\\bjam\\b",
+                        "preserves"
+                    ],
+        "exclude":  [
+                        "\\bbeans?\\b",
+                        "donut",
+                        "\\broll\\b",
+                        "pepper\\s+jelly",
+                        "petroleum",
+                        "toast\\b"
+                    ]
+    },
+    {
+        "id":  "honey",
+        "label":  "Honey",
+        "unit":  "oz",
+        "band_min":  0.15,
+        "band_max":  1.2,
+        "include":  [
+                        "\\bhoney\\b"
+                    ],
+        "exclude":  [
+                        "\\bham\\b",
+                        "mustard",
+                        "\\bbbq\\b",
+                        "graham",
+                        "bread",
+                        "\\bbun\\b",
+                        "cereal",
+                        "\\boats?\\b",
+                        "\\bnut\\b",
+                        "glaze",
+                        "turkey",
+                        "wing",
+                        "\\bdew\\b",
+                        "\\bcomb\\b",
+                        "roasted",
+                        "\\bbbq\\b",
+                        "wheat"
+                    ]
+    },
+    {
+        "id":  "canned-black-beans",
+        "label":  "Canned Black Beans",
+        "unit":  "oz",
+        "band_min":  0.03,
+        "band_max":  0.25,
+        "relax_global":  [
+                             "\\bcanned\\b"
+                         ],
+        "include":  [
+                        "black\\s+beans?"
+                    ],
+        "exclude":  [
+                        "\\bsoup\\b",
+                        "\\bdry\\b",
+                        "\\bdried\\b",
+                        "burger",
+                        "chips",
+                        "salsa",
+                        "\\bcorn\\b"
+                    ]
+    },
+    {
+        "id":  "canned-corn",
+        "label":  "Canned Corn",
+        "unit":  "oz",
+        "band_min":  0.02,
+        "band_max":  0.25,
+        "relax_global":  [
+                             "\\bcanned\\b"
+                         ],
+        "include":  [
+                        "whole\\s+kernel\\s+corn",
+                        "golden\\s+sweet\\s+corn\\b.{0,20}\\b(?:can|15)",
+                        "canned\\s+corn"
+                    ],
+        "exclude":  [
+                        "\\bcob\\b",
+                        "fresh",
+                        "\\bfrozen\\b",
+                        "chips",
+                        "starch",
+                        "syrup",
+                        "bread",
+                        "muffin",
+                        "\\bdog\\b",
+                        "flakes",
+                        "\\bpops?\\b",
+                        "cream"
+                    ]
+    },
+    {
+        "id":  "diced-tomatoes",
+        "label":  "Canned Diced Tomatoes",
+        "unit":  "oz",
+        "band_min":  0.03,
+        "band_max":  0.25,
+        "relax_global":  [
+                             "\\bcanned\\b"
+                         ],
+        "include":  [
+                        "diced\\s+tomato(?:es)?",
+                        "crushed\\s+tomato(?:es)?",
+                        "whole\\s+peeled\\s+tomato"
+                    ],
+        "exclude":  [
+                        "paste",
+                        "\\bsauce\\b",
+                        "sun",
+                        "\\bsoup\\b",
+                        "chil(?:i|e)",
+                        "\\bstewed\\b"
+                    ]
+    },
+    {
+        "id":  "chicken-broth",
+        "label":  "Chicken Broth / Stock",
+        "unit":  "floz",
+        "band_min":  0.02,
+        "band_max":  0.25,
+        "include":  [
+                        "chicken\\s+(?:broth|stock)"
+                    ],
+        "exclude":  [
+                        "bouillon",
+                        "\\bbase\\b",
+                        "\\bcubes?\\b",
+                        "ramen",
+                        "\\bsoup\\b"
+                    ]
+    },
+    {
+        "id":  "ketchup",
+        "label":  "Ketchup",
+        "unit":  "oz",
+        "band_min":  0.04,
+        "band_max":  0.35,
+        "include":  [
+                        "ketchup",
+                        "catsup"
+                    ],
+        "exclude":  [
+                        "chips"
+                    ]
+    },
+    {
+        "id":  "mustard",
+        "label":  "Yellow Mustard",
+        "unit":  "oz",
+        "band_min":  0.04,
+        "band_max":  0.4,
+        "include":  [
+                        "yellow\\s+mustard",
+                        "\\bmustard\\b"
+                    ],
+        "exclude":  [
+                        "dijon",
+                        "honey",
+                        "spicy\\s+brown",
+                        "greens",
+                        "potato\\s+salad",
+                        "stone\\s+ground",
+                        "horseradish",
+                        "pretzel"
+                    ]
+    },
+    {
+        "id":  "mayonnaise",
+        "label":  "Mayonnaise",
+        "unit":  "oz",
+        "band_min":  0.06,
+        "band_max":  0.5,
+        "include":  [
+                        "mayonnaise",
+                        "\\bmayo\\b"
+                    ],
+        "exclude":  [
+                        "miracle\\s+whip",
+                        "\\bdip\\b",
+                        "aioli"
+                    ]
+    },
+    {
+        "id":  "ranch-dressing",
+        "label":  "Ranch Dressing",
+        "unit":  "floz",
+        "band_min":  0.06,
+        "band_max":  0.6,
+        "include":  [
+                        "ranch\\s+dressing",
+                        "\\branch\\b.{0,25}dressing"
+                    ],
+        "exclude":  [
+                        "seasoning",
+                        "\\bmix\\b",
+                        "\\bdip\\b",
+                        "chips",
+                        "wing"
+                    ]
+    },
+    {
+        "id":  "salsa",
+        "label":  "Salsa",
+        "unit":  "oz",
+        "band_min":  0.06,
+        "band_max":  0.6,
+        "include":  [
+                        "\\bsalsa\\b"
+                    ],
+        "exclude":  [
+                        "con\\s+queso",
+                        "chips",
+                        "verde\\s+doritos"
+                    ]
+    },
+    {
+        "id":  "salt",
+        "label":  "Table Salt",
+        "unit":  "oz",
+        "band_min":  0.01,
+        "band_max":  0.4,
+        "include":  [
+                        "iodized\\s+salt",
+                        "table\\s+salt",
+                        "\\bsalt\\b"
+                    ],
+        "exclude":  [
+                        "salted",
+                        "chips",
+                        "vinegar",
+                        "epsom",
+                        "\\bbath\\b",
+                        "caramel",
+                        "seasoning",
+                        "\\bsea\\s+salt\\s+(?:caramel|chocolate)",
+                        "\\bbutter\\b",
+                        "\\bnuts?\\b",
+                        "grinder",
+                        "lamp"
+                    ]
+    },
+    {
+        "id":  "black-pepper",
+        "label":  "Black Pepper (ground)",
+        "unit":  "oz",
+        "band_min":  0.3,
+        "band_max":  6,
+        "include":  [
+                        "black\\s+pepper"
+                    ],
+        "exclude":  [
+                        "\\bbell\\b",
+                        "turkey",
+                        "bacon",
+                        "\\bjack\\b",
+                        "crusted",
+                        "grinder\\s+set"
+                    ]
+    },
+    {
+        "id":  "tortilla-chips",
+        "label":  "Tortilla Chips",
+        "unit":  "oz",
+        "band_min":  0.06,
+        "band_max":  0.6,
+        "relax_global":  [
+                             "\\bsnack\\b"
+                         ],
+        "include":  [
+                        "tortilla\\s+chips?"
+                    ],
+        "exclude":  [
+                        "\\bdip\\b",
+                        "salsa\\s+combo"
+                    ]
+    },
+    {
+        "id":  "potato-chips",
+        "label":  "Potato Chips",
+        "unit":  "oz",
+        "band_min":  0.1,
+        "band_max":  0.8,
+        "relax_global":  [
+                             "\\bsnack\\b"
+                         ],
+        "include":  [
+                        "potato\\s+chips?"
+                    ],
+        "exclude":  [
+                        "\\bdip\\b",
+                        "sweet\\s+potato"
+                    ]
+    },
+    {
+        "id":  "soda",
+        "label":  "Soda (12-pack)",
+        "unit":  "floz",
+        "band_min":  0.015,
+        "band_max":  0.2,
+        "relax_global":  [
+                             "\\bsoda\\b"
+                         ],
+        "include":  [
+                        "\\bsoda\\b",
+                        "\\bcola\\b"
+                    ],
+        "exclude":  [
+                        "tarts?",
+                        "\\bcorn\\b",
+                        "baking",
+                        "cracker",
+                        "\\bbread\\b",
+                        "scrub"
+                    ]
+    },
+    {
+        "id":  "bottled-water",
+        "label":  "Bottled Water (24-pack)",
+        "unit":  "each",
+        "band_min":  0.08,
+        "band_max":  1.2,
+        "relax_global":  [
+                             "\\bwater\\b"
+                         ],
+        "include":  [
+                        "purified\\s+(?:drinking\\s+)?water",
+                        "spring\\s+water",
+                        "drinking\\s+water"
+                    ],
+        "exclude":  [
+                        "sparkling",
+                        "tonic",
+                        "coconut",
+                        "flavored",
+                        "\\bgallon\\b",
+                        "enhanced",
+                        "electrolyte",
+                        "chestnut"
+                    ]
+    },
+    {
+        "id":  "frozen-pizza",
+        "label":  "Frozen Pizza",
+        "unit":  "each",
+        "band_min":  1.5,
+        "band_max":  14,
+        "relax_global":  [
+                             "\\bfrozen\\b",
+                             "\\bsnack\\b"
+                         ],
+        "include":  [
+                        "\\bpizza\\b"
+                    ],
+        "exclude":  [
+                        "rolls?",
+                        "\\bbites\\b",
+                        "bagel",
+                        "\\bsauce\\b",
+                        "pizza\\s+crust",
+                        "dough",
+                        "seasoning",
+                        "sticks?",
+                        "lunchable",
+                        "\\bkit\\b"
+                    ]
+    },
+    {
+        "id":  "ice-cream",
+        "label":  "Ice Cream",
+        "unit":  "floz",
+        "band_min":  0.03,
+        "band_max":  0.4,
+        "relax_global":  [
+                             "ice\\s*cream",
+                             "\\bfrozen\\b"
+                         ],
+        "include":  [
+                        "ice\\s*cream"
+                    ],
+        "exclude":  [
+                        "sandwich",
+                        "\\bbars?\\b",
+                        "\\bcones?\\b",
+                        "\\bcake\\b",
+                        "sundae",
+                        "\\bmaker\\b",
+                        "salt"
+                    ]
+    },
+    {
+        "id":  "frozen-vegetables",
+        "label":  "Frozen Mixed Vegetables",
+        "unit":  "oz",
+        "band_min":  0.03,
+        "band_max":  0.4,
+        "relax_global":  [
+                             "\\bfrozen\\b"
+                         ],
+        "include":  [
+                        "mixed\\s+vegetables",
+                        "peas\\s+(?:\u0026|and)\\s+carrots",
+                        "vegetable\\s+medley"
+                    ],
+        "exclude":  [
+                        "\\bsoup\\b",
+                        "\\bcanned\\b",
+                        "\\boil\\b",
+                        "\\bpasta\\b"
+                    ]
+    },
+    {
+        "id":  "frozen-fries",
+        "label":  "Frozen French Fries",
+        "unit":  "oz",
+        "band_min":  0.03,
+        "band_max":  0.35,
+        "relax_global":  [
+                             "\\bfrozen\\b"
+                         ],
+        "include":  [
+                        "french\\s+fri(?:es|ed)",
+                        "crinkle\\s+cut",
+                        "\\bfries\\b"
+                    ],
+        "exclude":  [
+                        "sweet\\s+potato",
+                        "waffle\\s+fries",
+                        "seasoned"
+                    ]
+    },
+    {
+        "id":  "chicken-nuggets",
+        "label":  "Frozen Chicken Nuggets",
+        "unit":  "oz",
+        "band_min":  0.08,
+        "band_max":  0.7,
+        "relax_global":  [
+                             "\\bfrozen\\b",
+                             "breaded",
+                             "\\bsnack\\b"
+                         ],
+        "include":  [
+                        "chicken\\s+nuggets?"
+                    ],
+        "exclude":  [
+                        "\\bdino\\b",
+                        "plant",
+                        "meatless",
+                        "\\bsauce\\b"
+                    ]
+    },
+    {
+        "id":  "paper-towels",
+        "label":  "Paper Towels",
+        "unit":  "each",
+        "band_min":  0.5,
+        "band_max":  5,
+        "include":  [
+                        "paper\\s+towels?"
+                    ],
+        "exclude":  [
+                        "holder",
+                        "dispenser"
+                    ]
+    },
+    {
+        "id":  "toilet-paper",
+        "label":  "Toilet Paper",
+        "unit":  "each",
+        "band_min":  0.3,
+        "band_max":  3,
+        "include":  [
+                        "toilet\\s+paper",
+                        "bath(?:room)?\\s+tissue"
+                    ],
+        "exclude":  [
+                        "holder",
+                        "cleaner",
+                        "\\bwand\\b"
+                    ]
+    },
+    {
+        "id":  "dish-soap",
+        "label":  "Dish Soap (liquid)",
+        "unit":  "floz",
+        "band_min":  0.05,
+        "band_max":  0.6,
+        "include":  [
+                        "dish\\s+(?:soap|liquid|detergent)",
+                        "dishwashing\\s+liquid"
+                    ],
+        "exclude":  [
+                        "dishwasher",
+                        "\\bpacs?\\b",
+                        "\\bpods?\\b",
+                        "\\btabs?\\b",
+                        "\\bwand\\b",
+                        "sponge",
+                        "brush"
+                    ]
+    },
+    {
+        "id":  "dishwasher-detergent",
+        "label":  "Dishwasher Detergent (pacs)",
+        "unit":  "each",
+        "band_min":  0.08,
+        "band_max":  1,
+        "include":  [
+                        "dishwasher\\s+(?:detergent|pacs?|pods?|tabs?)",
+                        "dishwasher"
+                    ],
+        "exclude":  [
+                        "\\bcleaner\\b",
+                        "rinse\\s+aid",
+                        "\\bsalt\\b",
+                        "magnet",
+                        "dish\\s+soap"
+                    ]
+    },
+    {
+        "id":  "trash-bags",
+        "label":  "Trash Bags (13 gal)",
+        "unit":  "each",
+        "band_min":  0.05,
+        "band_max":  0.8,
+        "include":  [
+                        "trash\\s+bags?",
+                        "garbage\\s+bags?",
+                        "\\bkitchen\\s+bags?\\b"
+                    ],
+        "exclude":  [
+                        "\\bcans?\\b",
+                        "compactor",
+                        "\\blawn\\b",
+                        "yard"
+                    ]
+    },
+    {
+        "id":  "aluminum-foil",
+        "label":  "Aluminum Foil",
+        "unit":  "each",
+        "band_min":  1,
+        "band_max":  15,
+        "include":  [
+                        "aluminum\\s+foil",
+                        "\\bfoil\\b.{0,15}(?:roll|sq)"
+                    ],
+        "exclude":  [
+                        "\\bpans?\\b",
+                        "baking\\s+cups",
+                        "balloon"
+                    ]
+    },
+    {
+        "id":  "storage-bags",
+        "label":  "Food Storage Bags (gallon)",
+        "unit":  "each",
+        "band_min":  0.03,
+        "band_max":  0.6,
+        "include":  [
+                        "(?:storage|freezer)\\s+bags?",
+                        "zipper\\s+bags?",
+                        "slider\\s+bags?"
+                    ],
+        "exclude":  [
+                        "vacuum",
+                        "trash",
+                        "sandwich\\s+bags?\\s+fold",
+                        "\\bsnack\\b"
+                    ]
+    },
+    {
+        "id":  "all-purpose-cleaner",
+        "label":  "All-Purpose Cleaner",
+        "unit":  "floz",
+        "band_min":  0.03,
+        "band_max":  0.5,
+        "include":  [
+                        "all[\\s-]*purpose\\s+cleaner",
+                        "multi[\\s-]*(?:purpose|surface)\\s+cleaner"
+                    ],
+        "exclude":  [
+                        "wipes",
+                        "eraser"
+                    ]
+    },
+    {
+        "id":  "bleach",
+        "label":  "Bleach",
+        "unit":  "floz",
+        "band_min":  0.008,
+        "band_max":  0.2,
+        "include":  [
+                        "\\bbleach\\b"
+                    ],
+        "exclude":  [
+                        "\\btoilet\\b",
+                        "\\bspray\\b",
+                        "wipes",
+                        "foamer",
+                        "\\bhair\\b",
+                        "\\bpen\\b",
+                        "crystals",
+                        "\\bgel\\b"
+                    ]
+    },
+    {
+        "id":  "hand-soap",
+        "label":  "Hand Soap (liquid)",
+        "unit":  "floz",
+        "band_min":  0.04,
+        "band_max":  1.5,
+        "include":  [
+                        "hand\\s+soap",
+                        "hand\\s+wash\\b"
+                    ],
+        "exclude":  [
+                        "sanitizer",
+                        "\\bdish\\b",
+                        "\\bbar\\b",
+                        "dispenser",
+                        "\\bbody\\b"
+                    ]
+    }
 ]

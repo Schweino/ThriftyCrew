@@ -11,7 +11,15 @@
                                                "ground-beef-8020",
                                                "ground-turkey",
                                                "bacon",
-                                               "pork-chops"
+                                               "pork-chops",
+                                               "whole-chicken",
+                                               "breakfast-sausage",
+                                               "hot-dogs",
+                                               "deli-ham",
+                                               "salmon",
+                                               "canned-tuna",
+                                               "shrimp",
+                                               "sirloin-steak"
                                            ]
                        },
                        {
@@ -26,7 +34,8 @@
                                                "sour-cream",
                                                "cream-cheese",
                                                "shredded-cheese",
-                                               "yogurt"
+                                               "yogurt",
+                                               "sliced-cheese"
                                            ]
                        },
                        {
@@ -41,7 +50,10 @@
                                                "apples",
                                                "peaches",
                                                "watermelon",
-                                               "avocados"
+                                               "avocados",
+                                               "oranges",
+                                               "lemons",
+                                               "limes"
                                            ]
                        },
                        {
@@ -51,26 +63,105 @@
                            "commodities":  [
                                                "russet-potatoes",
                                                "onions",
-                                               "sweet-corn"
+                                               "sweet-corn",
+                                               "tomatoes",
+                                               "lettuce",
+                                               "carrots",
+                                               "broccoli",
+                                               "bell-peppers",
+                                               "celery",
+                                               "cucumbers",
+                                               "garlic",
+                                               "spinach",
+                                               "mushrooms",
+                                               "sweet-potatoes"
+                                           ]
+                       },
+                       {
+                           "order":  5,
+                           "key":  "bakery",
+                           "label":  "Bread \u0026 Bakery",
+                           "commodities":  [
+                                               "bread",
+                                               "tortillas",
+                                               "hamburger-buns",
+                                               "bagels"
                                            ]
                        },
                        {
                            "key":  "pantry",
                            "label":  "Pantry \u0026 Beverages",
-                           "order":  5,
+                           "order":  6,
                            "commodities":  [
-                                               "bread",
                                                "peanut-butter",
                                                "orange-juice",
-                                               "coffee"
+                                               "coffee",
+                                               "rice",
+                                               "pasta",
+                                               "pasta-sauce",
+                                               "mac-and-cheese",
+                                               "ramen",
+                                               "flour",
+                                               "sugar",
+                                               "brown-sugar",
+                                               "olive-oil",
+                                               "vegetable-oil",
+                                               "cereal",
+                                               "oatmeal",
+                                               "jelly",
+                                               "honey",
+                                               "canned-black-beans",
+                                               "canned-corn",
+                                               "diced-tomatoes",
+                                               "chicken-broth",
+                                               "ketchup",
+                                               "mustard",
+                                               "mayonnaise",
+                                               "ranch-dressing",
+                                               "salsa",
+                                               "salt",
+                                               "black-pepper"
                                            ]
                        },
                        {
-                           "order":  6,
+                           "order":  7,
+                           "key":  "snacks",
+                           "label":  "Snacks \u0026 Drinks",
+                           "commodities":  [
+                                               "tortilla-chips",
+                                               "potato-chips",
+                                               "soda",
+                                               "bottled-water"
+                                           ]
+                       },
+                       {
+                           "order":  8,
+                           "key":  "frozen",
+                           "label":  "Frozen",
+                           "commodities":  [
+                                               "frozen-pizza",
+                                               "ice-cream",
+                                               "frozen-vegetables",
+                                               "frozen-fries",
+                                               "chicken-nuggets"
+                                           ]
+                       },
+                       {
+                           "order":  9,
                            "key":  "household",
                            "label":  "Household",
                            "commodities":  [
-                                               "laundry-detergent"
+                                               "laundry-detergent",
+                                               "paper-towels",
+                                               "toilet-paper",
+                                               "dish-soap",
+                                               "dishwasher-detergent",
+                                               "trash-bags",
+                                               "aluminum-foil",
+                                               "storage-bags",
+                                               "all-purpose-cleaner",
+                                               "bleach",
+                                               "hand-soap"
                                            ]
                        }
                    ]

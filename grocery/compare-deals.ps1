@@ -378,11 +378,21 @@ $GLOBAL_EXCLUDE = @(
 if ($GEX_OVERRIDE) { $GLOBAL_EXCLUDE = $GEX_OVERRIDE }
 function Match-Category($name) {
   $n = $name.ToLower()
-  foreach ($g in $GLOBAL_EXCLUDE) { if ($n -match $g) { return $null } }
+  # Which global prepared-food tokens hit this name (usually none). A commodity whose PLAIN form legitimately
+  # IS one of these (pasta-sauce is a sauce, soda is soda, ice-cream is ice cream...) declares relax_global:
+  # ["\\bsauce\\b", ...] in commodities.json to waive EXACTLY those tokens for itself - every other commodity
+  # still gets the full global protection (a "chicken sauce" can never enter chicken-breast).
+  $ghits = @(); foreach ($g in $GLOBAL_EXCLUDE) { if ($n -match $g) { $ghits += $g } }
   foreach ($c in $commodities) {
     $hit = $false
     foreach ($inc in $c.include) { if ($n -match $inc) { $hit=$true; break } }
     if (-not $hit) { continue }
+    if ($ghits.Count) {
+      $relax = @($c.relax_global | Where-Object { $_ })
+      $blocked = $false
+      foreach ($g in $ghits) { if ($relax -notcontains $g) { $blocked = $true; break } }
+      if ($blocked) { continue }
+    }
     $bad = $false
     foreach ($exc in $c.exclude) { if ($n -match $exc) { $bad=$true; break } }
     if ($bad) { continue }
