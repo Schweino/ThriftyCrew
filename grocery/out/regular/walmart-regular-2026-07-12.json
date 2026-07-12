@@ -1,0 +1,248 @@
+﻿{
+    "store":  "Walmart",
+    "week_of":  "2026-07-08",
+    "price_type":  "everyday",
+    "source":  "walmart.com in-browser search (Next.js __NEXT_DATA__ fetch), store set to \u0027Omaha L St Supercenter\u0027. Everyday shelf price (Walmart grocery pricing is store/location-specific). Base Great Value / Fresh store item per commodity; organic/frozen/prepared/flavored variants skipped.",
+    "deals":  [
+                  {
+                      "store":  "Walmart",
+                      "item":  "Freshness Guaranteed Boneless Skinless Chicken Breast",
+                      "ad_price":  "$2.48",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Tyson Fresh Chicken Thighs, Family Pack (bone-in)",
+                      "ad_price":  "$1.77",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "80% Lean/20% Fat Ground Beef Chuck",
+                      "ad_price":  "$6.28",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Jennie-O Fresh Lean Ground Turkey 93%",
+                      "ad_price":  "$5.46",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Great Value Naturally Hickory Smoked Sliced Bacon",
+                      "ad_price":  "$3.94",
+                      "size":  "12 oz",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Boneless Pork Loin Chops, Family Pack",
+                      "ad_price":  "$4.17",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Great Value Large White Eggs, 12 ct",
+                      "ad_price":  "$1.47",
+                      "size":  "dozen",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Great Value 1% Low-Fat Milk, Gallon",
+                      "ad_price":  "$3.00",
+                      "size":  "gallon",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Great Value Sweet Cream Salted Butter",
+                      "ad_price":  "$3.06",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Great Value 4% Small Curd Cottage Cheese",
+                      "ad_price":  "$2.87",
+                      "size":  "24 oz",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Great Value Original Sour Cream",
+                      "ad_price":  "$1.84",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Great Value Cream Cheese Brick (2 pk)",
+                      "ad_price":  "$2.97",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Great Value Fiesta Blend Finely Shredded Cheese",
+                      "ad_price":  "$1.97",
+                      "size":  "8 oz",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Great Value Original Vanilla Low-fat Yogurt",
+                      "ad_price":  "$2.64",
+                      "size":  "32 oz",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Fresh Banana",
+                      "ad_price":  "$0.50",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Fresh Strawberries, 2 lb Container",
+                      "ad_price":  "$4.72",
+                      "size":  "32 oz",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Fresh Blueberries, 18 oz Container",
+                      "ad_price":  "$4.64",
+                      "size":  "18 oz",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Fresh Hass Avocado",
+                      "ad_price":  "$0.73",
+                      "size":  "each",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Fresh Russet Potatoes, 5 lb Bag",
+                      "ad_price":  "$0.55",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Fresh Yellow Onions, 3 lb Bag",
+                      "ad_price":  "$1.15",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Fresh Gala Apples, 3 lb Bag",
+                      "ad_price":  "$1.08",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Fresh Red Seedless Grapes",
+                      "ad_price":  "$1.87",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Fresh Sweet Corn on the Cob",
+                      "ad_price":  "$0.74",
+                      "size":  "each",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Fresh Seedless Watermelon",
+                      "ad_price":  "$4.65",
+                      "size":  "each",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Fresh Yellow Peaches, 2 lb Bag",
+                      "ad_price":  "$1.84",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Great Value White Round Top Bread Loaf, 20 oz",
+                      "ad_price":  "$1.48",
+                      "size":  "each",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Great Value Creamy Peanut Butter, 40 oz",
+                      "ad_price":  "$3.98",
+                      "size":  "40 oz",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Great Value 100% Orange Juice, No Pulp, 52 fl oz",
+                      "ad_price":  "$3.96",
+                      "size":  "52 fl oz",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Folgers Classic Roast Ground Coffee",
+                      "ad_price":  "$0.44",
+                      "size":  "oz",
+                      "regular":  null,
+                      "source_ad":  "walmart.com"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "ARM \u0026 HAMMER Plus OxiClean with Odor Blasters Liquid Detergent, Fresh Burst",
+                      "ad_price":  "$12.48",
+                      "size":  "158.6 fl oz",
+                      "regular":  null,
+                      "source_ad":  "walmart.com (Omaha L St, verified 2026-07-12)"
+                  }
+              ]
+}
