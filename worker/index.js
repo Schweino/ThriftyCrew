@@ -5,6 +5,10 @@
 //   Secrets (set in Cloudflare dashboard, NOT in this repo):
 //     GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN
 //   Optional var: NOTIFY_TO (defaults to contact@simplemoneyplaybook.com)
+// - POST /alert: price-alert signup {email, item, weekly} -> Ghost member gets label alert-<item>
+//   (member created as FREE member if new; subscribed to the "Price Alerts" newsletter, plus the
+//   default newsletter when weekly=true). The daily pipeline emails label segments on record lows.
+//   Extra secret required: GHOST_ADMIN_KEY (same id:hexsecret Admin API key the pipeline uses)
 
 const ALLOWED_ORIGINS = [
   "https://www.thriftycrew.com",
@@ -82,10 +86,110 @@ async function sendEmail(env, { store, item, url }) {
   return (await r.json()).id;
 }
 
+// ---- Ghost Admin API helpers (for /alert) ----
+const GHOST_API = "https://map-to-success.ghost.io";
+
+async function ghostJwt(env) {
+  const [id, secretHex] = (env.GHOST_ADMIN_KEY || "").split(":");
+  if (!id || !secretHex) throw new Error("GHOST_ADMIN_KEY secret missing/malformed");
+  const keyBytes = new Uint8Array(secretHex.length / 2);
+  for (let i = 0; i < keyBytes.length; i++) keyBytes[i] = parseInt(secretHex.substr(i * 2, 2), 16);
+  const now = Math.floor(Date.now() / 1000);
+  const header = b64url(JSON.stringify({ alg: "HS256", typ: "JWT", kid: id }));
+  const payload = b64url(JSON.stringify({ iat: now, exp: now + 300, aud: "/admin/" }));
+  const key = await crypto.subtle.importKey("raw", keyBytes, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const sig = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(header + "." + payload));
+  const sigBytes = new Uint8Array(sig);
+  let bin = "";
+  for (let i = 0; i < sigBytes.length; i++) bin += String.fromCharCode(sigBytes[i]);
+  const sigB64 = btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  return header + "." + payload + "." + sigB64;
+}
+
+async function ghostFetch(env, path, opts) {
+  const token = await ghostJwt(env);
+  const r = await fetch(GHOST_API + path, {
+    ...opts,
+    headers: { Authorization: "Ghost " + token, "Accept-Version": "v5.0", "Content-Type": "application/json", ...(opts && opts.headers) },
+  });
+  return r;
+}
+
+// find-or-create the member and attach the alert label + Price Alerts newsletter.
+// Labels/newsletters are REPLACED on PUT in Ghost, so we always merge with what exists.
+async function subscribeAlert(env, email, item, weekly) {
+  // newsletters: find "Price Alerts" (required) + the default (for weekly opt-in)
+  const nlR = await ghostFetch(env, "/ghost/api/admin/newsletters/?limit=all");
+  if (!nlR.ok) throw new Error("newsletters fetch failed " + nlR.status);
+  const newsletters = (await nlR.json()).newsletters || [];
+  const alertsNl = newsletters.find((n) => n.name === "Price Alerts" && n.status === "active");
+  if (!alertsNl) throw new Error("Price Alerts newsletter not found");
+  const defaultNl = newsletters.find((n) => n.status === "active" && n.id !== alertsNl.id);
+
+  const label = "alert-" + item;
+  const filter = encodeURIComponent("email:'" + email.replace(/'/g, "") + "'");
+  const findR = await ghostFetch(env, "/ghost/api/admin/members/?filter=" + filter + "&limit=1&include=labels,newsletters");
+  if (!findR.ok) throw new Error("member lookup failed " + findR.status);
+  const found = (await findR.json()).members || [];
+
+  if (found.length === 0) {
+    const nls = [{ id: alertsNl.id }];
+    if (weekly && defaultNl) nls.push({ id: defaultNl.id });
+    const createR = await ghostFetch(env, "/ghost/api/admin/members/", {
+      method: "POST",
+      body: JSON.stringify({ members: [{ email: email, labels: [{ name: label }], newsletters: nls, note: "Signed up via price alerts (" + item + ")" }] }),
+    });
+    if (!createR.ok) throw new Error("member create failed " + createR.status + " " + (await createR.text()).slice(0, 200));
+    return "created";
+  }
+
+  const m = found[0];
+  const labels = (m.labels || []).map((l) => ({ name: l.name }));
+  if (!labels.some((l) => l.name === label)) labels.push({ name: label });
+  const nlIds = (m.newsletters || []).map((n) => ({ id: n.id }));
+  if (!nlIds.some((n) => n.id === alertsNl.id)) nlIds.push({ id: alertsNl.id });
+  if (weekly && defaultNl && !nlIds.some((n) => n.id === defaultNl.id)) nlIds.push({ id: defaultNl.id });
+  const putR = await ghostFetch(env, "/ghost/api/admin/members/" + m.id + "/", {
+    method: "PUT",
+    body: JSON.stringify({ members: [{ labels: labels, newsletters: nlIds }] }),
+  });
+  if (!putR.ok) throw new Error("member update failed " + putR.status + " " + (await putR.text()).slice(0, 200));
+  return "updated";
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const origin = request.headers.get("Origin") || "";
+
+    if (url.pathname === "/alert") {
+      if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders(origin) });
+      if (request.method !== "POST") return json({ ok: false, error: "method not allowed" }, 405, origin);
+      let data;
+      try { data = await request.json(); } catch { return json({ ok: false, error: "invalid JSON" }, 400, origin); }
+      // honeypot: silently accept bots
+      if (data && typeof data.website === "string" && data.website.trim() !== "") return json({ ok: true }, 200, origin);
+      const email = (data.email || "").toString().trim().toLowerCase();
+      const item = (data.item || "").toString().trim();
+      const weekly = data.weekly === true;
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || email.length > 200) return json({ ok: false, error: "Please enter a valid email address." }, 400, origin);
+      if (!/^[a-z0-9-]{2,60}$/.test(item)) return json({ ok: false, error: "Unknown item." }, 400, origin);
+      // item must be something we actually track (guards junk labels)
+      try {
+        const feedRes = await env.ASSETS.fetch(new Request(new URL("/smp-feed.json", request.url)));
+        const feedText = await feedRes.text();
+        const feed = JSON.parse(feedText.charCodeAt(0) === 0xfeff ? feedText.slice(1) : feedText);
+        if (!feed.ingredients || !feed.ingredients[item]) return json({ ok: false, error: "Unknown item." }, 400, origin);
+      } catch (e) {
+        return json({ ok: false, error: "Could not verify the item right now." }, 502, origin);
+      }
+      try {
+        await subscribeAlert(env, email, item, weekly);
+        return json({ ok: true }, 200, origin);
+      } catch (e) {
+        return json({ ok: false, error: "Could not sign you up right now. Please try again later." }, 502, origin);
+      }
+    }
 
     if (url.pathname === "/submit") {
       if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders(origin) });

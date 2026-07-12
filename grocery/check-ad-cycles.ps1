@@ -228,6 +228,8 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # re-cost the 113 recipes from today's board + refresh the hub's Top 5 (only publishes on change). Non-fatal.
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\top5-weekly.ps1') | Out-Null; Log 'top5-weekly refreshed' } catch { Log ('top5-weekly threw: ' + $_.Exception.Message) }
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'export-feed.ps1') | Out-Null; Log 'smp-feed exported' } catch { Log ('export-feed threw: ' + $_.Exception.Message) }
+      # price alerts: email label:alert-<id> subscribers when an item hits a tracked low (self-gates via alert-state.json)
+      try { $paOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-price-alerts.ps1'); Log ('price-alerts: ' + (@($paOut)[-1])) } catch { Log ('send-price-alerts threw: ' + $_.Exception.Message) }
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'resolve-worklist.ps1') | Out-Null } catch { Log ('resolve-worklist threw: ' + $_.Exception.Message) }
       $sigAfter = BoardSignature
       $sigFile  = Join-Path $OutDir 'published-board.sig'

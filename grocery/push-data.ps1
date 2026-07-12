@@ -14,7 +14,7 @@ $repo = Split-Path $PSScriptRoot -Parent   # income\ (git root)
 Push-Location $repo
 try {
   # cloud owns these (regenerated deterministically OR cross-run state it must persist): discard local copies
-  git checkout -- grocery/public/smp-feed.json grocery/out/published-board.sig grocery/out/last-visibility.txt grocery/price-history.json 2>$null
+  git checkout -- grocery/public/smp-feed.json grocery/out/published-board.sig grocery/out/last-visibility.txt grocery/price-history.json grocery/alert-state.json 2>$null
   git add -A
   git diff --cached --quiet
   if ($LASTEXITCODE -eq 0) { Write-Output 'push-data: no raw-input changes to push'; return }

@@ -819,6 +819,20 @@ if ($histDoc) {
 .tcc-chip.is-off{opacity:.4}
 .tcc-chip.is-off i{background:#c3cad6!important}
 .tcc-chip:hover{border-color:#E2A43C}
+.pg-alertp{border:1px solid #ecd9ae;background:#fdf8ec;color:#8a6d1f;border-radius:999px;padding:2px 10px;font-size:.62em;font-weight:800;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;font-family:inherit;margin-left:7px;vertical-align:2px;white-space:nowrap;flex:0 0 auto;line-height:1.6}
+.pg-alertp:hover{border-color:#E2A43C;color:#16263F}
+.pg-al-form{margin-top:14px}
+.pg-al-form input[type=email]{width:100%;padding:.7em .9em;font-size:1em;border:1.5px solid #e2e8f0;border-radius:10px;font-family:inherit;color:#16263F;box-sizing:border-box}
+.pg-al-form input[type=email]:focus{outline:none;border-color:#E2A43C;box-shadow:0 0 0 3px rgba(226,164,60,.2)}
+.pg-al-week{display:flex;gap:.6em;align-items:flex-start;font-size:.85em;color:#3a4658;margin:10px 0 12px;line-height:1.45}
+.pg-al-week input{margin-top:.2em;accent-color:#e2a43c}
+.pg-al-btn{background:#E2A43C;color:#16263F;border:none;border-radius:10px;padding:.8em 1.6em;font-size:1em;font-weight:800;cursor:pointer;font-family:inherit;width:100%}
+.pg-al-btn:disabled{opacity:.6;cursor:default}
+.pg-al-msg{font-size:.9em;margin:10px 0 0;min-height:1.3em}
+.pg-al-msg.ok{color:#1f7a4d;font-weight:700}
+.pg-al-msg.err{color:#b23b2e;font-weight:600}
+.pg-al-fine{font-size:.75em;color:#8a94a6;margin:10px 0 0;line-height:1.5}
+.pg-al-hp{position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden}
 .pg-hx-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
 .pg-hx-note{font-size:.75em;color:#8a94a6}
 .pg-hx-trend{font-size:.85em;font-weight:700;color:#8a6d1f;text-decoration:none}
@@ -829,17 +843,25 @@ if ($histDoc) {
   var TCH = __TCH_JSON__;
   function fmt(v){ if (v === null || v === undefined) return ''; return v < 1 ? '$' + v.toFixed(3) : '$' + v.toFixed(2); }
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-  // add a history pill to every row we have data for
+  // add pills to every row: "history" (when we have data) + "alerts" (every tracked item)
   var rows = document.querySelectorAll('.pg-row[data-id]');
   for (var i = 0; i < rows.length; i++){
     var id = rows[i].getAttribute('data-id');
-    if (!TCH[id]) continue;
     var head = rows[i].querySelector('.pg-rowhead');
     if (!head) continue;
-    var b = document.createElement('button');
-    b.type = 'button'; b.className = 'pg-hist'; b.setAttribute('data-hid', id); b.textContent = 'history';
-    b.title = "Every store's price for this item, week by week";
-    head.appendChild(b);
+    if (TCH[id]){
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'pg-hist'; b.setAttribute('data-hid', id); b.textContent = 'history';
+      b.title = "Every store's price for this item, week by week";
+      head.appendChild(b);
+    }
+    var nameEl = rows[i].querySelector('.pg-name');
+    var a = document.createElement('button');
+    a.type = 'button'; a.className = 'pg-alertp'; a.setAttribute('data-aid', id);
+    a.setAttribute('data-aname', nameEl ? nameEl.textContent : id);
+    a.textContent = 'alerts';
+    a.title = 'Get an email when this hits a low price';
+    head.appendChild(a);
   }
   var ov = null;
   function close(){ if (ov && ov.parentNode) ov.parentNode.removeChild(ov); ov = null; }
@@ -851,7 +873,7 @@ if ($histDoc) {
     h += '<p class="pg-hx-sub">Price per ' + esc(d.u) + ' at each store over time. Tap a dot for the exact price; tap a store below to hide or show its line.</p>';
     h += '<div class="pg-hx-chart"></div>';
     h += '<div class="pg-hx-foot"><span class="pg-hx-note">Daily checks for the last three weeks, weekly before that. History deepens as we track.</span>';
-    if (d.t) h += '<a class="pg-hx-trend" href="/' + d.t + '/?ref=board-history">Full history page &rarr;</a>';
+    h += '<span><button type="button" class="pg-alertp" data-aid="' + esc(id) + '" data-aname="' + esc(d.l) + '" style="margin-left:0">Get alerted on lows</button>' + (d.t ? ' <a class="pg-hx-trend" href="/' + d.t + '/?ref=board-history">Full history &rarr;</a>' : '') + '</span>';
     h += '</div></div>';
     ov = document.createElement('div');
     ov.className = 'pg-hx-ov';
@@ -860,7 +882,46 @@ if ($histDoc) {
     tcChart(ov.querySelector('.pg-hx-chart'), d);
     ov.addEventListener('click', function(e){ if (e.target === ov || e.target.closest('.pg-hx-x')) close(); });
   }
-  document.addEventListener('click', function(e){ var b = e.target.closest('.pg-hist'); if (b) open(b.getAttribute('data-hid')); });
+  var ALERT_URL = 'https://smp-feed.ancient-snow-93df.workers.dev/alert';
+  function openAlert(id, name){
+    close();
+    var h = '<div class="pg-hx" style="max-width:480px"><div class="pg-hx-top"><h3>Price alerts: ' + esc(name) + '</h3><button type="button" class="pg-hx-x" aria-label="Close">&times;</button></div>';
+    h += '<p class="pg-hx-sub">One short email when ' + esc(name.toLowerCase()) + ' hits the lowest price we have tracked in Omaha. No spam, no daily digests, just the good news.</p>';
+    h += '<div class="pg-al-form"><input type="email" id="pg-al-email" placeholder="you@email.com" maxlength="200" autocomplete="email">';
+    h += '<input type="text" class="pg-al-hp" id="pg-al-web" tabindex="-1" autocomplete="off" aria-hidden="true">';
+    h += '<label class="pg-al-week"><input type="checkbox" id="pg-al-week" checked> Also send me the weekly cheapest-groceries roundup (you can turn either off anytime)</label>';
+    h += '<button type="button" class="pg-al-btn" id="pg-al-go" data-aid="' + esc(id) + '">Alert me on low prices</button>';
+    h += '<p class="pg-al-msg" id="pg-al-msg"></p>';
+    h += '<p class="pg-al-fine">Free. This signs you up as a free Thrifty Crew member so we can email you; every email has an unsubscribe link.</p>';
+    h += '</div></div>';
+    ov = document.createElement('div');
+    ov.className = 'pg-hx-ov';
+    ov.innerHTML = h;
+    document.body.appendChild(ov);
+    ov.addEventListener('click', function(e){ if (e.target === ov || e.target.closest('.pg-hx-x')) close(); });
+    setTimeout(function(){ var inp = document.getElementById('pg-al-email'); if (inp) inp.focus(); }, 50);
+  }
+  function submitAlert(btn){
+    var id = btn.getAttribute('data-aid');
+    var email = (document.getElementById('pg-al-email') || {value:''}).value.trim();
+    var weekly = !!(document.getElementById('pg-al-week') || {}).checked;
+    var hp = (document.getElementById('pg-al-web') || {value:''}).value;
+    var msg = document.getElementById('pg-al-msg');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ msg.className = 'pg-al-msg err'; msg.textContent = 'That email does not look right.'; return; }
+    btn.disabled = true; msg.className = 'pg-al-msg'; msg.textContent = 'Signing you up...';
+    fetch(ALERT_URL, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ email: email, item: id, weekly: weekly, website: hp }) })
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        if (j && j.ok){ msg.className = 'pg-al-msg ok'; msg.textContent = 'Done. We will email you when it hits a low.'; btn.textContent = 'You are on the list'; }
+        else { msg.className = 'pg-al-msg err'; msg.textContent = (j && j.error) || 'Could not sign you up right now.'; btn.disabled = false; }
+      })
+      .catch(function(){ msg.className = 'pg-al-msg err'; msg.textContent = 'Could not reach the sign-up service. Try again in a minute.'; btn.disabled = false; });
+  }
+  document.addEventListener('click', function(e){
+    var b = e.target.closest('.pg-hist'); if (b){ open(b.getAttribute('data-hid')); return; }
+    var g = e.target.closest('#pg-al-go'); if (g){ submitAlert(g); return; }
+    var a = e.target.closest('.pg-alertp'); if (a){ openAlert(a.getAttribute('data-aid'), a.getAttribute('data-aname') || a.getAttribute('data-aid')); return; }
+  });
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') close(); });
 })();
 </script>
