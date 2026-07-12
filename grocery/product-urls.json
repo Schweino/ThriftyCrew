@@ -120,6 +120,15 @@
                                                              "name":  "JENNIE-O Fresh Lean Ground Turkey 93/7, 3 lb"
                                                          }
                                          },
+                  "all-purpose-cleaner":  {
+                                              "commodity":  "all-purpose-cleaner",
+                                              "Walmart":  {
+                                                              "url":  "https://www.walmart.com/ip/Great-Value-Bleach-FREE-Lemon-Scented-All-Purpose-Cleaner-32-floz/2560978912",
+                                                              "price":  2.97,
+                                                              "size":  "32 fl oz",
+                                                              "name":  "Great Value Multi Purpose Cleaner Lemon Scent"
+                                                          }
+                                          },
                   "all-purpose-flour":  {
                                             "commodity":  "All-Purpose Flour",
                                             "Aldi":  {
@@ -159,6 +168,15 @@
                                                             "name":  "Great Value All-Purpose Flour, 25 lb"
                                                         }
                                         },
+                  "aluminum-foil":  {
+                                        "commodity":  "aluminum-foil",
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/Great-Value-75-sq-ft-Aluminum-Foil/121815660",
+                                                        "price":  4.83,
+                                                        "size":  "each",
+                                                        "name":  "Great Value Aluminum Foil 75 sq ft Roll"
+                                                    }
+                                    },
                   "apple":  {
                                 "commodity":  "Apple",
                                 "Aldi":  {
@@ -417,6 +435,15 @@
                                                 "name":  "Great Value Naturally Hickory Smoked Sliced Bacon, 12 oz"
                                             }
                             },
+                  "bagels":  {
+                                 "commodity":  "bagels",
+                                 "Walmart":  {
+                                                 "url":  "https://www.walmart.com/ip/Great-Value-Pre-Sliced-Plain-Bagels-RTE-20-oz-6-Count/667056737",
+                                                 "price":  2.08,
+                                                 "size":  "6 ct",
+                                                 "name":  "Great Value Pre-Sliced Plain Bagels 6 Count"
+                                             }
+                             },
                   "balsamic-vinegar":  {
                                            "commodity":  "Balsamic Vinegar",
                                            "Aldi":  {
@@ -595,6 +622,15 @@
                                                            "name":  "Chuck Roast, Choice Angus Beef, Fresh, 1.6 - 2.85 lb"
                                                        }
                                        },
+                  "bell-peppers":  {
+                                       "commodity":  "bell-peppers",
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/Fresh-Green-Bell-Pepper-Each/44390945",
+                                                       "price":  0.86,
+                                                       "size":  "each",
+                                                       "name":  "Fresh Green Bell Pepper"
+                                                   }
+                                   },
                   "black-pepper":  {
                                        "commodity":  "Black Pepper",
                                        "Aldi":  {
@@ -626,8 +662,23 @@
                                                                "price":  7.98,
                                                                "size":  "18 oz",
                                                                "name":  "Member\u0027s Mark Fine Ground Black Pepper"
-                                                           }
+                                                           },
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/Great-Value-Ground-Black-Pepper-3-oz/44662573",
+                                                       "price":  3.58,
+                                                       "size":  "3 oz",
+                                                       "name":  "Great Value Ground Black Pepper"
+                                                   }
                                    },
+                  "bleach":  {
+                                 "commodity":  "bleach",
+                                 "Walmart":  {
+                                                 "url":  "https://www.walmart.com/ip/Great-Value-Bleach-121-fl-oz/629539844",
+                                                 "price":  5.88,
+                                                 "size":  "121 fl oz",
+                                                 "name":  "Great Value Concentrated Liquid Bleach"
+                                             }
+                             },
                   "blueberries":  {
                                       "commodity":  "Blueberries",
                                       "Aldi":  {
@@ -713,6 +764,15 @@
                                                                           "name":  "Great Value All Natural Boneless Skinless Chicken Thighs, 3 lb"
                                                                       }
                                                       },
+                  "bottled-water":  {
+                                        "commodity":  "bottled-water",
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/Great-Value-Purified-Drinking-Water-16-9-fl-oz-24-Count/13448854",
+                                                        "price":  3.68,
+                                                        "size":  "24 ct",
+                                                        "name":  "Great Value Purified Drinking Water 24 Count"
+                                                    }
+                                    },
                   "bread":  {
                                 "commodity":  "Bread (loaf)",
                                 "Aldi":  {
@@ -831,6 +891,24 @@
                                                        "name":  "Great Value Italian Style Bread Crumbs, 15 oz"
                                                    }
                                    },
+                  "breakfast-sausage":  {
+                                            "commodity":  "breakfast-sausage",
+                                            "Walmart":  {
+                                                            "url":  "https://www.walmart.com/ip/Farmland-Original-Pork-Breakfast-Sausage-Roll-16-oz/10403368",
+                                                            "price":  2.87,
+                                                            "size":  "16 oz",
+                                                            "name":  "Farmland Original Pork Breakfast Sausage Roll"
+                                                        }
+                                        },
+                  "broccoli":  {
+                                   "commodity":  "broccoli",
+                                   "Walmart":  {
+                                                   "url":  "https://www.walmart.com/ip/Fresh-Broccoli-Crowns-Each/51259378",
+                                                   "price":  2.47,
+                                                   "size":  "lb",
+                                                   "name":  "Fresh Whole Green Broccoli Crowns"
+                                               }
+                               },
                   "brown-sugar":  {
                                       "commodity":  "Brown Sugar",
                                       "Aldi":  {
@@ -864,10 +942,10 @@
                                                               "name":  "Member\u0027s Mark Light Brown Sugar, 7 lbs."
                                                           },
                                       "Walmart":  {
-                                                      "url":  "https://www.walmart.com/ip/10315012",
+                                                      "url":  "https://www.walmart.com/ip/Great-Value-Light-Brown-Sugar-32-oz/10315012",
                                                       "price":  1.98,
                                                       "size":  "32 oz",
-                                                      "name":  "Great Value Light Brown Sugar, 32 oz"
+                                                      "name":  "Great Value Light Brown Sugar"
                                                   }
                                   },
                   "buffalo-wing-sauce":  {
@@ -956,6 +1034,24 @@
                                                  "name":  "Great Value Sweet Cream Salted Butter, 16 oz, 4 Sticks"
                                              }
                              },
+                  "canned-black-beans":  {
+                                             "commodity":  "canned-black-beans",
+                                             "Walmart":  {
+                                                             "url":  "https://www.walmart.com/ip/Great-Value-Black-Beans-15-oz-Can/10534038",
+                                                             "price":  0.86,
+                                                             "size":  "15 oz",
+                                                             "name":  "Great Value Black Beans"
+                                                         }
+                                         },
+                  "canned-corn":  {
+                                      "commodity":  "canned-corn",
+                                      "Walmart":  {
+                                                      "url":  "https://www.walmart.com/ip/Great-Value-No-Salt-Added-Golden-Sweet-Whole-Kernel-Corn-15-25-oz/589659824",
+                                                      "price":  0.78,
+                                                      "size":  "15.25 oz",
+                                                      "name":  "Great Value No Salt Added Golden Sweet Whole Kernel Corn"
+                                                  }
+                                  },
                   "canned-sweet-corn":  {
                                             "commodity":  "Canned Sweet Corn",
                                             "Aldi":  {
@@ -995,6 +1091,15 @@
                                                             "name":  "Great Value No Salt Added Golden Sweet Whole Kernel Corn"
                                                         }
                                         },
+                  "canned-tuna":  {
+                                      "commodity":  "canned-tuna",
+                                      "Walmart":  {
+                                                      "url":  "https://www.walmart.com/ip/Great-Value-Chunk-Light-Tuna-in-Water-5-oz/11965048",
+                                                      "price":  0.96,
+                                                      "size":  "5 oz",
+                                                      "name":  "Great Value Chunk Light Tuna in Water"
+                                                  }
+                                  },
                   "cannellini-beans":  {
                                            "commodity":  "Cannellini Beans",
                                            "Aldi":  {
@@ -1072,10 +1177,10 @@
                                                           "name":  "Organic Tender Sweet Carrots, 5 lbs."
                                                       },
                                   "Walmart":  {
-                                                  "url":  "https://www.walmart.com/ip/10535757",
+                                                  "url":  "https://www.walmart.com/ip/Fresh-Carrots-2-lb-Bag/10535757",
                                                   "price":  2.26,
                                                   "size":  "2 lb",
-                                                  "name":  "Fresh Whole Carrots, 2 lb Bag"
+                                                  "name":  "Fresh Whole Carrots 2-Pound Bag"
                                               }
                               },
                   "cashews":  {
@@ -1178,10 +1283,10 @@
                                                 "name":  "Celery"
                                             },
                                  "Walmart":  {
-                                                 "url":  "https://www.walmart.com/ip/51259411",
+                                                 "url":  "https://www.walmart.com/ip/Fresh-Celery-Stalk-Each/51259411",
                                                  "price":  2.37,
-                                                 "size":  "",
-                                                 "name":  "Fresh Whole Celery, 1 ea"
+                                                 "size":  "each",
+                                                 "name":  "Fresh Whole Celery Stalk"
                                              }
                              },
                   "celery-salt":  {
@@ -1211,6 +1316,15 @@
                                                       "name":  "Great Value Celery Salt 3pk, 5.25 oz"
                                                   }
                                   },
+                  "cereal":  {
+                                 "commodity":  "cereal",
+                                 "Walmart":  {
+                                                 "url":  "https://www.walmart.com/ip/Great-Value-Honey-Nut-O-s-Oat-Breakfast-Cereal-12-25-oz/108922787",
+                                                 "price":  1.94,
+                                                 "size":  "12.25 oz",
+                                                 "name":  "Great Value Honey Nut O\u0027s Oat Breakfast Cereal"
+                                             }
+                             },
                   "cheddar-cheese":  {
                                          "commodity":  "Cheddar Cheese",
                                          "Aldi":  {
@@ -1368,12 +1482,21 @@
                                                                 "name":  "Member\u0027s Mark Chicken Broth"
                                                             },
                                         "Walmart":  {
-                                                        "url":  "https://www.walmart.com/ip/44391066",
-                                                        "price":  0,
+                                                        "url":  "https://www.walmart.com/ip/Great-Value-Chicken-Broth-32-oz-Carton-Shelf-Stable-Ambient-Gluten-Free/10899013",
+                                                        "price":  1.5,
                                                         "size":  "32 fl oz",
-                                                        "name":  "Great Value Reduced Sodium Gluten-Free Chicken Broth, 32 oz Carton"
+                                                        "name":  "Great Value Chicken Broth Carton"
                                                     }
                                     },
+                  "chicken-nuggets":  {
+                                          "commodity":  "chicken-nuggets",
+                                          "Walmart":  {
+                                                          "url":  "https://www.walmart.com/ip/Great-Value-Fully-Cooked-Chicken-Nuggets-32-oz-Frozen/51259447",
+                                                          "price":  5.97,
+                                                          "size":  "32 oz",
+                                                          "name":  "Great Value Fully Cooked Chicken Nuggets"
+                                                      }
+                                      },
                   "chicken-thighs":  {
                                          "commodity":  "Chicken Thighs / Drumsticks",
                                          "Aldi":  {
@@ -1859,6 +1982,15 @@
                                                    "name":  "Fresh Cucumber, Each"
                                                }
                                },
+                  "cucumbers":  {
+                                    "commodity":  "cucumbers",
+                                    "Walmart":  {
+                                                    "url":  "https://www.walmart.com/ip/Fresh-Cucumber-Each/44390954",
+                                                    "price":  0.76,
+                                                    "size":  "each",
+                                                    "name":  "Fresh Cucumber"
+                                                }
+                                },
                   "curry-powder":  {
                                        "commodity":  "Curry Powder",
                                        "Baker\u0027s":  {
@@ -1893,6 +2025,15 @@
                                                        "name":  "Great Value Curry Powder, 2 oz"
                                                    }
                                    },
+                  "deli-ham":  {
+                                   "commodity":  "deli-ham",
+                                   "Walmart":  {
+                                                   "url":  "https://www.walmart.com/ip/Land-O-Frost-Premium-Meat-Sandwich-Sliced-Deli-Lunch-Meat-Black-Forest-Ham-1-lb/19276135",
+                                                   "price":  6.24,
+                                                   "size":  "16 oz",
+                                                   "name":  "Land O Frost Premium Sandwich Sliced Deli Black Forest Ham"
+                                               }
+                               },
                   "diced-green-chiles":  {
                                              "commodity":  "Diced Green Chiles",
                                              "Aldi":  {
@@ -1959,10 +2100,10 @@
                                                                  "name":  "Member\u0027s Mark Diced Tomatoes in Tomato Juice"
                                                              },
                                          "Walmart":  {
-                                                         "url":  "https://www.walmart.com/ip/10450990",
-                                                         "price":  0,
+                                                         "url":  "https://www.walmart.com/ip/Great-Value-Diced-Tomatoes-in-Tomato-Juice-14-5-oz-Can/10450990",
+                                                         "price":  0.96,
                                                          "size":  "14.5 oz",
-                                                         "name":  "Great Value Diced Tomatoes in Tomato Juice, 14.5 oz Can"
+                                                         "name":  "Great Value Diced Tomatoes in Tomato Juice"
                                                      }
                                      },
                   "dijon-mustard":  {
@@ -1999,6 +2140,24 @@
                                                         "name":  "Great Value Dijon Mustard, 12 oz"
                                                     }
                                     },
+                  "dish-soap":  {
+                                    "commodity":  "dish-soap",
+                                    "Walmart":  {
+                                                    "url":  "https://www.walmart.com/ip/Dawn-Ultra-Liquid-Dish-Soap-Dishwashing-Liquid-Grease-Removal-Original-18oz/1095568875",
+                                                    "price":  2.94,
+                                                    "size":  "18 fl oz",
+                                                    "name":  "Dawn Ultra Dishwashing Liquid Original"
+                                                }
+                                },
+                  "dishwasher-detergent":  {
+                                               "commodity":  "dishwasher-detergent",
+                                               "Walmart":  {
+                                                               "url":  "https://www.walmart.com/ip/Cascade-Platinum-Plus-Dishwasher-Pods-Action-Pacs-Dishwasher-Detergent-Tabs-Fresh-57-Count/8921608735",
+                                                               "price":  22.94,
+                                                               "size":  "57 ct",
+                                                               "name":  "Cascade Platinum Plus Dishwasher Pods 57 Count"
+                                                           }
+                                           },
                   "dried-basil":  {
                                       "commodity":  "Dried Basil",
                                       "Baker\u0027s":  {
@@ -2388,6 +2547,15 @@
                                                                  "name":  "Private Selection Chinese Five Spice Blend"
                                                              }
                                         },
+                  "flour":  {
+                                "commodity":  "flour",
+                                "Walmart":  {
+                                                "url":  "https://www.walmart.com/ip/Great-Value-All-Purpose-Enriched-Flour-5LB-Bag/10403017",
+                                                "price":  2.38,
+                                                "size":  "5 lb",
+                                                "name":  "Great Value All-Purpose Enriched Bleached Wheat Flour 5-Pound Bag"
+                                            }
+                            },
                   "fresh-cilantro":  {
                                          "commodity":  "Fresh Cilantro",
                                          "Aldi":  {
@@ -2543,6 +2711,15 @@
                                                                  "name":  "Great Value Chopped Spinach, 16 oz (Frozen)"
                                                              }
                                              },
+                  "frozen-fries":  {
+                                       "commodity":  "frozen-fries",
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/Great-Value-Crinkle-Cut-French-Fried-Potatoes-32-oz-Bag-Frozen/10534212",
+                                                       "price":  2.97,
+                                                       "size":  "32 oz",
+                                                       "name":  "Great Value Crinkle Cut French Fried Potatoes"
+                                                   }
+                                   },
                   "frozen-green-beans":  {
                                              "commodity":  "Frozen Cut Green Beans",
                                              "Aldi":  {
@@ -2642,6 +2819,24 @@
                                                       "name":  "Great Value Frozen Sweet Peas, 16 oz"
                                                   }
                                   },
+                  "frozen-pizza":  {
+                                       "commodity":  "frozen-pizza",
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/Red-Baron-Four-Cheese-Classic-Crust-Frozen-Pizza-21-06-oz/10292879",
+                                                       "price":  4.82,
+                                                       "size":  "each",
+                                                       "name":  "Red Baron Four Cheese Classic Crust Frozen Pizza"
+                                                   }
+                                   },
+                  "frozen-vegetables":  {
+                                            "commodity":  "frozen-vegetables",
+                                            "Walmart":  {
+                                                            "url":  "https://www.walmart.com/ip/Green-Giant-Simply-Steam-Garden-Vegetable-Medley-10-oz-Bag-Frozen/14974031",
+                                                            "price":  1.87,
+                                                            "size":  "10 oz",
+                                                            "name":  "Green Giant Simply Steam Garden Vegetable Medley"
+                                                        }
+                                        },
                   "garam-masala":  {
                                        "commodity":  "Garam Masala",
                                        "Baker\u0027s":  {
@@ -2696,9 +2891,9 @@
                                                 "name":  "Jumbo Garlic"
                                             },
                                  "Walmart":  {
-                                                 "url":  "https://www.walmart.com/ip/44391100",
-                                                 "price":  0,
-                                                 "size":  "1 bulb",
+                                                 "url":  "https://www.walmart.com/ip/Garlic-Bulb-Fresh-Whole-Each/44391100",
+                                                 "price":  0.72,
+                                                 "size":  "each",
                                                  "name":  "Garlic Bulb Fresh Whole"
                                              }
                              },
@@ -3423,6 +3618,24 @@
                                                         "name":  "Great Value Half and Half, 64 fl oz"
                                                     }
                                     },
+                  "hamburger-buns":  {
+                                         "commodity":  "hamburger-buns",
+                                         "Walmart":  {
+                                                         "url":  "https://www.walmart.com/ip/Great-Value-Hamburger-Buns-8-Count-11-oz/10450104",
+                                                         "price":  1.48,
+                                                         "size":  "8 ct",
+                                                         "name":  "Great Value White Hamburger Buns 8 Count"
+                                                     }
+                                     },
+                  "hand-soap":  {
+                                    "commodity":  "hand-soap",
+                                    "Walmart":  {
+                                                    "url":  "https://www.walmart.com/ip/Equate-Clear-Liquid-Hand-Soap-50-fl-oz/1783955214",
+                                                    "price":  2.97,
+                                                    "size":  "50 fl oz",
+                                                    "name":  "Equate Liquid Hand Soap Clear Refill"
+                                                }
+                                },
                   "hickory-smoked-bacon":  {
                                                "commodity":  "Hickory Smoked Bacon",
                                                "Aldi":  {
@@ -3547,10 +3760,10 @@
                                                "name":  "That\u0027s Smart! 100% Honey"
                                            },
                                 "Walmart":  {
-                                                "url":  "https://www.walmart.com/ip/20647992",
+                                                "url":  "https://www.walmart.com/ip/Great-Value-Honey-12-oz-Plastic-Bear/20647992",
                                                 "price":  2.97,
                                                 "size":  "12 oz",
-                                                "name":  "Great Value Honey, 12 oz Plastic Bear"
+                                                "name":  "Great Value Honey Plastic Bear"
                                             }
                             },
                   "honey-dijon-mustard":  {
@@ -3587,6 +3800,15 @@
                                                               "name":  "Great Value Honey Dijon Mustard, 12 oz"
                                                           }
                                           },
+                  "hot-dogs":  {
+                                   "commodity":  "hot-dogs",
+                                   "Walmart":  {
+                                                   "url":  "https://www.walmart.com/ip/Ball-Park-Classic-Bun-Size-Hot-Dogs-15-oz-8-Count/34632371",
+                                                   "price":  2.84,
+                                                   "size":  "15 oz",
+                                                   "name":  "Ball Park Classic Bun Size Hot Dogs 8 Count"
+                                               }
+                               },
                   "hot-honey":  {
                                     "commodity":  "Hot Honey",
                                     "Aldi":  {
@@ -3698,6 +3920,15 @@
                                                     "name":  "Great Value Louisiana Hot Sauce"
                                                 }
                                 },
+                  "ice-cream":  {
+                                    "commodity":  "ice-cream",
+                                    "Walmart":  {
+                                                    "url":  "https://www.walmart.com/ip/Great-Value-Cookies-Cream-Ice-Cream-48-fl-oz/12329735",
+                                                    "price":  2.5,
+                                                    "size":  "48 fl oz",
+                                                    "name":  "Great Value Cookies and Cream Ice Cream"
+                                                }
+                                },
                   "italian-seasoning":  {
                                             "commodity":  "Italian Seasoning",
                                             "Aldi":  {
@@ -3803,6 +4034,15 @@
                                                        "name":  "Mahatma Jasmine Rice, Thai Fragrant Long Grain Rice, Gluten Free, 80 oz Bag (5 lbs)"
                                                    }
                                    },
+                  "jelly":  {
+                                "commodity":  "jelly",
+                                "Walmart":  {
+                                                "url":  "https://www.walmart.com/ip/Great-Value-Concord-Grape-Jelly-30-oz/364924551",
+                                                "price":  2.74,
+                                                "size":  "30 oz",
+                                                "name":  "Great Value Concord Grape Jelly"
+                                            }
+                            },
                   "jerk-seasoning":  {
                                          "commodity":  "Jerk Seasoning",
                                          "Baker\u0027s":  {
@@ -3857,10 +4097,10 @@
                                                           "name":  "Heinz Original Tomato Ketchup, 114 oz."
                                                       },
                                   "Walmart":  {
-                                                  "url":  "https://www.walmart.com/ip/10533323",
-                                                  "price":  3.01,
-                                                  "size":  "64 oz",
-                                                  "name":  "Great Value Tomato Ketchup, 64 oz"
+                                                  "url":  "https://www.walmart.com/ip/Great-Value-Tomato-Ketchup-32-oz/172196409",
+                                                  "price":  1.97,
+                                                  "size":  "32 oz",
+                                                  "name":  "Great Value Tomato Ketchup"
                                               }
                               },
                   "kidney-beans":  {
@@ -3969,6 +4209,24 @@
                                                       "name":  "ReaLemon Lemon Juice (gal)"
                                                   }
                                   },
+                  "lemons":  {
+                                 "commodity":  "lemons",
+                                 "Walmart":  {
+                                                 "url":  "https://www.walmart.com/ip/Fresh-Lemon-Each/41752773",
+                                                 "price":  0.5,
+                                                 "size":  "each",
+                                                 "name":  "Fresh Lemon"
+                                             }
+                             },
+                  "lettuce":  {
+                                  "commodity":  "lettuce",
+                                  "Walmart":  {
+                                                  "url":  "https://www.walmart.com/ip/Fresh-Iceberg-Lettuce-Each/10402650",
+                                                  "price":  2.28,
+                                                  "size":  "each",
+                                                  "name":  "Fresh Iceberg Lettuce"
+                                              }
+                              },
                   "light-sour-cream":  {
                                            "commodity":  "Light Sour Cream",
                                            "Aldi":  {
@@ -4030,9 +4288,9 @@
                                                "name":  "Limes"
                                            },
                                 "Walmart":  {
-                                                "url":  "https://www.walmart.com/ip/44391008",
-                                                "price":  0,
-                                                "size":  "1 each",
+                                                "url":  "https://www.walmart.com/ip/Fresh-Lime-Each/44391008",
+                                                "price":  0.25,
+                                                "size":  "each",
                                                 "name":  "Fresh Lime"
                                             }
                             },
@@ -4063,6 +4321,15 @@
                                                        "name":  "Liquid Smoke"
                                                    }
                                    },
+                  "mac-and-cheese":  {
+                                         "commodity":  "mac-and-cheese",
+                                         "Walmart":  {
+                                                         "url":  "https://www.walmart.com/ip/Kraft-Original-Mac-N-Cheese-Macaroni-and-Cheese-Dinner-5-ct-Pack-7-25-oz-Boxes/14869676",
+                                                         "price":  4.88,
+                                                         "size":  "5 ct",
+                                                         "name":  "Kraft Mac and Cheese Original 5 Boxes"
+                                                     }
+                                     },
                   "marinara-sauce":  {
                                          "commodity":  "Marinara Sauce",
                                          "Aldi":  {
@@ -4097,6 +4364,15 @@
                                                          "name":  "Great Value Marinara Pasta Sauce, 23 oz"
                                                      }
                                      },
+                  "mayonnaise":  {
+                                     "commodity":  "mayonnaise",
+                                     "Walmart":  {
+                                                     "url":  "https://www.walmart.com/ip/Great-Value-Mayonnaise-30-fl-oz/17056888",
+                                                     "price":  2.97,
+                                                     "size":  "30 oz",
+                                                     "name":  "Great Value Mayonnaise"
+                                                 }
+                                 },
                   "milk":  {
                                "commodity":  "Milk (gallon)",
                                "Aldi":  {
@@ -4183,6 +4459,33 @@
                                                             "name":  "Mozzarella Cheese (32 oz)"
                                                         }
                                         },
+                  "mushrooms":  {
+                                    "commodity":  "mushrooms",
+                                    "Walmart":  {
+                                                    "url":  "https://www.walmart.com/ip/Fresh-Whole-White-Mushrooms-16-oz/10451903",
+                                                    "price":  3.77,
+                                                    "size":  "16 oz",
+                                                    "name":  "Fresh Whole White Mushrooms"
+                                                }
+                                },
+                  "mustard":  {
+                                  "commodity":  "mustard",
+                                  "Walmart":  {
+                                                  "url":  "https://www.walmart.com/ip/Great-Value-Yellow-Mustard-20-oz-Squeeze-Bottle/43711099",
+                                                  "price":  1,
+                                                  "size":  "20 oz",
+                                                  "name":  "Great Value Yellow Mustard Squeeze Bottle"
+                                              }
+                              },
+                  "oatmeal":  {
+                                  "commodity":  "oatmeal",
+                                  "Walmart":  {
+                                                  "url":  "https://www.walmart.com/ip/Great-Value-Instant-100-Whole-Grain-Old-Fashioned-Oats-Cup-42-oz/10314925",
+                                                  "price":  4.18,
+                                                  "size":  "42 oz",
+                                                  "name":  "Great Value 100% Whole Grain Old Fashioned Oats"
+                                              }
+                              },
                   "olive-oil":  {
                                     "commodity":  "Olive Oil",
                                     "Aldi":  {
@@ -4216,10 +4519,10 @@
                                                             "name":  "Member\u0027s Mark Pure Olive Oil"
                                                         },
                                     "Walmart":  {
-                                                    "url":  "https://www.walmart.com/ip/46651266",
-                                                    "price":  0,
-                                                    "size":  "51 fl oz",
-                                                    "name":  "Great Value Classic Olive Oil for Cooking"
+                                                    "url":  "https://www.walmart.com/ip/Great-Value-Extra-Virgin-Olive-Oil-17-fl-oz/10315102",
+                                                    "price":  5.57,
+                                                    "size":  "17 fl oz",
+                                                    "name":  "Great Value Extra Virgin Olive Oil"
                                                 }
                                 },
                   "olives":  {
@@ -4386,6 +4689,24 @@
                                                        "name":  "Great Value 100% Orange Juice, No Pulp, 52 fl oz"
                                                    }
                                    },
+                  "oranges":  {
+                                  "commodity":  "oranges",
+                                  "Walmart":  {
+                                                  "url":  "https://www.walmart.com/ip/Fresh-Navel-Oranges-4-lb-Bag/44391012",
+                                                  "price":  4.97,
+                                                  "size":  "4 lb",
+                                                  "name":  "Fresh Navel Oranges 4-Pound Bag"
+                                              }
+                              },
+                  "paper-towels":  {
+                                       "commodity":  "paper-towels",
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/Scott-Paper-Towels-Choose-A-Sheet-6-Double-Rolls/8886020987",
+                                                       "price":  6.84,
+                                                       "size":  "6 ct",
+                                                       "name":  "Scott Paper Towels Choose-A-Sheet 6 Double Rolls"
+                                                   }
+                                   },
                   "paprika":  {
                                   "commodity":  "Paprika",
                                   "Aldi":  {
@@ -4464,6 +4785,24 @@
                                                           "name":  "Great Value Grated Parmesan Cheese, 16 oz Bottle"
                                                       }
                                       },
+                  "pasta":  {
+                                "commodity":  "pasta",
+                                "Walmart":  {
+                                                "url":  "https://www.walmart.com/ip/Great-Value-Spaghetti-32-oz/10534105",
+                                                "price":  1.94,
+                                                "size":  "32 oz",
+                                                "name":  "Great Value Spaghetti"
+                                            }
+                            },
+                  "pasta-sauce":  {
+                                      "commodity":  "pasta-sauce",
+                                      "Walmart":  {
+                                                      "url":  "https://www.walmart.com/ip/Great-Value-Traditional-Pasta-Sauce-24-oz/19758051",
+                                                      "price":  1.74,
+                                                      "size":  "24 oz",
+                                                      "name":  "Great Value Traditional Pasta Sauce"
+                                                  }
+                                  },
                   "peaches":  {
                                   "commodity":  "Peaches",
                                   "Aldi":  {
@@ -4873,6 +5212,15 @@
                                                  "name":  "Russet Potato Whole Fresh, Each"
                                              }
                              },
+                  "potato-chips":  {
+                                       "commodity":  "potato-chips",
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/Great-Value-Party-Size-Original-Potato-Chips-13oz-bag/686470097",
+                                                       "price":  2.5,
+                                                       "size":  "13 oz",
+                                                       "name":  "Great Value Original Potato Chips Party Size"
+                                                   }
+                                   },
                   "provolone-cheese":  {
                                            "commodity":  "Provolone Cheese",
                                            "Aldi":  {
@@ -4913,6 +5261,24 @@
                                                            "name":  "Great Value Deli Style Sliced Provolone Cheese, 8 oz"
                                                        }
                                        },
+                  "ramen":  {
+                                "commodity":  "ramen",
+                                "Walmart":  {
+                                                "url":  "https://www.walmart.com/ip/Maruchan-Ramen-Noodle-Chicken-Flavor-Soup-3-oz-12-Count-Shelf-Stable-Package/10450904",
+                                                "price":  3.87,
+                                                "size":  "12 ct",
+                                                "name":  "Maruchan Ramen Noodle Soup Chicken 12 Pack"
+                                            }
+                            },
+                  "ranch-dressing":  {
+                                         "commodity":  "ranch-dressing",
+                                         "Walmart":  {
+                                                         "url":  "https://www.walmart.com/ip/Great-Value-Classic-Ranch-Dressing-36-fl-oz/22282307",
+                                                         "price":  3.82,
+                                                         "size":  "36 fl oz",
+                                                         "name":  "Great Value Classic Ranch Dressing"
+                                                     }
+                                     },
                   "ranch-seasoning-mix":  {
                                               "commodity":  "Ranch Seasoning Packet",
                                               "Aldi":  {
@@ -5091,6 +5457,15 @@
                                                            "name":  "Pompeian Red Wine Vinegar, 16 fl oz"
                                                        }
                                        },
+                  "rice":  {
+                               "commodity":  "rice",
+                               "Walmart":  {
+                                               "url":  "https://www.walmart.com/ip/Great-Value-Long-Grain-Enriched-Rice-5-lbs/10315395",
+                                               "price":  3.37,
+                                               "size":  "5 lb",
+                                               "name":  "Great Value Long Grain Enriched Rice 5-Pound Bag"
+                                           }
+                           },
                   "rice-vinegar":  {
                                        "commodity":  "Rice Vinegar",
                                        "Aldi":  {
@@ -5231,6 +5606,15 @@
                                                           "name":  "Fresh Whole Russet Potatoes, 5 lb Bag"
                                                       }
                                       },
+                  "salmon":  {
+                                 "commodity":  "salmon",
+                                 "Walmart":  {
+                                                 "url":  "https://www.walmart.com/ip/Marketside-Fresh-Coho-Salmon-3-95-1-05-lb/9179862572",
+                                                 "price":  8.97,
+                                                 "size":  "lb",
+                                                 "name":  "Marketside Fresh Coho Salmon Skin-On Fillet"
+                                             }
+                             },
                   "salsa":  {
                                 "commodity":  "Salsa",
                                 "Aldi":  {
@@ -5264,8 +5648,8 @@
                                                         "name":  "Pace Chunky Salsa, Medium (closest match; no \u0027Mild\u0027 thick \u0026 chunky variant found at Sam\u0027s Club)"
                                                     },
                                 "Walmart":  {
-                                                "url":  "https://www.walmart.com/ip/1959652540",
-                                                "price":  0,
+                                                "url":  "https://www.walmart.com/ip/Great-Value-Thick-and-Chunky-Salsa-Mild-16-oz/1959652540",
+                                                "price":  1.97,
                                                 "size":  "16 oz",
                                                 "name":  "Great Value Thick and Chunky Salsa Mild"
                                             }
@@ -5336,7 +5720,7 @@
                                                        "name":  "Morton Iodized Salt"
                                                    },
                                "Walmart":  {
-                                               "url":  "https://www.walmart.com/ip/10448316",
+                                               "url":  "https://www.walmart.com/ip/Great-Value-Iodized-Salt-26-oz/10448316",
                                                "price":  0.94,
                                                "size":  "26 oz",
                                                "name":  "Great Value Iodized Salt"
@@ -5469,6 +5853,33 @@
                                                           "name":  "Great Value Fiesta Blend Finely Shredded Cheese, 8 oz"
                                                       }
                                       },
+                  "shrimp":  {
+                                 "commodity":  "shrimp",
+                                 "Walmart":  {
+                                                 "url":  "https://www.walmart.com/ip/Great-Value-Frozen-Raw-Large-Peeled-Deveined-Tail-off-Shrimp-2-lb-31-40-Count-per-lb-Value-Bag/791288879",
+                                                 "price":  15.96,
+                                                 "size":  "2 lb",
+                                                 "name":  "Great Value Frozen Raw Large Peeled Deveined Tail-off Shrimp Value Bag"
+                                             }
+                             },
+                  "sirloin-steak":  {
+                                        "commodity":  "sirloin-steak",
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/Beef-Choice-Angus-Thin-Sliced-Sirloin-Tip-Steak-0-85-1-6-lb-Tray/179426904",
+                                                        "price":  8.82,
+                                                        "size":  "lb",
+                                                        "name":  "Beef Choice Angus Thin Sliced Sirloin Tip Steak"
+                                                    }
+                                    },
+                  "sliced-cheese":  {
+                                        "commodity":  "sliced-cheese",
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/Great-Value-Singles-American-Pasteurized-Prepared-Cheese-Product-16-oz-24-Count/10452423",
+                                                        "price":  2.48,
+                                                        "size":  "16 oz",
+                                                        "name":  "Great Value Singles American Cheese Product 24 Slices"
+                                                    }
+                                    },
                   "smoked-paprika":  {
                                          "commodity":  "Smoked Paprika",
                                          "Aldi":  {
@@ -5502,6 +5913,15 @@
                                                          "name":  "Smoked Paprika"
                                                      }
                                      },
+                  "soda":  {
+                               "commodity":  "soda",
+                               "Walmart":  {
+                                               "url":  "https://www.walmart.com/ip/Sam-s-Cola-Soda-Pop-12-fl-oz-12-Pack-Cans/10794693",
+                                               "price":  3.97,
+                                               "size":  "12 pk 12 fl oz",
+                                               "name":  "Sam\u0027s Cola Soda Pop 12 Pack Cans"
+                                           }
+                           },
                   "sour-cream":  {
                                      "commodity":  "Sour Cream",
                                      "Aldi":  {
@@ -5588,6 +6008,15 @@
                                                     "name":  "Great Value Less Sodium Soy Sauce, 15 fl oz"
                                                 }
                                 },
+                  "spinach":  {
+                                  "commodity":  "spinach",
+                                  "Walmart":  {
+                                                  "url":  "https://www.walmart.com/ip/Marketside-Fresh-Spinach-10-oz-Bag-Fresh/13893738",
+                                                  "price":  2,
+                                                  "size":  "10 oz",
+                                                  "name":  "Marketside Fresh Spinach Bag"
+                                              }
+                              },
                   "sriracha":  {
                                    "commodity":  "Sriracha",
                                    "Baker\u0027s":  {
@@ -5615,6 +6044,15 @@
                                                            "name":  "Huy Fong Sriracha Sauce (2 pk)"
                                                        }
                                },
+                  "storage-bags":  {
+                                       "commodity":  "storage-bags",
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/Great-Value-Freezer-Guard-Double-Zipper-Freezer-Bags-Gallon-40-Count/808599731",
+                                                       "price":  2.82,
+                                                       "size":  "40 ct",
+                                                       "name":  "Great Value Freezer Guard Double Zipper Freezer Bags Gallon 40 Count"
+                                                   }
+                                   },
                   "strawberries":  {
                                        "commodity":  "Strawberries",
                                        "Aldi":  {
@@ -5693,10 +6131,10 @@
                                                         "name":  "Member\u0027s Mark Premium Cane Sugar"
                                                     },
                                 "Walmart":  {
-                                                "url":  "https://www.walmart.com/ip/10314931",
-                                                "price":  8,
-                                                "size":  "",
-                                                "name":  "Great Value Granulated Sugar, 10 lb"
+                                                "url":  "https://www.walmart.com/ip/Great-Value-Pure-Granulated-Sugar-4-lb/10315162",
+                                                "price":  3.27,
+                                                "size":  "4 lb",
+                                                "name":  "Great Value Pure Granulated Sugar 4-Pound Bag"
                                             }
                             },
                   "sugar-free-bbq-sauce":  {
@@ -5860,6 +6298,15 @@
                                                      "name":  "Fresh Sweet Corn on the Cob, 4 Count"
                                                  }
                                  },
+                  "sweet-potatoes":  {
+                                         "commodity":  "sweet-potatoes",
+                                         "Walmart":  {
+                                                         "url":  "https://www.walmart.com/ip/Sweet-Potatoes-Whole-Fresh-3-lb-Bag/132720824",
+                                                         "price":  4.44,
+                                                         "size":  "3 lb",
+                                                         "name":  "Sweet Potatoes Whole Fresh 3-Pound Bag"
+                                                     }
+                                     },
                   "swiss-cheese":  {
                                        "commodity":  "Swiss Cheese",
                                        "Aldi":  {
@@ -6032,6 +6479,15 @@
                                                                "name":  "Kevala Organic Toasted Sesame Seeds, 16 oz"
                                                            }
                                            },
+                  "toilet-paper":  {
+                                       "commodity":  "toilet-paper",
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/Scott-ComfortPlus-Toilet-Paper-12-Mega-Rolls/14944866035",
+                                                       "price":  8.47,
+                                                       "size":  "12 ct",
+                                                       "name":  "Scott ComfortPlus Toilet Paper 12 Mega Rolls"
+                                                   }
+                                   },
                   "tomatillos":  {
                                      "commodity":  "Tomatillos",
                                      "Baker\u0027s":  {
@@ -6066,6 +6522,15 @@
                                                      "name":  "Fresh Tomatillos Milpero, 16 oz"
                                                  }
                                  },
+                  "tomatoes":  {
+                                   "commodity":  "tomatoes",
+                                   "Walmart":  {
+                                                   "url":  "https://www.walmart.com/ip/Fresh-Roma-Tomato-Each/44390944",
+                                                   "price":  1.27,
+                                                   "size":  "lb",
+                                                   "name":  "Fresh Roma Tomato"
+                                               }
+                               },
                   "tomato-paste":  {
                                        "commodity":  "Tomato Paste",
                                        "Aldi":  {
@@ -6146,6 +6611,24 @@
                                                        "name":  "Great Value Tomato Sauce, 15 oz"
                                                    }
                                    },
+                  "tortilla-chips":  {
+                                         "commodity":  "tortilla-chips",
+                                         "Walmart":  {
+                                                         "url":  "https://www.walmart.com/ip/Great-Value-Restaurant-Style-White-Corn-Tortilla-Chips-13-oz/12335104",
+                                                         "price":  2.17,
+                                                         "size":  "13 oz",
+                                                         "name":  "Great Value Restaurant Style White Corn Tortilla Chips"
+                                                     }
+                                     },
+                  "tortillas":  {
+                                    "commodity":  "tortillas",
+                                    "Walmart":  {
+                                                    "url":  "https://www.walmart.com/ip/Great-Value-Medium-Soft-Taco-Flour-Tortillas-17-5-oz-Bag-10-Count-Shelf-Stable/953466267",
+                                                    "price":  1.98,
+                                                    "size":  "10 ct",
+                                                    "name":  "Great Value Medium Soft Taco Flour Tortillas 10 Count"
+                                                }
+                                },
                   "traditional-pasta-sauce":  {
                                                   "commodity":  "Traditional Pasta Sauce",
                                                   "Aldi":  {
@@ -6180,6 +6663,15 @@
                                                                   "name":  "Great Value Traditional Pasta Sauce, 24 oz"
                                                               }
                                               },
+                  "trash-bags":  {
+                                     "commodity":  "trash-bags",
+                                     "Walmart":  {
+                                                     "url":  "https://www.walmart.com/ip/Great-Value-13-Gallon-Drawstring-Tall-Kitchen-Trash-Bags-Unscented-40-Bags/344638043",
+                                                     "price":  6.48,
+                                                     "size":  "40 ct",
+                                                     "name":  "Great Value 13-Gallon Drawstring Tall Kitchen Trash Bags 40 Count"
+                                                 }
+                                 },
                   "turkey-pepperoni":  {
                                            "commodity":  "Turkey Pepperoni",
                                            "Aldi":  {
@@ -6246,10 +6738,10 @@
                                                                 "name":  "Member\u0027s Mark Vegetable Oil"
                                                             },
                                         "Walmart":  {
-                                                        "url":  "https://www.walmart.com/ip/10451011",
+                                                        "url":  "https://www.walmart.com/ip/Great-Value-Vegetable-Oil-1-Gallon/10451011",
                                                         "price":  8.74,
                                                         "size":  "128 fl oz",
-                                                        "name":  "Vegetable Oil (1 gal)"
+                                                        "name":  "Great Value Vegetable Oil 1 Gallon"
                                                     }
                                     },
                   "watermelon":  {
@@ -6408,6 +6900,15 @@
                                                              "name":  "Pompeian White Wine Vinegar, 16 fl oz"
                                                          }
                                          },
+                  "whole-chicken":  {
+                                        "commodity":  "whole-chicken",
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/Tyson-All-Natural-Fresh-Premium-Young-Whole-Chicken-5-0-6-5-lb/19400244",
+                                                        "price":  1.46,
+                                                        "size":  "lb",
+                                                        "name":  "Tyson All Natural Fresh Premium Young Whole Chicken"
+                                                    }
+                                    },
                   "worcestershire-sauce":  {
                                                "commodity":  "Worcestershire Sauce",
                                                "Baker\u0027s":  {

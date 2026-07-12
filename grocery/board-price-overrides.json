@@ -2,7 +2,7 @@
     "readme":  "DERIVED by generate-board-overrides.ps1 - do not hand-edit. Per-cell EVERYDAY per-unit corrections: when a board price disagrees \u003e30% with the verified product its See-item link opens (and name-drift confirms the link is the right product), the board number is stale and is pinned here to the link\u0027s per-unit so price==link==shelf. build-deals-page applies these to EVERYDAY cells only (a live sale always wins) and survives daily regeneration. Sales, wrong-product links (name-drift), and ids present in both the staple+recipe board are intentionally excluded.",
     "updated":  "2026-07-12",
     "tol":  0.3,
-    "count":  22,
+    "count":  20,
     "cells":  [
                   {
                       "id":  "boneless-skinless-chicken-thigh",
@@ -38,24 +38,6 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.1193,
                       "link_name":  "Gustare Vita Italian Bread Crumbs",
-                      "set":  "2026-07-12"
-                  },
-                  {
-                      "id":  "brown-sugar",
-                      "store":  "Sam\u0027s Club",
-                      "per_unit":  0.0623,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.03,
-                      "link_name":  "Member\u0027s Mark Light Brown Sugar, 7 lbs.",
-                      "set":  "2026-07-12"
-                  },
-                  {
-                      "id":  "brown-sugar",
-                      "store":  "Family Fare",
-                      "per_unit":  0.1684,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.2497,
-                      "link_name":  "C\u0026H Dark Brown Pure Cane Sugar 32 Oz",
                       "set":  "2026-07-12"
                   },
                   {

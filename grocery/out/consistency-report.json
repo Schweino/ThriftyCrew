@@ -1,12 +1,24 @@
 ﻿{
-    "generated":  "2026-07-12 15:04",
+    "generated":  "2026-07-12 16:40",
     "tol":  0.3,
-    "no_link_count":  4,
+    "no_link_count":  55,
     "max_no_link":  0,
     "no_link_by_store":  [
                              {
+                                 "store":  "Hy-Vee",
+                                 "count":  26
+                             },
+                             {
                                  "store":  "Family Fare",
-                                 "count":  3
+                                 "count":  22
+                             },
+                             {
+                                 "store":  "Aldi",
+                                 "count":  5
+                             },
+                             {
+                                 "store":  "Walmart",
+                                 "count":  1
                              },
                              {
                                  "store":  "Baker\u0027s",
@@ -19,19 +31,223 @@
                         "store":  "Baker\u0027s"
                     },
                     {
+                        "id":  "whole-chicken",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "whole-chicken",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "breakfast-sausage",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "hot-dogs",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "salmon",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "salmon",
+                        "store":  "Aldi"
+                    },
+                    {
+                        "id":  "salmon",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "canned-tuna",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "shrimp",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "shrimp",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "shrimp",
+                        "store":  "Aldi"
+                    },
+                    {
+                        "id":  "sirloin-steak",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "sliced-cheese",
+                        "store":  "Hy-Vee"
+                    },
+                    {
                         "id":  "apples",
                         "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "oranges",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "lemons",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "tomatoes",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "tomatoes",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "broccoli",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "broccoli",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "cucumbers",
+                        "store":  "Aldi"
+                    },
+                    {
+                        "id":  "cucumbers",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "cucumbers",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "spinach",
+                        "store":  "Aldi"
+                    },
+                    {
+                        "id":  "mushrooms",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "mushrooms",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "sweet-potatoes",
+                        "store":  "Hy-Vee"
                     },
                     {
                         "id":  "bread",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "peanut-butter",
+                        "id":  "tortillas",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "pasta",
                         "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "pasta-sauce",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "brown-sugar",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "vegetable-oil",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "cereal",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "oatmeal",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "jelly",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "honey",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "honey",
+                        "store":  "Aldi"
+                    },
+                    {
+                        "id":  "diced-tomatoes",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "mustard",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "mayonnaise",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "salsa",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "salt",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "tortilla-chips",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "tortilla-chips",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "potato-chips",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "soda",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "soda",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "bottled-water",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "ice-cream",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "frozen-fries",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "trash-bags",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "storage-bags",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "ketchup",
+                        "store":  "Walmart"
                     }
                 ],
-    "mismatch_count":  8,
+    "mismatch_count":  13,
     "mismatch":  [
                      {
                          "id":  "chicken-breast",
@@ -44,13 +260,33 @@
                          "size":  "lb"
                      },
                      {
-                         "id":  "peanut-butter",
+                         "id":  "brown-sugar",
+                         "store":  "Hy-Vee",
+                         "unit":  "lb",
+                         "board":  1.88,
+                         "link":  0.94,
+                         "off_pct":  50,
+                         "product":  "That\u0027s Smart! Light Brown Sugar",
+                         "size":  "32 oz"
+                     },
+                     {
+                         "id":  "diced-tomatoes",
                          "store":  "Family Fare",
                          "unit":  "oz",
-                         "board":  0.1248,
-                         "link":  0.2494,
-                         "off_pct":  100,
-                         "product":  "Jif Creamy Peanut Butter 16 Oz",
+                         "board":  0.1234,
+                         "link":  0.0683,
+                         "off_pct":  45,
+                         "product":  "Our Family Tomatoes, Diced 14.5 Oz",
+                         "size":  "14.5 oz"
+                     },
+                     {
+                         "id":  "honey",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  0.2119,
+                         "link":  0.6869,
+                         "off_pct":  224,
+                         "product":  "Local Hive Midwest Raw \u0026 Unfiltered Honey Blend 16 Oz",
                          "size":  "16 oz"
                      },
                      {
@@ -84,6 +320,26 @@
                          "size":  "4 ct"
                      },
                      {
+                         "id":  "salt",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  0.3082,
+                         "link":  0.0381,
+                         "off_pct":  88,
+                         "product":  "Iodized Salt Our Family",
+                         "size":  "26 oz"
+                     },
+                     {
+                         "id":  "vegetable-oil",
+                         "store":  "Family Fare",
+                         "unit":  "floz",
+                         "board":  0.3327,
+                         "link":  0.0937,
+                         "off_pct":  72,
+                         "product":  "Our Family Vegetable Oil, 100% Pure 1 Gal",
+                         "size":  "1 gal"
+                     },
+                     {
                          "id":  "watermelon",
                          "store":  "Baker\u0027s",
                          "unit":  "each",
@@ -111,6 +367,16 @@
                          "link":  0.1559,
                          "off_pct":  32,
                          "product":  "Ore Ida Crispy Straight Cut Fries 32 Oz",
+                         "size":  "32 oz"
+                     },
+                     {
+                         "id":  "ketchup",
+                         "store":  "Walmart",
+                         "unit":  "oz",
+                         "board":  0.047,
+                         "link":  0.0616,
+                         "off_pct":  31,
+                         "product":  "Great Value Tomato Ketchup",
                          "size":  "32 oz"
                      }
                  ]
