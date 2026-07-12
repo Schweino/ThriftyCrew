@@ -1,0 +1,24 @@
+Baker's (bakersplus.com) Akamai block hit during the staples-100 pricing run on 2026-07-12.
+
+What happened:
+- Homepage warmed OK (store selector showed "Pickup at Saddlecreek", 888 S Saddle Creek Rd, Omaha 68106).
+- 49 of 70 search terms completed successfully at ~4-5s pacing via /search?query=<term>&searchType=default_search.
+- On term "iodized salt" the page returned "Access Denied" (Akamai). Waited 8s, re-warmed the homepage (loaded fine),
+  waited 6s, retried the same search once -> "Access Denied" again. Two denials in a row -> stopped Baker's entirely
+  per run instructions (do not hammer).
+
+Completed and saved to bakers-agent.json (49 ids):
+whole-chicken, breakfast-sausage, hot-dogs, deli-ham, salmon, canned-tuna, shrimp, sirloin-steak, sliced-cheese,
+oranges, lemons, limes, tomatoes, lettuce, carrots, broccoli, bell-peppers, celery, cucumbers, garlic, spinach,
+mushrooms, sweet-potatoes, tortillas, hamburger-buns, bagels, rice, pasta, pasta-sauce, mac-and-cheese, ramen,
+flour, sugar, brown-sugar, olive-oil, vegetable-oil, cereal, oatmeal, jelly, honey, canned-black-beans, canned-corn,
+diced-tomatoes, chicken-broth, ketchup, mustard, mayonnaise, ranch-dressing, salsa
+
+NOT searched (blocked before reaching them, 21 ids - these are un-priced, not "does not carry"):
+salt, black-pepper, tortilla-chips, potato-chips, soda, bottled-water, frozen-pizza, ice-cream, frozen-vegetables,
+frozen-fries, chicken-nuggets, paper-towels, toilet-paper, dish-soap, dishwasher-detergent, trash-bags,
+aluminum-foil, storage-bags, all-purpose-cleaner, bleach, hand-soap
+
+Notes:
+- bell-peppers was recorded as Fresh Red Bell Pepper $1.66/ct (green single-each never appeared in results before the block).
+- Retry later with a fresh session / longer pacing for the remaining 21.

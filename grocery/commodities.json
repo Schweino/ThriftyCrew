@@ -683,7 +683,8 @@
         "band_min":  0.08,
         "band_max":  0.7,
         "relax_global":  [
-                             "\\bcanned\\b"
+                             "\\bcanned\\b",
+                             "\\bwater\\b"
                          ],
         "include":  [
                         "\\btuna\\b"
@@ -1273,7 +1274,8 @@
         "band_min":  0.5,
         "band_max":  3.5,
         "include":  [
-                        "brown\\s+sugar"
+                        "brown\\s+sugar",
+                        "sugar,\\s*brown"
                     ],
         "exclude":  [
                         "oatmeal",
@@ -1420,7 +1422,8 @@
         "band_min":  0.03,
         "band_max":  0.25,
         "relax_global":  [
-                             "\\bcanned\\b"
+                             "\\bcanned\\b",
+                             "\\bwater\\b"
                          ],
         "include":  [
                         "black\\s+beans?"
@@ -1447,7 +1450,9 @@
         "include":  [
                         "whole\\s+kernel\\s+corn",
                         "golden\\s+sweet\\s+corn\\b.{0,20}\\b(?:can|15)",
-                        "canned\\s+corn"
+                        "canned\\s+corn",
+                        "corn,\\s*(?:whole\\s*)?kernel",
+                        "kernel,\\s*whole"
                     ],
         "exclude":  [
                         "\\bcob\\b",
@@ -1471,7 +1476,8 @@
         "band_min":  0.03,
         "band_max":  0.25,
         "relax_global":  [
-                             "\\bcanned\\b"
+                             "\\bcanned\\b",
+                             "(?\u003c!orange\\s)\\bjuice\\b"
                          ],
         "include":  [
                         "diced\\s+tomato(?:es)?",
@@ -1747,7 +1753,8 @@
         "band_max":  0.4,
         "relax_global":  [
                              "ice\\s*cream",
-                             "\\bfrozen\\b"
+                             "\\bfrozen\\b",
+                             "flavored"
                          ],
         "include":  [
                         "ice\\s*cream"
