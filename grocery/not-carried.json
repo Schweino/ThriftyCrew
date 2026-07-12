@@ -1,0 +1,6 @@
+{
+  "readme": "Commodity x store cells confirmed (by manual verification) that the store genuinely does not carry a comparable product. build-deals-page.ps1 renders these as a 'Does not carry' cell with a 'See it? Let us know!' link to /suggest-an-item/. Keyed list of {id, store}.",
+  "cells": [
+    { "id": "frozen-green-peas", "store": "Sam's Club", "note": "Sam's stocks frozen broccoli/corn/green beans/mixes but no plain frozen peas (checked 2026-07-12)" }
+  ]
+}
