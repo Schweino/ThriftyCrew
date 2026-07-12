@@ -65,7 +65,7 @@ async function getAccessToken(env) {
   return j.access_token;
 }
 
-async function sendEmail(env, { store, item, url, notifyEmail }) {
+async function sendEmail(env, { store, item, url, notifyEmail, queued }) {
   const to = env.NOTIFY_TO || "contact@thriftycrew.com";
   const token = await getAccessToken(env);
   const text =
@@ -73,7 +73,7 @@ async function sendEmail(env, { store, item, url, notifyEmail }) {
     "Store: " + store + "\r\n" +
     "Item:  " + item + "\r\n" +
     "URL:   " + url + "\r\n" +
-    (notifyEmail ? "Notify when added: " + notifyEmail + "\r\n" : "") +
+    (notifyEmail ? "Notify when added: " + notifyEmail + (queued ? " (auto-notify QUEUED - the pipeline emails them when a matching item goes live on the board)" : " (auto-notify queue FAILED - reply manually when added)") + "\r\n" : "") +
     "\r\n(Submitted via the website item-request form." +
     (notifyEmail ? " Reply to this email to reach the requester." : "") + ")";
   const raw =
@@ -162,6 +162,58 @@ async function subscribeAlert(env, email, item, weekly) {
   return "updated";
 }
 
+// ---- "notify me when it's added" queue (NO Ghost member is created - requesters are often not members) ----
+// A pending request is stored as a Ghost DRAFT post tagged #item-request-queue (invisible to visitors; only
+// clutter is the admin Drafts list). The daily pipeline (notify-item-added.ps1) matches new board commodities
+// against the queue and calls POST /notify here to send the requester a ONE-OFF Gmail - no membership, no
+// newsletter, nothing persistent for the requester.
+const QUEUE_TAG = "#item-request-queue";
+
+async function queueRequest(env, email, store, item) {
+  const meta = JSON.stringify({ email: email, store: store, item: item, date: new Date().toISOString().slice(0, 10) });
+  const lex = JSON.stringify({ root: { children: [{ type: "html", version: 1, html: "<pre>" + meta.replace(/</g, "&lt;") + "</pre>" }], direction: null, format: "", indent: 0, type: "root", version: 1 } });
+  const r = await ghostFetch(env, "/ghost/api/admin/posts/", {
+    method: "POST",
+    body: JSON.stringify({ posts: [{ title: "[QUEUE] item request: " + item.slice(0, 120), lexical: lex, status: "draft", custom_excerpt: meta.slice(0, 300), tags: [{ name: QUEUE_TAG }] }] }),
+  });
+  if (!r.ok) throw new Error("queue draft create failed " + r.status + " " + (await r.text()).slice(0, 200));
+  return (await r.json()).posts[0].id;
+}
+
+// constant-ish auth: caller sends SHA-256 hex of GHOST_ADMIN_KEY (shared with the pipeline; key never travels)
+async function notifyAuthOk(env, request) {
+  const given = request.headers.get("X-Notify-Auth") || "";
+  if (!env.GHOST_ADMIN_KEY || !given) return false;
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(env.GHOST_ADMIN_KEY));
+  const want = [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
+  return given.toLowerCase() === want;
+}
+
+async function sendRequesterEmail(env, { email, item, commodity, cheapest }) {
+  const token = await getAccessToken(env);
+  const text =
+    "Good news!\r\n\r\n" +
+    "You asked us to track \"" + item + "\" on the Thrifty Crew price board, and it's live now" +
+    (commodity ? " as \"" + commodity + "\"" : "") + "." +
+    (cheapest ? "\r\n\r\nCheapest right now: " + cheapest : "") +
+    "\r\n\r\nSee it here: https://www.thriftycrew.com/omaha-grocery-prices/\r\n\r\n" +
+    "Thanks for the suggestion. Happy saving!\r\n" +
+    "- The Thrifty Crew\r\n\r\n" +
+    "(This is the one-time heads-up you asked for on our suggest-an-item form. No list, no follow-ups.)";
+  const raw =
+    "To: " + email + "\r\n" +
+    "Subject: " + (commodity || item) + " is now on the Omaha price board\r\n" +
+    "Content-Type: text/plain; charset=UTF-8\r\n\r\n" +
+    text;
+  const r = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", {
+    method: "POST",
+    headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" },
+    body: JSON.stringify({ raw: b64url(raw) }),
+  });
+  if (!r.ok) throw new Error("gmail send failed: " + r.status + " " + (await r.text()).slice(0, 200));
+  return (await r.json()).id;
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -193,6 +245,27 @@ export default {
         return json({ ok: true }, 200, origin);
       } catch (e) {
         return json({ ok: false, error: "Could not sign you up right now. Please try again later." }, 502, origin);
+      }
+    }
+
+    // pipeline-only: send the one-off "your item is live" email to a requester. Auth = SHA-256 of the
+    // shared GHOST_ADMIN_KEY (pipeline computes the same hash; the key itself never travels). No CORS
+    // needed (server-to-server), no browser path hits this.
+    if (url.pathname === "/notify") {
+      if (request.method !== "POST") return json({ ok: false, error: "method not allowed" }, 405, origin);
+      if (!(await notifyAuthOk(env, request))) return json({ ok: false, error: "unauthorized" }, 401, origin);
+      let data;
+      try { data = await request.json(); } catch { return json({ ok: false, error: "invalid JSON" }, 400, origin); }
+      const email = (data.email || "").toString().trim();
+      const item = (data.item || "").toString().trim();
+      const commodity = (data.commodity || "").toString().trim();
+      const cheapest = (data.cheapest || "").toString().trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || !item) return json({ ok: false, error: "bad payload" }, 400, origin);
+      try {
+        const id = await sendRequesterEmail(env, { email, item, commodity, cheapest });
+        return json({ ok: true, id: id }, 200, origin);
+      } catch (e) {
+        return json({ ok: false, error: "send failed" }, 502, origin);
       }
     }
 
@@ -232,8 +305,14 @@ export default {
         return json({ ok: false, error: "One of the fields is too long." }, 400, origin);
       }
 
+      // queue the auto-notification BEFORE emailing Brad, so his email can say whether it queued.
+      // Queue failure never fails the submit - Brad's email still carries the address as the manual fallback.
+      let queued = false;
+      if (notifyEmail) {
+        try { await queueRequest(env, notifyEmail, store, item); queued = true; } catch (e) { queued = false; }
+      }
       try {
-        await sendEmail(env, { store, item, url: itemUrl, notifyEmail });
+        await sendEmail(env, { store, item, url: itemUrl, notifyEmail, queued });
         return json({ ok: true }, 200, origin);
       } catch (e) {
         return json({ ok: false, error: "Could not send right now. Please try again later." }, 502, origin);

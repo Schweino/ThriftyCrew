@@ -386,6 +386,17 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           } else { Log 'store-coverage OK - every staple commodity shows all 7 stores'; if (Test-Path (Join-Path $OutDir 'store-coverage-alert.sig')) { Remove-Item (Join-Path $OutDir 'store-coverage-alert.sig') -ErrorAction SilentlyContinue } }
         } catch { Log ('store-coverage guard threw: ' + $_.Exception.Message) }
       }
+
+      # ---- ITEM-REQUEST NOTIFICATIONS: when a NEW commodity appears on the board, email any /suggest-an-item/
+      # requester who asked for it (one-off via the Worker's Gmail; requesters are NOT members). Driven purely
+      # by the notify-known-ids.json state diff, so it is a no-op every day nothing new was added - and it runs
+      # regardless of -NoAlert (these are requester-facing, not Brad-alerts). Never fatal to the pipeline.
+      try {
+        $niOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'notify-item-added.ps1') 2>&1
+        foreach ($ln in @($niOut)) { Log ("notify-item-added: " + $ln) }
+        $niSent = @($niOut | Where-Object { "$_" -match '^NOTIFIED ' }).Count
+        if ($niSent -gt 0) { $summary += ("NOTIFIED  $niSent item-request follower(s) emailed - their suggested item is now on the board") }
+      } catch { Log ('notify-item-added threw: ' + $_.Exception.Message) }
     }
   } catch { Log ("downstream FAILED: " + $_.Exception.Message) }
 } elseif ($hardFail -and (-not $NoDownstream)) {
