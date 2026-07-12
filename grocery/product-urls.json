@@ -1290,6 +1290,12 @@
                                      },
                   "chickpeas":  {
                                     "commodity":  "Chickpeas",
+                                    "Aldi":  {
+                                                 "url":  "https://www.aldi.us/store/aldi/products/18649153-dakota-s-pride-garbanzo-beans-15-5-oz",
+                                                 "price":  "$0.85",
+                                                 "size":  "15.5 oz",
+                                                 "name":  "Dakota\u0027s Pride Garbanzo Beans"
+                                             },
                                     "Baker\u0027s":  {
                                                          "url":  "https://www.bakersplus.com/p/kroger-garbanzo-beans-each/0001111012143",
                                                          "price":  1,
@@ -2505,6 +2511,12 @@
                                                      "name":  "Ginger Root",
                                                      "recipe_pu":  4.99
                                                  },
+                                 "Hy-Vee":  {
+                                                "url":  "https://www.hy-vee.com/aisles-online/p/37354/melissa-ginger-root-1-each",
+                                                "price":  "$5.99",
+                                                "size":  "lb",
+                                                "name":  "Melissa Ginger Root"
+                                            },
                                  "Sam\u0027s Club":  {
                                                          "url":  "https://www.samsclub.com/ip/Organic-Ginger-Root-1-75-lbs/13888814112",
                                                          "price":  5.97,
@@ -3257,6 +3269,12 @@
                                                                   "name":  "Our Family Mustard, Honey 12 Oz",
                                                                   "recipe_pu":  0.1825
                                                               },
+                                              "Hy-Vee":  {
+                                                             "url":  "https://www.hy-vee.com/aisles-online/p/253488/hy-vee-stone-ground-honey-dijon-mustard",
+                                                             "price":  "$3.29",
+                                                             "size":  "12 oz",
+                                                             "name":  "Hy-Vee Stone Ground Honey Dijon Mustard"
+                                                         },
                                               "Walmart":  {
                                                               "url":  "https://www.walmart.com/ip/326914635",
                                                               "price":  1.72,
@@ -4466,6 +4484,12 @@
                                           },
                   "red-bell-pepper":  {
                                           "commodity":  "Red Bell Pepper",
+                                          "Aldi":  {
+                                                       "url":  "https://www.aldi.us/store/aldi/products/26274165-multi-colored-peppers-package-3-ct",
+                                                       "price":  "$2.69",
+                                                       "size":  "3 ct",
+                                                       "name":  "Multi-Colored Peppers, Package"
+                                                   },
                                           "Baker\u0027s":  {
                                                                "url":  "https://www.bakersplus.com/p/fresh-red-bell-pepper/0000000004088",
                                                                "price":  1.66,
@@ -5665,7 +5689,13 @@
                                                              "price":  6.97,
                                                              "size":  "each",
                                                              "name":  "Whole Seedless Watermelon"
-                                                         }
+                                                         },
+                                     "Walmart":  {
+                                                     "url":  "https://www.walmart.com/ip/Fresh-Seedless-Watermelon-Each/44391101",
+                                                     "price":  "$4.67",
+                                                     "size":  "each",
+                                                     "name":  "Fresh Seedless Watermelon, Each"
+                                                 }
                                  },
                   "white-mushrooms":  {
                                           "commodity":  "White Mushrooms",
@@ -5846,6 +5876,12 @@
                              },
                   "zero-sugar-soda":  {
                                           "commodity":  "Zero-Sugar Soda",
+                                          "Aldi":  {
+                                                       "url":  "https://www.aldi.us/store/aldi/products/84316153-summit-zero-sugar-cola-12pk-12-fl-oz",
+                                                       "price":  "$3.79",
+                                                       "size":  "12 x 12 fl oz",
+                                                       "name":  "Summit Zero Sugar Cola 12pk"
+                                                   },
                                           "Baker\u0027s":  {
                                                                "url":  "https://www.bakersplus.com/p/big-k-lemon-lime-zero-sugar-caffeine-free-soda-bottle/0001111009836",
                                                                "price":  1,

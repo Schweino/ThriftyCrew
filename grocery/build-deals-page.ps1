@@ -145,7 +145,7 @@ function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$board
     if ($lnk.url) {
       $ok = $true
       # suppress a link whose product per-unit is clearly off the board price shown (>30%) - missing beats wrong
-      if ($boardPU -gt 0) { $lpu = LinkPU ([string]$lnk.size) $unit ([double]$lnk.price); if (($null -ne $lpu) -and ([math]::Abs($lpu - $boardPU) / $boardPU -gt 0.30)) { $ok = $false } }
+      if ($boardPU -gt 0) { $lprice = 0.0; [void][double]::TryParse((([string]$lnk.price) -replace '[^0-9.]',''), [ref]$lprice); $lpu = LinkPU ([string]$lnk.size) $unit $lprice; if (($null -ne $lpu) -and ([math]::Abs($lpu - $boardPU) / $boardPU -gt 0.30)) { $ok = $false } }
       if ($ok) { $url = [string]$lnk.url }
     }
   }
