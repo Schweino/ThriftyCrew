@@ -430,6 +430,8 @@ if ($recBadge.Count -gt 0) {
 [void]$sb.Append("<div id='pg-tripbox-body' hidden><p class='pg-tripbox-n'><b id='pg-tripbox-count'>0 items</b> selected. How many stores are you willing to visit?</p><div class='pg-plan-kbtns' id='pg-plan-kbtns'></div><div class='pg-plan-out' id='pg-plan-out'></div><p class='pg-plan-note'>Based on this week's verified per-unit prices. Register totals vary by package size.</p></div></div>")
 # hide-Sam's toggle: recomputes the cheapest flags + scoreboard for shoppers without a membership
 [void]$sb.Append("<label class='pg-toggle'><input type='checkbox' id='pg-hidesams'><span>Hide Sam's Club</span><span class='pg-toggle-note'>membership required: toggle to see the best price without one</span></label>")
+# show-all toggle: opens every row's full 7-store grid at once (default is the compact one-line view)
+[void]$sb.Append("<label class='pg-toggle'><input type='checkbox' id='pg-expandall'><span>Show all prices</span><span class='pg-toggle-note'>expand every item to compare all stores at once</span></label>")
 
 # ---- sticky control bar: search + consolidated filter pills ----
 # The two boards' category taxonomies overlap ("Fruit"/"Vegetables" vs "Produce", "Dairy & Eggs" vs
@@ -459,6 +461,38 @@ foreach ($gd in $groupDefs) {
 }
 [void]$sb.Append("</div></nav>")
 
+# Progressive disclosure (2026-07-13): at 300+ items every row collapses to a one-line "cheapest here"
+# summary; the full 7-store grid opens on tap. This builds the summary chip (cheapest store + price) that
+# rides in the row head. JS (pgSummaries) refreshes it live when Hide-Sam's changes the cheapest.
+function SummaryHtml($best, [string]$unit) {
+  if (-not $best) { return '' }
+  $tag = if ([string]$best.type -eq 'sale') { " <span class='pg-tag pg-tag-sale'>sale</span>" } else { '' }
+  return "<span class='pg-sum'><span class='pg-sum-p'>" + (Fmt-Price ([double]$best.per_unit) $unit) + "</span><span class='pg-sum-s'>" + (HtmlEnc $shortName[[string]$best.store]) + "</span>" + $tag + "</span><span class='pg-chev' aria-hidden='true'></span>"
+}
+
+# Deals strip: the compact rows hide per-item record/sale badges, so surface the best of them here at the top.
+# Record lows first, then this week's sales. Each chip jumps to (and opens) that item's row.
+$dealItems = New-Object System.Collections.Generic.List[object]
+foreach ($r in $doc.comparison) {
+  $rk = @($r.stores | Where-Object { -not (IsNoneCarry ([string]$r.id) ([string]$_.store)) } | Sort-Object per_unit)
+  if ($rk.Count -eq 0) { continue }
+  $best = $rk[0]
+  $rb = $recBadge[[string]$r.id]
+  $isRec = ($rb -and $rb.cls -eq 'pg-rec-low')
+  $isSale = ([string]$best.type -eq 'sale')
+  if (-not ($isRec -or $isSale)) { continue }
+  $dealItems.Add([pscustomobject]@{ id=[string]$r.id; name=[string]$r.commodity; price=(Fmt-Price ([double]$best.per_unit) ([string]$r.unit)); store=[string]$shortName[[string]$best.store]; rec=$isRec; rank=$(if($isRec){0}else{1}) })
+}
+$dealsTop = @($dealItems | Sort-Object rank | Select-Object -First 16)
+if ($dealsTop.Count) {
+  [void]$sb.Append("<div class='pg-deals'><span class='pg-deals-h'><span class='pg-deals-dot'></span>Deals right now</span><div class='pg-deals-row'>")
+  foreach ($d in $dealsTop) {
+    $tag = if ($d.rec) { "<span class='pg-deal-t pg-deal-rec'>record low</span>" } else { "<span class='pg-deal-t pg-deal-sale'>sale</span>" }
+    [void]$sb.Append("<button type='button' class='pg-deal' data-jump=`"" + (HtmlEnc $d.id) + "`"><span class='pg-deal-nm'>" + (HtmlEnc $d.name) + "</span><span class='pg-deal-p'>" + $d.price + " <span class='pg-deal-s'>" + (HtmlEnc $d.store) + "</span></span>" + $tag + "</button>")
+  }
+  [void]$sb.Append("</div></div>")
+}
+
 $totalCommodities = 0; $totalPrices = 0
 foreach ($c in $cats) {
   [void]$sb.Append("<section class='pg-cat' data-cat='" + $c.key + "'><h2 class='pg-cath'>" + (HtmlEnc $c.label) + "</h2>")
@@ -480,7 +514,8 @@ foreach ($c in $cats) {
     # Buy-or-Wait verdict shows only when no record badge is on the row
     $vd = $verdict[[string]$r.id]
     if (-not $rb -and $vd) { $rbHtml += "<span class='pg-rec " + $vd.cls + "' title=`"" + (HtmlEnc $vd.title) + "`">" + $vd.label + "</span>" }
-    [void]$sb.Append("<div class='pg-rowhead'><label class='pg-pickl' title='Add to my shopping list'><input type='checkbox' class='pg-pick' aria-label='Add to my shopping list'></label><span class='pg-name'>" + (HtmlEnc $r.commodity) + "</span><span class='pg-unit'>" + (UnitLabel $unit) + "</span>" + $rbHtml + "</div>")
+    $sumHtml = SummaryHtml $ranked[0] $unit
+    [void]$sb.Append("<div class='pg-rowhead'><label class='pg-pickl' title='Add to my shopping list'><input type='checkbox' class='pg-pick' aria-label='Add to my shopping list'></label><span class='pg-name'>" + (HtmlEnc $r.commodity) + "</span><span class='pg-unit'>" + (UnitLabel $unit) + "</span>" + $rbHtml + $sumHtml + "</div>")
     [void]$sb.Append("<div class='pg-stores'>")
     $i = 0
     foreach ($s in $ranked) {
@@ -525,7 +560,8 @@ if ($riDoc) {
       $totalCommodities++
       $unit = [string]$r.unit
       [void]$sb.Append("<article class='pg-row' data-cat='" + (HtmlEnc $riKey) + "' data-id='" + [string]$r.id + "'>")
-      [void]$sb.Append("<div class='pg-rowhead'><label class='pg-pickl' title='Add to my shopping list'><input type='checkbox' class='pg-pick' aria-label='Add to my shopping list'></label><span class='pg-name'>" + (HtmlEnc $r.commodity) + "</span><span class='pg-unit'>" + (UnitLabel $unit) + "</span></div>")
+      $sumHtml = SummaryHtml $ranked[0] $unit
+      [void]$sb.Append("<div class='pg-rowhead'><label class='pg-pickl' title='Add to my shopping list'><input type='checkbox' class='pg-pick' aria-label='Add to my shopping list'></label><span class='pg-name'>" + (HtmlEnc $r.commodity) + "</span><span class='pg-unit'>" + (UnitLabel $unit) + "</span>" + $sumHtml + "</div>")
       [void]$sb.Append("<div class='pg-stores'>")
       $i = 0
       foreach ($s in $ranked) {
@@ -641,10 +677,34 @@ $css = @'
 .pg-cath{font-family:Georgia,'Times New Roman',serif;font-size:1.22em;color:var(--ink);margin:26px 0 4px;padding-bottom:6px;border-bottom:2px solid var(--bd)}
 .pg-refnote{margin:26px 0 4px;padding:9px 13px;font-size:.82em;line-height:1.4;color:var(--mut);background:var(--amber-t);border:1px solid var(--bd);border-radius:8px}
 .pg-row{padding:15px 0 16px;border-bottom:1px solid #eef1ee}
-.pg-rowhead{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap}
-.pg-name{font-size:1.09em;font-weight:700;color:var(--ink)}
+.pg-rowhead{display:flex;align-items:baseline;gap:10px;margin-bottom:0;flex-wrap:wrap;cursor:pointer}
+.pg-row.pg-open .pg-rowhead{margin-bottom:10px}
+.pg-rowhead:focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:4px}
+.pg-name{font-size:1.09em;font-weight:700;color:var(--ink);flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pg-unit{font-size:.72em;color:var(--mut);opacity:.8;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
-.pg-stores{display:flex;flex-wrap:wrap;gap:8px}
+/* collapsed rows stay one clean line: name + cheapest + chevron. The unit, record/verdict badges, and the
+   history/alerts pills (JS-injected) reveal only when the row is opened, so 300 items scan fast. */
+.pg-row:not(.pg-open) .pg-unit,.pg-row:not(.pg-open) .pg-rec,.pg-row:not(.pg-open) .pg-hist,.pg-row:not(.pg-open) .pg-alertp{display:none}
+.pg-sum{margin-left:auto;flex:0 0 auto;display:inline-flex;align-items:baseline;gap:5px;white-space:nowrap}
+.pg-sum-p{font-weight:800;color:var(--green-d);font-size:1.05em}
+.pg-sum-s{font-size:.78em;color:var(--mut)}
+.pg-sum .pg-tag-sale{font-size:.58em;margin-left:2px;align-self:center}
+.pg-chev{width:8px;height:8px;border-right:2px solid var(--mut);border-bottom:2px solid var(--mut);transform:rotate(45deg);margin-left:4px;align-self:center;flex:0 0 auto;transition:transform .15s}
+.pg-row.pg-open .pg-chev{transform:rotate(-135deg)}
+.pg-stores{display:none;flex-wrap:wrap;gap:8px}
+.pg-row.pg-open .pg-stores,.pg-wrap.pg-allopen .pg-stores{display:flex}
+.pg-deals{margin:6px 0 2px}
+.pg-deals-h{display:flex;align-items:center;gap:6px;font-size:.78em;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.pg-deals-dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
+.pg-deals-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
+.pg-deal{flex:0 0 auto;display:flex;flex-direction:column;gap:2px;align-items:flex-start;text-align:left;background:#fff;border:1px solid var(--bd);border-radius:11px;padding:9px 12px;cursor:pointer;font-family:inherit}
+.pg-deal:hover{border-color:var(--green)}
+.pg-deal-nm{font-size:.84em;font-weight:700;color:var(--ink);white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis}
+.pg-deal-p{font-size:1.05em;font-weight:800;color:var(--green-d)}
+.pg-deal-s{font-size:.66em;font-weight:600;color:var(--mut)}
+.pg-deal-t{font-size:.6em;font-weight:800;text-transform:uppercase;letter-spacing:.04em;padding:1px 7px;border-radius:999px;margin-top:2px}
+.pg-deal-rec{background:var(--green);color:#fff}
+.pg-deal-sale{background:#fdf3e3;color:#8a6d1f}
 .pg-chip{position:relative;display:flex;flex-direction:column;gap:3px;min-width:118px;padding:10px 13px 9px;border:1px solid var(--bd);border-radius:11px;background:#fcfdfc}
 .pg-chip-none{background:repeating-linear-gradient(135deg,#f7f7f5,#f7f7f5 7px,#f2f2ef 7px,#f2f2ef 14px);border-style:dashed;justify-content:center}
 .pg-chip-none .pg-store{opacity:.7}
@@ -775,6 +835,39 @@ $js = @'
     var n=sec.querySelectorAll('.pg-row').length, h=sec.querySelector('.pg-cath');
     if(h && n){ var sp2=document.createElement('span'); sp2.className='pg-cath-n'; sp2.textContent='\u00B7 '+n+(n===1?' item':' items'); h.appendChild(sp2); }
   });
+  // ---- progressive disclosure: rows collapse to a one-line cheapest summary; click/tap to open all stores ----
+  function pgFirstChip(row){ var cs=row.querySelectorAll('.pg-chip'); for(var i=0;i<cs.length;i++){ if(cs[i].style.display!=='none') return cs[i]; } return null; }
+  function pgSummaries(){
+    document.querySelectorAll('.pg-row').forEach(function(row){
+      var sum=row.querySelector('.pg-sum'); if(!sum) return;
+      var c=pgFirstChip(row); if(!c){ sum.innerHTML=''; return; }
+      var p=c.querySelector('.pg-price'), s=c.querySelector('.pg-store');
+      var sale=c.querySelector('.pg-tag-sale')?" <span class='pg-tag pg-tag-sale'>sale</span>":"";
+      sum.innerHTML="<span class='pg-sum-p'>"+(p?p.textContent:'')+"</span><span class='pg-sum-s'>"+(s?s.textContent:'')+"</span>"+sale;
+    });
+  }
+  document.querySelectorAll('.pg-rowhead').forEach(function(h){ h.setAttribute('tabindex','0'); });
+  function pgToggle(head){ var row=head.closest('.pg-row'); if(row){ row.classList.toggle('pg-open'); } }
+  document.addEventListener('click',function(e){
+    if(e.target.closest('.pg-pickl,.pg-pick,.pg-alertp,.pg-histp,.pg-see,.pg-hx,a,button,input,label')) return;
+    var head=e.target.closest('.pg-rowhead'); if(head){ pgToggle(head); }
+  });
+  document.addEventListener('keydown',function(e){
+    if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('pg-rowhead')){ e.preventDefault(); pgToggle(e.target); }
+  });
+  var pgWrap=document.querySelector('.pg-wrap'), pgEA=document.getElementById('pg-expandall');
+  if(pgEA&&pgWrap){ pgEA.addEventListener('change',function(){ pgWrap.classList.toggle('pg-allopen',pgEA.checked); }); }
+  // deals-strip chips jump to and open the item's row (clearing any active filter first)
+  document.addEventListener('click',function(e){
+    var dl=e.target.closest('.pg-deal'); if(!dl) return;
+    var id=dl.getAttribute('data-jump'); if(!id) return;
+    var s=document.getElementById('pg-search'); if(s){ s.value=''; } state.q='';
+    btns.forEach(function(x){x.classList.remove('is-active')}); var all=document.querySelector(".pg-fbtn[data-cat='all']"); if(all){all.classList.add('is-active');} state.pill='all'; state.cats=null; applyFilters();
+    var sel=(window.CSS&&CSS.escape)?CSS.escape(id):id;
+    var row=document.querySelector(".pg-row[data-id='"+sel+"']");
+    if(row){ row.classList.add('pg-open'); row.scrollIntoView({behavior:'smooth',block:'center'}); }
+  });
+  pgSummaries();
   // hide Sam's Club: drop its chips, then re-flag the cheapest per row + recount the scoreboard
   var SAMS="Sam's Club";
   var tg=document.getElementById('pg-hidesams');
@@ -804,6 +897,7 @@ $js = @'
       cell.classList.toggle('is-lead', !(hide&&sams) && n===maxw && n>0);
       cell.style.order=String(100-n);
     });
+    pgSummaries();
   }
   if(tg){ tg.addEventListener('change',recompute); }
   // ---- trip planner: pick items, choose store count, get the optimal split ----
