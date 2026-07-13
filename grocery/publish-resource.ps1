@@ -1,4 +1,4 @@
-<#
+﻿<#
   publish-resource.ps1 (repo-local copy) - Publishes ONE item to the Resources section (tag: resources).
   Uses a lexical HTML card (not source=html) so styled classes like mts-btn survive. Paid-gated by default
   (paywall JSON-LD added), matching the lesson pattern.
@@ -71,8 +71,9 @@ else { $method='Post'; $uri="$apiUrl/ghost/api/admin/posts/" }
 $payload = @{ posts = @($postObj) }
 $bytes = [Text.Encoding]::UTF8.GetBytes((ConvertTo-Json $payload -Depth 14))
 $jwt = New-GhostJWT $adminKey
-$r = Invoke-RestMethod -Uri $uri -Method $method -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body $bytes -TimeoutSec 30
+$r = Invoke-RestMethod -Uri $uri -Method $method -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'} -ContentType 'application/json' -Body $bytes -TimeoutSec 120
 $saved = $r.posts[0]
 $verb = if ($existing) { "UPDATED" } else { "CREATED" }
 Write-Host ("{0}: {1}" -f $verb, $postUrl) -ForegroundColor Green
 Write-Host ("  status={0}  visibility={1}  paywallSchema={2}" -f $saved.status, $saved.visibility, [bool]$cih)
+

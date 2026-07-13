@@ -65,7 +65,8 @@
                         "85/15",
                         "organic",
                         "grass[\\s-]*fed",
-                        "\\bjerky\\b"
+                        "\\bjerky\\b",
+                        "\\bpork\\b"
                     ]
     },
     {
@@ -134,7 +135,11 @@
                         "\\bnog\\b",
                         "hard[\\s-]?cooked",
                         "peeled",
-                        "salad"
+                        "salad",
+                        "\\bpasta\\b",
+                        "sandwich",
+                        "croissant",
+                        "biscuit"
                     ]
     },
     {
@@ -157,7 +162,9 @@
                         "milkbone",
                         "cream",
                         "\\ba2\\b",
-                        "lactose"
+                        "lactose",
+                        "formula",
+                        "milk[\\s-]?bones?"
                     ]
     },
     {
@@ -186,7 +193,9 @@
                         "not\\s+butter",
                         "spread",
                         "canola",
-                        "\\boil\\b"
+                        "\\boil\\b",
+                        "popcorn",
+                        "croissant"
                     ]
     },
     {
@@ -296,7 +305,17 @@
                         "yog(?:h)?urt",
                         "\\bbar\\b",
                         "spread",
-                        "\\bfrozen\\b"
+                        "\\bfrozen\\b",
+                        "pastr",
+                        "\\bsnacks?\\b",
+                        "toaster",
+                        "\\bwash\\b",
+                        "lotion",
+                        "shampoo",
+                        "body",
+                        "creamer",
+                        "gels",
+                        "unsweetened"
                     ]
     },
     {
@@ -467,7 +486,9 @@
                         "chunks",
                         "\\bcup\\b",
                         "\\bdrink\\b",
-                        "\\bjuice\\b"
+                        "\\bjuice\\b",
+                        "\\bpops?\\b",
+                        "fruity"
                     ]
     },
     {
@@ -617,7 +638,8 @@
                         "tender",
                         "patt",
                         "cooked",
-                        "smoked"
+                        "smoked",
+                        "roasted"
                     ]
     },
     {
@@ -758,7 +780,9 @@
                         "fried",
                         "\\bscampi\\b",
                         "\\bramen\\b",
-                        "poppers"
+                        "poppers",
+                        "\\bcat\\b",
+                        "\\bflavors\\b"
                     ]
     },
     {
@@ -1072,7 +1096,9 @@
                         "gravy",
                         "\\bjar\\b",
                         "\\bdried\\b",
-                        "pieces\\s+and\\s+stems"
+                        "pieces\\s+and\\s+stems",
+                        "pieces\\s*(?:\u0026|and)\\s*stems",
+                        "stems\\s*(?:\u0026|and)\\s*pieces"
                     ]
     },
     {
@@ -1173,7 +1199,11 @@
                         "brown\\s+rice",
                         "\\bbowl\\b",
                         "\\ba\\s*roni\\b",
-                        "wild"
+                        "wild",
+                        "rice\\s+cakes?",
+                        "\\bdog\\b",
+                        "\\bcat\\b",
+                        "chicken\\s+and\\s+rice"
                     ]
     },
     {
@@ -1747,7 +1777,8 @@
         "include":  [
                         "purified\\s+(?:drinking\\s+)?water",
                         "spring\\s+water",
-                        "drinking\\s+water"
+                        "drinking\\s+water",
+                        "bottled\\s+water"
                     ],
         "exclude":  [
                         "sparkling",
@@ -1757,7 +1788,10 @@
                         "\\bgallon\\b",
                         "enhanced",
                         "electrolyte",
-                        "chestnut"
+                        "chestnut",
+                        "\\bwash\\b",
+                        "\\bsoap\\b",
+                        "body"
                     ]
     },
     {
@@ -1817,12 +1851,14 @@
         "band_min":  0.03,
         "band_max":  0.4,
         "relax_global":  [
-                             "\\bfrozen\\b"
+                             "\\bfrozen\\b",
+                             "\\bmeal\\b"
                          ],
         "include":  [
                         "mixed\\s+vegetables",
                         "peas\\s+(?:\u0026|and)\\s+carrots",
-                        "vegetable\\s+medley"
+                        "vegetable\\s+medley",
+                        "vegetables\\b.{0,12}mixed"
                     ],
         "exclude":  [
                         "\\bsoup\\b",
@@ -2002,7 +2038,9 @@
         "band_max":  0.5,
         "include":  [
                         "all[\\s-]*purpose\\s+cleaner",
-                        "multi[\\s-]*(?:purpose|surface)\\s+cleaner"
+                        "multi[\\s-]*(?:purpose|surface)\\s+cleaner",
+                        "all\\s+purpose\\s+spray\\s+cleaner",
+                        "\\bspray\\s+cleaner\\b"
                     ],
         "exclude":  [
                         "wipes",
@@ -2172,7 +2210,10 @@
                         "yog",
                         "\\bbar\\b",
                         "lemonade",
-                        "\\btea\\b"
+                        "\\btea\\b",
+                        "gels",
+                        "creamer",
+                        "\\bwash\\b"
                     ]
     },
     {
@@ -2189,7 +2230,9 @@
                         "\\bjam\\b",
                         "preserves",
                         "yog",
-                        "\\bbar\\b"
+                        "\\bbar\\b",
+                        "gels",
+                        "\\bwash\\b"
                     ]
     },
     {
@@ -2213,7 +2256,13 @@
                         "\\bsoda\\b",
                         "vanilla",
                         "cough",
-                        "jubilee"
+                        "jubilee",
+                        "\\bblend\\b",
+                        "pastr",
+                        "toaster",
+                        "frosted",
+                        "\\bpops?\\b",
+                        "\\bgels\\b"
                     ]
     },
     {
@@ -2559,7 +2608,9 @@
         "include":  [
                         "pork\\s+(?:shoulder|butt)\\b",
                         "boston\\s+butt",
-                        "pork\\s+picnic"
+                        "pork\\s+picnic",
+                        "half\\s+butt",
+                        "butt\\s+pork\\s+roast"
                     ],
         "exclude":  [
                         "smoked",
@@ -2575,14 +2626,19 @@
         "band_max":  9,
         "include":  [
                         "baby\\s*back",
-                        "pork\\s+back\\s+ribs"
+                        "pork\\s+back\\s+ribs",
+                        "pork\\s+loin\\s+back\\s+ribs",
+                        "\\bback\\s+ribs\\b"
                     ],
         "exclude":  [
                         "\\bsauce\\b",
                         "seasoned",
                         "smoked",
                         "fully\\s+cooked"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bfrozen\\b"
+                         ]
     },
     {
         "id":  "ground-pork",
@@ -2668,7 +2724,10 @@
                         "glazed",
                         "\\bdip\\b",
                         "seasoned"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bfrozen\\b"
+                         ]
     },
     {
         "id":  "rotisserie-chicken",
@@ -2677,7 +2736,9 @@
         "band_min":  4,
         "band_max":  12,
         "include":  [
-                        "rotisserie"
+                        "rotisserie",
+                        "roasted\\s+whole\\s+chicken",
+                        "hot\\s+whole\\s+chicken"
                     ],
         "exclude":  [
                         "seasoning",
@@ -2749,7 +2810,8 @@
         "band_min":  0.15,
         "band_max":  0.8,
         "relax_global":  [
-                             "\\bcanned\\b"
+                             "\\bcanned\\b",
+                             "\\bwater\\b"
                          ],
         "include":  [
                         "pink\\s+salmon",
@@ -2991,7 +3053,8 @@
         "band_min":  0.05,
         "band_max":  0.4,
         "relax_global":  [
-                             "\\bcreamer\\b"
+                             "\\bcreamer\\b",
+                             "flavored"
                          ],
         "include":  [
                         "creamer"
@@ -3079,12 +3142,16 @@
                         "croissants?"
                     ],
         "exclude":  [
-                        "sandwich",
+                        "breakfast\\s+sandwich",
                         "breakfast",
                         "\\bham\\b",
                         "\\bfrozen\\b",
                         "\\brolls\\b.{0,15}crescent"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bbake\\b",
+                             "\\bbaked\\b"
+                         ]
     },
     {
         "id":  "muffins",
@@ -3093,7 +3160,9 @@
         "band_min":  0.4,
         "band_max":  2.5,
         "relax_global":  [
-                             "muffin"
+                             "muffin",
+                             "\\bbake\\b",
+                             "\\bbaked\\b"
                          ],
         "include":  [
                         "\\bmuffins?\\b"
@@ -3131,7 +3200,9 @@
         "include":  [
                         "french\\s+bread",
                         "baguette",
-                        "italian\\s+bread"
+                        "italian\\s+bread",
+                        "french\\s+bakery\\s+bread",
+                        "bakery\\s+bread\\s+loaf"
                     ],
         "exclude":  [
                         "\\bpizza\\b",
@@ -3153,7 +3224,11 @@
                         "chips",
                         "crackers",
                         "hummus"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bbaked\\b",
+                             "\\bbake\\b"
+                         ]
     },
     {
         "id":  "pancake-mix",
@@ -3276,7 +3351,9 @@
         "include":  [
                         "chocolate\\s+chips\\b",
                         "chocolate\\s+morsels",
-                        "chocolate\\s+chip\\b(?!\\s*cooki)"
+                        "chocolate\\s+chip\\b(?!\\s*cooki)",
+                        "chocolate\\s+baking\\s+chips",
+                        "baking\\s+chips"
                     ],
         "exclude":  [
                         "cookie",
@@ -3286,7 +3363,11 @@
                         "muffin",
                         "\\bmix\\b",
                         "\\bbar\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bbake\\b",
+                             "\\bbaked\\b"
+                         ]
     },
     {
         "id":  "cocoa-powder",
@@ -3455,14 +3536,18 @@
         "band_min":  0.03,
         "band_max":  0.5,
         "include":  [
-                        "apple\\s+cider\\s+vinegar"
+                        "apple\\s+cider\\s+vinegar",
+                        "apple\\s+cider\\s+flavored\\s+(?:distilled\\s+)?vinegar"
                     ],
         "exclude":  [
                         "gummies",
                         "capsule",
                         "\\bpills\\b",
                         "\\bdrink\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "flavored"
+                         ]
     },
     {
         "id":  "worcestershire",
@@ -3615,7 +3700,8 @@
         "relax_global":  [
                              "\\bcanned\\b",
                              "\\bbaked\\b",
-                             "\\bbake\\b"
+                             "\\bbake\\b",
+                             "\\bsauce\\b"
                          ],
         "include":  [
                         "baked\\s+beans?",
@@ -3709,7 +3795,8 @@
         "include":  [
                         "mushrooms?\\b.{0,25}(?:pieces|stems|sliced\\b.{0,10}can)",
                         "canned\\s+mushrooms?",
-                        "mushroom\\s+pieces"
+                        "mushroom\\s+pieces",
+                        "pieces\\s*(?:\u0026|and)\\s*stems"
                     ],
         "exclude":  [
                         "fresh",
@@ -3749,7 +3836,9 @@
                          ],
         "include":  [
                         "tomato\\s+soup",
-                        "tomato\\s+bisque"
+                        "tomato\\s+bisque",
+                        "tomato\\s+condensed\\s+soup",
+                        "condensed\\s+tomato\\s+soup"
                     ],
         "exclude":  [
                         "\\bdry\\b",
@@ -3802,7 +3891,9 @@
         "include":  [
                         "instant\\s+(?:mashed\\s+)?potatoes",
                         "mashed\\s+potatoes?\\b.{0,20}(?:flakes|instant|pouch)",
-                        "potato\\s+flakes"
+                        "potato\\s+flakes",
+                        "\\bidahoan\\b",
+                        "homestyle\\s+(?:butter(?:y)?\\s+)?mashed"
                     ],
         "exclude":  [
                         "\\bfrozen\\b",
@@ -3818,7 +3909,8 @@
         "band_max":  0.6,
         "relax_global":  [
                              "stuffing",
-                             "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
+                             "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)",
+                             "flavored"
                          ],
         "include":  [
                         "stuffing"
@@ -3835,7 +3927,8 @@
         "band_min":  0.5,
         "band_max":  4,
         "include":  [
-                        "brown\\s+rice"
+                        "brown\\s+rice",
+                        "brown\\s+basmati"
                     ],
         "exclude":  [
                         "\\bcup\\b",
@@ -3856,7 +3949,8 @@
         "band_min":  0.05,
         "band_max":  0.35,
         "include":  [
-                        "egg\\s+noodles?"
+                        "egg\\s+noodles?",
+                        "egg\\s+pasta"
                     ],
         "exclude":  [
                         "ramen",
@@ -3871,13 +3965,19 @@
         "band_min":  0.06,
         "band_max":  0.4,
         "include":  [
-                        "lasagna(?:\\s+noodles?)?\\b(?!.{0,25}(?:frozen|meal|dinner))"
+                        "lasagna\\s+noodles?",
+                        "oven\\s+ready\\b.{0,20}lasagna",
+                        "no\\s+boil\\b.{0,15}lasagna",
+                        "lasagna\\s+pasta"
                     ],
         "exclude":  [
                         "\\bfrozen\\b",
                         "\\bmeal\\b",
                         "skillet",
-                        "\\bsauce\\b"
+                        "\\bsauce\\b",
+                        "meat",
+                        "italian-?style",
+                        "family"
                     ]
     },
     {
@@ -4015,7 +4115,9 @@
         "include":  [
                         "peaches\\b.{0,30}(?:syrup|juice|can|sliced|halves)",
                         "canned\\s+peaches",
-                        "sliced\\s+peaches"
+                        "sliced\\s+peaches",
+                        "peach\\s+slices",
+                        "peaches\\s+in\\s+(?:heavy\\s+|light\\s+)?syrup"
                     ],
         "exclude":  [
                         "fresh",
@@ -4153,7 +4255,9 @@
         "band_min":  0.08,
         "band_max":  0.6,
         "relax_global":  [
-                             "\\bsnack\\b"
+                             "\\bsnack\\b",
+                             "\\bbaked\\b",
+                             "\\bbake\\b"
                          ],
         "include":  [
                         "saltines?",
@@ -4178,7 +4282,9 @@
         "band_min":  0.1,
         "band_max":  0.7,
         "relax_global":  [
-                             "\\bsnack\\b"
+                             "\\bsnack\\b",
+                             "\\bbaked\\b",
+                             "\\bbake\\b"
                          ],
         "include":  [
                         "cheese\\s+crackers?",
@@ -4219,7 +4325,8 @@
         "band_min":  0.2,
         "band_max":  1.5,
         "relax_global":  [
-                             "\\bsnack\\b"
+                             "\\bsnack\\b",
+                             "flavored"
                          ],
         "include":  [
                         "microwave\\s+popcorn",
@@ -4268,7 +4375,9 @@
                          ],
         "include":  [
                         "sandwich\\s+cookies",
-                        "\\boreos?\\b"
+                        "\\boreos?\\b",
+                        "sandwich\\s+creme\\s+cookies",
+                        "creme\\s+cookies"
                     ],
         "exclude":  [
                         "ice\\s*cream",
@@ -4290,20 +4399,22 @@
                         "chewy\\s+bars?"
                     ],
         "exclude":  [
-                        "protein"
+                        "protein",
+                        "\\bfruity\\b"
                     ]
     },
     {
         "id":  "protein-bars",
         "label":  "Protein Bars",
         "unit":  "each",
-        "band_min":  0.6,
+        "band_min":  0.35,
         "band_max":  3.5,
         "relax_global":  [
                              "\\bsnack\\b"
                          ],
         "include":  [
-                        "protein\\s+bars?"
+                        "protein\\s+bars?",
+                        "protein\\b.{0,18}bars?"
                     ],
         "exclude":  [
                         "powder",
@@ -4318,11 +4429,14 @@
         "band_max":  0.8,
         "relax_global":  [
                              "fruit\\s*snack",
-                             "\\bsnack\\b"
+                             "\\bsnack\\b",
+                             "flavored"
                          ],
         "include":  [
                         "fruit\\s+snacks?",
-                        "gummies\\b.{0,15}fruit"
+                        "gummies\\b.{0,15}fruit",
+                        "fruit\\s+flavored\\s+snacks",
+                        "fruity\\s+snacks"
                     ],
         "exclude":  [
                         "\\bacv\\b",
@@ -4344,7 +4458,9 @@
                          ],
         "include":  [
                         "toaster\\s+pastr",
-                        "pop[\\s-]?tarts?"
+                        "pop[\\s-]?tarts?",
+                        "toaster\\s+tarts?",
+                        "pop-?ups"
                     ],
         "exclude":  [
                         "\\bbites\\b"
@@ -4371,9 +4487,9 @@
     {
         "id":  "rice-cakes",
         "label":  "Rice Cakes",
-        "unit":  "each",
-        "band_min":  0.1,
-        "band_max":  0.8,
+        "unit":  "oz",
+        "band_min":  0.25,
+        "band_max":  1.5,
         "relax_global":  [
                              "\\bcake\\b",
                              "\\bsnack\\b"
@@ -4419,7 +4535,9 @@
                         "fruit\\s+cups?",
                         "mandarin\\s+oranges?\\s+cups?",
                         "peach\\s+cups?",
-                        "fruit\\s+bowls?"
+                        "fruit\\s+bowls?",
+                        "mandarin\\s+oranges?\\b.{0,30}juice",
+                        "mixed\\s+fruits?\\b.{0,25}(?:cups?|variety)"
                     ],
         "exclude":  [
                         "yog",
@@ -4434,7 +4552,8 @@
         "band_max":  1.2,
         "relax_global":  [
                              "\\bpudding\\b",
-                             "\\bsnack\\b"
+                             "\\bsnack\\b",
+                             "flavored"
                          ],
         "include":  [
                         "pudding\\s+(?:cups?|snack)",
@@ -4456,11 +4575,13 @@
         "band_min":  0.2,
         "band_max":  1.5,
         "relax_global":  [
-                             "\\bsnack\\b"
+                             "\\bsnack\\b",
+                             "flavored"
                          ],
         "include":  [
                         "gelatin",
-                        "jell[\\s-]?o\\b"
+                        "jell[\\s-]?o\\b",
+                        "juicy\\s+gels"
                     ],
         "exclude":  [
                         "\\bmix\\b",
@@ -4479,7 +4600,8 @@
                              "(?\u003c!orange\\s)\\bjuice\\b"
                          ],
         "include":  [
-                        "apple\\s+juice"
+                        "apple\\s+juice",
+                        "apple\\b.{0,15}100%\\s*juice"
                     ],
         "exclude":  [
                         "cider\\s+vinegar",
@@ -4497,7 +4619,9 @@
                              "(?\u003c!orange\\s)\\bjuice\\b"
                          ],
         "include":  [
-                        "grape\\s+juice"
+                        "grape\\s+juice",
+                        "(?:100%\\s+)?juice,?\\s+grape",
+                        "grape\\b.{0,15}100%\\s*juice"
                     ],
         "exclude":  [
                         "sparkling",
@@ -4515,7 +4639,8 @@
                              "cocktail"
                          ],
         "include":  [
-                        "cranberry\\s+juice"
+                        "cranberry\\s+juice",
+                        "cranberry\\b.{0,15}100%\\s*juice"
                     ],
         "exclude":  [
                         "sparkling",
@@ -4611,11 +4736,14 @@
         "relax_global":  [
                              "sparkling",
                              "\\bwater\\b",
-                             "seltzer"
+                             "seltzer",
+                             "flavored"
                          ],
         "include":  [
                         "sparkling\\s+water",
-                        "seltzer\\s+water"
+                        "seltzer\\s+water",
+                        "belle\\s+vie",
+                        "sparkling\\s+flavored\\s+water"
                     ],
         "exclude":  [
                         "\\btonic\\b",
@@ -4631,7 +4759,9 @@
         "band_max":  0.12,
         "include":  [
                         "iced\\s+tea",
-                        "sweet\\s+tea"
+                        "sweet\\s+tea",
+                        "brewed\\b.{0,20}tea",
+                        "pure\\s+leaf"
                     ],
         "exclude":  [
                         "\\bmix\\b",
@@ -4668,7 +4798,8 @@
         "band_min":  0.1,
         "band_max":  1,
         "relax_global":  [
-                             "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
+                             "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)",
+                             "flavored"
                          ],
         "include":  [
                         "hot\\s+(?:cocoa|chocolate)"
@@ -4687,7 +4818,8 @@
         "include":  [
                         "k[\\s-]?cups?",
                         "coffee\\s+pods?",
-                        "single\\s+serve\\s+coffee"
+                        "single\\s+serve\\s+coffee",
+                        "coffee\\s+cups\\b"
                     ],
         "exclude":  [
                         "\\bmaker\\b",
@@ -4743,7 +4875,8 @@
                         "frozen\\s+broccoli",
                         "broccoli\\s+florets\\b.{0,25}(?:frozen|steam)",
                         "steamable\\s+broccoli",
-                        "broccoli\\s+cuts"
+                        "broccoli\\s+cuts",
+                        "cut\\s+broccoli"
                     ],
         "exclude":  [
                         "fresh",
@@ -4765,13 +4898,18 @@
                         "frozen\\s+(?:sweet\\s+)?corn",
                         "steamable\\s+corn",
                         "corn\\b.{0,20}\\bfrozen\\b",
-                        "super\\s+sweet\\s+corn\\b.{0,15}\\bbag"
+                        "super\\s+sweet\\s+corn\\b.{0,15}\\bbag",
+                        "cut\\s+(?:golden\\s+)?corn",
+                        "steamables?\\b.{0,20}corn",
+                        "super\\s+sweet\\s+corn",
+                        "whole\\s+kernel\\s+golden\\s+corn"
                     ],
         "exclude":  [
                         "\\bcob\\b",
                         "fresh",
                         "\\bcanned\\b",
-                        "cream"
+                        "cream",
+                        "\\bdogs?\\b"
                     ]
     },
     {
@@ -4786,7 +4924,10 @@
         "include":  [
                         "frozen\\s+(?:sweet\\s+|green\\s+)?peas",
                         "steamable\\s+peas",
-                        "(?:sweet|green)\\s+peas\\b.{0,20}\\b(?:frozen|bag|steam)"
+                        "(?:sweet|green)\\s+peas\\b.{0,20}\\b(?:frozen|bag|steam)",
+                        "steamables?\\b.{0,20}peas",
+                        "sweet\\s+green\\s+peas",
+                        "green\\s+peas\\b"
                     ],
         "exclude":  [
                         "\\bcanned\\b",
@@ -4806,7 +4947,10 @@
                              "\\bmeal\\b"
                          ],
         "include":  [
-                        "breakfast\\s+sandwich"
+                        "breakfast\\s+sandwich",
+                        "croissant\\s+sandwich",
+                        "biscuit\\s+sandwich",
+                        "sandwiches\\b.{0,35}(?:sausage|egg)"
                     ],
         "exclude":  [
                         "\\bmaker\\b"
@@ -4861,11 +5005,13 @@
         "band_max":  0.4,
         "relax_global":  [
                              "\\bfrozen\\b",
-                             "\\bmeal\\b"
+                             "\\bmeal\\b",
+                             "\\bsauce\\b"
                          ],
         "include":  [
                         "lasagna\\b.{0,30}(?:frozen|family|meat|cheese)",
-                        "frozen\\s+lasagna"
+                        "frozen\\s+lasagna",
+                        "\\blasagna\\b"
                     ],
         "exclude":  [
                         "noodles\\s+only",
@@ -4980,7 +5126,9 @@
                          ],
         "include":  [
                         "frozen\\s+(?:mixed\\s+)?(?:berries|fruit|strawberries|blueberries|mango|peaches)",
-                        "berry\\s+(?:medley|blend)"
+                        "berry\\s+(?:medley|blend)",
+                        "unsweetened\\s+(?:whole\\s+|sliced\\s+)?(?:strawberries|berries|fruit)",
+                        "cherry\\s+berry\\s+blend"
                     ],
         "exclude":  [
                         "\\bbars?\\b",
@@ -4992,7 +5140,7 @@
         "id":  "popsicles",
         "label":  "Popsicles / Ice Pops",
         "unit":  "each",
-        "band_min":  0.1,
+        "band_min":  0.04,
         "band_max":  1.5,
         "relax_global":  [
                              "\\bfrozen\\b",
@@ -5002,7 +5150,11 @@
                         "popsicles?",
                         "ice\\s+pops",
                         "freezer\\s+pops",
-                        "fruit\\s+pops"
+                        "fruit\\s+pops",
+                        "\\bice\\s+pops?\\b",
+                        "freeze\\s+pops?",
+                        "bomb\\s+pops?",
+                        "fun\\s*pops"
                     ],
         "exclude":  [
                         "\\bmold\\b",
@@ -5049,7 +5201,9 @@
         "include":  [
                         "laundry\\s+(?:pods?|pacs?)",
                         "tide\\s+pods",
-                        "detergent\\s+(?:pods?|pacs?)"
+                        "detergent\\s+(?:pods?|pacs?)",
+                        "power\\s+pacs?",
+                        "power\\s+paks?"
                     ],
         "exclude":  [
                         "dishwasher",
@@ -5137,7 +5291,10 @@
         "exclude":  [
                         "\\bpaper\\b",
                         "reusable"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bsnack\\b"
+                         ]
     },
     {
         "id":  "plastic-wrap",
@@ -5151,7 +5308,9 @@
         "include":  [
                         "plastic\\s+wrap",
                         "cling\\s+wrap",
-                        "saran"
+                        "saran",
+                        "cling\\s*\u0027?n\u0027?\\s*seal",
+                        "food\\s+wrap"
                     ],
         "exclude":  [
                         "\\bfoil\\b"
@@ -5238,7 +5397,9 @@
         "include":  [
                         "disinfectant\\s+spray",
                         "lysol\\s+spray",
-                        "disinfecting\\s+spray"
+                        "disinfecting\\s+spray",
+                        "disinfectant\\b.{0,45}spray",
+                        "antibacterial\\s+spray"
                     ],
         "exclude":  [
                         "\\bwipes\\b"
@@ -5268,7 +5429,7 @@
         "id":  "batteries",
         "label":  "Batteries (AA)",
         "unit":  "each",
-        "band_min":  0.3,
+        "band_min":  0.15,
         "band_max":  2,
         "include":  [
                         "aa\\s+batteries",
@@ -5319,13 +5480,16 @@
                         "\\bkids\\b",
                         "\\bdog\\b",
                         "charcoal"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bsoda\\b"
+                         ]
     },
     {
         "id":  "toothbrushes",
         "label":  "Toothbrushes",
         "unit":  "each",
-        "band_min":  0.5,
+        "band_min":  0.25,
         "band_max":  4,
         "include":  [
                         "toothbrush"
@@ -5359,7 +5523,7 @@
         "id":  "shampoo",
         "label":  "Shampoo",
         "unit":  "floz",
-        "band_min":  0.1,
+        "band_min":  0.05,
         "band_max":  1,
         "include":  [
                         "shampoo"
@@ -5378,7 +5542,7 @@
         "id":  "conditioner",
         "label":  "Hair Conditioner",
         "unit":  "floz",
-        "band_min":  0.1,
+        "band_min":  0.05,
         "band_max":  1,
         "include":  [
                         "\\bconditioner\\b"
@@ -5404,7 +5568,10 @@
         "exclude":  [
                         "\\bbaby\\b",
                         "\\bkids\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bwater\\b"
+                         ]
     },
     {
         "id":  "bar-soap",
@@ -5446,7 +5613,7 @@
         "id":  "razors",
         "label":  "Razors (disposable)",
         "unit":  "each",
-        "band_min":  0.3,
+        "band_min":  0.12,
         "band_max":  4,
         "include":  [
                         "razors?"
@@ -5477,7 +5644,9 @@
         "band_min":  0.15,
         "band_max":  1.2,
         "include":  [
-                        "\\blotion\\b"
+                        "\\blotion\\b",
+                        "skin\\s+moisturizer",
+                        "healing\\b.{0,30}moisturizer"
                     ],
         "exclude":  [
                         "sunscreen",
@@ -5542,7 +5711,9 @@
         "band_max":  0.6,
         "include":  [
                         "(?:maxi|feminine|overnight)\\s+pads?",
-                        "always\\s+pads?"
+                        "always\\s+pads?",
+                        "always\\b.{0,25}pads?",
+                        "maxi\\b.{0,15}pads?"
                     ],
         "exclude":  [
                         "pupp",
@@ -5595,7 +5766,10 @@
                     ],
         "exclude":  [
                         "\\bwarmer\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bwater\\b"
+                         ]
     },
     {
         "id":  "baby-formula",
@@ -5621,7 +5795,11 @@
         "include":  [
                         "baby\\s+food",
                         "gerber\\b",
-                        "stage\\s+[12]\\b"
+                        "stage\\s+[12]\\b",
+                        "baby\\b.{0,25}pouches",
+                        "organics\\b.{0,35}pouches",
+                        "happy\\s*baby",
+                        "beech-?nut"
                     ],
         "exclude":  [
                         "\\bdog\\b",
@@ -5645,7 +5823,10 @@
                         "treats",
                         "\\btopper\\b",
                         "puppy\\s+pads"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
+                         ]
     },
     {
         "id":  "cat-food",
@@ -5661,7 +5842,10 @@
                         "\\bcans?\\b",
                         "treats",
                         "litter"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
+                         ]
     },
     {
         "id":  "cat-litter",
@@ -5678,7 +5862,10 @@
                         "\\bmat\\b",
                         "deodorizer",
                         "\\bscoop\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bsoda\\b"
+                         ]
     },
     {
         "id":  "dog-treats",

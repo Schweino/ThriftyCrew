@@ -51,8 +51,12 @@ foreach ($f in $In) {
     # canonical-unit fixups so the engine can price the item in the commodity's unit
     $cu = if ($unitMap.ContainsKey($id)) { $unitMap[$id] } else { '' }
     if ($cu -eq 'each') {
-      # a loaf / avocado / ear / whole melon = one each; the current price IS the per-each price
-      $sz = 'each'; if ($adp -notmatch '^\$[0-9.]+$') { $adp = '$' + $price }
+      # a loaf / avocado / ear / whole melon = one each; the current price IS the per-each price.
+      # BUT a counted pack ("12 ct" buns/popsicles/tampons) must KEEP its count so the engine divides
+      # to a true per-item price - force-writing 'each' here made $3.99/12ct read as $3.99 PER ITEM.
+      if ($size -match '\d+\s*ct\b') { $sz = $size }
+      else { $sz = 'each' }
+      if ($adp -notmatch '^\$[0-9.]+$') { $adp = '$' + $price }
     } elseif ($cu -eq 'gallon') { $sz = 'gallon' }
       elseif ($cu -eq 'dozen') {
         $ct = [regex]::Match($size, '([\d.]+)\s*ct')

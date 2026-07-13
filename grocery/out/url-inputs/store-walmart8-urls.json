@@ -1,0 +1,1409 @@
+﻿[
+    {
+        "id":  "pears",
+        "url":  "https://www.walmart.com/ip/Fresh-Pears-Bartlett-Bulk-Each/12852163028",
+        "price":  "2.48",
+        "size":  "lb",
+        "name":  "Fresh Pears Bartlett Bulk"
+    },
+    {
+        "id":  "mangoes",
+        "url":  "https://www.walmart.com/ip/Fresh-Mangoes-Each-Sweet/994998279",
+        "price":  "0.75",
+        "size":  "each",
+        "name":  "Fresh Red Mango"
+    },
+    {
+        "id":  "kiwi",
+        "url":  "https://www.walmart.com/ip/Kiwi-Clamshell-1lb/13508117005",
+        "price":  "2.62",
+        "size":  "16 oz",
+        "name":  "Fresh Kiwi Package"
+    },
+    {
+        "id":  "cantaloupe",
+        "url":  "https://www.walmart.com/ip/Cantaloupe-each/44390974",
+        "price":  "2.69",
+        "size":  "each",
+        "name":  "Fresh Cantaloupe"
+    },
+    {
+        "id":  "honeydew",
+        "url":  "https://www.walmart.com/ip/Fresh-Honeydew-Melon-Each/44391113",
+        "price":  "4.46",
+        "size":  "each",
+        "name":  "Fresh Honeydew Melon"
+    },
+    {
+        "id":  "pineapple",
+        "url":  "https://www.walmart.com/ip/Fresh-Pineapple-Each/44391200",
+        "price":  "1.98",
+        "size":  "each",
+        "name":  "Fresh Pineapple"
+    },
+    {
+        "id":  "raspberries",
+        "url":  "https://www.walmart.com/ip/Fresh-Raspberries-6-oz-Container/44391666",
+        "price":  "2.97",
+        "size":  "6 oz",
+        "name":  "Fresh Raspberries"
+    },
+    {
+        "id":  "blackberries",
+        "url":  "https://www.walmart.com/ip/Fresh-Blackberries-6-oz-Container/47314798",
+        "price":  "2.57",
+        "size":  "6 oz",
+        "name":  "Fresh Blackberries"
+    },
+    {
+        "id":  "cherries",
+        "url":  "https://www.walmart.com/ip/Fresh-Red-Cherries-2-25-lb-Bag/46491694",
+        "price":  "2.50",
+        "size":  "lb",
+        "name":  "Fresh Red Cherries"
+    },
+    {
+        "id":  "plums",
+        "url":  "https://www.walmart.com/ip/Fresh-Plums-2-lb-Bag/153466616",
+        "price":  "2.74",
+        "size":  "lb",
+        "name":  "Fresh Plums"
+    },
+    {
+        "id":  "grapefruit",
+        "url":  "https://www.walmart.com/ip/Fresh-Red-Grapefruit-Each/51259387",
+        "price":  "1.36",
+        "size":  "each",
+        "name":  "Fresh Grapefruit"
+    },
+    {
+        "id":  "clementines",
+        "url":  "https://www.walmart.com/ip/Fresh-Clementines-5-lb-Bag/44390951",
+        "price":  "1.59",
+        "size":  "lb",
+        "name":  "Fresh Mandarin Oranges"
+    },
+    {
+        "id":  "zucchini",
+        "url":  "https://www.walmart.com/ip/Fresh-Zucchini-Squash-Each/44390947",
+        "price":  "1.52",
+        "size":  "lb",
+        "name":  "Fresh Zucchini"
+    },
+    {
+        "id":  "cauliflower",
+        "url":  "https://www.walmart.com/ip/Fresh-Cauliflower-Each/10402652",
+        "price":  "3.97",
+        "size":  "each",
+        "name":  "Fresh Whole White Cauliflower"
+    },
+    {
+        "id":  "asparagus",
+        "url":  "https://www.walmart.com/ip/Marketside-Fresh-Asparagus-Spears-10-oz/44391242",
+        "price":  "3.97",
+        "size":  "10 oz",
+        "name":  "Marketside Fresh Asparagus Spears"
+    },
+    {
+        "id":  "brussels-sprouts",
+        "url":  "https://www.walmart.com/ip/Fresh-Brussels-Sprouts-1-lb-Bag/51259385",
+        "price":  "3.17",
+        "size":  "16 oz",
+        "name":  "Fresh Whole Brussels Sprouts"
+    },
+    {
+        "id":  "cabbage",
+        "url":  "https://www.walmart.com/ip/Fresh-Green-Cabbage-Each/44391042",
+        "price":  "0.85",
+        "size":  "lb",
+        "name":  "Fresh Green Cabbage"
+    },
+    {
+        "id":  "kale",
+        "url":  "https://www.walmart.com/ip/Fresh-Green-Kale-Bunch-Each/40347953",
+        "price":  "1.48",
+        "size":  "each",
+        "name":  "Fresh Kale Greens Bunch"
+    },
+    {
+        "id":  "green-onions",
+        "url":  "https://www.walmart.com/ip/Fresh-Green-Onions-Bunch-Each/51259361",
+        "price":  "1.07",
+        "size":  "each",
+        "name":  "Fresh Whole Green Onion Bunch"
+    },
+    {
+        "id":  "jalapenos",
+        "url":  "https://www.walmart.com/ip/Fresh-Jalapeno-Pepper-Approx-3-5-per-0-25-Pound/44391018",
+        "price":  "1.76",
+        "size":  "lb",
+        "name":  "Fresh Jalapenos"
+    },
+    {
+        "id":  "fresh-ginger",
+        "url":  "https://www.walmart.com/ip/Fresh-Ginger-Root-Each/44391005",
+        "price":  "3.97",
+        "size":  "lb",
+        "name":  "Fresh Ginger Root"
+    },
+    {
+        "id":  "radishes",
+        "url":  "https://www.walmart.com/ip/Fresh-Bagged-Radish-Each/42353640",
+        "price":  "1.94",
+        "size":  "6 oz",
+        "name":  "Fresh Bagged Whole Red Radish"
+    },
+    {
+        "id":  "red-potatoes",
+        "url":  "https://www.walmart.com/ip/Red-Potatoes-Whole-Fresh-5-lb-Bag/10449950",
+        "price":  "1.34",
+        "size":  "lb",
+        "name":  "Fresh Red Potatoes"
+    },
+    {
+        "id":  "fresh-green-beans",
+        "url":  "https://www.walmart.com/ip/Fresh-Green-Beans/44391023",
+        "price":  "1.78",
+        "size":  "lb",
+        "name":  "Fresh Green Beans"
+    },
+    {
+        "id":  "ribeye-steak",
+        "url":  "https://www.walmart.com/ip/Ribeye-Steak-Choice-Angus-Beef-1-per-Package-Fresh-0-9-1-6-lb/5001801215",
+        "price":  "14.87",
+        "size":  "lb",
+        "name":  "Ribeye Steak Choice Angus Beef"
+    },
+    {
+        "id":  "chuck-roast",
+        "url":  "https://www.walmart.com/ip/Chuck-Roast-Choice-Angus-Beef-Fresh-1-6-2-85-lb/8386854802",
+        "price":  "7.97",
+        "size":  "lb",
+        "name":  "Chuck Roast Choice Angus Beef"
+    },
+    {
+        "id":  "pork-tenderloin",
+        "url":  "https://www.walmart.com/ip/Prairie-Fresh-Natural-Fresh-Pork-Tenderloin-2-Pieces-1-75-3-0-lb-23g-of-Protein-per-4oz-Serving/131070657",
+        "price":  "3.97",
+        "size":  "lb",
+        "name":  "Prairie Fresh Natural Pork Tenderloin"
+    },
+    {
+        "id":  "baby-back-ribs",
+        "url":  "https://www.walmart.com/ip/Prairie-Fresh-Natural-Fresh-Pork-Back-Ribs-Bone-in-2-4-3-8-lb-19g-of-Protein-per-4-oz-Serving/465183919",
+        "price":  "3.38",
+        "size":  "lb",
+        "name":  "Prairie Fresh Pork Back Ribs Bone-In"
+    },
+    {
+        "id":  "ground-pork",
+        "url":  "https://www.walmart.com/ip/Tyson-Ground-Pork-85-Lean-15-Fat-All-Natural-Fresh-Meat-1-5-lb-Tray/688797857",
+        "price":  "3.41",
+        "size":  "lb",
+        "name":  "Tyson All Natural 85% Lean Ground Pork"
+    },
+    {
+        "id":  "italian-sausage",
+        "url":  "https://www.walmart.com/ip/Marketside-Mild-Italian-Sausage-5-Links-1-lb-3-oz-Fresh/198361163",
+        "price":  "2.97",
+        "size":  "19 oz",
+        "name":  "Marketside Mild Italian Sausage 5 Links"
+    },
+    {
+        "id":  "bratwurst",
+        "url":  "https://www.walmart.com/ip/Marketside-Beer-N-Bratwurst-5-Links-1-lb-3-oz-Fresh/105413616",
+        "price":  "2.97",
+        "size":  "19 oz",
+        "name":  "Marketside Beer \u0027N Bratwurst 5 Links"
+    },
+    {
+        "id":  "kielbasa",
+        "url":  "https://www.walmart.com/ip/Great-Value-Fully-Cooked-Polish-Kielbasa-14-oz/5265533849",
+        "price":  "2.97",
+        "size":  "14 oz",
+        "name":  "Great Value Fully Cooked Polska Kielbasa"
+    },
+    {
+        "id":  "chicken-wings",
+        "url":  "https://www.walmart.com/ip/Tyson-All-Natural-Fresh-Chicken-Wings-Family-Pack-4-25-5-3-lb-Tray/19400230",
+        "price":  "2.64",
+        "size":  "lb",
+        "name":  "Tyson All Natural Fresh Chicken Wings Family Pack"
+    },
+    {
+        "id":  "rotisserie-chicken",
+        "url":  "https://www.walmart.com/ip/Freshness-Guaranteed-Traditional-Rotisserie-Whole-36-oz-19g-of-Protein-per-3oz-serving-Hot/325918992",
+        "price":  "5.97",
+        "size":  "each",
+        "name":  "Freshness Guaranteed Traditional Rotisserie Whole Chicken"
+    },
+    {
+        "id":  "canned-chicken",
+        "url":  "https://www.walmart.com/ip/Great-Value-Chunk-Chicken-Breast-5-Ounce-Can/36267274",
+        "price":  "1.24",
+        "size":  "5 oz",
+        "name":  "Great Value Chunk Chicken Breast"
+    },
+    {
+        "id":  "canned-salmon",
+        "url":  "https://www.walmart.com/ip/Great-Value-Alaskan-Pink-Salmon-14-75-oz/10534321",
+        "price":  "3.46",
+        "size":  "14.75 oz",
+        "name":  "Great Value Alaskan Pink Salmon"
+    },
+    {
+        "id":  "pepperoni",
+        "url":  "https://www.walmart.com/ip/Great-Value-Original-Pepperoni-Slices-6-oz/40495518",
+        "price":  "2.88",
+        "size":  "6 oz",
+        "name":  "Great Value Original Pepperoni Slices"
+    },
+    {
+        "id":  "turkey-bacon",
+        "url":  "https://www.walmart.com/ip/Butterball-Gluten-Free-Turkey-Bacon-Original-Chopped-and-Formed-Refrigerated-12-oz-Plastic-Pouch/13908160",
+        "price":  "2.28",
+        "size":  "12 oz",
+        "name":  "Butterball Turkey Bacon Original"
+    },
+    {
+        "id":  "heavy-cream",
+        "url":  "https://www.walmart.com/ip/Great-Value-Heavy-Whipping-Cream-16-oz-Carton-Refrigerated/10450339",
+        "price":  "2.96",
+        "size":  "16 fl oz",
+        "name":  "Great Value Heavy Whipping Cream"
+    },
+    {
+        "id":  "half-and-half",
+        "url":  "https://www.walmart.com/ip/Great-Value-Half-Half-32-fl-oz/10450338",
+        "price":  "2.56",
+        "size":  "32 fl oz",
+        "name":  "Great Value Half \u0026 Half"
+    },
+    {
+        "id":  "whipped-cream",
+        "url":  "https://www.walmart.com/ip/Great-Value-Original-Dairy-Whipped-Topping-13-oz/44030496",
+        "price":  "2.56",
+        "size":  "13 oz",
+        "name":  "Great Value Original Dairy Whipped Topping"
+    },
+    {
+        "id":  "almond-milk",
+        "url":  "https://www.walmart.com/ip/bettergoods-Plant-Based-Unsweetened-Original-Almondmilk-Half-Gallon/5326649789",
+        "price":  "2.54",
+        "size":  "64 fl oz",
+        "name":  "bettergoods Unsweetened Original Almond Milk"
+    },
+    {
+        "id":  "oat-milk",
+        "url":  "https://www.walmart.com/ip/Planet-Oat-Original-Oatmilk-Dairy-Free-52-oz-Refrigerated-Cardboard-Carton/157991373",
+        "price":  "3.38",
+        "size":  "52 fl oz",
+        "name":  "Planet Oat Original Oatmilk"
+    },
+    {
+        "id":  "cilantro",
+        "url":  "https://www.walmart.com/ip/Fresh-Cut-Cilantro-0-5-oz-Clamshell/3558983106",
+        "price":  "1.78",
+        "size":  "each",
+        "name":  "Fresh Cut Cilantro Clamshell"
+    },
+    {
+        "id":  "string-cheese",
+        "url":  "https://www.walmart.com/ip/Great-Value-String-Low-Moisture-Part-Skim-Mozzarella-Cheese-12-oz-Bag-12-Sticks/364923224",
+        "price":  "3.28",
+        "size":  "12 oz",
+        "name":  "Great Value Part-Skim Mozzarella String Cheese"
+    },
+    {
+        "id":  "parmesan",
+        "url":  "https://www.walmart.com/ip/Great-Value-Grated-Parmesan-Cheese-8-oz-Bottle/10315402",
+        "price":  "2.98",
+        "size":  "8 oz",
+        "name":  "Great Value Grated Parmesan Cheese"
+    },
+    {
+        "id":  "feta",
+        "url":  "https://www.walmart.com/ip/Frigo-Crumbled-Feta-Cheese-5-oz-Refrigerated-Plastic-Cup/34729673",
+        "price":  "3.28",
+        "size":  "5 oz",
+        "name":  "Frigo Crumbled Feta Cheese"
+    },
+    {
+        "id":  "egg-whites",
+        "url":  "https://www.walmart.com/ip/Great-Value-100-Liquid-Egg-Whites-32-oz/13925176",
+        "price":  "4.87",
+        "size":  "32 fl oz",
+        "name":  "Great Value 100% Liquid Egg Whites"
+    },
+    {
+        "id":  "buttermilk",
+        "url":  "https://www.walmart.com/ip/Kemps-Select-Lowfat-Buttermilk-Quart/951454530",
+        "price":  "1.96",
+        "size":  "32 fl oz",
+        "name":  "Kemps Select 1% Lowfat Buttermilk"
+    },
+    {
+        "id":  "coffee-creamer",
+        "url":  "https://www.walmart.com/ip/Great-Value-French-Vanilla-Coffee-Creamer-32-fl-oz/10315919",
+        "price":  "2.84",
+        "size":  "32 fl oz",
+        "name":  "Great Value French Vanilla Coffee Creamer"
+    },
+    {
+        "id":  "chocolate-milk",
+        "url":  "https://www.walmart.com/ip/Great-Value-1-Low-fat-Chocolate-Milk-Half-Gallon-Plastic-Jug-64-Fl-Oz/44391121",
+        "price":  "1.94",
+        "size":  "64 fl oz",
+        "name":  "Great Value 1% Low-Fat Chocolate Milk"
+    },
+    {
+        "id":  "hot-dog-buns",
+        "url":  "https://www.walmart.com/ip/Great-Value-Hot-Dog-Buns-White-11-oz-8-Count/10450133",
+        "price":  "1.48",
+        "size":  "8 ct",
+        "name":  "Great Value Hot Dog Buns White"
+    },
+    {
+        "id":  "dinner-rolls",
+        "url":  "https://www.walmart.com/ip/Great-Value-Sweet-Hawaiian-Rolls-12-oz-12-Count/19987413404",
+        "price":  "2.68",
+        "size":  "12 ct",
+        "name":  "Great Value Sweet Hawaiian Rolls"
+    },
+    {
+        "id":  "english-muffins",
+        "url":  "https://www.walmart.com/ip/Great-Value-Original-Fork-Split-English-Muffins-12-oz-6-Count/23591312",
+        "price":  "1.62",
+        "size":  "6 ct",
+        "name":  "Great Value Original Fork Split English Muffins"
+    },
+    {
+        "id":  "croissants",
+        "url":  "https://www.walmart.com/ip/Marketside-All-Butter-Whole-Croissants-9-17-oz-4-Count/747667210",
+        "price":  "4.98",
+        "size":  "4 ct",
+        "name":  "Marketside All Butter Whole Croissants"
+    },
+    {
+        "id":  "muffins",
+        "url":  "https://www.walmart.com/ip/Marketside-Blueberry-Muffins-14-oz-4-Count/19758064",
+        "price":  "3.98",
+        "size":  "4 ct",
+        "name":  "Marketside Baked Blueberry Muffins"
+    },
+    {
+        "id":  "donuts",
+        "url":  "https://www.walmart.com/ip/Freshness-Guaranteed-Glazed-Donuts-27-oz-12-Count/982981989",
+        "price":  "6.34",
+        "size":  "12 ct",
+        "name":  "Freshness Guaranteed Glazed Donuts"
+    },
+    {
+        "id":  "french-bread",
+        "url":  "https://www.walmart.com/ip/Freshness-Guaranteed-French-Bakery-Bread-Loaf-14-oz-1-Count/46491756",
+        "price":  "1.25",
+        "size":  "each",
+        "name":  "Freshness Guaranteed French Bakery Bread Loaf"
+    },
+    {
+        "id":  "pita-bread",
+        "url":  "https://www.walmart.com/ip/Toufayan-Bakeries-Whole-Wheat-Pita-Bread-6-Loaves/21803975",
+        "price":  "2.24",
+        "size":  "6 ct",
+        "name":  "Toufayan Whole Wheat Pita Bread"
+    },
+    {
+        "id":  "pancake-mix",
+        "url":  "https://www.walmart.com/ip/Great-Value-Complete-Pancake-Waffle-Mix-Buttermilk-32-oz/10314920",
+        "price":  "1.98",
+        "size":  "32 oz",
+        "name":  "Great Value Complete Pancake \u0026 Waffle Mix Buttermilk"
+    },
+    {
+        "id":  "maple-syrup",
+        "url":  "https://www.walmart.com/ip/Great-Value-Original-Syrup-24-oz/10315480",
+        "price":  "2.36",
+        "size":  "24 fl oz",
+        "name":  "Great Value Original Syrup"
+    },
+    {
+        "id":  "baking-powder",
+        "url":  "https://www.walmart.com/ip/Great-Value-Double-Acting-Baking-Powder-8-1-oz/16627955",
+        "price":  "1.98",
+        "size":  "8.1 oz",
+        "name":  "Great Value Double Acting Baking Powder"
+    },
+    {
+        "id":  "baking-soda",
+        "url":  "https://www.walmart.com/ip/Great-Value-Baking-Soda-1-Lb/10315486",
+        "price":  "0.92",
+        "size":  "16 oz",
+        "name":  "Great Value Baking Soda"
+    },
+    {
+        "id":  "yeast",
+        "url":  "https://www.walmart.com/ip/Great-Value-Active-Dry-Yeast-0-25-oz-3-Count/453472924",
+        "price":  "1.14",
+        "size":  "0.75 oz",
+        "name":  "Great Value Active Dry Yeast 3 Count"
+    },
+    {
+        "id":  "vanilla-extract",
+        "url":  "https://www.walmart.com/ip/Great-Value-Pure-Vanilla-Extract-1-fl-oz-Ambient-Plastic-Container-Liquid/21368021",
+        "price":  "3.24",
+        "size":  "1 fl oz",
+        "name":  "Great Value Pure Vanilla Extract"
+    },
+    {
+        "id":  "chocolate-chips",
+        "url":  "https://www.walmart.com/ip/Great-Value-Semi-Sweet-Chocolate-Baking-Chips-12-oz-Bag/42306176",
+        "price":  "3.86",
+        "size":  "12 oz",
+        "name":  "Great Value Semi-Sweet Chocolate Baking Chips"
+    },
+    {
+        "id":  "cocoa-powder",
+        "url":  "https://www.walmart.com/ip/Great-Value-Baking-Unsweetened-Cocoa-Powder-8-oz-Tub/110307843",
+        "price":  "4.66",
+        "size":  "8 oz",
+        "name":  "Great Value Baking Unsweetened Cocoa Powder"
+    },
+    {
+        "id":  "powdered-sugar",
+        "url":  "https://www.walmart.com/ip/Great-Value-Confectioners-Powdered-Sugar-32-oz/10315011",
+        "price":  "1.98",
+        "size":  "32 oz",
+        "name":  "Great Value Confectioners Powdered Sugar"
+    },
+    {
+        "id":  "cake-mix",
+        "url":  "https://www.walmart.com/ip/Great-Value-Deluxe-Moist-Yellow-Cake-Mix-15-25-oz-Box/18873904712",
+        "price":  "1.12",
+        "size":  "15.25 oz",
+        "name":  "Great Value Deluxe Moist Yellow Cake Mix"
+    },
+    {
+        "id":  "brownie-mix",
+        "url":  "https://www.walmart.com/ip/Duncan-Hines-Chewy-Fudge-Brownie-Mix-18-3-oz/10309845",
+        "price":  "1.78",
+        "size":  "18.3 oz",
+        "name":  "Duncan Hines Chewy Fudge Brownie Mix"
+    },
+    {
+        "id":  "frosting",
+        "url":  "https://www.walmart.com/ip/Great-Value-Vanilla-Frosting-Tub-White-16-oz/151069795",
+        "price":  "1.72",
+        "size":  "16 oz",
+        "name":  "Great Value Vanilla Frosting Tub White"
+    },
+    {
+        "id":  "evaporated-milk",
+        "url":  "https://www.walmart.com/ip/Great-Value-Evaporated-Milk-12-fl-oz-12-Servings/10534163",
+        "price":  "1.00",
+        "size":  "12 oz",
+        "name":  "Great Value Evaporated Milk"
+    },
+    {
+        "id":  "condensed-milk",
+        "url":  "https://www.walmart.com/ip/Great-Value-Sweetened-Condensed-Milk-14-oz/10534165",
+        "price":  "1.97",
+        "size":  "14 oz",
+        "name":  "Great Value Sweetened Condensed Milk"
+    },
+    {
+        "id":  "cooking-spray",
+        "url":  "https://www.walmart.com/ip/Great-Value-Original-Cooking-Spray-8-ounces/10315267",
+        "price":  "2.52",
+        "size":  "8 oz",
+        "name":  "Great Value Original Cooking Spray"
+    },
+    {
+        "id":  "coconut-oil",
+        "url":  "https://www.walmart.com/ip/LouAna-100-Pure-Coconut-Oil-14-fl-oz/33282297",
+        "price":  "5.18",
+        "size":  "14 fl oz",
+        "name":  "LouAna 100% Pure Coconut Oil"
+    },
+    {
+        "id":  "apple-cider-vinegar",
+        "url":  "https://www.walmart.com/ip/Great-Value-Apple-Cider-Vinegar-32-fl-oz/10451000",
+        "price":  "2.36",
+        "size":  "32 fl oz",
+        "name":  "Great Value Apple Cider Vinegar"
+    },
+    {
+        "id":  "worcestershire",
+        "url":  "https://www.walmart.com/ip/Great-Value-Worcestershire-Sauce-10-fl-oz-Regular/12157940",
+        "price":  "1.00",
+        "size":  "10 fl oz",
+        "name":  "Great Value Worcestershire Sauce"
+    },
+    {
+        "id":  "hot-sauce",
+        "url":  "https://www.walmart.com/ip/The-Original-Louisiana-Brand-Hot-Sauce-Original-6-fl-oz-Bottle/53952984",
+        "price":  "1.67",
+        "size":  "6 fl oz",
+        "name":  "The Original Louisiana Brand Hot Sauce"
+    },
+    {
+        "id":  "bbq-sauce",
+        "url":  "https://www.walmart.com/ip/Sweet-Baby-Ray-s-Original-Barbecue-Sauce-18-oz/10294615",
+        "price":  "2.37",
+        "size":  "18 oz",
+        "name":  "Sweet Baby Ray\u0027s Original Barbecue Sauce"
+    },
+    {
+        "id":  "italian-dressing",
+        "url":  "https://www.walmart.com/ip/Great-Value-Zesty-Italian-Dressing-Marinade-16-fl-oz/10452366",
+        "price":  "2.32",
+        "size":  "16 fl oz",
+        "name":  "Great Value Zesty Italian Dressing \u0026 Marinade"
+    },
+    {
+        "id":  "pickles",
+        "url":  "https://www.walmart.com/ip/Great-Value-Kosher-Spears-Dill-Pickle-Fresh-Pack-24-fl-oz-Jar/548915008",
+        "price":  "2.64",
+        "size":  "24 fl oz",
+        "name":  "Great Value Kosher Spears Dill Pickle Fresh Pack"
+    },
+    {
+        "id":  "relish",
+        "url":  "https://www.walmart.com/ip/Vlasic-Kosher-Sweet-Pickle-Relish-10-fl-oz/10308960",
+        "price":  "1.72",
+        "size":  "10 fl oz",
+        "name":  "Vlasic Sweet Relish"
+    },
+    {
+        "id":  "refried-beans",
+        "url":  "https://www.walmart.com/ip/Great-Value-Traditional-Refried-Beans-16-oz/10534037",
+        "price":  "1.00",
+        "size":  "16 oz",
+        "name":  "Great Value Traditional Refried Beans"
+    },
+    {
+        "id":  "canned-pinto-beans",
+        "url":  "https://www.walmart.com/ip/Great-Value-Pinto-Beans-15-5-oz-Can/10534043",
+        "price":  "0.86",
+        "size":  "15.5 oz",
+        "name":  "Great Value Pinto Beans"
+    },
+    {
+        "id":  "baked-beans",
+        "url":  "https://www.walmart.com/ip/Great-Value-Brown-Sugar-Hickory-Baked-Beans-28-oz-Can/417764146",
+        "price":  "2.27",
+        "size":  "28 oz",
+        "name":  "Great Value Brown Sugar Hickory Baked Beans"
+    },
+    {
+        "id":  "canned-chili",
+        "url":  "https://www.walmart.com/ip/WOLF-BRAND-Chili-With-Beans-15-oz-Can/10294770",
+        "price":  "2.28",
+        "size":  "15 oz",
+        "name":  "Wolf Brand Chili With Beans"
+    },
+    {
+        "id":  "canned-green-beans",
+        "url":  "https://www.walmart.com/ip/Great-Value-Cut-Green-Beans-Canned-Green-Beans-14-5-oz-Can/10448318",
+        "price":  "0.78",
+        "size":  "14.5 oz",
+        "name":  "Great Value Cut Green Beans"
+    },
+    {
+        "id":  "canned-peas",
+        "url":  "https://www.walmart.com/ip/GREAT-VALUE-SWEET-PEAS-15OZ/10451509",
+        "price":  "0.78",
+        "size":  "15 oz",
+        "name":  "Great Value Sweet Peas"
+    },
+    {
+        "id":  "canned-mushrooms",
+        "url":  "https://www.walmart.com/ip/Great-Value-White-Mushrooms-Pieces-and-Stems-6-5-oz/55278031",
+        "price":  "1.47",
+        "size":  "6.5 oz",
+        "name":  "Great Value White Mushrooms Pieces and Stems"
+    },
+    {
+        "id":  "chicken-noodle-soup",
+        "url":  "https://www.walmart.com/ip/Campbell-s-Condensed-Chicken-Noodle-Soup-10-75-oz-Can/10321674",
+        "price":  "1.28",
+        "size":  "10.75 oz",
+        "name":  "Campbell\u0027s Condensed Chicken Noodle Soup"
+    },
+    {
+        "id":  "tomato-soup",
+        "url":  "https://www.walmart.com/ip/Great-Value-Tomato-Condensed-Soup-10-75-oz/10314957",
+        "price":  "0.74",
+        "size":  "10.75 oz",
+        "name":  "Great Value Tomato Condensed Soup"
+    },
+    {
+        "id":  "cream-of-mushroom-soup",
+        "url":  "https://www.walmart.com/ip/Great-Value-Cream-of-Mushroom-Condensed-Soup-10-5-oz-Can/10314960",
+        "price":  "0.74",
+        "size":  "10.5 oz",
+        "name":  "Great Value Cream of Mushroom Condensed Soup"
+    },
+    {
+        "id":  "cream-of-chicken-soup",
+        "url":  "https://www.walmart.com/ip/Great-Value-Cream-Of-Chicken-Condensed-Soup-10-5-oz/10314959",
+        "price":  "0.74",
+        "size":  "10.5 oz",
+        "name":  "Great Value Cream of Chicken Condensed Soup"
+    },
+    {
+        "id":  "instant-mashed-potatoes",
+        "url":  "https://www.walmart.com/ip/Idahoan-Buttery-Homestyle-Mashed-Potatoes-4-oz/10312430",
+        "price":  "1.48",
+        "size":  "4 oz",
+        "name":  "Idahoan Buttery Homestyle Mashed Potatoes"
+    },
+    {
+        "id":  "stuffing-mix",
+        "url":  "https://www.walmart.com/ip/Great-Value-Chicken-Flavored-Stuffing-Mix-6-oz/10315304",
+        "price":  "0.97",
+        "size":  "6 oz",
+        "name":  "Great Value Chicken-Flavored Stuffing Mix"
+    },
+    {
+        "id":  "brown-rice",
+        "url":  "https://www.walmart.com/ip/Great-Value-Brown-Rice-Whole-Grain-16-oz/13045034",
+        "price":  "0.88",
+        "size":  "16 oz",
+        "name":  "Great Value Brown Rice Whole Grain"
+    },
+    {
+        "id":  "egg-noodles",
+        "url":  "https://www.walmart.com/ip/Great-Value-Wide-Egg-Noodles-16-oz/10534093",
+        "price":  "1.74",
+        "size":  "16 oz",
+        "name":  "Great Value Wide Egg Noodles"
+    },
+    {
+        "id":  "lasagna-noodles",
+        "url":  "https://www.walmart.com/ip/Great-Value-Lasagna-Pasta-16-oz/10534110",
+        "price":  "1.84",
+        "size":  "16 oz",
+        "name":  "Great Value Lasagna Pasta"
+    },
+    {
+        "id":  "alfredo-sauce",
+        "url":  "https://www.walmart.com/ip/Great-Value-Alfredo-Pasta-Sauce-16-Oz/13033144",
+        "price":  "1.92",
+        "size":  "16 oz",
+        "name":  "Great Value Alfredo Pasta Sauce"
+    },
+    {
+        "id":  "pizza-sauce",
+        "url":  "https://www.walmart.com/ip/Great-Value-Pizza-Sauce-14-oz/12444468",
+        "price":  "1.22",
+        "size":  "14 oz",
+        "name":  "Great Value Pizza Sauce"
+    },
+    {
+        "id":  "queso",
+        "url":  "https://www.walmart.com/ip/Great-Value-Salsa-Con-Queso-Cheese-Dip-15-oz/145125267",
+        "price":  "2.72",
+        "size":  "15 oz",
+        "name":  "Great Value Salsa Con Queso Cheese Dip"
+    },
+    {
+        "id":  "hummus",
+        "url":  "https://www.walmart.com/ip/Marketside-Gluten-Free-Classic-Hummus-10-oz-Ready-to-Eat-Resealable-Cup-2-Tbsp-28g-Servings/128642379",
+        "price":  "2.87",
+        "size":  "10 oz",
+        "name":  "Marketside Classic Hummus"
+    },
+    {
+        "id":  "marshmallows",
+        "url":  "https://www.walmart.com/ip/Jet-Puffed-Marshmallows-12-oz-Bag/826143995",
+        "price":  "2.17",
+        "size":  "12 oz",
+        "name":  "Jet-Puffed Marshmallows"
+    },
+    {
+        "id":  "graham-crackers",
+        "url":  "https://www.walmart.com/ip/Honey-Maid-Honey-Graham-Crackers-14-4-oz/10292699",
+        "price":  "3.97",
+        "size":  "14.4 oz",
+        "name":  "Honey Maid Honey Graham Crackers"
+    },
+    {
+        "id":  "beef-broth",
+        "url":  "https://www.walmart.com/ip/Great-Value-Beef-Broth-32-oz-Carton-Shelf-Stable-Ambient-Gluten-Free/10899014",
+        "price":  "1.50",
+        "size":  "32 fl oz",
+        "name":  "Great Value Beef Broth"
+    },
+    {
+        "id":  "canned-peaches",
+        "url":  "https://www.walmart.com/ip/Great-Value-Sliced-Yellow-Cling-Peaches-in-Juice-14-75-oz-Can/2284085015",
+        "price":  "1.78",
+        "size":  "14.75 oz",
+        "name":  "Great Value Sliced Yellow Cling Peaches in Juice"
+    },
+    {
+        "id":  "canned-pineapple",
+        "url":  "https://www.walmart.com/ip/Great-Value-Canned-Pineapple-Chunks-in-Pineapple-Juice-20-oz/10315437",
+        "price":  "1.68",
+        "size":  "20 oz",
+        "name":  "Great Value Canned Pineapple Chunks in Pineapple Juice"
+    },
+    {
+        "id":  "applesauce",
+        "url":  "https://www.walmart.com/ip/Great-Value-Unsweetened-Applesauce-4-oz-6-Count/14562670",
+        "price":  "1.97",
+        "size":  "24 oz",
+        "name":  "Great Value Unsweetened Applesauce Cups 6 Count"
+    },
+    {
+        "id":  "peanuts",
+        "url":  "https://www.walmart.com/ip/Great-Value-Dry-Roasted-Peanuts-16-oz/10448531",
+        "price":  "2.58",
+        "size":  "16 oz",
+        "name":  "Great Value Dry Roasted Peanuts"
+    },
+    {
+        "id":  "almonds",
+        "url":  "https://www.walmart.com/ip/Great-Value-Whole-Natural-Almonds-14-oz/5295229969",
+        "price":  "5.97",
+        "size":  "14 oz",
+        "name":  "Great Value Whole Natural Almonds"
+    },
+    {
+        "id":  "raisins",
+        "url":  "https://www.walmart.com/ip/Great-Value-Sun-Dried-Raisins-Carton-12-oz-340g/20925296",
+        "price":  "2.86",
+        "size":  "12 oz",
+        "name":  "Great Value Sun-Dried Raisins"
+    },
+    {
+        "id":  "mixed-nuts",
+        "url":  "https://www.walmart.com/ip/Great-Value-Roasted-Lightly-Salted-Mixed-Nuts-14-75-oz/271454657",
+        "price":  "5.42",
+        "size":  "14.75 oz",
+        "name":  "Great Value Roasted \u0026 Lightly Salted Mixed Nuts"
+    },
+    {
+        "id":  "tilapia",
+        "url":  "https://www.walmart.com/ip/Marketside-Farm-Raised-Skinless-Tilapia-Fillets-Fresh-Never-Frozen-0-8-1-25-lb/155158056",
+        "price":  "7.98",
+        "size":  "lb",
+        "name":  "Marketside Farm Raised Skinless Tilapia Fillets"
+    },
+    {
+        "id":  "cod",
+        "url":  "https://www.walmart.com/ip/Marketside-Skinless-Wild-Caught-Cod-Fillet-0-70-1-4-lb/142257133",
+        "price":  "13.97",
+        "size":  "lb",
+        "name":  "Marketside Skinless Wild Caught Cod Fillet"
+    },
+    {
+        "id":  "turkey-lunchmeat",
+        "url":  "https://www.walmart.com/ip/Great-Value-Oven-Roasted-Turkey-Breast-Lunchmeat-16-oz-Plastic-Tub/47394316",
+        "price":  "5.97",
+        "size":  "16 oz",
+        "name":  "Great Value Oven Roasted Turkey Breast Lunchmeat"
+    },
+    {
+        "id":  "crackers",
+        "url":  "https://www.walmart.com/ip/Great-Value-Saltine-Crackers-16-oz-4-Count/10315375",
+        "price":  "1.88",
+        "size":  "16 oz",
+        "name":  "Great Value Saltine Crackers"
+    },
+    {
+        "id":  "cheese-crackers",
+        "url":  "https://www.walmart.com/ip/GREAT-VALUE-21-OZ-CHEESE-CRACKERS/382433624",
+        "price":  "4.26",
+        "size":  "21 oz",
+        "name":  "Great Value Cheese Crackers"
+    },
+    {
+        "id":  "pretzels",
+        "url":  "https://www.walmart.com/ip/Great-Value-Mini-Pretzel-Twists-16-oz-Bag/890488670",
+        "price":  "2.44",
+        "size":  "16 oz",
+        "name":  "Great Value Mini Pretzel Twists"
+    },
+    {
+        "id":  "microwave-popcorn",
+        "url":  "https://www.walmart.com/ip/Great-Value-Extra-Butter-Flavored-Microwave-Popcorn-2-55-oz-12-Count/812120929",
+        "price":  "4.97",
+        "size":  "12 ct",
+        "name":  "Great Value Extra Butter Flavored Microwave Popcorn"
+    },
+    {
+        "id":  "cookies",
+        "url":  "https://www.walmart.com/ip/CHIPS-AHOY-Original-Chocolate-Chip-Cookies-13-oz/17176252",
+        "price":  "3.87",
+        "size":  "13 oz",
+        "name":  "Chips Ahoy Original Chocolate Chip Cookies"
+    },
+    {
+        "id":  "sandwich-cookies",
+        "url":  "https://www.walmart.com/ip/Great-Value-Assorted-Flavor-Sandwich-Cookies-25-oz/536930984",
+        "price":  "2.78",
+        "size":  "25 oz",
+        "name":  "Great Value Assorted Flavor Sandwich Cookies"
+    },
+    {
+        "id":  "granola-bars",
+        "url":  "https://www.walmart.com/ip/Great-Value-Chewy-Granola-Bars-Variety-Pack-Family-Pack-0-84-oz-24-Count/39127386",
+        "price":  "4.42",
+        "size":  "24 ct",
+        "name":  "Great Value Chewy Granola Bars Variety Pack"
+    },
+    {
+        "id":  "protein-bars",
+        "url":  "https://www.walmart.com/ip/Great-Value-Peanut-Butter-Dark-Chocolate-Protein-Bars-21-1-oz-15-Count/509480237",
+        "price":  "7.92",
+        "size":  "15 ct",
+        "name":  "Great Value Peanut Butter and Dark Chocolate Protein Bars"
+    },
+    {
+        "id":  "fruit-snacks",
+        "url":  "https://www.walmart.com/ip/Mott-s-Fruit-Flavored-Snacks-Easter-Basket-Stuffers-Family-Pack-40-Ct-32-oz/45733406",
+        "price":  "6.97",
+        "size":  "40 ct",
+        "name":  "Mott\u0027s Fruit Flavored Snacks Assorted Fruit Family Pack"
+    },
+    {
+        "id":  "toaster-pastries",
+        "url":  "https://www.walmart.com/ip/Great-Value-Frosted-Cherry-Toaster-Pastries-20-3oz-12-Count/2779085361",
+        "price":  "2.26",
+        "size":  "12 ct",
+        "name":  "Great Value Frosted Cherry Toaster Pastries"
+    },
+    {
+        "id":  "granola",
+        "url":  "https://www.walmart.com/ip/Great-Value-Oats-Honey-Granola-11-oz/202344615",
+        "price":  "2.67",
+        "size":  "11 oz",
+        "name":  "Great Value Oats \u0026 Honey Granola"
+    },
+    {
+        "id":  "rice-cakes",
+        "url":  "https://www.walmart.com/ip/Quaker-Rice-Cakes-Whole-Grain-Chocolate-Gluten-Free-7-23-oz/13448658",
+        "price":  "3.48",
+        "size":  "7.23 oz",
+        "name":  "Quaker Rice Cakes Whole Grain Chocolate"
+    },
+    {
+        "id":  "beef-jerky",
+        "url":  "https://www.walmart.com/ip/Great-Value-Original-Beef-Jerky-Value-Pack-10-oz/258089437",
+        "price":  "11.52",
+        "size":  "10 oz",
+        "name":  "Great Value Original Beef Jerky Value Pack"
+    },
+    {
+        "id":  "fruit-cups",
+        "url":  "https://www.walmart.com/ip/Great-Value-Diced-Peaches-Mandarin-Segments-Cherry-Mixed-Fruits-Variety-Pack-4-oz-12-Pack/5329046728",
+        "price":  "7.97",
+        "size":  "12 ct",
+        "name":  "Great Value Mixed Fruits Variety Pack Cups"
+    },
+    {
+        "id":  "pudding-cups",
+        "url":  "https://www.walmart.com/ip/Snack-Pack-Chocolate-and-Vanilla-Flavored-Pudding-Cups-Family-Pack-12-Count-Pudding-Cups/21312046",
+        "price":  "3.97",
+        "size":  "12 ct",
+        "name":  "Snack Pack Chocolate and Vanilla Pudding Cups Family Pack"
+    },
+    {
+        "id":  "gelatin",
+        "url":  "https://www.walmart.com/ip/Winky-Brand-Gelatin-3-5-oz-12-Count-Plastic-Cups-Refrigerated-Gluten-Free/17073412009",
+        "price":  "4.64",
+        "size":  "12 ct",
+        "name":  "Winky Brand Gelatin Cups"
+    },
+    {
+        "id":  "apple-juice",
+        "url":  "https://www.walmart.com/ip/Great-Value-No-Added-Sweeteners-100-Apple-Juice-64-fl-oz/16935731",
+        "price":  "2.27",
+        "size":  "64 fl oz",
+        "name":  "Great Value No Added Sweeteners 100% Apple Juice"
+    },
+    {
+        "id":  "grape-juice",
+        "url":  "https://www.walmart.com/ip/Great-Value-100-Concord-Grape-Juice-64-fl-oz/12927454291",
+        "price":  "3.78",
+        "size":  "64 fl oz",
+        "name":  "Great Value 100% Concord Grape Juice"
+    },
+    {
+        "id":  "cranberry-juice",
+        "url":  "https://www.walmart.com/ip/Great-Value-Cranberry-Juice-Cocktail-64-fl-oz/10415097",
+        "price":  "2.97",
+        "size":  "64 fl oz",
+        "name":  "Great Value Cranberry Juice Cocktail"
+    },
+    {
+        "id":  "lemonade",
+        "url":  "https://www.walmart.com/ip/Simply-Non-GMO-All-Natural-Lemonade-Juice-52-fl-oz-Bottle/757977763",
+        "price":  "2.97",
+        "size":  "52 fl oz",
+        "name":  "Simply Lemonade"
+    },
+    {
+        "id":  "fruit-punch",
+        "url":  "https://www.walmart.com/ip/Hawaiian-Punch-Fruit-Juicy-Red-Juice-1-Gal-Bottle/10535476",
+        "price":  "3.22",
+        "size":  "128 fl oz",
+        "name":  "Hawaiian Punch Fruit Juicy Red"
+    },
+    {
+        "id":  "sports-drinks",
+        "url":  "https://www.walmart.com/ip/Gatorade-Thirst-Quencher-Fruit-Punch-Sports-Drinks-12-fl-oz-12-Count-Bottles/10449240",
+        "price":  "6.98",
+        "size":  "12 pk 12 fl oz",
+        "name":  "Gatorade Thirst Quencher Fruit Punch"
+    },
+    {
+        "id":  "energy-drinks",
+        "url":  "https://www.walmart.com/ip/Alani-Grape-Cotton-Candy-12oz/19988967627",
+        "price":  "2.67",
+        "size":  "12 fl oz",
+        "name":  "Alani Nu Sugar Free Energy Drink"
+    },
+    {
+        "id":  "sparkling-water",
+        "url":  "https://www.walmart.com/ip/bubly-Sparkling-Water-Strawberry-Sunset-12-Fl-Oz-8-Count/5207400432",
+        "price":  "3.57",
+        "size":  "8 pk 12 fl oz",
+        "name":  "bubly Strawberry Sunset Sparkling Water"
+    },
+    {
+        "id":  "iced-tea",
+        "url":  "https://www.walmart.com/ip/Great-Value-Sweet-Brewed-Iced-Tea-128-fl-oz-Bottle/10899050",
+        "price":  "3.27",
+        "size":  "128 fl oz",
+        "name":  "Great Value Sweet Brewed Iced Tea"
+    },
+    {
+        "id":  "tea-bags",
+        "url":  "https://www.walmart.com/ip/Great-Value-Black-Tea-Bags-8-oz-100-Count/10315396",
+        "price":  "2.18",
+        "size":  "100 ct",
+        "name":  "Great Value Black Tea Bags"
+    },
+    {
+        "id":  "hot-cocoa",
+        "url":  "https://www.walmart.com/ip/Great-Value-Milk-Chocolate-Hot-Cocoa-Drink-Mix-27-oz-Canister/908275150",
+        "price":  "5.42",
+        "size":  "27 oz",
+        "name":  "Great Value Milk Chocolate Hot Cocoa Drink Mix"
+    },
+    {
+        "id":  "coffee-pods",
+        "url":  "https://www.walmart.com/ip/Great-Value-Donut-Shop-100-Arabica-Medium-Roast-Ground-Coffee-Pods-48-Ct/42124215",
+        "price":  "16.47",
+        "size":  "48 ct",
+        "name":  "Great Value Donut Shop Medium Roast Coffee Pods"
+    },
+    {
+        "id":  "instant-coffee",
+        "url":  "https://www.walmart.com/ip/Great-Value-Classic-Medium-Roast-Instant-Coffee-8-oz/10315303",
+        "price":  "5.77",
+        "size":  "8 oz",
+        "name":  "Great Value Classic Medium Roast Instant Coffee"
+    },
+    {
+        "id":  "frozen-waffles",
+        "url":  "https://www.walmart.com/ip/Eggo-Homestyle-Original-Waffles-Frozen-Breakfast-12-3-oz-10-Count-Regular/10891827",
+        "price":  "2.87",
+        "size":  "10 ct",
+        "name":  "Eggo Homestyle Waffles"
+    },
+    {
+        "id":  "frozen-broccoli",
+        "url":  "https://www.walmart.com/ip/Great-Value-Frozen-Cut-Broccoli-16-oz/13033156",
+        "price":  "0.94",
+        "size":  "16 oz",
+        "name":  "Great Value Frozen Cut Broccoli"
+    },
+    {
+        "id":  "frozen-corn",
+        "url":  "https://www.walmart.com/ip/Great-Value-Frozen-Whole-Kernel-Golden-Corn-16-oz/10315053",
+        "price":  "0.98",
+        "size":  "16 oz",
+        "name":  "Great Value Frozen Whole Kernel Golden Corn"
+    },
+    {
+        "id":  "frozen-peas",
+        "url":  "https://www.walmart.com/ip/Great-Value-Frozen-Sweet-Peas-16-oz-Steamable-Bag/10315048",
+        "price":  "0.98",
+        "size":  "16 oz",
+        "name":  "Great Value Frozen Sweet Peas"
+    },
+    {
+        "id":  "breakfast-sandwiches",
+        "url":  "https://www.walmart.com/ip/Great-Value-Croissant-Sandwiches-Sausage-Egg-and-Cheese-4-4-oz-Size-4-Count-Frozen/20971337",
+        "price":  "5.78",
+        "size":  "4 ct",
+        "name":  "Great Value Croissant Sandwiches Sausage Egg and Cheese"
+    },
+    {
+        "id":  "frozen-burritos",
+        "url":  "https://www.walmart.com/ip/Tina-s-Big-Burrito-Beef-Bean-Packaged-Burrito-9-oz-1-Count/573898069",
+        "price":  "1.00",
+        "size":  "each",
+        "name":  "Tina\u0027s Big Burrito Beef \u0026 Bean"
+    },
+    {
+        "id":  "frozen-meatballs",
+        "url":  "https://www.walmart.com/ip/Great-Value-Fully-Cooked-Homestyle-Meatballs-32-oz-Frozen/14336389",
+        "price":  "8.14",
+        "size":  "32 oz",
+        "name":  "Great Value Fully Cooked Homestyle Meatballs"
+    },
+    {
+        "id":  "frozen-lasagna",
+        "url":  "https://www.walmart.com/ip/Great-Value-Italian-Style-Three-Meat-Lasagna-35-oz-Packaged-Meal-Frozen/901054119",
+        "price":  "7.88",
+        "size":  "35 oz",
+        "name":  "Great Value Italian-Style Three Meat Lasagna"
+    },
+    {
+        "id":  "tater-tots",
+        "url":  "https://www.walmart.com/ip/GV-TATER-TOTS-80-OZ/10534282",
+        "price":  "7.36",
+        "size":  "80 oz",
+        "name":  "Great Value Tater Tots"
+    },
+    {
+        "id":  "corn-dogs",
+        "url":  "https://www.walmart.com/ip/State-Fair-Classic-Corn-Dogs-with-Honey-Sweetened-Batter-16-oz-6-Count-Frozen/17352572",
+        "price":  "4.84",
+        "size":  "6 ct",
+        "name":  "State Fair Classic Corn Dogs"
+    },
+    {
+        "id":  "garlic-bread",
+        "url":  "https://www.walmart.com/ip/Great-Value-Garlic-Texas-Toast-8-Count-11-25-Ounce-Frozen/10416519",
+        "price":  "1.97",
+        "size":  "8 ct",
+        "name":  "Great Value Garlic Texas Toast"
+    },
+    {
+        "id":  "popsicles",
+        "url":  "https://www.walmart.com/ip/FunPops-Freeze-Pops-Variety-Pack-Gluten-Free-2-oz-36-Count-Bag/5144655101",
+        "price":  "1.97",
+        "size":  "36 ct",
+        "name":  "FunPops Freeze Pops Variety Pack"
+    },
+    {
+        "id":  "fish-sticks",
+        "url":  "https://www.walmart.com/ip/Great-Value-Breaded-Fish-Sticks-24-7-oz-44-Count-Frozen/10316632",
+        "price":  "5.44",
+        "size":  "24.7 oz",
+        "name":  "Great Value Breaded Fish Sticks"
+    },
+    {
+        "id":  "frozen-fruit",
+        "url":  "https://www.walmart.com/ip/Great-Value-Frozen-Whole-Berry-Medley-16-oz/10543668",
+        "price":  "3.52",
+        "size":  "16 oz",
+        "name":  "Great Value Frozen Whole Berry Medley"
+    },
+    {
+        "id":  "dryer-sheets",
+        "url":  "https://www.walmart.com/ip/Snuggle-Fabric-Softener-Dryer-Sheets-Blue-Sparkle-40-Count/13908606",
+        "price":  "1.97",
+        "size":  "40 ct",
+        "name":  "Snuggle Blue Sparkle Dryer Sheets"
+    },
+    {
+        "id":  "fabric-softener",
+        "url":  "https://www.walmart.com/ip/Snuggle-39-4oz-1-16L-FSL-Blu-Sprkl-CUF/14611861809",
+        "price":  "4.47",
+        "size":  "39.4 fl oz",
+        "name":  "Snuggle Blue Sparkle Liquid Fabric Softener"
+    },
+    {
+        "id":  "laundry-pods",
+        "url":  "https://www.walmart.com/ip/ARM-HAMMER-Plus-OxiClean-Odor-Blasters-5-in-1-Laundry-Detergent-Power-Paks-Fresh-Burst-42-Ct/319162367",
+        "price":  "8.98",
+        "size":  "42 ct",
+        "name":  "Arm \u0026 Hammer Plus OxiClean Laundry Detergent Power Paks"
+    },
+    {
+        "id":  "stain-remover",
+        "url":  "https://www.walmart.com/ip/Shout-Active-Enzyme-Laundry-Stain-Remover-Prewash-Spray-22-oz/16664823",
+        "price":  "3.48",
+        "size":  "22 fl oz",
+        "name":  "Shout Active Enzyme Laundry Stain Remover Spray"
+    },
+    {
+        "id":  "sponges",
+        "url":  "https://www.walmart.com/ip/Great-Value-Non-Scratch-Scrub-Sponges-4-Count/554742513",
+        "price":  "2.18",
+        "size":  "4 ct",
+        "name":  "Great Value Non-Scratch Scrub Sponges"
+    },
+    {
+        "id":  "paper-plates",
+        "url":  "https://www.walmart.com/ip/Great-Value-Everyday-Disposable-Paper-Plates-8-5-100-Count/885116895",
+        "price":  "5.58",
+        "size":  "100 ct",
+        "name":  "Great Value Disposable Paper Plates 8.5 Inch"
+    },
+    {
+        "id":  "paper-napkins",
+        "url":  "https://www.walmart.com/ip/Great-Value-Disposable-Paper-Napkins-White-500-Count/363821204",
+        "price":  "3.48",
+        "size":  "500 ct",
+        "name":  "Great Value Disposable Paper Napkins White"
+    },
+    {
+        "id":  "sandwich-bags",
+        "url":  "https://www.walmart.com/ip/Great-Value-Double-Zipper-Sandwich-Bags-100-Count/2471694270",
+        "price":  "2.28",
+        "size":  "100 ct",
+        "name":  "Great Value Double Zipper Sandwich Bags"
+    },
+    {
+        "id":  "plastic-wrap",
+        "url":  "https://www.walmart.com/ip/Great-Value-Plastic-Wrap-200-Sq-ft/184907101",
+        "price":  "2.14",
+        "size":  "each",
+        "name":  "Great Value Plastic Wrap 200 Sq Ft"
+    },
+    {
+        "id":  "parchment-paper",
+        "url":  "https://www.walmart.com/ip/Great-Value-Unbleached-Parchment-Paper-Roll-50-Sq-ft/137567989",
+        "price":  "2.96",
+        "size":  "each",
+        "name":  "Great Value Unbleached Parchment Paper 50 Sq Ft"
+    },
+    {
+        "id":  "toilet-bowl-cleaner",
+        "url":  "https://www.walmart.com/ip/Great-Value-Toilet-Bowl-Cleaners-Fresh-Scent-24-Fluid-Ounce/154650870",
+        "price":  "1.92",
+        "size":  "24 fl oz",
+        "name":  "Great Value Toilet Bowl Cleaner Fresh Scent"
+    },
+    {
+        "id":  "glass-cleaner",
+        "url":  "https://www.walmart.com/ip/Great-Value-Glass-Cleaner-32-Fluid-Ounce/410079393",
+        "price":  "1.74",
+        "size":  "32 fl oz",
+        "name":  "Great Value Glass Cleaner"
+    },
+    {
+        "id":  "disinfecting-wipes",
+        "url":  "https://www.walmart.com/ip/Great-Value-Disinfecting-Wipes-Fresh-Scent-75-Count/20670295",
+        "price":  "2.98",
+        "size":  "75 ct",
+        "name":  "Great Value Disinfecting Wipes Fresh Scent"
+    },
+    {
+        "id":  "disinfectant-spray",
+        "url":  "https://www.walmart.com/ip/Great-Value-Disinfecting-Aerosol-Morning-Meadow-19-fl-oz/18484022133",
+        "price":  "4.77",
+        "size":  "19 oz",
+        "name":  "Great Value Disinfectant Spray"
+    },
+    {
+        "id":  "air-freshener",
+        "url":  "https://www.walmart.com/ip/Great-Value-Aerosol-Air-Freshener-Linen-Fresh/5508575075",
+        "price":  "0.97",
+        "size":  "8 oz",
+        "name":  "Great Value Aerosol Air Freshener Linen Fresh"
+    },
+    {
+        "id":  "batteries",
+        "url":  "https://www.walmart.com/ip/Great-Value-AA-Batteries-8-Pack-Double-A-Alkaline-Batteries/14317516644",
+        "price":  "2.97",
+        "size":  "8 ct",
+        "name":  "Great Value Alkaline AA Batteries"
+    },
+    {
+        "id":  "charcoal",
+        "url":  "https://www.walmart.com/ip/Kingsford-Original-Charcoal-Briquettes-BBQ-Charcoal-for-Grilling-16-Pounds/987796704",
+        "price":  "10.92",
+        "size":  "16 lb",
+        "name":  "Kingsford Original Charcoal Briquettes"
+    },
+    {
+        "id":  "toothpaste",
+        "url":  "https://www.walmart.com/ip/Colgate-Baking-Soda-and-Peroxide-Whitening-Toothpaste-Gel-Frosty-Mint-6-oz-Tube/49714958",
+        "price":  "1.97",
+        "size":  "6 oz",
+        "name":  "Colgate Baking Soda and Peroxide Whitening Toothpaste"
+    },
+    {
+        "id":  "toothbrushes",
+        "url":  "https://www.walmart.com/ip/EQ-Manual-Toothbrush-6ct-Soft/15662806819",
+        "price":  "1.00",
+        "size":  "6 ct",
+        "name":  "Equate Manual Toothbrushes Soft"
+    },
+    {
+        "id":  "mouthwash",
+        "url":  "https://www.walmart.com/ip/Equate-Antiseptic-Mouthwash-Blue-Mint-16-9-fl-oz/1427387568",
+        "price":  "1.98",
+        "size":  "16.9 fl oz",
+        "name":  "Equate Antiseptic Mouthwash Blue Mint"
+    },
+    {
+        "id":  "shampoo",
+        "url":  "https://www.walmart.com/ip/SV-SH-ESS-Daily-Clarifying-4p-22-5z/18162050796",
+        "price":  "1.94",
+        "size":  "22.5 fl oz",
+        "name":  "Suave Essentials Daily Clarifying Shampoo"
+    },
+    {
+        "id":  "conditioner",
+        "url":  "https://www.walmart.com/ip/Alberto-VO5-Strawberries-Cream-Moisturizing-Conditioner-for-All-Hair-Types-16-9-fl-oz-Squeeze/3062501243",
+        "price":  "1.26",
+        "size":  "16.9 fl oz",
+        "name":  "Alberto VO5 Strawberries \u0026 Cream Conditioner"
+    },
+    {
+        "id":  "body-wash",
+        "url":  "https://www.walmart.com/ip/Suave-Strawberry-Delight-Uplifting-Body-Wash-with-Glycerin-Vitamin-E-18-oz/8859858453",
+        "price":  "2.97",
+        "size":  "18 fl oz",
+        "name":  "Suave Strawberry Delight Uplifting Body Wash"
+    },
+    {
+        "id":  "bar-soap",
+        "url":  "https://www.walmart.com/ip/Dial-Antibacterial-Deodorant-Bar-Soap-Advanced-Clean-Gold-4-oz-4-Bars/113888326",
+        "price":  "4.97",
+        "size":  "4 ct",
+        "name":  "Dial Gold Antibacterial Deodorant Bar Soap"
+    },
+    {
+        "id":  "deodorant",
+        "url":  "https://www.walmart.com/ip/Suave-Antiperspirant-Deodorant-For-Women-48hr-Protection-Tropical-Paradise-1-2-oz/12791200841",
+        "price":  "1.98",
+        "size":  "1.2 oz",
+        "name":  "Suave 48hr Protection Antiperspirant Deodorant"
+    },
+    {
+        "id":  "razors",
+        "url":  "https://www.walmart.com/ip/Equate-The-Essential-2-Blade-Disposable-Razors-12-Count/569909250",
+        "price":  "1.96",
+        "size":  "12 ct",
+        "name":  "Equate 2-Blade Disposable Razors"
+    },
+    {
+        "id":  "shaving-cream",
+        "url":  "https://www.walmart.com/ip/Barbasol-Original-Thick-Rich-Shaving-Cream-for-Men-10-oz/17619759",
+        "price":  "1.97",
+        "size":  "10 oz",
+        "name":  "Barbasol Original Thick \u0026 Rich Shaving Cream"
+    },
+    {
+        "id":  "lotion",
+        "url":  "https://www.walmart.com/ip/Aveeno-Daily-Moisturizing-Body-Lotion-and-Facial-Moisturizer-for-Face-Body-and-Dry-Skin-18-oz/10818473",
+        "price":  "9.97",
+        "size":  "18 fl oz",
+        "name":  "Aveeno Daily Moisturizing Body Lotion"
+    },
+    {
+        "id":  "hand-sanitizer",
+        "url":  "https://www.walmart.com/ip/Germ-X-Original-Hand-Sanitizer-Gel-62-Ethyl-Alcohol-with-Vitamin-E-Scented-Travel-Size-8-fl-oz/17210302684",
+        "price":  "1.97",
+        "size":  "8 fl oz",
+        "name":  "Germ-X Original Hand Sanitizer Gel"
+    },
+    {
+        "id":  "facial-tissues",
+        "url":  "https://www.walmart.com/ip/Great-Value-Everyday-Soft-Facial-Tissues-1-Flat-Carton-160-Tissues-per-Flat-2-Ply/883374873",
+        "price":  "1.64",
+        "size":  "160 ct",
+        "name":  "Great Value Everyday Soft Facial Tissues"
+    },
+    {
+        "id":  "cotton-swabs",
+        "url":  "https://www.walmart.com/ip/Equate-Paper-Stick-Cotton-Swabs-500-Count/51258973",
+        "price":  "2.18",
+        "size":  "500 ct",
+        "name":  "Equate 100% Pure Cotton Swabs"
+    },
+    {
+        "id":  "feminine-pads",
+        "url":  "https://www.walmart.com/ip/Equate-Maxi-Pads-Super-48-Count/10423559",
+        "price":  "3.98",
+        "size":  "48 ct",
+        "name":  "Equate Maxi Pads Super Absorbency"
+    },
+    {
+        "id":  "tampons",
+        "url":  "https://www.walmart.com/ip/Playtex-Sport-Multi-Pack-Regular-Super-Plastic-Applicator-Unscented-Tampons-48-Ct-Total/162594077",
+        "price":  "9.97",
+        "size":  "48 ct",
+        "name":  "Playtex Sport Tampons Unscented Multi-Pack"
+    },
+    {
+        "id":  "diapers",
+        "url":  "https://www.walmart.com/ip/Parent-s-Choice-Dry-Gentle-Diapers-Size-4-192-Count-Select-for-More-Options/871349337",
+        "price":  "27.38",
+        "size":  "192 ct",
+        "name":  "Parent\u0027s Choice Dry \u0026 Gentle Diapers Size 4"
+    },
+    {
+        "id":  "baby-wipes",
+        "url":  "https://www.walmart.com/ip/Ricitos-de-Oro-Baby-Wipes-Chamomile-Aloe-Vera-Refillable-Baby-Wipes-Moisturize-Clean-Baby-Lightly-Scented-Hypoallergenic-Alcoh",
+        "price":  "3.34",
+        "size":  "240 ct",
+        "name":  "Ricitos de Oro Gentle Baby Wipes 3 Pack"
+    },
+    {
+        "id":  "baby-formula",
+        "url":  "https://www.walmart.com/ip/Enfamil-Powder-Baby-Formula-with-Iron-12-5-oz-Can/16940594",
+        "price":  "20.97",
+        "size":  "12.5 oz",
+        "name":  "Enfamil Infant Powder Baby Formula with Iron"
+    },
+    {
+        "id":  "baby-food",
+        "url":  "https://www.walmart.com/ip/CONV-VARIETY-PACK/13148251222",
+        "price":  "9.67",
+        "size":  "48 oz",
+        "name":  "Parent\u0027s Choice Stage 2 Baby Food Variety Pack 12 Pouches"
+    },
+    {
+        "id":  "dog-food",
+        "url":  "https://www.walmart.com/ip/Ol-Roy-Complete-Nutrition-T-Bone-Bacon-Flavor-Dry-Dog-Food-46-lbs/209292288",
+        "price":  "22.24",
+        "size":  "46 lb",
+        "name":  "Ol\u0027 Roy Complete Nutrition T-Bone and Bacon Dry Dog Food"
+    },
+    {
+        "id":  "cat-food",
+        "url":  "https://www.walmart.com/ip/Purina-Friskies-Seafood-Sensations-Indoor-Dry-Cat-Food-Salmon-Tuna-Shrimp-3-15-lb-Bag/10536157",
+        "price":  "4.72",
+        "size":  "3.15 lb",
+        "name":  "Purina Friskies Seafood Sensations Dry Cat Food"
+    },
+    {
+        "id":  "cat-litter",
+        "url":  "https://www.walmart.com/ip/Special-Kitty-Scoopable-Fresh-Scent-Tight-Clumping-Cat-Litter-20-lbs/42132300",
+        "price":  "7.86",
+        "size":  "20 lb",
+        "name":  "Special Kitty Scoopable Tight Clumping Cat Litter"
+    },
+    {
+        "id":  "dog-treats",
+        "url":  "https://www.walmart.com/ip/Canine-Carry-Outs-Steak-Bites-Beef-Flavor-Dog-Treats-4-5oz-Bag/174315218",
+        "price":  "1.24",
+        "size":  "4.5 oz",
+        "name":  "Canine Carry Outs Steak Bites Beef Flavor Dog Treats"
+    },
+    {
+        "id":  "pork-shoulder",
+        "url":  "https://www.walmart.com/ip/Prairie-Fresh-Natural-Fresh-Pork-Shoulder-Butt-Roast-Bone-in-6-4-10-5-lb-21g-of-Protein-per-4oz-Serving/865961246",
+        "price":  "2.24",
+        "size":  "lb",
+        "name":  "Prairie Fresh Pork Shoulder Butt Roast Bone-In"
+    },
+    {
+        "id":  "hash-browns",
+        "url":  "https://www.walmart.com/ip/Great-Value-Shredded-Hash-Browns-26-oz-Bag-Frozen/10534284",
+        "price":  "3.42",
+        "size":  "26 oz",
+        "name":  "Great Value Shredded Hash Browns"
+    }
+]

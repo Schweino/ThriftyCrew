@@ -1,0 +1,35 @@
+{
+  "store": "aldi",
+  "checked": "2026-07-13",
+  "club": "ALDI OLA 42 - Omaha (postalCode 68137, shopId 43147, in-store mode)",
+  "missing": [
+    {"id": "mangoes", "reason": "no fresh whole mango; only slices/frozen/dried (2 phrasings tried)"},
+    {"id": "cantaloupe", "reason": "No results; related melons carousel only shows watermelon (out of season/stock)"},
+    {"id": "honeydew", "reason": "No results; related melons carousel only shows watermelon"},
+    {"id": "grapefruit", "reason": "No results; citrus related shows no grapefruit"},
+    {"id": "clementines", "reason": "No results for clementines or mandarins (fresh)"},
+    {"id": "kale", "reason": "no fresh kale bunch; only organic chopped (Simply Nature) and salad kits"},
+    {"id": "rotisserie-chicken", "reason": "Aldi has no hot rotisserie chicken; only pulled/deli rotisserie-style meat"},
+    {"id": "buttermilk", "reason": "No results; related shows sour cream/cottage cheese only"},
+    {"id": "pita-bread", "reason": "only pita chips/crackers, no pita bread"},
+    {"id": "donuts", "reason": "no standard glazed donuts; only donut holes and mini donuts (3 phrasings tried)"},
+    {"id": "cocoa-powder", "reason": "no baking cocoa powder (2 phrasings tried)"},
+    {"id": "worcestershire", "reason": "No results (2 phrasings tried)"},
+    {"id": "gelatin", "reason": "no ready gelatin cups; only dry gelatin mix boxes"},
+    {"id": "hot-cocoa", "reason": "No results for hot cocoa/hot chocolate (seasonal item)"},
+    {"id": "glass-cleaner", "reason": "No results; no Windex-type product online"},
+    {"id": "disinfectant-spray", "reason": "No results"},
+    {"id": "charcoal", "reason": "No results (seasonal ALDI Find, not in storefront)"},
+    {"id": "shaving-cream", "reason": "No results"},
+    {"id": "hand-sanitizer", "reason": "No results"},
+    {"id": "feminine-pads", "reason": "No results for maxi/feminine pads"},
+    {"id": "tampons", "reason": "search returns empty response (3 tries)"},
+    {"id": "baby-formula", "reason": "No results for infant/baby formula"}
+  ],
+  "notes": [
+    "coconut-oil and apple-cider-vinegar recorded as Simply Nature Organic - the ONLY variants Aldi sells (flagged; skip-organic rule waived to avoid false 'does not carry')",
+    "brown-rice recorded as Earthly Grains Brown Basmati Rice 2 lb - Aldi's only dry brown rice",
+    "per-lb meat prices derived from package estimate / parWeight (e.g. chuck 19.18/2.4lb = 7.99/lb)",
+    "pears bag weight (3 lb) verified from product-page description"
+  ]
+}

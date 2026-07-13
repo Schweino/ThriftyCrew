@@ -1,0 +1,67 @@
+Baker's (bakersplus.com) Akamai block hit during the staples-300 pricing run on 2026-07-13.
+
+What happened:
+- Homepage warmed OK (store selector: "Pickup at Saddlecreek", 888 S Saddle Creek Rd, Omaha 68106).
+- Worked through the 21 old-debt ids from staples100 (ALL 21 priced this session), then file A.
+- Pacing ~8-12s between searches, homepage re-warm every ~15 searches, plus bonus captures
+  from already-loaded result pages to reduce search count.
+- 44 searches completed this session. On search #45 ("canned chunk chicken breast") -> "Access Denied".
+  Waited 10s, re-warmed homepage (loaded fine), waited 18s more, retried once with a shorter
+  query ("canned chicken breast") -> "Access Denied" again. Two denials in a row -> stopped the whole
+  store per run instructions. Note: same pattern as 2026-07-12 run (~45-50 searches before block;
+  homepage stays accessible, only /search is blocked).
+
+Priced this session and saved to bakers-agent.json (61 ids total):
+- Old debt (21/21 cleared): salt, black-pepper, tortilla-chips, potato-chips, soda, bottled-water,
+  frozen-pizza, ice-cream, frozen-vegetables, frozen-fries, chicken-nuggets, paper-towels,
+  toilet-paper, dish-soap, dishwasher-detergent, trash-bags, aluminum-foil, storage-bags,
+  all-purpose-cleaner, bleach, hand-soap
+- File A fruit (12/12): pears, mangoes, kiwi, cantaloupe, honeydew, pineapple, raspberries,
+  blackberries, cherries, plums, grapefruit, clementines
+- File A veg (13/13): zucchini, cauliflower, asparagus, brussels-sprouts, cabbage, kale,
+  green-onions, jalapenos, cilantro, fresh-ginger, radishes, red-potatoes, fresh-green-beans
+- File A meat (13/18): ribeye-steak, chuck-roast, pork-tenderloin, pork-shoulder, baby-back-ribs,
+  ground-pork, italian-sausage, bratwurst, kielbasa, chicken-wings, rotisserie-chicken, tilapia, cod
+- Bonus: hot-dog-buns (file A bakery), frozen-peas (file C frozen)
+
+NOT searched / blocked before reaching them (160 ids - un-priced, NOT "does not carry"):
+
+File A remainder (24):
+canned-chicken, canned-salmon, pepperoni, turkey-lunchmeat, turkey-bacon,
+heavy-cream, half-and-half, whipped-cream, almond-milk, oat-milk, string-cheese, parmesan,
+feta, egg-whites, buttermilk, coffee-creamer, chocolate-milk,
+dinner-rolls, english-muffins, croissants, muffins, donuts, french-bread, pita-bread
+
+File B (all 52):
+pancake-mix, maple-syrup, baking-powder, baking-soda, yeast, vanilla-extract, chocolate-chips,
+cocoa-powder, powdered-sugar, cake-mix, brownie-mix, frosting, evaporated-milk, condensed-milk,
+cooking-spray, coconut-oil, apple-cider-vinegar, worcestershire, hot-sauce, bbq-sauce,
+italian-dressing, pickles, relish, canned-pinto-beans, refried-beans, baked-beans, canned-chili,
+canned-green-beans, canned-peas, canned-mushrooms, chicken-noodle-soup, tomato-soup,
+cream-of-mushroom-soup, cream-of-chicken-soup, instant-mashed-potatoes, stuffing-mix, brown-rice,
+egg-noodles, lasagna-noodles, alfredo-sauce, pizza-sauce, queso, hummus, marshmallows,
+graham-crackers, beef-broth, canned-peaches, canned-pineapple, applesauce, peanuts, almonds,
+raisins, mixed-nuts
+
+File C (84 - all except frozen-peas):
+crackers, cheese-crackers, pretzels, microwave-popcorn, cookies, sandwich-cookies, granola-bars,
+protein-bars, fruit-snacks, toaster-pastries, granola, rice-cakes, beef-jerky, fruit-cups,
+pudding-cups, gelatin, apple-juice, grape-juice, cranberry-juice, lemonade, fruit-punch,
+sports-drinks, energy-drinks, sparkling-water, iced-tea, tea-bags, hot-cocoa, coffee-pods,
+instant-coffee, frozen-waffles, frozen-broccoli, frozen-corn, breakfast-sandwiches,
+frozen-burritos, frozen-meatballs, frozen-lasagna, hash-browns, tater-tots, corn-dogs,
+fish-sticks, garlic-bread, frozen-fruit, popsicles, dryer-sheets, fabric-softener, laundry-pods,
+stain-remover, sponges, paper-plates, paper-napkins, sandwich-bags, plastic-wrap, parchment-paper,
+toilet-bowl-cleaner, glass-cleaner, disinfecting-wipes, disinfectant-spray, air-freshener,
+batteries, charcoal, toothpaste, toothbrushes, mouthwash, shampoo, conditioner, body-wash,
+bar-soap, deodorant, razors, shaving-cream, lotion, hand-sanitizer, facial-tissues, cotton-swabs,
+feminine-pads, tampons, diapers, baby-wipes, baby-formula, baby-food, dog-food, cat-food,
+cat-litter, dog-treats
+
+Notes:
+- No "does not carry" determinations were made (bakers-agent-missing.json intentionally not created).
+- Block budget observation: two runs in a row died at ~45-50 searches even with slower pacing.
+  For the remaining 160 ids plan ~4 sessions of <=40 searches each with hours between them,
+  or lean harder on bonus-capture (multi-id umbrella terms) to cut search count.
+- Session quirk: only /search?query= gets denied; homepage and (presumably) /p/ product pages
+  still load. A future run could try category browse URLs instead of search.
