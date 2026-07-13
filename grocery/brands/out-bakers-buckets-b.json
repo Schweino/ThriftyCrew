@@ -1,0 +1,19 @@
+{
+  "store": "Baker's", "generated": "2026-07-13",
+  "items": {
+    "mustard":            [{"b":"Store brand","s":1,"per":0.10}],
+    "bbq-sauce":          [{"b":"Store brand","s":1,"per":0.08},{"b":"Kraft","s":0,"per":0.11}],
+    "pasta-sauce":        [{"b":"Ragu","s":0,"per":0.08},{"b":"Store brand","s":1,"per":0.08},{"b":"Classico","s":0,"per":0.12},{"b":"Prego","s":0,"per":0.12},{"b":"Bertolli","s":0,"per":0.16}],
+    "salsa":              [{"b":"Store brand","s":1,"per":0.14},{"b":"Herdez","s":0,"per":0.16},{"b":"Pace","s":0,"per":0.17}],
+    "pickles":            [{"b":"Vlasic","s":0,"per":0.09},{"b":"Mt. Olive","s":0,"per":0.10},{"b":"Store brand","s":1,"per":0.12},{"b":"Claussen","s":0,"per":0.16}],
+    "canned-tuna":        [{"b":"Store brand","s":1,"per":0.19},{"b":"StarKist","s":0,"per":0.21},{"b":"Chicken of the Sea","s":0,"per":0.26},{"b":"Bumble Bee","s":0,"per":0.36},{"b":"Wild Planet","s":0,"per":1.20}],
+    "chicken-noodle-soup":[{"b":"Store brand","s":1,"per":0.08}],
+    "potato-chips":       [{"b":"Store brand","s":1,"per":0.19},{"b":"Ruffles","s":0,"per":0.46},{"b":"Utz","s":0,"per":0.51}],
+    "tortilla-chips":     [{"b":"Store brand","s":1,"per":0.14},{"b":"Santitas","s":0,"per":0.23},{"b":"Mission","s":0,"per":0.27},{"b":"On The Border","s":0,"per":0.29},{"b":"Tostitos","s":0,"per":0.46}],
+    "crackers":           [{"b":"Store brand","s":1,"per":0.14},{"b":"Ritz","s":0,"per":0.28},{"b":"Club","s":0,"per":0.36}],
+    "pasta":              [{"b":"Store brand","s":1,"per":0.08},{"b":"Barilla","s":0,"per":0.11},{"b":"De Cecco","s":0,"per":0.19}],
+    "yogurt":             [{"b":"Store brand","s":1,"per":0.13},{"b":"Chobani","s":0,"per":0.21},{"b":"Oikos","s":0,"per":0.22},{"b":"Fage","s":0,"per":0.22}],
+    "ice-cream":          [{"b":"Store brand","s":1,"per":0.05}],
+    "olive-oil":          [{"b":"Store brand","s":1,"per":0.28},{"b":"Filippo Berio","s":0,"per":0.33},{"b":"Pompeian","s":0,"per":0.34},{"b":"Bertolli","s":0,"per":0.34},{"b":"Colavita","s":0,"per":0.73}]
+  }
+}

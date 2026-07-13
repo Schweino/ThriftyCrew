@@ -1,0 +1,19 @@
+{
+  "store": "Hy-Vee", "generated": "2026-07-13",
+  "items": {
+    "mustard":            [{"b":"Store brand","s":1,"per":0.0843},{"b":"French's","s":0,"per":0.1095},{"b":"Heinz","s":0,"per":0.1495}],
+    "bbq-sauce":          [{"b":"Kraft","s":0,"per":0.0989},{"b":"Sweet Baby Ray's","s":0,"per":0.1123},{"b":"Store brand","s":1,"per":0.1267},{"b":"Stubb's","s":0,"per":0.3883}],
+    "pasta-sauce":        [{"b":"Store brand","s":1,"per":0.0746},{"b":"Ragu","s":0,"per":0.0829},{"b":"Prego","s":0,"per":0.1109},{"b":"Classico","s":0,"per":0.1492},{"b":"Rao's","s":0,"per":0.2809}],
+    "salsa":              [{"b":"Store brand","s":1,"per":0.1244},{"b":"Pace","s":0,"per":0.1663},{"b":"Tostitos","s":0,"per":0.2079},{"b":"Chi-Chi's","s":0,"per":0.2369},{"b":"Herdez","s":0,"per":0.3119}],
+    "pickles":            [{"b":"Store brand","s":1,"per":0.0928},{"b":"Claussen","s":0,"per":0.1872}],
+    "canned-tuna":        [{"b":"StarKist","s":0,"per":0.1942},{"b":"Store brand","s":1,"per":0.1992},{"b":"Chicken of the Sea","s":0,"per":0.2},{"b":"Bumble Bee","s":0,"per":0.458}],
+    "chicken-noodle-soup":[{"b":"Store brand","s":1,"per":0.107},{"b":"Campbell's","s":0,"per":0.1191}],
+    "potato-chips":       [{"b":"Store brand","s":1,"per":0.2112},{"b":"Pringles","s":0,"per":0.4509},{"b":"Lay's","s":0,"per":0.4608},{"b":"Ruffles","s":0,"per":0.4608},{"b":"Kettle","s":0,"per":0.9073}],
+    "tortilla-chips":     [{"b":"On The Border","s":0,"per":0.266},{"b":"Store brand","s":1,"per":0.266},{"b":"Santitas","s":0,"per":0.2718},{"b":"Tostitos","s":0,"per":0.3524},{"b":"Doritos","s":0,"per":0.4131}],
+    "crackers":           [{"b":"Store brand","s":1,"per":0.1175},{"b":"Zesta","s":0,"per":0.2494},{"b":"Club","s":0,"per":0.2654},{"b":"Ritz","s":0,"per":0.3489}],
+    "pasta":              [{"b":"Store brand","s":1,"per":0.0793},{"b":"Barilla","s":0,"per":0.2062}],
+    "yogurt":             [{"b":"Store brand","s":1,"per":0.1837},{"b":"Chobani","s":0,"per":0.2028},{"b":"Fage","s":0,"per":0.2184},{"b":"Oikos","s":0,"per":0.9415}],
+    "ice-cream":          [{"b":"Blue Bunny","s":0,"per":0.0623},{"b":"Breyers","s":0,"per":0.1248}],
+    "olive-oil":          [{"b":"Store brand","s":1,"per":0.3528},{"b":"Pompeian","s":0,"per":0.3675},{"b":"Bertolli","s":0,"per":0.4332},{"b":"Filippo Berio","s":0,"per":0.4621}]
+  }
+}

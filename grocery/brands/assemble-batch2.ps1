@@ -3,9 +3,12 @@ $here='C:\Codex\income\grocery\brands'
 $cfg = (Get-Content (Join-Path $here 'brand-config.json') -Raw | ConvertFrom-Json).commodities
 $ff = (Get-Content (Join-Path $here '..\out\brands\out-ff-buckets-b.json') -Raw | ConvertFrom-Json).items
 $wm = (Get-Content (Join-Path $here 'out-walmart-buckets-b.json') -Raw | ConvertFrom-Json).items
+$sm = (Get-Content (Join-Path $here 'out-sams-buckets-b.json') -Raw | ConvertFrom-Json).items
+$bk = (Get-Content (Join-Path $here 'out-bakers-buckets-b.json') -Raw | ConvertFrom-Json).items
+$hv = (Get-Content (Join-Path $here 'out-hyvee-buckets-b.json') -Raw | ConvertFrom-Json).items
 $bb = Get-Content (Join-Path $here '..\out\brands\brands-board.json') -Raw | ConvertFrom-Json
-$storeOrder = @('Family Fare','Walmart')
-$storeData = @{ 'Family Fare'=$ff; 'Walmart'=$wm }
+$storeOrder = @('Family Fare','Walmart',"Sam's Club","Baker's",'Hy-Vee')
+$storeData = @{ 'Family Fare'=$ff; 'Walmart'=$wm; "Sam's Club"=$sm; "Baker's"=$bk; 'Hy-Vee'=$hv }
 
 function BrandMap($obj,$cid){ $m=@{}; if($obj.$cid){ foreach($r in @($obj.$cid)){ if($null -eq $r.per){continue}; $k=[string]$r.b; if(-not $m.ContainsKey($k) -or [double]$r.per -lt $m[$k].per){ $m[$k]=@{per=[double]$r.per; store=([string]$r.b -eq 'Store brand')} } } }; return $m }
 
@@ -18,6 +21,10 @@ foreach($cid in $cfg.PSObject.Properties.Name){
   foreach($k in $keys){
     $prices=[ordered]@{}; $vals=@(); $isStore=$false
     foreach($st in $storeOrder){ if($maps[$st].ContainsKey($k)){ $v=[math]::Round($maps[$st][$k].per,3); $prices[$st]=$v; $vals+=$v; if($maps[$st][$k].store){$isStore=$true} } }
+    if($vals.Count -eq 0){ continue }
+    # sanity gate: with >=3 store values, drop any outside [0.3x, 4x] of the median (catches size/parse errors)
+    if($vals.Count -ge 3){ $sorted=@($vals|Sort-Object); $med=$sorted[[int]([math]::Floor($sorted.Count/2))]
+      $keep=[ordered]@{}; foreach($sk in $prices.Keys){ $v=$prices[$sk]; if($v -ge 0.3*$med -and $v -le 4*$med){ $keep[$sk]=$v } }; $prices=$keep; $vals=@($prices.Values) }
     if($vals.Count -eq 0){ continue }
     $min=($vals|Measure-Object -Minimum).Minimum
     $cheap=($prices.GetEnumerator() | Where-Object { $_.Value -eq $min } | Select-Object -First 1).Key
