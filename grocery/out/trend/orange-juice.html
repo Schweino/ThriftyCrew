@@ -29,9 +29,9 @@
 <div class="tp-hero">
   <p class="tp-kicker">This week in Omaha</p>
   <div class="tp-price">$0.0623<span class="tp-unit">/fl oz</span></div>
-  <div class="tp-where">Cheapest at Fareway, week of Jul 12</div>
+  <div class="tp-where">Cheapest at Fareway, week of Jul 13</div>
 </div>
-<p class="tp-record"><strong>Record low we have tracked:</strong> $0.0623 per fl oz at Fareway (week of Jul 12). This week sets that low.</p>
+<p class="tp-record"><strong>Record low we have tracked:</strong> $0.0623 per fl oz at Fareway (week of Jul 12). This week ties that low.</p>
 <p class="tp-read">At $0.0623 per fl oz, this is the best price we have tracked for orange juice. If it is on your list, this is a good week to stock up.</p>
 <h2>Price history</h2>
 <div class="tp-chartwrap" id="tp-chart"></div>
@@ -125,13 +125,14 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-06","07-08","07-09","07-10","07-11","07-12"],"s":{"Sam's Club":[0.0648,0.0648,0.0648,0.0648,0.0648,0.0648],"Baker's":[0.0687,0.0687,0.0687,0.0687,0.0687,0.0687],"Hy-Vee":[0.0702,0.078,0.078,0.078,0.078,0.078],"Family Fare":[0.0702,null,null,null,0.0921,0.0921],"Walmart":[0.0762,0.0762,0.0762,0.0762,0.0762,0.0762],"Aldi":[0.0798,0.0798,0.0798,0.0798,0.0798,0.0798],"Fareway":[null,null,null,null,null,0.0623]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-06","07-08","07-09","07-10","07-11","07-12","07-13"],"s":{"Sam's Club":[0.0648,0.0648,0.0648,0.0648,0.0648,0.0648,0.0648],"Baker's":[0.0687,0.0687,0.0687,0.0687,0.0687,0.0687,0.0687],"Hy-Vee":[0.0702,0.078,0.078,0.078,0.078,0.078,0.078],"Family Fare":[0.0702,null,null,null,0.0921,0.0921,null],"Walmart":[0.0762,0.0762,0.0762,0.0762,0.0762,0.0762,0.0762],"Aldi":[0.0798,0.0798,0.0798,0.0798,0.0798,0.0798,0.0798],"Fareway":[null,null,null,null,null,0.0623,0.0623]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
 <table class="tp-table">
 <thead><tr><th>Week of</th><th>Cheapest price</th><th>Store</th></tr></thead>
 <tbody>
+<tr class="tp-low"><td>Jul 13</td><td>$0.0623 per fl oz</td><td>Fareway</td></tr>
 <tr class="tp-low"><td>Jul 12</td><td>$0.0623 per fl oz</td><td>Fareway</td></tr>
 <tr><td>Jul 11</td><td>$0.0648 per fl oz</td><td>Sam&#39;s Club</td></tr>
 <tr><td>Jul 10</td><td>$0.0648 per fl oz</td><td>Sam&#39;s Club</td></tr>
@@ -141,15 +142,14 @@ function tcChart(root, d){
 </tbody></table>
 <h2>Who has it cheapest this week</h2>
 <table class="tp-table">
-<thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
+<thead><tr><th>Store</th><th>Price</th></tr></thead>
 <tbody>
-<tr class="tp-low"><td>Fareway</td><td>$0.0623 per fl oz</td><td><span class="tp-item">Fareway Orange Juice, from Concentrate</span></td></tr>
-<tr><td>Sam&#39;s Club</td><td>$0.0648 per fl oz</td><td><span class="tp-item">Member&#39;s Mark Pulp-Free 100% Orange Juice (2 x 52 fl oz)</span></td></tr>
-<tr><td>Baker&#39;s</td><td>$0.0687 per fl oz</td><td><span class="tp-item">Kroger 100% Orange Juice Pulp Free 1 Gal</span></td></tr>
-<tr><td>Walmart</td><td>$0.0762 per fl oz</td><td><span class="tp-item">Great Value 100% Orange Juice, No Pulp, 52 fl oz</span></td></tr>
-<tr><td>Hy-Vee</td><td>$0.078 per fl oz</td><td><span class="tp-item">Hy-Vee 100% Orange Juice</span></td></tr>
-<tr><td>Aldi</td><td>$0.0798 per fl oz</td><td><span class="tp-item">Nature&#39;s Nectar Premium Orange Juice (Not From Concentrate)</span></td></tr>
-<tr><td>Family Fare</td><td>$0.0921 per fl oz</td><td><span class="tp-item">Tropicana Pure Premium No Pulp Orange Juice 89 Fl Oz</span></td></tr>
+<tr class="tp-low"><td>Fareway</td><td>$0.0623 per fl oz</td></tr>
+<tr><td>Sam&#39;s Club</td><td>$0.0648 per fl oz</td></tr>
+<tr><td>Baker&#39;s</td><td>$0.0687 per fl oz</td></tr>
+<tr><td>Walmart</td><td>$0.0762 per fl oz</td></tr>
+<tr><td>Hy-Vee</td><td>$0.078 per fl oz</td></tr>
+<tr><td>Aldi</td><td>$0.0798 per fl oz</td></tr>
 </tbody></table>
 <p class="tp-links"><a href="/omaha-grocery-prices/?ref=trend">See the full live Omaha price board</a> &middot; <a href="/omaha-price-tracker/?ref=trend">All tracked staples</a></p>
 <p class="tp-foot">Tracked weekly across Hy-Vee, Baker&#39;s, Family Fare, Aldi, Sam&#39;s Club and Walmart in Omaha since June 2026. This page updates every week.</p>

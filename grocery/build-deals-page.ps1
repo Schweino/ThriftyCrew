@@ -479,7 +479,7 @@ foreach ($gd in $groupDefs) {
 function SummaryHtml($best, [string]$unit) {
   if (-not $best) { return '' }
   $tag = if ([string]$best.type -eq 'sale') { " <span class='pg-tag pg-tag-sale'>sale</span>" } else { '' }
-  return "<span class='pg-sum'><span class='pg-sum-p'>" + (Fmt-Price ([double]$best.per_unit) $unit) + "</span><span class='pg-sum-s'>" + (HtmlEnc $shortName[[string]$best.store]) + "</span>" + $tag + "</span><span class='pg-chev' aria-hidden='true'></span>"
+  return "<span class='pg-sum'><span class='pg-sum-p'>" + (Fmt-Price ([double]$best.per_unit) $unit) + "</span><span class='pg-sum-s'>" + (HtmlEnc $shortName[[string]$best.store]) + "</span>" + $tag + "</span>"
 }
 
 # (The "Deals right now" strip was removed 2026-07-13 per Brad. Record-low / sale badges still ride inline on
@@ -507,7 +507,7 @@ foreach ($c in $cats) {
     $vd = $verdict[[string]$r.id]
     if (-not $rb -and $vd) { $rbHtml += "<span class='pg-rec " + $vd.cls + "' title=`"" + (HtmlEnc $vd.title) + "`">" + $vd.label + "</span>" }
     $sumHtml = SummaryHtml $ranked[0] $unit
-    [void]$sb.Append("<div class='pg-rowhead'><label class='pg-pickl' title='Add to my shopping list'><input type='checkbox' class='pg-pick' aria-label='Add to my shopping list'></label><span class='pg-name'>" + (HtmlEnc $r.commodity) + "</span><span class='pg-unit'>" + (UnitLabel $unit) + "</span>" + $rbHtml + $sumHtml + "</div>")
+    [void]$sb.Append("<div class='pg-rowhead'><div class='pg-rh-top'><label class='pg-pickl' title='Add to my shopping list'><input type='checkbox' class='pg-pick' aria-label='Add to my shopping list'></label><span class='pg-name'>" + (HtmlEnc $r.commodity) + "</span><span class='pg-chev' aria-hidden='true'></span>" + $sumHtml + "</div><div class='pg-rh-bot'><span class='pg-unit'>" + (UnitLabel $unit) + "</span>" + $rbHtml + "</div></div>")
     [void]$sb.Append("<div class='pg-stores'>")
     $i = 0
     foreach ($s in $ranked) {
@@ -553,7 +553,7 @@ if ($riDoc) {
       $unit = [string]$r.unit
       [void]$sb.Append("<article class='pg-row' data-cat='" + (HtmlEnc $riKey) + "' data-id='" + [string]$r.id + "'>")
       $sumHtml = SummaryHtml $ranked[0] $unit
-      [void]$sb.Append("<div class='pg-rowhead'><label class='pg-pickl' title='Add to my shopping list'><input type='checkbox' class='pg-pick' aria-label='Add to my shopping list'></label><span class='pg-name'>" + (HtmlEnc $r.commodity) + "</span><span class='pg-unit'>" + (UnitLabel $unit) + "</span>" + $sumHtml + "</div>")
+      [void]$sb.Append("<div class='pg-rowhead'><div class='pg-rh-top'><label class='pg-pickl' title='Add to my shopping list'><input type='checkbox' class='pg-pick' aria-label='Add to my shopping list'></label><span class='pg-name'>" + (HtmlEnc $r.commodity) + "</span><span class='pg-chev' aria-hidden='true'></span>" + $sumHtml + "</div><div class='pg-rh-bot'><span class='pg-unit'>" + (UnitLabel $unit) + "</span></div></div>")
       [void]$sb.Append("<div class='pg-stores'>")
       $i = 0
       foreach ($s in $ranked) {
@@ -627,7 +627,7 @@ $css = @'
 .pg-recchip span{font-size:.82em;font-weight:700;color:var(--ink)}
 .pg-recchip em{font-style:normal;font-size:.7em;font-weight:700;letter-spacing:.03em;color:#8a6d1f}
 .pg-recband-sub{display:block;margin-top:9px;font-size:.74em;color:var(--mut)}
-.pg-rec{display:inline-block;margin-left:7px;padding:2px 9px 2px;border-radius:999px;font-size:.6em;font-weight:800;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;vertical-align:2px}
+.pg-rec{display:inline-block;margin-left:0;padding:2px 9px 2px;border-radius:999px;font-size:.6em;font-weight:800;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;vertical-align:2px}
 .pg-rec-low{background:var(--green);color:#fff}
 .pg-rec-tie{background:var(--green-t);color:var(--green-d);border:1px solid var(--green)}
 .pg-rec-dip{background:#fdf8ec;color:#8a6d1f;border:1px solid #ecd9ae}
@@ -674,19 +674,21 @@ $css = @'
 .pg-cath{font-family:Georgia,'Times New Roman',serif;font-size:1.22em;color:var(--ink);margin:26px 0 4px;padding-bottom:6px;border-bottom:2px solid var(--bd)}
 .pg-refnote{margin:26px 0 4px;padding:9px 13px;font-size:.82em;line-height:1.4;color:var(--mut);background:var(--amber-t);border:1px solid var(--bd);border-radius:8px}
 .pg-row{padding:15px 0 16px;border-bottom:1px solid #eef1ee}
-.pg-rowhead{display:flex;align-items:baseline;gap:10px;margin-bottom:0;flex-wrap:wrap;cursor:pointer}
+.pg-rowhead{display:flex;flex-direction:column;gap:7px;margin-bottom:0;cursor:pointer}
 .pg-row.pg-open .pg-rowhead{margin-bottom:10px}
 .pg-rowhead:focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:4px}
-.pg-name{font-size:1.09em;font-weight:700;color:var(--ink);flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pg-rh-top{display:flex;align-items:center;gap:8px}
+.pg-rh-bot{display:flex;flex-wrap:wrap;align-items:center;gap:7px;padding-left:28px}
+.pg-name{font-size:1.09em;font-weight:700;color:var(--ink);flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pg-unit{font-size:.72em;color:var(--mut);opacity:.8;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
 /* collapsed rows stay one clean line: name + cheapest + chevron. The unit, record/verdict badges, and the
    history/alerts pills (JS-injected) reveal only when the row is opened, so 300 items scan fast. */
-.pg-row:not(.pg-open) .pg-unit,.pg-row:not(.pg-open) .pg-rec,.pg-row:not(.pg-open) .pg-hist,.pg-row:not(.pg-open) .pg-alertp{display:none}
+.pg-row:not(.pg-open) .pg-rh-bot{display:none}
 .pg-sum{margin-left:auto;flex:0 0 auto;display:inline-flex;align-items:baseline;gap:5px;white-space:nowrap}
 .pg-sum-p{font-weight:800;color:var(--green-d);font-size:1.05em}
 .pg-sum-s{font-size:.78em;color:var(--mut)}
 .pg-sum .pg-tag-sale{font-size:.58em;margin-left:2px;align-self:center}
-.pg-chev{width:8px;height:8px;border-right:2px solid var(--mut);border-bottom:2px solid var(--mut);transform:rotate(45deg);margin-left:4px;align-self:center;flex:0 0 auto;transition:transform .15s}
+.pg-chev{width:8px;height:8px;border-right:2px solid var(--mut);border-bottom:2px solid var(--mut);transform:rotate(45deg);margin-left:1px;align-self:center;flex:0 0 auto;transition:transform .15s}
 .pg-row.pg-open .pg-chev{transform:rotate(-135deg)}
 .pg-stores{display:none;flex-wrap:wrap;gap:8px}
 .pg-row.pg-open .pg-stores,.pg-wrap.pg-allopen .pg-stores{display:flex}
@@ -1012,7 +1014,7 @@ if ($histDoc) {
     $histJson = '{' + ($entries -join ',') + '}'
     $histBlock = @'
 <style>
-.pg-hist{border:1px solid #d5dbe4;background:#fff;color:#68748a;border-radius:999px;padding:2px 10px;font-size:.62em;font-weight:800;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;font-family:inherit;margin-left:7px;vertical-align:2px;white-space:nowrap;flex:0 0 auto;line-height:1.6}
+.pg-hist{border:1px solid #d5dbe4;background:#fff;color:#68748a;border-radius:999px;padding:2px 10px;font-size:.62em;font-weight:800;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;font-family:inherit;margin-left:0;vertical-align:2px;white-space:nowrap;flex:0 0 auto;line-height:1.6}
 .pg-hist:hover{border-color:#E2A43C;color:#8a6d1f}
 .pg-hx-ov{position:fixed;inset:0;background:rgba(22,38,63,.55);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px}
 .pg-hx{background:#fff;border-radius:16px;max-width:640px;width:100%;max-height:85vh;overflow:auto;padding:22px 22px 18px;box-shadow:0 24px 64px rgba(0,0,0,.3)}
@@ -1028,7 +1030,7 @@ if ($histDoc) {
 .tcc-chip.is-off{opacity:.4}
 .tcc-chip.is-off i{background:#c3cad6!important}
 .tcc-chip:hover{border-color:#E2A43C}
-.pg-alertp{border:1px solid #ecd9ae;background:#fdf8ec;color:#8a6d1f;border-radius:999px;padding:2px 10px;font-size:.62em;font-weight:800;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;font-family:inherit;margin-left:7px;vertical-align:2px;white-space:nowrap;flex:0 0 auto;line-height:1.6}
+.pg-alertp{border:1px solid #ecd9ae;background:#fdf8ec;color:#8a6d1f;border-radius:999px;padding:2px 10px;font-size:.62em;font-weight:800;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;font-family:inherit;margin-left:0;vertical-align:2px;white-space:nowrap;flex:0 0 auto;line-height:1.6}
 .pg-alertp:hover{border-color:#E2A43C;color:#16263F}
 .pg-al-form{margin-top:14px}
 .pg-al-form input[type=email]{width:100%;padding:.7em .9em;font-size:1em;border:1.5px solid #e2e8f0;border-radius:10px;font-family:inherit;color:#16263F;box-sizing:border-box}
@@ -1068,7 +1070,7 @@ if ($histDoc) {
   var rows = document.querySelectorAll('.pg-row[data-id]');
   for (var i = 0; i < rows.length; i++){
     var id = rows[i].getAttribute('data-id');
-    var head = rows[i].querySelector('.pg-rowhead');
+    var head = rows[i].querySelector('.pg-rh-bot');
     if (!head) continue;
     if (TCH[id]){
       var b = document.createElement('button');

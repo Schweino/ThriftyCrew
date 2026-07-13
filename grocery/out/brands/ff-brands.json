@@ -1,0 +1,620 @@
+﻿{
+    "store":  "Family Fare",
+    "store_id":  "6401",
+    "generated":  "2026-07-13 14:22",
+    "source":  "Freshop base_price (Omaha 6401)",
+    "items":  [
+                  {
+                      "id":  "peanut-butter",
+                      "label":  "Peanut Butter",
+                      "type":  "brand",
+                      "unit":  "oz",
+                      "brand_count":  6,
+                      "brands":  [
+                                     {
+                                         "brand":  "Jif Unsweet",
+                                         "is_store_brand":  false,
+                                         "name":  "Jif Unsweet Creamy Peanut Butter",
+                                         "size":  "15 oz",
+                                         "price":  3.99,
+                                         "per_unit":  0.266
+                                     },
+                                     {
+                                         "brand":  "Justin\u0027s",
+                                         "is_store_brand":  false,
+                                         "name":  "Justin\u0027s Peanut Butter Spread, Classic 16 Oz",
+                                         "size":  "16 oz",
+                                         "price":  5.99,
+                                         "per_unit":  0.3744
+                                     },
+                                     {
+                                         "brand":  "Store brand",
+                                         "is_store_brand":  true,
+                                         "name":  "Creamy Peanut Butter Our Family",
+                                         "size":  "64 oz",
+                                         "price":  7.99,
+                                         "per_unit":  0.1248
+                                     },
+                                     {
+                                         "brand":  "Peter Pan",
+                                         "is_store_brand":  false,
+                                         "name":  "Peter Pan Creamy Peanut Butter 16.3 Oz",
+                                         "size":  "16.3 oz",
+                                         "price":  3.99,
+                                         "per_unit":  0.2448
+                                     },
+                                     {
+                                         "brand":  "Jif",
+                                         "is_store_brand":  false,
+                                         "name":  "Jif Creamy Peanut Butter 28 Oz",
+                                         "size":  "28 oz",
+                                         "price":  5.89,
+                                         "per_unit":  0.2104
+                                     },
+                                     {
+                                         "brand":  "Skippy",
+                                         "is_store_brand":  false,
+                                         "name":  "Skippy Creamy Peanut Butter 40 Oz",
+                                         "size":  "40 oz",
+                                         "price":  8.99,
+                                         "per_unit":  0.2248
+                                     }
+                                 ]
+                  },
+                  {
+                      "id":  "ketchup",
+                      "label":  "Ketchup",
+                      "type":  "brand",
+                      "unit":  "oz",
+                      "brand_count":  4,
+                      "brands":  [
+                                     {
+                                         "brand":  "Store brand",
+                                         "is_store_brand":  true,
+                                         "name":  "Ketchup Our Family",
+                                         "size":  "64 oz",
+                                         "price":  3.99,
+                                         "per_unit":  0.0623
+                                     },
+                                     {
+                                         "brand":  "Heinz",
+                                         "is_store_brand":  false,
+                                         "name":  "Heinz Tomato Ketchup 38 Oz",
+                                         "size":  "38 oz",
+                                         "price":  5.89,
+                                         "per_unit":  0.155
+                                     },
+                                     {
+                                         "brand":  "Del Monte",
+                                         "is_store_brand":  false,
+                                         "name":  "Del Monte Tomato Ketchup 24 Oz",
+                                         "size":  "24 oz",
+                                         "price":  2.69,
+                                         "per_unit":  0.1121
+                                     },
+                                     {
+                                         "brand":  "Hunt\u0027s",
+                                         "is_store_brand":  false,
+                                         "name":  "Hunt\u0027s Tomato Ketchup 32 Oz",
+                                         "size":  "32 oz",
+                                         "price":  3.19,
+                                         "per_unit":  0.0997
+                                     }
+                                 ]
+                  },
+                  {
+                      "id":  "mayonnaise",
+                      "label":  "Mayonnaise",
+                      "type":  "brand",
+                      "unit":  "floz",
+                      "brand_count":  8,
+                      "brands":  [
+                                     {
+                                         "brand":  "Primal Kitchen",
+                                         "is_store_brand":  false,
+                                         "name":  "Primal Kitchen Mayo 17 Fl Oz",
+                                         "size":  "17 fl oz",
+                                         "price":  14.49,
+                                         "per_unit":  0.8524
+                                     },
+                                     {
+                                         "brand":  "Store brand",
+                                         "is_store_brand":  true,
+                                         "name":  "Our Family Mayo, Real 30 Fl Oz",
+                                         "size":  "30 fl oz",
+                                         "price":  3.99,
+                                         "per_unit":  0.133
+                                     },
+                                     {
+                                         "brand":  "Graza",
+                                         "is_store_brand":  false,
+                                         "name":  "Graza Fancy Mayo 12 Fl Oz",
+                                         "size":  "12 fl oz",
+                                         "price":  10.99,
+                                         "per_unit":  0.9158
+                                     },
+                                     {
+                                         "brand":  "Duke\u0027s",
+                                         "is_store_brand":  false,
+                                         "name":  "Duke\u0027s Mayonnaise, Real, Smooth \u0026 Creamy 30 Fl Oz",
+                                         "size":  "30 fl oz",
+                                         "price":  6.59,
+                                         "per_unit":  0.2197
+                                     },
+                                     {
+                                         "brand":  "Hellmann\u0027s",
+                                         "is_store_brand":  false,
+                                         "name":  "Hellmann\u0027s Mayonnaise, Real, Bonus 36 Oz",
+                                         "size":  "36 oz",
+                                         "price":  7.99,
+                                         "per_unit":  0.2219
+                                     },
+                                     {
+                                         "brand":  "Kraft",
+                                         "is_store_brand":  false,
+                                         "name":  "Kraft Real Mayonnaise 30 Fl Oz",
+                                         "size":  "30 oz",
+                                         "price":  6.49,
+                                         "per_unit":  0.2163
+                                     },
+                                     {
+                                         "brand":  "Mccormick",
+                                         "is_store_brand":  false,
+                                         "name":  "Mc Cormick Mayonesa (Mayonnaise) With Lime Juice 28 Fl Oz",
+                                         "size":  "28 fl oz",
+                                         "price":  8.29,
+                                         "per_unit":  0.2961
+                                     },
+                                     {
+                                         "brand":  "Chosen",
+                                         "is_store_brand":  false,
+                                         "name":  "Chosen Foods Mayo, Classic 11.25 Fl Oz",
+                                         "size":  "11.25 fl oz",
+                                         "price":  8.49,
+                                         "per_unit":  0.7547
+                                     }
+                                 ]
+                  },
+                  {
+                      "id":  "ground-coffee",
+                      "label":  "Ground Coffee",
+                      "type":  "brand",
+                      "unit":  "oz",
+                      "brand_count":  10,
+                      "brands":  [
+                                     {
+                                         "brand":  "Folgers",
+                                         "is_store_brand":  false,
+                                         "name":  "Folgers Coffee, Ground, Medium, Classic Roast 30.5 Oz",
+                                         "size":  "30.5 oz",
+                                         "price":  17.99,
+                                         "per_unit":  0.5898
+                                     },
+                                     {
+                                         "brand":  "Store brand",
+                                         "is_store_brand":  true,
+                                         "name":  "Our Family Coffee, Ground, Medium Dark Roast, Colombian 12 Oz",
+                                         "size":  "12 oz",
+                                         "price":  7.29,
+                                         "per_unit":  0.6075
+                                     },
+                                     {
+                                         "brand":  "Starbucks",
+                                         "is_store_brand":  false,
+                                         "name":  "Starbucks Coffee, Ground, Dark Roast, French Roast 18 Oz",
+                                         "size":  "18 oz",
+                                         "price":  19.99,
+                                         "per_unit":  1.1106
+                                     },
+                                     {
+                                         "brand":  "San Francisco Bay",
+                                         "is_store_brand":  false,
+                                         "name":  "San Francisco Bay Coffee, Ground, Dark Roast, French Roast 12 Oz",
+                                         "size":  "12 oz",
+                                         "price":  11.99,
+                                         "per_unit":  0.9992
+                                     },
+                                     {
+                                         "brand":  "Maxwell House",
+                                         "is_store_brand":  false,
+                                         "name":  "Maxwell House Original Roast Ground Coffee C",
+                                         "size":  "27.5 oz",
+                                         "price":  16.49,
+                                         "per_unit":  0.5996
+                                     },
+                                     {
+                                         "brand":  "Eight O\u0027Clock",
+                                         "is_store_brand":  false,
+                                         "name":  "Eight O\u0027clock Coffee Ground Medium Roast The Original Coffee 11 Oz",
+                                         "size":  "11 oz",
+                                         "price":  11.99,
+                                         "per_unit":  1.09
+                                     },
+                                     {
+                                         "brand":  "Gevalia",
+                                         "is_store_brand":  false,
+                                         "name":  "Gevalia Coffee, Ground, Mild, Traditional 12 Oz",
+                                         "size":  "12 oz",
+                                         "price":  13.79,
+                                         "per_unit":  1.1492
+                                     },
+                                     {
+                                         "brand":  "Caribou",
+                                         "is_store_brand":  false,
+                                         "name":  "Caribou Coffee Coffee, Ground, Dark Roast, Mahogany Blend 12 Oz",
+                                         "size":  "12 oz",
+                                         "price":  13.99,
+                                         "per_unit":  1.1658
+                                     },
+                                     {
+                                         "brand":  "Seattle\u0027s Best",
+                                         "is_store_brand":  false,
+                                         "name":  "Seattle\u0027s Best Coffee Ground Campfire S\u0027mores Coffee 11 Oz",
+                                         "size":  "11 oz",
+                                         "price":  10.99,
+                                         "per_unit":  0.9991
+                                     },
+                                     {
+                                         "brand":  "Cameron\u0027s",
+                                         "is_store_brand":  false,
+                                         "name":  "Cameron\u0027s Coffee Ground Bag, Breakfast Blend, 32oz",
+                                         "size":  "32 oz",
+                                         "price":  21.29,
+                                         "per_unit":  0.6653
+                                     }
+                                 ]
+                  },
+                  {
+                      "id":  "cream-cheese",
+                      "label":  "Cream Cheese",
+                      "type":  "brand",
+                      "unit":  "oz",
+                      "brand_count":  2,
+                      "brands":  [
+                                     {
+                                         "brand":  "Store brand",
+                                         "is_store_brand":  true,
+                                         "name":  "Cream Cheese Bar Our Family (2 Ct)",
+                                         "size":  "16 oz",
+                                         "price":  3.99,
+                                         "per_unit":  0.2494
+                                     },
+                                     {
+                                         "brand":  "Philadelphia",
+                                         "is_store_brand":  false,
+                                         "name":  "Philadelphia Original Cream Cheese 8 Oz",
+                                         "size":  "8 oz",
+                                         "price":  3.79,
+                                         "per_unit":  0.4738
+                                     }
+                                 ]
+                  },
+                  {
+                      "id":  "laundry-detergent",
+                      "label":  "Laundry Detergent (liquid)",
+                      "type":  "brand",
+                      "unit":  "floz",
+                      "brand_count":  8,
+                      "brands":  [
+                                     {
+                                         "brand":  "Seventh Generation",
+                                         "is_store_brand":  false,
+                                         "name":  "Seventh Generation Biobased Deep Clean Fresh Lavender Scent Laundry Detergent 90 Fl Oz",
+                                         "size":  "90 fl oz",
+                                         "price":  18.99,
+                                         "per_unit":  0.211
+                                     },
+                                     {
+                                         "brand":  "Method",
+                                         "is_store_brand":  false,
+                                         "name":  "Method Laundry Detergent, Fresh Air 1.58 L",
+                                         "size":  "1.58 l",
+                                         "price":  16.79,
+                                         "per_unit":  0.3143
+                                     },
+                                     {
+                                         "brand":  "Tide +",
+                                         "is_store_brand":  false,
+                                         "name":  "Tide + Tide Plus Boost Of Ultra Downy Liquid Laundry Detergent, April Fresh Scent, 117 Fl Oz, 83 Loads 3.65 Qt",
+                                         "size":  "3.65 qt",
+                                         "price":  22.99,
+                                         "per_unit":  0.1968
+                                     },
+                                     {
+                                         "brand":  "Gain",
+                                         "is_store_brand":  false,
+                                         "name":  "Gain Liquid Laundry Detergent, Original Scent, 144 Fl Oz, 100 Loads 144 Fl Oz",
+                                         "size":  "144 fl oz",
+                                         "price":  22.99,
+                                         "per_unit":  0.1597
+                                     },
+                                     {
+                                         "brand":  "Woolite®",
+                                         "is_store_brand":  false,
+                                         "name":  "Woolite Laundry Detergent, All Clothes 50 Oz",
+                                         "size":  "50 oz",
+                                         "price":  13.69,
+                                         "per_unit":  0.2738
+                                     },
+                                     {
+                                         "brand":  "Gain Laundry",
+                                         "is_store_brand":  false,
+                                         "name":  "Gain Laundry Detergent Hec Mb",
+                                         "size":  "81 oz",
+                                         "price":  15.99,
+                                         "per_unit":  0.1974
+                                     },
+                                     {
+                                         "brand":  "Tide",
+                                         "is_store_brand":  false,
+                                         "name":  "Tide Free \u0026 Gentle Liquid Laundry Detergent, 64 Loads, 84 Fl Oz 84 Oz",
+                                         "size":  "84 oz",
+                                         "price":  13.99,
+                                         "per_unit":  0.1665
+                                     },
+                                     {
+                                         "brand":  "Store brand",
+                                         "is_store_brand":  true,
+                                         "name":  "Laundry Detergent, Mountain Fresh",
+                                         "size":  "50 fl oz",
+                                         "price":  4.19,
+                                         "per_unit":  0.0838
+                                     }
+                                 ]
+                  },
+                  {
+                      "id":  "cereal-honey-oat",
+                      "label":  "Honey Nut Oat Cereal",
+                      "type":  "brand",
+                      "unit":  "oz",
+                      "brand_count":  3,
+                      "brands":  [
+                                     {
+                                         "brand":  "Store brand",
+                                         "is_store_brand":  true,
+                                         "name":  "Our Family Cereal, Honey Nut, Toasted Oats 32 Oz",
+                                         "size":  "32 oz",
+                                         "price":  5.39,
+                                         "per_unit":  0.1684
+                                     },
+                                     {
+                                         "brand":  "Chex",
+                                         "is_store_brand":  false,
+                                         "name":  "Chex Honey Nut Cereal 12.5 Oz",
+                                         "size":  "12.5 oz",
+                                         "price":  5.39,
+                                         "per_unit":  0.4312
+                                     },
+                                     {
+                                         "brand":  "Cheerios",
+                                         "is_store_brand":  false,
+                                         "name":  "Cheerios Honey Nut Cereal Giant Size 27.2 Oz",
+                                         "size":  "27.2 oz",
+                                         "price":  8.99,
+                                         "per_unit":  0.3305
+                                     }
+                                 ]
+                  },
+                  {
+                      "id":  "cola-2l",
+                      "label":  "Cola (2-liter)",
+                      "type":  "brand",
+                      "unit":  "floz",
+                      "brand_count":  4,
+                      "brands":  [
+                                     {
+                                         "brand":  "Chek",
+                                         "is_store_brand":  false,
+                                         "name":  "Chek Cola Soda",
+                                         "size":  "2 lt",
+                                         "price":  1.29,
+                                         "per_unit":  0.0191
+                                     },
+                                     {
+                                         "brand":  "Pepsi",
+                                         "is_store_brand":  false,
+                                         "name":  "Pepsi Soda 2.1 Qt",
+                                         "size":  "2.1 qt",
+                                         "price":  3.49,
+                                         "per_unit":  0.0519
+                                     },
+                                     {
+                                         "brand":  "RC",
+                                         "is_store_brand":  false,
+                                         "name":  "Rc Cola 2.1 Qt",
+                                         "size":  "2ltr btl",
+                                         "price":  3.49,
+                                         "per_unit":  0.0516
+                                     },
+                                     {
+                                         "brand":  "Coca-Cola",
+                                         "is_store_brand":  false,
+                                         "name":  "Coca Cola Soda Bottle 2000 Ml",
+                                         "size":  "2 ltr",
+                                         "price":  3.49,
+                                         "per_unit":  0.0516
+                                     }
+                                 ]
+                  },
+                  {
+                      "id":  "ranch-dressing",
+                      "label":  "Ranch Dressing",
+                      "type":  "brand",
+                      "unit":  "floz",
+                      "brand_count":  10,
+                      "brands":  [
+                                     {
+                                         "brand":  "Store brand",
+                                         "is_store_brand":  true,
+                                         "name":  "Our Family Dressing, Classic Ranch 24 Fl Oz",
+                                         "size":  "24 fl oz",
+                                         "price":  3.69,
+                                         "per_unit":  0.1538
+                                     },
+                                     {
+                                         "brand":  "Ken\u0027s Steak House",
+                                         "is_store_brand":  false,
+                                         "name":  "Ken\u0027s Steak House Ranch Dressing, Topping \u0026 Spread 24 Fl Oz",
+                                         "size":  "24 fl oz",
+                                         "price":  5.49,
+                                         "per_unit":  0.2288
+                                     },
+                                     {
+                                         "brand":  "Hidden Valley",
+                                         "is_store_brand":  false,
+                                         "name":  "Hidden Valley Ranch Original",
+                                         "size":  "24 oz",
+                                         "price":  5.99,
+                                         "per_unit":  0.2496
+                                     },
+                                     {
+                                         "brand":  "Wish-Bone",
+                                         "is_store_brand":  false,
+                                         "name":  "Wish Bone Ranch Dressing 15 Fl Oz",
+                                         "size":  "15 fl oz",
+                                         "price":  3.39,
+                                         "per_unit":  0.226
+                                     },
+                                     {
+                                         "brand":  "G Hughes",
+                                         "is_store_brand":  false,
+                                         "name":  "G Hughes Zero Sugar Ranch Dressing 12 Fl Oz",
+                                         "size":  "12 fl oz",
+                                         "price":  4.49,
+                                         "per_unit":  0.3742
+                                     },
+                                     {
+                                         "brand":  "Marzetti Simply",
+                                         "is_store_brand":  false,
+                                         "name":  "Marzetti Simply Dressed Homestyle Ranch",
+                                         "size":  "12 oz",
+                                         "price":  5.49,
+                                         "per_unit":  0.4575
+                                     },
+                                     {
+                                         "brand":  "Newman\u0027s Own",
+                                         "is_store_brand":  false,
+                                         "name":  "Newman\u0027s Own Dressing, Ranch 16 Fl Oz",
+                                         "size":  "16 fl oz",
+                                         "price":  5.29,
+                                         "per_unit":  0.3306
+                                     },
+                                     {
+                                         "brand":  "Olive Garden",
+                                         "is_store_brand":  false,
+                                         "name":  "Olive Garden Dressing, Parmesan Ranch 24 Oz",
+                                         "size":  "24 oz",
+                                         "price":  7.99,
+                                         "per_unit":  0.3329
+                                     },
+                                     {
+                                         "brand":  "Pampa",
+                                         "is_store_brand":  false,
+                                         "name":  "Pampa Dressing, Ranch 16 Oz",
+                                         "size":  "16 oz",
+                                         "price":  5,
+                                         "per_unit":  0.3125
+                                     },
+                                     {
+                                         "brand":  "Kraft",
+                                         "is_store_brand":  false,
+                                         "name":  "Kraft Classic Ranch Dressing Family Size 24 Fl Oz",
+                                         "size":  "24 oz",
+                                         "price":  5.69,
+                                         "per_unit":  0.2371
+                                     }
+                                 ]
+                  },
+                  {
+                      "id":  "shredded-cheddar",
+                      "label":  "Shredded Cheddar",
+                      "type":  "brand",
+                      "unit":  "oz",
+                      "brand_count":  4,
+                      "brands":  [
+                                     {
+                                         "brand":  "Store brand",
+                                         "is_store_brand":  true,
+                                         "name":  "Our Family Natural Sharp Cheddar Shredded Cheese 32 Oz",
+                                         "size":  "32 oz",
+                                         "price":  7.89,
+                                         "per_unit":  0.2466
+                                     },
+                                     {
+                                         "brand":  "Violife",
+                                         "is_store_brand":  false,
+                                         "name":  "Violife Just Like Cheddar Shreds Shredded Cheese, Dairy Free Vegan 8 Oz",
+                                         "size":  "8 oz",
+                                         "price":  7.49,
+                                         "per_unit":  0.9362
+                                     },
+                                     {
+                                         "brand":  "Kraft",
+                                         "is_store_brand":  false,
+                                         "name":  "Kraft Fine Shred Mild Cheddar Cheese",
+                                         "size":  "8 oz",
+                                         "price":  3.79,
+                                         "per_unit":  0.4738
+                                     },
+                                     {
+                                         "brand":  "Sargento",
+                                         "is_store_brand":  false,
+                                         "name":  "Sargento Shredded Cheese, Natural, Sharp Cheddar 8 Oz",
+                                         "size":  "8 oz",
+                                         "price":  3.99,
+                                         "per_unit":  0.4988
+                                     }
+                                 ]
+                  },
+                  {
+                      "id":  "apples",
+                      "label":  "Apples",
+                      "type":  "variety",
+                      "unit":  "lb",
+                      "brand_count":  1,
+                      "brands":  [
+                                     {
+                                         "brand":  "Gala",
+                                         "is_store_brand":  false,
+                                         "name":  "Our Family Apples Michigan Gala",
+                                         "size":  "48 oz",
+                                         "price":  4.99,
+                                         "per_unit":  1.6633
+                                     }
+                                 ]
+                  },
+                  {
+                      "id":  "potatoes",
+                      "label":  "Potatoes",
+                      "type":  "variety",
+                      "unit":  "lb",
+                      "brand_count":  3,
+                      "brands":  [
+                                     {
+                                         "brand":  "Russet",
+                                         "is_store_brand":  false,
+                                         "name":  "Our Family Potatoes Russet Idaho",
+                                         "size":  "10 lb",
+                                         "price":  5.49,
+                                         "per_unit":  0.549
+                                     },
+                                     {
+                                         "brand":  "Red",
+                                         "is_store_brand":  false,
+                                         "name":  "Our Family Potatoes North Dakota Red",
+                                         "size":  "5 lb",
+                                         "price":  5.99,
+                                         "per_unit":  1.198
+                                     },
+                                     {
+                                         "brand":  "Baby",
+                                         "is_store_brand":  false,
+                                         "name":  "Our Family Potatoes Yellow Baby Dutch",
+                                         "size":  "24 oz",
+                                         "price":  4.99,
+                                         "per_unit":  3.3267
+                                     }
+                                 ]
+                  }
+              ]
+}

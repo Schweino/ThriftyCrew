@@ -1,0 +1,17 @@
+{
+  "store": "Walmart",
+  "generated": "2026-07-13",
+  "source": "walmart.com __NEXT_DATA__ via owner Chrome (unit price from Walmart)",
+  "items": {
+    "peanut-butter":    [{"b":"Store brand","s":1,"per":0.10},{"b":"Skippy","s":0,"per":0.131},{"b":"Peter Pan","s":0,"per":0.144},{"b":"Jif","s":0,"per":0.168},{"b":"Justin's","s":0,"per":0.276}],
+    "ketchup":          [{"b":"Store brand","s":1,"per":0.047},{"b":"Hunt's","s":0,"per":0.069},{"b":"Heinz","s":0,"per":0.119}],
+    "mayonnaise":       [{"b":"Store brand","s":1,"per":0.099},{"b":"Hellmann's","s":0,"per":0.164},{"b":"Duke's","s":0,"per":0.164},{"b":"Kraft","s":0,"per":0.166}],
+    "ground-coffee":    [{"b":"Folgers","s":0,"per":0.441},{"b":"Maxwell House","s":0,"per":0.49},{"b":"Store brand","s":1,"per":0.491},{"b":"Starbucks","s":0,"per":0.553}],
+    "cream-cheese":     [{"b":"Store brand","s":1,"per":0.186},{"b":"Philadelphia","s":0,"per":0.31}],
+    "laundry-detergent":[{"b":"Arm & Hammer","s":0,"per":0.064},{"b":"Tide","s":0,"per":0.082},{"b":"Gain","s":0,"per":0.104},{"b":"Persil","s":0,"per":0.154}],
+    "cereal-honey-oat": [{"b":"Malt-O-Meal","s":0,"per":0.189},{"b":"Honey Nut Cheerios","s":0,"per":0.201}],
+    "cola-2l":          [{"b":"Store brand","s":1,"per":0.015},{"b":"Pepsi","s":0,"per":0.041},{"b":"Coca-Cola","s":0,"per":0.044}],
+    "ranch-dressing":   [{"b":"Store brand","s":1,"per":0.106},{"b":"Wish-Bone","s":0,"per":0.163},{"b":"Kraft","s":0,"per":0.173},{"b":"Hidden Valley","s":0,"per":0.194},{"b":"Ken's","s":0,"per":0.199}],
+    "shredded-cheddar": [{"b":"Store brand","s":1,"per":0.216},{"b":"Kraft","s":0,"per":0.311},{"b":"Crystal Farms","s":0,"per":0.328},{"b":"Sargento","s":0,"per":0.396},{"b":"Tillamook","s":0,"per":0.498}]
+  }
+}
