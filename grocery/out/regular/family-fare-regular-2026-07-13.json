@@ -3,7 +3,10 @@
     "week_of":  "2026-07-13",
     "price_type":  "everyday",
     "source":  "Freshop catalog base_price (store_id 6401, Omaha), NOT Instacart",
-    "deal_count":  375,
+    "deal_count":  590,
+    "empty_terms":  [
+
+                    ],
     "deals":  [
                   {
                       "store":  "Family Fare",
@@ -176,9 +179,9 @@
                   {
                       "store":  "Family Fare",
                       "item":  "Standard Pride 80%/20% 100% Pure Ground Beef 48 Oz Discount Limit 2",
-                      "ad_price":  "$21.99",
+                      "ad_price":  "$19.99",
                       "size":  "48 oz",
-                      "regular":  21.99,
+                      "regular":  19.99,
                       "source_ad":  "everyday shelf price"
                   },
                   {
@@ -279,6 +282,14 @@
                   },
                   {
                       "store":  "Family Fare",
+                      "item":  "Hormel Original Bacon 16 Oz",
+                      "ad_price":  "$8.29",
+                      "size":  "16 oz",
+                      "regular":  8.29,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
                       "item":  "Hormel Black Label Thick Cut Bacon",
                       "ad_price":  "$8.29",
                       "size":  "16 oz",
@@ -315,14 +326,6 @@
                       "ad_price":  "$9.49",
                       "size":  "16 oz",
                       "regular":  9.49,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
-                      "item":  "Plumrose Bacon, Sliced 12 Oz",
-                      "ad_price":  "$4.29",
-                      "size":  "12 oz",
-                      "regular":  4.29,
                       "source_ad":  "everyday shelf price"
                   },
                   {
@@ -559,6 +562,14 @@
                   },
                   {
                       "store":  "Family Fare",
+                      "item":  "Kemps 2% Reduced Fat Milk 1 Gal",
+                      "ad_price":  "$4.69",
+                      "size":  "1 gal",
+                      "regular":  4.69,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
                       "item":  "Kemps Fat Free Skim Milk 1 Gal",
                       "ad_price":  "$4.69",
                       "size":  "1 gal",
@@ -642,14 +653,6 @@
                       "item":  "Kemps 2% Reduced Fat Milk 0.5 Gal",
                       "ad_price":  "$2.99",
                       "size":  "0.5 gal",
-                      "regular":  2.99,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
-                      "item":  "Kemps Whole Milk 0.5 Gal",
-                      "ad_price":  "$2.99",
-                      "size":  "64 oz",
                       "regular":  2.99,
                       "source_ad":  "everyday shelf price"
                   },
@@ -855,6 +858,14 @@
                   },
                   {
                       "store":  "Family Fare",
+                      "item":  "Lactaid Cottage Cheese 16 Oz",
+                      "ad_price":  "$4.49",
+                      "size":  "16 oz",
+                      "regular":  4.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
                       "item":  "Our Family Cottage Cheese, Small Curd, 4% Milkfat Minimum 24 Oz",
                       "ad_price":  "$3.69",
                       "size":  "24 oz",
@@ -883,14 +894,6 @@
                       "ad_price":  "$2.79",
                       "size":  "16 oz",
                       "regular":  2.79,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
-                      "item":  "Daisy Cottage Cheese, With Peaches, 4% Milkfat Minimum 6 Oz",
-                      "ad_price":  "$2.29",
-                      "size":  "6 oz",
-                      "regular":  2.29,
                       "source_ad":  "everyday shelf price"
                   },
                   {
@@ -999,18 +1002,18 @@
                   },
                   {
                       "store":  "Family Fare",
-                      "item":  "Cacique Sour Cream, Crema Mexicana Agria 15 Oz",
-                      "ad_price":  "$5.59",
-                      "size":  "15 oz",
-                      "regular":  5.59,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
                       "item":  "Cacique Sour Cream, Original Crema, Mexican Style 12 Oz",
                       "ad_price":  "$3.99",
                       "size":  "12 oz",
                       "regular":  3.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Lala Sour Cream, Crema Mexicana, Mexican Style 16 Oz",
+                      "ad_price":  "$5.99",
+                      "size":  "16 oz",
+                      "regular":  5.99,
                       "source_ad":  "everyday shelf price"
                   },
                   {
@@ -1271,10 +1274,26 @@
                   },
                   {
                       "store":  "Family Fare",
+                      "item":  "Noosa Yoghurt, Finest, Vanilla Bean 8 Oz",
+                      "ad_price":  "$2.89",
+                      "size":  "8 oz",
+                      "regular":  2.89,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
                       "item":  "Noosa Yoghurt, Finest, Salted Caramel 4.5 Oz",
                       "ad_price":  "$1.79",
                       "size":  "4.5 oz",
                       "regular":  1.79,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Noosa Yoghurt, Finest, Strawberry Rhubarb 8 Oz",
+                      "ad_price":  "$2.89",
+                      "size":  "8 oz",
+                      "regular":  2.89,
                       "source_ad":  "everyday shelf price"
                   },
                   {
@@ -1319,6 +1338,14 @@
                   },
                   {
                       "store":  "Family Fare",
+                      "item":  "Noosa Yoghurt, Finest, Peach 8 Oz",
+                      "ad_price":  "$2.89",
+                      "size":  "8 oz",
+                      "regular":  2.89,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
                       "item":  "Yoplait Low Fat Strawberry Banana Yogurt 6 Oz",
                       "ad_price":  "$0.89",
                       "size":  "6 oz",
@@ -1347,30 +1374,6 @@
                       "ad_price":  "$0.89",
                       "size":  "6 oz",
                       "regular":  0.89,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
-                      "item":  "Yoplait Low Fat Strawberry Yogurt 6 Oz",
-                      "ad_price":  "$0.89",
-                      "size":  "6 oz",
-                      "regular":  0.89,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
-                      "item":  "Yoplait Low Fat Mountain Blueberry Yogurt 6 Oz",
-                      "ad_price":  "$0.89",
-                      "size":  "6 oz",
-                      "regular":  0.89,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
-                      "item":  "Chobani Yogurt, Chocolate Covered Strawberry, Greek 4.5 Oz",
-                      "ad_price":  "$1.89",
-                      "size":  "4.5 oz",
-                      "regular":  1.89,
                       "source_ad":  "everyday shelf price"
                   },
                   {
@@ -1432,9 +1435,9 @@
                   {
                       "store":  "Family Fare",
                       "item":  "Chobani Strawberry Banana On The Bottom Reduced Fat Greek Yogurt 5.3 Oz",
-                      "ad_price":  "$1.69",
+                      "ad_price":  "$1.89",
                       "size":  "6 oz",
-                      "regular":  1.69,
+                      "regular":  1.89,
                       "source_ad":  "everyday shelf price"
                   },
                   {
@@ -1535,6 +1538,14 @@
                   },
                   {
                       "store":  "Family Fare",
+                      "item":  "Yoplait Low Fat Strawberry Yogurt 6 Oz",
+                      "ad_price":  "$0.89",
+                      "size":  "6 oz",
+                      "regular":  0.89,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
                       "item":  "Mike\u0027s Harder Harder Strawberry Pineapple Beer 23.5 Oz",
                       "ad_price":  "$3.69",
                       "size":  "23.5 oz",
@@ -1555,6 +1566,14 @@
                       "ad_price":  "$0.5",
                       "size":  "1 ea",
                       "regular":  0.5,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Chobani Yogurt, Chocolate Covered Strawberry, Greek 4.5 Oz",
+                      "ad_price":  "$1.89",
+                      "size":  "4.5 oz",
+                      "regular":  1.89,
                       "source_ad":  "everyday shelf price"
                   },
                   {
@@ -1587,6 +1606,14 @@
                       "ad_price":  "$5.99",
                       "size":  "16 oz",
                       "regular":  5.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Yoplait Low Fat Mountain Blueberry Yogurt 6 Oz",
+                      "ad_price":  "$0.89",
+                      "size":  "6 oz",
+                      "regular":  0.89,
                       "source_ad":  "everyday shelf price"
                   },
                   {
@@ -1851,6 +1878,126 @@
                       "ad_price":  "$5.99",
                       "size":  "lb",
                       "regular":  5.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Apple Juice 64 Fl Oz",
+                      "ad_price":  "$2.69",
+                      "size":  "64 fl oz",
+                      "regular":  2.69,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Simply Apple Juice Bottle 52 Fl Oz",
+                      "ad_price":  "$5.49",
+                      "size":  "52 oz",
+                      "regular":  5.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Juicy Juice 100% Juice, Apple 64 Fl Oz",
+                      "ad_price":  "$4.99",
+                      "size":  "64 fl oz",
+                      "regular":  4.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Mott\u0027s 100% Juice, Natural, Apple 64 Oz",
+                      "ad_price":  "$5.39",
+                      "size":  "64 oz",
+                      "regular":  5.39,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Mott\u0027s Zero Sugar Apple Juice Drink From Concentrate 64 Fl Oz",
+                      "ad_price":  "$4.29",
+                      "size":  "64 fl oz",
+                      "regular":  4.29,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Old Orchard 100% Juice, Apple 64 Oz",
+                      "ad_price":  "$3.99",
+                      "size":  "64 oz",
+                      "regular":  3.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Mott\u0027s Apple Juice 64 Fl Oz",
+                      "ad_price":  "$5.39",
+                      "size":  "64 oz",
+                      "regular":  5.39,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Mott\u0027s 100% Juice, Apple 1 Gal",
+                      "ad_price":  "$8.59",
+                      "size":  "1 gal",
+                      "regular":  8.59,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Indian Summer Apple Juice, Premium 128 Fl Oz",
+                      "ad_price":  "$7.49",
+                      "size":  "128 fl oz",
+                      "regular":  7.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Apple Cider Juice 64 Fl Oz",
+                      "ad_price":  "$4.29",
+                      "size":  "64 fl oz",
+                      "regular":  4.29,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Mott\u0027s Light Apple Juice Beverage 64 Fl Oz",
+                      "ad_price":  "$5.39",
+                      "size":  "64 fl oz",
+                      "regular":  5.39,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Indian Summer Apple Juice, Premium 64 Fl Oz",
+                      "ad_price":  "$4.59",
+                      "size":  "64 fl oz",
+                      "regular":  4.59,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Langers Apple 100% Juice 64 Fl Oz",
+                      "ad_price":  "$4.59",
+                      "size":  "64 fl oz",
+                      "regular":  4.59,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Apple Juice",
+                      "ad_price":  "$3.99",
+                      "size":  "96 oz",
+                      "regular":  3.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Certified 93% Lean / 7% Fat, Lean Ground Beef Roll, 1 Lb. 16 Oz",
+                      "ad_price":  "$9.29",
+                      "size":  "1 lb",
+                      "regular":  9.29,
                       "source_ad":  "everyday shelf price"
                   },
                   {
@@ -2583,6 +2730,14 @@
                   },
                   {
                       "store":  "Family Fare",
+                      "item":  "The Little Potato Co. Potatoes, Garlic \u0026 Herb, Fresh 1 Lb",
+                      "ad_price":  "$5.69",
+                      "size":  "1 lb",
+                      "regular":  5.69,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
                       "item":  "Fresh \u0026 Finest Garlic Herb Butter",
                       "ad_price":  "$4.99",
                       "size":  "4 oz",
@@ -2603,14 +2758,6 @@
                       "ad_price":  "$4.99",
                       "size":  "6 ea",
                       "regular":  4.99,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
-                      "item":  "Fresh Gourmet Croutons, Butter \u0026 Garlic 5 Oz",
-                      "ad_price":  "$2.49",
-                      "size":  "5 oz",
-                      "regular":  2.49,
                       "source_ad":  "everyday shelf price"
                   },
                   {
@@ -2687,106 +2834,10 @@
                   },
                   {
                       "store":  "Family Fare",
-                      "item":  "Spice Supreme Spices Garlic Powder",
-                      "ad_price":  "$5.0",
-                      "size":  "1.75 oz",
-                      "regular":  5.0,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
-                      "item":  "Our Family Garlic Powder 3.12 Oz",
-                      "ad_price":  "$2.29",
-                      "size":  "3.12 oz",
-                      "regular":  2.29,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
-                      "item":  "That\u0027s Smart! Garlic Powder",
-                      "ad_price":  "$1.39",
-                      "size":  "2.5 oz",
-                      "regular":  1.39,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
-                      "item":  "Our Family Garlic Powder 5.37 Oz",
-                      "ad_price":  "$4.99",
-                      "size":  "5.37 oz",
-                      "regular":  4.99,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
-                      "item":  "Lawry\u0027s Garlic Powder 3.12 Oz",
-                      "ad_price":  "$3.49",
-                      "size":  "3.12 oz",
-                      "regular":  3.49,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
-                      "item":  "Mc Cormick Garlic Powder 3.12 Oz",
-                      "ad_price":  "$6.99",
-                      "size":  "3.12 oz",
-                      "regular":  6.99,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
-                      "item":  "Mc Cormick Garlic Powder 8.75 Oz",
-                      "ad_price":  "$10.99",
-                      "size":  "8.75 oz",
-                      "regular":  10.99,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
-                      "item":  "Mc Cormick Garlic Powder 5.37 Oz",
-                      "ad_price":  "$9.79",
-                      "size":  "5.37 oz",
-                      "regular":  9.79,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
-                      "item":  "Garlic, Powder Tones",
-                      "ad_price":  "$1.99",
-                      "size":  "0.9 oz",
-                      "regular":  1.99,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
-                      "item":  "Lawry\u0027s Garlic Powder 8.5 Oz",
-                      "ad_price":  "$9.99",
-                      "size":  "8.5 oz",
-                      "regular":  9.99,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
-                      "item":  "Sugar \u0027N Spice Smoked Garlic Powder Pp",
-                      "ad_price":  "$2.66",
-                      "size":  "2 oz",
-                      "regular":  2.66,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
-                      "item":  "Finest Reserve Garlic Powder 1.9 Oz",
-                      "ad_price":  "$6.59",
-                      "size":  "1.9 oz",
-                      "regular":  6.59,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
-                      "item":  "Mc Cormick Gourmet Organic Garlic Powder 2.25 Oz",
-                      "ad_price":  "$10.49",
-                      "size":  "2.25 oz",
-                      "regular":  10.49,
+                      "item":  "Whole Boneless Pork Tenderloin",
+                      "ad_price":  "$5.49",
+                      "size":  "lb",
+                      "regular":  5.49,
                       "source_ad":  "everyday shelf price"
                   },
                   {
@@ -2991,19 +3042,1691 @@
                   },
                   {
                       "store":  "Family Fare",
-                      "item":  "California Sun Dry Sun Dried Tomatoes Julienne Ct",
-                      "ad_price":  "$5.99",
-                      "size":  "8 oz",
-                      "regular":  5.99,
-                      "source_ad":  "everyday shelf price"
-                  },
-                  {
-                      "store":  "Family Fare",
                       "item":  "Simple Mills Almond Flour Crackers, Tomato \u0026 Basil, Sun Dried 4.25 Oz",
                       "ad_price":  "$5.99",
                       "size":  "4.25 oz",
                       "regular":  5.99,
                       "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Simply Grape Juice Drink Bottle 52 Fl Oz",
+                      "ad_price":  "$3.49",
+                      "size":  "52 fl oz",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Grape Juice 64 Fl Oz",
+                      "ad_price":  "$3.99",
+                      "size":  "64 fl oz",
+                      "regular":  3.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family White Grape Juice 64 Fl Oz",
+                      "ad_price":  "$3.99",
+                      "size":  "64 fl oz",
+                      "regular":  3.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Welch\u0027s Juice, Red Grape 64 Fl Oz",
+                      "ad_price":  "$6.89",
+                      "size":  "64 fl oz",
+                      "regular":  6.89,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Welch\u0027s White Grape Juice 64 Fl Oz",
+                      "ad_price":  "$6.89",
+                      "size":  "64 oz",
+                      "regular":  6.89,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Juicy Juice 100% Juice, Grape 64 Fl Oz",
+                      "ad_price":  "$4.99",
+                      "size":  "64 fl oz",
+                      "regular":  4.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Welch\u0027s Juice, Concord Grape 64 Fl Oz",
+                      "ad_price":  "$6.89",
+                      "size":  "64 oz",
+                      "regular":  6.89,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Welch\u0027s Concord Grape Juice 46 Fl Oz",
+                      "ad_price":  "$5.49",
+                      "size":  "46 fl oz",
+                      "regular":  5.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Fresh White/Green Seedless Grapes",
+                      "ad_price":  "$3.49",
+                      "size":  "lb",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Red Seedless Grapes",
+                      "ad_price":  "$3.69",
+                      "size":  "lb",
+                      "regular":  3.69,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Powerade Zero Sugar Grape Sports Drink Bottle 28 Fl Oz",
+                      "ad_price":  "$1.59",
+                      "size":  "28 fl oz",
+                      "regular":  1.59,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Grape Tomatoes Our Family",
+                      "ad_price":  "$3.29",
+                      "size":  "1 pt",
+                      "regular":  3.29,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Powerade Grape Sports Drink Bottle 28 Fl Oz",
+                      "ad_price":  "$1.59",
+                      "size":  "28 fl oz",
+                      "regular":  1.59,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Kool Aid Caffeine Free Unsweetened Grape Drink Mix 0.14 Oz",
+                      "ad_price":  "$0.59",
+                      "size":  "0.14 oz",
+                      "regular":  0.59,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Fresh Grapes Fresh Divide",
+                      "ad_price":  "$4.99",
+                      "size":  "lb",
+                      "regular":  4.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Fresh Sweet Corn (4 Ct)",
+                      "ad_price":  "$5.99",
+                      "size":  "1 pk",
+                      "regular":  5.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Birds Eye Super Sweet Corn 10 Oz",
+                      "ad_price":  "$1.59",
+                      "size":  "10 oz",
+                      "regular":  1.59,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Sweet Corn, Super, Steamable 10 Oz",
+                      "ad_price":  "$1.39",
+                      "size":  "10 oz",
+                      "regular":  1.39,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Frozen Super Sweet Corn, On The Cob Our Family",
+                      "ad_price":  "$3.49",
+                      "size":  "8 ct",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Green Giant Whole Kernal Sweet Corn",
+                      "ad_price":  "$1.99",
+                      "size":  "15.25 oz",
+                      "regular":  1.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Del Monte Cream Style Sweet Corn 14.75 Oz",
+                      "ad_price":  "$1.79",
+                      "size":  "14.75 oz",
+                      "regular":  1.79,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Beech Nut Stage 2 (6+ Months) Sweet Corn \u0026 Green Beans 4 Oz",
+                      "ad_price":  "$1.59",
+                      "size":  "4 oz",
+                      "regular":  1.59,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Pop Corners Kettle Corn Sweet \u0026 Salty Popped Corn Snacks 7 Oz",
+                      "ad_price":  "$4.99",
+                      "size":  "7 oz",
+                      "regular":  4.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Del Monte Cream Style Golden Sweet Corn 8.25 Oz",
+                      "ad_price":  "$1.79",
+                      "size":  "8.25 oz",
+                      "regular":  1.79,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Del Monte No Salt Added Whole Kernel Golden Sweet Corn 11 Oz",
+                      "ad_price":  "$3.39",
+                      "size":  "11 oz",
+                      "regular":  3.39,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Libby\u0027s Whole Kernel Sweet Corn 4 Ea",
+                      "ad_price":  "$2.69",
+                      "size":  "4 ea",
+                      "regular":  2.69,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Del Monte No Salt Added Golden Cream Style Sweet Corn 14.75 Oz",
+                      "ad_price":  "$1.99",
+                      "size":  "14.75 oz",
+                      "regular":  1.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Green Giant Sweet Corn, Whole Kernel, Extra Sweet Niblets 11 Oz",
+                      "ad_price":  "$3.49",
+                      "size":  "11 oz",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Sweet Yellow Corn",
+                      "ad_price":  "$0.69",
+                      "size":  "1 ct",
+                      "regular":  0.69,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Super Sweet Cream Corn 14.75 Oz",
+                      "ad_price":  "$0.99",
+                      "size":  "14.75 oz",
+                      "regular":  0.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Fresh Watermelons, Seedless",
+                      "ad_price":  "$6.99",
+                      "size":  "1 ct",
+                      "regular":  6.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Fresh Watermelon Cubes",
+                      "ad_price":  "$5.0",
+                      "size":  "18 oz",
+                      "regular":  5.0,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Fresh  Watermelon, Fillets Fresh Divide",
+                      "ad_price":  "$2.49",
+                      "size":  "lb",
+                      "regular":  2.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Red Bull Red Edition Energy Drink, Watermelon, 114mg Caffeine 12 Fl Oz",
+                      "ad_price":  "$3.49",
+                      "size":  "12 fl oz",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Sparkling Ice Zero Sugar Strawberry Watermelon Sparkling Water 17 Fl Oz",
+                      "ad_price":  "$1.39",
+                      "size":  "17 fl oz",
+                      "regular":  1.39,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Watermelon Mini Seedless",
+                      "ad_price":  "$5.99",
+                      "size":  "1 ct",
+                      "regular":  5.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Extra Sugarfree Sweet Watermelon Gum 15 Ea",
+                      "ad_price":  "$2.29",
+                      "size":  "15 ct",
+                      "regular":  2.29,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Push Pop Cherry Watermelon Jumbo Candy 1.06 Oz",
+                      "ad_price":  "$2.99",
+                      "size":  "1.06 oz",
+                      "regular":  2.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Dots Watermelon Dots",
+                      "ad_price":  "$1.69",
+                      "size":  "6.5 oz",
+                      "regular":  1.69,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Simply Watermelon Juice Drink Bottle 52 Fl Oz",
+                      "ad_price":  "$3.49",
+                      "size":  "52 oz",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Watermelon Liqueur, Liquor",
+                      "ad_price":  "$0.99",
+                      "size":  "50",
+                      "regular":  0.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Powerade Zero Sugar Watermelon Enhanced Water Bottle 20 Fl Oz",
+                      "ad_price":  "$1.89",
+                      "size":  "20 fl oz",
+                      "regular":  1.89,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Bomb Pop Pops, Strawberry, Watermelon \u0026 Grape, Nerds Candy 12 Ea",
+                      "ad_price":  "$4.99",
+                      "size":  "12 ea",
+                      "regular":  4.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Sparkling Ice Zero Sugar Watermelon Lemonade Flavored Sparkling Water 16 Fl Oz",
+                      "ad_price":  "$1.79",
+                      "size":  "16 fl oz",
+                      "regular":  1.79,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Kool Aid Watermelon Drink 10 Ea",
+                      "ad_price":  "$3.79",
+                      "size":  "10ct/6oz",
+                      "regular":  3.79,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Spice Supreme Spices Garlic Powder",
+                      "ad_price":  "$5.0",
+                      "size":  "1.75 oz",
+                      "regular":  5.0,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Garlic Powder 3.12 Oz",
+                      "ad_price":  "$2.29",
+                      "size":  "3.12 oz",
+                      "regular":  2.29,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "That\u0027s Smart! Garlic Powder",
+                      "ad_price":  "$1.39",
+                      "size":  "2.5 oz",
+                      "regular":  1.39,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Garlic Powder 5.37 Oz",
+                      "ad_price":  "$4.99",
+                      "size":  "5.37 oz",
+                      "regular":  4.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Lawry\u0027s Garlic Powder 3.12 Oz",
+                      "ad_price":  "$3.49",
+                      "size":  "3.12 oz",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Mc Cormick Garlic Powder 3.12 Oz",
+                      "ad_price":  "$6.99",
+                      "size":  "3.12 oz",
+                      "regular":  6.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Mc Cormick Garlic Powder 8.75 Oz",
+                      "ad_price":  "$10.99",
+                      "size":  "8.75 oz",
+                      "regular":  10.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Mc Cormick Garlic Powder 5.37 Oz",
+                      "ad_price":  "$9.79",
+                      "size":  "5.37 oz",
+                      "regular":  9.79,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Garlic, Powder Tones",
+                      "ad_price":  "$1.99",
+                      "size":  "0.9 oz",
+                      "regular":  1.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Lawry\u0027s Garlic Powder 8.5 Oz",
+                      "ad_price":  "$9.99",
+                      "size":  "8.5 oz",
+                      "regular":  9.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Sugar \u0027N Spice Smoked Garlic Powder Pp",
+                      "ad_price":  "$2.66",
+                      "size":  "2 oz",
+                      "regular":  2.66,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Finest Reserve Garlic Powder 1.9 Oz",
+                      "ad_price":  "$6.59",
+                      "size":  "1.9 oz",
+                      "regular":  6.59,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Mc Cormick Gourmet Organic Garlic Powder 2.25 Oz",
+                      "ad_price":  "$10.49",
+                      "size":  "2.25 oz",
+                      "regular":  10.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Green Beans, Cut, Fresh Frozen 12 Oz",
+                      "ad_price":  "$1.39",
+                      "size":  "12 oz",
+                      "regular":  1.39,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Green Beans, Cut, Fresh Frozen 24 Oz",
+                      "ad_price":  "$2.39",
+                      "size":  "24 oz",
+                      "regular":  2.39,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Frozen Green Beans, French Cut Our Family Steamable",
+                      "ad_price":  "$1.39",
+                      "size":  "12 oz",
+                      "regular":  1.39,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Tomatoes, With Onion, Celery \u0026 Green Bell Pepper, Diced, Petite 14.5 Oz",
+                      "ad_price":  "$0.99",
+                      "size":  "14.5 oz",
+                      "regular":  0.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Cumin, Ground 2 Oz",
+                      "ad_price":  "$4.29",
+                      "size":  "2 oz",
+                      "regular":  4.29,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Comino Molido Ground Cumin",
+                      "ad_price":  "$1.19",
+                      "size":  "1 ea",
+                      "regular":  1.19,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Tone\u0027s Ground Cumin",
+                      "ad_price":  "$1.99",
+                      "size":  "0.6 oz",
+                      "regular":  1.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Finest Reserve Cumin, Ground 1.8 Oz",
+                      "ad_price":  "$6.59",
+                      "size":  "1.8 oz",
+                      "regular":  6.59,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Lawry\u0027s Ground Cumin 2 Oz",
+                      "ad_price":  "$3.49",
+                      "size":  "2 oz",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Mc Cormick Ground Cumin 1.5 Oz",
+                      "ad_price":  "$3.99",
+                      "size":  "1.5 oz",
+                      "regular":  3.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Full Circle Organic Cumin, Ground",
+                      "ad_price":  "$4.49",
+                      "size":  "1.6 oz",
+                      "regular":  4.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Mike\u0027s Hot Honey Extra Hot Honey 12 Oz",
+                      "ad_price":  "$13.99",
+                      "size":  "12 oz",
+                      "regular":  13.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Nate\u0027s 100% Pure Hot Honey 16 Oz",
+                      "ad_price":  "$9.99",
+                      "size":  "16 oz",
+                      "regular":  9.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Local Hive Honey Hot Habanero Hot Sauce 6 Oz",
+                      "ad_price":  "$4.99",
+                      "size":  "6 oz",
+                      "regular":  4.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Frank\u0027s Red Hot Hot Honey Squeeze Sauce 12 Fl Oz",
+                      "ad_price":  "$5.99",
+                      "size":  "12 fl oz",
+                      "regular":  5.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Kinder\u0027s Honey Hot Bbq Sauce 15.5 Oz",
+                      "ad_price":  "$5.99",
+                      "size":  "15.5 oz",
+                      "regular":  5.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Blue Diamond Hot Honey Almonds 6 Oz",
+                      "ad_price":  "$4.69",
+                      "size":  "6 oz",
+                      "regular":  4.69,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Minute Hot Honey Chicken Seasoned Rice 8.8 Oz",
+                      "ad_price":  "$2.79",
+                      "size":  "8.8 oz",
+                      "regular":  2.79,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Pace® Hot Honey Habanero, Sweet And Spicy 16.000 Oz",
+                      "ad_price":  "$3.39",
+                      "size":  "16.000 oz",
+                      "regular":  3.39,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "V8® Hot Honey 100% Vegetable Juice 46.000 Fl Oz",
+                      "ad_price":  "$4.99",
+                      "size":  "46.000 fl oz",
+                      "regular":  4.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "State Fair Hot Honey Mini Corn Dogs 23.76 Oz",
+                      "ad_price":  "$9.99",
+                      "size":  "23.76 oz",
+                      "regular":  9.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Del Monte Sliced Hot Honey Carrots 14.5 Oz",
+                      "ad_price":  "$2.99",
+                      "size":  "14.5 oz",
+                      "regular":  2.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Bush\u0027s Best Hot Honey Grillin\u0027 Beans 21.7 Oz",
+                      "ad_price":  "$2.99",
+                      "size":  "21.7 oz",
+                      "regular":  2.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Jiffy Sweet \u0026 Spicy Hot Honey Corn Muffin Mix 7 Oz",
+                      "ad_price":  "$1.69",
+                      "size":  "7 oz",
+                      "regular":  1.69,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Kind Honey Hot Breakfast Bars 6 Ea",
+                      "ad_price":  "$6.99",
+                      "size":  "6 ea",
+                      "regular":  6.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Stonefire Hot Honey Flavored Naan 2 Ea",
+                      "ad_price":  "$4.49",
+                      "size":  "2 ea",
+                      "regular":  4.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Johnsonville Sausage, Italian, Hot 19 Oz",
+                      "ad_price":  "$6.99",
+                      "size":  "19 oz",
+                      "regular":  6.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Johnsonville Premium Italian Hot Sausage 16 Oz",
+                      "ad_price":  "$6.99",
+                      "size":  "16 oz",
+                      "regular":  6.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Smoked Hot Italian Sausage Hot",
+                      "ad_price":  "$6.99",
+                      "size":  "1 ea",
+                      "regular":  6.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Teriyaki Sauce Our Family",
+                      "ad_price":  "$2.29",
+                      "size":  "10 oz",
+                      "regular":  2.29,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "La Choy Sauce, Teriyaki 14.5 Oz",
+                      "ad_price":  "$4.79",
+                      "size":  "14.5 oz",
+                      "regular":  4.79,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Kikkoman Baste \u0026 Glaze Teriyaki Sauce 285 Ml",
+                      "ad_price":  "$4.99",
+                      "size":  "285 ml",
+                      "regular":  4.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Panda Express Sauce, Mandarin Teriyaki 20.5 Oz",
+                      "ad_price":  "$6.99",
+                      "size":  "20.5 oz",
+                      "regular":  6.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Kikkoman The Original Teriyaki Marinade \u0026 Sauce 296 Ml",
+                      "ad_price":  "$3.79",
+                      "size":  "10 oz",
+                      "regular":  3.79,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Culinary Tours Sauce, Sesame Teriyaki 11.8 Fl Oz",
+                      "ad_price":  "$5.99",
+                      "size":  "11.8 fl oz",
+                      "regular":  5.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Sweet Baby Ray\u0027s Sauce \u0026 Marinade, Sweet Teriyaki 16 Fl Oz",
+                      "ad_price":  "$4.99",
+                      "size":  "16 fl oz",
+                      "regular":  4.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Soy Vay Veri Veri Teriyaki Marinade \u0026 Sauce 21 Oz",
+                      "ad_price":  "$5.99",
+                      "size":  "21 oz",
+                      "regular":  5.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Hormel Turkey Pepperoni 5 Oz",
+                      "ad_price":  "$5.49",
+                      "size":  "5 oz",
+                      "regular":  5.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Armour Turkey Pepperoni 4 Oz",
+                      "ad_price":  "$3.99",
+                      "size":  "4 oz",
+                      "regular":  3.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Dr Pepper Soda, Zero Sugar 2 L",
+                      "ad_price":  "$3.49",
+                      "size":  "2 l",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Coca Cola Zero Sugar Soda Bottle 2 L",
+                      "ad_price":  "$3.49",
+                      "size":  "2 ltr",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Sunkist Zero Sugar Orange Soda 2.1 Qt",
+                      "ad_price":  "$3.49",
+                      "size":  "2ltr btl",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "7 Up Soda, Zero Sugar, Cherry 2.1 Qt",
+                      "ad_price":  "$3.49",
+                      "size":  "2ltr btl",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Dr Pepper Zero Sugar Cherry Soda 2.1 Qt",
+                      "ad_price":  "$3.49",
+                      "size":  "2.1 qt",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "7 Up Soda, Zero Sugar, Lemon Lime 2.1 Qt",
+                      "ad_price":  "$3.49",
+                      "size":  "2ltr btl",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Pepsi Soda, Zero Sugar, Wild Cherry 2.1 Qt",
+                      "ad_price":  "$3.49",
+                      "size":  "2.1 qt",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Sprite Zero Sugar Lemon Lime Soda Bottle 2 L",
+                      "ad_price":  "$3.49",
+                      "size":  "2 ltr",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Pepsi Cola, Zero Sugar 2.1 Qt",
+                      "ad_price":  "$3.49",
+                      "size":  "2 ltr",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Canada Dry Ginger Ale, Zero Sugar 2.1 Qt",
+                      "ad_price":  "$3.49",
+                      "size":  "2.1 qt",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "A\u0026W Zero Sugar Root Beer 2.1 Qt",
+                      "ad_price":  "$3.49",
+                      "size":  "2ltr btl",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Zucchini Squash",
+                      "ad_price":  "$2.29",
+                      "size":  "lb",
+                      "regular":  2.29,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Yellow Zucchini/Yellow Squash",
+                      "ad_price":  "$1.99",
+                      "size":  "lb",
+                      "regular":  1.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Arm \u0026 Hammer Detergent, Clean Meadow 100.5 Fl Oz",
+                      "ad_price":  "$12.99",
+                      "size":  "100.5 fl oz",
+                      "regular":  12.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Arm \u0026 Hammer Detergent, Sensitive Skin, Free \u0026 Clear 105 Fl Oz",
+                      "ad_price":  "$12.99",
+                      "size":  "105 fl oz",
+                      "regular":  12.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Arm \u0026 Hammer Detergent, Sensitive Skin, Free \u0026 Clear 140 Fl Oz",
+                      "ad_price":  "$13.99",
+                      "size":  "140 fl oz",
+                      "regular":  13.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Arm \u0026 Hammer Detergent, Sensitive Skin, Free \u0026 Clear 33 Fl Oz",
+                      "ad_price":  "$6.19",
+                      "size":  "33 fl oz",
+                      "regular":  6.19,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Arm \u0026 Hammer Detergent, Odor Blasters, Fresh Botanical 100.5 Fl Oz",
+                      "ad_price":  "$12.99",
+                      "size":  "100.5 fl oz",
+                      "regular":  12.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Arm \u0026 Hammer Detergent, Odor Blasters, Stain Fighters, Fresh Burst 138 Fl Oz",
+                      "ad_price":  "$13.99",
+                      "size":  "138 fl oz",
+                      "regular":  13.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Arm \u0026 Hammer Laundry Detergent, Concentrated, 5 In 1, Fresh Burst, Power Paks 42 Ea",
+                      "ad_price":  "$12.49",
+                      "size":  "42 ea",
+                      "regular":  12.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Arm \u0026 Hammer Deep Clean Free \u0026 Clear Detergent 75 Fl Oz",
+                      "ad_price":  "$15.49",
+                      "size":  "75 fl oz",
+                      "regular":  15.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Arm \u0026 Hammer Baking Soda Fresh Sparkling Fresh Detergent 110 Fl Oz",
+                      "ad_price":  "$12.99",
+                      "size":  "110 fl oz",
+                      "regular":  12.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Arm \u0026 Hammer Stain Fighters Fresh Scent Detergent 32.5 Fl Oz",
+                      "ad_price":  "$6.19",
+                      "size":  "32.5 fl oz",
+                      "regular":  6.19,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Arm \u0026 Hammer Stain Fighters Fresh Scent Detergent 100.5 Fl Oz",
+                      "ad_price":  "$12.99",
+                      "size":  "100.5 fl oz",
+                      "regular":  12.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Arm \u0026 Hammer Deep Clean Odor Formula Radiant Burst Detergent 75 Fl Oz",
+                      "ad_price":  "$15.49",
+                      "size":  "75 fl oz",
+                      "regular":  15.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Arm \u0026 Hammer Clean Burst Dual He",
+                      "ad_price":  "$12.99",
+                      "size":  "110 oz",
+                      "regular":  12.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Arm \u0026 Hammer Odor Blst Fresh Burst",
+                      "ad_price":  "$12.99",
+                      "size":  "96.2 oz",
+                      "regular":  12.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Arm \u0026 Hammer Liquid Laundry Clean Burst",
+                      "ad_price":  "$6.19",
+                      "size":  "43 oz",
+                      "regular":  6.19,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Fresh Whole Chicken",
+                      "ad_price":  "$1.79",
+                      "size":  "lb",
+                      "regular":  1.79,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Fresh Whole Chicken Gold N Plump",
+                      "ad_price":  "$1.99",
+                      "size":  "lb",
+                      "regular":  1.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Iams Adult 1+ 100% Complete \u0026 Balanced Minichunks Chicken \u0026 Whole Grain Recipe Dog Food 15 Lb",
+                      "ad_price":  "$37.99",
+                      "size":  "15 lb",
+                      "regular":  37.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Iams Dog Food, Super Premium, Chicken \u0026 Whole Grain Recipe, Healthy Aging, Mature 7+ 15 Lb",
+                      "ad_price":  "$37.99",
+                      "size":  "15 lb",
+                      "regular":  37.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Iams Adult 1+ Chicken \u0026 Whole Grain Recipe Dog Food 15 Lb",
+                      "ad_price":  "$37.99",
+                      "size":  "15 lb",
+                      "regular":  37.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Iams Adult 1+ 100% Complete \u0026 Balanced Minichunks Chicken \u0026 Whole Grain Recipe Dog Food 5 Lb",
+                      "ad_price":  "$15.99",
+                      "size":  "5 lb",
+                      "regular":  15.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Iams Adult 1+ Minichunks Chicken \u0026 Whole Grain Recipe Dog Food 30 Lb",
+                      "ad_price":  "$55.99",
+                      "size":  "30 lb",
+                      "regular":  55.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Iams Dog Food, With Chicken \u0026 Whole Grain Rice, Classic Ground, Adult 13 Oz",
+                      "ad_price":  "$2.99",
+                      "size":  "13 oz",
+                      "regular":  2.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Whole Rotisserie Chicken, Savory Hot (No Pick Up/Delivery Before 11am)",
+                      "ad_price":  "$8.99",
+                      "size":  "1 ea",
+                      "regular":  8.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Whole Rotisserie Chicken (No Pick Up/Delivery Before 11am)",
+                      "ad_price":  "$7.99",
+                      "size":  "1 ea",
+                      "regular":  7.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Whole Rotisserie Chicken, Savory Cold",
+                      "ad_price":  "$8.99",
+                      "size":  "1 ea",
+                      "regular":  8.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Chicken Of The Sea Whole Oysters 8 Oz",
+                      "ad_price":  "$5.29",
+                      "size":  "8 oz",
+                      "regular":  5.29,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Nutrish Natural Adult Whole Health Blend Chunks In Gravy Real Chicken \u0026 Veggies Recipe Food For Dogs 13 Oz",
+                      "ad_price":  "$3.49",
+                      "size":  "13 oz",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Johnsonville Original Recipe Breakfast Sausage 12 Oz",
+                      "ad_price":  "$5.69",
+                      "size":  "12 oz",
+                      "regular":  5.69,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Johnsonville Turkey Breakfast Sausage 12 Ea",
+                      "ad_price":  "$5.99",
+                      "size":  "12 ea",
+                      "regular":  5.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Johnsonville Original Recipe Breakfast Sausage 12 Ea",
+                      "ad_price":  "$5.99",
+                      "size":  "12 ea",
+                      "regular":  5.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Johnsonville Mild Recipe Breakfast Sausage 12 Oz",
+                      "ad_price":  "$5.69",
+                      "size":  "12 oz",
+                      "regular":  5.69,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Jimmy Dean Premium Pork Regular Breakfast Sausage Roll 16 Oz",
+                      "ad_price":  "$6.99",
+                      "size":  "16 oz",
+                      "regular":  6.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Breakfast Sausage Links Our Family",
+                      "ad_price":  "$4.49",
+                      "size":  "12 oz",
+                      "regular":  4.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Ground Breakfast Sausage Our Family Original",
+                      "ad_price":  "$4.49",
+                      "size":  "16 oz",
+                      "regular":  4.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Maple Breakfast Sausage Links Our Family",
+                      "ad_price":  "$4.49",
+                      "size":  "12 oz",
+                      "regular":  4.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Breakfast Sausage Patties Our Family",
+                      "ad_price":  "$4.49",
+                      "size":  "12 oz",
+                      "regular":  4.49,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Jimmy Dean Fully Cooked Original Breakfast Sausage Crumbles 9.6 Oz",
+                      "ad_price":  "$5.99",
+                      "size":  "9.6 oz",
+                      "regular":  5.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Hormel Homestyle Breakfast Sausage Hash 14 Oz",
+                      "ad_price":  "$4.99",
+                      "size":  "14 oz",
+                      "regular":  4.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Jimmy Dean Breakfast Bowl, Sausage, Frozen, Bowl 7 Oz",
+                      "ad_price":  "$3.69",
+                      "size":  "7 oz",
+                      "regular":  3.69,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Jimmy Dean Heat \u0027N Serve Breakfast Turkey Sausage Patties 26 Ct",
+                      "ad_price":  "$8.99",
+                      "size":  "26 ct",
+                      "regular":  8.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Jimmy Dean Biscuit Roll Ups, Sausage, Frozen Breakfast 8 Ct",
+                      "ad_price":  "$7.99",
+                      "size":  "8 ct",
+                      "regular":  7.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Jimmy Dean Maple Biscuit Roll Ups, Sausage, Frozen Breakfast 2 Ct",
+                      "ad_price":  "$7.99",
+                      "size":  "2 ct",
+                      "regular":  7.99,
+                      "source_ad":  "everyday shelf price"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Creamy Reduced Salt \u0026 Sugar Peanut Butter",
+                      "ad_price":  "$2.29",
+                      "size":  "16 oz",
+                      "regular":  2.29,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Tropicana Pure Premium No Pulp Orange Juice 89 Fl Oz",
+                      "ad_price":  "$9.49",
+                      "size":  "89 oz",
+                      "regular":  9.49,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Folgers Med Dark Gourmet Supreme Ground Coffee 9.6 Oz",
+                      "ad_price":  "$9.99",
+                      "size":  "9.6 oz",
+                      "regular":  9.99,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Deli Fresh Sliced Ham",
+                      "ad_price":  "$12.99",
+                      "size":  "lb",
+                      "regular":  12.99,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Chicken Of The Sea Premium Solid White Tuna In Water 4   5 Oz Cans 4 Ea",
+                      "ad_price":  "$8.99",
+                      "size":  "4 ea",
+                      "regular":  8.99,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Fresh Sliced American Cheese Kretschmar",
+                      "ad_price":  "$9.99",
+                      "size":  "lb",
+                      "regular":  9.99,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Fresh Navel Oranges, Large",
+                      "ad_price":  "$1.39",
+                      "size":  "1 ea",
+                      "regular":  1.39,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "True Lemon Mango Lemonade Drink Mix 10 Ea",
+                      "ad_price":  "$3.99",
+                      "size":  "10 ea",
+                      "regular":  3.99,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Fresh Limes",
+                      "ad_price":  "$0.79",
+                      "size":  "1 ct",
+                      "regular":  0.79,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Fresh Iceberg Lettuce Head",
+                      "ad_price":  "$2.89",
+                      "size":  "24 ct",
+                      "regular":  2.89,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Fresh Baby Carrots Our Family",
+                      "ad_price":  "$1.39",
+                      "size":  "1 lb",
+                      "regular":  1.39,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Fresh Celery",
+                      "ad_price":  "$2.49",
+                      "size":  "1 ea",
+                      "regular":  2.49,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Fresh Express Baby Spinach 5 Oz",
+                      "ad_price":  "$3.99",
+                      "size":  "6 oz",
+                      "regular":  3.99,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Red/Orangy Red Flesh Sweet Potato/Yam/Kumara, Small",
+                      "ad_price":  "$1.79",
+                      "size":  "lb",
+                      "regular":  1.79,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Flour Tortillas Mi Mama\u0027s",
+                      "ad_price":  "$2.69",
+                      "size":  "16 oz",
+                      "regular":  2.69,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Fresh \u0026 Finest 8 Ct Egg Hamburger Buns",
+                      "ad_price":  "$4.79",
+                      "size":  "16 oz",
+                      "regular":  4.79,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Lender\u0027s Pre Sliced Plain Bagels 6 Ea",
+                      "ad_price":  "$3.59",
+                      "size":  "17.1 oz",
+                      "regular":  3.59,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Enriched Long Grain White Rice",
+                      "ad_price":  "$1.19",
+                      "size":  "16 oz",
+                      "regular":  1.19,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Full Circle Market Pasta Sauce, Marinara 24 Oz",
+                      "ad_price":  "$3.89",
+                      "size":  "24 oz",
+                      "regular":  3.89,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Annie\u0027s Shells White Cheddar Macaroni \u0026 Cheese 6 Oz",
+                      "ad_price":  "$2.29",
+                      "size":  "6 oz",
+                      "regular":  2.29,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Simply Asia Japanese Style Ramen Noodles 8 Oz",
+                      "ad_price":  "$6.99",
+                      "size":  "8 oz",
+                      "regular":  6.99,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Gold Medal All Purpose Flour 5 Lb",
+                      "ad_price":  "$5.69",
+                      "size":  "5 lb",
+                      "regular":  5.69,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Crystal Sugar Sugar, Granulated 4 Lb",
+                      "ad_price":  "$4.69",
+                      "size":  "4 lb",
+                      "regular":  4.69,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Splenda Brown Sugar Blend 1 Lb",
+                      "ad_price":  "$7.99",
+                      "size":  "16 oz",
+                      "regular":  7.99,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Vegetable Oil 100% Pure",
+                      "ad_price":  "$4.99",
+                      "size":  "40 oz",
+                      "regular":  4.99,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Cheerios Cereal Large Size 12 Oz",
+                      "ad_price":  "$5.59",
+                      "size":  "12 oz",
+                      "regular":  5.59,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Old Fashioned Oats, Whole Grain Our Family",
+                      "ad_price":  "$2.99",
+                      "size":  "18 oz",
+                      "regular":  2.99,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Smucker\u0027s Grape Jelly",
+                      "ad_price":  "$5.49",
+                      "size":  "30 oz",
+                      "regular":  5.49,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Bush\u0027s Best Black Beans 16 Oz",
+                      "ad_price":  "$1.79",
+                      "size":  "15 oz",
+                      "regular":  1.79,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Squeeze Bottle Ketchup",
+                      "ad_price":  "$1.99",
+                      "size":  "20 oz",
+                      "regular":  1.99,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Mustard, Yellow 14 Oz",
+                      "ad_price":  "$1.69",
+                      "size":  "14 oz",
+                      "regular":  1.69,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Kraft Classic Ranch Dressing 16 Fl Oz",
+                      "ad_price":  "$3.99",
+                      "size":  "16 oz",
+                      "regular":  3.99,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Morton Iodized Salt 26 Oz",
+                      "ad_price":  "$1.99",
+                      "size":  "26 oz",
+                      "regular":  1.99,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "That\u0027s Smart! Ground Black Pepper",
+                      "ad_price":  "$1.39",
+                      "size":  "2 oz",
+                      "regular":  1.39,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Aquafina Drinking Water, Purified 24 Ea",
+                      "ad_price":  "$6.49",
+                      "size":  "24pk 16.9 oz",
+                      "regular":  6.49,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Rao\u0027s® Uncured Pepperoni Pizza Frozen Pizza 18.300 Oz",
+                      "ad_price":  "$14.99",
+                      "size":  "18.300 oz",
+                      "regular":  14.99,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Edy\u0027s Light Vanilla Ice Cream 1.5 Qt",
+                      "ad_price":  "$6.89",
+                      "size":  "1.5 qt",
+                      "regular":  6.89,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Frozen Mixed Vegetables Our Family",
+                      "ad_price":  "$1.39",
+                      "size":  "12 oz",
+                      "regular":  1.39,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Tyson Frozen Chicken Nuggets 29 Oz",
+                      "ad_price":  "$7.89",
+                      "size":  "29 oz",
+                      "regular":  7.89,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Stove Top Stuffing Mix For Turkey 6 Oz",
+                      "ad_price":  "$2.99",
+                      "size":  "6 oz",
+                      "regular":  2.99,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Long Grain Brown Rice Our Family",
+                      "ad_price":  "$1.19",
+                      "size":  "16 oz",
+                      "regular":  1.19,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Extra Wide Egg Noodles Our Family",
+                      "ad_price":  "$2.19",
+                      "size":  "12 oz",
+                      "regular":  2.19,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Bertolli Garlic Alfredo Sauce 15 Oz",
+                      "ad_price":  "$4.49",
+                      "size":  "15 oz",
+                      "regular":  4.49,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Pizza Sauce Our Family",
+                      "ad_price":  "$1.39",
+                      "size":  "14 oz",
+                      "regular":  1.39,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Tostitos Medium Salsa Con Queso Dip 15 Oz",
+                      "ad_price":  "$5.99",
+                      "size":  "15 oz",
+                      "regular":  5.99,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Marshmallows 10 Oz",
+                      "ad_price":  "$1.39",
+                      "size":  "10 oz",
+                      "regular":  1.39,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Crav\u0027n Flavor Graham Crackers, Honey, 3 Packs 3 Ea",
+                      "ad_price":  "$3.29",
+                      "size":  "3 ea",
+                      "regular":  3.29,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Mott\u0027s Apple Sauce 6 Ea",
+                      "ad_price":  "$3.49",
+                      "size":  "6/4 oz",
+                      "regular":  3.49,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Peanuts, Dry Roasted 16 Oz",
+                      "ad_price":  "$2.99",
+                      "size":  "16 oz",
+                      "regular":  2.99,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Lender\u0027s Pre Sliced Cinnamon Raisin Swirl Bagels 6 Ea",
+                      "ad_price":  "$3.59",
+                      "size":  "6 ea",
+                      "regular":  3.59,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Regal Health Foods Deluxe Mixed Nuts",
+                      "ad_price":  "$12.0",
+                      "size":  "16 oz",
+                      "regular":  12.0,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Unsalted Tops Saltine Crackers 16 Oz",
+                      "ad_price":  "$2.49",
+                      "size":  "16 oz",
+                      "regular":  2.49,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Cheez It Cheese Crackers, Original 12.4 Oz",
+                      "ad_price":  "$4.19",
+                      "size":  "12.4 oz",
+                      "regular":  4.19,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Snyder\u0027s Of Hanover® Seasoned Twisted Pretzel Sticks 12.000 Oz",
+                      "ad_price":  "$4.79",
+                      "size":  "12.000 oz",
+                      "regular":  4.79,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Orville Redenbacher\u0027s Gourmet Kettle Corn Microwave Popcorn 6 Ea",
+                      "ad_price":  "$6.59",
+                      "size":  "6 ea",
+                      "regular":  6.59,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Sunbelt Bakery Oats \u0026 Honey Chewy Granola Bars 10 Ea",
+                      "ad_price":  "$3.59",
+                      "size":  "10 ea",
+                      "regular":  3.59,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Ground Pork Our Family",
+                      "ad_price":  "$4.49",
+                      "size":  "lb",
+                      "regular":  4.49,
+                      "source_ad":  "everyday shelf price (recovered 2026-07-13)"
                   }
               ]
 }

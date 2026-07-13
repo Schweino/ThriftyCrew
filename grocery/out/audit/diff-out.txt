@@ -1,0 +1,179 @@
+﻿TOTAL products compared: 2905
+  MOVED (commodity A->B): 60
+  RECOVERED (unmatched->matched): 68
+  DROPPED (matched->unmatched) [REGRESSION RISK]: 41
+
+=== DROPPED (each must be an intended removal of a WRONG match, not a lost good one) ===
+  avocados           X  Hy-Vee | Hy-Vee avocado spray, 5 fl. oz., $4.49
+  bagels             X  Aldi | Southern Grove Everything Bagel or Honey Roasted Cashews
+  bananas            X  Family Fare | Vlasic Mild Banana Pepper Rings 12 Fl Oz
+  bananas            X  Family Fare | Banana Boat Sunscreen Spray, Clear, Spf 30 1.8 Oz
+  bananas            X  Family Fare | Little Debbie Banana Puddin' Creme Pies 8 Ea
+  bananas            X  Family Fare | 99 Brand Banana Liqueur, 50 M L Bottle, 99 Proof
+  blueberries        X  Family Fare | 3 Ct Blueberry Scones
+  brown-rice         X  Fareway | Ben's Original Whole Grain Brown Rice Pouch
+  chicken-thighs     X  Family Fare | Fried Chicken Thigh Hot
+  dog-food           X  Family Fare | Iams Dog Food, With Chicken & Whole Grain Rice, Classic Ground, Adult 13 Oz
+  frozen-fruit       X  Hy-Vee | Hy-Vee Short Cuts elegant berry blend, EARN 5¢ OFF PER GALLON, $8.99 lb.
+  garlic             X  Family Fare | Fresh Gourmet Croutons, Focaccia, Roasted Garlic 4.5 Oz
+  garlic             X  Family Fare | The Little Potato Co. Potatoes, Garlic & Herb, Fresh 1 Lb
+  garlic             X  Aldi | Kirkwood Garlic & Herb Chicken Breasts
+  garlic             X  Family Fare | Fresh Gourmet Fat Free Premium Croutons Garlic Caesar Flavor
+  honey              X  Family Fare | Bush's Best Hot Honey Grillin' Beans 21.7 Oz
+  honey              X  Aldi | Parkview Hot Honey or Nashville Hot Chicken Sausage
+  honey              X  Family Fare | Pace® Hot Honey Habanero, Sweet And Spicy 16.000 Oz
+  honey              X  Family Fare | Kind Honey Hot Breakfast Bars 6 Ea
+  muffins            X  Family Fare | Chobani Greek Blueberry Lemon Muffin Yogurt 5.3 Oz
+  muffins            X  Hy-Vee | Hy-Vee Sausage, Egg, & Cheese Muffin Breakfast Sandwiches
+  olive-oil          X  Family Fare | Land O Lakes Butter With Olive Oil & Sea Salt 7 Oz
+  olive-oil          X  Family Fare | Land O Lakes Butter With Olive Oil & Sea Salt 13 Oz
+  onions             X  Hy-Vee | Coldstone dessert topping or Virginia Brand vidalia onion dressing, 10% off regular price,
+  strawberries       X  Family Fare | 99 Brand Strawberry Liqueur, 50 M L Bottle, 99 Proof
+  strawberries       X  Family Fare | Charms Blow Pop, Super, Strawberry 1 Ea
+  sugar              X  Family Fare | Sugar 'N Spice Garlic Powder
+  sugar              X  Family Fare | Sugar 'N Spice Smoked Garlic Powder Pp
+  sugar              X  Family Fare | Sugar N Spice Chili Powder Pp
+  sugar              X  Family Fare | Sugar 'N Spice Roasted Garlic Powder Pp
+  sweet-corn         X  Family Fare | Del Monte Cream Style Sweet Corn 14.75 Oz
+  sweet-corn         X  Family Fare | Del Monte Cream Style Golden Sweet Corn 8.25 Oz
+  sweet-corn         X  Family Fare | Del Monte No Salt Added Golden Cream Style Sweet Corn 14.75 Oz
+  tomatoes           X  Family Fare | Gilbert's Sausage, Chicken, Caprese, With Basil, Mozzarella & Sun Dried Tomatoes 10 Oz
+  tomatoes           X  Hy-Vee | Gustare Vita tomato passata, 26.45 oz., $2.99
+  tortillas          X  Hy-Vee | Hy-Vee tortilla or wonton salad toppings, 4 oz., $2.29
+  vegetable-oil      X  Family Fare | Land O Lakes Butter With Canola Oil 15 Oz
+  vegetable-oil      X  Family Fare | Our Family Butter, With Canola Oil, Salted, Spreadable 15 Oz
+  watermelon         X  Family Fare | Fresh Watermelon Cubes
+  watermelon         X  Family Fare | Dots Watermelon Dots
+  watermelon         X  Family Fare | Fresh  Watermelon, Fillets Fresh Divide
+
+=== MOVED (each should be product going to its CORRECT commodity) ===
+  apples           -> limes             Hy-Vee | Busch Light apple or lime, 30 pk. cans 12 fl. oz., $27.99
+  avocados         -> limes             Family Fare | Vigo Lime Rice, Creamy Avocado, Authentic 8 Oz
+  avocados         -> salsa             Family Fare | Fresh & Finest By Our Family Salsa, Avocado Dragon, Medium 10 Oz
+  avocados         -> salsa             Family Fare | Fresh & Finest By Our Family Salsa Avocado
+  avocados         -> limes             Family Fare | Triscuit Crackers, Avocado, Cilantro & Lime 8.5 Oz
+  bacon            -> frozen-burritos   Hy-Vee | Jimmy Dean Bacon, Egg & Cheese Breakfast Burrito, 1 ct
+  bananas          -> strawberries      Family Fare | Jumex Strawberry Banana Nectar From Concentrate 11.3 Fl Oz
+  bread            -> crackers          Hy-Vee | Wasa crispbread crackers or bread, 5.4 to 9.2 oz., 2/ $7
+  butter           -> shrimp            Hy-Vee | Our own ready to cook shrimp & crab boil, Snow crab clusters, crawfish, Argentine red EZ peel shrimp, red skin potato wedges, mini corn cobs, garlic herb butter pucks & Old Bay crab cajun spices, 64 oz. half shrimp & crab boil 32 oz. $17.99, $34.99
+  butter           -> instant-mashed-potatoes  Aldi | Chef's Cupboard Homestyle Butter Mashed Potatoes
+  butter           -> shrimp            Hy-Vee | Our own ready to cook shrimp boil, Argentina red EZ peel shrimp, red skin potato wedges, Zatarain's andouille smoked sausage, mini sweet corn cobs, garlic herb butter pucks & Old Bay cajun spices, 56 oz. half shrimp boil 28 oz. 12.99, $19.99
+  canned-peas      -> frozen-peas       Aldi | Season's Choice Steamable Sweet Peas
+  carrots          -> honey             Family Fare | Del Monte Sliced Hot Honey Carrots 14.5 Oz
+  carrots          -> frozen-vegetables  Hy-Vee | That's Smart! Mixed Vegetables With Carrots, Corn, Peas & Green Beans
+  coffee           -> coffee-pods       Aldi | Barissimo Donut Store Blend Coffee Cups
+  cookies          -> sandwich-cookies  Aldi | Benton's Vanilla Sandwich Creme Cookies
+  croissants       -> breakfast-sandwiches  Sam's Club | Jimmy Dean Sausage, Egg, and Cheese Croissant Sandwiches
+  croissants       -> breakfast-sandwiches  Walmart | Great Value Croissant Sandwiches Sausage Egg and Cheese
+  donuts           -> coffee-pods       Hy-Vee | Dunkin' Donuts Original Blend K-Cup 10 Count
+  fresh-green-beans -> canned-green-beans  Hy-Vee | Hy-Vee corn or green beans, 14.25 to 15.25 oz., $0.88
+  frozen-corn      -> canned-corn       Hy-Vee | That's Smart! Whole Kernel Golden Corn
+  frozen-pizza     -> garlic-bread      Aldi | Mama Cozzi's Pizza Kitchen Garlic Texas Toast
+  fruit-punch      -> sports-drinks     Family Fare | Gatorade Advanced Rehydration Fruit Punch Thirst Quencher 28 Fl Oz
+  fruit-punch      -> sports-drinks     Aldi | Gatorade Fruit Punch Thirst Quencher
+  fruit-punch      -> sports-drinks     Walmart | Gatorade Thirst Quencher Fruit Punch
+  garlic           -> crackers          Family Fare | Ritz Fresh Stacks Roasted Garlic/The Original/Everything Crackers Variety Pack 6 Ea
+  garlic           -> crackers          Family Fare | Ritz Fresh Stacks Roasted Garlic Crackers 8 Ea
+  garlic           -> fresh-ginger      Family Fare | Fresh Gourmet Fresh Gourmet Garlic Ginger Wonton Strips 3.5 Oz
+  garlic           -> hummus            Family Fare | Fresh & Finest By Our Family Garlic Hummus 10 Oz
+  honey            -> corn-dogs         Family Fare | State Fair Hot Honey Mini Corn Dogs 23.76 Oz
+  honey            -> granola           Sam's Club | Member's Mark Honey Almond Granola
+  honey            -> mangoes           Baker's | Honey Mangos
+  honey            -> almonds           Family Fare | Blue Diamond Hot Honey Almonds 6 Oz
+  lemons           -> sports-drinks     Family Fare | Gatorade Lemon Lime Thirst Quencher 28 Fl Oz
+  lemons           -> sports-drinks     Family Fare | Gatorade Zero Sugar Lemon Lime Thirst Quencher 28 Fl Oz
+  milk             -> shredded-cheese   Family Fare | Whole Milk Mozzarella Shredded Cheese Our Family
+  onions           -> bell-peppers      Family Fare | Our Family Tomatoes, With Onion, Celery & Green Bell Pepper, Diced, Petite 14.5 Oz
+  oranges          -> sports-drinks     Family Fare | Gatorade Thirst Quencher, Zero Sugar, Orange 28 Fl Oz
+  oranges          -> gelatin           Fareway | Fareway Orange Gelatin Dessert
+  oranges          -> sports-drinks     Family Fare | Gatorade Orange Thirst Quencher 28 Fl Oz
+  pasta            -> egg-noodles       Sam's Club | Country Pasta Homemade Style Egg Pasta
+  peaches          -> salsa             Family Fare | Mrs. Renfro's Salsa, Peach, Mild 16 Oz
+  peanut-butter    -> protein-bars      Hy-Vee | Hy-Vee Chewy Protein Bars Peanut Butter & Dark Chocolate 5-1.42 oz Bars
+  peanut-butter    -> protein-bars      Walmart | Great Value Peanut Butter and Dark Chocolate Protein Bars
+  peanut-butter    -> protein-bars      Aldi | Millville Peanut Butter Dark Chocolate Protein Chewy Bars
+  pineapple        -> popsicles         Sam's Club | Frollies Watermelon and Pineapple Fruity Ice Pops
+  rice             -> brown-rice        Aldi | Earthly Grains Brown Basmati Rice
+  salt             -> peanuts           Aldi | Southern Grove Dry Roasted Peanuts with Sea Salt
+  shredded-cheese  -> parmesan          Fareway | Fareway Parmesan Fancy Shredded Cheese
+  shredded-cheese  -> parmesan          Family Fare | Bel Gioioso Freshly Shredded Cheese, Parmesan 5 Oz
+  shredded-cheese  -> parmesan          Family Fare | Our Family Natural Finely Cut Parmesan Shredded Cheese 6 Oz
+  shredded-cheese  -> parmesan          Family Fare | Bel Gioioso Parmesan Freshly Shredded Cheese 8 Oz
+  strawberries     -> grapes            Family Fare | Bomb Pop Pops, Strawberry, Watermelon & Grape, Nerds Candy 12 Ea
+  sugar            -> applesauce        Sam's Club | Mott's No Sugar Added Applesauce
+  sugar            -> soda              Family Fare | Pepsi Cola, Zero Sugar 2.1 Qt
+  sugar            -> soda              Family Fare | Pepsi Cola, Zero Sugar 12 Ea
+  sweet-corn       -> kielbasa          Hy-Vee | Our own ready to cook crab boil, Snow crab clusters, Zatarain's andouille smoked sausage, mini sweet corn cobs & Old Bay cajun spices, 64 oz., $39.99
+  sweet-corn       -> frozen-corn       Family Fare | Birds Eye Super Sweet Corn 10 Oz
+  tomatoes         -> crackers          Family Fare | Simple Mills Almond Flour Crackers, Tomato & Basil, Sun Dried 4.25 Oz
+  tomatoes         -> olive-oil         Family Fare | Alessi Tomatoes, Sun Dried, In Extra Virgin Olive Oil 7 Oz
+
+=== RECOVERED (68) newly matched staples ===
+  ->aluminum-foil      Sam's Club | Reynolds Wrap Heavy Duty 18 Inch Aluminum Foil, 2 pk
+  ->aluminum-foil      Baker's | Reynolds Wrap Aluminum Foil 30 Sq Ft
+  ->apple-juice        Family Fare | Mott's 100% Juice, Natural, Apple 64 Oz
+  ->apple-juice        Family Fare | Old Orchard 100% Juice, Apple 64 Oz
+  ->apple-juice        Family Fare | Juicy Juice 100% Juice, Apple 64 Fl Oz
+  ->apple-juice        Family Fare | Mott's 100% Juice, Apple 1 Gal
+  ->baby-wipes         Hy-Vee | Pampers wipes, EARN 5¢ OFF PER GALLON, $12.97
+  ->bagels             Family Fare | Bubba's Sliced Blueberry Flavored Bagels 6 Ea
+  ->bbq-sauce          Family Fare | G Hughes Sugar Free Hickory Flavored Bbq Sauce 18 Oz
+  ->bbq-sauce          Family Fare | Buffalo Wild Wings Honey Bbq Sauce 12 Fl Oz
+  ->bbq-sauce          Family Fare | G Hughes Sugar Free Honey Flavored Bbq Sauce 18 Oz
+  ->beef-broth         Family Fare | Our Family Beef Bone Broth 32 Fl Oz
+  ->beef-broth         Family Fare | Pacific Foods Organic Beef Bone Broth 32.000 Oz
+  ->beef-broth         Family Fare | Swanson® Sipping Beef Bone Broth 10.750 Oz
+  ->beef-broth         Family Fare | Zoup! Beef Bone Broth 32 Oz
+  ->bratwurst          Walmart | Marketside Beer 'N Bratwurst 5 Links
+  ->canned-corn        Family Fare | Del Monte No Salt Added Whole Kernel Golden Sweet Corn 11 Oz
+  ->canned-corn        Baker's | Kroger Whole Kernel Sweet Golden Corn
+  ->canned-corn        Family Fare | Libby's Whole Kernel Sweet Corn 4 Ea
+  ->canned-corn        Family Fare | Green Giant Whole Kernal Sweet Corn
+  ->canned-peaches     Walmart | Great Value Sliced Yellow Cling Peaches in Juice
+  ->chicken-breast     Family Fare | Chicken Breasts, Boneless & Skinless Fresh
+  ->chicken-breast     Family Fare | Tyson Skinless Boneless Chicken Breasts 32 Oz
+  ->chicken-breast     Family Fare | Chicken Breast, Boneless/Skinless Gold N Plump
+  ->chicken-breast     Family Fare | Chicken Breast, Boneless Skinless
+  ->chicken-breast     Hy-Vee | Fresh boneless skinless lean hand trimmed chicken breasts, $4.88 lb.
+  ->chicken-breast     Family Fare | Boneless Skinless Extra Lean Chicken Breasts
+  ->chicken-broth      Family Fare | Full Circle Market Bone Broth, Chicken 32 Oz
+  ->cooking-spray      Hy-Vee | Hy-Vee Butter Flavored No Stick Cooking Spray 5 oz
+  ->diced-tomatoes     Family Fare | Our Family Tomatoes, Diced, Petite 14.5 Oz
+  ->diced-tomatoes     Family Fare | Hunt's Tomatoes, Diced 28 Oz
+  ->diced-tomatoes     Family Fare | Hunt's Tomatoes, Diced, Petite 28 Oz
+  ->diced-tomatoes     Family Fare | Hunt's Tomatoes, Diced, 100% Natural 14.5 Oz
+  ->diced-tomatoes     Family Fare | Our Family Tomatoes, Diced 14.5 Oz
+  ->diced-tomatoes     Family Fare | Our Family Tomatoes, Diced 28 Oz
+  ->diced-tomatoes     Family Fare | Our Family Tomatoes, Diced, Petite 28 Oz
+  ->energy-drinks      Family Fare | Juice Monster Strawberry Lemonade Energy Drink 16 Fl Oz
+  ->energy-drinks      Hy-Vee | Liquid Death sparkling energy drink, 12 fl. oz., 2/ $4
+  ->energy-drinks      Hy-Vee | Optimum Nutrition Sparkling Energy Drink, $1.67 each, 3/ $5 each
+  ->frozen-corn        Family Fare | Our Family Sweet Corn, Super, Steamable 10 Oz
+  ->frozen-pizza       Hy-Vee | DiGiorno gluten free or stuffed crust pizza, 21.9 to 26.4 oz., $7.99
+  ->grape-juice        Family Fare | Welch's Juice, Concord Grape 64 Fl Oz
+  ->grape-juice        Family Fare | Welch's Juice, Red Grape 64 Fl Oz
+  ->ground-beef-8020   Family Fare | Fresh 80% Lean Ground Beef, Value Pack
+  ->ground-beef-8020   Family Fare | Ground Beef Meal Deal 80/20
+  ->ground-beef-8020   Family Fare | Standard Pride 80%/20% 100% Pure Ground Beef 48 Oz Discount Limit 2
+  ->hot-cocoa          Walmart | Great Value Milk Chocolate Hot Cocoa Drink Mix
+  ->hot-dogs           Sam's Club | Bar-S Franks, Family Pack 5-Pound
+  ->hot-dogs           Walmart | Ball Park Classic Bun Size Hot Dogs 8 Count
+  ->hot-dogs           Hy-Vee | Bar-S jumbo franks, 16 oz., $1.77
+  ->hot-dogs           Family Fare | John Morrell Jumbo Franks 12 Oz
+  ->hot-dogs           Aldi | Parkview Turkey Franks
+  ->hot-dogs           Family Fare | John Morrell Franks 12 Oz
+  ->hot-dogs           Baker's | Bar-S Classic Franks, 8-Count
+  ->hot-dogs           Hy-Vee | Bar-S Classic Franks 12oz
+  ->ice-cream          Aldi | Sundae Shoppe Mochi Ice Cream
+  ->ice-cream          Aldi | Sundae Shoppe Vanilla Bean Ice Cream
+  ->italian-sausage    Family Fare | Johnsonville Premium Italian Hot Sausage 16 Oz
+  ->italian-sausage    Family Fare | Johnsonville Sausage, Italian, Hot 19 Oz
+  ->lettuce            Baker's | Wrapped Iceberg Lettuce
+  ->potato-chips       Family Fare | Ruffles Cheddar & Sour Cream Flavored Potato Chips 8 Oz
+  ->rotisserie-chicken Sam's Club | Member's Mark Seasoned Rotisserie Chicken
+  ->sliced-cheese      Sam's Club | Member's Mark American Cheese, 160 Slices
+  ->toilet-bowl-cleaner Hy-Vee | Lysol bowl cleaner, 24 fl. oz., $2.99
+  ->tortilla-chips     Family Fare | Doritos Cool Ranch Flavored Tortilla Chips 9.25 Oz
+  ->tortilla-chips     Family Fare | Doritos Salsa Verde Flavored Tortilla Chips 9.25 Oz
+  ->tortilla-chips     Family Fare | Doritos Spicy Nacho Flavored Tortilla Chips 9.25 Oz
+  ->tortilla-chips     Family Fare | Doritos Nacho Cheese Flavored Tortilla Chips 9.25 Oz

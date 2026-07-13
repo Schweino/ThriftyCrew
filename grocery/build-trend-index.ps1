@@ -48,6 +48,14 @@ function Get-UnitSuffix { param([string]$u)
   }
 }
 
+# Board store coverage - keep in lockstep with $storeOrder (build-deals-page.ps1) / the audit store lists.
+# Both the count-word and the named list below derive from this one array so the copy can't go stale.
+$StoreNames = @('Hy-Vee','Aldi','Family Fare','Fareway',"Baker's","Sam's Club",'Walmart')
+$numWords   = @('zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve')
+$StoreWord  = if ($StoreNames.Count -lt $numWords.Count) { $numWords[$StoreNames.Count] } else { [string]$StoreNames.Count }
+$escStores  = @($StoreNames | ForEach-Object { Esc $_ })
+if ($escStores.Count -gt 1) { $StoreList = ($escStores[0..($escStores.Count - 2)] -join ', ') + ' and ' + $escStores[-1] } else { $StoreList = [string]$escStores[0] }
+
 # category map by commodity id; anything unmapped lands in "More staples"
 $catOf = @{
   'chicken-breast'   = 'Meat and protein'
@@ -140,7 +148,7 @@ $sb = New-Object System.Text.StringBuilder
 .tp-foot{font-size:.85rem;color:#9ca3af;margin:0}
 </style>
 '@)
-$intro = 'We track the cheapest price for ' + $included + ' Omaha grocery staples every week across six stores. Pick an item to see this week&#39;s best price, the tracked record low, and how it has moved week by week.'
+$intro = 'We track the cheapest price for ' + $included + ' Omaha grocery staples every week across ' + $StoreWord + ' stores. Pick an item to see this week&#39;s best price, the tracked record low, and how it has moved week by week.'
 if ($weekLabel -ne '') { $intro = $intro + ' Prices below are from the week of ' + (Esc $weekLabel) + '.' }
 [void]$sb.AppendLine('<p class="tp-intro">' + $intro + '</p>')
 
@@ -163,7 +171,7 @@ foreach ($cat in $catOrder) {
 }
 
 [void]$sb.AppendLine('<p class="tp-links"><a href="/omaha-grocery-prices/?ref=trend">See the full live Omaha price board</a></p>')
-[void]$sb.AppendLine('<p class="tp-foot">Tracked weekly across Hy-Vee, Baker&#39;s, Family Fare, Aldi, Sam&#39;s Club and Walmart in Omaha since June 2026. This page updates every week.</p>')
+[void]$sb.AppendLine('<p class="tp-foot">Tracked weekly across ' + $StoreList + ' in Omaha since June 2026. This page updates every week.</p>')
 [void]$sb.Append('</div>')
 
 $outDir = Split-Path -Parent $OutFile

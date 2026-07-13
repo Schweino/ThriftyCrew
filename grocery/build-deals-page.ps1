@@ -400,7 +400,8 @@ function RiCatKey([string]$label) { if ($weeklyLabelKey.ContainsKey($label)) { r
 
 # ---- scoreboard: who wins this week (the shopper's headline stat) ----
 $maxWins = 0; foreach ($k in $wins.Keys) { if ($wins[$k] -gt $maxWins) { $maxWins = $wins[$k] } }
-[void]$sb.Append("<div class='pg-board'><span class='pg-board-h'>Cheapest-store scoreboard &middot; items each store wins this week</span><div class='pg-board-row'>")
+$trackedCount = @($doc.comparison).Count
+[void]$sb.Append("<div class='pg-board'><span class='pg-board-h'>Cheapest-store scoreboard &middot; items each store wins this week</span><div class='pg-board-sub'><b>" + $trackedCount + " items</b> tracked across " + $storeOrder.Count + " Omaha stores, updated daily</div><div class='pg-board-row'>")
 foreach ($s in $storeOrder) {
   $n = $wins[$s]
   $cls = 'pg-score'; if ($n -eq $maxWins -and $n -gt 0) { $cls += ' is-lead' }
@@ -438,10 +439,21 @@ if ($recBadge.Count -gt 0) {
 # "Cheese & Dairy") - shoppers should never see that seam. Pills are GROUPS mapping to one or more
 # data-cat keys (data-cats attr, pipe-separated); the catch-all Pantry group must stay LAST.
 $groupDefs = @(
-  @{ label = 'Meat &amp; Poultry'; rx = 'Meat|Poultry|Seafood' },
-  @{ label = 'Dairy &amp; Eggs';   rx = 'Dairy|Cheese|Egg' },
-  @{ label = 'Produce';            rx = 'Fruit|Vegetable|Produce' },
-  @{ label = 'Pantry &amp; More';  rx = '.' }
+  @{ label = 'Meat &amp; Poultry';      rx = 'Meat|Poultry|Seafood' },
+  @{ label = 'Dairy &amp; Eggs';        rx = 'Dairy|Cheese|Egg' },
+  @{ label = 'Produce';                 rx = 'Fruit|Vegetable|Produce' },
+  @{ label = 'Bread &amp; Bakery';      rx = 'Bakery|Bread' },
+  @{ label = 'Canned &amp; Soup';       rx = 'Canned|Soup|Beans' },
+  @{ label = 'Sauces &amp; Condiments'; rx = 'Condiment|Sauce' },
+  @{ label = 'Baking &amp; Spices';     rx = 'Baking|Spice' },
+  @{ label = 'Pasta, Rice &amp; Grains';rx = 'Grain|Pasta|Rice|Noodle' },
+  @{ label = 'Coffee, Oils &amp; Spreads'; rx = 'Oil|Coffee|Spread' },
+  @{ label = 'Snacks &amp; Drinks';     rx = 'Snack|Candy|Beverage|Drink' },
+  @{ label = 'Frozen';                  rx = 'Frozen' },
+  @{ label = 'Household';               rx = 'Household|Cleaning|Paper' },
+  @{ label = 'Personal Care';           rx = 'Personal|Health|Beauty' },
+  @{ label = 'Baby &amp; Pet';          rx = 'Baby|Pet|Infant' },
+  @{ label = 'More';                    rx = '.' }   # catch-all - only renders if a category matched nothing above (kept for safety)
 )
 $groupKeys = @{}; foreach ($gd in $groupDefs) { $groupKeys[[string]$gd.label] = New-Object System.Collections.Generic.List[string] }
 $allCatPairs = New-Object System.Collections.Generic.List[object]
@@ -470,28 +482,8 @@ function SummaryHtml($best, [string]$unit) {
   return "<span class='pg-sum'><span class='pg-sum-p'>" + (Fmt-Price ([double]$best.per_unit) $unit) + "</span><span class='pg-sum-s'>" + (HtmlEnc $shortName[[string]$best.store]) + "</span>" + $tag + "</span><span class='pg-chev' aria-hidden='true'></span>"
 }
 
-# Deals strip: the compact rows hide per-item record/sale badges, so surface the best of them here at the top.
-# Record lows first, then this week's sales. Each chip jumps to (and opens) that item's row.
-$dealItems = New-Object System.Collections.Generic.List[object]
-foreach ($r in $doc.comparison) {
-  $rk = @($r.stores | Where-Object { -not (IsNoneCarry ([string]$r.id) ([string]$_.store)) } | Sort-Object per_unit)
-  if ($rk.Count -eq 0) { continue }
-  $best = $rk[0]
-  $rb = $recBadge[[string]$r.id]
-  $isRec = ($rb -and $rb.cls -eq 'pg-rec-low')
-  $isSale = ([string]$best.type -eq 'sale')
-  if (-not ($isRec -or $isSale)) { continue }
-  $dealItems.Add([pscustomobject]@{ id=[string]$r.id; name=[string]$r.commodity; price=(Fmt-Price ([double]$best.per_unit) ([string]$r.unit)); store=[string]$shortName[[string]$best.store]; rec=$isRec; rank=$(if($isRec){0}else{1}) })
-}
-$dealsTop = @($dealItems | Sort-Object rank | Select-Object -First 16)
-if ($dealsTop.Count) {
-  [void]$sb.Append("<div class='pg-deals'><span class='pg-deals-h'><span class='pg-deals-dot'></span>Deals right now</span><div class='pg-deals-row'>")
-  foreach ($d in $dealsTop) {
-    $tag = if ($d.rec) { "<span class='pg-deal-t pg-deal-rec'>record low</span>" } else { "<span class='pg-deal-t pg-deal-sale'>sale</span>" }
-    [void]$sb.Append("<button type='button' class='pg-deal' data-jump=`"" + (HtmlEnc $d.id) + "`"><span class='pg-deal-nm'>" + (HtmlEnc $d.name) + "</span><span class='pg-deal-p'>" + $d.price + " <span class='pg-deal-s'>" + (HtmlEnc $d.store) + "</span></span>" + $tag + "</button>")
-  }
-  [void]$sb.Append("</div></div>")
-}
+# (The "Deals right now" strip was removed 2026-07-13 per Brad. Record-low / sale badges still ride inline on
+# each item's row, and the On-sale filter pill surfaces the sales - so nothing is lost by dropping the strip.)
 
 $totalCommodities = 0; $totalPrices = 0
 foreach ($c in $cats) {
@@ -610,10 +602,13 @@ $css = @'
    on this page only (this CSS ships inside the page embed). A grocery list is not financial advice. */
 .gh-article-header .gh-article-meta,.gh-article-header .gh-article-author,.gh-article-header [class*="byline"],.gh-article-excerpt,.mts-disclaimer{display:none !important}
 /* brand harmony: navy ink + gold accents to match the site; green stays ONLY where it means savings */
-/* min-width:0 is LOAD-BEARING: pg-wrap sits in the theme's CSS grid column, whose items default to
-   min-width:auto - the non-wrapping pills row's intrinsic width (~526px) inflated the whole board past
-   phone viewports and everything clipped at the right edge. */
-.pg-wrap{min-width:0;max-width:100%;--ink:#16263F;--green:#10794e;--green-d:#0c5c3b;--green-t:#e6f5ec;--mut:#5a6862;--bd:#e2e6ec;--amber:#8a6d1f;--amber-t:#f8f0d8;
+/* min-width:0 AND width:100% are BOTH LOAD-BEARING: pg-wrap sits in the theme's CSS grid column, whose
+   items default to min-width:auto, so any non-wrapping strip's intrinsic width (pills ~526px, the 16-chip
+   deals row ~2300px) inflates the whole board past the phone viewport and everything clips at the right
+   edge. min-width:0 lets the item shrink; width:100% makes its width DEFINITE (= the column, not content)
+   so the grid never grows to min-content. width:100% is the cross-browser clamp - contain:inline-size on
+   the inner strips only helps on Safari 16.4+; older Safari ignores it and needs the definite width here. */
+.pg-wrap{min-width:0;width:100%;max-width:100%;--ink:#16263F;--green:#10794e;--green-d:#0c5c3b;--green-t:#e6f5ec;--mut:#5a6862;--bd:#e2e6ec;--amber:#8a6d1f;--amber-t:#f8f0d8;
   max-width:1060px;margin:0 auto;padding:8px 16px 44px;color:var(--ink);
   font-family:inherit,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;font-size:1.6rem}
 .pg-wrap *{box-sizing:border-box}
@@ -642,7 +637,9 @@ $css = @'
 @media(max-width:560px){.pg-recchip{min-width:calc(50% - 5px);flex:1 1 calc(50% - 5px)}}
 /* scoreboard */
 .pg-board{margin:20px 0 6px;padding:15px 16px 14px;border:1px solid var(--bd);border-radius:14px;background:var(--green-t)}
-.pg-board-h{display:block;font-size:.7em;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--green-d);margin-bottom:11px}
+.pg-board-h{display:block;font-size:.7em;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--green-d);margin-bottom:6px}
+.pg-board-sub{font-size:.85em;line-height:1.4;color:var(--mut);margin:0 0 12px}
+.pg-board-sub b{color:var(--green-d);font-weight:800}
 .pg-board-row{display:flex;flex-wrap:wrap;gap:10px}
 .pg-score{flex:1 1 auto;min-width:96px;display:flex;flex-direction:column;align-items:center;gap:1px;padding:9px 8px;border-radius:10px;background:#fff;border:1px solid var(--bd)}
 .pg-score.is-lead{background:var(--green);border-color:var(--green)}
@@ -693,18 +690,6 @@ $css = @'
 .pg-row.pg-open .pg-chev{transform:rotate(-135deg)}
 .pg-stores{display:none;flex-wrap:wrap;gap:8px}
 .pg-row.pg-open .pg-stores,.pg-wrap.pg-allopen .pg-stores{display:flex}
-.pg-deals{margin:6px 0 2px}
-.pg-deals-h{display:flex;align-items:center;gap:6px;font-size:.78em;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
-.pg-deals-dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
-.pg-deals-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:thin}
-.pg-deal{flex:0 0 auto;display:flex;flex-direction:column;gap:2px;align-items:flex-start;text-align:left;background:#fff;border:1px solid var(--bd);border-radius:11px;padding:9px 12px;cursor:pointer;font-family:inherit}
-.pg-deal:hover{border-color:var(--green)}
-.pg-deal-nm{font-size:.84em;font-weight:700;color:var(--ink);white-space:nowrap;max-width:150px;overflow:hidden;text-overflow:ellipsis}
-.pg-deal-p{font-size:1.05em;font-weight:800;color:var(--green-d)}
-.pg-deal-s{font-size:.66em;font-weight:600;color:var(--mut)}
-.pg-deal-t{font-size:.6em;font-weight:800;text-transform:uppercase;letter-spacing:.04em;padding:1px 7px;border-radius:999px;margin-top:2px}
-.pg-deal-rec{background:var(--green);color:#fff}
-.pg-deal-sale{background:#fdf3e3;color:#8a6d1f}
 .pg-chip{position:relative;display:flex;flex-direction:column;gap:3px;min-width:118px;padding:10px 13px 9px;border:1px solid var(--bd);border-radius:11px;background:#fcfdfc}
 .pg-chip-none{background:repeating-linear-gradient(135deg,#f7f7f5,#f7f7f5 7px,#f2f2ef 7px,#f2f2ef 14px);border-style:dashed;justify-content:center}
 .pg-chip-none .pg-store{opacity:.7}
@@ -857,16 +842,6 @@ $js = @'
   });
   var pgWrap=document.querySelector('.pg-wrap'), pgEA=document.getElementById('pg-expandall');
   if(pgEA&&pgWrap){ pgEA.addEventListener('change',function(){ pgWrap.classList.toggle('pg-allopen',pgEA.checked); }); }
-  // deals-strip chips jump to and open the item's row (clearing any active filter first)
-  document.addEventListener('click',function(e){
-    var dl=e.target.closest('.pg-deal'); if(!dl) return;
-    var id=dl.getAttribute('data-jump'); if(!id) return;
-    var s=document.getElementById('pg-search'); if(s){ s.value=''; } state.q='';
-    btns.forEach(function(x){x.classList.remove('is-active')}); var all=document.querySelector(".pg-fbtn[data-cat='all']"); if(all){all.classList.add('is-active');} state.pill='all'; state.cats=null; applyFilters();
-    var sel=(window.CSS&&CSS.escape)?CSS.escape(id):id;
-    var row=document.querySelector(".pg-row[data-id='"+sel+"']");
-    if(row){ row.classList.add('pg-open'); row.scrollIntoView({behavior:'smooth',block:'center'}); }
-  });
   pgSummaries();
   // hide Sam's Club: drop its chips, then re-flag the cheapest per row + recount the scoreboard
   var SAMS="Sam's Club";
@@ -1067,6 +1042,18 @@ if ($histDoc) {
 .pg-al-msg.err{color:#b23b2e;font-weight:600}
 .pg-al-fine{font-size:.75em;color:#8a94a6;margin:10px 0 0;line-height:1.5}
 .pg-al-hp{position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden}
+.pg-gate{text-align:center;padding:2px 4px 2px}
+.pg-gate-ic{font-size:2.1em;line-height:1;margin:0 0 6px}
+.pg-gate h3{font-size:1.28em;color:#16263F;margin:0 0 8px}
+.pg-gate-body{font-size:.92em;color:#3a4658;line-height:1.55;margin:0 auto 14px;max-width:34em}
+.pg-gate-price{font-size:1.05em;font-weight:800;color:#1E3A5F;margin:0 0 14px}
+.pg-gate-price span{font-weight:600;color:#8a94a6;font-size:.86em}
+.pg-gate-join{display:block;width:100%;background:#E2A43C;color:#16263F;border:none;border-radius:10px;padding:.85em 1.6em;font-size:1.02em;font-weight:800;cursor:pointer;font-family:inherit;text-decoration:none;text-align:center;box-sizing:border-box}
+.pg-gate-join:hover{background:#d9992f}
+.pg-gate-year{margin-top:11px;font-size:.9em;font-weight:700;color:#1E3A5F;background:none;border:none;cursor:pointer;font-family:inherit;text-decoration:underline;text-underline-offset:2px;padding:2px}
+.pg-gate-fine{font-size:.75em;color:#8a94a6;margin:12px 0 0;line-height:1.5}
+.pg-gate-later{margin-top:9px;font-size:.85em;color:#8a94a6;background:none;border:none;cursor:pointer;font-family:inherit;padding:4px}
+.pg-gate-later:hover{color:#16263F}
 .pg-hx-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
 .pg-hx-note{font-size:.75em;color:#8a94a6}
 .pg-hx-trend{font-size:.85em;font-weight:700;color:#8a6d1f;text-decoration:none}
@@ -1117,7 +1104,46 @@ if ($histDoc) {
     ov.addEventListener('click', function(e){ if (e.target === ov || e.target.closest('.pg-hx-x')) close(); });
   }
   var ALERT_URL = 'https://smp-feed.ancient-snow-93df.workers.dev/alert';
-  function openAlert(id, name){
+  // Price alerts are a PAID-member perk. Non-paid clicks get the join interstitial (paid tier only, no free option).
+  var PAID_TIER = '6a43628ae02523000897528f';
+  var PAID_MO = '#/portal/signup/' + PAID_TIER + '/monthly';
+  var PAID_YR = '#/portal/signup/' + PAID_TIER + '/yearly';
+  var TC_PAID = null, TC_MEMBER = null;
+  function tcIsPaid(cb){
+    // fast path: the site-wide member block stamps html.tc-paid for paid/comped members
+    if (document.documentElement.classList.contains('tc-paid')) { cb(true); return; }
+    if (TC_PAID !== null) { cb(TC_PAID); return; }
+    fetch('/members/api/member/', { credentials: 'include' })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(m){ TC_MEMBER = m; var st = m ? (m.status || (m.paid ? 'paid' : 'free')) : null; TC_PAID = (st === 'paid' || st === 'comped'); cb(TC_PAID); })
+      .catch(function(){ TC_PAID = false; cb(false); });
+  }
+  function goPortal(hash){ close(); try { window.location.hash = hash; } catch(e){ window.location.href = '/' + hash; } }
+  function openAlert(id, name){ tcIsPaid(function(paid){ if (paid) openAlertForm(id, name); else openAlertGate(name); }); }
+  function openAlertGate(name){
+    close();
+    var h = '<div class="pg-hx" style="max-width:440px"><div class="pg-hx-top" style="justify-content:flex-end;margin-bottom:0"><button type="button" class="pg-hx-x" aria-label="Close">&times;</button></div>';
+    h += '<div class="pg-gate">';
+    h += '<div class="pg-gate-ic" aria-hidden="true">&#128276;</div>';
+    h += '<h3>Price alerts are a member perk</h3>';
+    h += '<p class="pg-gate-body">Get one short email the moment ' + esc(name.toLowerCase()) + ' hits the lowest price we have tracked in Omaha. Low-price alerts come with a Thrifty Crew membership, along with every tool, all our recipes, and the full price history.</p>';
+    h += '<p class="pg-gate-price">Just $1/month <span>or $10/year</span></p>';
+    h += '<a href="' + PAID_MO + '" class="pg-gate-join" id="pg-gate-mo">Join the Crew for $1/month</a>';
+    h += '<div><button type="button" class="pg-gate-year" id="pg-gate-yr">or join yearly for $10</button></div>';
+    h += '<p class="pg-gate-fine">Not a trial, not an intro rate. Cancel anytime in two clicks.</p>';
+    h += '<div><button type="button" class="pg-gate-later">Maybe later</button></div>';
+    h += '</div></div>';
+    ov = document.createElement('div');
+    ov.className = 'pg-hx-ov';
+    ov.innerHTML = h;
+    document.body.appendChild(ov);
+    ov.addEventListener('click', function(e){
+      if (e.target.closest('#pg-gate-mo')) { e.preventDefault(); goPortal(PAID_MO); return; }
+      if (e.target.closest('#pg-gate-yr')) { goPortal(PAID_YR); return; }
+      if (e.target === ov || e.target.closest('.pg-hx-x') || e.target.closest('.pg-gate-later')) { close(); return; }
+    });
+  }
+  function openAlertForm(id, name){
     close();
     var h = '<div class="pg-hx" style="max-width:480px"><div class="pg-hx-top"><h3>Price alerts: ' + esc(name) + '</h3><button type="button" class="pg-hx-x" aria-label="Close">&times;</button></div>';
     h += '<p class="pg-hx-sub">One short email when ' + esc(name.toLowerCase()) + ' hits the lowest price we have tracked in Omaha. No spam, no daily digests, just the good news.</p>';
@@ -1126,14 +1152,14 @@ if ($histDoc) {
     h += '<label class="pg-al-week"><input type="checkbox" id="pg-al-week" checked> Also send me the weekly cheapest-groceries roundup (you can turn either off anytime)</label>';
     h += '<button type="button" class="pg-al-btn" id="pg-al-go" data-aid="' + esc(id) + '">Alert me on low prices</button>';
     h += '<p class="pg-al-msg" id="pg-al-msg"></p>';
-    h += '<p class="pg-al-fine">Free. This signs you up as a free Thrifty Crew member so we can email you; every email has an unsubscribe link.</p>';
+    h += '<p class="pg-al-fine">Included with your membership. Every email has an unsubscribe link.</p>';
     h += '</div></div>';
     ov = document.createElement('div');
     ov.className = 'pg-hx-ov';
     ov.innerHTML = h;
     document.body.appendChild(ov);
     ov.addEventListener('click', function(e){ if (e.target === ov || e.target.closest('.pg-hx-x')) close(); });
-    setTimeout(function(){ var inp = document.getElementById('pg-al-email'); if (inp) inp.focus(); }, 50);
+    setTimeout(function(){ var inp = document.getElementById('pg-al-email'); if (inp){ if (TC_MEMBER && TC_MEMBER.email) inp.value = TC_MEMBER.email; inp.focus(); } }, 50);
   }
   function submitAlert(btn){
     var id = btn.getAttribute('data-aid');

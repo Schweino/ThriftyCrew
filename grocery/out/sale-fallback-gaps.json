@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-13 13:49",
-    "gap_count":  22,
+    "generated":  "2026-07-13 02:57",
+    "gap_count":  16,
     "gaps":  [
                  {
                      "commodity":  "apples",
@@ -33,11 +33,6 @@
                      "sale_per_unit":  2.5
                  },
                  {
-                     "commodity":  "dishwasher-detergent",
-                     "store":  "Hy-Vee",
-                     "sale_per_unit":  0.1665
-                 },
-                 {
                      "commodity":  "frozen-fries",
                      "store":  "Family Fare",
                      "sale_per_unit":  0.1184
@@ -48,24 +43,9 @@
                      "sale_per_unit":  0.0446
                  },
                  {
-                     "commodity":  "grapes",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  2.99
-                 },
-                 {
                      "commodity":  "hot-dogs",
                      "store":  "Hy-Vee",
-                     "sale_per_unit":  0.1875
-                 },
-                 {
-                     "commodity":  "laundry-detergent",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.0941
-                 },
-                 {
-                     "commodity":  "lemons",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  1.25
+                     "sale_per_unit":  0.28
                  },
                  {
                      "commodity":  "mushrooms",
@@ -101,16 +81,6 @@
                      "commodity":  "sirloin-steak",
                      "store":  "Family Fare",
                      "sale_per_unit":  11.99
-                 },
-                 {
-                     "commodity":  "sweet-corn",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.9975
-                 },
-                 {
-                     "commodity":  "watermelon",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  5.99
                  }
              ]
 }

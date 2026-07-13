@@ -34,6 +34,12 @@ $adminKey = if ($env:GHOST_ADMIN_KEY) { $env:GHOST_ADMIN_KEY }
   else { throw 'Ghost admin key missing: set $env:GHOST_ADMIN_KEY or create meal-prep\.ghostkey' }
 $apiUrl = 'https://map-to-success.ghost.io'
 
+# Board store coverage - keep the count in lockstep with $storeOrder (build-deals-page.ps1) / the audit store lists.
+# Derived to a word so the copy can never silently go stale when a store is added.
+$StoreNames = @('Hy-Vee','Aldi','Family Fare','Fareway',"Baker's","Sam's Club",'Walmart')
+$numWords   = @('zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve')
+$StoreWord  = if ($StoreNames.Count -lt $numWords.Count) { $numWords[$StoreNames.Count] } else { [string]$StoreNames.Count }
+
 function New-GhostJWT { param($key)
   $p = $key -split ':'; $id = $p[0]; $secretHex = $p[1]
   $sb = New-Object byte[] ($secretHex.Length / 2)
@@ -121,8 +127,8 @@ foreach ($c in $data.commodities) {
   $slug = $c.id + '-price-omaha'
   $title = $c.label + ' Price in Omaha This Week'
   $metaTitle = $c.label + ' Price in Omaha This Week (Tracked Weekly) | Thrifty Crew'
-  $metaDesc = 'Cheapest ' + $c.label.ToLower() + ' in Omaha this week: ' + $curPrice + ' ' + $unitPhr + ' at ' + $cur.cheapest_store + '. Tracked weekly across six stores, with the record low and full price history. Updates every week.'
-  $excerpt = 'This week: ' + $curPrice + ' ' + $unitPhr + ' at ' + $cur.cheapest_store + '. Tracked weekly across six Omaha stores.'
+  $metaDesc = 'Cheapest ' + $c.label.ToLower() + ' in Omaha this week: ' + $curPrice + ' ' + $unitPhr + ' at ' + $cur.cheapest_store + '. Tracked weekly across ' + $StoreWord + ' stores, with the record low and full price history. Updates every week.'
+  $excerpt = 'This week: ' + $curPrice + ' ' + $unitPhr + ' at ' + $cur.cheapest_store + '. Tracked weekly across ' + $StoreWord + ' Omaha stores.'
 
   try {
     $jwt = New-GhostJWT $adminKey

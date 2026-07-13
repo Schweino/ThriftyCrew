@@ -83,6 +83,18 @@ try {
 & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-store-coverage.ps1') -Embed $embed -OutDir $OutDir
 if ($LASTEXITCODE -eq 2 -and -not $Force) { Write-Output 'HELD: a staple commodity is missing a store tile (see out\store-coverage-report.json). NOT publishing (run -Force to override once the render is fixed).'; exit 2 }
 
+# ---- MATCHING-SOUNDNESS gate (HARD): a rule change that MOVED or DROPPED an existing product's commodity
+# vs the reviewed baseline is a matching regression (the 2026-07-13 audit class). Hold until a human reviews
+# and runs `audit-match-soundness.ps1 -Accept`. Steady state (no rule change) => 0 changes => passes. -Force overrides.
+& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-match-soundness.ps1') -OutDir $OutDir
+if ($LASTEXITCODE -eq 2 -and -not $Force) { Write-Output 'HELD: commodity matching changed vs the reviewed baseline (see out\audit\soundness-report.json). A product MOVED/DROPPED commodity. Review, then `audit-match-soundness.ps1 -Accept` (or -Force to override).'; exit 2 }
+
+# ---- CATEGORY-COVERAGE gate (HARD): every commodity must be filed into exactly one category, else it renders in
+# NO department/filter (invisible). This is what makes "add a new item" safe: forget to categorize it and the
+# publish HOLDS. Daily pipeline never adds commodities, so it only trips right after a human adds one. -Force overrides.
+& powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-category-coverage.ps1') -OutDir $OutDir
+if ($LASTEXITCODE -eq 2 -and -not $Force) { Write-Output 'HELD: a commodity is not in exactly one category (see out\category-coverage-report.json) - it would render in no filter. Add it to a category in categories.json (or -Force to override).'; exit 2 }
+
 # ---- preserve the live post's current visibility (so a weekly refresh never reverts a manual paid-gate) ----
 function New-GhostJWT { param($key)
   $p=$key -split ':'; $id=$p[0]; $secretHex=$p[1]

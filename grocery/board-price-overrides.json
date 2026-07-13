@@ -2,7 +2,7 @@
     "readme":  "DERIVED by generate-board-overrides.ps1 - do not hand-edit. Per-cell EVERYDAY per-unit corrections: when a board price disagrees \u003e30% with the verified product its See-item link opens (and name-drift confirms the link is the right product), the board number is stale and is pinned here to the link\u0027s per-unit so price==link==shelf. build-deals-page applies these to EVERYDAY cells only (a live sale always wins) and survives daily regeneration. Sales, wrong-product links (name-drift), and ids present in both the staple+recipe board are intentionally excluded.",
     "updated":  "2026-07-13",
     "tol":  0.3,
-    "count":  26,
+    "count":  24,
     "cells":  [
                   {
                       "id":  "bottled-water",
@@ -14,21 +14,12 @@
                       "set":  "2026-07-13"
                   },
                   {
-                      "id":  "cookies",
-                      "store":  "Aldi",
-                      "per_unit":  0.2192,
+                      "id":  "coffee",
+                      "store":  "Family Fare",
+                      "per_unit":  0.5898,
                       "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.122,
-                      "link_name":  "Benton\u0027s Chocolate Chip Cookies",
-                      "set":  "2026-07-13"
-                  },
-                  {
-                      "id":  "frozen-corn",
-                      "store":  "Hy-Vee",
-                      "per_unit":  0.0817,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.0498,
-                      "link_name":  "That\u0027s Smart! Cut Golden Corn",
+                      "board_was":  1.0406,
+                      "link_name":  "Folgers Coffee, Ground, Medium, Classic Roast 30.5 Oz",
                       "set":  "2026-07-13"
                   },
                   {
@@ -42,11 +33,11 @@
                   },
                   {
                       "id":  "strawberries",
-                      "store":  "Hy-Vee",
-                      "per_unit":  0.1869,
+                      "store":  "Family Fare",
+                      "per_unit":  0.2494,
                       "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.3119,
-                      "link_name":  "Wish Farms California Strawberries",
+                      "board_was":  0.1053,
+                      "link_name":  "Fresh Strawberries",
                       "set":  "2026-07-13"
                   },
                   {
@@ -83,15 +74,6 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.1193,
                       "link_name":  "Gustare Vita Italian Bread Crumbs",
-                      "set":  "2026-07-13"
-                  },
-                  {
-                      "id":  "enchilada-sauce",
-                      "store":  "Hy-Vee",
-                      "per_unit":  0.1139,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.269,
-                      "link_name":  "Hy-Vee Mild Enchilada Sauce",
                       "set":  "2026-07-13"
                   },
                   {

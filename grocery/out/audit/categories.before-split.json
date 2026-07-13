@@ -1,4 +1,4 @@
-{
+﻿{
     "note":  "Food-category grouping for the public deals page. order = display order of the category section + its filter button.",
     "categories":  [
                        {
@@ -152,123 +152,95 @@
                                            ]
                        },
                        {
-                           "key":  "canned",
-                           "label":  "Canned \u0026 Soup",
+                           "key":  "pantry",
+                           "label":  "Pantry \u0026 Beverages",
                            "order":  6,
                            "commodities":  [
-                                               "baked-beans",
-                                               "canned-black-beans",
-                                               "canned-chili",
-                                               "canned-corn",
-                                               "canned-green-beans",
-                                               "canned-mushrooms",
-                                               "canned-peaches",
-                                               "canned-peas",
-                                               "canned-pineapple",
-                                               "canned-pinto-beans",
-                                               "refried-beans",
-                                               "diced-tomatoes",
-                                               "chicken-noodle-soup",
-                                               "cream-of-chicken-soup",
-                                               "cream-of-mushroom-soup",
-                                               "tomato-soup",
-                                               "applesauce",
-                                               "pickles",
-                                               "beef-broth",
-                                               "chicken-broth"
-                                           ]
-                       },
-                       {
-                           "key":  "condiments",
-                           "label":  "Sauces \u0026 Condiments",
-                           "order":  7,
-                           "commodities":  [
-                                               "alfredo-sauce",
-                                               "bbq-sauce",
-                                               "hot-sauce",
-                                               "ketchup",
-                                               "mustard",
-                                               "mayonnaise",
-                                               "italian-dressing",
-                                               "ranch-dressing",
+                                               "peanut-butter",
+                                               "orange-juice",
+                                               "coffee",
+                                               "rice",
+                                               "pasta",
                                                "pasta-sauce",
-                                               "pizza-sauce",
-                                               "salsa",
-                                               "queso",
-                                               "relish",
-                                               "worcestershire",
-                                               "hummus"
-                                           ]
-                       },
-                       {
-                           "key":  "baking",
-                           "label":  "Baking \u0026 Spices",
-                           "order":  8,
-                           "commodities":  [
+                                               "mac-and-cheese",
+                                               "ramen",
                                                "flour",
                                                "sugar",
                                                "brown-sugar",
-                                               "powdered-sugar",
+                                               "olive-oil",
+                                               "vegetable-oil",
+                                               "cereal",
+                                               "oatmeal",
+                                               "jelly",
+                                               "honey",
+                                               "canned-black-beans",
+                                               "canned-corn",
+                                               "diced-tomatoes",
+                                               "chicken-broth",
+                                               "ketchup",
+                                               "mustard",
+                                               "mayonnaise",
+                                               "ranch-dressing",
+                                               "salsa",
+                                               "salt",
+                                               "black-pepper",
+                                               "pancake-mix",
+                                               "maple-syrup",
                                                "baking-powder",
                                                "baking-soda",
-                                               "cocoa-powder",
-                                               "chocolate-chips",
-                                               "vanilla-extract",
                                                "yeast",
+                                               "vanilla-extract",
+                                               "chocolate-chips",
+                                               "cocoa-powder",
+                                               "powdered-sugar",
                                                "cake-mix",
                                                "brownie-mix",
                                                "frosting",
-                                               "marshmallows",
-                                               "black-pepper",
-                                               "salt",
+                                               "evaporated-milk",
                                                "condensed-milk",
-                                               "evaporated-milk"
-                                           ]
-                       },
-                       {
-                           "key":  "grains",
-                           "label":  "Pasta, Rice \u0026 Grains",
-                           "order":  9,
-                           "commodities":  [
-                                               "pasta",
+                                               "cooking-spray",
+                                               "coconut-oil",
+                                               "apple-cider-vinegar",
+                                               "worcestershire",
+                                               "hot-sauce",
+                                               "bbq-sauce",
+                                               "italian-dressing",
+                                               "pickles",
+                                               "relish",
+                                               "canned-pinto-beans",
+                                               "refried-beans",
+                                               "baked-beans",
+                                               "canned-chili",
+                                               "canned-green-beans",
+                                               "canned-peas",
+                                               "canned-mushrooms",
+                                               "chicken-noodle-soup",
+                                               "tomato-soup",
+                                               "cream-of-mushroom-soup",
+                                               "cream-of-chicken-soup",
+                                               "instant-mashed-potatoes",
+                                               "stuffing-mix",
+                                               "brown-rice",
                                                "egg-noodles",
                                                "lasagna-noodles",
-                                               "ramen",
-                                               "mac-and-cheese",
-                                               "rice",
-                                               "brown-rice",
-                                               "oatmeal",
-                                               "cereal",
-                                               "stuffing-mix",
-                                               "instant-mashed-potatoes",
-                                               "pancake-mix"
-                                           ]
-                       },
-                       {
-                           "key":  "oils",
-                           "label":  "Coffee, Oils \u0026 Spreads",
-                           "order":  10,
-                           "commodities":  [
-                                               "olive-oil",
-                                               "vegetable-oil",
-                                               "coconut-oil",
-                                               "cooking-spray",
-                                               "apple-cider-vinegar",
-                                               "coffee",
-                                               "orange-juice",
-                                               "peanut-butter",
-                                               "jelly",
-                                               "honey",
-                                               "maple-syrup",
-                                               "almonds",
+                                               "alfredo-sauce",
+                                               "pizza-sauce",
+                                               "queso",
+                                               "hummus",
+                                               "marshmallows",
+                                               "graham-crackers",
+                                               "beef-broth",
+                                               "canned-peaches",
+                                               "canned-pineapple",
+                                               "applesauce",
                                                "peanuts",
-                                               "mixed-nuts",
+                                               "almonds",
                                                "raisins",
-                                               "graham-crackers"
+                                               "mixed-nuts"
                                            ]
                        },
                        {
-                           "order":  11,
+                           "order":  7,
                            "key":  "snacks",
                            "label":  "Snacks \u0026 Drinks",
                            "commodities":  [
@@ -308,7 +280,7 @@
                                            ]
                        },
                        {
-                           "order":  12,
+                           "order":  8,
                            "key":  "frozen",
                            "label":  "Frozen",
                            "commodities":  [
@@ -335,7 +307,7 @@
                                            ]
                        },
                        {
-                           "order":  13,
+                           "order":  9,
                            "key":  "household",
                            "label":  "Household",
                            "commodities":  [
@@ -370,7 +342,7 @@
                                            ]
                        },
                        {
-                           "order":  14,
+                           "order":  10,
                            "key":  "personal",
                            "label":  "Personal Care",
                            "commodities":  [
@@ -393,7 +365,7 @@
                                            ]
                        },
                        {
-                           "order":  15,
+                           "order":  11,
                            "key":  "baby",
                            "label":  "Baby",
                            "commodities":  [
@@ -404,7 +376,7 @@
                                            ]
                        },
                        {
-                           "order":  16,
+                           "order":  12,
                            "key":  "pet",
                            "label":  "Pet",
                            "commodities":  [

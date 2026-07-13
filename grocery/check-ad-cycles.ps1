@@ -99,6 +99,13 @@ if ($serverDue) {
     # pick the cheapest VALID one. Do NOT swap in a "pick one cheapest here" researcher - pre-filtering with a lesser
     # rule dropped FF from milk/butter/blueberries (it picked Butter Beans / Blueberry Soda). Non-fatal.
     try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'pull-regular-familyfare.ps1') | Out-Null; Log 'FF everyday refreshed' } catch { Log ('FF everyday pull threw: ' + $_.Exception.Message) }
+    # FF PULL-COMPLETENESS GUARD: catch a term the Freshop pull silently dropped (rate-limit -> 0 items) for a
+    # product FF actually carries (the 2026-07-13 ground-pork bug; coverage-gaps can't see a never-pulled item).
+    try {
+      $fcArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-ff-carry.ps1'),'-OutDir',$OutDir)
+      if (-not $NoAlert) { $fcArgs += '-Alert' }
+      & powershell @fcArgs | ForEach-Object { Log ('ff-carry: ' + $_) }
+    } catch { Log ('ff-carry guard threw: ' + $_.Exception.Message) }
   }
   # read verification from TODAY's file (real runs); in -NoPull test mode fall back to the newest ads file
   if (Test-Path $adsToday) { $verif = @((Get-Content $adsToday -Raw | ConvertFrom-Json).verification) }
@@ -236,6 +243,24 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           } else { Log 'coverage-gaps unchanged since last alert - not re-alerting' }
         } else { if (Test-Path (Join-Path $OutDir 'coverage-gap-alert.sig')) { Remove-Item (Join-Path $OutDir 'coverage-gap-alert.sig') -ErrorAction SilentlyContinue } }
       } catch { Log ('coverage-gap guard threw: ' + $_.Exception.Message) }
+      # ---- MATCHING-SOUNDNESS GUARD: a WRONG product landing in a commodity, or a rule change quietly moving/
+      # dropping an existing product vs the reviewed baseline (the 2026-07-13 matching-audit class). No other
+      # guard catches theft-IN. audit-match-soundness -Alert self-dedups and emails on a NEW issue-set; a
+      # MOVED/DROPPED also makes it exit 2 so the publish gate holds. Advisory here (the daily board still ships).
+      try {
+        $msArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-match-soundness.ps1'),'-OutDir',$OutDir)
+        if (-not $NoAlert) { $msArgs += '-Alert' }
+        & powershell @msArgs | ForEach-Object { Log ('match-soundness: ' + $_) }
+        if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    commodity matching changed vs baseline (a product MOVED/DROPPED) - see out\audit\soundness-report.json; publish will HOLD until reviewed + audit-match-soundness.ps1 -Accept' }
+      } catch { Log ('match-soundness guard threw: ' + $_.Exception.Message) }
+      # ---- CATEGORY-COVERAGE GUARD: a commodity filed into NO category renders in no department/filter (invisible).
+      # HARD publish gate + daily alert so adding a new item can never silently skip a filter.
+      try {
+        $ccArgs = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'audit-category-coverage.ps1'),'-OutDir',$OutDir)
+        if (-not $NoAlert) { $ccArgs += '-Alert' }
+        & powershell @ccArgs | ForEach-Object { Log ('category-coverage: ' + $_) }
+        if ($LASTEXITCODE -eq 2) { $summary += 'REVIEW    a commodity is in no category (renders in no filter) - see out\category-coverage-report.json; publish will HOLD until it is filed into a category' }
+      } catch { Log ('category-coverage guard threw: ' + $_.Exception.Message) }
       # ---- SALE-FALLBACK GUARD: an on-sale cell with NO everyday item to revert to VANISHES when the sale ends.
       # audit-sale-fallback flags them; FF self-heals daily (researched above), browser-store gaps go to
       # research-worklist.json for the weekly agent to research the next-cheapest everyday item. De-duped alert.

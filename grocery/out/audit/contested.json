@@ -1,0 +1,452 @@
+﻿[
+    {
+        "name":  "Countryside Creamery Salted Butter Quarters",
+        "winner":  "butter",
+        "eligible":  "butter \u003e coffee-creamer"
+    },
+    {
+        "name":  "French Green Beans, Package",
+        "winner":  "fresh-green-beans",
+        "eligible":  "fresh-green-beans \u003e canned-green-beans"
+    },
+    {
+        "name":  "Chef\u0027s Cupboard Homestyle Butter Mashed Potatoes",
+        "winner":  "butter",
+        "eligible":  "butter \u003e instant-mashed-potatoes"
+    },
+    {
+        "name":  "Earthly Grains Brown Basmati Rice",
+        "winner":  "rice",
+        "eligible":  "rice \u003e brown-rice"
+    },
+    {
+        "name":  "Reggano Oven Ready Lasagna Noodles",
+        "winner":  "lasagna-noodles",
+        "eligible":  "lasagna-noodles \u003e frozen-lasagna"
+    },
+    {
+        "name":  "Sweet Harvest Pineapple Chunks in Pineapple Juice",
+        "winner":  "canned-pineapple",
+        "eligible":  "canned-pineapple \u003e apple-juice"
+    },
+    {
+        "name":  "Southern Grove Dry Roasted Peanuts with Sea Salt",
+        "winner":  "salt",
+        "eligible":  "salt \u003e peanuts"
+    },
+    {
+        "name":  "Benton\u0027s Vanilla Sandwich Creme Cookies",
+        "winner":  "cookies",
+        "eligible":  "cookies \u003e sandwich-cookies"
+    },
+    {
+        "name":  "Millville Peanut Butter Dark Chocolate Protein Chewy Bars",
+        "winner":  "peanut-butter",
+        "eligible":  "peanut-butter \u003e protein-bars"
+    },
+    {
+        "name":  "Gatorade Fruit Punch Thirst Quencher",
+        "winner":  "fruit-punch",
+        "eligible":  "fruit-punch \u003e sports-drinks"
+    },
+    {
+        "name":  "Barissimo Donut Store Blend Coffee Cups",
+        "winner":  "coffee",
+        "eligible":  "coffee \u003e donuts \u003e coffee-pods"
+    },
+    {
+        "name":  "Season\u0027s Choice Steamable Sweet Peas",
+        "winner":  "canned-peas",
+        "eligible":  "canned-peas \u003e frozen-peas"
+    },
+    {
+        "name":  "Mama Cozzi\u0027s Pizza Kitchen Garlic Texas Toast",
+        "winner":  "frozen-pizza",
+        "eligible":  "frozen-pizza \u003e garlic-bread"
+    },
+    {
+        "name":  "Honey Mangos",
+        "winner":  "honey",
+        "eligible":  "honey \u003e mangoes"
+    },
+    {
+        "name":  "Kale Lettuce Bunch",
+        "winner":  "lettuce",
+        "eligible":  "lettuce \u003e kale"
+    },
+    {
+        "name":  "Daisy Daisy 4% Milkfat Minimum With Blueberries Cottage Cheese 6 Oz",
+        "winner":  "cottage-cheese",
+        "eligible":  "cottage-cheese \u003e blueberries"
+    },
+    {
+        "name":  "Philadelphia Chive \u0026 Onion Cream Cheese Spread 7.5 Oz",
+        "winner":  "cream-cheese",
+        "eligible":  "cream-cheese \u003e onions"
+    },
+    {
+        "name":  "Philadelphia Honey Pecan Cream Cheese Spread 7.5 Oz",
+        "winner":  "cream-cheese",
+        "eligible":  "cream-cheese \u003e honey"
+    },
+    {
+        "name":  "Bel Gioioso Parmesan Freshly Shredded Cheese 8 Oz",
+        "winner":  "shredded-cheese",
+        "eligible":  "shredded-cheese \u003e parmesan"
+    },
+    {
+        "name":  "Bel Gioioso Freshly Shredded Cheese, Parmesan 5 Oz",
+        "winner":  "shredded-cheese",
+        "eligible":  "shredded-cheese \u003e parmesan"
+    },
+    {
+        "name":  "Our Family Natural Finely Cut Parmesan Shredded Cheese 6 Oz",
+        "winner":  "shredded-cheese",
+        "eligible":  "shredded-cheese \u003e parmesan"
+    },
+    {
+        "name":  "Noosa Yoghurt, Finest, Peach 8 Oz",
+        "winner":  "yogurt",
+        "eligible":  "yogurt \u003e peaches"
+    },
+    {
+        "name":  "Yoplait Low Fat Strawberry Banana Yogurt 6 Oz",
+        "winner":  "yogurt",
+        "eligible":  "yogurt \u003e bananas"
+    },
+    {
+        "name":  "Yoplait Reduced Fat Orange Creme Yogurt 4 Oz",
+        "winner":  "yogurt",
+        "eligible":  "yogurt \u003e oranges"
+    },
+    {
+        "name":  "Jumex Strawberry Banana Nectar From Concentrate 11.3 Fl Oz",
+        "winner":  "bananas",
+        "eligible":  "bananas \u003e strawberries"
+    },
+    {
+        "name":  "Chobani Strawberry Banana On The Bottom Reduced Fat Greek Yogurt 5.3 Oz",
+        "winner":  "yogurt",
+        "eligible":  "yogurt \u003e bananas"
+    },
+    {
+        "name":  "El Mexicano Yogurt Drink, Strawberry Banana 7 Fl Oz",
+        "winner":  "yogurt",
+        "eligible":  "yogurt \u003e bananas"
+    },
+    {
+        "name":  "Fresh Strawberries \u0026 Blueberries Fresh Divide",
+        "winner":  "strawberries",
+        "eligible":  "strawberries \u003e blueberries"
+    },
+    {
+        "name":  "Fresh \u0026 Finest By Our Family Salsa Avocado",
+        "winner":  "avocados",
+        "eligible":  "avocados \u003e salsa"
+    },
+    {
+        "name":  "Fresh \u0026 Finest By Our Family Salsa, Avocado Dragon, Medium 10 Oz",
+        "winner":  "avocados",
+        "eligible":  "avocados \u003e salsa"
+    },
+    {
+        "name":  "Triscuit Crackers, Avocado, Cilantro \u0026 Lime 8.5 Oz",
+        "winner":  "avocados",
+        "eligible":  "avocados \u003e limes \u003e cilantro \u003e crackers"
+    },
+    {
+        "name":  "Vigo Lime Rice, Creamy Avocado, Authentic 8 Oz",
+        "winner":  "avocados",
+        "eligible":  "avocados \u003e limes \u003e rice"
+    },
+    {
+        "name":  "Fresh Gourmet Fresh Gourmet Garlic Ginger Wonton Strips 3.5 Oz",
+        "winner":  "garlic",
+        "eligible":  "garlic \u003e fresh-ginger"
+    },
+    {
+        "name":  "Ritz Fresh Stacks Roasted Garlic Crackers 8 Ea",
+        "winner":  "garlic",
+        "eligible":  "garlic \u003e crackers"
+    },
+    {
+        "name":  "Ritz Fresh Stacks Roasted Garlic/The Original/Everything Crackers Variety Pack 6 Ea",
+        "winner":  "garlic",
+        "eligible":  "garlic \u003e crackers"
+    },
+    {
+        "name":  "Fresh \u0026 Finest By Our Family Garlic Hummus 10 Oz",
+        "winner":  "garlic",
+        "eligible":  "garlic \u003e hummus"
+    },
+    {
+        "name":  "Mrs. Renfro\u0027s Salsa, Peach, Mild 16 Oz",
+        "winner":  "peaches",
+        "eligible":  "peaches \u003e salsa"
+    },
+    {
+        "name":  "Alessi Tomatoes, Sun Dried, In Extra Virgin Olive Oil 7 Oz",
+        "winner":  "tomatoes",
+        "eligible":  "tomatoes \u003e olive-oil"
+    },
+    {
+        "name":  "Simple Mills Almond Flour Crackers, Tomato \u0026 Basil, Sun Dried 4.25 Oz",
+        "winner":  "tomatoes",
+        "eligible":  "tomatoes \u003e crackers"
+    },
+    {
+        "name":  "Birds Eye Super Sweet Corn 10 Oz",
+        "winner":  "sweet-corn",
+        "eligible":  "sweet-corn \u003e frozen-corn"
+    },
+    {
+        "name":  "Bomb Pop Pops, Strawberry, Watermelon \u0026 Grape, Nerds Candy 12 Ea",
+        "winner":  "strawberries",
+        "eligible":  "strawberries \u003e grapes \u003e popsicles"
+    },
+    {
+        "name":  "Our Family Tomatoes, With Onion, Celery \u0026 Green Bell Pepper, Diced, Petite 14.5 Oz",
+        "winner":  "onions",
+        "eligible":  "onions \u003e bell-peppers \u003e celery"
+    },
+    {
+        "name":  "Blue Diamond Hot Honey Almonds 6 Oz",
+        "winner":  "honey",
+        "eligible":  "honey \u003e almonds"
+    },
+    {
+        "name":  "State Fair Hot Honey Mini Corn Dogs 23.76 Oz",
+        "winner":  "honey",
+        "eligible":  "honey \u003e corn-dogs"
+    },
+    {
+        "name":  "Del Monte Sliced Hot Honey Carrots 14.5 Oz",
+        "winner":  "carrots",
+        "eligible":  "carrots \u003e honey"
+    },
+    {
+        "name":  "Pepsi Cola, Zero Sugar 2.1 Qt",
+        "winner":  "sugar",
+        "eligible":  "sugar \u003e soda"
+    },
+    {
+        "name":  "Cedar Hollow Foods Cherry Wood Ham",
+        "winner":  "deli-ham",
+        "eligible":  "deli-ham \u003e cherries"
+    },
+    {
+        "name":  "Fareway Parmesan Fancy Shredded Cheese",
+        "winner":  "shredded-cheese",
+        "eligible":  "shredded-cheese \u003e parmesan"
+    },
+    {
+        "name":  "Fareway Oven Ready Lasagna",
+        "winner":  "lasagna-noodles",
+        "eligible":  "lasagna-noodles \u003e frozen-lasagna"
+    },
+    {
+        "name":  "Fareway Orange Gelatin Dessert",
+        "winner":  "oranges",
+        "eligible":  "oranges \u003e gelatin"
+    },
+    {
+        "name":  "That\u0027s Smart! Mixed Vegetables With Carrots, Corn, Peas \u0026 Green Beans",
+        "winner":  "carrots",
+        "eligible":  "carrots \u003e frozen-vegetables \u003e fresh-green-beans \u003e canned-green-beans"
+    },
+    {
+        "name":  "Hy-Vee Oven Ready No Boil Lasagna",
+        "winner":  "lasagna-noodles",
+        "eligible":  "lasagna-noodles \u003e frozen-lasagna"
+    },
+    {
+        "name":  "That\u0027s Smart! Pineapple Chunks In Pineapple Juice 8 oz",
+        "winner":  "canned-pineapple",
+        "eligible":  "canned-pineapple \u003e apple-juice"
+    },
+    {
+        "name":  "Hy-Vee Chewy Protein Bars Peanut Butter \u0026 Dark Chocolate 5-1.42 oz Bars",
+        "winner":  "peanut-butter",
+        "eligible":  "peanut-butter \u003e protein-bars"
+    },
+    {
+        "name":  "Dunkin\u0027 Donuts Original Blend K-Cup 10 Count",
+        "winner":  "donuts",
+        "eligible":  "donuts \u003e coffee-pods"
+    },
+    {
+        "name":  "Jimmy Dean Bacon, Egg \u0026 Cheese Breakfast Burrito, 1 ct",
+        "winner":  "bacon",
+        "eligible":  "bacon \u003e eggs \u003e frozen-burritos"
+    },
+    {
+        "name":  "Great Value Lasagna Pasta",
+        "winner":  "lasagna-noodles",
+        "eligible":  "lasagna-noodles \u003e frozen-lasagna"
+    },
+    {
+        "name":  "Great Value Peanut Butter and Dark Chocolate Protein Bars",
+        "winner":  "peanut-butter",
+        "eligible":  "peanut-butter \u003e protein-bars"
+    },
+    {
+        "name":  "Great Value Mixed Fruits Variety Pack Cups",
+        "winner":  "fruit-cups",
+        "eligible":  "fruit-cups \u003e coffee-pods"
+    },
+    {
+        "name":  "Gatorade Thirst Quencher Fruit Punch",
+        "winner":  "fruit-punch",
+        "eligible":  "fruit-punch \u003e sports-drinks"
+    },
+    {
+        "name":  "Great Value Croissant Sandwiches Sausage Egg and Cheese",
+        "winner":  "croissants",
+        "eligible":  "croissants \u003e breakfast-sandwiches"
+    },
+    {
+        "name":  "Dial Gold Antibacterial Deodorant Bar Soap",
+        "winner":  "bar-soap",
+        "eligible":  "bar-soap \u003e deodorant"
+    },
+    {
+        "name":  "Hy-Vee corn or green beans, 14.25 to 15.25 oz., $0.88",
+        "winner":  "fresh-green-beans",
+        "eligible":  "fresh-green-beans \u003e canned-green-beans"
+    },
+    {
+        "name":  "Nothing But The Truth blueberries, raspberries, strawberries or berry medley, SAVE! .50, $2.99 PERLS PRICES. NON-MEMBER PRICE $3.49",
+        "winner":  "strawberries",
+        "eligible":  "strawberries \u003e blueberries \u003e raspberries \u003e frozen-fruit"
+    },
+    {
+        "name":  "Di Lusso wraps or croissant sandwich, FUEL SAVER EARN 3¢ OFF PER GALLON,",
+        "winner":  "croissants",
+        "eligible":  "croissants \u003e breakfast-sandwiches"
+    },
+    {
+        "name":  "HyChi manager\u0027s special, 2 entrées, 2 appetizers, rice \u0026 fortune cookie, $9.99",
+        "winner":  "rice",
+        "eligible":  "rice \u003e cookies"
+    },
+    {
+        "name":  "Wasa crispbread crackers or bread, 5.4 to 9.2 oz., 2/ $7",
+        "winner":  "bread",
+        "eligible":  "bread \u003e crackers"
+    },
+    {
+        "name":  "The Mad Butcher\u0027s salsa or queso, 15 or 16 oz., $2.99",
+        "winner":  "salsa",
+        "eligible":  "salsa \u003e queso"
+    },
+    {
+        "name":  "Hy-Vee heavy whipping cream 16 fl. oz. or half \u0026 half 32 fl. oz., $3.49",
+        "winner":  "heavy-cream",
+        "eligible":  "heavy-cream \u003e half-and-half"
+    },
+    {
+        "name":  "Urban Pie, Cheez-it, Connie\u0027s, Stranger Things, Screamin\u0027 Sicilian breadstix or pizza, 13.3 to 26.9 oz., $5.99",
+        "winner":  "frozen-pizza",
+        "eligible":  "frozen-pizza \u003e cheese-crackers"
+    },
+    {
+        "name":  "Busch Light apple or lime, 30 pk. cans 12 fl. oz., $27.99",
+        "winner":  "apples",
+        "eligible":  "apples \u003e limes"
+    },
+    {
+        "name":  "Hy-Vee berry medley or sliced peaches, 48 oz., $11.98",
+        "winner":  "canned-peaches",
+        "eligible":  "canned-peaches \u003e frozen-fruit"
+    },
+    {
+        "name":  "Our own ready to cook shrimp \u0026 crab boil, Snow crab clusters, crawfish, Argentine red EZ peel shrimp, red skin potato wedges, mini corn cobs, garlic herb butter pucks \u0026 Old Bay crab cajun spices, 64 oz. half shrimp \u0026 crab boil 32 oz. $17.99, $34.99",
+        "winner":  "butter",
+        "eligible":  "butter \u003e shrimp"
+    },
+    {
+        "name":  "Our own ready to cook crab boil, Snow crab clusters, Zatarain\u0027s andouille smoked sausage, mini sweet corn cobs \u0026 Old Bay cajun spices, 64 oz., $39.99",
+        "winner":  "sweet-corn",
+        "eligible":  "sweet-corn \u003e kielbasa"
+    },
+    {
+        "name":  "Our own ready to cook shrimp boil, Argentina red EZ peel shrimp, red skin potato wedges, Zatarain\u0027s andouille smoked sausage, mini sweet corn cobs, garlic herb butter pucks \u0026 Old Bay cajun spices, 56 oz. half shrimp boil 28 oz. 12.99, $19.99",
+        "winner":  "butter",
+        "eligible":  "butter \u003e sweet-corn \u003e shrimp \u003e kielbasa"
+    },
+    {
+        "name":  "Firecracker green beans, $6.99 lb.",
+        "winner":  "fresh-green-beans",
+        "eligible":  "fresh-green-beans \u003e canned-green-beans"
+    },
+    {
+        "name":  "Whole Milk Mozzarella Shredded Cheese Our Family",
+        "winner":  "milk",
+        "eligible":  "milk \u003e shredded-cheese"
+    },
+    {
+        "name":  "Gatorade Lemon Lime Thirst Quencher 28 Fl Oz",
+        "winner":  "lemons",
+        "eligible":  "lemons \u003e limes \u003e sports-drinks"
+    },
+    {
+        "name":  "Gatorade Advanced Rehydration Fruit Punch Thirst Quencher 28 Fl Oz",
+        "winner":  "fruit-punch",
+        "eligible":  "fruit-punch \u003e sports-drinks"
+    },
+    {
+        "name":  "Pepsi Cola, Zero Sugar 12 Ea",
+        "winner":  "sugar",
+        "eligible":  "sugar \u003e soda"
+    },
+    {
+        "name":  "Gatorade Orange Thirst Quencher 28 Fl Oz",
+        "winner":  "oranges",
+        "eligible":  "oranges \u003e sports-drinks"
+    },
+    {
+        "name":  "Gatorade Zero Sugar Lemon Lime Thirst Quencher 28 Fl Oz",
+        "winner":  "lemons",
+        "eligible":  "lemons \u003e limes \u003e sugar \u003e sports-drinks"
+    },
+    {
+        "name":  "Gatorade Thirst Quencher, Zero Sugar, Orange 28 Fl Oz",
+        "winner":  "oranges",
+        "eligible":  "oranges \u003e sugar \u003e sports-drinks"
+    },
+    {
+        "name":  "Organic Green Beans",
+        "winner":  "fresh-green-beans",
+        "eligible":  "fresh-green-beans \u003e canned-green-beans"
+    },
+    {
+        "name":  "Country Pasta Homemade Style Egg Pasta",
+        "winner":  "pasta",
+        "eligible":  "pasta \u003e egg-noodles"
+    },
+    {
+        "name":  "Mott\u0027s No Sugar Added Applesauce",
+        "winner":  "sugar",
+        "eligible":  "sugar \u003e applesauce"
+    },
+    {
+        "name":  "Member\u0027s Mark Honey Almond Granola",
+        "winner":  "honey",
+        "eligible":  "honey \u003e granola"
+    },
+    {
+        "name":  "Pure Leaf Real Brewed Unsweetened Black Tea",
+        "winner":  "iced-tea",
+        "eligible":  "iced-tea \u003e tea-bags"
+    },
+    {
+        "name":  "Jimmy Dean Sausage, Egg, and Cheese Croissant Sandwiches",
+        "winner":  "croissants",
+        "eligible":  "croissants \u003e breakfast-sandwiches"
+    },
+    {
+        "name":  "Frollies Watermelon and Pineapple Fruity Ice Pops",
+        "winner":  "pineapple",
+        "eligible":  "pineapple \u003e popsicles"
+    }
+]

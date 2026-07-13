@@ -1,0 +1,401 @@
+﻿[
+    {
+        "id":  "peanut-butter",
+        "term":  "peanut butter",
+        "name":  "Creamy Reduced Salt \u0026 Sugar Peanut Butter",
+        "price":  2.29,
+        "size":  "16 oz"
+    },
+    {
+        "id":  "orange-juice",
+        "term":  "orange juice",
+        "name":  "Tropicana Pure Premium No Pulp Orange Juice 89 Fl Oz",
+        "price":  9.49,
+        "size":  "89 oz"
+    },
+    {
+        "id":  "coffee",
+        "term":  "ground coffee",
+        "name":  "Folgers Med Dark Gourmet Supreme Ground Coffee 9.6 Oz",
+        "price":  9.99,
+        "size":  "9.6 oz"
+    },
+    {
+        "id":  "deli-ham",
+        "term":  "sliced deli ham",
+        "name":  "Deli Fresh Sliced Ham",
+        "price":  12.99,
+        "size":  "lb"
+    },
+    {
+        "id":  "canned-tuna",
+        "term":  "canned tuna",
+        "name":  "Chicken Of The Sea Premium Solid White Tuna In Water 4   5 Oz Cans 4 Ea",
+        "price":  8.99,
+        "size":  "4 ea"
+    },
+    {
+        "id":  "sliced-cheese",
+        "term":  "american cheese slices",
+        "name":  "Fresh Sliced American Cheese Kretschmar",
+        "price":  9.99,
+        "size":  "lb"
+    },
+    {
+        "id":  "oranges",
+        "term":  "navel oranges",
+        "name":  "Fresh Navel Oranges, Large",
+        "price":  1.39,
+        "size":  "1 ea"
+    },
+    {
+        "id":  "lemons",
+        "term":  "lemons",
+        "name":  "True Lemon Mango Lemonade Drink Mix 10 Ea",
+        "price":  3.99,
+        "size":  "10 ea"
+    },
+    {
+        "id":  "limes",
+        "term":  "fresh limes",
+        "name":  "Fresh Limes",
+        "price":  0.79,
+        "size":  "1 ct"
+    },
+    {
+        "id":  "lettuce",
+        "term":  "iceberg lettuce",
+        "name":  "Fresh Iceberg Lettuce Head",
+        "price":  2.89,
+        "size":  "24 ct"
+    },
+    {
+        "id":  "carrots",
+        "term":  "carrots",
+        "name":  "Fresh Baby Carrots Our Family",
+        "price":  1.39,
+        "size":  "1 lb"
+    },
+    {
+        "id":  "bell-peppers",
+        "term":  "green bell pepper",
+        "name":  "Our Family Tomatoes, With Onion, Celery \u0026 Green Bell Pepper, Diced, Petite 14.5 Oz",
+        "price":  0.99,
+        "size":  "14.5 oz"
+    },
+    {
+        "id":  "celery",
+        "term":  "celery",
+        "name":  "Fresh Celery",
+        "price":  2.49,
+        "size":  "1 ea"
+    },
+    {
+        "id":  "spinach",
+        "term":  "fresh spinach",
+        "name":  "Fresh Express Baby Spinach 5 Oz",
+        "price":  3.99,
+        "size":  "6 oz"
+    },
+    {
+        "id":  "sweet-potatoes",
+        "term":  "sweet potatoes",
+        "name":  "Red/Orangy Red Flesh Sweet Potato/Yam/Kumara, Small",
+        "price":  1.79,
+        "size":  "lb"
+    },
+    {
+        "id":  "tortillas",
+        "term":  "flour tortillas",
+        "name":  "Flour Tortillas Mi Mama\u0027s",
+        "price":  2.69,
+        "size":  "16 oz"
+    },
+    {
+        "id":  "hamburger-buns",
+        "term":  "hamburger buns",
+        "name":  "Fresh \u0026 Finest 8 Ct Egg Hamburger Buns",
+        "price":  4.79,
+        "size":  "16 oz"
+    },
+    {
+        "id":  "bagels",
+        "term":  "plain bagels",
+        "name":  "Lender\u0027s Pre Sliced Plain Bagels 6 Ea",
+        "price":  3.59,
+        "size":  "17.1 oz"
+    },
+    {
+        "id":  "rice",
+        "term":  "long grain white rice",
+        "name":  "Enriched Long Grain White Rice",
+        "price":  1.19,
+        "size":  "16 oz"
+    },
+    {
+        "id":  "pasta-sauce",
+        "term":  "pasta sauce marinara",
+        "name":  "Full Circle Market Pasta Sauce, Marinara 24 Oz",
+        "price":  3.89,
+        "size":  "24 oz"
+    },
+    {
+        "id":  "mac-and-cheese",
+        "term":  "macaroni and cheese",
+        "name":  "Annie\u0027s Shells White Cheddar Macaroni \u0026 Cheese 6 Oz",
+        "price":  2.29,
+        "size":  "6 oz"
+    },
+    {
+        "id":  "ramen",
+        "term":  "ramen noodles",
+        "name":  "Simply Asia Japanese Style Ramen Noodles 8 Oz",
+        "price":  6.99,
+        "size":  "8 oz"
+    },
+    {
+        "id":  "flour",
+        "term":  "all purpose flour",
+        "name":  "Gold Medal All Purpose Flour 5 Lb",
+        "price":  5.69,
+        "size":  "5 lb"
+    },
+    {
+        "id":  "sugar",
+        "term":  "granulated sugar",
+        "name":  "Crystal Sugar Sugar, Granulated 4 Lb",
+        "price":  4.69,
+        "size":  "4 lb"
+    },
+    {
+        "id":  "brown-sugar",
+        "term":  "brown sugar",
+        "name":  "Splenda Brown Sugar Blend 1 Lb",
+        "price":  7.99,
+        "size":  "16 oz"
+    },
+    {
+        "id":  "vegetable-oil",
+        "term":  "vegetable oil",
+        "name":  "Our Family Vegetable Oil 100% Pure",
+        "price":  4.99,
+        "size":  "40 oz"
+    },
+    {
+        "id":  "cereal",
+        "term":  "cereal",
+        "name":  "Cheerios Cereal Large Size 12 Oz",
+        "price":  5.59,
+        "size":  "12 oz"
+    },
+    {
+        "id":  "oatmeal",
+        "term":  "old fashioned oats",
+        "name":  "Old Fashioned Oats, Whole Grain Our Family",
+        "price":  2.99,
+        "size":  "18 oz"
+    },
+    {
+        "id":  "jelly",
+        "term":  "grape jelly",
+        "name":  "Smucker\u0027s Grape Jelly",
+        "price":  5.49,
+        "size":  "30 oz"
+    },
+    {
+        "id":  "canned-black-beans",
+        "term":  "black beans",
+        "name":  "Bush\u0027s Best Black Beans 16 Oz",
+        "price":  1.79,
+        "size":  "15 oz"
+    },
+    {
+        "id":  "ketchup",
+        "term":  "ketchup",
+        "name":  "Our Family Squeeze Bottle Ketchup",
+        "price":  1.99,
+        "size":  "20 oz"
+    },
+    {
+        "id":  "mustard",
+        "term":  "yellow mustard",
+        "name":  "Our Family Mustard, Yellow 14 Oz",
+        "price":  1.69,
+        "size":  "14 oz"
+    },
+    {
+        "id":  "ranch-dressing",
+        "term":  "ranch dressing",
+        "name":  "Kraft Classic Ranch Dressing 16 Fl Oz",
+        "price":  3.99,
+        "size":  "16 oz"
+    },
+    {
+        "id":  "salt",
+        "term":  "iodized salt",
+        "name":  "Morton Iodized Salt 26 Oz",
+        "price":  1.99,
+        "size":  "26 oz"
+    },
+    {
+        "id":  "black-pepper",
+        "term":  "ground black pepper",
+        "name":  "That\u0027s Smart! Ground Black Pepper",
+        "price":  1.39,
+        "size":  "2 oz"
+    },
+    {
+        "id":  "bottled-water",
+        "term":  "purified water 24 pack",
+        "name":  "Aquafina Drinking Water, Purified 24 Ea",
+        "price":  6.49,
+        "size":  "24pk 16.9 oz"
+    },
+    {
+        "id":  "frozen-pizza",
+        "term":  "frozen pizza",
+        "name":  "Rao\u0027s® Uncured Pepperoni Pizza Frozen Pizza 18.300 Oz",
+        "price":  14.99,
+        "size":  "18.300 oz"
+    },
+    {
+        "id":  "ice-cream",
+        "term":  "vanilla ice cream",
+        "name":  "Edy\u0027s Light Vanilla Ice Cream 1.5 Qt",
+        "price":  6.89,
+        "size":  "1.5 qt"
+    },
+    {
+        "id":  "frozen-vegetables",
+        "term":  "frozen mixed vegetables",
+        "name":  "Frozen Mixed Vegetables Our Family",
+        "price":  1.39,
+        "size":  "12 oz"
+    },
+    {
+        "id":  "chicken-nuggets",
+        "term":  "frozen chicken nuggets",
+        "name":  "Tyson Frozen Chicken Nuggets 29 Oz",
+        "price":  7.89,
+        "size":  "29 oz"
+    },
+    {
+        "id":  "stuffing-mix",
+        "term":  "stuffing mix",
+        "name":  "Stove Top Stuffing Mix For Turkey 6 Oz",
+        "price":  2.99,
+        "size":  "6 oz"
+    },
+    {
+        "id":  "brown-rice",
+        "term":  "brown rice",
+        "name":  "Long Grain Brown Rice Our Family",
+        "price":  1.19,
+        "size":  "16 oz"
+    },
+    {
+        "id":  "egg-noodles",
+        "term":  "egg noodles",
+        "name":  "Extra Wide Egg Noodles Our Family",
+        "price":  2.19,
+        "size":  "12 oz"
+    },
+    {
+        "id":  "alfredo-sauce",
+        "term":  "alfredo sauce",
+        "name":  "Bertolli Garlic Alfredo Sauce 15 Oz",
+        "price":  4.49,
+        "size":  "15 oz"
+    },
+    {
+        "id":  "pizza-sauce",
+        "term":  "pizza sauce",
+        "name":  "Pizza Sauce Our Family",
+        "price":  1.39,
+        "size":  "14 oz"
+    },
+    {
+        "id":  "queso",
+        "term":  "salsa con queso",
+        "name":  "Tostitos Medium Salsa Con Queso Dip 15 Oz",
+        "price":  5.99,
+        "size":  "15 oz"
+    },
+    {
+        "id":  "marshmallows",
+        "term":  "marshmallows",
+        "name":  "Our Family Marshmallows 10 Oz",
+        "price":  1.39,
+        "size":  "10 oz"
+    },
+    {
+        "id":  "graham-crackers",
+        "term":  "graham crackers",
+        "name":  "Crav\u0027n Flavor Graham Crackers, Honey, 3 Packs 3 Ea",
+        "price":  3.29,
+        "size":  "3 ea"
+    },
+    {
+        "id":  "applesauce",
+        "term":  "applesauce",
+        "name":  "Mott\u0027s Apple Sauce 6 Ea",
+        "price":  3.49,
+        "size":  "6/4 oz"
+    },
+    {
+        "id":  "peanuts",
+        "term":  "dry roasted peanuts",
+        "name":  "Our Family Peanuts, Dry Roasted 16 Oz",
+        "price":  2.99,
+        "size":  "16 oz"
+    },
+    {
+        "id":  "raisins",
+        "term":  "raisins",
+        "name":  "Lender\u0027s Pre Sliced Cinnamon Raisin Swirl Bagels 6 Ea",
+        "price":  3.59,
+        "size":  "6 ea"
+    },
+    {
+        "id":  "mixed-nuts",
+        "term":  "mixed nuts",
+        "name":  "Regal Health Foods Deluxe Mixed Nuts",
+        "price":  12.0,
+        "size":  "16 oz"
+    },
+    {
+        "id":  "crackers",
+        "term":  "saltine crackers",
+        "name":  "Our Family Unsalted Tops Saltine Crackers 16 Oz",
+        "price":  2.49,
+        "size":  "16 oz"
+    },
+    {
+        "id":  "cheese-crackers",
+        "term":  "cheese crackers",
+        "name":  "Cheez It Cheese Crackers, Original 12.4 Oz",
+        "price":  4.19,
+        "size":  "12.4 oz"
+    },
+    {
+        "id":  "pretzels",
+        "term":  "pretzel twists",
+        "name":  "Snyder\u0027s Of Hanover® Seasoned Twisted Pretzel Sticks 12.000 Oz",
+        "price":  4.79,
+        "size":  "12.000 oz"
+    },
+    {
+        "id":  "microwave-popcorn",
+        "term":  "microwave popcorn",
+        "name":  "Orville Redenbacher\u0027s Gourmet Kettle Corn Microwave Popcorn 6 Ea",
+        "price":  6.59,
+        "size":  "6 ea"
+    },
+    {
+        "id":  "granola-bars",
+        "term":  "chewy granola bars",
+        "name":  "Sunbelt Bakery Oats \u0026 Honey Chewy Granola Bars 10 Ea",
+        "price":  3.59,
+        "size":  "10 ea"
+    }
+]

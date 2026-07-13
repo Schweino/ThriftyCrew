@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-13 13:49",
-    "gap_count":  161,
+    "generated":  "2026-07-13 05:35",
+    "gap_count":  102,
     "gaps":  [
                  {
                      "commodity":  "peanut-butter",
@@ -18,21 +18,6 @@
                      "candidate":  "Folgers Classic Roast Ground Coffee"
                  },
                  {
-                     "commodity":  "whole-chicken",
-                     "store":  "Family Fare",
-                     "candidate":  "Our Family Fresh Whole Chicken"
-                 },
-                 {
-                     "commodity":  "breakfast-sausage",
-                     "store":  "Family Fare",
-                     "candidate":  "Johnsonville Original Recipe Breakfast Sausage 12 Oz"
-                 },
-                 {
-                     "commodity":  "sliced-cheese",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Member\u0027s Mark American Cheese, 160 Slices"
-                 },
-                 {
                      "commodity":  "oranges",
                      "store":  "Family Fare",
                      "candidate":  "Yoplait Reduced Fat Orange Creme Yogurt 4 Oz"
@@ -41,6 +26,11 @@
                      "commodity":  "lemons",
                      "store":  "Aldi",
                      "candidate":  "Lemons, Bag"
+                 },
+                 {
+                     "commodity":  "lemons",
+                     "store":  "Family Fare",
+                     "candidate":  "7 Up Soda, Zero Sugar, Lemon Lime 2.1 Qt"
                  },
                  {
                      "commodity":  "lemons",
@@ -55,7 +45,7 @@
                  {
                      "commodity":  "limes",
                      "store":  "Family Fare",
-                     "candidate":  "Gatorade Lemon Lime Thirst Quencher 28 Fl Oz"
+                     "candidate":  "Triscuit Crackers, Avocado, Cilantro \u0026 Lime 8.5 Oz"
                  },
                  {
                      "commodity":  "limes",
@@ -90,12 +80,22 @@
                  {
                      "commodity":  "bagels",
                      "store":  "Aldi",
-                     "candidate":  "Southern Grove Everything Bagel or Honey Roasted Cashews"
+                     "candidate":  "L\u0027oven Fresh Plain Bagels"
+                 },
+                 {
+                     "commodity":  "bagels",
+                     "store":  "Family Fare",
+                     "candidate":  "Bubba\u0027s Sliced Blueberry Flavored Bagels 6 Ea"
                  },
                  {
                      "commodity":  "rice",
                      "store":  "Family Fare",
                      "candidate":  "Vigo Lime Rice, Creamy Avocado, Authentic 8 Oz"
+                 },
+                 {
+                     "commodity":  "mac-and-cheese",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Luke\u0027s lobster mac \u0026 cheese or ravioli, 8 oz., $7.99"
                  },
                  {
                      "commodity":  "mac-and-cheese",
@@ -115,12 +115,12 @@
                  {
                      "commodity":  "ramen",
                      "store":  "Hy-Vee",
-                     "candidate":  "Cup Noodles protein ramen, 2.54 oz., $0.99"
+                     "candidate":  "Maruchan Chicken Flavor Ramen Noodle Soup"
                  },
                  {
                      "commodity":  "sugar",
                      "store":  "Family Fare",
-                     "candidate":  "Pepsi Cola, Zero Sugar 12 Ea"
+                     "candidate":  "Creamy Reduced Salt \u0026 Sugar Peanut Butter"
                  },
                  {
                      "commodity":  "brown-sugar",
@@ -128,34 +128,9 @@
                      "candidate":  "Starbucks Coffee, Ground, Brown Sugar Cinnamon 11 Oz"
                  },
                  {
-                     "commodity":  "honey",
-                     "store":  "Family Fare",
-                     "candidate":  "Philadelphia Honey Pecan Cream Cheese Spread 7.5 Oz"
-                 },
-                 {
-                     "commodity":  "canned-corn",
+                     "commodity":  "frozen-pizza",
                      "store":  "Hy-Vee",
-                     "candidate":  "That\u0027s Smart! Whole Kernel Golden Corn"
-                 },
-                 {
-                     "commodity":  "canned-corn",
-                     "store":  "Family Fare",
-                     "candidate":  "Del Monte No Salt Added Whole Kernel Golden Sweet Corn 11 Oz"
-                 },
-                 {
-                     "commodity":  "canned-corn",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Kroger Whole Kernel Sweet Golden Corn"
-                 },
-                 {
-                     "commodity":  "salt",
-                     "store":  "Family Fare",
-                     "candidate":  "Del Monte No Salt Added Whole Kernel Golden Sweet Corn 11 Oz"
-                 },
-                 {
-                     "commodity":  "soda",
-                     "store":  "Family Fare",
-                     "candidate":  "Dr Pepper Soda, 12 Pack 12 Ea"
+                     "candidate":  "Tombstone, DiGiorno Classic, Jack\u0027s rising crust pizza or cheesy pizza dippers, -1.00 off with manufacturer\u0027s digital coupon, $2.99"
                  },
                  {
                      "commodity":  "frozen-pizza",
@@ -168,34 +143,14 @@
                      "candidate":  "Vigo Lime Rice, Creamy Avocado, Authentic 8 Oz"
                  },
                  {
-                     "commodity":  "frozen-vegetables",
-                     "store":  "Hy-Vee",
-                     "candidate":  "That\u0027s Smart! Mixed Vegetables With Carrots, Corn, Peas \u0026 Green Beans"
-                 },
-                 {
                      "commodity":  "aluminum-foil",
                      "store":  "Hy-Vee",
-                     "candidate":  "Hy-Vee aluminum foil, 130 or 200 sq. ft., $11.99"
-                 },
-                 {
-                     "commodity":  "aluminum-foil",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Reynolds Wrap Aluminum Foil 30 Sq Ft"
-                 },
-                 {
-                     "commodity":  "aluminum-foil",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Reynolds Wrap Heavy Duty 18 Inch Aluminum Foil, 2 pk"
+                     "candidate":  "That\u0027s Smart Aluminum Foil"
                  },
                  {
                      "commodity":  "hand-soap",
                      "store":  "Hy-Vee",
                      "candidate":  "Hy-Vee Clear Hands Soap"
-                 },
-                 {
-                     "commodity":  "mangoes",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Honey Mangos"
                  },
                  {
                      "commodity":  "kiwi",
@@ -218,11 +173,6 @@
                      "candidate":  "Fresh Kiwi Package"
                  },
                  {
-                     "commodity":  "honeydew",
-                     "store":  "Fareway",
-                     "candidate":  "Honeydew Melon"
-                 },
-                 {
                      "commodity":  "pineapple",
                      "store":  "Family Fare",
                      "candidate":  "Pineapple, Small"
@@ -236,16 +186,6 @@
                      "commodity":  "grapefruit",
                      "store":  "Hy-Vee",
                      "candidate":  "Red Grapefruit"
-                 },
-                 {
-                     "commodity":  "zucchini",
-                     "store":  "Family Fare",
-                     "candidate":  "Zucchini Squash"
-                 },
-                 {
-                     "commodity":  "cauliflower",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Table Ready Cauliflower"
                  },
                  {
                      "commodity":  "kale",
@@ -278,24 +218,9 @@
                      "candidate":  "USDA Choice Thick Cut Ribeye Steak"
                  },
                  {
-                     "commodity":  "pork-tenderloin",
-                     "store":  "Family Fare",
-                     "candidate":  "Whole Boneless Pork Tenderloin"
-                 },
-                 {
-                     "commodity":  "italian-sausage",
-                     "store":  "Family Fare",
-                     "candidate":  "Johnsonville Premium Italian Hot Sausage 16 Oz"
-                 },
-                 {
                      "commodity":  "bratwurst",
                      "store":  "Sam\u0027s Club",
                      "candidate":  "Johnsonville Brats Original Pork Bratwurst Links"
-                 },
-                 {
-                     "commodity":  "bratwurst",
-                     "store":  "Walmart",
-                     "candidate":  "Marketside Beer \u0027N Bratwurst 5 Links"
                  },
                  {
                      "commodity":  "kielbasa",
@@ -303,34 +228,19 @@
                      "candidate":  "Smoked Hot Italian Sausage Hot"
                  },
                  {
-                     "commodity":  "rotisserie-chicken",
-                     "store":  "Family Fare",
-                     "candidate":  "Whole Rotisserie Chicken, Savory Hot (No Pick Up/Delivery Before 11am)"
+                     "commodity":  "tilapia",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Encrusted tilapia fillet, $12.98 lb."
                  },
                  {
-                     "commodity":  "rotisserie-chicken",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Member\u0027s Mark Seasoned Rotisserie Chicken"
-                 },
-                 {
-                     "commodity":  "pepperoni",
-                     "store":  "Family Fare",
-                     "candidate":  "Hormel Turkey Pepperoni 5 Oz"
-                 },
-                 {
-                     "commodity":  "parmesan",
-                     "store":  "Family Fare",
-                     "candidate":  "Our Family Natural Finely Cut Parmesan Shredded Cheese 6 Oz"
-                 },
-                 {
-                     "commodity":  "parmesan",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Parmesan Fancy Shredded Cheese"
+                     "commodity":  "string-cheese",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Hy-Vee Light String Cheese Mozzarella 12 Count"
                  },
                  {
                      "commodity":  "donuts",
-                     "store":  "Aldi",
-                     "candidate":  "Barissimo Donut Store Blend Coffee Cups"
+                     "store":  "Hy-Vee",
+                     "candidate":  "Hy-Vee mini donuts, SAVE 50¢, $1.99"
                  },
                  {
                      "commodity":  "donuts",
@@ -353,19 +263,9 @@
                      "candidate":  "Toufayan Bakeries Hearth Baked Classic White Pita 6 Each"
                  },
                  {
-                     "commodity":  "pancake-mix",
-                     "store":  "Family Fare",
-                     "candidate":  "Fast Shake Pancake Mix, Blueberry 5.3 Oz"
-                 },
-                 {
                      "commodity":  "yeast",
                      "store":  "Hy-Vee",
                      "candidate":  "Fleischmann\u0027s ActiveDry Yeast 3 Pack"
-                 },
-                 {
-                     "commodity":  "yeast",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Fleischmann\u0027s Instant Dry Yeast"
                  },
                  {
                      "commodity":  "cake-mix",
@@ -398,44 +298,9 @@
                      "candidate":  "Sam\u0027s Vanilla Whipped Icing, Frozen Bucket"
                  },
                  {
-                     "commodity":  "hot-sauce",
-                     "store":  "Family Fare",
-                     "candidate":  "Local Hive Honey Hot Habanero Hot Sauce 6 Oz"
-                 },
-                 {
                      "commodity":  "canned-green-beans",
                      "store":  "Family Fare",
                      "candidate":  "Beech Nut Stage 2 (6+ Months) Sweet Corn \u0026 Green Beans 4 Oz"
-                 },
-                 {
-                     "commodity":  "canned-mushrooms",
-                     "store":  "Aldi",
-                     "candidate":  "Happy Harvest Mushrooms Pieces \u0026 Stems"
-                 },
-                 {
-                     "commodity":  "instant-mashed-potatoes",
-                     "store":  "Aldi",
-                     "candidate":  "Chef\u0027s Cupboard Homestyle Butter Mashed Potatoes"
-                 },
-                 {
-                     "commodity":  "brown-rice",
-                     "store":  "Aldi",
-                     "candidate":  "Earthly Grains Brown Basmati Rice"
-                 },
-                 {
-                     "commodity":  "egg-noodles",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Country Pasta Homemade Style Egg Pasta"
-                 },
-                 {
-                     "commodity":  "hummus",
-                     "store":  "Family Fare",
-                     "candidate":  "Fresh \u0026 Finest By Our Family Garlic Hummus 10 Oz"
-                 },
-                 {
-                     "commodity":  "hummus",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Member\u0027s Mark Roasted Red Pepper Hummus"
                  },
                  {
                      "commodity":  "canned-peaches",
@@ -443,49 +308,14 @@
                      "candidate":  "Our Family Peaches, Yellow Cling, Sliced 15 Oz"
                  },
                  {
-                     "commodity":  "canned-peaches",
-                     "store":  "Walmart",
-                     "candidate":  "Great Value Sliced Yellow Cling Peaches in Juice"
-                 },
-                 {
                      "commodity":  "applesauce",
                      "store":  "Fareway",
                      "candidate":  "Fareway Unsweetened Applesauce"
                  },
                  {
-                     "commodity":  "applesauce",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Mott\u0027s No Sugar Added Applesauce"
-                 },
-                 {
-                     "commodity":  "peanuts",
-                     "store":  "Aldi",
-                     "candidate":  "Southern Grove Dry Roasted Peanuts with Sea Salt"
-                 },
-                 {
-                     "commodity":  "almonds",
-                     "store":  "Family Fare",
-                     "candidate":  "Blue Diamond Hot Honey Almonds 6 Oz"
-                 },
-                 {
                      "commodity":  "crackers",
                      "store":  "Family Fare",
                      "candidate":  "Triscuit Crackers, Avocado, Cilantro \u0026 Lime 8.5 Oz"
-                 },
-                 {
-                     "commodity":  "sandwich-cookies",
-                     "store":  "Aldi",
-                     "candidate":  "Benton\u0027s Vanilla Sandwich Creme Cookies"
-                 },
-                 {
-                     "commodity":  "protein-bars",
-                     "store":  "Aldi",
-                     "candidate":  "Millville Peanut Butter Dark Chocolate Protein Chewy Bars"
-                 },
-                 {
-                     "commodity":  "protein-bars",
-                     "store":  "Walmart",
-                     "candidate":  "Great Value Peanut Butter and Dark Chocolate Protein Bars"
                  },
                  {
                      "commodity":  "fruit-snacks",
@@ -501,16 +331,6 @@
                      "commodity":  "toaster-pastries",
                      "store":  "Family Fare",
                      "candidate":  "Pop Tarts Toaster Pastries, Star Spangled Blueberry 13.5 Oz"
-                 },
-                 {
-                     "commodity":  "toaster-pastries",
-                     "store":  "Walmart",
-                     "candidate":  "Great Value Frosted Cherry Toaster Pastries"
-                 },
-                 {
-                     "commodity":  "granola",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Member\u0027s Mark Honey Almond Granola"
                  },
                  {
                      "commodity":  "rice-cakes",
@@ -548,41 +368,6 @@
                      "candidate":  "Snack Pack Butterscotch Flavored Pudding"
                  },
                  {
-                     "commodity":  "gelatin",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Orange Gelatin Dessert"
-                 },
-                 {
-                     "commodity":  "apple-juice",
-                     "store":  "Family Fare",
-                     "candidate":  "Our Family Apple Juice 64 Fl Oz"
-                 },
-                 {
-                     "commodity":  "grape-juice",
-                     "store":  "Family Fare",
-                     "candidate":  "Simply Grape Juice Drink Bottle 52 Fl Oz"
-                 },
-                 {
-                     "commodity":  "lemonade",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Member\u0027s Mark Fresh Squeezed Lemonade"
-                 },
-                 {
-                     "commodity":  "sports-drinks",
-                     "store":  "Aldi",
-                     "candidate":  "Gatorade Fruit Punch Thirst Quencher"
-                 },
-                 {
-                     "commodity":  "sports-drinks",
-                     "store":  "Walmart",
-                     "candidate":  "Gatorade Thirst Quencher Fruit Punch"
-                 },
-                 {
-                     "commodity":  "sparkling-water",
-                     "store":  "Family Fare",
-                     "candidate":  "Sparkling Ice Zero Sugar Strawberry Watermelon Sparkling Water 17 Fl Oz"
-                 },
-                 {
                      "commodity":  "iced-tea",
                      "store":  "Family Fare",
                      "candidate":  "Our Family Sweet Corn, Super, Steamable 10 Oz"
@@ -593,11 +378,6 @@
                      "candidate":  "Kroger Thin Sliced Beef Ribeye Steak"
                  },
                  {
-                     "commodity":  "tea-bags",
-                     "store":  "Aldi",
-                     "candidate":  "USDA Choice Black Angus Petite Sirloin Steak"
-                 },
-                 {
                      "commodity":  "hot-cocoa",
                      "store":  "Fareway",
                      "candidate":  "Nestle Hot Cocoa Rich Milk Chocolate Flavored Mix Powder"
@@ -606,16 +386,6 @@
                      "commodity":  "hot-cocoa",
                      "store":  "Walmart",
                      "candidate":  "Great Value Milk Chocolate Hot Cocoa Drink Mix"
-                 },
-                 {
-                     "commodity":  "coffee-pods",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Dunkin\u0027 Donuts Original Blend K-Cup 10 Count"
-                 },
-                 {
-                     "commodity":  "coffee-pods",
-                     "store":  "Aldi",
-                     "candidate":  "Barissimo Donut Store Blend Coffee Cups"
                  },
                  {
                      "commodity":  "instant-coffee",
@@ -633,34 +403,9 @@
                      "candidate":  "Eggo Blueberry Waffles 10 Ea"
                  },
                  {
-                     "commodity":  "frozen-corn",
-                     "store":  "Family Fare",
-                     "candidate":  "Birds Eye Super Sweet Corn 10 Oz"
-                 },
-                 {
-                     "commodity":  "frozen-corn",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Kroger Whole Kernel Sweet Golden Corn"
-                 },
-                 {
-                     "commodity":  "frozen-peas",
-                     "store":  "Aldi",
-                     "candidate":  "Season\u0027s Choice Steamable Sweet Peas"
-                 },
-                 {
                      "commodity":  "breakfast-sandwiches",
                      "store":  "Aldi",
                      "candidate":  "Breakfast Best Sausage, Egg \u0026 Cheese Biscuit Sandwiches"
-                 },
-                 {
-                     "commodity":  "breakfast-sandwiches",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Jimmy Dean Sausage, Egg, and Cheese Croissant Sandwiches"
-                 },
-                 {
-                     "commodity":  "breakfast-sandwiches",
-                     "store":  "Walmart",
-                     "candidate":  "Great Value Croissant Sandwiches Sausage Egg and Cheese"
                  },
                  {
                      "commodity":  "frozen-burritos",
@@ -695,7 +440,7 @@
                  {
                      "commodity":  "garlic-bread",
                      "store":  "Hy-Vee",
-                     "candidate":  "Hy-Vee garlic bread, SAVE! .60, $2.38 PERKS PRICE, $2.98 NON-MEMBERS PRICE"
+                     "candidate":  "Hy-Vee garlic bread, 8 to 11.25 oz., $2.68"
                  },
                  {
                      "commodity":  "garlic-bread",
@@ -723,19 +468,9 @@
                      "candidate":  "Bomb Pop Pops, Strawberry, Watermelon \u0026 Grape, Nerds Candy 12 Ea"
                  },
                  {
-                     "commodity":  "popsicles",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Frollies Watermelon and Pineapple Fruity Ice Pops"
-                 },
-                 {
                      "commodity":  "laundry-pods",
                      "store":  "Family Fare",
                      "candidate":  "Arm \u0026 Hammer Laundry Detergent, Concentrated, 5 In 1, Fresh Burst, Power Paks 42 Ea"
-                 },
-                 {
-                     "commodity":  "laundry-pods",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Member\u0027s Mark Laundry Detergent Power Pacs"
                  },
                  {
                      "commodity":  "plastic-wrap",
@@ -745,7 +480,7 @@
                  {
                      "commodity":  "parchment-paper",
                      "store":  "Hy-Vee",
-                     "candidate":  "Hy-Vee parchment paper, 45 or 75 sq. ft., $3.99"
+                     "candidate":  "Hy-Vee Parchment Paper"
                  },
                  {
                      "commodity":  "parchment-paper",
@@ -763,19 +498,9 @@
                      "candidate":  "Great Value Aerosol Air Freshener Linen Fresh"
                  },
                  {
-                     "commodity":  "toothbrushes",
-                     "store":  "Walmart",
-                     "candidate":  "Equate Manual Toothbrushes Soft"
-                 },
-                 {
                      "commodity":  "bar-soap",
                      "store":  "Aldi",
                      "candidate":  "Lacura Deep Moisturizing Beauty Bar"
-                 },
-                 {
-                     "commodity":  "lotion",
-                     "store":  "Aldi",
-                     "candidate":  "Lacura Oatmeal Body Lotion"
                  },
                  {
                      "commodity":  "diapers",
@@ -783,29 +508,9 @@
                      "candidate":  "Luvs Pro Level Leak Protection Diapers, Size 4"
                  },
                  {
-                     "commodity":  "baby-food",
-                     "store":  "Family Fare",
-                     "candidate":  "Beech Nut Stage 2 (6+ Months) Sweet Corn \u0026 Green Beans 4 Oz"
-                 },
-                 {
                      "commodity":  "dog-food",
                      "store":  "Family Fare",
                      "candidate":  "Iams Adult 1+ 100% Complete \u0026 Balanced Minichunks Chicken \u0026 Whole Grain Recipe Dog Food 15 Lb"
-                 },
-                 {
-                     "commodity":  "dog-food",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Member\u0027s Mark Chicken and Brown Rice Recipe Dry Dog Food"
-                 },
-                 {
-                     "commodity":  "dog-food",
-                     "store":  "Walmart",
-                     "candidate":  "Ol\u0027 Roy Complete Nutrition T-Bone and Bacon Dry Dog Food"
-                 },
-                 {
-                     "commodity":  "dog-treats",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Milk-Bone Original Dog Biscuits, Medium"
                  }
              ]
 }

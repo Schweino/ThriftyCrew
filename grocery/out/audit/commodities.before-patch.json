@@ -6,10 +6,7 @@
         "include":  [
                         "boneless,?\\s*skinless\\s+chicken\\s+breast",
                         "chicken\\s+breast[^,]*boneless",
-                        "b\\.?s\\.?b\\.?\\s+chicken",
-                        "boneless,?\\s*skinless\\b.{0,25}chicken\\s+breast",
-                        "chicken\\s+breasts?,\\s*(?:boneless|skinless)",
-                        "(?:boneless|skinless)\\s*[,\u0026/ ]+\\s*(?:boneless|skinless)[^,]*chicken\\s+breast"
+                        "b\\.?s\\.?b\\.?\\s+chicken"
                     ],
         "exclude":  [
                         "thigh",
@@ -43,8 +40,7 @@
                         "boneless skinless.*breast",
                         "breaded",
                         "cooked",
-                        "nugget",
-                        "fried"
+                        "nugget"
                     ]
     },
     {
@@ -55,9 +51,7 @@
                         "ground\\s+beef[^.]*80",
                         "80%?\\s*lean[^.]*20%?\\s*fat",
                         "80/20\\s+ground",
-                        "ground\\s+chuck",
-                        "80\\s*%?\\s*lean[^.]*ground\\s+beef",
-                        "80\\s*%?\\s*/\\s*20[^.]*ground\\s+beef"
+                        "ground\\s+chuck"
                     ],
         "exclude":  [
                         "turkey",
@@ -73,10 +67,7 @@
                         "grass[\\s-]*fed",
                         "\\bjerky\\b",
                         "\\bpork\\b"
-                    ],
-        "relax_global":  [
-                             "\\bmeal\\b"
-                         ]
+                    ]
     },
     {
         "id":  "ground-turkey",
@@ -103,8 +94,7 @@
                         "ranch",
                         "bacon\\s+cheese",
                         "canadian",
-                        "turkey bacon",
-                        "burrito"
+                        "turkey bacon"
                     ]
     },
     {
@@ -149,8 +139,7 @@
                         "\\bpasta\\b",
                         "sandwich",
                         "croissant",
-                        "biscuit",
-                        "burrito"
+                        "biscuit"
                     ]
     },
     {
@@ -175,8 +164,7 @@
                         "\\ba2\\b",
                         "lactose",
                         "formula",
-                        "milk[\\s-]?bones?",
-                        "\\bcheese\\b"
+                        "milk[\\s-]?bones?"
                     ]
     },
     {
@@ -207,11 +195,7 @@
                         "canola",
                         "\\boil\\b",
                         "popcorn",
-                        "croissant",
-                        "mashed",
-                        "\\bboil\\b",
-                        "\\bshrimp\\b",
-                        "\\bcrab\\b"
+                        "croissant"
                     ]
     },
     {
@@ -273,8 +257,7 @@
                         "sauce",
                         "slice",
                         "spread",
-                        "snack",
-                        "parmesan"
+                        "snack"
                     ]
     },
     {
@@ -308,16 +291,7 @@
                         "chip",
                         "muffin",
                         "chips",
-                        "\\bfrozen\\b",
-                        "\\bboat\\b",
-                        "sunscreen",
-                        "liqueur",
-                        "\\bpepper\\b",
-                        "nectar",
-                        "creme",
-                        "\\bpie\\b",
-                        "\\bjuice\\b",
-                        "\\bdrink\\b"
+                        "\\bfrozen\\b"
                     ]
     },
     {
@@ -345,10 +319,7 @@
                         "body",
                         "creamer",
                         "gels",
-                        "unsweetened",
-                        "\\bpops?\\b",
-                        "candy",
-                        "liqueur"
+                        "unsweetened"
                     ]
     },
     {
@@ -369,8 +340,7 @@
                         "\\bbar\\b",
                         "spread",
                         "syrup",
-                        "\\bfrozen\\b",
-                        "scone"
+                        "\\bfrozen\\b"
                     ]
     },
     {
@@ -382,13 +352,7 @@
                     ],
         "exclude":  [
                         "\\boil\\b",
-                        "guacamole",
-                        "\\brice\\b",
-                        "cracker",
-                        "\\bsalsa\\b",
-                        "\\bspray\\b",
-                        "hummus",
-                        "wonton"
+                        "guacamole"
                     ]
     },
     {
@@ -428,9 +392,7 @@
                         "scallion",
                         "\\bfrozen\\b",
                         "\\brings\\b",
-                        "french\\s+fried",
-                        "\\btomato",
-                        "dressing"
+                        "french\\s+fried"
                     ]
     },
     {
@@ -455,10 +417,7 @@
                         "\\bsauce\\b",
                         "\\bcider\\b",
                         "\\bcup\\b",
-                        "\\bcanned\\b",
-                        "busch",
-                        "\\bbeer\\b",
-                        "\\bcans?\\b\\s*12"
+                        "\\bcanned\\b"
                     ]
     },
     {
@@ -509,11 +468,7 @@
                         "grill\\s+ready",
                         "green\\s+giant",
                         "kernel",
-                        "\\bfrozen\\b",
-                        "cream\\s+style",
-                        "birds\\s*eye",
-                        "\\bboil\\b",
-                        "crab"
+                        "\\bfrozen\\b"
                     ]
     },
     {
@@ -537,10 +492,7 @@
                         "\\bdrink\\b",
                         "\\bjuice\\b",
                         "\\bpops?\\b",
-                        "fruity",
-                        "\\bcubes?\\b",
-                        "fillet",
-                        "\\bdots\\b"
+                        "fruity"
                     ]
     },
     {
@@ -564,8 +516,7 @@
                         "\\bcup",
                         "\\bcanned\\b",
                         "\\bcup\\b",
-                        "syrup",
-                        "salsa"
+                        "syrup"
                     ]
     },
     {
@@ -593,9 +544,7 @@
                         "french",
                         "baguette",
                         "italian\\s+bread",
-                        "texas\\s+toast",
-                        "crispbread",
-                        "wasa"
+                        "texas\\s+toast"
                     ]
     },
     {
@@ -609,7 +558,7 @@
                         "\\bcup",
                         "cookie",
                         "cracker",
-                        "\\bbars?\\b",
+                        "\\bbar\\b",
                         "cereal",
                         "pretzel",
                         "filled",
@@ -649,8 +598,7 @@
                         "ready\\s+to\\s+drink",
                         "\\brtd\\b",
                         "cold\\s+brew\\s+can",
-                        "instant",
-                        "\\bcups?\\b"
+                        "instant"
                     ]
     },
     {
@@ -732,17 +680,15 @@
         "include":  [
                         "hot\\s*dogs?",
                         "wieners?",
-                        "beef\\s+franks?",
-                        "\\bfranks?\\b"
+                        "beef\\s+franks?"
                     ],
         "exclude":  [
-                        "\\bbuns?\\b(?!\\s*(?:size|length))",
+                        "\\bbuns?\\b",
                         "corn\\s*dog",
                         "chili",
                         "\\bsauce\\b",
                         "relish",
-                        "corn\\s*dogs?",
-                        "red\\s*hot"
+                        "corn\\s*dogs?"
                     ]
     },
     {
@@ -873,8 +819,7 @@
                         "sliced\\b.{0,25}cheese",
                         "\\bsingles\\b.{0,20}cheese",
                         "cheese\\b.{0,15}\\bsingles\\b",
-                        "american\\s+slices?",
-                        "american\\s+cheese\\b.{0,15}slices?"
+                        "american\\s+slices?"
                     ],
         "exclude":  [
                         "shredded",
@@ -908,11 +853,7 @@
                         "cleaner",
                         "\\bsoap\\b",
                         "detergent",
-                        "wipes",
-                        "gatorade",
-                        "powerade",
-                        "thirst\\s+quencher",
-                        "gelatin"
+                        "wipes"
                     ]
     },
     {
@@ -940,10 +881,7 @@
                         "detergent",
                         "wipes",
                         "polish",
-                        "spray",
-                        "gatorade",
-                        "powerade",
-                        "thirst\\s+quencher"
+                        "spray"
                     ]
     },
     {
@@ -967,10 +905,7 @@
                         "cleaner",
                         "\\bsoap\\b",
                         "detergent",
-                        "wipes",
-                        "gatorade",
-                        "powerade",
-                        "thirst\\s+quencher"
+                        "wipes"
                     ]
     },
     {
@@ -991,12 +926,10 @@
                         "\\bsoup\\b",
                         "juice",
                         "ketchup",
-                        "sun[\\s-]?dried",
+                        "sun-?dried",
                         "stewed",
                         "\\bpeeled\\b",
-                        "fire\\s*roasted",
-                        "passata",
-                        "cracker"
+                        "fire\\s*roasted"
                     ]
     },
     {
@@ -1017,10 +950,7 @@
                         "chopped",
                         "salad\\s+mix",
                         "\\bhearts\\b.{0,10}\\b3\\b"
-                    ],
-        "relax_global":  [
-                             "wrapped"
-                         ]
+                    ]
     },
     {
         "id":  "carrots",
@@ -1036,10 +966,7 @@
                         "juice",
                         "chips",
                         "\\bdip\\b",
-                        "glazed",
-                        "mixed\\s+veg",
-                        "hot\\s+honey",
-                        "medley"
+                        "glazed"
                     ]
     },
     {
@@ -1133,14 +1060,7 @@
                         "toast",
                         "spread",
                         "\\bknots\\b",
-                        "press",
-                        "crouton",
-                        "hummus",
-                        "wonton",
-                        "cracker",
-                        "chicken",
-                        "\\bpotato",
-                        "strips"
+                        "press"
                     ]
     },
     {
@@ -1222,9 +1142,7 @@
                         "chips",
                         "\\bsoup\\b",
                         "\\bbowl\\b",
-                        "crusts?",
-                        "salad",
-                        "topping"
+                        "crusts?"
                     ]
     },
     {
@@ -1256,13 +1174,8 @@
                         "\\bmini\\b",
                         "seasoning",
                         "\\bdogs?\\b",
-                        "pizza",
-                        "cashew",
-                        "\\bnuts?\\b"
-                    ],
-        "relax_global":  [
-                             "flavored"
-                         ]
+                        "pizza"
+                    ]
     },
     {
         "id":  "rice",
@@ -1294,8 +1207,7 @@
                         "rice\\s+cakes?",
                         "\\bdog\\b",
                         "\\bcat\\b",
-                        "chicken\\s+and\\s+rice",
-                        "\\bbrown\\b[\\w\\s]{0,15}rice"
+                        "chicken\\s+and\\s+rice"
                     ]
     },
     {
@@ -1325,8 +1237,7 @@
                         "\\bo\u0027s\\b",
                         "rice",
                         "lasagna",
-                        "egg\\s+noodle",
-                        "egg\\s+pasta"
+                        "egg\\s+noodle"
                     ]
     },
     {
@@ -1427,13 +1338,7 @@
                         "cookie",
                         "turbinado",
                         "\\bcones?\\b",
-                        "wafer",
-                        "apple\\s*sauce",
-                        "no\\s+sugar",
-                        "zero\\s+sugar",
-                        "sugar\\s+added",
-                        "n\\s+spice",
-                        "\\bcola\\b"
+                        "wafer"
                     ]
     },
     {
@@ -1469,8 +1374,7 @@
                         "mayonnaise",
                         "\\bspray\\b",
                         "dressing",
-                        "\\bsoap\\b",
-                        "butter"
+                        "\\bsoap\\b"
                     ]
     },
     {
@@ -1487,8 +1391,7 @@
                         "\\bspray\\b",
                         "shortening",
                         "\\bmayo\\b",
-                        "mayonnaise",
-                        "butter"
+                        "mayonnaise"
                     ]
     },
     {
@@ -1587,19 +1490,7 @@
                         "\\bcomb\\b",
                         "roasted",
                         "\\bbbq\\b",
-                        "wheat",
-                        "mango",
-                        "almond",
-                        "\\bbeans?\\b",
-                        "corn\\s*dog",
-                        "granola",
-                        "\\bsausage\\b",
-                        "\\bbars?\\b",
-                        "habanero",
-                        "\\bchicken\\b",
-                        "\\bnaan\\b",
-                        "muffin",
-                        "\\bcarrots?\\b"
+                        "wheat"
                     ]
     },
     {
@@ -1639,8 +1530,7 @@
                         "golden\\s+sweet\\s+corn\\b.{0,20}\\b(?:can|15)",
                         "canned\\s+corn",
                         "corn,\\s*(?:whole\\s*)?kernel",
-                        "kernel,\\s*whole",
-                        "whole\\s+kern[ae]l[^,]*corn"
+                        "kernel,\\s*whole"
                     ],
         "exclude":  [
                         "\\bcob\\b",
@@ -1670,8 +1560,7 @@
         "include":  [
                         "diced\\s+tomato(?:es)?",
                         "crushed\\s+tomato(?:es)?",
-                        "whole\\s+peeled\\s+tomato",
-                        "tomato(?:es)?,\\s*(?:[^,]*,\\s*)?diced"
+                        "whole\\s+peeled\\s+tomato"
                     ],
         "exclude":  [
                         "paste",
@@ -1689,9 +1578,7 @@
         "band_min":  0.02,
         "band_max":  0.3,
         "include":  [
-                        "chicken\\s+(?:broth|stock)",
-                        "chicken\\s+bone\\s+broth",
-                        "bone\\s+broth,\\s*chicken"
+                        "chicken\\s+(?:broth|stock)"
                     ],
         "exclude":  [
                         "bouillon",
@@ -1813,8 +1700,7 @@
                         "\\bcorn\\b",
                         "unsalted",
                         "salt[-\\s]?free",
-                        "del\\s+monte",
-                        "peanut"
+                        "del\\s+monte"
                     ]
     },
     {
@@ -1842,8 +1728,7 @@
         "band_min":  0.06,
         "band_max":  0.6,
         "relax_global":  [
-                             "\\bsnack\\b",
-                             "flavored"
+                             "\\bsnack\\b"
                          ],
         "include":  [
                         "tortilla\\s+chips?"
@@ -1860,8 +1745,7 @@
         "band_min":  0.1,
         "band_max":  0.8,
         "relax_global":  [
-                             "\\bsnack\\b",
-                             "flavored"
+                             "\\bsnack\\b"
                          ],
         "include":  [
                         "potato\\s+chips?"
@@ -1930,8 +1814,7 @@
         "band_max":  14,
         "relax_global":  [
                              "\\bfrozen\\b",
-                             "\\bsnack\\b",
-                             "stuffed"
+                             "\\bsnack\\b"
                          ],
         "include":  [
                         "\\bpizza\\b"
@@ -1946,9 +1829,7 @@
                         "seasoning",
                         "sticks?",
                         "lunchable",
-                        "\\bkit\\b",
-                        "texas\\s+toast",
-                        "garlic\\s+bread"
+                        "\\bkit\\b"
                     ]
     },
     {
@@ -1970,7 +1851,7 @@
                         "\\bbars?\\b",
                         "\\bcones?\\b",
                         "\\bcake\\b",
-                        "sundae(?!\\s+shoppe)",
+                        "sundae",
                         "\\bmaker\\b",
                         "salt"
                     ]
@@ -2139,10 +2020,7 @@
                         "\\bpans?\\b",
                         "baking\\s+cups",
                         "balloon"
-                    ],
-        "relax_global":  [
-                             "\\bwrap\\b"
-                         ]
+                    ]
     },
     {
         "id":  "storage-bags",
@@ -2325,10 +2203,7 @@
                         "dried",
                         "tidbits",
                         "\\bcup\\b",
-                        "pizza",
-                        "\\bpops?\\b",
-                        "fruity",
-                        "ice\\s*pop"
+                        "pizza"
                     ]
     },
     {
@@ -2684,8 +2559,7 @@
                         "seasoned",
                         "14\\.5",
                         "\\bcans?\\b",
-                        "\\bsteam\\b",
-                        "\\bcorn\\b"
+                        "\\bsteam\\b"
                     ]
     },
     {
@@ -2800,9 +2674,7 @@
         "band_min":  2,
         "band_max":  8,
         "include":  [
-                        "italian\\s+sausage",
-                        "italian.{0,10}sausage",
-                        "sausage,\\s*italian"
+                        "italian\\s+sausage"
                     ],
         "exclude":  [
                         "pizza",
@@ -2826,10 +2698,7 @@
                         "\\bbuns?\\b",
                         "chicken",
                         "cheddar\\s+cheese\\s+brat"
-                    ],
-        "relax_global":  [
-                             "\\bbeer\\b"
-                         ]
+                    ]
     },
     {
         "id":  "kielbasa",
@@ -2888,10 +2757,7 @@
                         "\\bsalad\\b",
                         "\\bsoup\\b",
                         "pulled"
-                    ],
-        "relax_global":  [
-                             "seasoned"
-                         ]
+                    ]
     },
     {
         "id":  "tilapia",
@@ -3203,7 +3069,7 @@
                              "flavored"
                          ],
         "include":  [
-                        "\\bcreamer\\b"
+                        "creamer"
                     ],
         "exclude":  [
                         "powder(?:ed)?\\s+creamer"
@@ -3292,9 +3158,7 @@
                         "breakfast",
                         "\\bham\\b",
                         "\\bfrozen\\b",
-                        "\\brolls\\b.{0,15}crescent",
-                        "sausage",
-                        "\\begg\\b"
+                        "\\brolls\\b.{0,15}crescent"
                     ],
         "relax_global":  [
                              "\\bbake\\b",
@@ -3319,11 +3183,7 @@
                         "english",
                         "\\bmix\\b",
                         "\\bmini\\b",
-                        "stuffin",
-                        "yog(?:h)?urt",
-                        "sandwich",
-                        "sausage",
-                        "\\begg\\b"
+                        "stuffin"
                     ]
     },
     {
@@ -3340,10 +3200,7 @@
                         "\\bholes\\b",
                         "\\bshop\\b",
                         "cereal",
-                        "\\bmix\\b",
-                        "k-?cup",
-                        "\\bpods?\\b",
-                        "coffee"
+                        "\\bmix\\b"
                     ]
     },
     {
@@ -3666,10 +3523,7 @@
         "exclude":  [
                         "cleaner",
                         "\\bhair\\b"
-                    ],
-        "relax_global":  [
-                             "flavored"
-                         ]
+                    ]
     },
     {
         "id":  "coconut-oil",
@@ -3752,14 +3606,13 @@
         "band_min":  0.04,
         "band_max":  0.4,
         "relax_global":  [
-                             "\\bsauce\\b",
-                             "flavored"
+                             "\\bsauce\\b"
                          ],
         "include":  [
                         "(?:bbq|barbecue)\\s+sauce"
                     ],
         "exclude":  [
-                        "wing\\s*sauce",
+                        "wing",
                         "chips",
                         "\\brub\\b",
                         "\\bjerky\\b",
@@ -3939,8 +3792,7 @@
                         "chick",
                         "split",
                         "\\bsoup\\b",
-                        "wasabi",
-                        "steamable"
+                        "wasabi"
                     ]
     },
     {
@@ -4099,8 +3951,7 @@
                         "syrup",
                         "flour",
                         "krisp",
-                        "instant\\s+brown",
-                        "\\bpouch\\b"
+                        "instant\\s+brown"
                     ]
     },
     {
@@ -4254,8 +4105,7 @@
         "band_min":  0.02,
         "band_max":  0.25,
         "include":  [
-                        "beef\\s+(?:broth|stock)",
-                        "beef\\s+bone\\s+broth"
+                        "beef\\s+(?:broth|stock)"
                     ],
         "exclude":  [
                         "bouillon",
@@ -4272,8 +4122,7 @@
         "band_min":  0.04,
         "band_max":  0.3,
         "relax_global":  [
-                             "\\bcanned\\b",
-                             "(?\u003c!orange\\s)\\bjuice\\b"
+                             "\\bcanned\\b"
                          ],
         "include":  [
                         "peaches\\b.{0,30}(?:syrup|juice|can|sliced|halves)",
@@ -4524,8 +4373,7 @@
                         "\\bdog\\b",
                         "girl\\s+scout",
                         "\\bcrisp\\b",
-                        "butter\\s+cookie\\s+tin",
-                        "sandwich"
+                        "butter\\s+cookie\\s+tin"
                     ]
     },
     {
@@ -4765,8 +4613,7 @@
                          ],
         "include":  [
                         "apple\\s+juice",
-                        "apple\\b.{0,15}100%\\s*juice",
-                        "(?:100%\\s+)?juice,?\\s+(?:natural,?\\s+)?apple\\b"
+                        "apple\\b.{0,15}100%\\s*juice"
                     ],
         "exclude":  [
                         "cider\\s+vinegar",
@@ -4785,7 +4632,7 @@
                          ],
         "include":  [
                         "grape\\s+juice",
-                        "(?:100%\\s+)?juice,?\\s+(?:\\w+\\s+)?grape\\b",
+                        "(?:100%\\s+)?juice,?\\s+grape",
                         "grape\\b.{0,15}100%\\s*juice"
                     ],
         "exclude":  [
@@ -4847,10 +4694,7 @@
                     ],
         "exclude":  [
                         "\\bmix\\b",
-                        "powder",
-                        "gatorade",
-                        "powerade",
-                        "thirst\\s+quencher"
+                        "powder"
                     ]
     },
     {
@@ -4882,10 +4726,7 @@
         "band_min":  0.08,
         "band_max":  0.4,
         "relax_global":  [
-                             "energy\\s*drink",
-                             "sparkling",
-                             "lemonade",
-                             "(?\u003c!orange\\s)\\bjuice\\b"
+                             "energy\\s*drink"
                          ],
         "include":  [
                         "energy\\s+drink",
@@ -4970,8 +4811,7 @@
         "band_max":  1,
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)",
-                             "flavored",
-                             "drink\\s*mix"
+                             "flavored"
                          ],
         "include":  [
                         "hot\\s+(?:cocoa|chocolate)"
@@ -5074,8 +4914,7 @@
                         "cut\\s+(?:golden\\s+)?corn",
                         "steamables?\\b.{0,20}corn",
                         "super\\s+sweet\\s+corn",
-                        "frozen\\b.{0,25}\\bcorn\\b",
-                        "corn\\b.{0,20}\\bsteamable\\b"
+                        "whole\\s+kernel\\s+golden\\s+corn"
                     ],
         "exclude":  [
                         "\\bcob\\b",
@@ -5306,8 +5145,7 @@
         "exclude":  [
                         "\\bbars?\\b",
                         "yog",
-                        "\\bcups?\\b",
-                        "short\\s*cuts"
+                        "\\bcups?\\b"
                     ]
     },
     {
@@ -5515,8 +5353,7 @@
         "band_max":  0.4,
         "include":  [
                         "toilet\\s+bowl",
-                        "toilet\\s+cleaner",
-                        "\\bbowl\\s+cleaner\\b"
+                        "toilet\\s+cleaner"
                     ],
         "exclude":  [
                         "\\bwand\\b",
@@ -5937,8 +5774,7 @@
         "band_min":  0.01,
         "band_max":  0.12,
         "include":  [
-                        "baby\\s+wipes?",
-                        "pampers\\s+wipes?"
+                        "baby\\s+wipes?"
                     ],
         "exclude":  [
                         "\\bwarmer\\b"
@@ -6004,8 +5840,7 @@
                         "\\bcans?\\b",
                         "treats",
                         "\\btopper\\b",
-                        "puppy\\s+pads",
-                        "classic\\s+ground"
+                        "puppy\\s+pads"
                     ],
         "relax_global":  [
                              "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)",

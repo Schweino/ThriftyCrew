@@ -372,7 +372,11 @@ $GLOBAL_EXCLUDE = @(
   'muffin','pretzel','filled','strudel','\bcake\b','drinkable','(?<!orange\s)\bjuice\b',
   '\bsoda\b','sparkling','seltzer','\bwater\b','energy\s*drink','sports\s*drink','tonic','lemonade','faygo','cocktail',
   'pop[\s-]?tart','pastr','toaster','\btart\b','cereal','granola\s*bar','fruit\s*snack',
-  '\bmalt\b','spiked','\bbeer\b','\bale\b','\bgum\b','\bwine\b','liquor','vodka','whiskey','tequila','bourbon','hard\s+seltzer','\bmix\b(?!\s*(?:&|and)\s*match)'
+  '\bmalt\b','spiked','\bbeer\b','\bale\b','\bgum\b','\bwine\b','liquor','vodka','whiskey','tequila','bourbon','hard\s+seltzer','\bmix\b(?!\s*(?:&|and)\s*match)',
+  # pet + baby food: no human staple is ever "dog food"/"cat litter"/"Beech Nut" - keep them out of every human
+  # commodity (chicken/bacon/rice/sweet-corn were stealing dog food & baby food). The pet/baby commodities
+  # relax_global exactly the token they need, so they still match their own products.
+  'dog\s+food','dog\s+treats?','dog\s+biscuits?','cat\s+food','cat\s+litter','beech[\s-]?nut','gerber','happy\s*baby','baby\s+food'
 )
 # a wrapper rule-file can replace the global list (the recipe set relaxes sauce/canned/frozen/juice)
 if ($GEX_OVERRIDE) { $GLOBAL_EXCLUDE = $GEX_OVERRIDE }
