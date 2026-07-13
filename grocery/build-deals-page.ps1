@@ -1031,6 +1031,18 @@ if ($histDoc) {
 .tcc-chip.is-off i{background:#c3cad6!important}
 .tcc-chip:hover{border-color:#E2A43C}
 .pg-alertp{border:1px solid #ecd9ae;background:#fdf8ec;color:#8a6d1f;border-radius:999px;padding:2px 10px;font-size:.62em;font-weight:800;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;font-family:inherit;margin-left:0;vertical-align:2px;white-space:nowrap;flex:0 0 auto;line-height:1.6}
+.pg-brandp{border:1px solid #cfe4d6;background:#eef7f1;color:#0f6b45;border-radius:999px;padding:2px 10px;font-size:.62em;font-weight:800;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;font-family:inherit;vertical-align:2px;white-space:nowrap;flex:0 0 auto;line-height:1.6}
+.pg-brandp:hover{border-color:#0f7a4e;color:#0c5c3b}
+.pg-bt-wrap{overflow-x:auto;margin-top:6px}
+.pg-bt{border-collapse:collapse;width:100%;font-size:.86em}
+.pg-bt th{text-align:right;font-size:.8em;font-weight:700;color:#68748a;padding:5px 8px;white-space:nowrap;border-bottom:1px solid #e2e8f0}
+.pg-bt th:first-child{text-align:left}
+.pg-bt td{text-align:right;padding:5px 8px;border-top:1px solid #eef1f5;white-space:nowrap;font-variant-numeric:tabular-nums;color:#16263f;font-weight:600}
+.pg-bt td:first-child{text-align:left}
+.pg-bt-store td:first-child{font-weight:800;color:#b07c1e}
+.pg-bt-store td:first-child::after{content:"STORE";font-size:.62em;letter-spacing:.04em;background:#fbf1dc;color:#8a6d1f;border-radius:4px;padding:1px 5px;margin-left:6px}
+.pg-bt-cheap{background:#e5f1eb;color:#0f7a4e;font-weight:800;border-radius:5px}
+.pg-bt-none{color:#c0c8d2;font-weight:400}
 .pg-alertp:hover{border-color:#E2A43C;color:#16263F}
 .pg-al-form{margin-top:14px}
 .pg-al-form input[type=email]{width:100%;padding:.7em .9em;font-size:1em;border:1.5px solid #e2e8f0;border-radius:10px;font-family:inherit;color:#16263F;box-sizing:border-box}
@@ -1064,6 +1076,7 @@ if ($histDoc) {
 <script>
 (function(){
   var TCH = __TCH_JSON__;
+  var TCB = (__TCB_JSON__).commodities || {};
   function fmt(v){ if (v === null || v === undefined) return ''; return v < 1 ? '$' + v.toFixed(3) : '$' + v.toFixed(2); }
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   // add pills to every row: "history" (when we have data) + "alerts" (every tracked item)
@@ -1085,10 +1098,38 @@ if ($histDoc) {
     a.textContent = 'alerts';
     a.title = 'Get an email when this hits a low price';
     head.appendChild(a);
+    if (TCB[id]){
+      var br = document.createElement('button');
+      br.type = 'button'; br.className = 'pg-brandp'; br.setAttribute('data-bid', id);
+      br.textContent = 'brands'; br.title = 'Compare name brands vs the store brand across stores';
+      head.appendChild(br);
+    }
   }
   var ov = null;
   function close(){ if (ov && ov.parentNode) ov.parentNode.removeChild(ov); ov = null; }
   __TCCHART__
+  function openBrands(id){
+    var d = TCB[id]; if (!d) return; close();
+    var sts = d.stores || [];
+    var h = '<div class="pg-hx" style="max-width:660px"><div class="pg-hx-top"><h3>Brands: ' + esc(d.label) + '</h3><button type="button" class="pg-hx-x" aria-label="Close">&times;</button></div>';
+    h += '<p class="pg-hx-sub">Price per ' + esc(d.unit) + ', cheapest brand first. The <b>store brand</b> is gold; the cheapest store for each brand is green. A dash means that store’s search did not surface that brand.</p>';
+    h += '<div class="pg-bt-wrap"><table class="pg-bt"><thead><tr><th>Brand</th>';
+    for (var s = 0; s < sts.length; s++){ h += '<th>' + esc(sts[s]) + '</th>'; }
+    h += '</tr></thead><tbody>';
+    for (var r = 0; r < d.brands.length; r++){ var bd = d.brands[r];
+      h += '<tr' + (bd.store ? ' class="pg-bt-store"' : '') + '><td>' + esc(bd.label) + '</td>';
+      for (var s2 = 0; s2 < sts.length; s2++){ var st = sts[s2]; var v = bd.prices[st];
+        if (v === undefined || v === null){ h += '<td class="pg-bt-none">&mdash;</td>'; }
+        else { var cheap = (st === bd.cheapest && sts.length > 1); h += '<td class="pg-bt-p' + (cheap ? ' pg-bt-cheap' : '') + '">$' + (v < 1 ? v.toFixed(3) : v.toFixed(2)) + '</td>'; }
+      }
+      h += '</tr>';
+    }
+    h += '</tbody></table></div>';
+    h += '<p class="pg-hx-note" style="margin-top:11px">Real Omaha shelf prices captured this week. Sam’s Club needs a membership. Aldi and Fareway are not shown here, since neither posts everyday brand prices online.</p></div>';
+    ov = document.createElement('div'); ov.className = 'pg-hx-ov'; ov.innerHTML = h;
+    document.body.appendChild(ov);
+    ov.addEventListener('click', function(e){ if (e.target === ov || e.target.closest('.pg-hx-x')) close(); });
+  }
   function open(id){
     var d = TCH[id]; if (!d) return;
     close();
@@ -1181,6 +1222,7 @@ if ($histDoc) {
   }
   document.addEventListener('click', function(e){
     var b = e.target.closest('.pg-hist'); if (b){ open(b.getAttribute('data-hid')); return; }
+    var brb = e.target.closest('.pg-brandp'); if (brb){ openBrands(brb.getAttribute('data-bid')); return; }
     var g = e.target.closest('#pg-al-go'); if (g){ submitAlert(g); return; }
     var a = e.target.closest('.pg-alertp'); if (a){ openAlert(a.getAttribute('data-aid'), a.getAttribute('data-aname') || a.getAttribute('data-aid')); return; }
   });
@@ -1189,7 +1231,9 @@ if ($histDoc) {
 </script>
 '@
     $tcChartJs = [IO.File]::ReadAllText((Join-Path $root 'tc-chart.js'), [Text.Encoding]::UTF8)
-    $histBlock = $histBlock.Replace('__TCH_JSON__', $histJson).Replace('__TCCHART__', $tcChartJs)
+    $tcbFile = Join-Path $root 'out\brands\brands-board.json'
+    $tcbJson = if (Test-Path $tcbFile) { (Get-Content $tcbFile -Raw).Trim() } else { '{"commodities":{}}' }
+    $histBlock = $histBlock.Replace('__TCH_JSON__', $histJson).Replace('__TCB_JSON__', $tcbJson).Replace('__TCCHART__', $tcChartJs)
   }
 }
 

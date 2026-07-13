@@ -1,0 +1,16 @@
+{
+  "store": "Sam's Club",
+  "generated": "2026-07-13",
+  "membership": true,
+  "source": "samsclub.com __NEXT_DATA__ via owner Chrome (Omaha 68137). Bulk/multipack sizing: rows that failed pack-math or fell an implausible-outlier below the other stores are DROPPED, not shown.",
+  "items": {
+    "peanut-butter":    [{"b":"Skippy","s":0,"per":0.1144},{"b":"Jif","s":0,"per":0.1144}],
+    "ketchup":          [{"b":"Heinz","s":0,"per":0.0832}],
+    "mayonnaise":       [{"b":"Kraft","s":0,"per":0.1092}],
+    "ground-coffee":    [{"b":"Folgers","s":0,"per":0.411},{"b":"Maxwell House","s":0,"per":0.4172},{"b":"Store brand","s":1,"per":0.4245},{"b":"Dunkin","s":0,"per":0.5745},{"b":"Starbucks","s":0,"per":0.6244}],
+    "cream-cheese":     [{"b":"Store brand","s":1,"per":0.1348},{"b":"Philadelphia","s":0,"per":0.2275}],
+    "cereal-honey-oat": [{"b":"Honey Nut Cheerios","s":0,"per":0.1592},{"b":"Cheerios","s":0,"per":0.169}],
+    "ranch-dressing":   [{"b":"Store brand","s":1,"per":0.0845},{"b":"Hidden Valley","s":0,"per":0.156}],
+    "shredded-cheddar": [{"b":"Store brand","s":1,"per":0.1596},{"b":"Tillamook","s":0,"per":0.2493}]
+  }
+}

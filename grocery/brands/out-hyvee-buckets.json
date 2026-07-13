@@ -1,0 +1,16 @@
+{
+  "store": "Hy-Vee",
+  "generated": "2026-07-13",
+  "source": "hy-vee.com Aisles Online product tiles via owner Chrome (Omaha store). Name/size/price parsed from tile text; implausible outliers (a $20/floz parse fail) and unparsed rows DROPPED. Mayonnaise did not load and is absent.",
+  "items": {
+    "peanut-butter":    [{"b":"Store brand","s":1,"per":0.0995},{"b":"Skippy","s":0,"per":0.1604},{"b":"Jif","s":0,"per":0.1742},{"b":"Justin's","s":0,"per":0.3744}],
+    "ketchup":          [{"b":"Store brand","s":1,"per":0.0557},{"b":"Hunt's","s":0,"per":0.0895},{"b":"Heinz","s":0,"per":0.1311}],
+    "ground-coffee":    [{"b":"Store brand","s":1,"per":0.5898},{"b":"Folgers","s":0,"per":0.6154},{"b":"Starbucks","s":0,"per":0.9158},{"b":"Dunkin","s":0,"per":1.0817}],
+    "cream-cheese":     [{"b":"Store brand","s":1,"per":0.29},{"b":"Philadelphia","s":0,"per":0.3412}],
+    "laundry-detergent":[{"b":"Store brand","s":1,"per":0.0389},{"b":"Tide","s":0,"per":0.1511}],
+    "cereal-honey-oat": [{"b":"Store brand","s":1,"per":0.1624},{"b":"Honey Nut Cheerios","s":0,"per":0.2202},{"b":"Cheerios","s":0,"per":0.2995}],
+    "cola-2l":          [{"b":"Store brand","s":1,"per":0.0219},{"b":"Pepsi","s":0,"per":0.0393},{"b":"Coca-Cola","s":0,"per":0.0445}],
+    "ranch-dressing":   [{"b":"Store brand","s":1,"per":0.1247},{"b":"Hidden Valley","s":0,"per":0.1942},{"b":"Ken's","s":0,"per":0.23}],
+    "shredded-cheddar": [{"b":"Store brand","s":1,"per":0.2462},{"b":"Crystal Farms","s":0,"per":0.3113},{"b":"Kraft","s":0,"per":0.4543},{"b":"Sargento","s":0,"per":0.5973}]
+  }
+}

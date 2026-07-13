@@ -1,0 +1,16 @@
+{
+  "store": "Baker's",
+  "generated": "2026-07-13",
+  "source": "bakersplus.com product tiles (unit price) via owner Chrome (Omaha store). Kroger prices detergent per-load, so detergent has no per-oz row.",
+  "items": {
+    "peanut-butter":    [{"b":"Store brand","s":1,"per":0.10},{"b":"Jif","s":0,"per":0.18},{"b":"Skippy","s":0,"per":0.20}],
+    "ketchup":          [{"b":"Store brand","s":1,"per":0.05},{"b":"Hunt's","s":0,"per":0.10},{"b":"Heinz","s":0,"per":0.13}],
+    "mayonnaise":       [{"b":"Store brand","s":1,"per":0.12},{"b":"Kraft","s":0,"per":0.17},{"b":"Duke's","s":0,"per":0.18},{"b":"Hellmann's","s":0,"per":0.19}],
+    "ground-coffee":    [{"b":"Store brand","s":1,"per":0.50},{"b":"Dunkin","s":0,"per":0.92},{"b":"Starbucks","s":0,"per":0.93}],
+    "cream-cheese":     [{"b":"Store brand","s":1,"per":0.21},{"b":"Philadelphia","s":0,"per":0.34}],
+    "cereal-honey-oat": [{"b":"Store brand","s":1,"per":0.14},{"b":"Honey Nut Cheerios","s":0,"per":0.22},{"b":"Cheerios","s":0,"per":0.30}],
+    "cola-2l":          [{"b":"Coca-Cola","s":0,"per":0.04}],
+    "ranch-dressing":   [{"b":"Store brand","s":1,"per":0.11},{"b":"Hidden Valley","s":0,"per":0.21},{"b":"Ken's","s":0,"per":0.22},{"b":"Kraft","s":0,"per":0.22}],
+    "shredded-cheddar": [{"b":"Store brand","s":1,"per":0.23},{"b":"Kraft","s":0,"per":0.47}]
+  }
+}
