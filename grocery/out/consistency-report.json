@@ -1,23 +1,27 @@
 ﻿{
-    "generated":  "2026-07-12 16:40",
+    "generated":  "2026-07-13 13:55",
     "tol":  0.3,
-    "no_link_count":  55,
+    "no_link_count":  61,
     "max_no_link":  0,
     "no_link_by_store":  [
                              {
-                                 "store":  "Hy-Vee",
-                                 "count":  26
+                                 "store":  "Family Fare",
+                                 "count":  29
                              },
                              {
-                                 "store":  "Family Fare",
-                                 "count":  22
+                                 "store":  "Hy-Vee",
+                                 "count":  24
                              },
                              {
                                  "store":  "Aldi",
-                                 "count":  5
+                                 "count":  3
                              },
                              {
                                  "store":  "Walmart",
+                                 "count":  3
+                             },
+                             {
+                                 "store":  "Sam\u0027s Club",
                                  "count":  1
                              },
                              {
@@ -31,16 +35,8 @@
                         "store":  "Baker\u0027s"
                     },
                     {
-                        "id":  "whole-chicken",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "whole-chicken",
+                        "id":  "pork-chops",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "breakfast-sausage",
-                        "store":  "Family Fare"
                     },
                     {
                         "id":  "hot-dogs",
@@ -48,19 +44,7 @@
                     },
                     {
                         "id":  "salmon",
-                        "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "salmon",
-                        "store":  "Aldi"
-                    },
-                    {
-                        "id":  "salmon",
                         "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "canned-tuna",
-                        "store":  "Hy-Vee"
                     },
                     {
                         "id":  "shrimp",
@@ -69,25 +53,33 @@
                     {
                         "id":  "shrimp",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "shrimp",
-                        "store":  "Aldi"
                     },
                     {
                         "id":  "sirloin-steak",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "sliced-cheese",
+                        "id":  "ribeye-steak",
+                        "store":  "Aldi"
+                    },
+                    {
+                        "id":  "chuck-roast",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "cod",
                         "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "turkey-bacon",
+                        "store":  "Family Fare"
                     },
                     {
                         "id":  "apples",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "oranges",
+                        "id":  "peaches",
                         "store":  "Hy-Vee"
                     },
                     {
@@ -95,8 +87,8 @@
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "tomatoes",
-                        "store":  "Hy-Vee"
+                        "id":  "clementines",
+                        "store":  "Aldi"
                     },
                     {
                         "id":  "tomatoes",
@@ -104,38 +96,22 @@
                     },
                     {
                         "id":  "broccoli",
-                        "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "broccoli",
                         "store":  "Family Fare"
                     },
                     {
                         "id":  "cucumbers",
-                        "store":  "Aldi"
-                    },
-                    {
-                        "id":  "cucumbers",
-                        "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "cucumbers",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "spinach",
-                        "store":  "Aldi"
-                    },
-                    {
-                        "id":  "mushrooms",
                         "store":  "Family Fare"
                     },
                     {
                         "id":  "mushrooms",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "jalapenos",
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "sweet-potatoes",
+                        "id":  "bread",
                         "store":  "Hy-Vee"
                     },
                     {
@@ -143,7 +119,11 @@
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "tortillas",
+                        "id":  "muffins",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "coffee",
                         "store":  "Hy-Vee"
                     },
                     {
@@ -151,11 +131,7 @@
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "pasta-sauce",
-                        "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "brown-sugar",
+                        "id":  "mac-and-cheese",
                         "store":  "Hy-Vee"
                     },
                     {
@@ -167,43 +143,23 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "oatmeal",
-                        "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "jelly",
-                        "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "honey",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "honey",
-                        "store":  "Aldi"
-                    },
-                    {
                         "id":  "diced-tomatoes",
                         "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "mustard",
-                        "store":  "Hy-Vee"
                     },
                     {
                         "id":  "mayonnaise",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "salsa",
-                        "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "salt",
+                        "id":  "cooking-spray",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "tortilla-chips",
+                        "id":  "bbq-sauce",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "queso",
                         "store":  "Hy-Vee"
                     },
                     {
@@ -219,15 +175,39 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "soda",
+                        "id":  "cookies",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "bottled-water",
+                        "id":  "sandwich-cookies",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "protein-bars",
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "ice-cream",
+                        "id":  "granola",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "lemonade",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "fruit-punch",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "sports-drinks",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "energy-drinks",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "frozen-pizza",
                         "store":  "Hy-Vee"
                     },
                     {
@@ -235,20 +215,98 @@
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "trash-bags",
+                        "id":  "frozen-broccoli",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "dishwasher-detergent",
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "storage-bags",
+                        "id":  "disinfecting-wipes",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "facial-tissues",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "baby-food",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "fries",
                         "store":  "Hy-Vee"
                     },
                     {
                         "id":  "ketchup",
                         "store":  "Walmart"
+                    },
+                    {
+                        "id":  "hot-sauce",
+                        "store":  "Walmart"
+                    },
+                    {
+                        "id":  "zucchini",
+                        "store":  "Aldi"
+                    },
+                    {
+                        "id":  "apple-cider-vinegar",
+                        "store":  "Walmart"
+                    },
+                    {
+                        "id":  "apple-cider-vinegar",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "brown-sugar",
+                        "store":  "Sam\u0027s Club"
+                    },
+                    {
+                        "id":  "salt",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "half-and-half",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "frozen-peas",
+                        "store":  "Hy-Vee"
                     }
                 ],
-    "mismatch_count":  13,
+    "mismatch_count":  58,
     "mismatch":  [
+                     {
+                         "id":  "all-purpose-cleaner",
+                         "store":  "Hy-Vee",
+                         "unit":  "floz",
+                         "board":  0.1247,
+                         "link":  0.1872,
+                         "off_pct":  50,
+                         "product":  "Lysol Lemon Breeze All Purpose Cleaner",
+                         "size":  "32 fl oz"
+                     },
+                     {
+                         "id":  "baby-food",
+                         "store":  "Hy-Vee",
+                         "unit":  "oz",
+                         "board":  0.2571,
+                         "link":  0.5114,
+                         "off_pct":  99,
+                         "product":  "Gerber Stage 4 Toddler Food, Cherry Banana Vanilla Puree Pouch",
+                         "size":  "3.5 oz"
+                     },
+                     {
+                         "id":  "batteries",
+                         "store":  "Hy-Vee",
+                         "unit":  "each",
+                         "board":  0.7475,
+                         "link":  0.9975,
+                         "off_pct":  33,
+                         "product":  "Simply Done AA Batteries 4 Pk",
+                         "size":  "4 ct"
+                     },
                      {
                          "id":  "chicken-breast",
                          "store":  "Family Fare",
@@ -260,14 +318,34 @@
                          "size":  "lb"
                      },
                      {
-                         "id":  "brown-sugar",
+                         "id":  "chicken-breast",
                          "store":  "Hy-Vee",
                          "unit":  "lb",
-                         "board":  1.88,
-                         "link":  0.94,
-                         "off_pct":  50,
-                         "product":  "That\u0027s Smart! Light Brown Sugar",
-                         "size":  "32 oz"
+                         "board":  2.98,
+                         "link":  4.88,
+                         "off_pct":  64,
+                         "product":  "Boneless Skinless Chicken Breast",
+                         "size":  "lb"
+                     },
+                     {
+                         "id":  "cereal",
+                         "store":  "Hy-Vee",
+                         "unit":  "oz",
+                         "board":  0.1106,
+                         "link":  0.1801,
+                         "off_pct":  63,
+                         "product":  "Hy-Vee Whole Grain Raisin Bran",
+                         "size":  "16.6 oz"
+                     },
+                     {
+                         "id":  "broccoli",
+                         "store":  "Hy-Vee",
+                         "unit":  "lb",
+                         "board":  1.8431,
+                         "link":  2.69,
+                         "off_pct":  46,
+                         "product":  "Broccoli Florettes",
+                         "size":  "lb"
                      },
                      {
                          "id":  "diced-tomatoes",
@@ -280,14 +358,204 @@
                          "size":  "14.5 oz"
                      },
                      {
-                         "id":  "honey",
-                         "store":  "Family Fare",
+                         "id":  "canned-salmon",
+                         "store":  "Hy-Vee",
                          "unit":  "oz",
-                         "board":  0.2119,
-                         "link":  0.6869,
-                         "off_pct":  224,
-                         "product":  "Local Hive Midwest Raw \u0026 Unfiltered Honey Blend 16 Oz",
-                         "size":  "16 oz"
+                         "board":  0.2908,
+                         "link":  0.458,
+                         "off_pct":  57,
+                         "product":  "Chicken of the Sea Pink Salmon, in Water, Alaskan, Wild Caught, Skinless \u0026 Boneless",
+                         "size":  "5 oz"
+                     },
+                     {
+                         "id":  "cheese-crackers",
+                         "store":  "Hy-Vee",
+                         "unit":  "oz",
+                         "board":  0.2376,
+                         "link":  0.3621,
+                         "off_pct":  52,
+                         "product":  "Cheez-It Cheese Crackers Original",
+                         "size":  "12.4 oz"
+                     },
+                     {
+                         "id":  "chocolate-milk",
+                         "store":  "Hy-Vee",
+                         "unit":  "floz",
+                         "board":  0.0781,
+                         "link":  0.1119,
+                         "off_pct":  43,
+                         "product":  "Hiland Premium Chocolate Milk, Pint, 16 Fl Oz",
+                         "size":  "16 fl oz"
+                     },
+                     {
+                         "id":  "cod",
+                         "store":  "Hy-Vee",
+                         "unit":  "lb",
+                         "board":  5.98,
+                         "link":  12.99,
+                         "off_pct":  117,
+                         "product":  "Previously Frozen Alaskan Cod Fillets",
+                         "size":  "lb"
+                     },
+                     {
+                         "id":  "cooking-spray",
+                         "store":  "Hy-Vee",
+                         "unit":  "oz",
+                         "board":  0.4112,
+                         "link":  0.696,
+                         "off_pct":  69,
+                         "product":  "Hy-Vee Butter Flavored No Stick Cooking Spray 5 oz",
+                         "size":  "5 oz"
+                     },
+                     {
+                         "id":  "dishwasher-detergent",
+                         "store":  "Hy-Vee",
+                         "unit":  "each",
+                         "board":  0.1665,
+                         "link":  0.3238,
+                         "off_pct":  94,
+                         "product":  "Cascade Platinum Action Pacs Fresh Scent, 71Ct",
+                         "size":  "71 ct"
+                     },
+                     {
+                         "id":  "disinfecting-wipes",
+                         "store":  "Hy-Vee",
+                         "unit":  "each",
+                         "board":  0.0749,
+                         "link":  0.114,
+                         "off_pct":  52,
+                         "product":  "Clorox Disinfecting Bleach Free Crisp Lemon Cleaning Wipes",
+                         "size":  "35 ct"
+                     },
+                     {
+                         "id":  "facial-tissues",
+                         "store":  "Hy-Vee",
+                         "unit":  "each",
+                         "board":  0.0178,
+                         "link":  0.0763,
+                         "off_pct":  329,
+                         "product":  "Kleenex Everyday Facial Tissues Slim Pack 3-Ply",
+                         "size":  "30 ct"
+                     },
+                     {
+                         "id":  "storage-bags",
+                         "store":  "Hy-Vee",
+                         "unit":  "each",
+                         "board":  0.0416,
+                         "link":  0.0833,
+                         "off_pct":  100,
+                         "product":  "That\u0027s Smart! Reclosable Freezer Storage Bags 1 Gallon",
+                         "size":  "12 ct"
+                     },
+                     {
+                         "id":  "frozen-meatballs",
+                         "store":  "Hy-Vee",
+                         "unit":  "oz",
+                         "board":  0.2621,
+                         "link":  0.4575,
+                         "off_pct":  75,
+                         "product":  "Hy-Vee Beef Meatballs",
+                         "size":  "12 oz"
+                     },
+                     {
+                         "id":  "glass-cleaner",
+                         "store":  "Hy-Vee",
+                         "unit":  "floz",
+                         "board":  0.0747,
+                         "link":  0.1091,
+                         "off_pct":  46,
+                         "product":  "Hy-Vee Glass Cleaner with Ammonia",
+                         "size":  "32 fl oz"
+                     },
+                     {
+                         "id":  "granola",
+                         "store":  "Hy-Vee",
+                         "unit":  "oz",
+                         "board":  0.2071,
+                         "link":  0.3627,
+                         "off_pct":  75,
+                         "product":  "Post Honey Bunches of Oats Crunchy Honey Roasted Granola",
+                         "size":  "11 oz"
+                     },
+                     {
+                         "id":  "grapes",
+                         "store":  "Hy-Vee",
+                         "unit":  "lb",
+                         "board":  1.88,
+                         "link":  3.99,
+                         "off_pct":  112,
+                         "product":  "Red Seedless Grapes",
+                         "size":  "lb"
+                     },
+                     {
+                         "id":  "hot-dogs",
+                         "store":  "Hy-Vee",
+                         "unit":  "oz",
+                         "board":  0.1875,
+                         "link":  0.1067,
+                         "off_pct":  43,
+                         "product":  "Bar-S Classic Franks 12oz",
+                         "size":  "12 oz"
+                     },
+                     {
+                         "id":  "instant-mashed-potatoes",
+                         "store":  "Hy-Vee",
+                         "unit":  "oz",
+                         "board":  0.2475,
+                         "link":  0.3725,
+                         "off_pct":  51,
+                         "product":  "Idahoan Four Cheese Mashed Potatoes",
+                         "size":  "4 oz"
+                     },
+                     {
+                         "id":  "mangoes",
+                         "store":  "Hy-Vee",
+                         "unit":  "each",
+                         "board":  1.29,
+                         "link":  2.5,
+                         "off_pct":  94,
+                         "product":  "Mangoes",
+                         "size":  "1 ct"
+                     },
+                     {
+                         "id":  "marshmallows",
+                         "store":  "Hy-Vee",
+                         "unit":  "oz",
+                         "board":  0.105,
+                         "link":  0.169,
+                         "off_pct":  61,
+                         "product":  "Hy-Vee Marshmallows",
+                         "size":  "10 oz"
+                     },
+                     {
+                         "id":  "mixed-nuts",
+                         "store":  "Hy-Vee",
+                         "unit":  "oz",
+                         "board":  0.5703,
+                         "link":  0.9131,
+                         "off_pct":  60,
+                         "product":  "Hy-Vee Deluxe Lightly Salted Mixed Nuts",
+                         "size":  "8.75 oz"
+                     },
+                     {
+                         "id":  "mushrooms",
+                         "store":  "Hy-Vee",
+                         "unit":  "oz",
+                         "board":  0.2488,
+                         "link":  0.3738,
+                         "off_pct":  50,
+                         "product":  "Highline Whole White Mushrooms",
+                         "size":  "8 oz"
+                     },
+                     {
+                         "id":  "popsicles",
+                         "store":  "Hy-Vee",
+                         "unit":  "each",
+                         "board":  0.2492,
+                         "link":  0.3742,
+                         "off_pct":  50,
+                         "product":  "Bomb Pop Original Ice Pop, 12 Pack",
+                         "size":  "12 ct"
                      },
                      {
                          "id":  "pork-chops",
@@ -298,6 +566,66 @@
                          "off_pct":  92,
                          "product":  "Fresh Assorted Bone In Pork Chops",
                          "size":  "lb"
+                     },
+                     {
+                         "id":  "potato-chips",
+                         "store":  "Hy-Vee",
+                         "unit":  "oz",
+                         "board":  0.2112,
+                         "link":  0.3362,
+                         "off_pct":  59,
+                         "product":  "Hy-Vee Wavy Potato Chips",
+                         "size":  "8 oz"
+                     },
+                     {
+                         "id":  "queso",
+                         "store":  "Hy-Vee",
+                         "unit":  "oz",
+                         "board":  0.1662,
+                         "link":  0.2327,
+                         "off_pct":  40,
+                         "product":  "The Mad Butcher\u0027s Queso Cheese 15 oz",
+                         "size":  "15 oz"
+                     },
+                     {
+                         "id":  "rotisserie-chicken",
+                         "store":  "Hy-Vee",
+                         "unit":  "each",
+                         "board":  4.99,
+                         "link":  8.99,
+                         "off_pct":  80,
+                         "product":  "Whole Savory Rotisserie Chicken (Cold)",
+                         "size":  "each"
+                     },
+                     {
+                         "id":  "salsa",
+                         "store":  "Hy-Vee",
+                         "unit":  "oz",
+                         "board":  0.1244,
+                         "link":  0.1681,
+                         "off_pct":  35,
+                         "product":  "Hy-Vee Mild Thick \u0026 Chunky Salsa",
+                         "size":  "16 oz"
+                     },
+                     {
+                         "id":  "sirloin-steak",
+                         "store":  "Hy-Vee",
+                         "unit":  "lb",
+                         "board":  6.99,
+                         "link":  13.99,
+                         "off_pct":  100,
+                         "product":  "Hy-Vee Angus Reserve Beef Loin Boneless Sirloin Steak",
+                         "size":  "lb"
+                     },
+                     {
+                         "id":  "soda",
+                         "store":  "Hy-Vee",
+                         "unit":  "floz",
+                         "board":  0.037,
+                         "link":  0.3933,
+                         "off_pct":  963,
+                         "product":  "Hy-Vee Cola 12Pk",
+                         "size":  "12 x 12 fl oz"
                      },
                      {
                          "id":  "strawberries",
@@ -320,14 +648,54 @@
                          "size":  "4 ct"
                      },
                      {
-                         "id":  "salt",
-                         "store":  "Family Fare",
+                         "id":  "relish",
+                         "store":  "Hy-Vee",
                          "unit":  "oz",
-                         "board":  0.3082,
-                         "link":  0.0381,
-                         "off_pct":  88,
-                         "product":  "Iodized Salt Our Family",
-                         "size":  "26 oz"
+                         "board":  0.169,
+                         "link":  0.259,
+                         "off_pct":  53,
+                         "product":  "Hy-Vee Sweet Relish 10 oz",
+                         "size":  "10 oz"
+                     },
+                     {
+                         "id":  "tater-tots",
+                         "store":  "Hy-Vee",
+                         "unit":  "oz",
+                         "board":  0.1425,
+                         "link":  0.1886,
+                         "off_pct":  32,
+                         "product":  "Ore-Ida Star Tater Tots Core Frozen Potatoes 28 oz",
+                         "size":  "28 oz"
+                     },
+                     {
+                         "id":  "toaster-pastries",
+                         "store":  "Hy-Vee",
+                         "unit":  "each",
+                         "board":  0.2862,
+                         "link":  0.3738,
+                         "off_pct":  31,
+                         "product":  "Pop-Tarts Toaster Pastries Frosted Cherry 8 Count",
+                         "size":  "8 ct"
+                     },
+                     {
+                         "id":  "tomatoes",
+                         "store":  "Hy-Vee",
+                         "unit":  "lb",
+                         "board":  1.0372,
+                         "link":  3,
+                         "off_pct":  189,
+                         "product":  "Roma Tomatoes",
+                         "size":  "lb"
+                     },
+                     {
+                         "id":  "tortillas",
+                         "store":  "Hy-Vee",
+                         "unit":  "each",
+                         "board":  0.149,
+                         "link":  0.199,
+                         "off_pct":  34,
+                         "product":  "Hy-Vee Flour Tortilla Great for Fajitas 10Ct",
+                         "size":  "10 ct"
                      },
                      {
                          "id":  "vegetable-oil",
@@ -340,6 +708,16 @@
                          "size":  "1 gal"
                      },
                      {
+                         "id":  "whole-chicken",
+                         "store":  "Hy-Vee",
+                         "unit":  "lb",
+                         "board":  1.88,
+                         "link":  2.49,
+                         "off_pct":  32,
+                         "product":  "Hy-Vee Fresh Young Whole Chicken",
+                         "size":  "lb"
+                     },
+                     {
                          "id":  "watermelon",
                          "store":  "Baker\u0027s",
                          "unit":  "each",
@@ -348,6 +726,36 @@
                          "off_pct":  67,
                          "product":  "Mini Seedless Whole Watermelon",
                          "size":  "1 ct"
+                     },
+                     {
+                         "id":  "yogurt",
+                         "store":  "Hy-Vee",
+                         "unit":  "oz",
+                         "board":  0.065,
+                         "link":  0.1,
+                         "off_pct":  54,
+                         "product":  "Yoplait Original Strawberry Low Fat Yogurt",
+                         "size":  "6 oz"
+                     },
+                     {
+                         "id":  "brown-sugar",
+                         "store":  "Sam\u0027s Club",
+                         "unit":  "oz",
+                         "board":  0.03,
+                         "link":  0.0623,
+                         "off_pct":  108,
+                         "product":  "Member\u0027s Mark Light Brown Sugar, 7-Pound",
+                         "size":  "7 lb"
+                     },
+                     {
+                         "id":  "brown-sugar",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  0.2497,
+                         "link":  0.1684,
+                         "off_pct":  33,
+                         "product":  "C\u0026H Dark Brown Pure Cane Sugar 32 Oz",
+                         "size":  "32 oz"
                      },
                      {
                          "id":  "cheddar-cheese-shredded",
@@ -378,6 +786,76 @@
                          "off_pct":  31,
                          "product":  "Great Value Tomato Ketchup",
                          "size":  "32 oz"
+                     },
+                     {
+                         "id":  "hot-sauce",
+                         "store":  "Walmart",
+                         "unit":  "floz",
+                         "board":  0.13,
+                         "link":  0.2783,
+                         "off_pct":  114,
+                         "product":  "The Original Louisiana Brand Hot Sauce",
+                         "size":  "6 fl oz"
+                     },
+                     {
+                         "id":  "zucchini",
+                         "store":  "Aldi",
+                         "unit":  "lb",
+                         "board":  1.39,
+                         "link":  2.08,
+                         "off_pct":  50,
+                         "product":  "Zucchini, Package",
+                         "size":  "1 lb"
+                     },
+                     {
+                         "id":  "salt",
+                         "store":  "Hy-Vee",
+                         "unit":  "oz",
+                         "board":  0.0345,
+                         "link":  0.0608,
+                         "off_pct":  76,
+                         "product":  "Hy-Vee Iodized Salt",
+                         "size":  "26 oz"
+                     },
+                     {
+                         "id":  "half-and-half",
+                         "store":  "Hy-Vee",
+                         "unit":  "floz",
+                         "board":  0.1091,
+                         "link":  0.1869,
+                         "off_pct":  71,
+                         "product":  "Hy-Vee Half \u0026 Half",
+                         "size":  "16 fl oz"
+                     },
+                     {
+                         "id":  "apple-cider-vinegar",
+                         "store":  "Walmart",
+                         "unit":  "floz",
+                         "board":  0.052,
+                         "link":  0.0738,
+                         "off_pct":  42,
+                         "product":  "Great Value Apple Cider Vinegar",
+                         "size":  "32 fl oz"
+                     },
+                     {
+                         "id":  "apple-cider-vinegar",
+                         "store":  "Hy-Vee",
+                         "unit":  "floz",
+                         "board":  0.0934,
+                         "link":  0.1369,
+                         "off_pct":  47,
+                         "product":  "Hy-Vee Apple Cider Flavored Distilled Vinegar",
+                         "size":  "16 fl oz"
+                     },
+                     {
+                         "id":  "frozen-peas",
+                         "store":  "Hy-Vee",
+                         "unit":  "oz",
+                         "board":  0.128,
+                         "link":  0.0817,
+                         "off_pct":  36,
+                         "product":  "That\u0027s Smart! Sweet Peas (Frozen)",
+                         "size":  "12 oz"
                      }
                  ]
 }

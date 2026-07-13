@@ -1,7 +1,811 @@
 ﻿{
-    "generated":  "2026-07-12 15:55",
-    "gap_count":  0,
+    "generated":  "2026-07-13 13:49",
+    "gap_count":  161,
     "gaps":  [
-
+                 {
+                     "commodity":  "peanut-butter",
+                     "store":  "Family Fare",
+                     "candidate":  "Our Family Creamy Peanut Butter"
+                 },
+                 {
+                     "commodity":  "orange-juice",
+                     "store":  "Family Fare",
+                     "candidate":  "Kemps 100% Orange Juice, half gallon"
+                 },
+                 {
+                     "commodity":  "coffee",
+                     "store":  "Family Fare",
+                     "candidate":  "Folgers Classic Roast Ground Coffee"
+                 },
+                 {
+                     "commodity":  "whole-chicken",
+                     "store":  "Family Fare",
+                     "candidate":  "Our Family Fresh Whole Chicken"
+                 },
+                 {
+                     "commodity":  "breakfast-sausage",
+                     "store":  "Family Fare",
+                     "candidate":  "Johnsonville Original Recipe Breakfast Sausage 12 Oz"
+                 },
+                 {
+                     "commodity":  "sliced-cheese",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Member\u0027s Mark American Cheese, 160 Slices"
+                 },
+                 {
+                     "commodity":  "oranges",
+                     "store":  "Family Fare",
+                     "candidate":  "Yoplait Reduced Fat Orange Creme Yogurt 4 Oz"
+                 },
+                 {
+                     "commodity":  "lemons",
+                     "store":  "Aldi",
+                     "candidate":  "Lemons, Bag"
+                 },
+                 {
+                     "commodity":  "lemons",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Lemons, 3-Pound Bag"
+                 },
+                 {
+                     "commodity":  "limes",
+                     "store":  "Aldi",
+                     "candidate":  "Limes, Bag"
+                 },
+                 {
+                     "commodity":  "limes",
+                     "store":  "Family Fare",
+                     "candidate":  "Gatorade Lemon Lime Thirst Quencher 28 Fl Oz"
+                 },
+                 {
+                     "commodity":  "limes",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Limes, 3-Pound Bag"
+                 },
+                 {
+                     "commodity":  "carrots",
+                     "store":  "Family Fare",
+                     "candidate":  "Dole Shredded Carrot"
+                 },
+                 {
+                     "commodity":  "bell-peppers",
+                     "store":  "Family Fare",
+                     "candidate":  "Our Family Tomatoes, With Onion, Celery \u0026 Green Bell Pepper, Diced, Petite 14.5 Oz"
+                 },
+                 {
+                     "commodity":  "celery",
+                     "store":  "Family Fare",
+                     "candidate":  "Celery Hearts"
+                 },
+                 {
+                     "commodity":  "garlic",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Fresh Garlic Bulbs, 2-Pound"
+                 },
+                 {
+                     "commodity":  "hamburger-buns",
+                     "store":  "Aldi",
+                     "candidate":  "L\u0027oven Fresh Hamburger Buns"
+                 },
+                 {
+                     "commodity":  "bagels",
+                     "store":  "Aldi",
+                     "candidate":  "Southern Grove Everything Bagel or Honey Roasted Cashews"
+                 },
+                 {
+                     "commodity":  "rice",
+                     "store":  "Family Fare",
+                     "candidate":  "Vigo Lime Rice, Creamy Avocado, Authentic 8 Oz"
+                 },
+                 {
+                     "commodity":  "mac-and-cheese",
+                     "store":  "Aldi",
+                     "candidate":  "Cheese Club Macaroni and Cheese Dinner"
+                 },
+                 {
+                     "commodity":  "mac-and-cheese",
+                     "store":  "Family Fare",
+                     "candidate":  "Bob Evans Macaroni \u0026 Cheese, Family Size 28 Oz"
+                 },
+                 {
+                     "commodity":  "mac-and-cheese",
+                     "store":  "Baker\u0027s",
+                     "candidate":  "Kroger Original Macaroni and Cheese"
+                 },
+                 {
+                     "commodity":  "ramen",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Cup Noodles protein ramen, 2.54 oz., $0.99"
+                 },
+                 {
+                     "commodity":  "sugar",
+                     "store":  "Family Fare",
+                     "candidate":  "Pepsi Cola, Zero Sugar 12 Ea"
+                 },
+                 {
+                     "commodity":  "brown-sugar",
+                     "store":  "Family Fare",
+                     "candidate":  "Starbucks Coffee, Ground, Brown Sugar Cinnamon 11 Oz"
+                 },
+                 {
+                     "commodity":  "honey",
+                     "store":  "Family Fare",
+                     "candidate":  "Philadelphia Honey Pecan Cream Cheese Spread 7.5 Oz"
+                 },
+                 {
+                     "commodity":  "canned-corn",
+                     "store":  "Hy-Vee",
+                     "candidate":  "That\u0027s Smart! Whole Kernel Golden Corn"
+                 },
+                 {
+                     "commodity":  "canned-corn",
+                     "store":  "Family Fare",
+                     "candidate":  "Del Monte No Salt Added Whole Kernel Golden Sweet Corn 11 Oz"
+                 },
+                 {
+                     "commodity":  "canned-corn",
+                     "store":  "Baker\u0027s",
+                     "candidate":  "Kroger Whole Kernel Sweet Golden Corn"
+                 },
+                 {
+                     "commodity":  "salt",
+                     "store":  "Family Fare",
+                     "candidate":  "Del Monte No Salt Added Whole Kernel Golden Sweet Corn 11 Oz"
+                 },
+                 {
+                     "commodity":  "soda",
+                     "store":  "Family Fare",
+                     "candidate":  "Dr Pepper Soda, 12 Pack 12 Ea"
+                 },
+                 {
+                     "commodity":  "frozen-pizza",
+                     "store":  "Family Fare",
+                     "candidate":  "Red Baron Classic Crust Pepperoni Pizza 20.6 Oz"
+                 },
+                 {
+                     "commodity":  "ice-cream",
+                     "store":  "Family Fare",
+                     "candidate":  "Vigo Lime Rice, Creamy Avocado, Authentic 8 Oz"
+                 },
+                 {
+                     "commodity":  "frozen-vegetables",
+                     "store":  "Hy-Vee",
+                     "candidate":  "That\u0027s Smart! Mixed Vegetables With Carrots, Corn, Peas \u0026 Green Beans"
+                 },
+                 {
+                     "commodity":  "aluminum-foil",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Hy-Vee aluminum foil, 130 or 200 sq. ft., $11.99"
+                 },
+                 {
+                     "commodity":  "aluminum-foil",
+                     "store":  "Baker\u0027s",
+                     "candidate":  "Reynolds Wrap Aluminum Foil 30 Sq Ft"
+                 },
+                 {
+                     "commodity":  "aluminum-foil",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Reynolds Wrap Heavy Duty 18 Inch Aluminum Foil, 2 pk"
+                 },
+                 {
+                     "commodity":  "hand-soap",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Hy-Vee Clear Hands Soap"
+                 },
+                 {
+                     "commodity":  "mangoes",
+                     "store":  "Baker\u0027s",
+                     "candidate":  "Honey Mangos"
+                 },
+                 {
+                     "commodity":  "kiwi",
+                     "store":  "Aldi",
+                     "candidate":  "Kiwi, Package"
+                 },
+                 {
+                     "commodity":  "kiwi",
+                     "store":  "Baker\u0027s",
+                     "candidate":  "Mighties Green Fresh Kiwi Fruit"
+                 },
+                 {
+                     "commodity":  "kiwi",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Green Kiwi"
+                 },
+                 {
+                     "commodity":  "kiwi",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Kiwi Package"
+                 },
+                 {
+                     "commodity":  "honeydew",
+                     "store":  "Fareway",
+                     "candidate":  "Honeydew Melon"
+                 },
+                 {
+                     "commodity":  "pineapple",
+                     "store":  "Family Fare",
+                     "candidate":  "Pineapple, Small"
+                 },
+                 {
+                     "commodity":  "raspberries",
+                     "store":  "Family Fare",
+                     "candidate":  "Faygo Raspberry Blueberry Soda 24 Fl Oz"
+                 },
+                 {
+                     "commodity":  "grapefruit",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Red Grapefruit"
+                 },
+                 {
+                     "commodity":  "zucchini",
+                     "store":  "Family Fare",
+                     "candidate":  "Zucchini Squash"
+                 },
+                 {
+                     "commodity":  "cauliflower",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Table Ready Cauliflower"
+                 },
+                 {
+                     "commodity":  "kale",
+                     "store":  "Baker\u0027s",
+                     "candidate":  "Kale Lettuce Bunch"
+                 },
+                 {
+                     "commodity":  "green-onions",
+                     "store":  "Aldi",
+                     "candidate":  "Green Onions, Bag"
+                 },
+                 {
+                     "commodity":  "cilantro",
+                     "store":  "Family Fare",
+                     "candidate":  "Triscuit Crackers, Avocado, Cilantro \u0026 Lime 8.5 Oz"
+                 },
+                 {
+                     "commodity":  "fresh-ginger",
+                     "store":  "Family Fare",
+                     "candidate":  "Fresh Gourmet Fresh Gourmet Garlic Ginger Wonton Strips 3.5 Oz"
+                 },
+                 {
+                     "commodity":  "fresh-green-beans",
+                     "store":  "Family Fare",
+                     "candidate":  "Fresh Green Beans Pero"
+                 },
+                 {
+                     "commodity":  "ribeye-steak",
+                     "store":  "Fareway",
+                     "candidate":  "USDA Choice Thick Cut Ribeye Steak"
+                 },
+                 {
+                     "commodity":  "pork-tenderloin",
+                     "store":  "Family Fare",
+                     "candidate":  "Whole Boneless Pork Tenderloin"
+                 },
+                 {
+                     "commodity":  "italian-sausage",
+                     "store":  "Family Fare",
+                     "candidate":  "Johnsonville Premium Italian Hot Sausage 16 Oz"
+                 },
+                 {
+                     "commodity":  "bratwurst",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Johnsonville Brats Original Pork Bratwurst Links"
+                 },
+                 {
+                     "commodity":  "bratwurst",
+                     "store":  "Walmart",
+                     "candidate":  "Marketside Beer \u0027N Bratwurst 5 Links"
+                 },
+                 {
+                     "commodity":  "kielbasa",
+                     "store":  "Family Fare",
+                     "candidate":  "Smoked Hot Italian Sausage Hot"
+                 },
+                 {
+                     "commodity":  "rotisserie-chicken",
+                     "store":  "Family Fare",
+                     "candidate":  "Whole Rotisserie Chicken, Savory Hot (No Pick Up/Delivery Before 11am)"
+                 },
+                 {
+                     "commodity":  "rotisserie-chicken",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Member\u0027s Mark Seasoned Rotisserie Chicken"
+                 },
+                 {
+                     "commodity":  "pepperoni",
+                     "store":  "Family Fare",
+                     "candidate":  "Hormel Turkey Pepperoni 5 Oz"
+                 },
+                 {
+                     "commodity":  "parmesan",
+                     "store":  "Family Fare",
+                     "candidate":  "Our Family Natural Finely Cut Parmesan Shredded Cheese 6 Oz"
+                 },
+                 {
+                     "commodity":  "parmesan",
+                     "store":  "Fareway",
+                     "candidate":  "Fareway Parmesan Fancy Shredded Cheese"
+                 },
+                 {
+                     "commodity":  "donuts",
+                     "store":  "Aldi",
+                     "candidate":  "Barissimo Donut Store Blend Coffee Cups"
+                 },
+                 {
+                     "commodity":  "donuts",
+                     "store":  "Fareway",
+                     "candidate":  "Hostess Donettes Frosted Mini Donuts"
+                 },
+                 {
+                     "commodity":  "french-bread",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Baking Stone French Bread"
+                 },
+                 {
+                     "commodity":  "french-bread",
+                     "store":  "Aldi",
+                     "candidate":  "Specially Selected French Bread"
+                 },
+                 {
+                     "commodity":  "pita-bread",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Toufayan Bakeries Hearth Baked Classic White Pita 6 Each"
+                 },
+                 {
+                     "commodity":  "pancake-mix",
+                     "store":  "Family Fare",
+                     "candidate":  "Fast Shake Pancake Mix, Blueberry 5.3 Oz"
+                 },
+                 {
+                     "commodity":  "yeast",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Fleischmann\u0027s ActiveDry Yeast 3 Pack"
+                 },
+                 {
+                     "commodity":  "yeast",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Fleischmann\u0027s Instant Dry Yeast"
+                 },
+                 {
+                     "commodity":  "cake-mix",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Hy-Vee Extra Moist Classic Yellow Deluxe Cake Mix"
+                 },
+                 {
+                     "commodity":  "cake-mix",
+                     "store":  "Aldi",
+                     "candidate":  "Baker\u0027s Corner Yellow Cake Mix"
+                 },
+                 {
+                     "commodity":  "cake-mix",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Deluxe Moist Yellow Cake Mix"
+                 },
+                 {
+                     "commodity":  "brownie-mix",
+                     "store":  "Aldi",
+                     "candidate":  "Baker\u0027s Corner Fudge Brownie Mix"
+                 },
+                 {
+                     "commodity":  "brownie-mix",
+                     "store":  "Walmart",
+                     "candidate":  "Duncan Hines Chewy Fudge Brownie Mix"
+                 },
+                 {
+                     "commodity":  "frosting",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Sam\u0027s Vanilla Whipped Icing, Frozen Bucket"
+                 },
+                 {
+                     "commodity":  "hot-sauce",
+                     "store":  "Family Fare",
+                     "candidate":  "Local Hive Honey Hot Habanero Hot Sauce 6 Oz"
+                 },
+                 {
+                     "commodity":  "canned-green-beans",
+                     "store":  "Family Fare",
+                     "candidate":  "Beech Nut Stage 2 (6+ Months) Sweet Corn \u0026 Green Beans 4 Oz"
+                 },
+                 {
+                     "commodity":  "canned-mushrooms",
+                     "store":  "Aldi",
+                     "candidate":  "Happy Harvest Mushrooms Pieces \u0026 Stems"
+                 },
+                 {
+                     "commodity":  "instant-mashed-potatoes",
+                     "store":  "Aldi",
+                     "candidate":  "Chef\u0027s Cupboard Homestyle Butter Mashed Potatoes"
+                 },
+                 {
+                     "commodity":  "brown-rice",
+                     "store":  "Aldi",
+                     "candidate":  "Earthly Grains Brown Basmati Rice"
+                 },
+                 {
+                     "commodity":  "egg-noodles",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Country Pasta Homemade Style Egg Pasta"
+                 },
+                 {
+                     "commodity":  "hummus",
+                     "store":  "Family Fare",
+                     "candidate":  "Fresh \u0026 Finest By Our Family Garlic Hummus 10 Oz"
+                 },
+                 {
+                     "commodity":  "hummus",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Member\u0027s Mark Roasted Red Pepper Hummus"
+                 },
+                 {
+                     "commodity":  "canned-peaches",
+                     "store":  "Family Fare",
+                     "candidate":  "Our Family Peaches, Yellow Cling, Sliced 15 Oz"
+                 },
+                 {
+                     "commodity":  "canned-peaches",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Sliced Yellow Cling Peaches in Juice"
+                 },
+                 {
+                     "commodity":  "applesauce",
+                     "store":  "Fareway",
+                     "candidate":  "Fareway Unsweetened Applesauce"
+                 },
+                 {
+                     "commodity":  "applesauce",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Mott\u0027s No Sugar Added Applesauce"
+                 },
+                 {
+                     "commodity":  "peanuts",
+                     "store":  "Aldi",
+                     "candidate":  "Southern Grove Dry Roasted Peanuts with Sea Salt"
+                 },
+                 {
+                     "commodity":  "almonds",
+                     "store":  "Family Fare",
+                     "candidate":  "Blue Diamond Hot Honey Almonds 6 Oz"
+                 },
+                 {
+                     "commodity":  "crackers",
+                     "store":  "Family Fare",
+                     "candidate":  "Triscuit Crackers, Avocado, Cilantro \u0026 Lime 8.5 Oz"
+                 },
+                 {
+                     "commodity":  "sandwich-cookies",
+                     "store":  "Aldi",
+                     "candidate":  "Benton\u0027s Vanilla Sandwich Creme Cookies"
+                 },
+                 {
+                     "commodity":  "protein-bars",
+                     "store":  "Aldi",
+                     "candidate":  "Millville Peanut Butter Dark Chocolate Protein Chewy Bars"
+                 },
+                 {
+                     "commodity":  "protein-bars",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Peanut Butter and Dark Chocolate Protein Bars"
+                 },
+                 {
+                     "commodity":  "fruit-snacks",
+                     "store":  "Aldi",
+                     "candidate":  "Lunch Buddies Mixed Berry Fruit Snacks"
+                 },
+                 {
+                     "commodity":  "fruit-snacks",
+                     "store":  "Family Fare",
+                     "candidate":  "Del Monte Fruit Cup Snacks Mandarin Oranges In 100% Juice Family Pack 12 Ea"
+                 },
+                 {
+                     "commodity":  "toaster-pastries",
+                     "store":  "Family Fare",
+                     "candidate":  "Pop Tarts Toaster Pastries, Star Spangled Blueberry 13.5 Oz"
+                 },
+                 {
+                     "commodity":  "toaster-pastries",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Frosted Cherry Toaster Pastries"
+                 },
+                 {
+                     "commodity":  "granola",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Member\u0027s Mark Honey Almond Granola"
+                 },
+                 {
+                     "commodity":  "rice-cakes",
+                     "store":  "Fareway",
+                     "candidate":  "Quaker Rice Cakes, Caramel"
+                 },
+                 {
+                     "commodity":  "rice-cakes",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Quaker Rice Cakes, Variety Pack"
+                 },
+                 {
+                     "commodity":  "fruit-cups",
+                     "store":  "Aldi",
+                     "candidate":  "Lunch Buddies Peach Fruit Cups in Juice"
+                 },
+                 {
+                     "commodity":  "fruit-cups",
+                     "store":  "Family Fare",
+                     "candidate":  "Dole Mandarin Oranges In Juice"
+                 },
+                 {
+                     "commodity":  "fruit-cups",
+                     "store":  "Fareway",
+                     "candidate":  "Fareway Mandarin Oranges in 100% Juice"
+                 },
+                 {
+                     "commodity":  "fruit-cups",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Member\u0027s Mark Diced Peach Cups"
+                 },
+                 {
+                     "commodity":  "pudding-cups",
+                     "store":  "Fareway",
+                     "candidate":  "Snack Pack Butterscotch Flavored Pudding"
+                 },
+                 {
+                     "commodity":  "gelatin",
+                     "store":  "Fareway",
+                     "candidate":  "Fareway Orange Gelatin Dessert"
+                 },
+                 {
+                     "commodity":  "apple-juice",
+                     "store":  "Family Fare",
+                     "candidate":  "Our Family Apple Juice 64 Fl Oz"
+                 },
+                 {
+                     "commodity":  "grape-juice",
+                     "store":  "Family Fare",
+                     "candidate":  "Simply Grape Juice Drink Bottle 52 Fl Oz"
+                 },
+                 {
+                     "commodity":  "lemonade",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Member\u0027s Mark Fresh Squeezed Lemonade"
+                 },
+                 {
+                     "commodity":  "sports-drinks",
+                     "store":  "Aldi",
+                     "candidate":  "Gatorade Fruit Punch Thirst Quencher"
+                 },
+                 {
+                     "commodity":  "sports-drinks",
+                     "store":  "Walmart",
+                     "candidate":  "Gatorade Thirst Quencher Fruit Punch"
+                 },
+                 {
+                     "commodity":  "sparkling-water",
+                     "store":  "Family Fare",
+                     "candidate":  "Sparkling Ice Zero Sugar Strawberry Watermelon Sparkling Water 17 Fl Oz"
+                 },
+                 {
+                     "commodity":  "iced-tea",
+                     "store":  "Family Fare",
+                     "candidate":  "Our Family Sweet Corn, Super, Steamable 10 Oz"
+                 },
+                 {
+                     "commodity":  "iced-tea",
+                     "store":  "Baker\u0027s",
+                     "candidate":  "Kroger Thin Sliced Beef Ribeye Steak"
+                 },
+                 {
+                     "commodity":  "tea-bags",
+                     "store":  "Aldi",
+                     "candidate":  "USDA Choice Black Angus Petite Sirloin Steak"
+                 },
+                 {
+                     "commodity":  "hot-cocoa",
+                     "store":  "Fareway",
+                     "candidate":  "Nestle Hot Cocoa Rich Milk Chocolate Flavored Mix Powder"
+                 },
+                 {
+                     "commodity":  "hot-cocoa",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Milk Chocolate Hot Cocoa Drink Mix"
+                 },
+                 {
+                     "commodity":  "coffee-pods",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Dunkin\u0027 Donuts Original Blend K-Cup 10 Count"
+                 },
+                 {
+                     "commodity":  "coffee-pods",
+                     "store":  "Aldi",
+                     "candidate":  "Barissimo Donut Store Blend Coffee Cups"
+                 },
+                 {
+                     "commodity":  "instant-coffee",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Folgers Classic Roast Instant Coffee, Single Serve Packets"
+                 },
+                 {
+                     "commodity":  "instant-coffee",
+                     "store":  "Fareway",
+                     "candidate":  "Folgers Instant Coffee Crystals Classic Roast Single Serve Packets"
+                 },
+                 {
+                     "commodity":  "frozen-waffles",
+                     "store":  "Family Fare",
+                     "candidate":  "Eggo Blueberry Waffles 10 Ea"
+                 },
+                 {
+                     "commodity":  "frozen-corn",
+                     "store":  "Family Fare",
+                     "candidate":  "Birds Eye Super Sweet Corn 10 Oz"
+                 },
+                 {
+                     "commodity":  "frozen-corn",
+                     "store":  "Baker\u0027s",
+                     "candidate":  "Kroger Whole Kernel Sweet Golden Corn"
+                 },
+                 {
+                     "commodity":  "frozen-peas",
+                     "store":  "Aldi",
+                     "candidate":  "Season\u0027s Choice Steamable Sweet Peas"
+                 },
+                 {
+                     "commodity":  "breakfast-sandwiches",
+                     "store":  "Aldi",
+                     "candidate":  "Breakfast Best Sausage, Egg \u0026 Cheese Biscuit Sandwiches"
+                 },
+                 {
+                     "commodity":  "breakfast-sandwiches",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Jimmy Dean Sausage, Egg, and Cheese Croissant Sandwiches"
+                 },
+                 {
+                     "commodity":  "breakfast-sandwiches",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Croissant Sandwiches Sausage Egg and Cheese"
+                 },
+                 {
+                     "commodity":  "frozen-burritos",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Jimmy Dean Bacon, Egg \u0026 Cheese Breakfast Burrito, 1 ct"
+                 },
+                 {
+                     "commodity":  "frozen-meatballs",
+                     "store":  "Family Fare",
+                     "candidate":  "Hot Pockets Italian Style Seasoned Crust Meatballs \u0026 Mozzarella Sandwiches 4 Ea"
+                 },
+                 {
+                     "commodity":  "hash-browns",
+                     "store":  "Family Fare",
+                     "candidate":  "Mr. Dee\u0027s Hash Brown Potato Patties 15 Ea"
+                 },
+                 {
+                     "commodity":  "corn-dogs",
+                     "store":  "Aldi",
+                     "candidate":  "Bremer Regular Corn Dogs"
+                 },
+                 {
+                     "commodity":  "corn-dogs",
+                     "store":  "Family Fare",
+                     "candidate":  "State Fair Hot Honey Mini Corn Dogs 23.76 Oz"
+                 },
+                 {
+                     "commodity":  "fish-sticks",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Gorton\u0027s Super Crunchy Fish Sticks, Frozen"
+                 },
+                 {
+                     "commodity":  "garlic-bread",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Hy-Vee garlic bread, SAVE! .60, $2.38 PERKS PRICE, $2.98 NON-MEMBERS PRICE"
+                 },
+                 {
+                     "commodity":  "garlic-bread",
+                     "store":  "Aldi",
+                     "candidate":  "Mama Cozzi\u0027s Pizza Kitchen Garlic Texas Toast"
+                 },
+                 {
+                     "commodity":  "garlic-bread",
+                     "store":  "Family Fare",
+                     "candidate":  "Village Hearth Sandwich Bread, Enriched, White, Texas Toast 28 Oz"
+                 },
+                 {
+                     "commodity":  "garlic-bread",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Cole\u0027s Garlic Texas Toast, Frozen"
+                 },
+                 {
+                     "commodity":  "garlic-bread",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Garlic Texas Toast"
+                 },
+                 {
+                     "commodity":  "popsicles",
+                     "store":  "Family Fare",
+                     "candidate":  "Bomb Pop Pops, Strawberry, Watermelon \u0026 Grape, Nerds Candy 12 Ea"
+                 },
+                 {
+                     "commodity":  "popsicles",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Frollies Watermelon and Pineapple Fruity Ice Pops"
+                 },
+                 {
+                     "commodity":  "laundry-pods",
+                     "store":  "Family Fare",
+                     "candidate":  "Arm \u0026 Hammer Laundry Detergent, Concentrated, 5 In 1, Fresh Burst, Power Paks 42 Ea"
+                 },
+                 {
+                     "commodity":  "laundry-pods",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Member\u0027s Mark Laundry Detergent Power Pacs"
+                 },
+                 {
+                     "commodity":  "plastic-wrap",
+                     "store":  "Aldi",
+                     "candidate":  "Boulder Plastic Wrap"
+                 },
+                 {
+                     "commodity":  "parchment-paper",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Hy-Vee parchment paper, 45 or 75 sq. ft., $3.99"
+                 },
+                 {
+                     "commodity":  "parchment-paper",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Member\u0027s Mark Unbleached Parchment Paper"
+                 },
+                 {
+                     "commodity":  "disinfecting-wipes",
+                     "store":  "Fareway",
+                     "candidate":  "Clorox Disinfecting Wipes, Bleach Free Cleaning Wipes, Fresh Scent"
+                 },
+                 {
+                     "commodity":  "air-freshener",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Aerosol Air Freshener Linen Fresh"
+                 },
+                 {
+                     "commodity":  "toothbrushes",
+                     "store":  "Walmart",
+                     "candidate":  "Equate Manual Toothbrushes Soft"
+                 },
+                 {
+                     "commodity":  "bar-soap",
+                     "store":  "Aldi",
+                     "candidate":  "Lacura Deep Moisturizing Beauty Bar"
+                 },
+                 {
+                     "commodity":  "lotion",
+                     "store":  "Aldi",
+                     "candidate":  "Lacura Oatmeal Body Lotion"
+                 },
+                 {
+                     "commodity":  "diapers",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Luvs Pro Level Leak Protection Diapers, Size 4"
+                 },
+                 {
+                     "commodity":  "baby-food",
+                     "store":  "Family Fare",
+                     "candidate":  "Beech Nut Stage 2 (6+ Months) Sweet Corn \u0026 Green Beans 4 Oz"
+                 },
+                 {
+                     "commodity":  "dog-food",
+                     "store":  "Family Fare",
+                     "candidate":  "Iams Adult 1+ 100% Complete \u0026 Balanced Minichunks Chicken \u0026 Whole Grain Recipe Dog Food 15 Lb"
+                 },
+                 {
+                     "commodity":  "dog-food",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Member\u0027s Mark Chicken and Brown Rice Recipe Dry Dog Food"
+                 },
+                 {
+                     "commodity":  "dog-food",
+                     "store":  "Walmart",
+                     "candidate":  "Ol\u0027 Roy Complete Nutrition T-Bone and Bacon Dry Dog Food"
+                 },
+                 {
+                     "commodity":  "dog-treats",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Milk-Bone Original Dog Biscuits, Medium"
+                 }
              ]
 }

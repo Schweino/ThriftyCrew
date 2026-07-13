@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-13T01:45:54",
-    "week_of":  "2026-07-12",
+    "generated":  "2026-07-13T13:50:06",
+    "week_of":  "2026-07-13",
     "ingredient_count":  433,
     "recipe_count":  113,
     "ingredients":  {
@@ -82,7 +82,7 @@
                                             "store":  "Aldi",
                                             "type":  "everyday",
                                             "url":  "https://www.aldi.us/store/aldi/products/20324471-nature-s-nectar-100-apple-juice-64-fl-oz",
-                                            "n":  6
+                                            "n":  5
                                         },
                         "apples":  {
                                        "unit":  "lb",
@@ -98,7 +98,8 @@
                                            "store":  "Hy-Vee",
                                            "type":  "sale",
                                            "url":  "https://www.hy-vee.com/aisles-online/p/2976165/thats-smart-unsweetened-apple-sauce-6-4-oz-containers",
-                                           "n":  3
+                                           "n":  3,
+                                           "sale_end":  "2026-07-19"
                                        },
                         "asparagus":  {
                                           "unit":  "lb",
@@ -319,11 +320,12 @@
                                       },
                         "bread":  {
                                       "unit":  "each",
-                                      "cheapest":  1.19,
-                                      "store":  "Baker\u0027s",
-                                      "type":  "everyday",
-                                      "url":  "https://www.bakersplus.com/p/smart-way-enriched-white-bread/0001111015125",
-                                      "n":  7
+                                      "cheapest":  0.958,
+                                      "store":  "Hy-Vee",
+                                      "type":  "sale",
+                                      "url":  "https://www.hy-vee.com/aisles-online/p/1955/hy-vee-white-bread",
+                                      "n":  7,
+                                      "sale_end":  "2026-07-19"
                                   },
                         "cereal":  {
                                        "unit":  "oz",
@@ -339,7 +341,7 @@
                                                   "store":  "Walmart",
                                                   "type":  "everyday",
                                                   "url":  "https://www.walmart.com/ip/Farmland-Original-Pork-Breakfast-Sausage-Roll-16-oz/10403368",
-                                                  "n":  7
+                                                  "n":  6
                                               },
                         "broccoli":  {
                                          "unit":  "lb",
@@ -347,7 +349,8 @@
                                          "store":  "Hy-Vee",
                                          "type":  "sale",
                                          "url":  "https://www.hy-vee.com/aisles-online/p/8801/broccoli-florettes",
-                                         "n":  6
+                                         "n":  6,
+                                         "sale_end":  "2026-07-19"
                                      },
                         "brown-rice":  {
                                            "unit":  "lb",
@@ -363,7 +366,8 @@
                                             "store":  "Hy-Vee",
                                             "type":  "sale",
                                             "url":  "https://www.hy-vee.com/aisles-online/p/2970352/thats-smart-light-brown-sugar",
-                                            "n":  6
+                                            "n":  6,
+                                            "sale_end":  "2026-07-19"
                                         },
                         "brownie-mix":  {
                                             "unit":  "each",
@@ -555,15 +559,16 @@
                                             "store":  "Fareway",
                                             "type":  "everyday",
                                             "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20562021",
-                                            "n":  6
+                                            "n":  5
                                         },
                         "celery":  {
                                        "unit":  "each",
-                                       "cheapest":  1.88,
+                                       "cheapest":  1.49,
                                        "store":  "Hy-Vee",
-                                       "type":  "everyday",
+                                       "type":  "sale",
                                        "url":  "https://www.hy-vee.com/aisles-online/p/8653/celery",
-                                       "n":  5
+                                       "n":  5,
+                                       "sale_end":  "2026-07-19"
                                    },
                         "charcoal":  {
                                          "unit":  "lb",
@@ -659,7 +664,8 @@
                                             "store":  "Aldi",
                                             "type":  "sale",
                                             "url":  "",
-                                            "n":  6
+                                            "n":  6,
+                                            "sale_end":  "2026-07-14"
                                         },
                         "cocoa-powder":  {
                                              "unit":  "oz",
@@ -679,11 +685,12 @@
                                         },
                         "cod":  {
                                     "unit":  "lb",
-                                    "cheapest":  8.395,
-                                    "store":  "Aldi",
-                                    "type":  "everyday",
-                                    "url":  "https://www.aldi.us/store/aldi/products/20383671-fremont-fish-market-value-pack-cod-fillets-32-oz",
-                                    "n":  6
+                                    "cheapest":  5.98,
+                                    "store":  "Hy-Vee",
+                                    "type":  "sale",
+                                    "url":  "https://www.hy-vee.com/aisles-online/p/61892/previously-frozen-alaskan-cod-fillets",
+                                    "n":  6,
+                                    "sale_end":  "2026-07-19"
                                 },
                         "coffee":  {
                                        "unit":  "oz",
@@ -851,7 +858,7 @@
                                                      "store":  "Sam\u0027s Club",
                                                      "type":  "everyday",
                                                      "url":  "https://www.samsclub.com/ip/Member-s-Mark-Platinum-Clean-Automatic-Dishwasher-Pacs-Fresh-Clean-110-ct/18766722402",
-                                                     "n":  5
+                                                     "n":  6
                                                  },
                         "disinfectant-spray":  {
                                                    "unit":  "oz",
@@ -879,10 +886,10 @@
                                      },
                         "dog-treats":  {
                                            "unit":  "oz",
-                                           "cheapest":  0.1454,
-                                           "store":  "Hy-Vee",
-                                           "type":  "sale",
-                                           "url":  "https://www.hy-vee.com/aisles-online/p/25911/milk-bone-soft-and-chewy-chicken-recipe",
+                                           "cheapest":  0.2756,
+                                           "store":  "Walmart",
+                                           "type":  "everyday",
+                                           "url":  "https://www.walmart.com/ip/Canine-Carry-Outs-Steak-Bites-Beef-Flavor-Dog-Treats-4-5oz-Bag/174315218",
                                            "n":  4
                                        },
                         "donuts":  {
@@ -979,7 +986,8 @@
                                              "store":  "Hy-Vee",
                                              "type":  "sale",
                                              "url":  "https://www.hy-vee.com/aisles-online/p/2913524/thats-smart-reclosable-freezer-storage-bags-1-gallon",
-                                             "n":  6
+                                             "n":  6,
+                                             "sale_end":  "2026-07-19"
                                          },
                         "french-bread":  {
                                              "unit":  "each",
@@ -1003,7 +1011,8 @@
                                                      "store":  "Hy-Vee",
                                                      "type":  "sale",
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/4234539/hy-vee-sausage-egg-and-cheese-muffin-breakfast-sandwiches",
-                                                     "n":  2
+                                                     "n":  2,
+                                                     "sale_end":  "2026-07-19"
                                                  },
                         "frozen-broccoli":  {
                                                 "unit":  "oz",
@@ -1047,10 +1056,10 @@
                                          },
                         "frozen-fruit":  {
                                              "unit":  "oz",
-                                             "cheapest":  0.0625,
-                                             "store":  "Hy-Vee",
-                                             "type":  "sale",
-                                             "url":  "https://www.hy-vee.com/aisles-online/p/1415831/hy-vee-berry-medley-unsweetened",
+                                             "cheapest":  0.149,
+                                             "store":  "Aldi",
+                                             "type":  "everyday",
+                                             "url":  "https://www.aldi.us/store/aldi/products/19936005-season-s-choice-cherry-berry-blend-dark-sweet-cherries-tart-cherries-blueberries-strawberries-48-oz",
                                              "n":  5
                                          },
                         "hash-browns":  {
@@ -1099,7 +1108,7 @@
                                              "store":  "Baker\u0027s",
                                              "type":  "everyday",
                                              "url":  "https://www.bakersplus.com/p/totino-s-party-pizza-pepperoni-17g-protein-thin-crust-frozen-pizza/0004280011400",
-                                             "n":  5
+                                             "n":  6
                                          },
                         "frozen-waffles":  {
                                                "unit":  "each",
@@ -1179,15 +1188,17 @@
                                                 "store":  "Hy-Vee",
                                                 "type":  "sale",
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/4240472/hy-vee-graham-crackers-with-honey",
-                                                "n":  5
+                                                "n":  5,
+                                                "sale_end":  "2026-07-19"
                                             },
                         "granola":  {
                                         "unit":  "oz",
-                                        "cheapest":  0.2129,
-                                        "store":  "Fareway",
-                                        "type":  "everyday",
-                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/66830121",
-                                        "n":  4
+                                        "cheapest":  0.2071,
+                                        "store":  "Hy-Vee",
+                                        "type":  "sale",
+                                        "url":  "https://www.hy-vee.com/aisles-online/p/287966/post-honey-bunches-of-oats-crunchy-honey-roasted-granola",
+                                        "n":  4,
+                                        "sale_end":  "2026-07-19"
                                     },
                         "granola-bars":  {
                                              "unit":  "each",
@@ -1211,7 +1222,7 @@
                                             "store":  "Aldi",
                                             "type":  "everyday",
                                             "url":  "https://www.aldi.us/store/aldi/products/19673951-nature-s-nectar-100-grape-juice-64-fl-oz",
-                                            "n":  5
+                                            "n":  4
                                         },
                         "grapefruit":  {
                                            "unit":  "each",
@@ -1231,10 +1242,10 @@
                                    },
                         "fresh-green-beans":  {
                                                   "unit":  "lb",
-                                                  "cheapest":  0.9233,
-                                                  "store":  "Hy-Vee",
-                                                  "type":  "sale",
-                                                  "url":  "https://www.hy-vee.com/aisles-online/p/8651/fresh-green-beans",
+                                                  "cheapest":  1.78,
+                                                  "store":  "Walmart",
+                                                  "type":  "everyday",
+                                                  "url":  "https://www.walmart.com/ip/Fresh-Green-Beans/44391023",
                                                   "n":  6
                                               },
                         "green-onions":  {
@@ -1323,7 +1334,7 @@
                                       "store":  "Sam\u0027s Club",
                                       "type":  "everyday",
                                       "url":  "https://www.samsclub.com/ip/Member-s-Mark-Wildflower-Pure-Premium-Honey-48-oz/15006863838",
-                                      "n":  7
+                                      "n":  6
                                   },
                         "honeydew":  {
                                          "unit":  "each",
@@ -1363,7 +1374,7 @@
                                           "store":  "Sam\u0027s Club",
                                           "type":  "everyday",
                                           "url":  "https://www.samsclub.com/ip/Frank-s-RedHot-Original-Cayenne-Pepper-Hot-Sauce-1-gal/13888220869",
-                                          "n":  6
+                                          "n":  5
                                       },
                         "hummus":  {
                                        "unit":  "oz",
@@ -1555,7 +1566,7 @@
                                                "store":  "Fareway",
                                                "type":  "everyday",
                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/69966184",
-                                               "n":  3
+                                               "n":  4
                                            },
                         "mangoes":  {
                                         "unit":  "each",
@@ -1567,11 +1578,12 @@
                                     },
                         "marshmallows":  {
                                              "unit":  "oz",
-                                             "cheapest":  0.1244,
+                                             "cheapest":  0.105,
                                              "store":  "Hy-Vee",
                                              "type":  "sale",
                                              "url":  "https://www.hy-vee.com/aisles-online/p/56924/hy-vee-marshmallows",
-                                             "n":  4
+                                             "n":  4,
+                                             "sale_end":  "2026-07-19"
                                          },
                         "mayonnaise":  {
                                            "unit":  "oz",
@@ -1771,7 +1783,7 @@
                                           "store":  "Sam\u0027s Club",
                                           "type":  "everyday",
                                           "url":  "https://www.samsclub.com/ip/Member-s-Mark-Sliced-Pepperoni-16-oz-2-pk/15238964676",
-                                          "n":  6
+                                          "n":  5
                                       },
                         "pickles":  {
                                         "unit":  "oz",
@@ -1852,7 +1864,7 @@
                                                 "store":  "Sam\u0027s Club",
                                                 "type":  "everyday",
                                                 "url":  "https://www.samsclub.com/ip/Member-s-Mark-Whole-Tenderloins-Cryovac-4-tenderloins-per-package-priced-per-pound/15568150002",
-                                                "n":  7
+                                                "n":  6
                                             },
                         "potato-chips":  {
                                              "unit":  "oz",
@@ -1868,7 +1880,8 @@
                                                "store":  "Hy-Vee",
                                                "type":  "sale",
                                                "url":  "https://www.hy-vee.com/aisles-online/p/2970351/thats-smart-powdered-sugar",
-                                               "n":  5
+                                               "n":  5,
+                                               "sale_end":  "2026-07-19"
                                            },
                         "pretzels":  {
                                          "unit":  "oz",
@@ -1880,11 +1893,12 @@
                                      },
                         "protein-bars":  {
                                              "unit":  "each",
-                                             "cheapest":  0.576,
+                                             "cheapest":  0.8317,
                                              "store":  "Hy-Vee",
                                              "type":  "sale",
                                              "url":  "https://www.hy-vee.com/aisles-online/p/365725/hy-vee-chewy-protein-bars-peanut-butter-and-dark-chocolate-5-142-oz-bars",
-                                             "n":  3
+                                             "n":  3,
+                                             "sale_end":  "2026-07-19"
                                          },
                         "pudding-cups":  {
                                              "unit":  "each",
@@ -1896,11 +1910,12 @@
                                          },
                         "queso":  {
                                       "unit":  "oz",
-                                      "cheapest":  0.17,
-                                      "store":  "Aldi",
-                                      "type":  "everyday",
-                                      "url":  "https://www.aldi.us/store/aldi/products/21044060-casa-mamita-salsa-con-queso-15-oz",
-                                      "n":  5
+                                      "cheapest":  0.1662,
+                                      "store":  "Hy-Vee",
+                                      "type":  "sale",
+                                      "url":  "https://www.hy-vee.com/aisles-online/p/4005030/the-mad-butchers-queso-cheese-15-oz",
+                                      "n":  5,
+                                      "sale_end":  "2026-07-19"
                                   },
                         "radishes":  {
                                          "unit":  "oz",
@@ -1972,7 +1987,8 @@
                                              "store":  "Aldi",
                                              "type":  "sale",
                                              "url":  "https://www.aldi.us/store/aldi/products/17771075-black-augus-ribeye-steak-1-per-lb",
-                                             "n":  5
+                                             "n":  5,
+                                             "sale_end":  "2026-07-14"
                                          },
                         "rice-cakes":  {
                                            "unit":  "oz",
@@ -1988,7 +2004,8 @@
                                                    "store":  "Hy-Vee",
                                                    "type":  "sale",
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/74923/whole-savory-rotisserie-chicken-cold",
-                                                   "n":  5
+                                                   "n":  4,
+                                                   "sale_end":  "2026-07-19"
                                                },
                         "russet-potatoes":  {
                                                 "unit":  "lb",
@@ -2004,7 +2021,8 @@
                                        "store":  "Hy-Vee",
                                        "type":  "sale",
                                        "url":  "https://www.hy-vee.com/aisles-online/p/4056989/trident-seafoods-alaska-salmon-fillet",
-                                       "n":  7
+                                       "n":  7,
+                                       "sale_end":  "2026-07-19"
                                    },
                         "salsa":  {
                                       "unit":  "oz",
@@ -2025,9 +2043,9 @@
                         "sandwich-cookies":  {
                                                  "unit":  "oz",
                                                  "cheapest":  0.1112,
-                                                 "store":  "Fareway",
+                                                 "store":  "Walmart",
                                                  "type":  "everyday",
-                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22151779",
+                                                 "url":  "https://www.walmart.com/ip/Great-Value-Assorted-Flavor-Sandwich-Cookies-25-oz/536930984",
                                                  "n":  5
                                              },
                         "shampoo":  {
@@ -2061,7 +2079,8 @@
                                        "store":  "Family Fare",
                                        "type":  "sale",
                                        "url":  "",
-                                       "n":  7
+                                       "n":  7,
+                                       "sale_end":  "2026-07-18"
                                    },
                         "sirloin-steak":  {
                                               "unit":  "lb",
@@ -2069,7 +2088,8 @@
                                               "store":  "Hy-Vee",
                                               "type":  "sale",
                                               "url":  "https://www.hy-vee.com/aisles-online/p/31803/hy-vee-angus-reserve-beef-loin-boneless-sirloin-steak",
-                                              "n":  7
+                                              "n":  7,
+                                              "sale_end":  "2026-07-19"
                                           },
                         "sliced-cheese":  {
                                               "unit":  "oz",
@@ -2085,7 +2105,7 @@
                                      "store":  "Walmart",
                                      "type":  "everyday",
                                      "url":  "https://www.walmart.com/ip/Sam-s-Cola-Soda-Pop-12-fl-oz-12-Pack-Cans/10794693",
-                                     "n":  7
+                                     "n":  6
                                  },
                         "sour-cream":  {
                                            "unit":  "oz",
@@ -2101,7 +2121,7 @@
                                                 "store":  "Aldi",
                                                 "type":  "everyday",
                                                 "url":  "https://www.aldi.us/store/aldi/products/20537066-puraqua-orginal-belle-vie-sparkling-flavored-water-12-fl-oz",
-                                                "n":  6
+                                                "n":  5
                                             },
                         "spinach":  {
                                         "unit":  "oz",
@@ -2133,7 +2153,7 @@
                                               "store":  "Sam\u0027s Club",
                                               "type":  "everyday",
                                               "url":  "https://www.samsclub.com/ip/Frigo-Cheese-Heads-String-Cheese-1-oz-pkg-48-ct/13879914072",
-                                              "n":  4
+                                              "n":  5
                                           },
                         "stuffing-mix":  {
                                              "unit":  "oz",
@@ -2190,7 +2210,7 @@
                                      "store":  "Aldi",
                                      "type":  "everyday",
                                      "url":  "https://www.aldi.us/store/aldi/products/18647588-stonemill-iodized-salt-26-oz",
-                                     "n":  7
+                                     "n":  6
                                  },
                         "tampons":  {
                                         "unit":  "each",
@@ -2222,7 +2242,7 @@
                                         "store":  "Aldi",
                                         "type":  "everyday",
                                         "url":  "https://www.aldi.us/store/aldi/products/29709493-fremont-fish-market-tilapia-value-pack-32-oz",
-                                        "n":  5
+                                        "n":  6
                                     },
                         "toaster-pastries":  {
                                                  "unit":  "each",
@@ -2258,11 +2278,12 @@
                                         },
                         "tomatoes":  {
                                          "unit":  "lb",
-                                         "cheapest":  1.15,
-                                         "store":  "Aldi",
-                                         "type":  "everyday",
-                                         "url":  "https://www.aldi.us/store/aldi/products/17763870-tomatoes-roma-per-lb",
-                                         "n":  7
+                                         "cheapest":  1.0372,
+                                         "store":  "Hy-Vee",
+                                         "type":  "sale",
+                                         "url":  "https://www.hy-vee.com/aisles-online/p/8657/roma-tomatoes",
+                                         "n":  7,
+                                         "sale_end":  "2026-07-19"
                                      },
                         "toothbrushes":  {
                                              "unit":  "each",
@@ -2358,7 +2379,7 @@
                                               "store":  "Walmart",
                                               "type":  "everyday",
                                               "url":  "https://www.walmart.com/ip/Tyson-All-Natural-Fresh-Premium-Young-Whole-Chicken-5-0-6-5-lb/19400244",
-                                              "n":  6
+                                              "n":  5
                                           },
                         "watermelon":  {
                                            "unit":  "each",
@@ -2403,11 +2424,12 @@
                                     },
                         "yogurt":  {
                                        "unit":  "oz",
-                                       "cheapest":  0.0825,
-                                       "store":  "Walmart",
-                                       "type":  "everyday",
-                                       "url":  "https://www.walmart.com/ip/10450127",
-                                       "n":  7
+                                       "cheapest":  0.065,
+                                       "store":  "Hy-Vee",
+                                       "type":  "sale",
+                                       "url":  "https://www.hy-vee.com/aisles-online/p/27004/yoplait-original-strawberry-low-fat-yogurt",
+                                       "n":  7,
+                                       "sale_end":  "2026-07-19"
                                    },
                         "zucchini":  {
                                          "unit":  "lb",
@@ -2415,7 +2437,7 @@
                                          "store":  "Walmart",
                                          "type":  "everyday",
                                          "url":  "https://www.walmart.com/ip/Fresh-Zucchini-Squash-Each/44390947",
-                                         "n":  6
+                                         "n":  5
                                      },
                         "93-7-ground-turkey":  {
                                                    "unit":  "lb",
@@ -2811,10 +2833,10 @@
                                          },
                         "traditional-pasta-sauce":  {
                                                         "unit":  "oz",
-                                                        "cheapest":  0.07,
-                                                        "store":  "Hy-Vee",
-                                                        "type":  "sale",
-                                                        "url":  "https://www.hy-vee.com/aisles-online/p/6752/hunts-traditional-pasta-sauce-24-oz-can",
+                                                        "cheapest":  0.073,
+                                                        "store":  "Walmart",
+                                                        "type":  "everyday",
+                                                        "url":  "https://www.walmart.com/ip/19758051",
                                                         "n":  5
                                                     },
                         "white-mushrooms":  {
@@ -4058,11 +4080,11 @@
                     "slow-cooker-chicken-cacciatore-pasta":  {
                                                                  "name":  "Slow Cooker Chicken Cacciatore Pasta",
                                                                  "servings":  14,
-                                                                 "week_cost":  38.53,
-                                                                 "per_serving":  2.75,
+                                                                 "week_cost":  38.63,
+                                                                 "per_serving":  2.76,
                                                                  "calories":  570,
                                                                  "sale_items":  [
-                                                                                    "Traditional Pasta Sauce"
+
                                                                                 ]
                                                              },
                     "turkey-taco-rice-skillet":  {

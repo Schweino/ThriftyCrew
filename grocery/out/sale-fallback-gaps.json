@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-12 14:36",
-    "gap_count":  4,
+    "generated":  "2026-07-13 13:49",
+    "gap_count":  22,
     "gaps":  [
                  {
                      "commodity":  "apples",
@@ -8,9 +8,99 @@
                      "sale_per_unit":  2.99
                  },
                  {
+                     "commodity":  "bread",
+                     "store":  "Family Fare",
+                     "sale_per_unit":  3
+                 },
+                 {
+                     "commodity":  "broccoli",
+                     "store":  "Family Fare",
+                     "sale_per_unit":  2.49
+                 },
+                 {
+                     "commodity":  "clementines",
+                     "store":  "Aldi",
+                     "sale_per_unit":  0.9967
+                 },
+                 {
+                     "commodity":  "cookies",
+                     "store":  "Family Fare",
+                     "sale_per_unit":  0.3016
+                 },
+                 {
+                     "commodity":  "cucumbers",
+                     "store":  "Family Fare",
+                     "sale_per_unit":  2.5
+                 },
+                 {
+                     "commodity":  "dishwasher-detergent",
+                     "store":  "Hy-Vee",
+                     "sale_per_unit":  0.1665
+                 },
+                 {
+                     "commodity":  "frozen-fries",
+                     "store":  "Family Fare",
+                     "sale_per_unit":  0.1184
+                 },
+                 {
+                     "commodity":  "fruit-punch",
+                     "store":  "Family Fare",
+                     "sale_per_unit":  0.0446
+                 },
+                 {
                      "commodity":  "grapes",
                      "store":  "Family Fare",
                      "sale_per_unit":  2.99
+                 },
+                 {
+                     "commodity":  "hot-dogs",
+                     "store":  "Hy-Vee",
+                     "sale_per_unit":  0.1875
+                 },
+                 {
+                     "commodity":  "laundry-detergent",
+                     "store":  "Family Fare",
+                     "sale_per_unit":  0.0941
+                 },
+                 {
+                     "commodity":  "lemons",
+                     "store":  "Family Fare",
+                     "sale_per_unit":  1.25
+                 },
+                 {
+                     "commodity":  "mushrooms",
+                     "store":  "Family Fare",
+                     "sale_per_unit":  0.2488
+                 },
+                 {
+                     "commodity":  "pasta",
+                     "store":  "Family Fare",
+                     "sale_per_unit":  0.0781
+                 },
+                 {
+                     "commodity":  "potato-chips",
+                     "store":  "Family Fare",
+                     "sale_per_unit":  0.4306
+                 },
+                 {
+                     "commodity":  "salmon",
+                     "store":  "Family Fare",
+                     "sale_per_unit":  11.99
+                 },
+                 {
+                     "commodity":  "sandwich-cookies",
+                     "store":  "Family Fare",
+                     "sale_per_unit":  0.2745
+                 },
+                 {
+                     "commodity":  "shrimp",
+                     "store":  "Family Fare",
+                     "sale_per_unit":  5.99
+                 },
+                 {
+                     "commodity":  "sirloin-steak",
+                     "store":  "Family Fare",
+                     "sale_per_unit":  11.99
                  },
                  {
                      "commodity":  "sweet-corn",
