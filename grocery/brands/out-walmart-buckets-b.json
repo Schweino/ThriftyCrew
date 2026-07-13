@@ -1,0 +1,19 @@
+{
+  "store": "Walmart", "generated": "2026-07-13",
+  "items": {
+    "mustard":            [{"b":"Store brand","s":1,"per":0.05},{"b":"French's","s":0,"per":0.061},{"b":"Heinz","s":0,"per":0.112}],
+    "bbq-sauce":          [{"b":"Sweet Baby Ray's","s":0,"per":0.087},{"b":"Store brand","s":1,"per":0.087},{"b":"KC Masterpiece","s":0,"per":0.098},{"b":"Kraft","s":0,"per":0.11},{"b":"Bull's-Eye","s":0,"per":0.14},{"b":"Stubb's","s":0,"per":0.196}],
+    "pasta-sauce":        [{"b":"Store brand","s":1,"per":0.073},{"b":"Prego","s":0,"per":0.08},{"b":"Ragu","s":0,"per":0.103},{"b":"Bertolli","s":0,"per":0.12},{"b":"Classico","s":0,"per":0.12},{"b":"Rao's","s":0,"per":0.291}],
+    "salsa":              [{"b":"Store brand","s":1,"per":0.123},{"b":"Pace","s":0,"per":0.124},{"b":"Chi-Chi's","s":0,"per":0.143},{"b":"Tostitos","s":0,"per":0.198}],
+    "pickles":            [{"b":"Mt. Olive","s":0,"per":0.186},{"b":"Best Maid","s":0,"per":0.187}],
+    "canned-tuna":        [{"b":"Store brand","s":1,"per":0.163},{"b":"StarKist","s":0,"per":0.199},{"b":"Chicken of the Sea","s":0,"per":0.224},{"b":"Bumble Bee","s":0,"per":0.373},{"b":"Wild Planet","s":0,"per":0.694}],
+    "chicken-noodle-soup":[{"b":"Store brand","s":1,"per":0.07},{"b":"Campbell's","s":0,"per":0.116}],
+    "potato-chips":       [{"b":"Store brand","s":1,"per":0.185},{"b":"Lay's","s":0,"per":0.295},{"b":"Kettle","s":0,"per":0.356},{"b":"Pringles","s":0,"per":0.413},{"b":"Ruffles","s":0,"per":0.452}],
+    "tortilla-chips":     [{"b":"Store brand","s":1,"per":0.148},{"b":"On The Border","s":0,"per":0.241},{"b":"Santitas","s":0,"per":0.267},{"b":"Tostitos","s":0,"per":0.27},{"b":"Doritos","s":0,"per":0.345}],
+    "crackers":           [{"b":"Store brand","s":1,"per":0.118},{"b":"Premium","s":0,"per":0.23},{"b":"Club","s":0,"per":0.29},{"b":"Ritz","s":0,"per":0.29}],
+    "pasta":              [{"b":"Store brand","s":1,"per":0.061},{"b":"Mueller's","s":0,"per":0.093},{"b":"Ronzoni","s":0,"per":0.093},{"b":"Skinner","s":0,"per":0.097},{"b":"Barilla","s":0,"per":0.098},{"b":"De Cecco","s":0,"per":0.332}],
+    "yogurt":             [{"b":"Store brand","s":1,"per":0.103},{"b":"Chobani","s":0,"per":0.187},{"b":"Oikos","s":0,"per":0.196},{"b":"Fage","s":0,"per":0.218}],
+    "ice-cream":          [{"b":"Store brand","s":1,"per":0.052},{"b":"Blue Bunny","s":0,"per":0.081},{"b":"Breyers","s":0,"per":0.087}],
+    "olive-oil":          [{"b":"Pompeian","s":0,"per":0.278},{"b":"Store brand","s":1,"per":0.305},{"b":"Bertolli","s":0,"per":0.393},{"b":"Filippo Berio","s":0,"per":0.434},{"b":"Colavita","s":0,"per":0.754}]
+  }
+}

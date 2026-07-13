@@ -1,0 +1,253 @@
+﻿{
+    "_note":  "Batch-2 brand config (15 commodities). board id = key. include/exclude sourced from commodities.json + research-driven brand-pull extras. brands = curated top national brands to bucket (store brand handled per-store). All regex are JS+PS compatible. per-unit ($/oz,$/floz) normalizes size variation.",
+    "commodities":  {
+                        "mustard":  {
+                                        "label":  "Yellow Mustard",
+                                        "unit":  "oz",
+                                        "queries":  [
+                                                        "yellow mustard",
+                                                        "mustard"
+                                                    ],
+                                        "include":  "(?i)mustard",
+                                        "exclude":  "(?i)dijon|honey|spicy\\s+brown|deli\\s?brown|\\bbrown\\b|greens|potato\\s+salad|stone\\s+ground|horseradish|pretzel|ketchup|onion|packet|dipping|\\bmix\\b|seed",
+                                        "brands":  [
+                                                       "French\u0027s",
+                                                       "Heinz",
+                                                       "Gulden\u0027s",
+                                                       "Great Value"
+                                                   ]
+                                    },
+                        "bbq-sauce":  {
+                                          "label":  "BBQ Sauce",
+                                          "unit":  "oz",
+                                          "queries":  [
+                                                          "bbq sauce",
+                                                          "barbecue sauce"
+                                                      ],
+                                          "include":  "(?i)(bbq|barbecue|bar-b-q)\\s*sauce",
+                                          "exclude":  "(?i)wing\\s*sauce|chips|\\brub\\b|\\bjerky\\b|cocktail|marinade|seasoning|\\bmix\\b|packet",
+                                          "brands":  [
+                                                         "Sweet Baby Ray\u0027s",
+                                                         "Kraft",
+                                                         "KC Masterpiece",
+                                                         "Bull\u0027s-Eye",
+                                                         "Stubb\u0027s",
+                                                         "Heinz"
+                                                     ]
+                                      },
+                        "pasta-sauce":  {
+                                            "label":  "Pasta Sauce",
+                                            "unit":  "oz",
+                                            "queries":  [
+                                                            "pasta sauce",
+                                                            "marinara",
+                                                            "spaghetti sauce"
+                                                        ],
+                                            "include":  "(?i)pasta\\s+sauce|marinara|spaghetti\\s+sauce|traditional\\s+sauce|tomato\\s?\u0026?\\s?basil",
+                                            "exclude":  "(?i)alfredo|pesto|pizza|\\bmix\\b|vodka|cheese\\s+sauce|dried|paste|\\bcan\\b|ragu\\s+cheese",
+                                            "brands":  [
+                                                           "Rao\u0027s",
+                                                           "Prego",
+                                                           "Ragu",
+                                                           "Classico",
+                                                           "Bertolli",
+                                                           "Newman\u0027s Own"
+                                                       ]
+                                        },
+                        "salsa":  {
+                                      "label":  "Salsa",
+                                      "unit":  "oz",
+                                      "queries":  [
+                                                      "salsa"
+                                                  ],
+                                      "include":  "(?i)\\bsalsa\\b|picante",
+                                      "exclude":  "(?i)con\\s+queso|\\bqueso\\b|cheese\\s+dip|chips|tortilla|kit|seasoning|\\bmix\\b|ranchera\\s+cooking",
+                                      "brands":  [
+                                                     "Pace",
+                                                     "Tostitos",
+                                                     "Herdez",
+                                                     "Old El Paso",
+                                                     "Chi-Chi\u0027s",
+                                                     "Frontera"
+                                                 ]
+                                  },
+                        "pickles":  {
+                                        "label":  "Dill Pickles",
+                                        "unit":  "oz",
+                                        "queries":  [
+                                                        "dill pickles",
+                                                        "pickles"
+                                                    ],
+                                        "include":  "(?i)\\bpickles?\\b|dill\\s+spears|pickle\\s+chips|pickle\\s+spears",
+                                        "exclude":  "(?i)relish|pickled\\s+(?:beets|eggs|jalape|okra|garlic)|\\bjuice\\b|seasoning|\\bmix\\b|sweet\\s+(?:gherk|midget)|bread\\s*(?:\u0026|and)\\s*butter|\\bchips\\b.{0,15}potato",
+                                        "brands":  [
+                                                       "Vlasic",
+                                                       "Claussen",
+                                                       "Mt. Olive",
+                                                       "Del Monte",
+                                                       "Best Maid",
+                                                       "Great Value"
+                                                   ]
+                                    },
+                        "canned-tuna":  {
+                                            "label":  "Canned Tuna",
+                                            "unit":  "oz",
+                                            "queries":  [
+                                                            "canned tuna",
+                                                            "chunk light tuna",
+                                                            "tuna in water"
+                                                        ],
+                                            "include":  "(?i)\\btuna\\b",
+                                            "exclude":  "(?i)\\bsteak\\b|fresh|\\bahi\\b|sushi|\\bcat\\b|creations|salad|\\bpouch|helper|in\\s+oil|olive\\s+oil|seasoned|ready|\\bcup\\b|snack\\s+kit|albacore\\s+in\\s+oil",
+                                            "brands":  [
+                                                           "StarKist",
+                                                           "Bumble Bee",
+                                                           "Chicken of the Sea",
+                                                           "Wild Planet",
+                                                           "Great Value"
+                                                       ]
+                                        },
+                        "chicken-noodle-soup":  {
+                                                    "label":  "Chicken Noodle Soup",
+                                                    "unit":  "oz",
+                                                    "queries":  [
+                                                                    "condensed chicken noodle soup",
+                                                                    "chicken noodle soup"
+                                                                ],
+                                                    "include":  "(?i)chicken\\s+noodle",
+                                                    "exclude":  "(?i)ramen|\\bcup\\b|\\bmix\\b|\\bdry\\b|progresso|chunky|homestyle|well\\s+yes|ready\\s+to|healthy\\s+request\\s+ready|microwav|bowl",
+                                                    "brands":  [
+                                                                   "Campbell\u0027s",
+                                                                   "Great Value"
+                                                               ]
+                                                },
+                        "potato-chips":  {
+                                             "label":  "Potato Chips",
+                                             "unit":  "oz",
+                                             "queries":  [
+                                                             "potato chips"
+                                                         ],
+                                             "include":  "(?i)potato\\s+chips?|\\bcrisps?\\b",
+                                             "exclude":  "(?i)\\bdip\\b|sweet\\s+potato|tortilla|veggie|\\bstix\\b|pork\\s+rind|popped",
+                                             "brands":  [
+                                                            "Lay\u0027s",
+                                                            "Ruffles",
+                                                            "Pringles",
+                                                            "Kettle",
+                                                            "Cape Cod",
+                                                            "Utz"
+                                                        ]
+                                         },
+                        "tortilla-chips":  {
+                                               "label":  "Tortilla Chips",
+                                               "unit":  "oz",
+                                               "queries":  [
+                                                               "tortilla chips"
+                                                           ],
+                                               "include":  "(?i)tortilla\\s+chips?",
+                                               "exclude":  "(?i)\\bdip\\b|salsa|\\bkit\\b|taco\\s+shell|tostada|strips\\s+for\\s+soup",
+                                               "brands":  [
+                                                              "Tostitos",
+                                                              "Santitas",
+                                                              "Mission",
+                                                              "Doritos",
+                                                              "On The Border",
+                                                              "Great Value"
+                                                          ]
+                                           },
+                        "crackers":  {
+                                         "label":  "Crackers",
+                                         "unit":  "oz",
+                                         "queries":  [
+                                                         "crackers",
+                                                         "saltine crackers",
+                                                         "round crackers"
+                                                     ],
+                                         "include":  "(?i)saltines?|\\bcrackers?\\b|soda\\s+cracker",
+                                         "exclude":  "(?i)graham|cheese|cheez|goldfish|peanut\\s+butter|\\bfilled\\b|oyster|animal|\\bmeal\\b|wheat\\s+thin|triscuit|\\bbits\\b|toppers|entertain|thin\\s?crisp|\\bmelts\\b|snack\\s+mix|flavor",
+                                         "brands":  [
+                                                        "Ritz",
+                                                        "Premium",
+                                                        "Club",
+                                                        "Zesta",
+                                                        "Krispy",
+                                                        "Great Value"
+                                                    ]
+                                     },
+                        "pasta":  {
+                                      "label":  "Pasta (dry)",
+                                      "unit":  "oz",
+                                      "queries":  [
+                                                      "spaghetti",
+                                                      "penne pasta",
+                                                      "pasta"
+                                                  ],
+                                      "include":  "(?i)spaghetti|\\bpenne\\b|\\brotini\\b|elbow\\s+macaroni|\\bfettuccine\\b|\\brigatoni\\b|\\bpasta\\b|\\bmacaroni\\b|\\bziti\\b|\\blinguine\\b|angel\\s+hair",
+                                      "exclude":  "(?i)\\bsauce\\b|cheese|\\bcanned\\b|ravioli|tortellini|salad|\\bfrozen\\b|\\bcup\\b|sides?\\b|\\bo\u0027s\\b|\\brice\\b|lasagna|egg\\s+noodle|ready\\s+pasta|gluten\\s?free|chickpea|banza|protein\\s?plus|whole\\s?wheat|helper|skillet",
+                                      "brands":  [
+                                                     "Barilla",
+                                                     "Mueller\u0027s",
+                                                     "Ronzoni",
+                                                     "De Cecco",
+                                                     "Creamette",
+                                                     "Skinner"
+                                                 ]
+                                  },
+                        "yogurt":  {
+                                       "label":  "Yogurt",
+                                       "unit":  "oz",
+                                       "queries":  [
+                                                       "greek yogurt",
+                                                       "yogurt"
+                                                   ],
+                                       "include":  "(?i)yog(?:h)?urt",
+                                       "exclude":  "(?i)covered|\\bbar\\b|pretzel|raisin|cheese|shred|\\bdrink|smoothie|\\btube|go-?gurt|danimals|kefir|non-?dairy|oat\\s?milk|almond\\s?milk|coconut\\s?milk|dip|granola",
+                                       "brands":  [
+                                                      "Chobani",
+                                                      "Yoplait",
+                                                      "Dannon",
+                                                      "Oikos",
+                                                      "Fage",
+                                                      "Stonyfield",
+                                                      "Activia"
+                                                  ]
+                                   },
+                        "ice-cream":  {
+                                          "label":  "Ice Cream",
+                                          "unit":  "floz",
+                                          "queries":  [
+                                                          "ice cream"
+                                                      ],
+                                          "include":  "(?i)ice\\s*cream",
+                                          "exclude":  "(?i)sandwich|\\bbars?\\b|\\bcones?\\b|\\bcake\\b|sundae(?!\\s+shoppe)|\\bmaker\\b|salt|gelato|sorbet|sherbet|frozen\\s+yog|drumstick|novelty|\\bpint\\b\\s+jar|cake\\s+cone|float|topping|non-?dairy|dairy\\s?free",
+                                          "brands":  [
+                                                         "Breyers",
+                                                         "Blue Bunny",
+                                                         "Blue Bell",
+                                                         "Edy\u0027s",
+                                                         "Dreyer\u0027s",
+                                                         "Ben \u0026 Jerry\u0027s",
+                                                         "Halo Top",
+                                                         "Turkey Hill"
+                                                     ]
+                                      },
+                        "olive-oil":  {
+                                          "label":  "Olive Oil",
+                                          "unit":  "floz",
+                                          "queries":  [
+                                                          "olive oil",
+                                                          "extra virgin olive oil"
+                                                      ],
+                                          "include":  "(?i)olive\\s+oil",
+                                          "exclude":  "(?i)\\bmayo\\b|mayonnaise|\\bspray\\b|dressing|\\bsoap\\b|butter|pomace|infused|garlic|basil|blend|canola|vegetable|\\bmist\\b|lotion|hair|skin",
+                                          "brands":  [
+                                                         "Pompeian",
+                                                         "Bertolli",
+                                                         "Filippo Berio",
+                                                         "California Olive Ranch",
+                                                         "Colavita",
+                                                         "Great Value"
+                                                     ]
+                                      }
+                    }
+}

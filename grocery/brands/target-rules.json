@@ -1,0 +1,243 @@
+﻿{
+    "olive-oil":  {
+                      "label":  "Olive Oil",
+                      "unit":  "floz",
+                      "include":  [
+                                      "olive\\s+oil"
+                                  ],
+                      "exclude":  [
+                                      "\\bmayo\\b",
+                                      "mayonnaise",
+                                      "\\bspray\\b",
+                                      "dressing",
+                                      "\\bsoap\\b",
+                                      "butter"
+                                  ]
+                  },
+    "chicken-noodle-soup":  {
+                                "label":  "Chicken Noodle Soup (canned)",
+                                "unit":  "oz",
+                                "include":  [
+                                                "chicken\\s+noodle\\s+soup"
+                                            ],
+                                "exclude":  [
+                                                "ramen",
+                                                "\\bcup\\b.{0,10}\\bmix\\b",
+                                                "\\bdry\\b"
+                                            ]
+                            },
+    "sliced-cheese":  {
+                          "label":  "Sliced Cheese",
+                          "unit":  "oz",
+                          "include":  [
+                                          "cheese\\s+slices?",
+                                          "sliced\\b.{0,25}cheese",
+                                          "\\bsingles\\b.{0,20}cheese",
+                                          "cheese\\b.{0,15}\\bsingles\\b",
+                                          "american\\s+slices?",
+                                          "american\\s+cheese\\b.{0,15}slices?"
+                                      ],
+                          "exclude":  [
+                                          "shredded",
+                                          "cream\\s*cheese",
+                                          "string",
+                                          "\\bblock\\b",
+                                          "cracker\\s+cuts?"
+                                      ]
+                      },
+    "mustard":  {
+                    "label":  "Yellow Mustard",
+                    "unit":  "oz",
+                    "include":  [
+                                    "yellow\\s+mustard",
+                                    "\\bmustard\\b"
+                                ],
+                    "exclude":  [
+                                    "dijon",
+                                    "honey",
+                                    "spicy\\s+brown",
+                                    "greens",
+                                    "potato\\s+salad",
+                                    "stone\\s+ground",
+                                    "horseradish",
+                                    "pretzel"
+                                ]
+                },
+    "potato-chips":  {
+                         "label":  "Potato Chips",
+                         "unit":  "oz",
+                         "include":  [
+                                         "potato\\s+chips?"
+                                     ],
+                         "exclude":  [
+                                         "\\bdip\\b",
+                                         "sweet\\s+potato"
+                                     ]
+                     },
+    "bbq-sauce":  {
+                      "label":  "BBQ Sauce",
+                      "unit":  "oz",
+                      "include":  [
+                                      "(?:bbq|barbecue)\\s+sauce"
+                                  ],
+                      "exclude":  [
+                                      "wing\\s*sauce",
+                                      "chips",
+                                      "\\brub\\b",
+                                      "\\bjerky\\b",
+                                      "cocktail"
+                                  ]
+                  },
+    "ice-cream":  {
+                      "label":  "Ice Cream",
+                      "unit":  "floz",
+                      "include":  [
+                                      "ice\\s*cream"
+                                  ],
+                      "exclude":  [
+                                      "sandwich",
+                                      "\\bbars?\\b",
+                                      "\\bcones?\\b",
+                                      "\\bcake\\b",
+                                      "sundae(?!\\s+shoppe)",
+                                      "\\bmaker\\b",
+                                      "salt"
+                                  ]
+                  },
+    "salsa":  {
+                  "label":  "Salsa",
+                  "unit":  "oz",
+                  "include":  [
+                                  "\\bsalsa\\b"
+                              ],
+                  "exclude":  [
+                                  "con\\s+queso",
+                                  "chips",
+                                  "verde\\s+doritos"
+                              ]
+              },
+    "crackers":  {
+                     "label":  "Crackers (saltine/buttery)",
+                     "unit":  "oz",
+                     "include":  [
+                                     "saltines?",
+                                     "\\bcrackers?\\b"
+                                 ],
+                     "exclude":  [
+                                     "graham",
+                                     "cheese\\s+cracker",
+                                     "cheez",
+                                     "goldfish",
+                                     "peanut\\s+butter",
+                                     "\\bfilled\\b",
+                                     "oyster",
+                                     "animal",
+                                     "\\bmeal\\b"
+                                 ]
+                 },
+    "tortilla-chips":  {
+                           "label":  "Tortilla Chips",
+                           "unit":  "oz",
+                           "include":  [
+                                           "tortilla\\s+chips?"
+                                       ],
+                           "exclude":  [
+                                           "\\bdip\\b",
+                                           "salsa\\s+combo"
+                                       ]
+                       },
+    "yogurt":  {
+                   "label":  "Yogurt",
+                   "unit":  "oz",
+                   "include":  [
+                                   "yog(?:h)?urt"
+                               ],
+                   "exclude":  [
+                                   "covered",
+                                   "bar",
+                                   "pretzel",
+                                   "raisin",
+                                   "cheese",
+                                   "shred"
+                               ]
+               },
+    "pickles":  {
+                    "label":  "Pickles (dill)",
+                    "unit":  "oz",
+                    "include":  [
+                                    "pickles?\\b",
+                                    "dill\\s+spears",
+                                    "pickle\\s+chips"
+                                ],
+                    "exclude":  [
+                                    "relish",
+                                    "\\bchips\\b.{0,15}potato",
+                                    "pickled\\s+(?:beets|eggs|jalape)",
+                                    "\\bjuice\\b",
+                                    "seasoning",
+                                    "bread\\s*(?:\u0026|and)\\s*butter\\s+pickle\\s+chips"
+                                ]
+                },
+    "pasta":  {
+                  "label":  "Pasta (dry)",
+                  "unit":  "oz",
+                  "include":  [
+                                  "spaghetti",
+                                  "\\bpenne\\b",
+                                  "\\brotini\\b",
+                                  "elbow\\s+macaroni",
+                                  "\\bfettuccine\\b",
+                                  "\\bpasta\\b"
+                              ],
+                  "exclude":  [
+                                  "\\bsauce\\b",
+                                  "cheese",
+                                  "\\bcanned\\b",
+                                  "ravioli",
+                                  "tortellini",
+                                  "salad",
+                                  "\\bfrozen\\b",
+                                  "\\bcup\\b",
+                                  "sides?\\b",
+                                  "\\bo\u0027s\\b",
+                                  "rice",
+                                  "lasagna",
+                                  "egg\\s+noodle",
+                                  "egg\\s+pasta"
+                              ]
+              },
+    "pasta-sauce":  {
+                        "label":  "Pasta Sauce (marinara)",
+                        "unit":  "oz",
+                        "include":  [
+                                        "pasta\\s+sauce",
+                                        "marinara",
+                                        "spaghetti\\s+sauce",
+                                        "traditional\\s+sauce"
+                                    ],
+                        "exclude":  [
+                                        "alfredo",
+                                        "pesto",
+                                        "pizza",
+                                        "\\bmix\\b"
+                                    ]
+                    },
+    "canned-tuna":  {
+                        "label":  "Canned Tuna",
+                        "unit":  "oz",
+                        "include":  [
+                                        "\\btuna\\b"
+                                    ],
+                        "exclude":  [
+                                        "\\bsteak\\b",
+                                        "fresh",
+                                        "\\bahi\\b",
+                                        "sushi",
+                                        "\\bcat\\b",
+                                        "creations",
+                                        "salad",
+                                        "pouch",
+                                        "helper"
+                                    ]
+                    }
+}

@@ -1,0 +1,339 @@
+﻿{
+    "store":  "Family Fare",
+    "generated":  "2026-07-13",
+    "items":  {
+                  "mustard":  [
+                                  {
+                                      "b":  "Heinz",
+                                      "s":  0,
+                                      "per":  0.1745
+                                  },
+                                  {
+                                      "b":  "Store brand",
+                                      "s":  1,
+                                      "per":  0.0995
+                                  },
+                                  {
+                                      "b":  "French\u0027s",
+                                      "s":  0,
+                                      "per":  0.1995
+                                  }
+                              ],
+                  "bbq-sauce":  [
+                                    {
+                                        "b":  "Store brand",
+                                        "s":  1,
+                                        "per":  0.1106
+                                    },
+                                    {
+                                        "b":  "KC Masterpiece",
+                                        "s":  0,
+                                        "per":  0.1439
+                                    },
+                                    {
+                                        "b":  "Stubb\u0027s",
+                                        "s":  0,
+                                        "per":  0.3328
+                                    },
+                                    {
+                                        "b":  "Kraft",
+                                        "s":  0,
+                                        "per":  0.1439
+                                    },
+                                    {
+                                        "b":  "Sweet Baby Ray\u0027s",
+                                        "s":  0,
+                                        "per":  0.1249
+                                    }
+                                ],
+                  "pasta-sauce":  [
+                                      {
+                                          "b":  "Prego",
+                                          "s":  0,
+                                          "per":  0.1204
+                                      },
+                                      {
+                                          "b":  "Store brand",
+                                          "s":  1,
+                                          "per":  0.082
+                                      },
+                                      {
+                                          "b":  "Bertolli",
+                                          "s":  0,
+                                          "per":  0.1871
+                                      },
+                                      {
+                                          "b":  "Classico",
+                                          "s":  0,
+                                          "per":  0.1662
+                                      },
+                                      {
+                                          "b":  "Ragu",
+                                          "s":  0,
+                                          "per":  0.1871
+                                      },
+                                      {
+                                          "b":  "Rao\u0027s",
+                                          "s":  0,
+                                          "per":  0.3746
+                                      }
+                                  ],
+                  "salsa":  [
+                                {
+                                    "b":  "Store brand",
+                                    "s":  1,
+                                    "per":  0.1166
+                                },
+                                {
+                                    "b":  "Pace",
+                                    "s":  0,
+                                    "per":  0.2244
+                                },
+                                {
+                                    "b":  "Herdez",
+                                    "s":  0,
+                                    "per":  0.2244
+                                },
+                                {
+                                    "b":  "Chi-Chi\u0027s",
+                                    "s":  0,
+                                    "per":  0.2181
+                                },
+                                {
+                                    "b":  "Tostitos",
+                                    "s":  0,
+                                    "per":  0.2912
+                                }
+                            ],
+                  "pickles":  [
+                                  {
+                                      "b":  "Store brand",
+                                      "s":  1,
+                                      "per":  0.1403
+                                  },
+                                  {
+                                      "b":  "Claussen",
+                                      "s":  0,
+                                      "per":  0.2704
+                                  },
+                                  {
+                                      "b":  "Vlasic",
+                                      "s":  0,
+                                      "per":  0.1746
+                                  }
+                              ],
+                  "canned-tuna":  [
+                                      {
+                                          "b":  "Store brand",
+                                          "s":  1,
+                                          "per":  0.198
+                                      },
+                                      {
+                                          "b":  "Chicken of the Sea",
+                                          "s":  0,
+                                          "per":  0.318
+                                      },
+                                      {
+                                          "b":  "Bumble Bee",
+                                          "s":  0,
+                                          "per":  0.298
+                                      },
+                                      {
+                                          "b":  "StarKist",
+                                          "s":  0,
+                                          "per":  0.258
+                                      }
+                                  ],
+                  "chicken-noodle-soup":  [
+                                              {
+                                                  "b":  "Store brand",
+                                                  "s":  1,
+                                                  "per":  0.0842
+                                              },
+                                              {
+                                                  "b":  "Campbell\u0027s",
+                                                  "s":  0,
+                                                  "per":  0.1393
+                                              }
+                                          ],
+                  "potato-chips":  [
+                                       {
+                                           "b":  "Store brand",
+                                           "s":  1,
+                                           "per":  0.2488
+                                       },
+                                       {
+                                           "b":  "Kettle",
+                                           "s":  0,
+                                           "per":  0.6653
+                                       },
+                                       {
+                                           "b":  "Ruffles",
+                                           "s":  0,
+                                           "per":  0.5608
+                                       },
+                                       {
+                                           "b":  "Utz",
+                                           "s":  0,
+                                           "per":  0.6181
+                                       },
+                                       {
+                                           "b":  "Lay\u0027s",
+                                           "s":  0,
+                                           "per":  0.4608
+                                       }
+                                   ],
+                  "tortilla-chips":  [
+                                         {
+                                             "b":  "Santitas",
+                                             "s":  0,
+                                             "per":  0.2718
+                                         },
+                                         {
+                                             "b":  "On The Border",
+                                             "s":  0,
+                                             "per":  0.4355
+                                         },
+                                         {
+                                             "b":  "Store brand",
+                                             "s":  1,
+                                             "per":  0.1915
+                                         },
+                                         {
+                                             "b":  "Tostitos",
+                                             "s":  0,
+                                             "per":  0.39
+                                         },
+                                         {
+                                             "b":  "Doritos",
+                                             "s":  0,
+                                             "per":  0.5028
+                                         }
+                                     ],
+                  "crackers":  [
+                                   {
+                                       "b":  "Club",
+                                       "s":  0,
+                                       "per":  0.3642
+                                   },
+                                   {
+                                       "b":  "Zesta",
+                                       "s":  0,
+                                       "per":  0.2681
+                                   },
+                                   {
+                                       "b":  "Store brand",
+                                       "s":  1,
+                                       "per":  0.1556
+                                   },
+                                   {
+                                       "b":  "Ritz",
+                                       "s":  0,
+                                       "per":  0.3361
+                                   },
+                                   {
+                                       "b":  "Premium",
+                                       "s":  0,
+                                       "per":  0.2942
+                                   }
+                               ],
+                  "pasta":  [
+                                {
+                                    "b":  "Skinner",
+                                    "s":  0,
+                                    "per":  0.1079
+                                },
+                                {
+                                    "b":  "Store brand",
+                                    "s":  1,
+                                    "per":  0.0778
+                                },
+                                {
+                                    "b":  "Creamette",
+                                    "s":  0,
+                                    "per":  0.1181
+                                },
+                                {
+                                    "b":  "Barilla",
+                                    "s":  0,
+                                    "per":  0.1244
+                                }
+                            ],
+                  "yogurt":  [
+                                 {
+                                     "b":  "Dannon",
+                                     "s":  0,
+                                     "per":  0.2354
+                                 },
+                                 {
+                                     "b":  "Yoplait",
+                                     "s":  0,
+                                     "per":  0.1341
+                                 },
+                                 {
+                                     "b":  "Store brand",
+                                     "s":  1,
+                                     "per":  0.1559
+                                 },
+                                 {
+                                     "b":  "Chobani",
+                                     "s":  0,
+                                     "per":  0.2341
+                                 },
+                                 {
+                                     "b":  "Oikos",
+                                     "s":  0,
+                                     "per":  0.2747
+                                 }
+                             ],
+                  "ice-cream":  [
+                                    {
+                                        "b":  "Breyers",
+                                        "s":  0,
+                                        "per":  0.1352
+                                    },
+                                    {
+                                        "b":  "Store brand",
+                                        "s":  1,
+                                        "per":  0.0665
+                                    },
+                                    {
+                                        "b":  "Dreyer\u0027s",
+                                        "s":  0,
+                                        "per":  0.1435
+                                    },
+                                    {
+                                        "b":  "Edy\u0027s",
+                                        "s":  0,
+                                        "per":  0.1435
+                                    }
+                                ],
+                  "olive-oil":  [
+                                    {
+                                        "b":  "Bertolli",
+                                        "s":  0,
+                                        "per":  0.67
+                                    },
+                                    {
+                                        "b":  "Colavita",
+                                        "s":  0,
+                                        "per":  0.7438
+                                    },
+                                    {
+                                        "b":  "Store brand",
+                                        "s":  1,
+                                        "per":  0.3991
+                                    },
+                                    {
+                                        "b":  "Pompeian",
+                                        "s":  0,
+                                        "per":  0.6244
+                                    },
+                                    {
+                                        "b":  "Filippo Berio",
+                                        "s":  0,
+                                        "per":  0.6503
+                                    }
+                                ]
+              }
+}
