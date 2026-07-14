@@ -1,0 +1,14 @@
+{
+  "flour":             {"label":"All-Purpose Flour","queries":["all purpose flour"],"brands":["Gold Medal","King Arthur","Pillsbury"]},
+  "rice":              {"label":"White Rice","queries":["white rice","long grain rice"],"brands":["Mahatma","Success","Riceland","Ben's Original"],"excludeAdd":"ready\\s+rice|\\bpouch|microwav|instant|\\bcups?\\b|risotto|arborio"},
+  "sugar":             {"label":"Granulated Sugar","queries":["granulated sugar"],"brands":["C&H","Domino"]},
+  "brown-sugar":       {"label":"Brown Sugar","queries":["brown sugar"],"brands":["C&H","Domino"]},
+  "bacon":             {"label":"Bacon","queries":["bacon"],"brands":["Oscar Mayer","Wright","Hormel","Farmland"]},
+  "butter":            {"label":"Butter","queries":["butter"],"brands":["Land O Lakes","Kerrygold","Challenge"]},
+  "breakfast-sausage": {"label":"Breakfast Sausage (pork)","queries":["breakfast sausage","pork sausage"],"brands":["Jimmy Dean","Johnsonville","Bob Evans"]},
+  "italian-sausage":   {"label":"Italian Sausage","queries":["italian sausage"],"brands":["Johnsonville","Premio"]},
+  "bratwurst":         {"label":"Bratwurst","queries":["bratwurst"],"brands":["Johnsonville","Klement's"]},
+  "kielbasa":          {"label":"Kielbasa / Smoked Sausage","queries":["kielbasa","smoked sausage"],"brands":["Hillshire Farm","Eckrich","Johnsonville"]},
+  "chicken-breast":    {"label":"Boneless Skinless Chicken Breast","queries":["boneless skinless chicken breast"],"brands":["Tyson","Perdue"]},
+  "ground-turkey":     {"label":"Ground Turkey","queries":["ground turkey"],"brands":["Jennie-O","Butterball"]}
+}

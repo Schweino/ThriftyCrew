@@ -1,0 +1,171 @@
+﻿{
+    "commodities":  {
+                        "flour":  {
+                                      "label":  "All-Purpose Flour",
+                                      "unit":  "lb",
+                                      "queries":  [
+                                                      "all purpose flour"
+                                                  ],
+                                      "include":  "all[\\s-]*purpose\\s+flour|\\bflour\\b",
+                                      "exclude":  "tortilla|almond|coconut|bread\\s+flour|self[\\s-]*rising|gluten|\\bcake\\b|whole\\s+wheat|\\bmix\\b",
+                                      "brands":  [
+                                                     "Gold Medal",
+                                                     "King Arthur",
+                                                     "Pillsbury"
+                                                 ]
+                                  },
+                        "rice":  {
+                                     "label":  "White Rice",
+                                     "unit":  "lb",
+                                     "queries":  [
+                                                     "white rice",
+                                                     "long grain rice"
+                                                 ],
+                                     "include":  "long\\s+grain\\s+(?:white\\s+)?rice|white\\s+rice|jasmine\\s+rice|\\brice\\b",
+                                     "exclude":  "krisp|\\bcake\\b|cereal|pudding|fried|seasoned|pilaf|vinegar|noodle|\\bmilk\\b|brown\\s+rice|\\bbowl\\b|\\ba\\s*roni\\b|wild|rice\\s+cakes?|\\bdog\\b|\\bcat\\b|chicken\\s+and\\s+rice|\\bbrown\\b[\\w\\s]{0,15}rice|ready\\s+rice|\\bpouch|microwav|instant|\\bcups?\\b|risotto|arborio",
+                                     "brands":  [
+                                                    "Mahatma",
+                                                    "Success",
+                                                    "Riceland",
+                                                    "Ben\u0027s Original"
+                                                ]
+                                 },
+                        "sugar":  {
+                                      "label":  "Granulated Sugar",
+                                      "unit":  "lb",
+                                      "queries":  [
+                                                      "granulated sugar"
+                                                  ],
+                                      "include":  "granulated\\s+sugar|pure\\s+cane\\s+sugar|\\bsugar\\b",
+                                      "exclude":  "brown|powdered|confectioner|\\bfree\\b|substitute|\\braw\\b|cookie|turbinado|\\bcones?\\b|wafer|apple\\s*sauce|no\\s+sugar|zero\\s+sugar|sugar\\s+added|n\\s+spice|\\bcola\\b",
+                                      "brands":  [
+                                                     "C\u0026H",
+                                                     "Domino"
+                                                 ]
+                                  },
+                        "brown-sugar":  {
+                                            "label":  "Brown Sugar",
+                                            "unit":  "lb",
+                                            "queries":  [
+                                                            "brown sugar"
+                                                        ],
+                                            "include":  "brown\\s+sugar|sugar,\\s*brown",
+                                            "exclude":  "oatmeal|\\btart\\b|syrup|cereal|\\bham\\b|cinnamon\\s+roll",
+                                            "brands":  [
+                                                           "C\u0026H",
+                                                           "Domino"
+                                                       ]
+                                        },
+                        "bacon":  {
+                                      "label":  "Bacon",
+                                      "unit":  "lb",
+                                      "queries":  [
+                                                      "bacon"
+                                                  ],
+                                      "include":  "\\bbacon\\b",
+                                      "exclude":  "bits|ranch|bacon\\s+cheese|canadian|turkey bacon|burrito",
+                                      "brands":  [
+                                                     "Oscar Mayer",
+                                                     "Wright",
+                                                     "Hormel",
+                                                     "Farmland"
+                                                 ]
+                                  },
+                        "butter":  {
+                                       "label":  "Butter",
+                                       "unit":  "lb",
+                                       "queries":  [
+                                                       "butter"
+                                                   ],
+                                       "include":  "\\bbutter\\b",
+                                       "exclude":  "peanut|almond\\s+butter|cashew|body|cookie|buttermilk|butterscotch|apple\\s+butter|bread|pickle|plant|crock|brummel|imperial|\\bballs?\\b|not\\s+butter|spread|canola|\\boil\\b|popcorn|croissant|mashed|\\bboil\\b|\\bshrimp\\b|\\bcrab\\b",
+                                       "brands":  [
+                                                      "Land O Lakes",
+                                                      "Kerrygold",
+                                                      "Challenge"
+                                                  ]
+                                   },
+                        "breakfast-sausage":  {
+                                                  "label":  "Breakfast Sausage (pork)",
+                                                  "unit":  "lb",
+                                                  "queries":  [
+                                                                  "breakfast sausage",
+                                                                  "pork sausage"
+                                                              ],
+                                                  "include":  "breakfast\\s+sausage|pork\\s+sausage\\s+(?:roll|links?|patties)|\\bpork\\s+sausage\\b",
+                                                  "exclude":  "italian|smoked|polish|kielbasa|bratwurst|chicken\\s+sausage|turkey\\s+sausage|corn\\s*dog|biscuit|sandwich|pizza",
+                                                  "brands":  [
+                                                                 "Jimmy Dean",
+                                                                 "Johnsonville",
+                                                                 "Bob Evans"
+                                                             ]
+                                              },
+                        "italian-sausage":  {
+                                                "label":  "Italian Sausage",
+                                                "unit":  "lb",
+                                                "queries":  [
+                                                                "italian sausage"
+                                                            ],
+                                                "include":  "italian\\s+sausage|italian.{0,10}sausage|sausage,\\s*italian",
+                                                "exclude":  "pizza|pasta|\\bsoup\\b|chicken\\s+italian|crumbles",
+                                                "brands":  [
+                                                               "Johnsonville",
+                                                               "Premio"
+                                                           ]
+                                            },
+                        "bratwurst":  {
+                                          "label":  "Bratwurst",
+                                          "unit":  "lb",
+                                          "queries":  [
+                                                          "bratwurst"
+                                                      ],
+                                          "include":  "bratwursts?|\\bbrats\\b",
+                                          "exclude":  "\\bbuns?\\b|chicken|cheddar\\s+cheese\\s+brat",
+                                          "brands":  [
+                                                         "Johnsonville",
+                                                         "Klement\u0027s"
+                                                     ]
+                                      },
+                        "kielbasa":  {
+                                         "label":  "Kielbasa / Smoked Sausage",
+                                         "unit":  "lb",
+                                         "queries":  [
+                                                         "kielbasa",
+                                                         "smoked sausage"
+                                                     ],
+                                         "include":  "kielbasa|polska|smoked\\s+sausage",
+                                         "exclude":  "chicken|turkey|cocktail|\\bbites\\b|breakfast",
+                                         "brands":  [
+                                                        "Hillshire Farm",
+                                                        "Eckrich",
+                                                        "Johnsonville"
+                                                    ]
+                                     },
+                        "chicken-breast":  {
+                                               "label":  "Boneless Skinless Chicken Breast",
+                                               "unit":  "lb",
+                                               "queries":  [
+                                                               "boneless skinless chicken breast"
+                                                           ],
+                                               "include":  "boneless,?\\s*skinless\\s+chicken\\s+breast|chicken\\s+breast[^,]*boneless|b\\.?s\\.?b\\.?\\s+chicken|boneless,?\\s*skinless\\b.{0,25}chicken\\s+breast|chicken\\s+breasts?,\\s*(?:boneless|skinless)|(?:boneless|skinless)\\s*[,\u0026/ ]+\\s*(?:boneless|skinless)[^,]*chicken\\s+breast",
+                                               "exclude":  "thigh|tender|strip|nugget|breaded|canned|salad|cooked|wing|patty|patties|ground|thin[\\s-]*sliced|skewer|twister|bone[\\s-]*in|split",
+                                               "brands":  [
+                                                              "Tyson",
+                                                              "Perdue"
+                                                          ]
+                                           },
+                        "ground-turkey":  {
+                                              "label":  "Ground Turkey",
+                                              "unit":  "lb",
+                                              "queries":  [
+                                                              "ground turkey"
+                                                          ],
+                                              "include":  "ground\\s+turkey",
+                                              "exclude":  "beef|patty|patties",
+                                              "brands":  [
+                                                             "Jennie-O",
+                                                             "Butterball"
+                                                         ]
+                                          }
+                    }
+}

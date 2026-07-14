@@ -33,6 +33,7 @@ function Parse-Qty([string]$size,[string]$unit){
   switch($unit){
     'oz'   { switch -regex ($u){ '^oz$' {return $n} '^(lbs?|pound)$' {return $n*16} '^kg$' {return $n*35.274} '^g$' {return $n*0.035274} default {return 0} } }
     'floz' { switch -regex ($u){ '^(floz|foz)$' {return $n} '^oz$' {return $n} '^(l|liter|litre)$' {return $n*33.814} '^ml$' {return $n*0.033814} '^qt$' {return $n*32} '^gal$' {return $n*128} default {return 0} } }
+    'lb'   { switch -regex ($u){ '^(lbs?|pound)$' {return $n} '^oz$' {return $n/16} '^kg$' {return $n*2.20462} '^g$' {return $n*0.00220462} default {return 0} } }
   }
   return 0
 }

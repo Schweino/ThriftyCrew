@@ -1,0 +1,17 @@
+{
+  "store": "Walmart", "generated": "2026-07-13",
+  "items": {
+    "flour":             [{"b":"Store brand","s":1,"per":0.4308},{"b":"Gold Medal","s":0,"per":0.747},{"b":"Pillsbury","s":0,"per":0.796},{"b":"King Arthur","s":0,"per":1.053}],
+    "rice":              [{"b":"Store brand","s":1,"per":0.573},{"b":"Mahatma","s":0,"per":0.599},{"b":"Riceland","s":0,"per":0.89},{"b":"Ben's Original","s":0,"per":1.632},{"b":"Success","s":0,"per":2.24}],
+    "sugar":             [{"b":"Store brand","s":1,"per":0.7988},{"b":"C&H","s":0,"per":1.088},{"b":"Domino","s":0,"per":1.088}],
+    "brown-sugar":       [{"b":"Store brand","s":1,"per":0.99},{"b":"Domino","s":0,"per":1.44},{"b":"C&H","s":0,"per":1.87}],
+    "bacon":             [{"b":"Store brand","s":1,"per":3.96},{"b":"Farmland","s":0,"per":5.68},{"b":"Hormel","s":0,"per":5.97},{"b":"Oscar Mayer","s":0,"per":6.1673},{"b":"Wright","s":0,"per":6.3267}],
+    "butter":            [{"b":"Store brand","s":1,"per":3.06},{"b":"Challenge","s":0,"per":4.28},{"b":"Land O Lakes","s":0,"per":4.46},{"b":"Kerrygold","s":0,"per":9.27}],
+    "breakfast-sausage": [{"b":"Store brand","s":1,"per":3.36},{"b":"Jimmy Dean","s":0,"per":4.66},{"b":"Johnsonville","s":0,"per":5.2933}],
+    "italian-sausage":   [{"b":"Store brand","s":1,"per":2.97},{"b":"Johnsonville","s":0,"per":4.9853}],
+    "bratwurst":         [{"b":"Store brand","s":1,"per":2.393},{"b":"Johnsonville","s":0,"per":4.5642}],
+    "kielbasa":          [{"b":"Store brand","s":1,"per":3.3943},{"b":"Eckrich","s":0,"per":3.52},{"b":"Hillshire Farm","s":0,"per":3.9467},{"b":"Johnsonville","s":0,"per":4.7052}],
+    "chicken-breast":    [{"b":"Store brand","s":1,"per":1.6967},{"b":"Tyson","s":0,"per":1.962},{"b":"Perdue","s":0,"per":4.9939}],
+    "ground-turkey":     [{"b":"Jennie-O","s":0,"per":4.18}]
+  }
+}

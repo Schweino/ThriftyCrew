@@ -1,0 +1,17 @@
+{
+  "store": "Baker's", "generated": "2026-07-13",
+  "items": {
+    "flour":             [{"b":"Store brand","s":1,"per":0.48},{"b":"Gold Medal","s":0,"per":0.96},{"b":"King Arthur","s":0,"per":1.28},{"b":"Pillsbury","s":0,"per":1.28}],
+    "rice":              [{"b":"Store brand","s":1,"per":0.96},{"b":"Mahatma","s":0,"per":1.28},{"b":"Success","s":0,"per":2.88}],
+    "sugar":             [{"b":"Store brand","s":1,"per":0.64}],
+    "brown-sugar":       [{"b":"Store brand","s":1,"per":1.12}],
+    "bacon":             [{"b":"Store brand","s":1,"per":4.48},{"b":"Farmland","s":0,"per":5.76},{"b":"Wright","s":0,"per":6.4},{"b":"Hormel","s":0,"per":8},{"b":"Oscar Mayer","s":0,"per":8}],
+    "butter":            [{"b":"Store brand","s":1,"per":3.04},{"b":"Land O Lakes","s":0,"per":4.96},{"b":"Kerrygold","s":0,"per":10.56}],
+    "breakfast-sausage": [{"b":"Store brand","s":1,"per":3.36},{"b":"Bob Evans","s":0,"per":4.96},{"b":"Jimmy Dean","s":0,"per":5.28},{"b":"Johnsonville","s":0,"per":5.28}],
+    "italian-sausage":   [{"b":"Store brand","s":1,"per":4.32},{"b":"Johnsonville","s":0,"per":5.44}],
+    "bratwurst":         [{"b":"Johnsonville","s":0,"per":4.16},{"b":"Store brand","s":1,"per":4.8}],
+    "kielbasa":          [{"b":"Eckrich","s":0,"per":3.52},{"b":"Store brand","s":1,"per":3.68},{"b":"Hillshire Farm","s":0,"per":4.48},{"b":"Johnsonville","s":0,"per":5.12}],
+    "chicken-breast":    [{"b":"Store brand","s":1,"per":2.29},{"b":"Tyson","s":0,"per":4.99},{"b":"Perdue","s":0,"per":5.92}],
+    "ground-turkey":     [{"b":"Store brand","s":1,"per":3.33},{"b":"Butterball","s":0,"per":3.52}]
+  }
+}
