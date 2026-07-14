@@ -2240,13 +2240,6 @@
                                                      "size":  "8.8 oz",
                                                      "name":  "Ben\u0027s Original Whole Grain Brown Rice Pouch"
                                                  },
-                                     "Hy-Vee":  {
-                                                    "url":  "https://www.hy-vee.com/aisles-online/p/22483/hy-vee-long-grain-brown-rice",
-                                                    "price":  1.99,
-                                                    "size":  "16 oz",
-                                                    "name":  "Hy-Vee Long Grain Brown Rice",
-                                                    "board_pu":  1.99
-                                                },
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/Mahatma-Brown-Rice-5-lb/19354152866",
                                                              "price":  4.98,
@@ -2259,7 +2252,14 @@
                                                      "size":  "16 oz",
                                                      "name":  "Great Value Brown Rice Whole Grain",
                                                      "board_pu":  0.88
-                                                 }
+                                                 },
+                                     "Hy-Vee":  {
+                                                    "url":  "https://www.hy-vee.com/aisles-online/p/254670/hy-vee-long-grain-brown-rice",
+                                                    "price":  1.99,
+                                                    "size":  "16 oz",
+                                                    "name":  "Hy-Vee Long Grain Brown Rice",
+                                                    "verified":  "2026-07-14 Hy-Vee search API (storeId 1465)"
+                                                }
                                  },
                   "brown-sugar":  {
                                       "commodity":  "Brown Sugar",
@@ -2891,13 +2891,6 @@
                                                            "name":  "Dole Pineapple Chunks",
                                                            "board_pu":  0.205
                                                        },
-                                           "Hy-Vee":  {
-                                                          "url":  "https://www.hy-vee.com/aisles-online/p/2970346/thats-smart-pineapple-chunks-in-pineapple-juice-8-oz",
-                                                          "price":  0.94,
-                                                          "size":  "8 oz",
-                                                          "name":  "That\u0027s Smart! Pineapple Chunks In Pineapple Juice 8 oz",
-                                                          "board_pu":  0.1175
-                                                      },
                                            "Sam\u0027s Club":  {
                                                                    "url":  "https://www.samsclub.com/ip/Dole-Tropical-Gold-Pineapple-Chunks-15-25-oz-6-pk/13608108237",
                                                                    "price":  11.48,
@@ -6019,7 +6012,14 @@
                                                         "price":  1.37,
                                                         "size":  "32 fl oz",
                                                         "name":  "Mister Plumber 32oz Drain Opener"
-                                                    }
+                                                    },
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/40950/drano-liquid-drain-cleaner",
+                                                       "price":  4.99,
+                                                       "size":  "32 fl oz",
+                                                       "name":  "Drano Liquid Drain Cleaner 32 fl oz",
+                                                       "verified":  "2026-07-14 Hy-Vee search API (storeId 1465)"
+                                                   }
                                     },
                   "dried-basil":  {
                                       "commodity":  "Dried Basil",
@@ -6922,7 +6922,14 @@
                                                         "price":  2.98,
                                                         "size":  "22 fl oz",
                                                         "name":  "Murphy Oil Soap Cleaning Spray, No-Rinse Floor Cleaner, Orange Scent, 22 fl oz Bottle"
-                                                    }
+                                                    },
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/4251663/method-squirt-mop-hard-floor-cleaner-spearmint-sage-25-ounce",
+                                                       "price":  7.99,
+                                                       "size":  "25 fl oz",
+                                                       "name":  "Method Squirt + Mop Hard Floor Cleaner, Spearmint Sage, 25 fl oz",
+                                                       "verified":  "2026-07-14 Hy-Vee search API (storeId 1465)"
+                                                   }
                                     },
                   "flour":  {
                                 "commodity":  "flour",
@@ -7480,13 +7487,6 @@
                                                        "name":  "Fareway Unsweetened Whole Strawberries",
                                                        "board_pu":  0.2806
                                                    },
-                                       "Hy-Vee":  {
-                                                      "url":  "https://www.hy-vee.com/aisles-online/p/1415831/hy-vee-berry-medley-unsweetened",
-                                                      "price":  5.99,
-                                                      "size":  "12 oz",
-                                                      "name":  "Hy-Vee Berry Medley Unsweetened",
-                                                      "board_pu":  0.4992
-                                                  },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-Triple-Berry-Blend-Frozen-64-oz/13592517231",
                                                                "price":  10.46,
@@ -7499,7 +7499,14 @@
                                                        "size":  "16 oz",
                                                        "name":  "Great Value Frozen Whole Berry Medley",
                                                        "board_pu":  0.22
-                                                   }
+                                                   },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/57395/hy-vee-berry-medley-unsweetened",
+                                                      "price":  5.99,
+                                                      "size":  "12 oz",
+                                                      "name":  "Hy-Vee Berry Medley Unsweetened",
+                                                      "verified":  "2026-07-14 Hy-Vee search API (storeId 1465)"
+                                                  }
                                    },
                   "frozen-green-beans":  {
                                              "commodity":  "Frozen Cut Green Beans",
@@ -7950,7 +7957,14 @@
                                                            "price":  4.84,
                                                            "size":  "9.7 oz",
                                                            "name":  "Pledge Expert Care Wood Polish, Lemon Enhancing, Aerosol, 9.7 oz"
-                                                       }
+                                                       },
+                                           "Hy-Vee":  {
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/51370/pledge-lemon-clean-furniture-spray",
+                                                          "price":  6.99,
+                                                          "size":  "9.7 oz",
+                                                          "name":  "Pledge Lemon Clean Furniture Spray 9.7 oz",
+                                                          "verified":  "2026-07-14 Hy-Vee search API (storeId 1465)"
+                                                      }
                                        },
                   "garam-masala":  {
                                        "commodity":  "Garam Masala",
@@ -8801,7 +8815,14 @@
                                                                    "price":  5.56,
                                                                    "size":  "$5.56/lb",
                                                                    "name":  "Member\u0027s Mark 80/20 Ground Beef Roll, priced per pound"
-                                                               }
+                                                               },
+                                           "Hy-Vee":  {
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/3846367/ground-beef-80-lean-20-fat",
+                                                          "price":  8.39,
+                                                          "size":  "lb",
+                                                          "name":  "Ground Beef Chub 80% Lean 20% Fat (5 lb)",
+                                                          "verified":  "2026-07-14 Hy-Vee search API (storeId 1465)"
+                                                      }
                                        },
                   "ground-cinnamon":  {
                                           "commodity":  "Ground Cinnamon",
@@ -8833,14 +8854,6 @@
                                                           "size":  "4.12 oz",
                                                           "name":  "McCormick Ground Cinnamon 4.12 oz"
                                                       },
-                                          "Hy-Vee":  {
-                                                         "url":  "https://www.hy-vee.com/aisles-online/p/2950925/thats-smart-ground-cinnamon",
-                                                         "price":  1.25,
-                                                         "size":  "2.5 oz",
-                                                         "name":  "That\u0027s Smart Ground Cinnamon",
-                                                         "board_pu":  0.5,
-                                                         "recipe_pu":  0.5
-                                                     },
                                           "Sam\u0027s Club":  {
                                                                   "url":  "https://www.samsclub.com/ip/Member-s-Mark-Ground-Cinnamon-18-oz/13610768224",
                                                                   "price":  7.98,
@@ -8856,7 +8869,14 @@
                                                           "name":  "Great Value Ground Cinnamon, 2.5 oz",
                                                           "board_pu":  0.508,
                                                           "recipe_pu":  0.508
-                                                      }
+                                                      },
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/2950925/that-s-smart-ground-cinnamon",
+                                                         "price":  1.25,
+                                                         "size":  "2.5 oz",
+                                                         "name":  "That\u0027s Smart Ground Cinnamon",
+                                                         "verified":  "2026-07-14 Hy-Vee search API (storeId 1465)"
+                                                     }
                                       },
                   "ground-coriander":  {
                                            "commodity":  "Ground Coriander",
@@ -10034,7 +10054,14 @@
                                                        "price":  5.97,
                                                        "size":  "20 oz",
                                                        "name":  "Raid Defend Ant \u0026 Roach Killer, Indoor Insecticide, Lemon Scent, 20 oz"
-                                                   }
+                                                   },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/17265/raid-ant-roach-killer-indoor-insecticide-residual-killing-power-fragrance-free-1",
+                                                      "price":  6.99,
+                                                      "size":  "17.5 oz",
+                                                      "name":  "Raid Ant \u0026 Roach Killer, Indoor Insecticide, Fragrance Free, 17.5 oz",
+                                                      "verified":  "2026-07-14 Hy-Vee search API (storeId 1465)"
+                                                  }
                                    },
                   "instant-coffee":  {
                                          "commodity":  "instant-coffee",
@@ -10818,7 +10845,14 @@
                                                       "name":  "ReaLemon Lemon Juice (gal)",
                                                       "board_pu":  0.1116,
                                                       "recipe_pu":  0.035
-                                                  }
+                                                  },
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/24367/hy-vee-reconstituted-lemon-100-juice",
+                                                     "price":  3.99,
+                                                     "size":  "32 fl oz",
+                                                     "name":  "Hy-Vee Reconstituted Lemon 100% Juice",
+                                                     "verified":  "2026-07-14 Hy-Vee search API (storeId 1465)"
+                                                 }
                                   },
                   "lemons":  {
                                  "commodity":  "lemons",
@@ -11943,13 +11977,6 @@
                                                        "name":  "Fareway Orange Juice, from Concentrate",
                                                        "board_pu":  0.0623
                                                    },
-                                       "Hy-Vee":  {
-                                                      "url":  "https://www.hy-vee.com/aisles-online/p/57270/hy-vee-100-orange-juice",
-                                                      "price":  8.99,
-                                                      "size":  "1 gal",
-                                                      "name":  "Hy-Vee 100% Orange Juice",
-                                                      "board_pu":  0.0702
-                                                  },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-Pulp-Free-100-Orange-Juice-52-fl-oz-2-pk/13879263904",
                                                                "price":  6.74,
@@ -11962,7 +11989,14 @@
                                                        "size":  "52 fl oz",
                                                        "name":  "Great Value 100% Orange Juice, No Pulp, 52 fl oz",
                                                        "board_pu":  0.0762
-                                                   }
+                                                   },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/57270/hy-vee-100-orange-juice",
+                                                      "price":  8.99,
+                                                      "size":  "1 gal",
+                                                      "name":  "Hy-Vee 100% Orange Juice 1 gal",
+                                                      "verified":  "2026-07-14 Hy-Vee search API (storeId 1465)"
+                                                  }
                                    },
                   "oranges":  {
                                   "commodity":  "oranges",
@@ -12026,7 +12060,14 @@
                                                        "price":  4.47,
                                                        "size":  "16 oz",
                                                        "name":  "Great Value Fume Free Oven Cleaner Aerosol Spray, 16 oz"
-                                                   }
+                                                   },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/338640/easy-off-fume-free-lemon-scent-oven-cleaner-spray",
+                                                      "price":  5.99,
+                                                      "size":  "14.5 oz",
+                                                      "name":  "Easy-Off Fume Free Lemon Scent Oven Cleaner Spray 14.5 oz",
+                                                      "verified":  "2026-07-14 Hy-Vee search API (storeId 1465)"
+                                                  }
                                    },
                   "pancake-mix":  {
                                       "commodity":  "pancake-mix",
@@ -12538,12 +12579,6 @@
                                                         "name":  "SKIPPY Peanut Butter, Creamy",
                                                         "board_pu":  0.119
                                                     },
-                                        "Hy-Vee":  {
-                                                       "url":  "https://www.hy-vee.com/aisles-online/p/204508/hy-vee-creamy-peanut-butter",
-                                                       "price":  5.98,
-                                                       "size":  "40 oz",
-                                                       "name":  "Hy-Vee Creamy Peanut Butter"
-                                                   },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/Member-s-Mark-Natural-Creamy-Peanut-Butter-40-oz-2-pk/7874219579",
                                                                 "price":  7.78,
@@ -12558,7 +12593,14 @@
                                                         "name":  "Great Value Creamy Peanut Butter, 40 oz",
                                                         "board_pu":  0.0995,
                                                         "recipe_pu":  0.1
-                                                    }
+                                                    },
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/204508/hy-vee-creamy-peanut-butter",
+                                                       "price":  5.98,
+                                                       "size":  "40 oz",
+                                                       "name":  "Hy-Vee Creamy Peanut Butter 40 oz",
+                                                       "verified":  "2026-07-14 Hy-Vee search API (storeId 1465)"
+                                                   }
                                     },
                   "peanuts":  {
                                   "commodity":  "peanuts",
@@ -14965,7 +15007,14 @@
                                                          "price":  2.97,
                                                          "size":  "32 fl oz",
                                                          "name":  "Scrub Free Total Bathroom Cleaner with OxiClean, Lemon Scent, 32 fl oz"
-                                                     }
+                                                     },
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/1462152/clean-shower-daily-shower-cleaner-refill-fresh-clean-scent-60-fl-oz",
+                                                        "price":  5.99,
+                                                        "size":  "60 fl oz",
+                                                        "name":  "Clean Shower Daily Shower Cleaner Refill, Fresh Clean Scent 60 fl oz",
+                                                        "verified":  "2026-07-14 Hy-Vee search API (storeId 1465)"
+                                                    }
                                      },
                   "shredded-carrots":  {
                                            "commodity":  "Shredded Carrots",
@@ -16799,13 +16848,6 @@
                                                      "name":  "Crest Baking Soda \u0026 Peroxide Whitening Toothpaste, Fresh Mint",
                                                      "board_pu":  0.4368
                                                  },
-                                     "Hy-Vee":  {
-                                                    "url":  "https://www.hy-vee.com/aisles-online/p/1868152/colgate-cavity-protection-fluoride-toothpaste-regular-flavor-2-6-oz",
-                                                    "price":  3.49,
-                                                    "size":  "6 oz",
-                                                    "name":  "Colgate Cavity Protection Great Regular Flavor Fluoride Toothpaste",
-                                                    "board_pu":  0.5817
-                                                },
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/Crest-Complete-Scope-Outlast-Ultra-Toothpaste-6-3-oz-5-pk/14170301002",
                                                              "price":  11.48,
@@ -16818,7 +16860,14 @@
                                                      "size":  "6 oz",
                                                      "name":  "Colgate Baking Soda and Peroxide Whitening Toothpaste",
                                                      "board_pu":  0.3283
-                                                 }
+                                                 },
+                                     "Hy-Vee":  {
+                                                    "url":  "https://www.hy-vee.com/aisles-online/p/1867779/colgate-cavity-protection-great-regular-flavor-fluoride-toothpaste",
+                                                    "price":  3.49,
+                                                    "size":  "6 oz",
+                                                    "name":  "Colgate Cavity Protection Great Regular Flavor Fluoride Toothpaste",
+                                                    "verified":  "2026-07-14 Hy-Vee search API (storeId 1465)"
+                                                }
                                  },
                   "tortilla-chips":  {
                                          "commodity":  "tortilla-chips",
