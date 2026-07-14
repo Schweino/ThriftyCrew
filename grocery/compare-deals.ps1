@@ -355,11 +355,41 @@ foreach ($extra in @($BakersFile,$SamsFile,$FarewayFile)) {
 # BOGO file from a prior week would otherwise be re-priced as a live sale forever.
 $exDir = if ($ExtraDir) { $ExtraDir } else { $OutDir }   # -ExtraDir: pinnable for the regression harness
 $extraF = Get-ChildItem (Join-Path $exDir 'extra-deals-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-if ($extraF -and $extraF.BaseName -match '(\d{4}-\d{2}-\d{2})$') { try { if ([math]::Abs(([datetime]$Matches[1] - [datetime]$today).TotalDays) -gt 7) { $extraF = $null } } catch {} }
+$exDate = ''
+if ($extraF -and $extraF.BaseName -match '(\d{4}-\d{2}-\d{2})$') { $exDate = $Matches[1]; try { if ([math]::Abs(([datetime]$exDate - [datetime]$today).TotalDays) -gt 7) { $extraF = $null } } catch {} }
 if ($extraF) {
   $ex = Get-Content $extraF.FullName -Raw | ConvertFrom-Json
   $pt = if ($ex.price_type) { [string]$ex.price_type } else { 'sale' }
-  foreach ($d in @($ex.deals)) { Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt }
+
+  # A DISCOUNT WE CANNOT DATE IS A DISCOUNT WE CANNOT PUBLISH.
+  # Two very different kinds of row live in this file:
+  #   * BOGO/multibuy pricing tied to the CURRENT weekly ad. The ad feed carries no regular price, so the
+  #     Wednesday agent looks one up and writes it here. Those belong to an ad cycle with a known window and
+  #     stay valid for the ad week - that is what the 7-day gate above is for.
+  #   * "Aisles Online markdown" snapshots: a cut price an agent happened to SEE on some day. These belong to
+  #     no ad cycle, carry no end date, and move constantly.
+  # We were replaying the second kind as a live sale for a full week. On 2026-07-14 the board published Hy-Vee
+  # sirloin at $6.99/lb off a 2026-07-12 markdown; the store's real price that day was $11.99/lb. FIFTY-ONE
+  # cells were being served this way. Worse, build-deals-page stamped them "Sale thru Jul 19" - a date
+  # borrowed from the store's ad cycle, which these rows have nothing to do with - so an unverifiable
+  # two-day-old snapshot wore the costume of a dated, ad-backed sale. And because the cell is typed `sale`,
+  # every price audit SKIPS it by design (a sale is supposed to differ from its product page). The whole class
+  # was structurally invisible: it could not be caught by any check we had.
+  # Rule: a row claiming a discount, with no end date, is honoured only on the day it was captured.
+  $todayReal = (Get-Date -Format 'yyyy-MM-dd')
+  $staleDiscount = 0
+  foreach ($d in @($ex.deals)) {
+    $ap = 0.0; $rg = 0.0
+    [void][double]::TryParse((([string]$d.ad_price) -replace '[^0-9.]',''), [ref]$ap)
+    [void][double]::TryParse((([string]$d.regular)  -replace '[^0-9.]',''), [ref]$rg)
+    $claimsDiscount = ($ap -gt 0 -and $rg -gt 0 -and $ap -lt $rg)
+    $dated = [bool]$d.sale_end
+    if ($claimsDiscount -and (-not $dated) -and ($exDate -ne $todayReal)) { $staleDiscount++; continue }
+    Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt
+  }
+  if ($staleDiscount -gt 0) {
+    Write-Warning ("extra-deals: skipped $staleDiscount undated discount row(s) from $exDate (captured before today, no end date - cannot be shown as a live sale). The board falls back to each store's everyday shelf price, which IS verified against its product link.")
+  }
 }
 # everyday/regular shelf-price files (out\regular\<store>-regular-<date>.json), newest per store; price_type=everyday.
 # -RegularDir lets the regression harness pin the everyday-price channel to a FROZEN copy - the default
@@ -463,6 +493,10 @@ foreach ($d in $deals) {
   $matched.Add([pscustomobject]@{
     id=$c.id; label=$c.label; unit=$c.unit; store=$d.store; name=$d.name; price_type=$d.price_type;
     price_text=$d.price_text; size_text=$d.size_text; regular=$d.regular; bulk=(Test-Bulk $d.size_text $d.name); membership=(Test-Membership $d.store);
+    # Carry the SOURCE through to the page. Without it build-deals-page cannot tell an ad-backed sale from a
+    # one-off price snapshot, so it stamped every sale chip with the store's ad-cycle end date - dressing an
+    # undated Aisles Online markdown up as "Sale thru Jul 19". A date we invented is worse than no date.
+    source_ad=$d.source_ad;
     unit_price=$uprice; basis=$basis; note=$note })
 }
 
@@ -492,7 +526,7 @@ foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Obje
     nomem_store = $(if($nm.Count){$nm[0].store}else{$null})
     nomem_price = $(if($nm.Count){$nm[0].unit_price}else{$null})
     nomem_type  = $(if($nm.Count){$nm[0].price_type}else{$null})
-    stores = @($ranked | ForEach-Object { [pscustomobject]@{ store=$_.store; per_unit=$_.unit_price; unit=$f.unit; type=$_.price_type; bulk=$_.bulk; membership=$_.membership; item=$_.name; ad=$_.price_text; size=$_.size_text; basis=$_.basis; note=$_.note } })
+    stores = @($ranked | ForEach-Object { [pscustomobject]@{ store=$_.store; per_unit=$_.unit_price; unit=$f.unit; type=$_.price_type; bulk=$_.bulk; membership=$_.membership; item=$_.name; ad=$_.price_text; size=$_.size_text; basis=$_.basis; note=$_.note; source_ad=$_.source_ad } })
   })
 }
 $report = @($report | Sort-Object commodity)

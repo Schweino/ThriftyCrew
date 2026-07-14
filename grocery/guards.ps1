@@ -186,6 +186,49 @@ if ($stray.Count -gt 0) {
   }
 } else { Say '  ok    out\regular holds only canonical <store>-regular-<date>.json data files' }
 
+# ---------------------------------------------------------------- 8: no undated stale discount published as a sale
+# THE ONLY BUG CLASS THAT WAS STRUCTURALLY INVISIBLE TO EVERY OTHER CHECK HERE.
+# A `sale` cell is EXEMPT from the price audits by design: a weekly-ad price is supposed to differ from the
+# shelf price on the product page it links to. That exemption is correct for an ad-backed sale, and it is a
+# blank cheque for anything else wearing the same label.
+# On 2026-07-14 the board published Hy-Vee sirloin at $6.99/lb, flagged Cheapest, badged "Sale thru Jul 19".
+# The real price was $11.99/lb. The $6.99 came from a two-day-old "Aisles Online markdown" snapshot in
+# extra-deals: no end date, tied to no ad cycle, replayed as a live sale for a week, and wearing an end date
+# borrowed from the store's ad window. FIFTY-ONE cells were served this way. Not one guard could see it.
+# Invariant: a row claiming a discount, carrying no end date, captured before today, must not appear on the
+# board as a sale. If we cannot say when a discount ends, we cannot say it is running.
+$exF = Get-ChildItem (Join-Path $root 'out\extra-deals-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
+$staleSale = 0
+if ($exF) {
+  $exDate = ''
+  if ($exF.BaseName -match '(\d{4}-\d{2}-\d{2})$') { $exDate = $Matches[1] }
+  $todayReal = (Get-Date -Format 'yyyy-MM-dd')
+  if ($exDate -and ($exDate -ne $todayReal)) {
+    $ex = Get-Content $exF.FullName -Raw | ConvertFrom-Json
+    $suspect = @{}
+    foreach ($d in @($ex.deals)) {
+      if ($d.sale_end) { continue }
+      $ap = 0.0; $rg = 0.0
+      [void][double]::TryParse((([string]$d.ad_price) -replace '[^0-9.]',''), [ref]$ap)
+      [void][double]::TryParse((([string]$d.regular)  -replace '[^0-9.]',''), [ref]$rg)
+      if ($ap -gt 0 -and $rg -gt 0 -and $ap -lt $rg) { $suspect[(([string]$d.store) + '|' + ([string]$d.item).Trim())] = $ap }
+    }
+    foreach ($row in $cmp.comparison) {
+      foreach ($s in $row.stores) {
+        if (([string]$s.type) -ne 'sale') { continue }
+        $k = ([string]$s.store) + '|' + ([string]$s.item).Trim()
+        if (-not $suspect.ContainsKey($k)) { continue }
+        $bAd = 0.0; [void][double]::TryParse((([string]$s.ad) -replace '[^0-9.]',''), [ref]$bAd)
+        if ($bAd -gt 0 -and ([math]::Abs($bAd - $suspect[$k]) -lt 0.005)) {
+          $staleSale++
+          [void]$fail.Add(("HARD FAIL: stale undated discount published as a live sale  {0} / {1}  `${2}  (from {3}, no end date - a sale we cannot date is a sale we cannot stand behind)" -f $row.id, $s.store, $bAd, $exF.Name))
+        }
+      }
+    }
+  }
+}
+if ($staleSale -eq 0) { Say '  ok    no undated stale discount is being published as a live sale' }
+
 # ---------------------------------------------------------------- report
 Say ''
 foreach ($w in $warn) { Say ("  warn  " + $w) }

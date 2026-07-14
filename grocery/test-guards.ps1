@@ -95,6 +95,28 @@ $strayF = Join-Path $root 'out\regular\family-fare-regular-2026-07-14.PARTIAL.js
 Check 'stray file: an empty .PARTIAL that outsorts the real Family Fare data' 2
 Remove-Item $strayF -Force
 
+# ---- 7. stale undated discount published as a live sale -----------------------------
+# Brad caught this one on the live board: Hy-Vee sirloin at $6.99/lb, flagged Cheapest, badged "Sale thru
+# Jul 19", when the store was charging $11.99/lb. It came from a 2-day-old undated "Aisles Online markdown"
+# in extra-deals. Because the cell is typed `sale`, every price audit skips it BY DESIGN - so this class was
+# invisible to all seven other guards. Rebuild the exact shape and prove guard 8 sees it.
+$cmpF = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName
+$cbak2 = Get-Content $cmpF -Raw
+$cmpD  = $cbak2 | ConvertFrom-Json
+$sirloin = $cmpD.comparison | Where-Object { $_.id -eq 'sirloin-steak' } | Select-Object -First 1
+$hv = $sirloin.stores | Where-Object { $_.store -eq 'Hy-Vee' } | Select-Object -First 1
+if ($hv) {
+  $hv.type     = 'sale'
+  $hv.per_unit = 6.99
+  $hv.ad       = '$6.99'
+  $hv.item     = 'Hy-Vee Angus Reserve Beef Loin Boneless Sirloin Steak'
+  ($cmpD | ConvertTo-Json -Depth 8) | Set-Content $cmpF -Encoding UTF8
+  Check 'stale sale: a 2-day-old undated markdown republished as a live sale' 2
+  Set-Content $cmpF $cbak2 -Encoding UTF8 -NoNewline
+} else {
+  Write-Output '  SKIP  stale sale: no Hy-Vee sirloin cell to mutate'
+}
+
 # ---- restored? ---------------------------------------------------------------------
 Check 'restored: guards pass again after every mutation is reverted' 0
 

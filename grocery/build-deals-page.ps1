@@ -354,6 +354,13 @@ function ParseFlashWindow([string]$text, $from, $to) {
 function SaleBadge($s, $store) {
   if ([string]$s.type -ne 'sale') { return '' }
   if (-not $adWin.ContainsKey($store)) { return '' }
+  # ONLY AN AD-BACKED SALE MAY WEAR AN AD-CYCLE DATE.
+  # The window below belongs to the store's weekly AD. A sale cell that did not come from that ad has no claim
+  # on it. This function used to badge every sale chip regardless of source, so a one-off "Aisles Online
+  # markdown" snapshot - undated, unverifiable, and two days stale - was published as
+  # "Hy-Vee $6.99/lb - Sale thru Jul 19". The store's real price that day was $11.99/lb. The invented date is
+  # what made the wrong number look trustworthy. No date beats a date we made up.
+  if (([string]$s.source_ad) -match '(?i)markdown|clearance|snapshot') { return '' }
   $wf = $null; $wt = $null
   try { $wf = [datetime]$adWin[$store].from } catch {}
   try { $wt = [datetime]$adWin[$store].to } catch {}

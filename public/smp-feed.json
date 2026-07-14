@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-07-14T09:15:43",
+    "generated":  "2026-07-14T09:27:04",
     "week_of":  "2026-07-14",
     "ingredient_count":  436,
     "recipe_count":  113,
@@ -95,12 +95,11 @@
                                    },
                         "applesauce":  {
                                            "unit":  "oz",
-                                           "cheapest":  0.0783,
-                                           "store":  "Hy-Vee",
-                                           "type":  "sale",
-                                           "url":  "https://www.hy-vee.com/aisles-online/p/2976165/thats-smart-unsweetened-apple-sauce-6-4-oz-containers",
-                                           "n":  3,
-                                           "sale_end":  "2026-07-19"
+                                           "cheapest":  0.0812,
+                                           "store":  "Aldi",
+                                           "type":  "everyday",
+                                           "url":  "https://www.aldi.us/store/aldi/products/18648479-lunch-buddies-original-applesauce-each",
+                                           "n":  3
                                        },
                         "asparagus":  {
                                           "unit":  "lb",
@@ -514,12 +513,11 @@
                                           },
                         "canned-tuna":  {
                                             "unit":  "oz",
-                                            "cheapest":  0.176,
+                                            "cheapest":  0.19,
                                             "store":  "Hy-Vee",
-                                            "type":  "sale",
+                                            "type":  "everyday",
                                             "url":  "https://www.hy-vee.com/aisles-online/p/2402871/hy-vee-chunk-light-tuna-in-water-free-school-caught",
-                                            "n":  5,
-                                            "sale_end":  "2026-07-19"
+                                            "n":  5
                                         },
                         "cantaloupe":  {
                                            "unit":  "each",
@@ -2148,12 +2146,11 @@
                                        },
                         "rotisserie-chicken":  {
                                                    "unit":  "each",
-                                                   "cheapest":  4.99,
-                                                   "store":  "Hy-Vee",
-                                                   "type":  "sale",
-                                                   "url":  "https://www.hy-vee.com/aisles-online/p/74923/whole-savory-rotisserie-chicken-cold",
-                                                   "n":  5,
-                                                   "sale_end":  "2026-07-19"
+                                                   "cheapest":  5.97,
+                                                   "store":  "Walmart",
+                                                   "type":  "everyday",
+                                                   "url":  "https://www.walmart.com/ip/Freshness-Guaranteed-Traditional-Rotisserie-Whole-36-oz-19g-of-Protein-per-3oz-serving-Hot/325918992",
+                                                   "n":  5
                                                },
                         "russet-potatoes":  {
                                                 "unit":  "lb",
@@ -2238,12 +2235,11 @@
                                    },
                         "sirloin-steak":  {
                                               "unit":  "lb",
-                                              "cheapest":  6.99,
-                                              "store":  "Hy-Vee",
-                                              "type":  "sale",
-                                              "url":  "https://www.hy-vee.com/aisles-online/p/31803/hy-vee-angus-reserve-beef-loin-boneless-sirloin-steak",
-                                              "n":  6,
-                                              "sale_end":  "2026-07-19"
+                                              "cheapest":  7.99,
+                                              "store":  "Fareway",
+                                              "type":  "everyday",
+                                              "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387764",
+                                              "n":  6
                                           },
                         "sliced-cheese":  {
                                               "unit":  "oz",
