@@ -229,6 +229,55 @@ if ($exF) {
 }
 if ($staleSale -eq 0) { Say '  ok    no undated stale discount is being published as a live sale' }
 
+# ---------------------------------------------------------------- 9: price freshness, per store
+# "SAFE" IS NOT A SYNONYM FOR "ACCURATE" (Brad's rule, and the right one). A stale price is a wrong price; it
+# just fails in a direction that feels comfortable. Hy-Vee sat for days publishing basePrice - the REGULAR
+# price - while the store was charging less, and nothing complained, because nothing was watching the CLOCK.
+# So: every store reports how old its prices are and how many of them we could not re-verify. A store that
+# cannot be checked is a store that is quietly drifting, and that has to be visible on every single run
+# rather than discovered by a reader clicking a link.
+$today = [datetime](Get-Date -Format 'yyyy-MM-dd')
+$stale = 0
+foreach ($f in (RegFiles)) {
+  $prefix = ($f.BaseName -replace '-regular-.*$','')
+  $newest = RegFiles ($prefix + '-regular-*.json') | Sort-Object Name -Desc | Select-Object -First 1
+  if ($f.FullName -ne $newest.FullName) { continue }
+  $doc = Get-Content $f.FullName -Raw | ConvertFrom-Json
+  $store = [string]$doc.store
+  $rows = @($doc.deals)
+  if (-not $rows.Count) { continue }
+
+  # how many rows carry a date, and how old is the freshest?
+  $dated = @($rows | Where-Object { $_.as_of })
+  $unver = @($rows | Where-Object { $_.not_reverified }).Count
+  $fileDate = $today
+  if ($f.BaseName -match '(\d{4}-\d{2}-\d{2})$') { try { $fileDate = [datetime]$Matches[1] } catch {} }
+
+  $age = [int]($today - $fileDate).TotalDays
+  $verifiedToday = 0
+  foreach ($r in $dated) { if (([string]$r.as_of) -eq (Get-Date -Format 'yyyy-MM-dd')) { $verifiedToday++ } }
+
+  $pct = 0
+  if ($rows.Count -gt 0) { $pct = [math]::Round(100.0 * $verifiedToday / $rows.Count) }
+  $note = ("{0,-13} {1,4} rows | {2,3}% re-verified against the store TODAY | file {3}d old" -f $store, $rows.Count, $pct, $age)
+  if ($unver -gt 0) { $note += (" | {0} row(s) flagged unverified" -f $unver) }
+  # Only stores that HAVE a regular/discounted split can suffer the Hy-Vee/Baker's bug. Aldi was checked and
+  # cannot: it is everyday-low-price and its listings carry a single "Current price" with no was/now pair
+  # anywhere. Flagging it for a bug it structurally cannot have would be crying wolf, and a warning nobody
+  # believes is a warning nobody reads.
+  if (($verifiedToday -eq 0) -and ($store -ne 'Aldi')) {
+    $note += '  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker''s bug)'
+  }
+  [void]$warn.Add($note)
+
+  # a store nobody has looked at in over two weeks is not "safe", it is unknown
+  if ($age -gt 14) {
+    $stale++
+    [void]$fail.Add(("HARD FAIL: {0} price data is {1} days old - a stale price is a wrong price" -f $store, $age))
+  }
+}
+if ($stale -eq 0) { Say '  ok    no store''s price data is older than 14 days' }
+
 # ---------------------------------------------------------------- report
 Say ''
 foreach ($w in $warn) { Say ("  warn  " + $w) }
