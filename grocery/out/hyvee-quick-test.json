@@ -1,0 +1,129 @@
+﻿{
+    "store":  "Hy-Vee",
+    "week_of":  "2026-07-14",
+    "price_type":  "everyday",
+    "price_mode":  "in-store",
+    "source":  "Hy-Vee Aisles Online GraphQL storeProducts.price - the CURRENT shelf price at storeId 1465 (Omaha #01). NOT basePrice (the regular price) and NOT ssrPricing (a different store).",
+    "size_policy":  "sizes are OUR verified ones, not Hy-Vee\u0027s - their size field mixes totals, single units of a multipack, and mislabelled units",
+    "deal_count":  10,
+    "refreshed_today":  10,
+    "marked_down":  3,
+    "newly_priced":  0,
+    "not_reverified":  0,
+    "failed":  0,
+    "deals":  [
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Boneless Skinless Chicken Breast",
+                      "ad_price":  "$4.99",
+                      "size":  "lb",
+                      "regular":  4.99,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
+                      "as_of":  "2026-07-14",
+                      "product_id":  65791,
+                      "base_price":  4.99
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Hy-Vee Double Smoked Thick Sliced Bacon",
+                      "ad_price":  "$4.89",
+                      "size":  "lb",
+                      "regular":  4.89,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
+                      "as_of":  "2026-07-14",
+                      "product_id":  57278,
+                      "base_price":  4.89
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Hy-Vee 2% Reduced Fat Milk",
+                      "ad_price":  "$4.99",
+                      "size":  "gallon",
+                      "regular":  4.99,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
+                      "as_of":  "2026-07-14",
+                      "product_id":  23936,
+                      "base_price":  4.99
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Hy-Vee Sweet Cream Salted Butter Quarters",
+                      "ad_price":  "$3.99",
+                      "size":  "lb",
+                      "regular":  3.99,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
+                      "as_of":  "2026-07-14",
+                      "product_id":  57018,
+                      "base_price":  3.99
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "That\u0027s Smart! Small Curd Cottage Cheese",
+                      "ad_price":  "$3.18",
+                      "size":  "24 oz",
+                      "regular":  3.18,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
+                      "as_of":  "2026-07-14",
+                      "product_id":  629334,
+                      "base_price":  3.18
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Hy-Vee All Natural Sour Cream",
+                      "ad_price":  "$1.98",
+                      "size":  "16 oz",
+                      "regular":  1.98,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
+                      "as_of":  "2026-07-14",
+                      "product_id":  23920,
+                      "base_price":  2.68,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Hy-Vee Cream Cheese",
+                      "ad_price":  "$2.49",
+                      "size":  "8 oz",
+                      "regular":  2.49,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
+                      "as_of":  "2026-07-14",
+                      "product_id":  23914,
+                      "base_price":  2.49
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Hy-Vee Nonfat Plain Greek Yogurt",
+                      "ad_price":  "$5.88",
+                      "size":  "32 oz",
+                      "regular":  5.88,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
+                      "as_of":  "2026-07-14",
+                      "product_id":  344740,
+                      "base_price":  5.88
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Fresh Chiquita Bananas",
+                      "ad_price":  "$0.5",
+                      "size":  "lb",
+                      "regular":  0.5,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
+                      "as_of":  "2026-07-14",
+                      "product_id":  37178,
+                      "base_price":  0.54,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Hass Avocados",
+                      "ad_price":  "$1.3333",
+                      "size":  "each",
+                      "regular":  1.3333,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
+                      "as_of":  "2026-07-14",
+                      "product_id":  37190,
+                      "base_price":  1.49,
+                      "marked_down":  true
+                  }
+              ]
+}

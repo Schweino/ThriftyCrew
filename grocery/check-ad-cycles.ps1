@@ -99,6 +99,17 @@ if ($serverDue) {
     # pick the cheapest VALID one. Do NOT swap in a "pick one cheapest here" researcher - pre-filtering with a lesser
     # rule dropped FF from milk/butter/blueberries (it picked Butter Beans / Blueberry Soda). Non-fatal.
     try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'pull-regular-familyfare.ps1') | Out-Null; Log 'FF everyday refreshed' } catch { Log ('FF everyday pull threw: ' + $_.Exception.Message) }
+
+    # HY-VEE, DAILY. Hy-Vee used to be the one priced store with no automated pull: a human refreshed it through
+    # a browser, it went stale in between, and the capture read basePrice (the REGULAR price) rather than what
+    # the store actually charges. That is how sirloin sat on the board at $13.99/lb while Omaha #01 was charging
+    # $11.99, and how ~110 live markdowns went unseen. Its GraphQL takes storeId as a request VARIABLE (not a
+    # cookie), so it runs headless right here, every day, like Family Fare's. Non-fatal: a bad run keeps the
+    # last good file (throttle-wipeout guard) and the price guards still gate the publish.
+    try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'pull-regular-hyvee.ps1') | Out-Null; Log 'Hy-Vee everyday refreshed (current shelf price, Omaha #01)' } catch { Log ('Hy-Vee pull threw: ' + $_.Exception.Message) }
+    # and re-point Hy-Vee's stored link snapshots at those same fresh numbers, so the board and its "See item"
+    # link quote one number. Skip this and yesterday's snapshots become override pins that drag the board back.
+    try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'refresh-hyvee-links.ps1') | Out-Null; Log 'Hy-Vee link snapshots refreshed' } catch { Log ('Hy-Vee link refresh threw: ' + $_.Exception.Message) }
     # FF PULL-COMPLETENESS GUARD: catch a term the Freshop pull silently dropped (rate-limit -> 0 items) for a
     # product FF actually carries (the 2026-07-13 ground-pork bug; coverage-gaps can't see a never-pulled item).
     try {

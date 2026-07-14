@@ -26,10 +26,11 @@
                                                                },
                                                "Hy-Vee":  {
                                                               "url":  "https://www.hy-vee.com/aisles-online/p/57250/hy-vee-13-less-fat-than-cream-cheese-neufchatel-cheese",
-                                                              "price":  1.99,
-                                                              "size":  "8 oz",
                                                               "name":  "Hy-Vee 1/3 Less Fat than Cream Cheese (Neufchatel Cheese)",
-                                                              "recipe_pu":  0.2488
+                                                              "recipe_pu":  0.2488,
+                                                              "price":  2.49,
+                                                              "size":  "8 oz",
+                                                              "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                           },
                                                "Sam\u0027s Club":  {
                                                                        "url":  "https://www.samsclub.com/ip/Philadelphia-Original-Cream-Cheese-Spread-16-oz-2-pk/13753702483",
@@ -69,10 +70,11 @@
                                                            },
                                            "Hy-Vee":  {
                                                           "url":  "https://www.hy-vee.com/aisles-online/p/42647/lean-ground-beef-93-lean-7-fat",
-                                                          "price":  0,
-                                                          "size":  "1 lb",
                                                           "name":  "Lean Ground Beef 93% Lean 7% Fat",
-                                                          "recipe_pu":  8.99
+                                                          "recipe_pu":  8.99,
+                                                          "price":  8.99,
+                                                          "size":  "1 lb",
+                                                          "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                       },
                                            "Sam\u0027s Club":  {
                                                                    "url":  "https://www.samsclub.com/ip/Member-s-Mark-93-7-Ground-Beef-priced-per-pound/13865573229",
@@ -192,10 +194,11 @@
                                                     },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/9912/ragu-cheese-creations-classic-alfredo-cheese-sauce",
-                                                       "price":  2.47,
-                                                       "size":  "16 oz",
                                                        "name":  "Ragu Cheese Creations Classic Alfredo Cheese Sauce",
-                                                       "board_pu":  0.1544
+                                                       "board_pu":  0.1544,
+                                                       "price":  1.99,
+                                                       "size":  "16 oz",
+                                                       "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                    },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/Bertolli-Alfredo-Sauce-with-Aged-Parmesan-Cheese-15-oz-3-pk/3620022163",
@@ -236,9 +239,10 @@
                                                           },
                                               "Hy-Vee":  {
                                                              "url":  "https://www.hy-vee.com/aisles-online/p/5272/lysol-lemon-breeze-all-purpose-cleaner",
-                                                             "price":  5.99,
+                                                             "name":  "Lysol Lemon Breeze All Purpose Cleaner",
+                                                             "price":  3.99,
                                                              "size":  "32 fl oz",
-                                                             "name":  "Lysol Lemon Breeze All Purpose Cleaner"
+                                                             "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                          },
                                               "Sam\u0027s Club":  {
                                                                       "url":  "https://www.samsclub.com/ip/Fabuloso-2X-Concentrated-Multi-Purpose-Cleaner-Lavender-210-fl-oz/13597517906",
@@ -278,10 +282,11 @@
                                                             },
                                             "Hy-Vee":  {
                                                            "url":  "https://www.hy-vee.com/aisles-online/p/56001/hy-vee-bleached-all-purpose-flour",
-                                                           "price":  2.99,
-                                                           "size":  "5 lb",
                                                            "name":  "Hy-Vee Bleached All Purpose Flour",
-                                                           "recipe_pu":  0.0374
+                                                           "recipe_pu":  0.0374,
+                                                           "price":  2.99,
+                                                           "size":  "5 lbs",
+                                                           "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                        },
                                             "Sam\u0027s Club":  {
                                                                     "url":  "https://www.samsclub.com/ip/Member-s-Mark-All-Purpose-Flour-25-lbs/13602764464",
@@ -316,10 +321,11 @@
                                                   },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/13766/blue-diamond-almond-breeze-unsweetened-original-almond-milk",
-                                                     "price":  2.5,
-                                                     "size":  "64 fl oz",
                                                      "name":  "Blue Diamond Almond Breeze Unsweetened Original Almond Milk",
-                                                     "board_pu":  0.0391
+                                                     "board_pu":  0.0391,
+                                                     "price":  3.69,
+                                                     "size":  "64 fl oz",
+                                                     "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                  },
                                       "Sam\u0027s Club":  {
                                                               "url":  "https://www.samsclub.com/ip/Silk-Unsweetened-Original-Almond-64-fl-oz-3-pk/13901607733",
@@ -446,10 +452,11 @@
                                                 },
                                 "Hy-Vee":  {
                                                "url":  "https://www.hy-vee.com/aisles-online/p/8669/gala-apples",
-                                               "price":  0.79,
-                                               "size":  "each",
                                                "name":  "Gala Apples",
-                                               "recipe_pu":  0.79
+                                               "recipe_pu":  0.79,
+                                               "price":  1.98,
+                                               "size":  "lb",
+                                               "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                            },
                                 "Sam\u0027s Club":  {
                                                         "url":  "https://www.samsclub.com/ip/Gala-Apples-5-lbs/13714624219",
@@ -484,10 +491,11 @@
                                                       },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/2122497/hy-vee-100-apple-cider",
-                                                     "price":  3.59,
-                                                     "size":  "64 fl oz",
                                                      "name":  "Hy-Vee 100% Apple Cider",
-                                                     "recipe_pu":  0.0561
+                                                     "recipe_pu":  0.0561,
+                                                     "price":  3.59,
+                                                     "size":  "64 floz",
+                                                     "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                  }
                                   },
                   "apple-cider-vinegar":  {
@@ -565,10 +573,11 @@
                                                   },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/24371/hy-vee-100-apple-juice-no-sugar-added",
-                                                     "price":  2.99,
-                                                     "size":  "64 fl oz",
                                                      "name":  "Hy-Vee 100% Apple Juice No Sugar Added",
-                                                     "board_pu":  0.0467
+                                                     "board_pu":  0.0467,
+                                                     "price":  2.19,
+                                                     "size":  "64 fl oz",
+                                                     "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                  },
                                       "Sam\u0027s Club":  {
                                                               "url":  "https://www.samsclub.com/ip/Mott-s-100-Apple-Juice-86-fl-oz-2-pk/13620310700",
@@ -973,10 +982,11 @@
                                             },
                                 "Hy-Vee":  {
                                                "url":  "https://www.hy-vee.com/aisles-online/p/57278/hy-vee-double-smoked-thick-sliced-bacon",
-                                               "price":  4.89,
-                                               "size":  "16 oz",
                                                "name":  "Hy-Vee Double Smoked Thick Sliced Bacon",
-                                               "board_pu":  4.89
+                                               "board_pu":  4.89,
+                                               "price":  4.89,
+                                               "size":  "lb",
+                                               "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                            },
                                 "Sam\u0027s Club":  {
                                                         "url":  "https://www.samsclub.com/ip/Member-s-Mark-Naturally-Hickory-Smoked-Bacon-3-lbs/13892064138",
@@ -1016,10 +1026,11 @@
                                              },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/23552/hy-vee-plain-bagels-5-count-pre-split",
-                                                "price":  2.28,
-                                                "size":  "5 ct",
                                                 "name":  "Hy-Vee Plain Bagels 5 Count Pre-Split",
-                                                "board_pu":  0.456
+                                                "board_pu":  0.456,
+                                                "price":  1.6667,
+                                                "size":  "5 ct",
+                                                "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                             },
                                  "Sam\u0027s Club":  {
                                                          "url":  "https://www.samsclub.com/ip/Thomas-Plain-Bagels-12-pk/19599173494",
@@ -1170,10 +1181,11 @@
                                                            },
                                            "Hy-Vee":  {
                                                           "url":  "https://www.hy-vee.com/aisles-online/p/4126251/nothing-but-the-truth-organic-balsamic-vinegar",
-                                                          "price":  2.97,
-                                                          "size":  "16.9 fl oz",
                                                           "name":  "Nothing But The Truth Organic Balsamic Vinegar",
-                                                          "recipe_pu":  0.1757
+                                                          "recipe_pu":  0.1757,
+                                                          "price":  3.99,
+                                                          "size":  "16.9 fl oz",
+                                                          "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                       },
                                            "Walmart":  {
                                                            "url":  "https://www.walmart.com/ip/128822499",
@@ -1215,10 +1227,11 @@
                                               },
                                   "Hy-Vee":  {
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/37178/fresh-chiquita-bananas",
-                                                 "price":  0.49,
-                                                 "size":  "lb",
                                                  "name":  "Fresh Chiquita Bananas",
-                                                 "board_pu":  0.49
+                                                 "board_pu":  0.49,
+                                                 "price":  0.5,
+                                                 "size":  "lb",
+                                                 "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                              },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/Bananas-3-lbs/18638953319",
@@ -1288,9 +1301,10 @@
                                                 },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/2398471/simply-done-aa-batteries-4pk",
-                                                   "price":  3.99,
+                                                   "name":  "Simply Done AA Batteries 4 Pk",
+                                                   "price":  2.99,
                                                    "size":  "4 ct",
-                                                   "name":  "Simply Done AA Batteries 4 Pk"
+                                                   "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                },
                                     "Sam\u0027s Club":  {
                                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-AA-Alkaline-Batteries-66-Pack/18075258612",
@@ -1457,10 +1471,11 @@
                                                            },
                                            "Hy-Vee":  {
                                                           "url":  "https://www.hy-vee.com/aisles-online/p/2150794/beef-boneless-chuck-roast",
-                                                          "price":  0,
-                                                          "size":  "lbs ($10.99/lb)",
                                                           "name":  "Beef Boneless Chuck Roast",
-                                                          "recipe_pu":  10.99
+                                                          "recipe_pu":  10.99,
+                                                          "price":  10.99,
+                                                          "size":  "lb",
+                                                          "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                       },
                                            "Sam\u0027s Club":  {
                                                                    "url":  "https://www.samsclub.com/ip/Member-s-Mark-USDA-Choice-Angus-Beef-Boneless-Chuck-Roast-priced-per-pound/13596802079",
@@ -1583,9 +1598,10 @@
                                                    },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/299680/blackberries",
-                                                      "price":  3.49,
+                                                      "name":  "Blackberries",
+                                                      "price":  2.99,
                                                       "size":  "6 oz",
-                                                      "name":  "Blackberries"
+                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/Fresh-Blackberries-6-oz-Container/47314798",
@@ -1676,10 +1692,11 @@
                                              },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/3113940/thats-smart-bleach-2-qt",
-                                                "price":  2.18,
-                                                "size":  "64 fl oz",
                                                 "name":  "That\u0027s Smart! Bleach 2 qt",
-                                                "board_pu":  0.0341
+                                                "board_pu":  0.0341,
+                                                "price":  1.88,
+                                                "size":  "64 fl oz",
+                                                "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                             },
                                  "Walmart":  {
                                                  "url":  "https://www.walmart.com/ip/Great-Value-Bleach-121-fl-oz/629539844",
@@ -1706,10 +1723,11 @@
                                                   },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/536497/fresh-blueberries-1-pint",
-                                                     "price":  4.99,
-                                                     "size":  "1 pint",
                                                      "name":  "Fresh Blueberries, 1 Pint",
-                                                     "board_pu":  0.2772
+                                                     "board_pu":  0.2772,
+                                                     "price":  4.99,
+                                                     "size":  "1 pt",
+                                                     "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                  },
                                       "Sam\u0027s Club":  {
                                                               "url":  "https://www.samsclub.com/ip/Jumbo-Blueberries-16-oz/13623451926",
@@ -1828,10 +1846,11 @@
                                                     },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/56357/hy-vee-spring-water-24pk",
-                                                       "price":  2.99,
-                                                       "size":  "24 x 16.9 fl oz",
                                                        "name":  "Hy-Vee Spring Water 24Pk",
-                                                       "board_pu":  0.1246
+                                                       "board_pu":  0.1246,
+                                                       "price":  4.99,
+                                                       "size":  "24 x 16.9 fl oz",
+                                                       "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                    },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/Member-s-Mark-Purified-Water-16-9-fl-oz-40-pk/7874202847",
@@ -1922,10 +1941,11 @@
                                             },
                                 "Hy-Vee":  {
                                                "url":  "https://www.hy-vee.com/aisles-online/p/1955/hy-vee-white-bread",
-                                               "price":  1.99,
-                                               "size":  "20 oz",
                                                "name":  "Hy-Vee White Bread",
-                                               "board_pu":  1.99
+                                               "board_pu":  1.99,
+                                               "price":  1.99,
+                                               "size":  "each",
+                                               "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                            },
                                 "Sam\u0027s Club":  {
                                                         "url":  "https://www.samsclub.com/ip/Rotella-s-Italian-Vienna-Bread-17-oz/13615557155",
@@ -2010,9 +2030,10 @@
                                                    },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/3309869/gustare-vita-italian-bread-crumbs-134-oz",
-                                                      "price":  2.49,
+                                                      "name":  "Gustare Vita Italian Bread Crumbs",
+                                                      "price":  2.99,
                                                       "size":  "13.4 oz",
-                                                      "name":  "Gustare Vita Italian Bread Crumbs"
+                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Vigo-Italian-Style-Bread-Crumbs-5-lbs/13803520339",
@@ -2048,10 +2069,11 @@
                                                            },
                                                "Hy-Vee":  {
                                                               "url":  "https://www.hy-vee.com/aisles-online/p/4234539/hy-vee-sausage-egg-and-cheese-muffin-breakfast-sandwiches",
-                                                              "price":  6.49,
-                                                              "size":  "18 oz",
                                                               "name":  "Hy-Vee Sausage, Egg, \u0026 Cheese Muffin Breakfast Sandwiches",
-                                                              "board_pu":  1.4975
+                                                              "board_pu":  1.4975,
+                                                              "price":  5.99,
+                                                              "size":  "18 oz",
+                                                              "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                           },
                                                "Sam\u0027s Club":  {
                                                                        "url":  "https://www.samsclub.com/ip/Jimmy-Dean-Sausage-Egg-and-Cheese-Croissant-Sandwiches-Frozen-12ct/13599221641",
@@ -2098,10 +2120,11 @@
                                                         },
                                             "Hy-Vee":  {
                                                            "url":  "https://www.hy-vee.com/aisles-online/p/2870240/hy-vee-midwest-pork-mild-spice-pork-sausage",
-                                                           "price":  4.88,
-                                                           "size":  "16 oz",
                                                            "name":  "Hy-Vee Midwest Pork Mild Spice Pork Sausage",
-                                                           "board_pu":  4.49
+                                                           "board_pu":  4.49,
+                                                           "price":  4.49,
+                                                           "size":  "16 oz",
+                                                           "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                        },
                                             "Sam\u0027s Club":  {
                                                                     "url":  "https://www.samsclub.com/ip/Jimmy-Dean-Premium-Pork-Sausage-Roll-2-lbs/13620410188",
@@ -2177,10 +2200,11 @@
                                                   },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/32646/duncan-hines-family-size-chewy-fudge-brownie-mix-183-oz",
-                                                     "price":  1.72,
-                                                     "size":  "18.3 oz",
                                                      "name":  "Duncan Hines Family Size Chewy Fudge Brownie Mix, 18.3 oz.",
-                                                     "board_pu":  1.72
+                                                     "board_pu":  1.72,
+                                                     "price":  1.72,
+                                                     "size":  "1 ct",
+                                                     "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                  },
                                       "Sam\u0027s Club":  {
                                                               "url":  "https://www.samsclub.com/ip/Betty-Crocker-HERSHEY-S-Triple-Chocolate-Fudge-Brownie-Mix-20-oz-4-pk/1600049628",
@@ -2360,10 +2384,11 @@
                                                              },
                                              "Hy-Vee":  {
                                                             "url":  "https://www.hy-vee.com/aisles-online/p/3012984/sweet-baby-rays-mild-buffalo-wing-sauce-16-fl-oz",
-                                                            "price":  0,
-                                                            "size":  "16 fl oz",
                                                             "name":  "Sweet Baby Ray\u0027s Mild Buffalo Wing Sauce",
-                                                            "recipe_pu":  0.2488
+                                                            "recipe_pu":  0.2488,
+                                                            "price":  3.98,
+                                                            "size":  "16 fl oz",
+                                                            "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                         },
                                              "Sam\u0027s Club":  {
                                                                      "url":  "https://www.samsclub.com/ip/Frank-s-RedHot-Original-Buffalo-Wing-Sauce-1-gal/4150074161",
@@ -2415,11 +2440,12 @@
                                              },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/57018/hy-vee-sweet-cream-salted-butter-quarters",
-                                                "price":  3.99,
-                                                "size":  "16 oz",
                                                 "name":  "Hy-Vee Sweet Cream Salted Butter Quarters",
                                                 "board_pu":  3.99,
-                                                "recipe_pu":  0.2494
+                                                "recipe_pu":  0.2494,
+                                                "price":  3.99,
+                                                "size":  "lb",
+                                                "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                             },
                                  "Sam\u0027s Club":  {
                                                          "url":  "https://www.samsclub.com/ip/Member-s-Mark-Salted-Sweet-Cream-Butter-Block-1-lb-4-lbs/15365221245",
@@ -2515,9 +2541,10 @@
                                                },
                                    "Hy-Vee":  {
                                                   "url":  "https://www.hy-vee.com/aisles-online/p/2263913/hy-vee-extra-moist-classic-yellow-deluxe-cake-mix",
-                                                  "price":  1.29,
+                                                  "name":  "Hy-Vee Extra Moist Classic Yellow Deluxe Cake Mix",
+                                                  "price":  0.99,
                                                   "size":  "13.25 oz",
-                                                  "name":  "Hy-Vee Extra Moist Classic Yellow Deluxe Cake Mix"
+                                                  "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                               },
                                    "Walmart":  {
                                                    "url":  "https://www.walmart.com/ip/Great-Value-Deluxe-Moist-Yellow-Cake-Mix-15-25-oz-Box/18873904712",
@@ -2864,13 +2891,6 @@
                                                            "name":  "Dole Pineapple Chunks",
                                                            "board_pu":  0.205
                                                        },
-                                           "Hy-Vee":  {
-                                                          "url":  "https://www.hy-vee.com/aisles-online/p/2970346/thats-smart-pineapple-chunks-in-pineapple-juice-8-oz",
-                                                          "price":  0.94,
-                                                          "size":  "8 oz",
-                                                          "name":  "That\u0027s Smart! Pineapple Chunks In Pineapple Juice 8 oz",
-                                                          "board_pu":  0.1175
-                                                      },
                                            "Sam\u0027s Club":  {
                                                                    "url":  "https://www.samsclub.com/ip/Dole-Tropical-Gold-Pineapple-Chunks-15-25-oz-6-pk/13608108237",
                                                                    "price":  11.48,
@@ -2903,10 +2923,11 @@
                                                          },
                                              "Hy-Vee":  {
                                                             "url":  "https://www.hy-vee.com/aisles-online/p/24686/hy-vee-pinto-beans",
-                                                            "price":  0.99,
-                                                            "size":  "15 oz",
                                                             "name":  "Hy-Vee Pinto Beans",
-                                                            "board_pu":  0.0593
+                                                            "board_pu":  0.0593,
+                                                            "price":  0.89,
+                                                            "size":  "15 oz",
+                                                            "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                         },
                                              "Sam\u0027s Club":  {
                                                                      "url":  "https://www.samsclub.com/ip/Bush-s-Pinto-Beans-16-oz-6-pk/3940010809",
@@ -2983,10 +3004,11 @@
                                                             },
                                             "Hy-Vee":  {
                                                            "url":  "https://www.hy-vee.com/aisles-online/p/4163934/green-giant-whole-kernel-sweet-corn-low-sodium",
-                                                           "price":  0,
-                                                           "size":  "15.25 oz",
                                                            "name":  "Green Giant Whole Kernel Sweet Corn Low Sodium",
-                                                           "recipe_pu":  1.49
+                                                           "recipe_pu":  1.49,
+                                                           "price":  1.49,
+                                                           "size":  "15.25 oz",
+                                                           "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                        },
                                             "Sam\u0027s Club":  {
                                                                     "url":  "https://www.samsclub.com/ip/Del-Monte-Golden-Sweet-Whole-Kernel-Corn-15-25-oz-8-pk/13596361849",
@@ -3028,10 +3050,11 @@
                                                   },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/2402871/hy-vee-chunk-light-tuna-in-water-free-school-caught",
-                                                     "price":  0.95,
-                                                     "size":  "5 oz",
                                                      "name":  "Hy-Vee Chunk Light Tuna in Water Free-School Caught",
-                                                     "board_pu":  0.176
+                                                     "board_pu":  0.176,
+                                                     "price":  0.88,
+                                                     "size":  "5 oz",
+                                                     "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                  },
                                       "Sam\u0027s Club":  {
                                                               "url":  "https://www.samsclub.com/ip/StarKist-Chunk-Light-Tuna-in-Water-5-oz-12-pk/8000051596",
@@ -3072,10 +3095,11 @@
                                                            },
                                            "Hy-Vee":  {
                                                           "url":  "https://www.hy-vee.com/aisles-online/p/337459/hy-vee-cannellini-beans",
-                                                          "price":  0.99,
-                                                          "size":  "15 oz",
                                                           "name":  "Hy-Vee Cannellini Beans",
-                                                          "recipe_pu":  0.0639
+                                                          "recipe_pu":  0.0639,
+                                                          "price":  0.99,
+                                                          "size":  "15.5 oz",
+                                                          "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                       },
                                            "Walmart":  {
                                                            "url":  "https://www.walmart.com/ip/22002645",
@@ -3443,10 +3467,11 @@
                                                       },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/4141460/hy-vee-celery-salt",
-                                                     "price":  1.99,
-                                                     "size":  "1.2 oz",
                                                      "name":  "Hy-Vee Celery Salt",
-                                                     "recipe_pu":  1.6583
+                                                     "recipe_pu":  1.6583,
+                                                     "price":  1.3333,
+                                                     "size":  "1.2 oz",
+                                                     "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                  },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/15918221301",
@@ -3560,10 +3585,11 @@
                                                          },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/2626400/hy-vee-cheese-sharp-cheddar-chunk",
-                                                        "price":  7.98,
-                                                        "size":  "32 oz",
                                                         "name":  "Hy-Vee Cheese Sharp Cheddar Chunk",
-                                                        "recipe_pu":  0.2494
+                                                        "recipe_pu":  0.2494,
+                                                        "price":  8.99,
+                                                        "size":  "32 oz Shrinkwrap",
+                                                        "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/Member-s-Mark-Standard-Shredded-Mild-Yellow-Cheddar-Cheese-5-lbs/13589400932",
@@ -3604,10 +3630,11 @@
                                                                   },
                                                   "Hy-Vee":  {
                                                                  "url":  "https://www.hy-vee.com/aisles-online/p/23859/hy-vee-finely-shredded-mild-cheddar-natural-cheese",
-                                                                 "price":  2.48,
-                                                                 "size":  "8 oz",
                                                                  "name":  "Hy-Vee Finely Shredded Mild Cheddar Natural Cheese",
-                                                                 "recipe_pu":  0.31
+                                                                 "recipe_pu":  0.31,
+                                                                 "price":  1.97,
+                                                                 "size":  "8 oz",
+                                                                 "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                              },
                                                   "Sam\u0027s Club":  {
                                                                           "url":  "https://www.samsclub.com/ip/Member-s-Mark-Mild-Cheddar-Shredded-Cheese-16-oz-2-pk/13771120208",
@@ -3739,9 +3766,10 @@
                                                      },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/65791/boneless-skinless-chicken-breast",
-                                                        "price":  4.88,
+                                                        "name":  "Boneless Skinless Chicken Breast",
+                                                        "price":  4.99,
                                                         "size":  "lb",
-                                                        "name":  "Boneless Skinless Chicken Breast"
+                                                        "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/Member-s-Mark-Boneless-and-Skinless-Chicken-Breast-priced-per-pound/13588173694",
@@ -3931,10 +3959,11 @@
                                                      },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/31783/hy-vee-100-natural-chicken-thighs-value-pack",
-                                                        "price":  1.99,
-                                                        "size":  "lb",
                                                         "name":  "Hy-Vee 100% Natural Chicken Thighs Value Pack",
-                                                        "board_pu":  1.77
+                                                        "board_pu":  1.77,
+                                                        "price":  1.77,
+                                                        "size":  "lb",
+                                                        "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/Member-s-Mark-Bone-In-Chicken-Thighs-priced-per-pound/13608013618",
@@ -4084,11 +4113,12 @@
                                                    },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2957041/thats-smart-chili-powder",
-                                                      "price":  0,
-                                                      "size":  "2.75 oz",
                                                       "name":  "That\u0027s Smart Chili Powder",
                                                       "board_pu":  0.4545,
-                                                      "recipe_pu":  0.4545
+                                                      "recipe_pu":  0.4545,
+                                                      "price":  1.25,
+                                                      "size":  "2.75 oz",
+                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-Chili-Powder-20-oz/13598100262",
@@ -4124,10 +4154,11 @@
                                                             },
                                             "Hy-Vee":  {
                                                            "url":  "https://www.hy-vee.com/aisles-online/p/64254/la-costena-chipotle-peppers-in-adobo-sauce",
-                                                           "price":  0,
-                                                           "size":  "12 oz",
                                                            "name":  "La Costena Chipotle Peppers in Adobo Sauce",
-                                                           "recipe_pu":  0.4992
+                                                           "recipe_pu":  0.4992,
+                                                           "price":  5.99,
+                                                           "size":  "12 oz",
+                                                           "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                        },
                                             "Walmart":  {
                                                             "url":  "https://www.walmart.com/ip/30854861",
@@ -4192,9 +4223,10 @@
                                                      },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/55167/hiland-premium-chocolate-milk-pint-16-fl-oz",
-                                                        "price":  1.79,
+                                                        "name":  "Hiland Premium Chocolate Milk, Pint, 16 Fl Oz",
+                                                        "price":  1.25,
                                                         "size":  "16 fl oz",
-                                                        "name":  "Hiland Premium Chocolate Milk, Pint, 16 Fl Oz"
+                                                        "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/Nesquik-Chocolate-Milk-Beverage-8-fl-oz-15-pk/13592921663",
@@ -4322,9 +4354,10 @@
                                                   },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/2587392/kings-river-poppies-mandarins",
-                                                     "price":  5.99,
+                                                     "name":  "Kings River Poppies Mandarins",
+                                                     "price":  4.99,
                                                      "size":  "3 lb",
-                                                     "name":  "Kings River Poppies Mandarins"
+                                                     "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                  },
                                       "Sam\u0027s Club":  {
                                                               "url":  "https://www.samsclub.com/ip/Clementine-Mandarins-5-lbs/13561616172",
@@ -4388,10 +4421,11 @@
                                                        },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/1849115/hy-vee-coconut-milk",
-                                                      "price":  0,
-                                                      "size":  "13.5 fl oz",
                                                       "name":  "Hy-Vee Coconut Milk",
-                                                      "recipe_pu":  0.2511
+                                                      "recipe_pu":  0.2511,
+                                                      "price":  3.39,
+                                                      "size":  "13.5 fl oz",
+                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Thai-Kitchen-Unsweetened-Coconut-Milk-13-66-fl-oz-cans-6-pk/73762801083",
@@ -4514,9 +4548,10 @@
                                              },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/3594226/folgers-coffee-classic-roast-ground-medium",
-                                                "price":  12.99,
+                                                "name":  "Folgers Classic Roast Ground Coffee",
+                                                "price":  15.94,
                                                 "size":  "25.9 oz",
-                                                "name":  "Folgers Classic Roast Ground Coffee"
+                                                "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                             },
                                  "Sam\u0027s Club":  {
                                                          "url":  "https://www.samsclub.com/ip/Folgers-Classic-Medium-Roast-Ground-Coffee-43-5-oz/13626705840",
@@ -4617,10 +4652,11 @@
                                                                       },
                                                       "Hy-Vee":  {
                                                                      "url":  "https://www.hy-vee.com/aisles-online/p/50124/campbells-condensed-french-onion-soup-105-oz-can",
-                                                                     "price":  1.96,
-                                                                     "size":  "10.5 oz can",
                                                                      "name":  "Campbell\u0027s Condensed French Onion Soup",
-                                                                     "recipe_pu":  1.96
+                                                                     "recipe_pu":  1.96,
+                                                                     "price":  1.96,
+                                                                     "size":  "10.5 oz",
+                                                                     "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                                  },
                                                       "Walmart":  {
                                                                       "url":  "https://www.walmart.com/ip/21274651",
@@ -4894,10 +4930,11 @@
                                                          },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/301255/la-banderita-yellow-corn-tortilla-30-ct",
-                                                        "price":  2.99,
-                                                        "size":  "24.9 oz / 30 ct",
                                                         "name":  "La Banderita Yellow Corn Tortilla 30 Ct",
-                                                        "recipe_pu":  0.0997
+                                                        "recipe_pu":  0.0997,
+                                                        "price":  2.99,
+                                                        "size":  "30 ea",
+                                                        "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                     }
                                      },
                   "cottage-cheese":  {
@@ -5244,11 +5281,12 @@
                                                        },
                                            "Hy-Vee":  {
                                                           "url":  "https://www.hy-vee.com/aisles-online/p/58132/hy-vee-crushed-tomatoes-in-puree",
-                                                          "price":  1.99,
-                                                          "size":  "28 oz",
                                                           "name":  "Hy-Vee Crushed Tomatoes in Puree",
                                                           "board_pu":  0.0711,
-                                                          "recipe_pu":  0.0711
+                                                          "recipe_pu":  0.0711,
+                                                          "price":  1.88,
+                                                          "size":  "28 oz",
+                                                          "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                       },
                                            "Sam\u0027s Club":  {
                                                                    "url":  "https://www.samsclub.com/ip/Tuttorosso-Crushed-Tomatoes-with-Basil-28-oz-8-pk/7294075605",
@@ -5543,10 +5581,11 @@
                                                              },
                                              "Hy-Vee":  {
                                                             "url":  "https://www.hy-vee.com/aisles-online/p/1722234/hy-vee-mild-green-chiles-diced",
-                                                            "price":  0,
-                                                            "size":  "4 oz",
                                                             "name":  "Hy-Vee Mild Green Chiles Diced",
-                                                            "recipe_pu":  0.4475
+                                                            "recipe_pu":  0.4475,
+                                                            "price":  1.79,
+                                                            "size":  "4 oz",
+                                                            "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                         },
                                              "Walmart":  {
                                                              "url":  "https://www.walmart.com/ip/10415222",
@@ -5591,11 +5630,12 @@
                                                      },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/58157/hy-vee-petite-cut-diced-tomatoes",
-                                                        "price":  1.99,
-                                                        "size":  "28 oz",
                                                         "name":  "Hy-Vee Petite Cut Diced Tomatoes",
                                                         "board_pu":  0.0711,
-                                                        "recipe_pu":  0.0821
+                                                        "recipe_pu":  0.0821,
+                                                        "price":  1.88,
+                                                        "size":  "28 oz",
+                                                        "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/Member-s-Mark-Diced-Tomatoes-in-Tomato-Juice-14-5-oz-12-pk/19396803121",
@@ -6023,10 +6063,11 @@
                                                      },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/2918306/hy-vee-dill-weed",
-                                                    "price":  2.49,
-                                                    "size":  "0.75 oz",
                                                     "name":  "Hy-Vee Dill Weed",
-                                                    "recipe_pu":  3.32
+                                                    "recipe_pu":  3.32,
+                                                    "price":  2.99,
+                                                    "size":  "0.75 oz",
+                                                    "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                 },
                                      "Walmart":  {
                                                      "url":  "https://www.walmart.com/ip/28645449",
@@ -6068,11 +6109,12 @@
                                                     },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/4141455/hy-vee-oregano-leaves",
-                                                       "price":  3.99,
-                                                       "size":  "3.75 oz",
                                                        "name":  "Hy-Vee Oregano Leaves",
                                                        "board_pu":  1.064,
-                                                       "recipe_pu":  1.064
+                                                       "recipe_pu":  1.064,
+                                                       "price":  3.49,
+                                                       "size":  "3.75 oz",
+                                                       "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                    },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/Member-s-Mark-Oregano-5-5-oz/13599561333",
@@ -6125,11 +6167,12 @@
                                                     },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/2922965/hy-vee-parsley-flakes",
-                                                       "price":  2.49,
-                                                       "size":  "0.75 oz",
                                                        "name":  "Hy-Vee Parsley Flakes",
                                                        "board_pu":  3.32,
-                                                       "recipe_pu":  3.32
+                                                       "recipe_pu":  3.32,
+                                                       "price":  2.99,
+                                                       "size":  "0.75 oz",
+                                                       "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                    },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/Member-s-Mark-Parsley-Flakes-3-2-oz/13585173500",
@@ -6402,10 +6445,11 @@
                                                           },
                                           "Hy-Vee":  {
                                                          "url":  "https://www.hy-vee.com/aisles-online/p/1922968/hy-vee-mild-enchilada-sauce",
-                                                         "price":  3.19,
-                                                         "size":  "28 oz",
                                                          "name":  "Hy-Vee Mild Enchilada Sauce",
-                                                         "recipe_pu":  0.1139
+                                                         "recipe_pu":  0.1139,
+                                                         "price":  3.49,
+                                                         "size":  "28 oz",
+                                                         "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                      },
                                           "Walmart":  {
                                                           "url":  "https://www.walmart.com/ip/1840673347",
@@ -6439,10 +6483,11 @@
                                                     },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/3973295/ghost-zero-sugar-energy-drink-welchs-grape-16-fl-oz-can",
-                                                       "price":  2.5,
-                                                       "size":  "16 fl oz",
                                                        "name":  "Ghost Zero Sugar Energy Drink, Welch\u0027s Grape, 16 fl oz can",
-                                                       "board_pu":  0.1562
+                                                       "board_pu":  0.1562,
+                                                       "price":  2.25,
+                                                       "size":  "16 fl oz",
+                                                       "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                    },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/Alani-Nu-Energy-Drink-Variety-Pack-12-fl-oz-18-pk/19707820853",
@@ -6475,10 +6520,11 @@
                                                       },
                                           "Hy-Vee":  {
                                                          "url":  "https://www.hy-vee.com/aisles-online/p/23555/hy-vee-pre-sliced-original-english-muffins-6-muffins",
-                                                         "price":  2.28,
-                                                         "size":  "6 ct",
                                                          "name":  "Hy-Vee Pre-Sliced Original English Muffins - 6 Muffins",
-                                                         "board_pu":  0.3317
+                                                         "board_pu":  0.3317,
+                                                         "price":  1.99,
+                                                         "size":  "6 ct",
+                                                         "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                      },
                                           "Sam\u0027s Club":  {
                                                                   "url":  "https://www.samsclub.com/ip/Thomas-Original-Nooks-Crannies-English-Muffins-12-ct/13713273560",
@@ -6512,10 +6558,11 @@
                                                       },
                                           "Hy-Vee":  {
                                                          "url":  "https://www.hy-vee.com/aisles-online/p/64125/nestl-carnation-evaporated-milk-vitamin-d-added-shelf-milk-evaporated-milk-canned",
-                                                         "price":  1.88,
-                                                         "size":  "12 fl oz",
                                                          "name":  "Nestle Carnation Evaporated Milk, Vitamin D Added",
-                                                         "board_pu":  0.1433
+                                                         "board_pu":  0.1433,
+                                                         "price":  1.72,
+                                                         "size":  "12 fl oz",
+                                                         "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                      },
                                           "Sam\u0027s Club":  {
                                                                   "url":  "https://www.samsclub.com/ip/Carnation-Evaporated-Milk-12-fl-oz-8-pk/5000001531",
@@ -6622,10 +6669,11 @@
                                                            },
                                            "Hy-Vee":  {
                                                           "url":  "https://www.hy-vee.com/aisles-online/p/51470/mccormick-fajita-seasoning-mix-112-oz",
-                                                          "price":  0,
-                                                          "size":  "1.12 oz",
                                                           "name":  "McCormick Fajita Seasoning Mix",
-                                                          "recipe_pu":  2.39
+                                                          "recipe_pu":  2.39,
+                                                          "price":  2.39,
+                                                          "size":  "1.12 oz",
+                                                          "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                       },
                                            "Walmart":  {
                                                            "url":  "https://www.walmart.com/ip/149215159",
@@ -6819,9 +6867,10 @@
                                                   },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/24123/fish-market-crunchy-fish-sticks-30ct",
-                                                     "price":  6.99,
+                                                     "name":  "Fish Market Crunchy Fish Sticks 30 Ct",
+                                                     "price":  5.99,
                                                      "size":  "20.1 oz",
-                                                     "name":  "Fish Market Crunchy Fish Sticks 30 Ct"
+                                                     "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                  },
                                       "Sam\u0027s Club":  {
                                                               "url":  "https://www.samsclub.com/ip/Gorton-s-Super-Crunchy-Fish-Sticks-Frozen-64-ct/13581923930",
@@ -7231,10 +7280,11 @@
                                                                   },
                                                   "Hy-Vee":  {
                                                                  "url":  "https://www.hy-vee.com/aisles-online/p/3485/birds-eye-baby-broccoli-florets-3g-of-fiber-per-serving-frozen-vegetables-126-oz-bag",
-                                                                 "price":  0,
-                                                                 "size":  "12.6 oz. Bag",
                                                                  "name":  "Birds Eye Baby Broccoli Florets, 3g of Fiber per Serving, Frozen Vegetables",
-                                                                 "recipe_pu":  0.1579
+                                                                 "recipe_pu":  0.1579,
+                                                                 "price":  1.99,
+                                                                 "size":  "12.6 oz",
+                                                                 "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                              },
                                                   "Sam\u0027s Club":  {
                                                                           "url":  "https://www.samsclub.com/ip/Member-s-Mark-Steamable-Broccoli-Florets-1-lb-4-pk/13585719539",
@@ -7306,10 +7356,11 @@
                                                                  },
                                                  "Hy-Vee":  {
                                                                 "url":  "https://www.hy-vee.com/aisles-online/p/38701/birds-eye-chopped-spinach-frozen-vegetables-10-oz-box",
-                                                                "price":  1.49,
-                                                                "size":  "10 oz",
                                                                 "name":  "Birds Eye Chopped Spinach",
-                                                                "recipe_pu":  0.149
+                                                                "recipe_pu":  0.149,
+                                                                "price":  0.99,
+                                                                "size":  "10 oz",
+                                                                "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                             },
                                                  "Walmart":  {
                                                                  "url":  "https://www.walmart.com/ip/36817130",
@@ -7387,9 +7438,10 @@
                                                    },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/4153223/hy-vee-straight-cut-french-fried-potatoes",
-                                                      "price":  4.48,
+                                                      "name":  "Hy-Vee Straight Cut French Fried Potatoes",
+                                                      "price":  3.48,
                                                       "size":  "32 oz",
-                                                      "name":  "Hy-Vee Straight Cut French Fried Potatoes"
+                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Ore-Ida-Crispy-Crinkles-French-Fries-Frozen-8-lbs/13621707320",
@@ -7467,10 +7519,11 @@
                                                              },
                                              "Hy-Vee":  {
                                                             "url":  "https://www.hy-vee.com/aisles-online/p/2985042/hy-vee-fresh-steam-cut-green-beans",
-                                                            "price":  0,
-                                                            "size":  "10 oz",
                                                             "name":  "Hy-Vee Fresh Steam Cut Green Beans",
-                                                            "recipe_pu":  0.139
+                                                            "recipe_pu":  0.139,
+                                                            "price":  1.28,
+                                                            "size":  "10 oz",
+                                                            "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                         },
                                              "Walmart":  {
                                                              "url":  "https://www.walmart.com/ip/10315044",
@@ -7742,10 +7795,11 @@
                                                      },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/57436/hy-vee-buttermilk-waffles-10-count",
-                                                        "price":  2.5,
-                                                        "size":  "10 ct",
                                                         "name":  "Hy-Vee Buttermilk Waffles 10 Count",
-                                                        "board_pu":  0.25
+                                                        "board_pu":  0.25,
+                                                        "price":  2,
+                                                        "size":  "10 ct",
+                                                        "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/Eggo-Homestyle-Waffles-Frozen-Breakfast-72-ct/15280601537",
@@ -7844,10 +7898,11 @@
                                                    },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/3910729/hy-vee-dinosaurs-fruit-snacks-10-08-oz-pouches",
-                                                      "price":  2.5,
-                                                      "size":  "10 ct",
                                                       "name":  "Hy-Vee Dinosaurs Fruit Snacks, 10-0.8 oz Pouches",
-                                                      "board_pu":  0.25
+                                                      "board_pu":  0.25,
+                                                      "price":  2.79,
+                                                      "size":  "10 ct",
+                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-Fruity-Snacks-0-8-oz-100-pk/16410168126",
@@ -8046,11 +8101,12 @@
                                                     },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/2925578/thats-smart-garlic-powder",
-                                                       "price":  0,
-                                                       "size":  "2.5 oz",
                                                        "name":  "That\u0027s Smart Garlic Powder",
                                                        "board_pu":  0.5,
-                                                       "recipe_pu":  0.5
+                                                       "recipe_pu":  0.5,
+                                                       "price":  1.25,
+                                                       "size":  "2.5 oz",
+                                                       "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                    },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/Member-s-Mark-Garlic-Powder-22-5-oz/15490511237",
@@ -8257,9 +8313,10 @@
                                                       },
                                           "Hy-Vee":  {
                                                          "url":  "https://www.hy-vee.com/aisles-online/p/4240472/hy-vee-graham-crackers-with-honey",
-                                                         "price":  2.5,
+                                                         "name":  "Hy-Vee Graham Crackers With Honey",
+                                                         "price":  2.99,
                                                          "size":  "14.4 oz",
-                                                         "name":  "Hy-Vee Graham Crackers With Honey"
+                                                         "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                      },
                                           "Sam\u0027s Club":  {
                                                                   "url":  "https://www.samsclub.com/ip/Honey-Maid-Honey-Graham-Crackers-14-4-oz-4-pk/4400031611",
@@ -8293,9 +8350,10 @@
                                               },
                                   "Hy-Vee":  {
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/287966/post-honey-bunches-of-oats-crunchy-honey-roasted-granola",
-                                                 "price":  3.99,
+                                                 "name":  "Post Honey Bunches of Oats Crunchy Honey Roasted Granola",
+                                                 "price":  3.49,
                                                  "size":  "11 oz",
-                                                 "name":  "Post Honey Bunches of Oats Crunchy Honey Roasted Granola"
+                                                 "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                              },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/Member-s-Mark-Honey-Almond-Granola-32-oz/7874228811",
@@ -8366,9 +8424,10 @@
                                                  },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/87141/red-grapefruit",
-                                                    "price":  1.99,
+                                                    "name":  "Red Grapefruit",
+                                                    "price":  1.29,
                                                     "size":  "1 lb",
-                                                    "name":  "Red Grapefruit"
+                                                    "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                 },
                                      "Walmart":  {
                                                      "url":  "https://www.walmart.com/ip/Fresh-Red-Grapefruit-Each/51259387",
@@ -8446,9 +8505,10 @@
                                              },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/8508/red-seedless-grapes",
-                                                "price":  3.99,
+                                                "name":  "Red Seedless Grapes",
+                                                "price":  1.88,
                                                 "size":  "lb",
-                                                "name":  "Red Seedless Grapes"
+                                                "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                             },
                                  "Sam\u0027s Club":  {
                                                          "url":  "https://www.samsclub.com/ip/Red-Seedless-Grapes-3-lbs/13585869299",
@@ -8526,10 +8586,11 @@
                                                       },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/58068/hy-vee-cut-green-beans",
-                                                     "price":  0.88,
-                                                     "size":  "14.5 oz",
                                                      "name":  "Hy-Vee Cut Green Beans",
-                                                     "recipe_pu":  0.0607
+                                                     "recipe_pu":  0.0607,
+                                                     "price":  0.99,
+                                                     "size":  "14.5 oz",
+                                                     "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                  },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/10448318",
@@ -8564,10 +8625,11 @@
                                                             },
                                             "Hy-Vee":  {
                                                            "url":  "https://www.hy-vee.com/aisles-online/p/8650/green-bell-pepper",
-                                                           "price":  0,
-                                                           "size":  "1 ct (2 for $3.00)",
                                                            "name":  "Green Bell Pepper",
-                                                           "recipe_pu":  1.5
+                                                           "recipe_pu":  1.5,
+                                                           "price":  1.5,
+                                                           "size":  "1 ct",
+                                                           "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                        },
                                             "Sam\u0027s Club":  {
                                                                     "url":  "https://www.samsclub.com/ip/Green-Bell-Peppers-6-ct/13888070896",
@@ -8806,10 +8868,11 @@
                                                            },
                                            "Hy-Vee":  {
                                                           "url":  "https://www.hy-vee.com/aisles-online/p/4141466/hy-vee-ground-coriander",
-                                                          "price":  1.99,
-                                                          "size":  "0.5 oz",
                                                           "name":  "Hy-Vee Ground Coriander",
-                                                          "recipe_pu":  3.98
+                                                          "recipe_pu":  3.98,
+                                                          "price":  1.3333,
+                                                          "size":  "0.5 oz",
+                                                          "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                       },
                                            "Walmart":  {
                                                            "url":  "https://www.walmart.com/ip/946318290",
@@ -8851,11 +8914,12 @@
                                                    },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/3972710/lawrys-ground-cumin-20-oz",
-                                                      "price":  0,
-                                                      "size":  "2.0 oz",
                                                       "name":  "Lawry\u0027s Ground Cumin",
                                                       "board_pu":  1.245,
-                                                      "recipe_pu":  1.245
+                                                      "recipe_pu":  1.245,
+                                                      "price":  2.49,
+                                                      "size":  "2 oz",
+                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-Ground-Cumin-16-oz/13591273997",
@@ -8929,10 +8993,11 @@
                                                         },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/2973757/hy-vee-ground-nutmeg-212-oz",
-                                                       "price":  2.49,
-                                                       "size":  "2.12 oz",
                                                        "name":  "Hy-Vee Ground Nutmeg",
-                                                       "recipe_pu":  1.1745
+                                                       "recipe_pu":  1.1745,
+                                                       "price":  3.99,
+                                                       "size":  "2.12 oz",
+                                                       "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                    },
                                         "Walmart":  {
                                                         "url":  "https://www.walmart.com/ip/344742144",
@@ -9174,10 +9239,11 @@
                                                      },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/77056/hy-vee-white-hamburger-buns-8-count",
-                                                        "price":  1.99,
-                                                        "size":  "8 ct",
                                                         "name":  "Hy-Vee White Hamburger Buns 8 Count",
-                                                        "board_pu":  0.2488
+                                                        "board_pu":  0.2488,
+                                                        "price":  1.88,
+                                                        "size":  "8 ct",
+                                                        "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/Sara-Lee-Restaurant-Style-White-Hamburger-Buns-16-ct/13693772702",
@@ -9365,10 +9431,11 @@
                                                                },
                                                "Hy-Vee":  {
                                                               "url":  "https://www.hy-vee.com/aisles-online/p/104466/hickory-country-smoked-bacon",
-                                                              "price":  4.99,
-                                                              "size":  "16 oz",
                                                               "name":  "Hickory Country Smoked Bacon",
-                                                              "recipe_pu":  4.99
+                                                              "recipe_pu":  4.99,
+                                                              "price":  3.97,
+                                                              "size":  "16 oz",
+                                                              "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                           },
                                                "Sam\u0027s Club":  {
                                                                        "url":  "https://www.samsclub.com/ip/Member-s-Mark-Naturally-Hickory-Smoked-Bacon-3-lbs/13892064138",
@@ -9513,9 +9580,10 @@
                                                },
                                    "Hy-Vee":  {
                                                   "url":  "https://www.hy-vee.com/aisles-online/p/8696/honeydew-melon",
-                                                  "price":  5.99,
+                                                  "name":  "Honeydew Melon",
+                                                  "price":  4.99,
                                                   "size":  "1 ct",
-                                                  "name":  "Honeydew Melon"
+                                                  "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                               },
                                    "Walmart":  {
                                                    "url":  "https://www.walmart.com/ip/Fresh-Honeydew-Melon-Each/44391113",
@@ -9572,9 +9640,10 @@
                                                 },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/56310/hy-vee-rich-chocolate-flavor-instant-hot-cocoa-mix-10-1-oz-pouches",
-                                                   "price":  2.39,
+                                                   "name":  "Hy-Vee Rich Chocolate Flavor Instant Hot Cocoa Mix 10-1 oz Pouches",
+                                                   "price":  1.99,
                                                    "size":  "10 ct",
-                                                   "name":  "Hy-Vee Rich Chocolate Flavor Instant Hot Cocoa Mix 10-1 oz Pouches"
+                                                   "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                },
                                     "Sam\u0027s Club":  {
                                                             "url":  "https://www.samsclub.com/ip/Swiss-Miss-Milk-Chocolate-Hot-Cocoa-Mix-50-ct/709204765",
@@ -9613,10 +9682,11 @@
                                                    },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/89633/hy-vee-hot-dog-buns-8-count",
-                                                      "price":  1.99,
-                                                      "size":  "8 ct",
                                                       "name":  "Hy-Vee Hot Dog Buns 8 Count",
-                                                      "board_pu":  0.235
+                                                      "board_pu":  0.235,
+                                                      "price":  1.88,
+                                                      "size":  "8 ct",
+                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Sara-Lee-Restaurant-Style-White-Hot-Dog-Buns-16-ct/13716621904",
@@ -9707,10 +9777,11 @@
                                                     },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/3635037/hy-vee-hot-honey-infused-with-chilies",
-                                                   "price":  0,
-                                                   "size":  "12 oz",
                                                    "name":  "Hy-Vee Hot Honey Infused with Chilies",
-                                                   "recipe_pu":  0.5825
+                                                   "recipe_pu":  0.5825,
+                                                   "price":  6.68,
+                                                   "size":  "12 oz",
+                                                   "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                },
                                     "Sam\u0027s Club":  {
                                                             "url":  "https://www.samsclub.com/ip/Nate-s-Honey-100-Pure-Hot-Honey-with-Habanero-Chili-Peppers-24-oz/13576766399",
@@ -9752,10 +9823,11 @@
                                                               },
                                               "Hy-Vee":  {
                                                              "url":  "https://www.hy-vee.com/aisles-online/p/65397/johnsonville-hot-italian-sausage-5-count-19-oz",
-                                                             "price":  0,
-                                                             "size":  "19 oz",
                                                              "name":  "Johnsonville Hot Italian Sausage, 5 Count",
-                                                             "recipe_pu":  5.0442
+                                                             "recipe_pu":  5.0442,
+                                                             "price":  5.88,
+                                                             "size":  "19 oz",
+                                                             "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                          },
                                               "Walmart":  {
                                                               "url":  "https://www.walmart.com/ip/10316094",
@@ -9885,10 +9957,11 @@
                                                 },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/1910331/hy-vee-we-all-scream-vanilla-ice-cream",
-                                                   "price":  7.48,
-                                                   "size":  "1 gal",
                                                    "name":  "Hy-Vee We All Scream! Vanilla Ice Cream",
-                                                   "board_pu":  0.0546
+                                                   "board_pu":  0.0546,
+                                                   "price":  6.99,
+                                                   "size":  "1 gal",
+                                                   "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                },
                                     "Sam\u0027s Club":  {
                                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Vanilla-Ice-Cream-Pail-5-qts/13877802816",
@@ -10009,9 +10082,10 @@
                                                               },
                                                   "Hy-Vee":  {
                                                                  "url":  "https://www.hy-vee.com/aisles-online/p/43867/idahoan-four-cheese-mashed-potatoes",
-                                                                 "price":  1.49,
+                                                                 "name":  "Idahoan Four Cheese Mashed Potatoes",
+                                                                 "price":  0.99,
                                                                  "size":  "4 oz",
-                                                                 "name":  "Idahoan Four Cheese Mashed Potatoes"
+                                                                 "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                              },
                                                   "Sam\u0027s Club":  {
                                                                           "url":  "https://www.samsclub.com/ip/Idahoan-Real-Premium-Mashed-Potatoes-3-25-lbs/2970052490",
@@ -10136,11 +10210,12 @@
                                                         },
                                             "Hy-Vee":  {
                                                            "url":  "https://www.hy-vee.com/aisles-online/p/2955753/thats-smart-italian-seasoning",
-                                                           "price":  0,
-                                                           "size":  "1 oz",
                                                            "name":  "That\u0027s Smart Italian Seasoning",
                                                            "board_pu":  1.25,
-                                                           "recipe_pu":  1.25
+                                                           "recipe_pu":  1.25,
+                                                           "price":  1.25,
+                                                           "size":  "1 oz",
+                                                           "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                        },
                                             "Sam\u0027s Club":  {
                                                                     "url":  "https://www.samsclub.com/ip/Member-s-Mark-Italian-Seasoning-6-oz/17057015915",
@@ -10184,10 +10259,11 @@
                                                    },
                                    "Hy-Vee":  {
                                                   "url":  "https://www.hy-vee.com/aisles-online/p/8832/jalapeno-pepper",
-                                                  "price":  2.99,
-                                                  "size":  "0.15 lbs ($2.99/lb)",
                                                   "name":  "Jalapeno Pepper",
-                                                  "recipe_pu":  2.99
+                                                  "recipe_pu":  2.99,
+                                                  "price":  2.99,
+                                                  "size":  "lb",
+                                                  "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                               }
                                },
                   "jalapenos":  {
@@ -10253,10 +10329,11 @@
                                                        },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/4253149/riceland-enriched-long-grain-jasmine-jasmine-rice-32-oz",
-                                                      "price":  0,
-                                                      "size":  "32 oz (2 lb)",
                                                       "name":  "Riceland Enriched Long Grain Jasmine Rice",
-                                                      "recipe_pu":  0.0934
+                                                      "recipe_pu":  0.0934,
+                                                      "price":  2.99,
+                                                      "size":  "32 oz",
+                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-Thai-Jasmine-Rice-50-lbs/13590054318",
@@ -10399,9 +10476,10 @@
                                               },
                                   "Hy-Vee":  {
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/769638/hy-vee-thick-and-rich-tomato-ketchup",
-                                                 "price":  2.98,
+                                                 "name":  "Hy-Vee Thick \u0026 Rich Tomato Ketchup",
+                                                 "price":  2.49,
                                                  "size":  "38 oz",
-                                                 "name":  "Hy-Vee Thick \u0026 Rich Tomato Ketchup"
+                                                 "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                              },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/Heinz-Original-Tomato-Ketchup-114-oz/15225818636",
@@ -10443,11 +10521,12 @@
                                                    },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2362477/hy-vee-light-red-kidney-beans",
-                                                      "price":  0.99,
-                                                      "size":  "15.5 oz",
                                                       "name":  "Hy-Vee Light Red Kidney Beans",
                                                       "board_pu":  0.0568,
-                                                      "recipe_pu":  0.0639
+                                                      "recipe_pu":  0.0639,
+                                                      "price":  0.88,
+                                                      "size":  "15.5 oz",
+                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Bush-s-Dark-Red-Kidney-Beans-16-oz-6-pk/3940010735",
@@ -10533,9 +10612,10 @@
                                            },
                                "Hy-Vee":  {
                                               "url":  "https://www.hy-vee.com/aisles-online/p/37185/kiwi-fruit",
-                                              "price":  0.99,
+                                              "name":  "Kiwi Fruit",
+                                              "price":  0.79,
                                               "size":  "1 ct",
-                                              "name":  "Kiwi Fruit"
+                                              "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                           },
                                "Sam\u0027s Club":  {
                                                        "url":  "https://www.samsclub.com/ip/Green-Kiwi-3-lbs/15384918475",
@@ -10757,10 +10837,11 @@
                                              },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/37192/lemons",
-                                                "price":  0.99,
-                                                "size":  "1 ct",
                                                 "name":  "Lemons",
-                                                "board_pu":  0.88
+                                                "board_pu":  0.88,
+                                                "price":  0.88,
+                                                "size":  "1 ct",
+                                                "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                             },
                                  "Sam\u0027s Club":  {
                                                          "url":  "https://www.samsclub.com/ip/Lemons-3-lbs/13762551112",
@@ -10801,9 +10882,10 @@
                                               },
                                   "Hy-Vee":  {
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/4237222/bud-iceberg-lettuce",
-                                                 "price":  2.49,
+                                                 "name":  "Bud Iceberg Lettuce",
+                                                 "price":  1.99,
                                                  "size":  "1 ct",
-                                                 "name":  "Bud Iceberg Lettuce"
+                                                 "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                              },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/Iceberg-Lettuce-2-heads/13725751832",
@@ -10844,10 +10926,11 @@
                                                            },
                                            "Hy-Vee":  {
                                                           "url":  "https://www.hy-vee.com/aisles-online/p/23920/hy-vee-all-natural-sour-cream",
-                                                          "price":  1.99,
-                                                          "size":  "16 oz",
                                                           "name":  "Hy-Vee Sour Cream",
-                                                          "recipe_pu":  0.1244
+                                                          "recipe_pu":  0.1244,
+                                                          "price":  1.98,
+                                                          "size":  "16 oz",
+                                                          "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                       },
                                            "Sam\u0027s Club":  {
                                                                    "url":  "https://www.samsclub.com/ip/Daisy-Brand-Pure-and-Natural-Sour-Cream-48-oz/13581873793",
@@ -10896,11 +10979,12 @@
                                             },
                                 "Hy-Vee":  {
                                                "url":  "https://www.hy-vee.com/aisles-online/p/37191/limes",
-                                               "price":  0.99,
-                                               "size":  "1 ct",
                                                "name":  "Limes",
                                                "board_pu":  0.88,
-                                               "recipe_pu":  0.88
+                                               "recipe_pu":  0.88,
+                                               "price":  0.88,
+                                               "size":  "1 ct",
+                                               "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                            },
                                 "Sam\u0027s Club":  {
                                                         "url":  "https://www.samsclub.com/ip/Limes-3-lbs/13821165423",
@@ -10935,10 +11019,11 @@
                                                        },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/19668/figaro-hickory-liquid-smoke-and-barbecue-marinade",
-                                                      "price":  2.99,
-                                                      "size":  "4 fl oz",
                                                       "name":  "Figaro Hickory Liquid Smoke \u0026 Barbecue Marinade",
-                                                      "recipe_pu":  0.7475
+                                                      "recipe_pu":  0.7475,
+                                                      "price":  2.99,
+                                                      "size":  "4 oz",
+                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/15377320035",
@@ -10966,10 +11051,11 @@
                                              },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/4115082/soapbox-body-lotion-vanilla-bean-and-fig",
-                                                "price":  7.99,
-                                                "size":  "16 fl oz",
                                                 "name":  "Soapbox Body Lotion, Vanilla Bean \u0026 Fig",
-                                                "board_pu":  0.4369
+                                                "board_pu":  0.4369,
+                                                "price":  6.99,
+                                                "size":  "16 fl oz",
+                                                "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                             },
                                  "Sam\u0027s Club":  {
                                                          "url":  "https://www.samsclub.com/ip/Jergens-Ultra-Healing-Extra-Dry-Skin-Moisturizer-45-fl-oz/1910025719",
@@ -11008,10 +11094,11 @@
                                                      },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/55931/hy-vee-original-macaroni-and-cheese-dinner",
-                                                        "price":  0.69,
-                                                        "size":  "7.25 oz",
                                                         "name":  "Hy-Vee Original Macaroni \u0026 Cheese Dinner",
-                                                        "board_pu":  1
+                                                        "board_pu":  1,
+                                                        "price":  0.59,
+                                                        "size":  "7.25 oz",
+                                                        "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/Kraft-Original-Macaroni-and-Cheese-Dinner-18-pk/2100005553",
@@ -11045,9 +11132,10 @@
                                               },
                                   "Hy-Vee":  {
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/230312/mangoes",
-                                                 "price":  2.5,
+                                                 "name":  "Mangoes",
+                                                 "price":  1.29,
                                                  "size":  "1 ct",
-                                                 "name":  "Mangoes"
+                                                 "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                              },
                                   "Walmart":  {
                                                   "url":  "https://www.walmart.com/ip/Fresh-Mangoes-Each-Sweet/994998279",
@@ -11150,9 +11238,10 @@
                                                    },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/56924/hy-vee-marshmallows",
-                                                      "price":  1.69,
+                                                      "name":  "Hy-Vee Marshmallows",
+                                                      "price":  1.49,
                                                       "size":  "10 oz",
-                                                      "name":  "Hy-Vee Marshmallows"
+                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/Jet-Puffed-Marshmallows-12-oz-Bag/826143995",
@@ -11314,9 +11403,10 @@
                                                  },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/24375/hy-vee-deluxe-lightly-salted-mixed-nuts",
-                                                    "price":  7.99,
+                                                    "name":  "Hy-Vee Deluxe Lightly Salted Mixed Nuts",
+                                                    "price":  4.99,
                                                     "size":  "8.75 oz",
-                                                    "name":  "Hy-Vee Deluxe Lightly Salted Mixed Nuts"
+                                                    "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/Member-s-Mark-Deluxe-Mixed-Nuts-with-Sea-Salt-34-oz/18097858607",
@@ -11585,9 +11675,10 @@
                                               },
                                   "Hy-Vee":  {
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/4073899/hy-vee-oatmeal-old-fashioned-oats",
-                                                 "price":  4.99,
+                                                 "name":  "Hy-Vee Oatmeal Old Fashioned Oats",
+                                                 "price":  4.29,
                                                  "size":  "42 oz",
-                                                 "name":  "Hy-Vee Oatmeal Old Fashioned Oats"
+                                                 "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                              },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/Quaker-Old-Fashioned-Oats-160-oz/3000041000",
@@ -11659,11 +11750,12 @@
                                                 },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/55988/gustare-vita-classic-olive-oil",
-                                                   "price":  5.99,
-                                                   "size":  "17 fl oz",
                                                    "name":  "Gustare Vita Classic Olive Oil",
                                                    "board_pu":  0.3524,
-                                                   "recipe_pu":  0.4112
+                                                   "recipe_pu":  0.4112,
+                                                   "price":  8.99,
+                                                   "size":  "17 fl oz",
+                                                   "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                },
                                     "Sam\u0027s Club":  {
                                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Pure-Olive-Oil-101-fl-oz/13894506105",
@@ -11753,11 +11845,12 @@
                                                    },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2925579/thats-smart-onion-powder",
-                                                      "price":  0,
-                                                      "size":  "2.25 oz",
                                                       "name":  "That\u0027s Smart Onion Powder",
                                                       "board_pu":  0.5556,
-                                                      "recipe_pu":  0.5556
+                                                      "recipe_pu":  0.5556,
+                                                      "price":  1.25,
+                                                      "size":  "2.75 oz",
+                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-Onion-Powder-21-oz/15498910247",
@@ -12159,9 +12252,10 @@
                                                       },
                                           "Hy-Vee":  {
                                                          "url":  "https://www.hy-vee.com/aisles-online/p/4177387/hy-vee-parchment-paper",
-                                                         "price":  4.59,
+                                                         "name":  "Hy-Vee Parchment Paper",
+                                                         "price":  3.99,
                                                          "size":  "45 sq ft",
-                                                         "name":  "Hy-Vee Parchment Paper"
+                                                         "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                      },
                                           "Sam\u0027s Club":  {
                                                                   "url":  "https://www.samsclub.com/ip/Member-s-Mark-Unbleached-Parchment-Paper-205-sq-ft-2-pk/14216962216",
@@ -12245,10 +12339,11 @@
                                                           },
                                           "Hy-Vee":  {
                                                          "url":  "https://www.hy-vee.com/aisles-online/p/2612576/hy-vee-grated-parmesan-cheese",
-                                                         "price":  0,
-                                                         "size":  "16 oz",
                                                          "name":  "Hy-Vee Grated Parmesan Cheese",
-                                                         "recipe_pu":  0.3744
+                                                         "recipe_pu":  0.3744,
+                                                         "price":  2.29,
+                                                         "size":  "3 oz",
+                                                         "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                      },
                                           "Sam\u0027s Club":  {
                                                                   "url":  "https://www.samsclub.com/ip/Member-s-Mark-Grated-Parmesan-Cheese-24-oz/15176922436",
@@ -12396,9 +12491,10 @@
                                               },
                                   "Hy-Vee":  {
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/8767/white-flesh-peaches",
-                                                 "price":  3.69,
+                                                 "name":  "White Flesh Peaches",
+                                                 "price":  3.99,
                                                  "size":  "lb",
-                                                 "name":  "White Flesh Peaches"
+                                                 "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                              },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/Yellow-Peaches-4-lbs/13713871066",
@@ -12481,10 +12577,11 @@
                                               },
                                   "Hy-Vee":  {
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/56919/hy-vee-dry-roasted-peanuts",
-                                                 "price":  2.99,
-                                                 "size":  "16 oz",
                                                  "name":  "Hy-Vee Dry Roasted Peanuts",
-                                                 "board_pu":  0.1869
+                                                 "board_pu":  0.1869,
+                                                 "price":  3.48,
+                                                 "size":  "16 oz",
+                                                 "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                              },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/Planters-Salted-Dry-Roasted-Peanuts-Canister-52-oz/2900007322",
@@ -12569,10 +12666,11 @@
                                                       },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/22457/hy-vee-penne-rigate",
-                                                     "price":  0,
-                                                     "size":  "16 oz",
                                                      "name":  "Hy-Vee Penne Rigate",
-                                                     "recipe_pu":  0.09
+                                                     "recipe_pu":  0.09,
+                                                     "price":  1.44,
+                                                     "size":  "16 oz",
+                                                     "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                  },
                                       "Sam\u0027s Club":  {
                                                               "url":  "https://www.samsclub.com/ip/Barilla-Penne-Pasta-16-oz-6-pk/13566472367",
@@ -12606,10 +12704,11 @@
                                                        },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/834955/mezzetta-medium-heat-golden-greek-peperoncini-32-oz",
-                                                      "price":  0,
-                                                      "size":  "32 fl oz",
                                                       "name":  "Mezzetta Medium Heat Golden Greek Peperoncini",
-                                                      "recipe_pu":  0.2809
+                                                      "recipe_pu":  0.2809,
+                                                      "price":  8.99,
+                                                      "size":  "32 oz",
+                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/185310896",
@@ -12724,10 +12823,11 @@
                                                 },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/82725/del-monte-whole-pineapple",
-                                                   "price":  3.99,
-                                                   "size":  "1 ct",
                                                    "name":  "Del Monte Whole Pineapple",
-                                                   "board_pu":  3.69
+                                                   "board_pu":  3.69,
+                                                   "price":  3.88,
+                                                   "size":  "1 ct",
+                                                   "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                },
                                     "Sam\u0027s Club":  {
                                                             "url":  "https://www.samsclub.com/ip/Pineapple/13613070091",
@@ -12896,10 +12996,11 @@
                                                    },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/4211799/hy-vee-plastic-wrap",
-                                                      "price":  2.99,
-                                                      "size":  "100 sq ft",
                                                       "name":  "Hy-Vee Plastic Wrap",
-                                                      "board_pu":  2.99
+                                                      "board_pu":  2.99,
+                                                      "price":  2.99,
+                                                      "size":  "1 ct",
+                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Glad-Cling-N-Seal-Clear-Plastic-Food-Wrap-400-sq-ft-roll-2-rolls/13865573501",
@@ -12970,10 +13071,11 @@
                                                           },
                                           "Hy-Vee":  {
                                                          "url":  "https://www.hy-vee.com/aisles-online/p/37443/poblano-peppers",
-                                                         "price":  4.99,
-                                                         "size":  "0.25 lbs ($4.99/lb)",
                                                          "name":  "Poblano Peppers",
-                                                         "recipe_pu":  4.99
+                                                         "recipe_pu":  4.99,
+                                                         "price":  4.99,
+                                                         "size":  "lb",
+                                                         "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                      },
                                           "Walmart":  {
                                                           "url":  "https://www.walmart.com/ip/269323363",
@@ -13001,9 +13103,10 @@
                                                 },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/18349/bomb-pop-original-ice-pop-12-pack",
-                                                   "price":  4.49,
+                                                   "name":  "Bomb Pop Original Ice Pop, 12 Pack",
+                                                   "price":  2.99,
                                                    "size":  "12 ct",
-                                                   "name":  "Bomb Pop Original Ice Pop, 12 Pack"
+                                                   "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                },
                                     "Sam\u0027s Club":  {
                                                             "url":  "https://www.samsclub.com/ip/Frollies-Watermelon-and-Pineapple-Fruity-Ice-Pops-2-5-fl-oz-24-pk/19299207316",
@@ -13086,10 +13189,11 @@
                                                      },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/73596/fresh-pork-loin-top-loin-roast-boneless",
-                                                   "price":  0,
-                                                   "size":  "2.8 lbs ($3.89/lb)",
                                                    "name":  "Fresh Pork Loin Top Loin Roast Boneless",
-                                                   "recipe_pu":  3.89
+                                                   "recipe_pu":  3.89,
+                                                   "price":  3.89,
+                                                   "size":  "lb",
+                                                   "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                },
                                     "Sam\u0027s Club":  {
                                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Whole-Boneless-Pork-Loin-Vacuum-Pack-priced-per-pound/15607106819",
@@ -13131,10 +13235,11 @@
                                                     },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/31956/fresh-pork-shoulder-blade-boston-butt-roast",
-                                                       "price":  2.99,
-                                                       "size":  "lb",
                                                        "name":  "Fresh Pork Shoulder Blade Boston Butt Roast",
-                                                       "board_pu":  2.99
+                                                       "board_pu":  2.99,
+                                                       "price":  1.99,
+                                                       "size":  "lb",
+                                                       "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                    },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/Member-s-Mark-Bone-In-Pork-Boston-Butt-Vacuum-Pack-priced-per-pound/13743867920",
@@ -13277,9 +13382,10 @@
                                                    },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/3511155/hy-vee-wavy-potato-chips",
-                                                      "price":  2.69,
+                                                      "name":  "Hy-Vee Wavy Potato Chips",
+                                                      "price":  1.69,
                                                       "size":  "8 oz",
-                                                      "name":  "Hy-Vee Wavy Potato Chips"
+                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-Wavy-Potato-Chips-16-oz/13865869287",
@@ -13430,10 +13536,11 @@
                                                            },
                                            "Hy-Vee":  {
                                                           "url":  "https://www.hy-vee.com/aisles-online/p/60540/hy-vee-sliced-provolone-cheese-10ct",
-                                                          "price":  2.5,
-                                                          "size":  "8 oz (2/$5.00)",
                                                           "name":  "Hy-Vee Sliced Provolone Cheese 10Ct",
-                                                          "recipe_pu":  0.3125
+                                                          "recipe_pu":  0.3125,
+                                                          "price":  3.29,
+                                                          "size":  "8 oz",
+                                                          "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                       },
                                            "Sam\u0027s Club":  {
                                                                    "url":  "https://www.samsclub.com/ip/Member-s-Mark-Smoked-Provolone-Cheese-Slices-2-lb/13573324261",
@@ -13628,9 +13735,10 @@
                                             },
                                 "Hy-Vee":  {
                                                "url":  "https://www.hy-vee.com/aisles-online/p/14304/maruchan-chicken-flavor-ramen-noodle-soup",
-                                               "price":  0.49,
+                                               "name":  "Maruchan Chicken Flavor Ramen Noodle Soup",
+                                               "price":  0.39,
                                                "size":  "3 oz",
-                                               "name":  "Maruchan Chicken Flavor Ramen Noodle Soup"
+                                               "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                            },
                                 "Sam\u0027s Club":  {
                                                         "url":  "https://www.samsclub.com/ip/Nissin-Top-Ramen-Chicken-24-pk/18239212180",
@@ -13721,10 +13829,11 @@
                                                               },
                                               "Hy-Vee":  {
                                                              "url":  "https://www.hy-vee.com/aisles-online/p/3481884/good-graces-organic-gluten-free-ranch-dip-and-dressing-mix",
-                                                             "price":  0,
-                                                             "size":  "0.55 oz",
                                                              "name":  "Good Graces Organic Gluten Free Ranch Dip \u0026 Dressing Mix",
-                                                             "recipe_pu":  1.49
+                                                             "recipe_pu":  1.49,
+                                                             "price":  1.49,
+                                                             "size":  "0.55 oz Packet",
+                                                             "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                          },
                                               "Walmart":  {
                                                               "url":  "https://www.walmart.com/ip/187211086",
@@ -13839,10 +13948,11 @@
                                                           },
                                           "Hy-Vee":  {
                                                          "url":  "https://www.hy-vee.com/aisles-online/p/8829/red-pepper",
-                                                         "price":  1.69,
-                                                         "size":  "each",
                                                          "name":  "Red Pepper",
-                                                         "recipe_pu":  1.69
+                                                         "recipe_pu":  1.69,
+                                                         "price":  1.69,
+                                                         "size":  "1 ct",
+                                                         "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                      },
                                           "Sam\u0027s Club":  {
                                                                   "url":  "https://www.samsclub.com/ip/Multi-Bell-Sweet-Peppers-6-ct/13617010302",
@@ -13975,10 +14085,11 @@
                                                                  },
                                                  "Hy-Vee":  {
                                                                 "url":  "https://www.hy-vee.com/aisles-online/p/57073/hy-vee-shredded-low-moisture-part-skim-mozzarella-natural-cheese",
-                                                                "price":  0,
-                                                                "size":  "8 oz",
                                                                 "name":  "Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Natural Cheese",
-                                                                "recipe_pu":  0.31
+                                                                "recipe_pu":  0.31,
+                                                                "price":  1.97,
+                                                                "size":  "8 oz",
+                                                                "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                             },
                                                  "Sam\u0027s Club":  {
                                                                          "url":  "https://www.samsclub.com/ip/Member-s-Mark-Part-Skim-Shredded-Mozzarella-Cheese-1-lb-2-pk/13571719477",
@@ -14254,10 +14365,11 @@
                                                        },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/253153/marukan-genuine-brewed-rice-vinegar",
-                                                      "price":  4.69,
-                                                      "size":  "12 fl oz",
                                                       "name":  "Marukan Genuine Brewed Rice Vinegar",
-                                                      "recipe_pu":  0.3908
+                                                      "recipe_pu":  0.3908,
+                                                      "price":  4.69,
+                                                      "size":  "12 floz",
+                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/6381360852",
@@ -14285,10 +14397,11 @@
                                                                },
                                               "Hy-Vee":  {
                                                              "url":  "https://www.hy-vee.com/aisles-online/p/40586/dunbars-roasted-peppers",
-                                                             "price":  2.99,
-                                                             "size":  "7 oz",
                                                              "name":  "Dunbars Roasted Peppers",
-                                                             "recipe_pu":  0.4271
+                                                             "recipe_pu":  0.4271,
+                                                             "price":  3.19,
+                                                             "size":  "7 oz",
+                                                             "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                          },
                                               "Walmart":  {
                                                               "url":  "https://www.walmart.com/ip/863905651",
@@ -14497,9 +14610,10 @@
                                             },
                                 "Hy-Vee":  {
                                                "url":  "https://www.hy-vee.com/aisles-online/p/58174/hy-vee-mild-thick-and-chunky-salsa",
-                                               "price":  2.69,
+                                               "name":  "Hy-Vee Mild Thick \u0026 Chunky Salsa",
+                                               "price":  1.99,
                                                "size":  "16 oz",
-                                               "name":  "Hy-Vee Mild Thick \u0026 Chunky Salsa"
+                                               "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                            },
                                 "Sam\u0027s Club":  {
                                                         "url":  "https://www.samsclub.com/ip/Pace-Chunky-Salsa-Medium-38-oz-2-ct/4156518836",
@@ -14542,10 +14656,11 @@
                                                       },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/2928685/hy-vee-salsa-verde-mild",
-                                                     "price":  0,
-                                                     "size":  "16 oz",
                                                      "name":  "Hy-Vee Salsa Verde, Mild",
-                                                     "recipe_pu":  0.293
+                                                     "recipe_pu":  0.293,
+                                                     "price":  4.69,
+                                                     "size":  "16 oz",
+                                                     "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                  },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/2922389780",
@@ -14700,10 +14815,11 @@
                                                                },
                                                "Hy-Vee":  {
                                                               "url":  "https://www.hy-vee.com/aisles-online/p/48195/bushs-seasoned-recipe-black-beans",
-                                                              "price":  0,
-                                                              "size":  "15 oz",
                                                               "name":  "Bush\u0027s Seasoned Recipe Black Beans",
-                                                              "recipe_pu":  0.0993
+                                                              "recipe_pu":  0.0993,
+                                                              "price":  1.49,
+                                                              "size":  "15 oz",
+                                                              "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                           },
                                                "Walmart":  {
                                                                "url":  "https://www.walmart.com/ip/596137010",
@@ -14862,10 +14978,11 @@
                                                            },
                                            "Hy-Vee":  {
                                                           "url":  "https://www.hy-vee.com/aisles-online/p/65595/grimmway-farms-shredded-carrots",
-                                                          "price":  0,
-                                                          "size":  "10 oz",
                                                           "name":  "Grimmway Farms Shredded Carrots",
-                                                          "recipe_pu":  0.199
+                                                          "recipe_pu":  0.199,
+                                                          "price":  1.88,
+                                                          "size":  "10 oz",
+                                                          "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                       },
                                            "Walmart":  {
                                                            "url":  "https://www.walmart.com/ip/46491672",
@@ -14937,9 +15054,10 @@
                                              },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/1579791/fish-market-raw-shrimp-4150-count",
-                                                "price":  7.99,
+                                                "name":  "Fish Market Raw Shrimp 41/50 Count",
+                                                "price":  5.99,
                                                 "size":  "12 oz",
-                                                "name":  "Fish Market Raw Shrimp 41/50 Count"
+                                                "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                             },
                                  "Sam\u0027s Club":  {
                                                          "url":  "https://www.samsclub.com/ip/Member-s-Mark-Farm-Raised-Large-Raw-Shrimp-Frozen-31-40-ct-per-pound-3-lbs/13939167608",
@@ -14980,9 +15098,10 @@
                                                     },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/31803/hy-vee-angus-reserve-beef-loin-boneless-sirloin-steak",
-                                                       "price":  13.99,
+                                                       "name":  "Hy-Vee Angus Reserve Beef Loin Boneless Sirloin Steak",
+                                                       "price":  11.99,
                                                        "size":  "lb",
-                                                       "name":  "Hy-Vee Angus Reserve Beef Loin Boneless Sirloin Steak"
+                                                       "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                    },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/Member-s-Mark-USDA-Choice-Angus-Beef-Boneless-Top-Sirloin-Steaks-priced-per-pound/13764906948",
@@ -15154,10 +15273,11 @@
                                                  },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/23920/hy-vee-all-natural-sour-cream",
-                                                    "price":  2.68,
-                                                    "size":  "16 oz",
                                                     "name":  "Hy-Vee All Natural Sour Cream",
-                                                    "board_pu":  0.1675
+                                                    "board_pu":  0.1675,
+                                                    "price":  1.98,
+                                                    "size":  "16 oz",
+                                                    "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/Daisy-Brand-Pure-and-Natural-Sour-Cream-48-oz/13581873793",
@@ -15248,10 +15368,11 @@
                                                       },
                                           "Hy-Vee":  {
                                                          "url":  "https://www.hy-vee.com/aisles-online/p/135218/lacroix-lime-sparkling-water-12-pack",
-                                                         "price":  6.48,
-                                                         "size":  "12 pk 12 fl oz",
                                                          "name":  "LaCroix Lime Sparkling Water 12 Pack",
-                                                         "board_pu":  0.0416
+                                                         "board_pu":  0.0416,
+                                                         "price":  5.99,
+                                                         "size":  "12 pk 12 fl oz",
+                                                         "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                      },
                                           "Sam\u0027s Club":  {
                                                                   "url":  "https://www.samsclub.com/ip/bubly-Sparkling-Water-Variety-Pack-12-fl-oz-24-pk/14993602886",
@@ -15568,10 +15689,11 @@
                                                     },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/254680/hy-vee-light-string-cheese-mozzarella-12-count",
-                                                       "price":  4.99,
-                                                       "size":  "12 ct",
                                                        "name":  "Hy-Vee Light String Cheese Mozzarella 12 Count",
-                                                       "board_pu":  0.3158
+                                                       "board_pu":  0.3158,
+                                                       "price":  3.79,
+                                                       "size":  "12 ct",
+                                                       "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                    },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/Frigo-Cheese-Heads-String-Cheese-1-oz-pkg-48-ct/13879914072",
@@ -15703,10 +15825,11 @@
                                                                },
                                                "Hy-Vee":  {
                                                               "url":  "https://www.hy-vee.com/aisles-online/p/2379852/g-hughes-smokehouse-sugar-free-original-bbq-sauce",
-                                                              "price":  0,
-                                                              "size":  "18 oz",
                                                               "name":  "G Hughes Smokehouse Sugar Free Original BBQ Sauce",
-                                                              "recipe_pu":  0.2772
+                                                              "recipe_pu":  0.2772,
+                                                              "price":  4.99,
+                                                              "size":  "18 oz",
+                                                              "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                           },
                                                "Walmart":  {
                                                                "url":  "https://www.walmart.com/ip/409008803",
@@ -15734,10 +15857,11 @@
                                                                  },
                                                  "Hy-Vee":  {
                                                                 "url":  "https://www.hy-vee.com/aisles-online/p/22375/hy-vee-sugar-free-pancake-and-waffle-syrup",
-                                                                "price":  3.28,
-                                                                "size":  "24 fl oz",
                                                                 "name":  "Hy-Vee Sugar Free Pancake \u0026 Waffle Syrup",
-                                                                "recipe_pu":  0.1367
+                                                                "recipe_pu":  0.1367,
+                                                                "price":  2.68,
+                                                                "size":  "24 fl oz",
+                                                                "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                             }
                                              },
                   "sun-dried-tomatoes":  {
@@ -15765,10 +15889,11 @@
                                                              },
                                              "Hy-Vee":  {
                                                             "url":  "https://www.hy-vee.com/aisles-online/p/34553/valued-naturals-sun-dried-tomatoes-prepriced",
-                                                            "price":  0,
-                                                            "size":  "8 oz",
                                                             "name":  "Valued Naturals Sun Dried Tomatoes PrePriced",
-                                                            "recipe_pu":  0.499
+                                                            "recipe_pu":  0.499,
+                                                            "price":  3.99,
+                                                            "size":  "8 oz",
+                                                            "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                         },
                                              "Sam\u0027s Club":  {
                                                                      "url":  "https://www.samsclub.com/ip/Terra-Verde-Italian-Sundried-Tomatoes-in-Oil-24-oz/17242460680",
@@ -15847,9 +15972,10 @@
                                                  },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/3228853/sweet-corn-4-count",
-                                                    "price":  5.99,
+                                                    "name":  "Sweet Corn 4 Count",
+                                                    "price":  4.99,
                                                     "size":  "4 ct",
-                                                    "name":  "Sweet Corn 4 Count"
+                                                    "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/Sweet-Corn-8-ct/15389952544",
@@ -15940,10 +16066,11 @@
                                                        },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/26257/hy-vee-sliced-swiss-cheese-10ct",
-                                                      "price":  2.5,
-                                                      "size":  "8 oz (2/$5.00)",
                                                       "name":  "Hy-Vee Sliced Swiss Cheese 10Ct",
-                                                      "recipe_pu":  0.3125
+                                                      "recipe_pu":  0.3125,
+                                                      "price":  3.29,
+                                                      "size":  "5 oz",
+                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-Baby-Swiss-Cheese-Slices-2-lbs/13602753810",
@@ -15985,10 +16112,11 @@
                                                          },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/1911130/mccormick-original-taco-seasoning-mix",
-                                                        "price":  0,
-                                                        "size":  "1 oz",
                                                         "name":  "McCormick Original Taco Seasoning Mix",
-                                                        "recipe_pu":  1.19
+                                                        "recipe_pu":  1.19,
+                                                        "price":  1.19,
+                                                        "size":  "1 oz",
+                                                        "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/McCormick-Original-Taco-Seasoning-Mix-1-oz-12-pk/5210003739",
@@ -16077,9 +16205,10 @@
                                                  },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/4242984/ore-ida-star-tater-tots-core-frozen-potatoes-28-oz",
-                                                    "price":  5.28,
+                                                    "name":  "Ore-Ida Star Tater Tots Core Frozen Potatoes 28 oz",
+                                                    "price":  3.99,
                                                     "size":  "28 oz",
-                                                    "name":  "Ore-Ida Star Tater Tots Core Frozen Potatoes 28 oz"
+                                                    "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/Ore-Ida-Crispy-Tater-Tots-Frozen-8-lbs/13591771451",
@@ -16156,10 +16285,11 @@
                                                          },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/55786/hy-vee-teriyaki-sauce",
-                                                        "price":  0,
-                                                        "size":  "10 fl oz",
                                                         "name":  "Hy-Vee Teriyaki Sauce",
-                                                        "recipe_pu":  0.249
+                                                        "recipe_pu":  0.249,
+                                                        "price":  1.99,
+                                                        "size":  "10 fl oz",
+                                                        "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/Kinder-s-Teriyaki-Marinade-Sauce-27-5-oz/13958970261",
@@ -16310,9 +16440,10 @@
                                                           },
                                               "Hy-Vee":  {
                                                              "url":  "https://www.hy-vee.com/aisles-online/p/40889/lysol-power-toilet-bowl-cleaner",
-                                                             "price":  3.69,
+                                                             "name":  "Lysol Power Toilet Bowl Cleaner",
+                                                             "price":  2.99,
                                                              "size":  "24 fl oz",
-                                                             "name":  "Lysol Power Toilet Bowl Cleaner"
+                                                             "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                          },
                                               "Sam\u0027s Club":  {
                                                                       "url":  "https://www.samsclub.com/ip/Lysol-Advanced-Toilet-Bowl-Gel-Cleaner-32-fl-oz-4-pk/1920083566",
@@ -16353,10 +16484,11 @@
                                                    },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/4223503/hy-vee-soft-and-strong-bath-tissue",
-                                                      "price":  8.99,
-                                                      "size":  "12 ct",
                                                       "name":  "Hy-Vee Soft and Strong Bath Tissue",
-                                                      "board_pu":  0.7492
+                                                      "board_pu":  0.7492,
+                                                      "price":  6.99,
+                                                      "size":  "12 ct",
+                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-Ultra-Premium-2-Ply-Toilet-Paper-45-rolls-235-sheets-roll/14179359401",
@@ -16441,9 +16573,10 @@
                                                },
                                    "Hy-Vee":  {
                                                   "url":  "https://www.hy-vee.com/aisles-online/p/8657/roma-tomatoes",
-                                                  "price":  3,
+                                                  "name":  "Roma Tomatoes",
+                                                  "price":  1.28,
                                                   "size":  "lb",
-                                                  "name":  "Roma Tomatoes"
+                                                  "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                               },
                                    "Sam\u0027s Club":  {
                                                            "url":  "https://www.samsclub.com/ip/Tomatoes-on-the-Vine-3-lbs/13595863391",
@@ -16711,10 +16844,11 @@
                                                      },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/909300/hy-vee-white-corn-restaurant-style-tortilla-chips",
-                                                        "price":  2.69,
-                                                        "size":  "13 oz",
                                                         "name":  "Hy-Vee White Corn Restaurant Style Tortilla Chips",
-                                                        "board_pu":  0.2069
+                                                        "board_pu":  0.2069,
+                                                        "price":  2.48,
+                                                        "size":  "13 oz",
+                                                        "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/On-The-Border-Cafe-Tortilla-Chips-23-5-oz/13897220250",
@@ -16909,9 +17043,10 @@
                                                        },
                                            "Hy-Vee":  {
                                                           "url":  "https://www.hy-vee.com/aisles-online/p/50195/hillshire-farm-ultra-thin-sliced-oven-roasted-turkey-breast-sandwich-meat-9-oz",
-                                                          "price":  4.99,
+                                                          "name":  "Hillshire Farm Ultra Thin Sliced Oven Roasted Turkey Breast Sandwich Meat, 9 oz",
+                                                          "price":  3.88,
                                                           "size":  "9 oz",
-                                                          "name":  "Hillshire Farm Ultra Thin Sliced Oven Roasted Turkey Breast Sandwich Meat, 9 oz"
+                                                          "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                       },
                                            "Sam\u0027s Club":  {
                                                                    "url":  "https://www.samsclub.com/ip/Member-s-Mark-Oven-Roasted-Turkey-Breast-Sliced-1-lb-6-oz/13890253215",
@@ -16952,10 +17087,11 @@
                                                            },
                                            "Hy-Vee":  {
                                                           "url":  "https://www.hy-vee.com/aisles-online/p/11332/hormel-turkey-pepperoni",
-                                                          "price":  0,
-                                                          "size":  "5 oz",
                                                           "name":  "Hormel Turkey Pepperoni",
-                                                          "recipe_pu":  0.994
+                                                          "recipe_pu":  0.994,
+                                                          "price":  4.48,
+                                                          "size":  "5 oz",
+                                                          "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                       },
                                            "Walmart":  {
                                                            "url":  "https://www.walmart.com/ip/40495517",
@@ -17076,10 +17212,11 @@
                                                  },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/37187/whole-seedless-watermelon",
-                                                    "price":  6.99,
-                                                    "size":  "1 ct",
                                                     "name":  "Whole Seedless Watermelon",
-                                                    "board_pu":  6.99
+                                                    "board_pu":  6.99,
+                                                    "price":  4.99,
+                                                    "size":  "each",
+                                                    "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/Whole-Seedless-Watermelon/13589400933",
@@ -17155,10 +17292,11 @@
                                                           },
                                           "Hy-Vee":  {
                                                          "url":  "https://www.hy-vee.com/aisles-online/p/3883530/highline-whole-white-mushrooms",
-                                                         "price":  1.99,
-                                                         "size":  "8 oz",
                                                          "name":  "Highline Whole White Mushrooms",
-                                                         "recipe_pu":  0.2488
+                                                         "recipe_pu":  0.2488,
+                                                         "price":  2.99,
+                                                         "size":  "8 oz",
+                                                         "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                      },
                                           "Sam\u0027s Club":  {
                                                                   "url":  "https://www.samsclub.com/ip/Whole-White-Mushrooms-24-oz/13894703507",
@@ -17249,10 +17387,11 @@
                                                              },
                                              "Hy-Vee":  {
                                                             "url":  "https://www.hy-vee.com/aisles-online/p/22373/gustare-vita-white-wine-vinegar",
-                                                            "price":  2.49,
-                                                            "size":  "16.9 fl oz",
                                                             "name":  "Gustare Vita White Wine Vinegar",
-                                                            "recipe_pu":  0.1473
+                                                            "recipe_pu":  0.1473,
+                                                            "price":  4.59,
+                                                            "size":  "17 fl oz",
+                                                            "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                         },
                                              "Walmart":  {
                                                              "url":  "https://www.walmart.com/ip/15610751",
@@ -17293,9 +17432,10 @@
                                                     },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/31777/hy-vee-fresh-young-whole-chicken",
-                                                       "price":  2.49,
+                                                       "name":  "Hy-Vee Fresh Young Whole Chicken",
+                                                       "price":  2.19,
                                                        "size":  "lb",
-                                                       "name":  "Hy-Vee Fresh Young Whole Chicken"
+                                                       "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                    },
                                         "Walmart":  {
                                                         "url":  "https://www.walmart.com/ip/Tyson-All-Natural-Fresh-Premium-Young-Whole-Chicken-5-0-6-5-lb/19400244",
@@ -17442,9 +17582,10 @@
                                              },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/27004/yoplait-original-strawberry-low-fat-yogurt",
-                                                "price":  0.60,
+                                                "name":  "Yoplait Original Strawberry Low Fat Yogurt",
+                                                "price":  0.79,
                                                 "size":  "6 oz",
-                                                "name":  "Yoplait Original Strawberry Low Fat Yogurt"
+                                                "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                             },
                                  "Sam\u0027s Club":  {
                                                          "url":  "https://www.samsclub.com/ip/Member-s-Mark-Nonfat-Plain-Greek-Yogurt-48-oz/18097303669",
@@ -17485,10 +17626,11 @@
                                                           },
                                           "Hy-Vee":  {
                                                          "url":  "https://www.hy-vee.com/aisles-online/p/2521996/pepsi-diet-soda-cola-2-liter",
-                                                         "price":  3.69,
-                                                         "size":  "2 l",
                                                          "name":  "Pepsi Diet Soda Cola 2 Liter",
-                                                         "recipe_pu":  3.49
+                                                         "recipe_pu":  3.49,
+                                                         "price":  2.5,
+                                                         "size":  "2.1 qt",
+                                                         "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                      },
                                           "Walmart":  {
                                                           "url":  "https://www.walmart.com/ip/15610627",
@@ -17516,10 +17658,11 @@
                                                              },
                                              "Hy-Vee":  {
                                                             "url":  "https://www.hy-vee.com/aisles-online/p/87231/coca-cola-zero-sugar-soda-soft-drink-bottle-2-liters",
-                                                            "price":  0,
-                                                            "size":  "2 liters",
                                                             "name":  "Coca-Cola Zero Sugar Soda Soft Drink Bottle",
-                                                            "recipe_pu":  0.0516
+                                                            "recipe_pu":  0.0516,
+                                                            "price":  3.49,
+                                                            "size":  "67.6 fl oz",
+                                                            "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                         },
                                              "Sam\u0027s Club":  {
                                                                      "url":  "https://www.samsclub.com/ip/Diet-Coke-Soda-Soft-Drink-12-fl-oz-35-pk/13793459973",

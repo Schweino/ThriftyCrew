@@ -2,7 +2,7 @@
     "readme":  "DERIVED by generate-board-overrides.ps1 - do not hand-edit. Per-cell EVERYDAY per-unit corrections: when a board price disagrees \u003e30% with the verified product its See-item link opens (and name-drift confirms the link is the right product), the board number is stale and is pinned here to the link\u0027s per-unit so price==link==shelf. build-deals-page applies these to EVERYDAY cells only (a live sale always wins) and survives daily regeneration. Sales, wrong-product links (name-drift), and ids present in both the staple+recipe board are intentionally excluded.",
     "updated":  "2026-07-14",
     "tol":  0.3,
-    "count":  12,
+    "count":  22,
     "cells":  [
                   {
                       "id":  "boneless-skinless-chicken-thigh",
@@ -23,9 +23,27 @@
                       "set":  "2026-07-14"
                   },
                   {
+                      "id":  "apple",
+                      "store":  "Hy-Vee",
+                      "per_unit":  1.98,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.79,
+                      "link_name":  "Gala Apples",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "balsamic-vinegar",
+                      "store":  "Hy-Vee",
+                      "per_unit":  0.2361,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.1757,
+                      "link_name":  "Nothing But The Truth Organic Balsamic Vinegar",
+                      "set":  "2026-07-14"
+                  },
+                  {
                       "id":  "enchilada-sauce",
                       "store":  "Hy-Vee",
-                      "per_unit":  0.1139,
+                      "per_unit":  0.1246,
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.269,
                       "link_name":  "Hy-Vee Mild Enchilada Sauce",
@@ -38,6 +56,15 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.0334,
                       "link_name":  "Ore-Ida Crispy Crinkles French Fries, Frozen 8 lbs.",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "frozen-chopped-spinach",
+                      "store":  "Hy-Vee",
+                      "per_unit":  0.099,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.149,
+                      "link_name":  "Birds Eye Chopped Spinach",
                       "set":  "2026-07-14"
                   },
                   {
@@ -68,6 +95,15 @@
                       "set":  "2026-07-14"
                   },
                   {
+                      "id":  "provolone-cheese",
+                      "store":  "Hy-Vee",
+                      "per_unit":  0.4112,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.3125,
+                      "link_name":  "Hy-Vee Sliced Provolone Cheese 10Ct",
+                      "set":  "2026-07-14"
+                  },
+                  {
                       "id":  "red-bell-pepper",
                       "store":  "Sam\u0027s Club",
                       "per_unit":  1.1283,
@@ -86,6 +122,15 @@
                       "set":  "2026-07-14"
                   },
                   {
+                      "id":  "parmesan-cheese",
+                      "store":  "Hy-Vee",
+                      "per_unit":  0.7633,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.3744,
+                      "link_name":  "Hy-Vee Grated Parmesan Cheese",
+                      "set":  "2026-07-14"
+                  },
+                  {
                       "id":  "smoked-paprika",
                       "store":  "Family Fare",
                       "per_unit":  2.49,
@@ -101,6 +146,51 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.8113,
                       "link_name":  "Athenos Feta Traditional Cheese Crumbles 4 Oz",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "ground-coriander",
+                      "store":  "Hy-Vee",
+                      "per_unit":  2.6666,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  3.98,
+                      "link_name":  "Hy-Vee Ground Coriander",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "celery-salt",
+                      "store":  "Hy-Vee",
+                      "per_unit":  1.1111,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  1.6583,
+                      "link_name":  "Hy-Vee Celery Salt",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "swiss-cheese",
+                      "store":  "Hy-Vee",
+                      "per_unit":  0.658,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.3125,
+                      "link_name":  "Hy-Vee Sliced Swiss Cheese 10Ct",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "white-wine-vinegar",
+                      "store":  "Hy-Vee",
+                      "per_unit":  0.27,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.1473,
+                      "link_name":  "Gustare Vita White Wine Vinegar",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "ground-nutmeg",
+                      "store":  "Hy-Vee",
+                      "per_unit":  1.8821,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  1.1745,
+                      "link_name":  "Hy-Vee Ground Nutmeg",
                       "set":  "2026-07-14"
                   },
                   {
