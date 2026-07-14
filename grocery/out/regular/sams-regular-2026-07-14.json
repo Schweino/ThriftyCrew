@@ -8,10 +8,13 @@
                   {
                       "store":  "Sam\u0027s Club",
                       "item":  "Vigo Italian Style Bread Crumbs, 5 lbs.",
-                      "ad_price":  "$5.94",
+                      "ad_price":  "$5.95",
                       "size":  "5 lb",
-                      "regular":  null,
-                      "source_ad":  "promoted from verified recipe pricing (Bread Crumbs)"
+                      "regular":  5.95,
+                      "source_ad":  "samsclub.com product.priceInfo currentPrice/unitPrice - the price Sam\u0027s Club charges today",
+                      "current_price":  5.95,
+                      "as_of":  "2026-07-14",
+                      "item_id":  "13803520339"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -40,34 +43,46 @@
                   {
                       "store":  "Sam\u0027s Club",
                       "item":  "Member\u0027s Mark Oregano",
-                      "ad_price":  "$5.98",
+                      "ad_price":  "$6",
                       "size":  "5.5 oz",
-                      "regular":  null,
-                      "source_ad":  "promoted from verified recipe pricing (Dried Oregano)"
+                      "regular":  6,
+                      "source_ad":  "samsclub.com product.priceInfo currentPrice/unitPrice - the price Sam\u0027s Club charges today",
+                      "current_price":  6,
+                      "as_of":  "2026-07-14",
+                      "item_id":  "13599561333"
                   },
                   {
                       "store":  "Sam\u0027s Club",
                       "item":  "Member\u0027s Mark Parsley Flakes",
-                      "ad_price":  "$6.44",
+                      "ad_price":  "$6.43",
                       "size":  "3.2 oz",
-                      "regular":  null,
-                      "source_ad":  "promoted from verified recipe pricing (Dried Parsley)"
+                      "regular":  6.43,
+                      "source_ad":  "samsclub.com product.priceInfo currentPrice/unitPrice - the price Sam\u0027s Club charges today",
+                      "current_price":  6.43,
+                      "as_of":  "2026-07-14",
+                      "item_id":  "13585173500"
                   },
                   {
                       "store":  "Sam\u0027s Club",
                       "item":  "Member\u0027s Mark Ground Cinnamon",
-                      "ad_price":  "$7.98",
+                      "ad_price":  "$7.92",
                       "size":  "18 oz",
-                      "regular":  null,
-                      "source_ad":  "promoted from verified recipe pricing (Ground Cinnamon)"
+                      "regular":  7.92,
+                      "source_ad":  "samsclub.com product.priceInfo currentPrice/unitPrice - the price Sam\u0027s Club charges today",
+                      "current_price":  7.92,
+                      "as_of":  "2026-07-14",
+                      "item_id":  "13610768224"
                   },
                   {
                       "store":  "Sam\u0027s Club",
                       "item":  "Member\u0027s Mark Ground Turmeric",
-                      "ad_price":  "$7.98",
+                      "ad_price":  "$8",
                       "size":  "20 oz",
-                      "regular":  null,
-                      "source_ad":  "promoted from verified recipe pricing (Ground Turmeric)"
+                      "regular":  8,
+                      "source_ad":  "samsclub.com product.priceInfo currentPrice/unitPrice - the price Sam\u0027s Club charges today",
+                      "current_price":  8,
+                      "as_of":  "2026-07-14",
+                      "item_id":  "13590169266"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -88,18 +103,24 @@
                   {
                       "store":  "Sam\u0027s Club",
                       "item":  "Member\u0027s Mark Spanish Style Paprika, 18 oz.",
-                      "ad_price":  "$8.44",
+                      "ad_price":  "$8.46",
                       "size":  "18 oz",
-                      "regular":  null,
-                      "source_ad":  "promoted from verified recipe pricing (Paprika)"
+                      "regular":  8.46,
+                      "source_ad":  "samsclub.com product.priceInfo currentPrice/unitPrice - the price Sam\u0027s Club charges today",
+                      "current_price":  8.46,
+                      "as_of":  "2026-07-14",
+                      "item_id":  "13594550259"
                   },
                   {
                       "store":  "Sam\u0027s Club",
                       "item":  "Member\u0027s Mark Crushed Red Pepper",
-                      "ad_price":  "$5.98",
+                      "ad_price":  "$5.94",
                       "size":  "13.5 oz",
-                      "regular":  null,
-                      "source_ad":  "promoted from verified recipe pricing (Red Pepper Flakes)"
+                      "regular":  5.94,
+                      "source_ad":  "samsclub.com product.priceInfo currentPrice/unitPrice - the price Sam\u0027s Club charges today",
+                      "current_price":  5.94,
+                      "as_of":  "2026-07-14",
+                      "item_id":  "13614254893"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -120,10 +141,13 @@
                   {
                       "store":  "Sam\u0027s Club",
                       "item":  "Member\u0027s Mark Tomato Sauce 106 oz.",
-                      "ad_price":  "$5.18",
+                      "ad_price":  "$5.3",
                       "size":  "106 oz",
-                      "regular":  null,
-                      "source_ad":  "promoted from verified recipe pricing (Tomato Sauce)"
+                      "regular":  5.3,
+                      "source_ad":  "samsclub.com product.priceInfo currentPrice/unitPrice - the price Sam\u0027s Club charges today",
+                      "current_price":  5.3,
+                      "as_of":  "2026-07-14",
+                      "item_id":  "13602663979"
                   },
                   {
                       "store":  "Sam\u0027s Club",
@@ -238,7 +262,8 @@
                       "source_ad":  "new-item fill 2026-07-14 (store search, in-store/everyday price, collision-validated)"
                   }
               ],
-    "price_mode":  "in-store",
     "mode_verified":  "2026-07-14",
-    "deal_count":  29
+    "deal_count":  29,
+    "price_mode":  "in-store",
+    "refreshed_today":  8
 }
