@@ -13,6 +13,30 @@ $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 . (Join-Path $root 'pu-lib.ps1')
 
+# --- explicit assertions: pin the tricky cases regardless of what live data happens to contain ---
+$cases = @(
+  @{ size='6 pk 4 oz';     unit='oz';     price=2.50; name='';                  want=0.104167 }  # pack-first multipack
+  @{ size='2 pk 48 fl oz'; unit='floz';   price=4.00; name='';                  want=0.041667 }  # fl oz multipack -> per fl oz
+  @{ size='2 pk 1 gal';    unit='gallon'; price=6.00; name='';                  want=3.0      }  # gallon multipack
+  @{ size='16 oz 6 pk';    unit='oz';     price=3.00; name='';                  want=0.03125  }  # weight-first pack (no double-multiply)
+  @{ size='6 pk 16 oz';    unit='oz';     price=3.00; name='';                  want=0.03125  }  # pack-first, same product -> same answer
+  @{ size='4 pk 4 oz';     unit='each';   price=2.78; name='';                  want=0.695    }  # 'each' commodity: N pk = N items, price/4 (NOT per-oz)
+  @{ size='3 oz';          unit='oz';     price=2.18; name='';                  want=0.726667 }  # plain single, unchanged
+  @{ size='each';          unit='each';   price=6.00; name='Water 24 Pack';     want=0.25     }  # multipack-in-name (bare-each size + count in name)
+  @{ size='lb';            unit='lb';     price=4.99; name='';                  want=4.99     }  # bare unit
+  @{ size='$0.07/oz';      unit='oz';     price=5.00; name='';                  want=0.07     }  # explicit unit price
+  @{ size='16 oz';         unit='each';   price=2.49; name='';                  want=$null    }  # genuine unit mismatch stays null
+)
+$afail = 0
+foreach ($c in $cases) {
+  $got = Get-LinkPerUnit -size $c.size -unit $c.unit -price $c.price -name $c.name
+  $ok = if ($null -eq $c.want) { $null -eq $got } else { ($null -ne $got) -and ([math]::Abs([double]$got - [double]$c.want) -lt 0.001) }
+  if (-not $ok) { $afail++; Write-Output ("ASSERT FAIL  size=`"$($c.size)`" unit=$($c.unit) price=$($c.price)  want=$($c.want)  got=$got") }
+}
+if ($afail) { Write-Output "$afail assertion(s) failed - pu-lib math is wrong."; exit 1 }
+Write-Output "explicit assertions: all $($cases.Count) passed"
+Write-Output ''
+
 # the OLD LinkPU, verbatim from audit-board-consistency.ps1 / build-deals-page.ps1
 function LinkPU([string]$size, [string]$unit, [double]$price, [string]$name = '') {
   $s = ([string]$size).ToLower().Trim()

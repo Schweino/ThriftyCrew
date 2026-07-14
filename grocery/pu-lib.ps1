@@ -40,26 +40,51 @@ function Get-LinkPerUnit {
 
   if ($price -le 0) { return $null }
 
-  # 2. a quantity + unit anywhere in the size. NOTE the number pattern: (\d+(?:\.\d+)?), NOT ([\d.]+) - the
-  #    latter matches a bare "." and [double]"." throws.
-  $q = [regex]::Match($s, '(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|lbs?|pound|ct|count|ea|pk|gal|gallon|qt|quart|dozen|doz|ml|l)\b')
-  $n = $null; $un = ''
-  if ($q.Success) {
-    $n = [double]$q.Groups[1].Value
-    $un = ($q.Groups[2].Value -replace '\s','') -replace 'fl',''
-  } else {
-    # 3. a BARE unit with no number ("lb", "per lb", "each", "dozen", "gal") means one of it
-    $bu = [regex]::Match($s, '\b(lbs?|pound|gal|gallon|dozen|doz|each|ea)\b')
-    if ($bu.Success) {
-      $n = 1
-      $un = $bu.Groups[1].Value -replace '^gallon$','gal' -replace '^doz$','dozen' -replace '^pound$','lb'
+  $n = $null; $un = ''; $mpDone = $false
+
+  # 2. multipack stated PACK-FIRST as "N pk/pack M <weight>" ("6 pk 4 oz", "2 pk 48 fl oz", "2 pk 1 gal"):
+  #    the TOTAL is N*M in the weight/volume unit. This MUST be tried before the generic quantity match
+  #    below, which lists 'pk' as a unit and so greedily reads "N pk" as the quantity, loses the per-item
+  #    weight, and returns null - the exact reason 17 real multipack cells (applesauce 6pk, lemon-juice
+  #    2pk, ...) sat unverified. Pack-first is fully resolved here; the weight-first multiply in step 4 is
+  #    then skipped so we never multiply the pack count in twice.
+  #    ONLY for weight/volume commodities. For an 'each'/'dozen' commodity, "4 pk 4 oz" means 4 ITEMS, not
+  #    16 oz - collapsing it to a per-ounce number the 'each' switch then drops was a regression the
+  #    differential test caught (fruit-cups, pudding-cups, microwave-popcorn). Those fall through to the
+  #    generic match, which reads "N pk" as the count ($un='pk' -> price/N) exactly as before.
+  if ($unit -in @('oz','floz','lb','gallon')) {
+    $mp = [regex]::Match($s, '([0-9]+)\s*(?:pk|pack)\s+([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|floz|oz|lbs?|pound|gal|gallon|qt|quart|ml|l)\b')
+    if ($mp.Success) {
+      $n = [double]$mp.Groups[1].Value * [double]$mp.Groups[2].Value
+      $un = ($mp.Groups[3].Value -replace '\s','') -replace 'fl','' -replace '^gallon$','gal' -replace '^quart$','qt' -replace '^pound$','lb'
+      $mpDone = $true
+    }
+  }
+
+  if (-not $mpDone) {
+    # 2b. a quantity + unit anywhere in the size. NOTE the number pattern: (\d+(?:\.\d+)?), NOT ([\d.]+) -
+    #     the latter matches a bare "." and [double]"." throws.
+    $q = [regex]::Match($s, '(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|lbs?|pound|ct|count|ea|pk|gal|gallon|qt|quart|dozen|doz|ml|l)\b')
+    if ($q.Success) {
+      $n = [double]$q.Groups[1].Value
+      $un = ($q.Groups[2].Value -replace '\s','') -replace 'fl',''
+    } else {
+      # 3. a BARE unit with no number ("lb", "per lb", "each", "dozen", "gal") means one of it
+      $bu = [regex]::Match($s, '\b(lbs?|pound|gal|gallon|dozen|doz|each|ea)\b')
+      if ($bu.Success) {
+        $n = 1
+        $un = $bu.Groups[1].Value -replace '^gallon$','gal' -replace '^doz$','dozen' -replace '^pound$','lb'
+      }
     }
   }
   if ($null -eq $n) { return $null }
 
-  # 4. multipack in the SIZE ("6 pk 16 oz") multiplies a weight
-  $pk = [regex]::Match($s, '([0-9]+)\s*(pk|pack)\b')
-  if ($pk.Success -and $n -and ($un -match '^(oz|lbs?|gal)$')) { $n = $n * [double]$pk.Groups[1].Value }
+  # 4. multipack in the SIZE stated WEIGHT-FIRST ("16 oz 6 pk") multiplies a weight. Skipped when the
+  #    pack-first branch already ran, so "6 pk 16 oz" is not multiplied by the pack count twice.
+  if (-not $mpDone) {
+    $pk = [regex]::Match($s, '([0-9]+)\s*(pk|pack)\b')
+    if ($pk.Success -and $n -and ($un -match '^(oz|lbs?|gal)$')) { $n = $n * [double]$pk.Groups[1].Value }
+  }
 
   # 5. multipack in the NAME. A link whose size is just "each" but whose NAME says "24 Pack" is 24 items, not
   #    1 - without this the whole pack price publishes as the per-item price (Fareway bottled water went out
