@@ -64,12 +64,30 @@ $seen = @{}
 function Ingest-Items($items) {
   foreach ($it in $items) {
     if (-not $it.name) { continue }
-    $val = $it.base_price; if (-not $val) { $val = $it.price }
-    if (-not $val) { continue }
+    # PUBLISH THE CURRENT PRICE, NEVER THE REGULAR ONE.
+    # This used to read `base_price` FIRST and only fall back to `price`. base_price is the REGULAR price;
+    # `price` is what the store charges today. That is exactly the bug that had the board publishing Hy-Vee
+    # sirloin at $13.99/lb while Omaha #01 was charging $11.99, and Baker's chicken breast at $2.89/lb while
+    # the store was charging $2.29. Freshop happens to return the two fields identical for every one of the
+    # 375 Family Fare products sampled on 2026-07-14, so it was harmless - but it was a loaded gun. The day
+    # Freshop starts populating a markdown into `price`, the old order would have quietly published the
+    # regular price instead, and nothing downstream would have caught it.
+    # `price` comes back as a string with a $ ("$3.59"); base_price as a number (3.59).
+    $cur  = 0.0; [void][double]::TryParse((([string]$it.price)      -replace '[^0-9.]',''), [ref]$cur)
+    $base = 0.0; [void][double]::TryParse((([string]$it.base_price) -replace '[^0-9.]',''), [ref]$base)
+    $val = $cur
+    if ($val -le 0) { $val = $base }
+    if ($val -le 0) { continue }
     $key = ([string]$it.name + '|' + [string]$it.size)
     if ($seen.ContainsKey($key)) { continue }
     $seen[$key] = $true
-    $script:deals += ,([ordered]@{ store='Family Fare'; item=[string]$it.name; ad_price=('$' + $val); size=[string]$it.size; regular=$it.base_price; source_ad='everyday shelf price' })
+    # THE CONTRACT (guards invariant 10): current_price is what the STORE CHARGES, recorded independently of
+    # what we choose to publish in ad_price. A puller that reaches for the regular-price field then produces
+    # two different numbers on the row, and the guard sees it. Without this field the guard cannot check us.
+    $row = [ordered]@{ store='Family Fare'; item=[string]$it.name; ad_price=('$' + $val); size=[string]$it.size; regular=$val; current_price=$cur; source_ad='everyday shelf price'; as_of=$todayS }
+    if ($base -gt 0) { $row['base_price'] = $base }
+    if ($base -gt 0 -and $val -lt ($base - 0.005)) { $row['marked_down'] = $true }
+    $script:deals += ,$row
   }
 }
 # flatten terms to an ordered array so a wall-clock break can queue the REMAINING terms for recovery

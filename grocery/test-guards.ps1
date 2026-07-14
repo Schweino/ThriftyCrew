@@ -117,6 +117,27 @@ if ($hv) {
   Write-Output '  SKIP  stale sale: no Hy-Vee sirloin cell to mutate'
 }
 
+# ---- 8. publishing the REGULAR price over a live discount ---------------------------
+# The bug Brad found, as a test. Take a Hy-Vee row that IS marked down and flip its published price back up
+# to the regular price - exactly what reading `basePrice` instead of `price` does - and prove guard 10 sees it.
+$hf = (Get-ChildItem (Join-Path $root 'out\regular\hyvee-regular-*.json') |
+  Where-Object { $_.BaseName -match '^hyvee-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1).FullName
+$hbak = Get-Content $hf -Raw
+$hd = $hbak | ConvertFrom-Json
+$md = @($hd.deals | Where-Object { $_.marked_down -and $_.base_price -and $_.current_price }) | Select-Object -First 1
+if ($md) {
+  # Do exactly what reading `basePrice` instead of `price` does: publish the REGULAR price while the store is
+  # still charging the marked-down one. Note this makes ad_price EQUAL to base_price, not greater - which is
+  # why the first version of guard 10 (ad_price <= base_price) sailed straight past it. current_price is the
+  # field that makes the lie visible.
+  $md.ad_price = ('$' + [string]$md.base_price)
+  ($hd | ConvertTo-Json -Depth 6) | Set-Content $hf -Encoding UTF8
+  Check 'basePrice bug: a marked-down item republished at its REGULAR price' 2
+  Set-Content $hf $hbak -Encoding UTF8 -NoNewline
+} else {
+  Write-Output '  SKIP  basePrice bug: no marked-down row carrying both current_price and base_price'
+}
+
 # ---- restored? ---------------------------------------------------------------------
 Check 'restored: guards pass again after every mutation is reverted' 0
 

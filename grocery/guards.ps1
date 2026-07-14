@@ -278,6 +278,52 @@ foreach ($f in (RegFiles)) {
 }
 if ($stale -eq 0) { Say '  ok    no store''s price data is older than 14 days' }
 
+# ---------------------------------------------------------------- 10: never publish the REGULAR price
+# THE BUG THIS WHOLE SESSION WAS ABOUT, TURNED INTO AN INVARIANT.
+# A shopper never pays MORE than the regular price. So for any row where we know both numbers, the price we
+# publish must be <= the regular price. If it is higher, we have taken the wrong field - we are publishing
+# `basePrice`/`base_price` (the REGULAR price) over a live discount. That is precisely how Hy-Vee sirloin went
+# out at $13.99/lb while Omaha #01 charged $11.99, and Baker's chicken breast at $2.89/lb against $2.29.
+#
+# THE CONTRACT THIS DEPENDS ON: a puller that can see BOTH prices must RECORD both - the current one in
+# ad_price, the regular one in base_price. Without both on the row, nothing downstream can tell that the wrong
+# one was published, and this guard is blind. Hy-Vee and Family Fare now honour that contract. Baker's,
+# Fareway, Sam's and Walmart do NOT yet - guard 9 is what keeps their staleness visible until they do.
+# A FIRST VERSION OF THIS GUARD WAS USELESS, AND THE NEGATIVE TEST IS WHAT PROVED IT.
+# It asserted ad_price <= base_price - reasoning that a shopper never pays more than the regular price. But
+# taking `base_price` does not publish a price ABOVE regular, it publishes one EXACTLY EQUAL to it. The check
+# passed happily on the very bug it existed to catch. A guard you cannot fail on purpose is not a guard.
+#
+# The non-circular version: the puller records what the store CHARGES (`current_price`) independently of what
+# we choose to PUBLISH (`ad_price`), and this asserts they are the same number. A puller that reaches for the
+# regular-price field now produces two different numbers on the row, and that is visible from the outside.
+$mismatch = 0; $checked = 0; $noContract = @{}
+foreach ($f in (RegFiles)) {
+  $prefix = ($f.BaseName -replace '-regular-.*$','')
+  $newest = RegFiles ($prefix + '-regular-*.json') | Sort-Object Name -Desc | Select-Object -First 1
+  if ($f.FullName -ne $newest.FullName) { continue }
+  $doc = Get-Content $f.FullName -Raw | ConvertFrom-Json
+  $store = [string]$doc.store
+  $any = $false
+  foreach ($d in $doc.deals) {
+    if ($null -eq $d.current_price) { continue }
+    $any = $true
+    $cp = 0.0; [void][double]::TryParse((([string]$d.current_price) -replace '[^0-9.]',''), [ref]$cp)
+    $ap = 0.0; [void][double]::TryParse((([string]$d.ad_price)      -replace '[^0-9.]',''), [ref]$ap)
+    if ($cp -le 0 -or $ap -le 0) { continue }
+    $checked++
+    if ([math]::Abs($ap - $cp) -gt 0.005) {
+      $mismatch++
+      [void]$fail.Add(("HARD FAIL: publishing a price the store is NOT charging  [{0}] {1}  we publish `${2}, the store charges `${3} - the puller took the wrong price field (this is the basePrice bug)" -f $store, [string]$d.item, $ap, $cp))
+    }
+  }
+  if (-not $any) { $noContract[$store] = $true }
+}
+if ($mismatch -eq 0) { Say ("  ok    every price we publish is the price the store charges ($checked rows verified against their own current_price)") }
+if ($noContract.Count) {
+  [void]$warn.Add(("these stores do NOT record the store's current price on their rows, so guard 10 CANNOT check them: " + (($noContract.Keys | Sort-Object) -join ', ') + " - until their pullers record current_price, guard 9's freshness numbers are the only thing standing between them and the basePrice bug"))
+}
+
 # ---------------------------------------------------------------- report
 Say ''
 foreach ($w in $warn) { Say ("  warn  " + $w) }

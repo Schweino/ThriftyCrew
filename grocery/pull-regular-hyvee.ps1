@@ -238,6 +238,11 @@ foreach ($w in $work) {
 
         $row = [ordered]@{
           store='Hy-Vee'; item=$w.name; ad_price=('$' + $price); size=$size; regular=$price
+          # THE CONTRACT (guards invariant 10). Record what the STORE CHARGES, separately from what we choose
+          # to PUBLISH. If anyone ever edits this puller to reach for basePrice again, ad_price and
+          # current_price stop agreeing and the guard catches it from the outside. Drop this field and the
+          # guard goes blind - which is exactly the state Baker's, Fareway, Sam's and Walmart are still in.
+          current_price=[double]$sp.price
           source_ad='Aisles Online current shelf price (storeId 1465, Omaha #01)'
           as_of=$todayS; product_id=[int]$w.pid
         }
