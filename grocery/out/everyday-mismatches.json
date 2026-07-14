@@ -1,5 +1,17 @@
 ﻿[
     {
+        "id":  "bacon",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  3.97,
+        "link":  4.89,
+        "ratio":  1.23,
+        "price":  4.89,
+        "size":  "lb",
+        "boardItem":  "Hickory Country Smoked Bacon",
+        "linkItem":  "Hy-Vee Double Smoked Thick Sliced Bacon"
+    },
+    {
         "id":  "chicken-breast",
         "store":  "Baker\u0027s",
         "unit":  "lb",
@@ -60,6 +72,42 @@
         "linkItem":  "Our Family Sugar, Granulated 32 Oz"
     },
     {
+        "id":  "hot-sauce",
+        "store":  "Hy-Vee",
+        "unit":  "floz",
+        "board":  0.2854,
+        "link":  0.2983,
+        "ratio":  1.05,
+        "price":  1.79,
+        "size":  "6 fl oz",
+        "boardItem":  "Tuong Sriracha Hot Chili Sauce",
+        "linkItem":  "Chophouse Meats Jalapeno Pepper Hot Sauce"
+    },
+    {
+        "id":  "italian-sausage",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  4.9516,
+        "link":  5.48,
+        "ratio":  1.11,
+        "price":  5.48,
+        "size":  "16 oz",
+        "boardItem":  "Johnsonville Hot Italian Sausage, 5 Count",
+        "linkItem":  "Purnells Old Folks Italian Sausage 16 oz"
+    },
+    {
+        "id":  "pasta-sauce",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  0.0767,
+        "link":  0.0829,
+        "ratio":  1.08,
+        "price":  1.99,
+        "size":  "24 oz",
+        "boardItem":  "Hunt\u0027s Traditional Pasta Sauce",
+        "linkItem":  "Hy-Vee Traditional Pasta Sauce"
+    },
+    {
         "id":  "shredded-cheese",
         "store":  "Baker\u0027s",
         "unit":  "oz",
@@ -94,17 +142,5 @@
         "size":  "$0.06/fl oz",
         "boardItem":  "Kroger Distilled White Vinegar 64 fl oz",
         "linkItem":  "Smart Way White Distilled Vinegar"
-    },
-    {
-        "id":  "onions",
-        "store":  "Hy-Vee",
-        "unit":  "lb",
-        "board":  0.9967,
-        "link":  0.83,
-        "ratio":  0.83,
-        "price":  2.49,
-        "size":  "3 lb",
-        "boardItem":  "Yellow Onions 3-Pound Bag",
-        "linkItem":  "Yellow Onions 3-Pound Bag"
     }
 ]
