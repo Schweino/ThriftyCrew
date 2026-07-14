@@ -361,7 +361,15 @@
                         "\\bnectar\\b",
                         "concentrate",
                         "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "jell[\\s-]?o\\b",
+                        "beverage",
+                        "\\bmalt\\b",
+                        "spiked",
+                        "\\bbeer\\b",
+                        "hard\\s+seltzer",
+                        "\\bdrink\\b",
+                        "electrolyte",
+                        "\\bsoda\\b"
                     ]
     },
     {
@@ -370,7 +378,7 @@
         "unit":  "oz",
         "pint_oz":  11.2,
         "include":  [
-                        "blueberr"
+                        "blueberries"
                     ],
         "exclude":  [
                         "muffin",
@@ -388,7 +396,16 @@
                         "yoghurt",
                         "cottage\\s+cheese",
                         "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "jell[\\s-]?o\\b",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "antioxidant",
+                        "electrolyte",
+                        "sparkling",
+                        "kombucha",
+                        "\\bsoda\\b",
+                        "\\bjuice\\b",
+                        "\\bbai\\b"
                     ]
     },
     {
@@ -510,7 +527,16 @@
                         "jell[\\s-]?o\\b",
                         "preserves?",
                         "\\bspread\\b",
-                        "marmalade"
+                        "marmalade",
+                        "beverage",
+                        "\\bdrink\\b",
+                        "electrolyte",
+                        "electrolit",
+                        "gatorade",
+                        "powerade",
+                        "antioxidant",
+                        "\\bsoda\\b",
+                        "energy"
                     ]
     },
     {
@@ -547,7 +573,13 @@
                         "cream\\s+style",
                         "birds\\s*eye",
                         "\\bboil\\b",
-                        "crab"
+                        "crab",
+                        "beech\\s*nut",
+                        "gerber",
+                        "\\bstage\\s*\\d",
+                        "\\bbaby\\b",
+                        "puree",
+                        "green\\s+beans"
                     ]
     },
     {
@@ -783,7 +815,12 @@
                         "\\bsauce\\b",
                         "relish",
                         "corn\\s*dogs?",
-                        "red\\s*hot"
+                        "red\\s*hot",
+                        "\\bcanine\\b",
+                        "dog\\s+snack",
+                        "dog\\s+treat",
+                        "carry\\s*outs",
+                        "\\bpet\\b"
                     ]
     },
     {
@@ -1031,7 +1068,16 @@
                         "\\bsalsa\\b",
                         "\\bcandy\\b",
                         "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "jell[\\s-]?o\\b",
+                        "lysol",
+                        "\\bgel\\b",
+                        "clinging",
+                        "\\brust\\b",
+                        "disinfect",
+                        "toilet",
+                        "\\bspray\\b",
+                        "febreze",
+                        "air\\s+freshener"
                     ]
     },
     {
@@ -1561,7 +1607,9 @@
                         "shortening",
                         "\\bmayo\\b",
                         "mayonnaise",
-                        "butter"
+                        "butter",
+                        "\\bspread\\b",
+                        "margarine"
                     ]
     },
     {
