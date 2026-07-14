@@ -2,8 +2,125 @@
     "readme":  "DERIVED by generate-board-overrides.ps1 - do not hand-edit. Per-cell EVERYDAY per-unit corrections: when a board price disagrees \u003e30% with the verified product its See-item link opens (and name-drift confirms the link is the right product), the board number is stale and is pinned here to the link\u0027s per-unit so price==link==shelf. build-deals-page applies these to EVERYDAY cells only (a live sale always wins) and survives daily regeneration. Sales, wrong-product links (name-drift), and ids present in both the staple+recipe board are intentionally excluded.",
     "updated":  "2026-07-14",
     "tol":  0.3,
-    "count":  11,
+    "count":  25,
     "cells":  [
+                  {
+                      "id":  "flour",
+                      "store":  "Family Fare",
+                      "per_unit":  1.138,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.5596,
+                      "link_name":  "Gold Medal All Purpose Flour 5 Lb",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "baby-food",
+                      "store":  "Family Fare",
+                      "per_unit":  0.3975,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.2738,
+                      "link_name":  "Beech Nut Stage 2 (6+ Months) Sweet Corn \u0026 Green Beans 4 Oz",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "bbq-sauce",
+                      "store":  "Family Fare",
+                      "per_unit":  0.3865,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.1439,
+                      "link_name":  "Kinder\u0027s Honey Hot Bbq Sauce 15.5 Oz",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "blueberries",
+                      "store":  "Family Fare",
+                      "per_unit":  0.3883,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.1494,
+                      "link_name":  "Flavor Ripe Blueberries 18 Oz",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "cereal",
+                      "store":  "Family Fare",
+                      "per_unit":  0.4658,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.192,
+                      "link_name":  "Cheerios Cereal Large Size 12 Oz",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "canned-black-beans",
+                      "store":  "Family Fare",
+                      "per_unit":  0.1193,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.0649,
+                      "link_name":  "Bush\u0027s Best Black Beans 16 Oz",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "canned-corn",
+                      "store":  "Family Fare",
+                      "per_unit":  0.1305,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.0649,
+                      "link_name":  "Green Giant Whole Kernal Sweet Corn",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "crackers",
+                      "store":  "Family Fare",
+                      "per_unit":  0.1556,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.5282,
+                      "link_name":  "Our Family Unsalted Tops Saltine Crackers 16 Oz",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "grapes",
+                      "store":  "Family Fare",
+                      "per_unit":  3.69,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  1.595,
+                      "link_name":  "Red Seedless Grapes",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "oatmeal",
+                      "store":  "Family Fare",
+                      "per_unit":  0.1661,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.126,
+                      "link_name":  "Old Fashioned Oats, Whole Grain Our Family",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "pasta",
+                      "store":  "Family Fare",
+                      "per_unit":  0.1181,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.0778,
+                      "link_name":  "Creamette Spaghetti 16 Oz",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "potato-chips",
+                      "store":  "Family Fare",
+                      "per_unit":  0.6459,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.2568,
+                      "link_name":  "Ruffles Original Potato Chips 8.5 Oz",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "rice",
+                      "store":  "Family Fare",
+                      "per_unit":  1.19,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.699,
+                      "link_name":  "Enriched Long Grain White Rice",
+                      "set":  "2026-07-14"
+                  },
                   {
                       "id":  "boneless-skinless-chicken-thigh",
                       "store":  "Hy-Vee",
@@ -20,6 +137,15 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  7.19,
                       "link_name":  "Chicken Thighs, Boneless Gold N Plump",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "enchilada-sauce",
+                      "store":  "Hy-Vee",
+                      "per_unit":  0.1139,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.269,
+                      "link_name":  "Hy-Vee Mild Enchilada Sauce",
                       "set":  "2026-07-14"
                   },
                   {

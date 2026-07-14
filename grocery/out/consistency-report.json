@@ -1,66 +1,70 @@
 ﻿{
-    "generated":  "2026-07-14 07:41",
+    "generated":  "2026-07-14 13:09",
     "tol":  0.3,
-    "no_link_count":  162,
+    "no_link_count":  113,
     "max_no_link":  0,
     "no_link_by_store":  [
                              {
                                  "store":  "Family Fare",
-                                 "count":  81
+                                 "count":  61
                              },
                              {
                                  "store":  "Hy-Vee",
-                                 "count":  28
-                             },
-                             {
-                                 "store":  "Fareway",
-                                 "count":  26
-                             },
-                             {
-                                 "store":  "Walmart",
-                                 "count":  10
+                                 "count":  32
                              },
                              {
                                  "store":  "Baker\u0027s",
-                                 "count":  8
+                                 "count":  9
                              },
                              {
-                                 "store":  "Aldi",
+                                 "store":  "Walmart",
                                  "count":  5
                              },
                              {
+                                 "store":  "Aldi",
+                                 "count":  3
+                             },
+                             {
+                                 "store":  "Fareway",
+                                 "count":  2
+                             },
+                             {
                                  "store":  "Sam\u0027s Club",
-                                 "count":  4
+                                 "count":  1
                              }
                          ],
     "no_link":  [
                     {
-                        "id":  "pork-chops",
+                        "id":  "ground-beef-8020",
+                        "store":  "Walmart"
+                    },
+                    {
+                        "id":  "ground-beef-8020",
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "whole-chicken",
-                        "store":  "Family Fare"
+                        "id":  "bacon",
+                        "store":  "Baker\u0027s"
                     },
                     {
-                        "id":  "breakfast-sausage",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "hot-dogs",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "deli-ham",
-                        "store":  "Family Fare"
+                        "id":  "pork-chops",
+                        "store":  "Hy-Vee"
                     },
                     {
                         "id":  "salmon",
                         "store":  "Family Fare"
                     },
                     {
+                        "id":  "canned-tuna",
+                        "store":  "Family Fare"
+                    },
+                    {
                         "id":  "shrimp",
                         "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "shrimp",
+                        "store":  "Family Fare"
                     },
                     {
                         "id":  "sirloin-steak",
@@ -71,123 +75,111 @@
                         "store":  "Aldi"
                     },
                     {
-                        "id":  "chuck-roast",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "ground-pork",
-                        "store":  "Family Fare"
-                    },
-                    {
                         "id":  "italian-sausage",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "rotisserie-chicken",
+                        "id":  "milk",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "pepperoni",
+                        "id":  "cream-cheese",
+                        "store":  "Walmart"
+                    },
+                    {
+                        "id":  "cream-cheese",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "turkey-bacon",
-                        "store":  "Family Fare"
+                        "id":  "shredded-cheese",
+                        "store":  "Aldi"
+                    },
+                    {
+                        "id":  "shredded-cheese",
+                        "store":  "Hy-Vee"
                     },
                     {
                         "id":  "sliced-cheese",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "parmesan",
+                        "id":  "coffee-creamer",
                         "store":  "Family Fare"
                     },
                     {
+                        "id":  "blueberries",
+                        "store":  "Baker\u0027s"
+                    },
+                    {
+                        "id":  "grapes",
+                        "store":  "Walmart"
+                    },
+                    {
                         "id":  "apples",
-                        "store":  "Family Fare"
+                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "peaches",
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "clementines",
-                        "store":  "Aldi"
+                        "id":  "watermelon",
+                        "store":  "Baker\u0027s"
                     },
                     {
-                        "id":  "tomatoes",
+                        "id":  "oranges",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "broccoli",
+                        "id":  "lemons",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "spinach",
+                        "id":  "mangoes",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "mushrooms",
+                        "id":  "cantaloupe",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "sweet-potatoes",
+                        "id":  "honeydew",
                         "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "raspberries",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "blackberries",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "plums",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "onions",
+                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "bread",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "hamburger-buns",
+                        "id":  "tortillas",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "muffins",
+                        "id":  "hot-dog-buns",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "canned-black-beans",
+                        "id":  "baked-beans",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "canned-corn",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "chickpeas",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "kidney-beans",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "kidney-beans",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "crushed-tomatoes",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "tomato-paste",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "tomato-paste",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "tomato-sauce",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "alfredo-sauce",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "bbq-sauce",
+                        "id":  "hot-sauce",
                         "store":  "Family Fare"
                     },
                     {
@@ -195,40 +187,16 @@
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "mustard",
-                        "store":  "Family Fare"
-                    },
-                    {
                         "id":  "mayonnaise",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "ranch-dressing",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "pasta-sauce",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "pizza-sauce",
+                        "id":  "salsa",
                         "store":  "Family Fare"
                     },
                     {
                         "id":  "queso",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "queso",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "hummus",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "soy-sauce",
-                        "store":  "Fareway"
                     },
                     {
                         "id":  "white-vinegar",
@@ -236,90 +204,18 @@
                     },
                     {
                         "id":  "lemon-juice",
-                        "store":  "Fareway"
+                        "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "flour",
+                        "id":  "sugar",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "marshmallows",
+                        "id":  "salt",
                         "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "cornstarch",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "bread-crumbs",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "bread-crumbs",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "paprika",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "paprika",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "dried-oregano",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "dried-oregano",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "dried-parsley",
-                        "store":  "Fareway"
                     },
                     {
                         "id":  "ground-cinnamon",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "ground-turmeric",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "red-pepper-flakes",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "garlic-powder",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "onion-powder",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "chili-powder",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "ground-cumin",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "ground-cumin",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "italian-seasoning",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "pasta",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "egg-noodles",
                         "store":  "Family Fare"
                     },
                     {
@@ -327,31 +223,15 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "rice",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "brown-rice",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "oatmeal",
-                        "store":  "Family Fare"
-                    },
-                    {
                         "id":  "cereal",
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "cereal",
+                        "id":  "olive-oil",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "stuffing-mix",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "pancake-mix",
+                        "id":  "vegetable-oil",
                         "store":  "Family Fare"
                     },
                     {
@@ -363,6 +243,14 @@
                         "store":  "Hy-Vee"
                     },
                     {
+                        "id":  "coffee",
+                        "store":  "Walmart"
+                    },
+                    {
+                        "id":  "peanut-butter",
+                        "store":  "Baker\u0027s"
+                    },
+                    {
                         "id":  "peanut-butter",
                         "store":  "Family Fare"
                     },
@@ -371,23 +259,7 @@
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "almonds",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "peanuts",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "mixed-nuts",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "tortilla-chips",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "potato-chips",
+                        "id":  "honey",
                         "store":  "Family Fare"
                     },
                     {
@@ -396,18 +268,6 @@
                     },
                     {
                         "id":  "soda",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "crackers",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "cheese-crackers",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "cookies",
                         "store":  "Family Fare"
                     },
                     {
@@ -420,38 +280,10 @@
                     },
                     {
                         "id":  "gelatin",
-                        "store":  "Aldi"
-                    },
-                    {
-                        "id":  "gelatin",
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "gelatin",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "gelatin",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "apple-juice",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "grape-juice",
-                        "store":  "Family Fare"
-                    },
-                    {
                         "id":  "lemonade",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "sports-drinks",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "energy-drinks",
                         "store":  "Family Fare"
                     },
                     {
@@ -463,27 +295,11 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "ice-cream",
+                        "id":  "breakfast-sandwiches",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "frozen-vegetables",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "frozen-fries",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "chicken-nuggets",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "frozen-broccoli",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "frozen-corn",
+                        "id":  "corn-dogs",
                         "store":  "Family Fare"
                     },
                     {
@@ -491,8 +307,48 @@
                         "store":  "Hy-Vee"
                     },
                     {
+                        "id":  "frozen-fruit",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "toilet-paper",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "dish-soap",
+                        "store":  "Family Fare"
+                    },
+                    {
                         "id":  "dishwasher-detergent",
                         "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "aluminum-foil",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "storage-bags",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "all-purpose-cleaner",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "bleach",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "hand-soap",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "toilet-bowl-cleaner",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "glass-cleaner",
+                        "store":  "Family Fare"
                     },
                     {
                         "id":  "disinfecting-wipes",
@@ -500,19 +356,7 @@
                     },
                     {
                         "id":  "floor-cleaner",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "floor-cleaner",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "floor-cleaner",
                         "store":  "Fareway"
-                    },
-                    {
-                        "id":  "floor-cleaner",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "floor-cleaner",
@@ -520,31 +364,7 @@
                     },
                     {
                         "id":  "drain-cleaner",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "drain-cleaner",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "drain-cleaner",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "drain-cleaner",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "drain-cleaner",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "oven-cleaner",
-                        "store":  "Sam\u0027s Club"
-                    },
-                    {
-                        "id":  "oven-cleaner",
-                        "store":  "Walmart"
                     },
                     {
                         "id":  "oven-cleaner",
@@ -555,52 +375,12 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "oven-cleaner",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "shower-cleaner",
-                        "store":  "Aldi"
-                    },
-                    {
-                        "id":  "shower-cleaner",
-                        "store":  "Walmart"
-                    },
-                    {
                         "id":  "shower-cleaner",
                         "store":  "Hy-Vee"
                     },
                     {
                         "id":  "shower-cleaner",
-                        "store":  "Sam\u0027s Club"
-                    },
-                    {
-                        "id":  "shower-cleaner",
                         "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "shower-cleaner",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "shower-cleaner",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "furniture-polish",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "furniture-polish",
-                        "store":  "Sam\u0027s Club"
-                    },
-                    {
-                        "id":  "furniture-polish",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "furniture-polish",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "furniture-polish",
@@ -612,15 +392,11 @@
                     },
                     {
                         "id":  "insect-spray",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "insect-spray",
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "insect-spray",
-                        "store":  "Fareway"
+                        "id":  "conditioner",
+                        "store":  "Family Fare"
                     },
                     {
                         "id":  "facial-tissues",
@@ -631,11 +407,15 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "baby-food",
+                        "id":  "cat-food",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "dog-food",
+                        "id":  "dog-treats",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "milk",
                         "store":  "Family Fare"
                     },
                     {
@@ -644,11 +424,11 @@
                     },
                     {
                         "id":  "ketchup",
-                        "store":  "Walmart"
+                        "store":  "Family Fare"
                     },
                     {
-                        "id":  "hot-sauce",
-                        "store":  "Walmart"
+                        "id":  "salsa",
+                        "store":  "Family Fare"
                     },
                     {
                         "id":  "zucchini",
@@ -667,15 +447,39 @@
                         "store":  "Hy-Vee"
                     },
                     {
+                        "id":  "bread-crumbs",
+                        "store":  "Baker\u0027s"
+                    },
+                    {
                         "id":  "brown-sugar",
                         "store":  "Sam\u0027s Club"
+                    },
+                    {
+                        "id":  "brown-sugar",
+                        "store":  "Family Fare"
                     },
                     {
                         "id":  "salt",
                         "store":  "Hy-Vee"
                     },
                     {
+                        "id":  "salt",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "kidney-beans",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "vegetable-oil",
+                        "store":  "Family Fare"
+                    },
+                    {
                         "id":  "half-and-half",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "lemon-juice",
                         "store":  "Hy-Vee"
                     },
                     {
@@ -683,7 +487,7 @@
                         "store":  "Hy-Vee"
                     }
                 ],
-    "mismatch_count":  69,
+    "mismatch_count":  80,
     "mismatch":  [
                      {
                          "id":  "ground-beef-8020",
@@ -796,6 +600,16 @@
                          "size":  "12.4 oz"
                      },
                      {
+                         "id":  "chicken-thighs",
+                         "store":  "Family Fare",
+                         "unit":  "lb",
+                         "board":  1.49,
+                         "link":  1.99,
+                         "off_pct":  34,
+                         "product":  "Chicken Thighs, Family Pack Gold N Plump",
+                         "size":  "$1.99/lb"
+                     },
+                     {
                          "id":  "chocolate-milk",
                          "store":  "Hy-Vee",
                          "unit":  "floz",
@@ -886,6 +700,16 @@
                          "size":  "11 oz"
                      },
                      {
+                         "id":  "sugar",
+                         "store":  "Family Fare",
+                         "unit":  "lb",
+                         "board":  0.9975,
+                         "link":  1.445,
+                         "off_pct":  45,
+                         "product":  "Our Family Sugar, Granulated 32 Oz",
+                         "size":  "32 oz"
+                     },
+                     {
                          "id":  "grapes",
                          "store":  "Hy-Vee",
                          "unit":  "lb",
@@ -896,6 +720,26 @@
                          "size":  "lb"
                      },
                      {
+                         "id":  "ground-cinnamon",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  0.4576,
+                         "link":  0.2704,
+                         "off_pct":  41,
+                         "product":  "That\u0027s Smart! Ground Cinnamon 2.5 Oz",
+                         "size":  "2.5 oz"
+                     },
+                     {
+                         "id":  "honey",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  0.1642,
+                         "link":  0.6869,
+                         "off_pct":  318,
+                         "product":  "Local Hive Midwest Raw \u0026 Unfiltered Honey Blend 16 Oz",
+                         "size":  "16 oz"
+                     },
+                     {
                          "id":  "hot-dogs",
                          "store":  "Family Fare",
                          "unit":  "oz",
@@ -904,6 +748,26 @@
                          "off_pct":  49,
                          "product":  "John Morrell Jumbo Franks 12 Oz",
                          "size":  "12 oz"
+                     },
+                     {
+                         "id":  "hot-sauce",
+                         "store":  "Family Fare",
+                         "unit":  "floz",
+                         "board":  0.1658,
+                         "link":  0.3742,
+                         "off_pct":  126,
+                         "product":  "Louisiana Brand Original Hot Sauce 12 Fl Oz",
+                         "size":  "12 fl oz"
+                     },
+                     {
+                         "id":  "hot-sauce",
+                         "store":  "Walmart",
+                         "unit":  "floz",
+                         "board":  0.2783,
+                         "link":  0.13,
+                         "off_pct":  53,
+                         "product":  "Great Value Louisiana Hot Sauce, 12 fl oz",
+                         "size":  "12 fl oz"
                      },
                      {
                          "id":  "instant-mashed-potatoes",
@@ -956,6 +820,16 @@
                          "size":  "8 oz"
                      },
                      {
+                         "id":  "olive-oil",
+                         "store":  "Family Fare",
+                         "unit":  "floz",
+                         "board":  0.2068,
+                         "link":  0.3991,
+                         "off_pct":  93,
+                         "product":  "Our Family Olive Oil, 100% Pure, Imported 33.8 Fl Oz",
+                         "size":  "33.8 fl oz"
+                     },
+                     {
                          "id":  "parmesan",
                          "store":  "Family Fare",
                          "unit":  "oz",
@@ -966,13 +840,23 @@
                          "size":  "6 oz"
                      },
                      {
-                         "id":  "pasta",
+                         "id":  "peanut-butter",
+                         "store":  "Baker\u0027s",
+                         "unit":  "oz",
+                         "board":  0.1014,
+                         "link":  0.1622,
+                         "off_pct":  60,
+                         "product":  "Kroger Peanut Butter Creamy",
+                         "size":  "40 oz"
+                     },
+                     {
+                         "id":  "peanut-butter",
                          "store":  "Family Fare",
                          "unit":  "oz",
-                         "board":  0.0781,
-                         "link":  0.1181,
-                         "off_pct":  51,
-                         "product":  "Creamette Spaghetti 16 Oz",
+                         "board":  0.3328,
+                         "link":  0.1431,
+                         "off_pct":  57,
+                         "product":  "Creamy Reduced Salt \u0026 Sugar Peanut Butter",
                          "size":  "16 oz"
                      },
                      {
@@ -1004,16 +888,6 @@
                          "off_pct":  59,
                          "product":  "Hy-Vee Wavy Potato Chips",
                          "size":  "8 oz"
-                     },
-                     {
-                         "id":  "potato-chips",
-                         "store":  "Family Fare",
-                         "unit":  "oz",
-                         "board":  0.4306,
-                         "link":  0.6459,
-                         "off_pct":  50,
-                         "product":  "Ruffles Original Potato Chips 8.5 Oz",
-                         "size":  "8.5 oz"
                      },
                      {
                          "id":  "queso",
@@ -1087,6 +961,16 @@
                      },
                      {
                          "id":  "sweet-corn",
+                         "store":  "Baker\u0027s",
+                         "unit":  "each",
+                         "board":  0.4,
+                         "link":  0.6,
+                         "off_pct":  50,
+                         "product":  "Fresh Sweet Corn on the Cob-Each",
+                         "size":  "each"
+                     },
+                     {
+                         "id":  "sweet-corn",
                          "store":  "Family Fare",
                          "unit":  "each",
                          "board":  0.9975,
@@ -1104,6 +988,16 @@
                          "off_pct":  53,
                          "product":  "Hy-Vee Sweet Relish 10 oz",
                          "size":  "10 oz"
+                     },
+                     {
+                         "id":  "salt",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  0.2772,
+                         "link":  0.0765,
+                         "off_pct":  72,
+                         "product":  "Morton Iodized Salt 26 Oz",
+                         "size":  "26 oz"
                      },
                      {
                          "id":  "tater-tots",
@@ -1164,6 +1058,16 @@
                          "off_pct":  34,
                          "product":  "Hy-Vee Flour Tortilla Great for Fajitas 10Ct",
                          "size":  "10 ct"
+                     },
+                     {
+                         "id":  "vegetable-oil",
+                         "store":  "Family Fare",
+                         "unit":  "floz",
+                         "board":  0.0937,
+                         "link":  0.1994,
+                         "off_pct":  113,
+                         "product":  "Our Family Vegetable Oil, 100% Pure 16 Fl Oz",
+                         "size":  "16 fl oz"
                      },
                      {
                          "id":  "whole-chicken",
@@ -1314,6 +1218,16 @@
                          "off_pct":  101,
                          "product":  "Morton Iodized Salt 26 Oz",
                          "size":  "26 oz"
+                     },
+                     {
+                         "id":  "vegetable-oil",
+                         "store":  "Family Fare",
+                         "unit":  "floz",
+                         "board":  0.1248,
+                         "link":  0.1994,
+                         "off_pct":  60,
+                         "product":  "Our Family Vegetable Oil, 100% Pure 16 Fl Oz",
+                         "size":  "16 fl oz"
                      },
                      {
                          "id":  "half-and-half",

@@ -1,21 +1,11 @@
 ﻿{
-    "generated":  "2026-07-13 02:57",
-    "gap_count":  16,
+    "generated":  "2026-07-14 12:58",
+    "gap_count":  6,
     "gaps":  [
-                 {
-                     "commodity":  "apples",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  2.99
-                 },
                  {
                      "commodity":  "bread",
                      "store":  "Family Fare",
                      "sale_per_unit":  3
-                 },
-                 {
-                     "commodity":  "broccoli",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  2.49
                  },
                  {
                      "commodity":  "clementines",
@@ -23,49 +13,9 @@
                      "sale_per_unit":  0.9967
                  },
                  {
-                     "commodity":  "cookies",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.3016
-                 },
-                 {
-                     "commodity":  "cucumbers",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  2.5
-                 },
-                 {
-                     "commodity":  "frozen-fries",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.1184
-                 },
-                 {
-                     "commodity":  "fruit-punch",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.0446
-                 },
-                 {
-                     "commodity":  "hot-dogs",
+                     "commodity":  "dishwasher-detergent",
                      "store":  "Hy-Vee",
-                     "sale_per_unit":  0.28
-                 },
-                 {
-                     "commodity":  "mushrooms",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.2488
-                 },
-                 {
-                     "commodity":  "pasta",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.0781
-                 },
-                 {
-                     "commodity":  "potato-chips",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.4306
-                 },
-                 {
-                     "commodity":  "salmon",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  11.99
+                     "sale_per_unit":  0.1665
                  },
                  {
                      "commodity":  "sandwich-cookies",
@@ -73,14 +23,14 @@
                      "sale_per_unit":  0.2745
                  },
                  {
-                     "commodity":  "shrimp",
+                     "commodity":  "sweet-corn",
                      "store":  "Family Fare",
-                     "sale_per_unit":  5.99
+                     "sale_per_unit":  0.9975
                  },
                  {
-                     "commodity":  "sirloin-steak",
+                     "commodity":  "tortilla-chips",
                      "store":  "Family Fare",
-                     "sale_per_unit":  11.99
+                     "sale_per_unit":  0.3405
                  }
              ]
 }
