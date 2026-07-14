@@ -42,6 +42,34 @@ function RegFiles([string]$pattern = '*-regular-*.json') {
     Where-Object { $_.BaseName -match '^[a-z0-9-]+-regular-\d{4}-\d{2}-\d{2}$' }
 }
 
+# ---------------------------------------------------------------- 0: pu-lib per-unit engine self-check
+# The publish path AND this gate both price with Get-LinkPerUnit. A silent regression there is invisible to
+# every downstream check, because a cell it can no longer price reads as "unknown" and gets SKIPPED, not
+# flagged - exactly how the "6 pk 4 oz" multipack format once returned null and dropped 19 cells out of the
+# factor guard while the gate stayed green. So assert the tricky cases right here, in the gate the daily cloud
+# job runs, and HARD FAIL before anything ships if the math drifts. Mirrors the assertions in test-pu-lib.ps1
+# (pure computation - no board mutation, no I/O), so it is safe to run on every publish.
+$puCases = @(
+  @{ size='6 pk 4 oz';     unit='oz';   price=2.50; name='';              want=0.104167 }  # pack-first multipack
+  @{ size='2 pk 48 fl oz'; unit='floz'; price=4.00; name='';              want=0.041667 }  # fl-oz multipack
+  @{ size='6 pk 16 oz';    unit='oz';   price=3.00; name='';              want=0.03125  }  # pack-first
+  @{ size='16 oz 6 pk';    unit='oz';   price=3.00; name='';              want=0.03125  }  # weight-first (no double-mult)
+  @{ size='4 pk 4 oz';     unit='each'; price=2.78; name='';              want=0.695    }  # each: N pk = N items
+  @{ size='each';          unit='each'; price=6.00; name='Water 24 Pack'; want=0.25     }  # multipack-in-name
+  @{ size='3 oz';          unit='oz';   price=2.18; name='';              want=0.726667 }  # plain single
+  @{ size='lb';            unit='lb';   price=4.99; name='';              want=4.99     }  # bare unit
+  @{ size='$0.07/oz';      unit='oz';   price=5.00; name='';              want=0.07     }  # explicit unit price
+  @{ size='16 oz';         unit='each'; price=2.49; name='';              want=$null    }  # genuine unit mismatch -> null
+)
+$puBad = New-Object System.Collections.Generic.List[string]
+foreach ($c in $puCases) {
+  $g = Get-LinkPerUnit -size $c.size -unit $c.unit -price $c.price -name $c.name
+  $ok = if ($null -eq $c.want) { $null -eq $g } else { ($null -ne $g) -and ([math]::Abs([double]$g - [double]$c.want) -lt 0.001) }
+  if (-not $ok) { $puBad.Add(('"{0}"/{1} -> {2} (want {3})' -f $c.size, $c.unit, $g, $c.want)) }
+}
+if ($puBad.Count) { [void]$fail.Add("HARD FAIL: pu-lib per-unit math regressed [" + ($puBad -join '; ') + "] - the publish path prices with this engine; see test-pu-lib.ps1") }
+else { Say '  ok    pu-lib per-unit engine self-check' }
+
 # ---------------------------------------------------------------- 1 + 2: delegate to the existing audits
 foreach ($g in @(
     @{ f='audit-price-mode.ps1';        n='price-mode (in-store pricing)' },
