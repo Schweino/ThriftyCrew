@@ -507,7 +507,10 @@
                         "freeze\\s*pop",
                         "ice\\s*pop",
                         "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "jell[\\s-]?o\\b",
+                        "preserves?",
+                        "\\bspread\\b",
+                        "marmalade"
                     ]
     },
     {
@@ -1671,7 +1674,15 @@
                         "muffin",
                         "\\bcarrots?\\b",
                         "cream\\s+cheese",
-                        "hot\\s+honey"
+                        "hot\\s+honey",
+                        "\\bsoap\\b",
+                        "detergent",
+                        "\\bdish\\b",
+                        "cleaner",
+                        "fabric",
+                        "softener",
+                        "\\bwipes?\\b",
+                        "dryer\\s+sheet"
                     ]
     },
     {

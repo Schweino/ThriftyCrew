@@ -165,6 +165,11 @@ $prevF = Get-ChildItem (Join-Path $regDir 'family-fare-regular-*.json') -EA Sile
 # mixing the two breaks both '.prop = x' assignment and Add-Member. Normalise every row through this.
 function Norm-Row($r, $asOf, $isCarried) {
   $h = [ordered]@{ store='Family Fare'; item=[string]$r.item; ad_price=[string]$r.ad_price; size=[string]$r.size; regular=$r.regular; source_ad=[string]$r.source_ad; as_of=[string]$asOf }
+  # PRESERVE THE CONTRACT FIELDS. This normalizer rebuilds every row with a fixed key set, and it used to drop
+  # current_price / base_price / marked_down - so the contract the ingest step carefully wrote got stripped one
+  # line later, and guard 10 saw ZERO Family Fare rows to police. A normalizer that silently discards the field
+  # a guard depends on is how a store slips back out from under the guard without anyone noticing.
+  foreach ($k in @('current_price','base_price','marked_down')) { if ($null -ne $r.$k) { $h[$k] = $r.$k } }
   if ($isCarried) { $h['carried_forward'] = $true }
   return $h
 }
