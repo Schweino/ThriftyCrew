@@ -94,5 +94,17 @@
         "size":  "$0.06/fl oz",
         "boardItem":  "Kroger Distilled White Vinegar 64 fl oz",
         "linkItem":  "Smart Way White Distilled Vinegar"
+    },
+    {
+        "id":  "onions",
+        "store":  "Hy-Vee",
+        "unit":  "lb",
+        "board":  0.9967,
+        "link":  0.83,
+        "ratio":  0.83,
+        "price":  2.49,
+        "size":  "3 lb",
+        "boardItem":  "Yellow Onions 3-Pound Bag",
+        "linkItem":  "Yellow Onions 3-Pound Bag"
     }
 ]
