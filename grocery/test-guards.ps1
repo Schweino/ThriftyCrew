@@ -138,6 +138,26 @@ if ($md) {
   Write-Output '  SKIP  basePrice bug: no marked-down row carrying both current_price and base_price'
 }
 
+# ---- 9. Baker's price not matching the store's EXACT shelf price (the milk rounding bug) -------------
+# Guard 10 only proves ad_price == current_price - both OUR numbers - so it cannot catch a current_price that
+# was COMPUTED wrong. Guard 11 brings in the raw capture's exact `cur`. Set milk to the rounded-unit
+# reconstruction ($2.56) while the raw capture shows the store charges $3.19, and prove guard 11 sees it.
+# (compare-*.json is NOT regenerated here, so guard 4 reads the old board and stays quiet - this isolates 11.)
+$bkf = (Get-ChildItem (Join-Path $root 'out\regular\bakers-regular-*.json') |
+  Where-Object { $_.BaseName -match '^bakers-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1).FullName
+$bkrCsv = Join-Path $root 'out\bakers-prices-raw.csv'
+$bkbak = Get-Content $bkf -Raw
+$bkd = $bkbak | ConvertFrom-Json
+$milk = @($bkd.deals | Where-Object { $_.item -match '2% Reduced Fat Milk' -and $_.upc -and $_.current_price }) | Select-Object -First 1
+if ((Test-Path $bkrCsv) -and $milk) {
+  $milk.ad_price = '$2.56'; $milk.current_price = 2.56   # rounded 0.02/floz x 128; the store's shelf price is $3.19
+  ($bkd | ConvertTo-Json -Depth 6) | Set-Content $bkf -Encoding UTF8
+  Check 'baker rounding: milk at the rounded-unit price, not the store''s exact shelf price' 2
+  Set-Content $bkf $bkbak -Encoding UTF8 -NoNewline
+} else {
+  Write-Output '  SKIP  baker rounding: no raw capture or no milk row to mutate'
+}
+
 # ---- restored? ---------------------------------------------------------------------
 Check 'restored: guards pass again after every mutation is reverted' 0
 

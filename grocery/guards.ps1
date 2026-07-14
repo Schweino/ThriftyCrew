@@ -352,6 +352,79 @@ if ($noContract.Count) {
   [void]$warn.Add(("these stores do NOT record the store's current price on their rows, so guard 10 CANNOT check them: " + (($noContract.Keys | Sort-Object) -join ', ') + " - until their pullers record current_price, guard 9's freshness numbers are the only thing standing between them and the basePrice bug"))
 }
 
+# ---------------------------------------------------------------- 11: Baker's price reconciles with the raw capture
+# Guard 10 asserts ad_price == current_price - but BOTH are our own numbers, so it cannot catch a current_price
+# that was COMPUTED wrong. That is exactly the 2026-07-14 milk bug: Baker's prints its unit price coarsely
+# ("$0.02/fl oz"), the importer rebuilt per-gallon as 0.02 x 128 = $2.56 and published it against the $3.19 the
+# store actually charges (its exact pack price `cur`). $2.56 equalled its own current_price, so guard 10 was
+# happy. This invariant brings in the INDEPENDENT truth - the raw capture's exact `cur` - and asserts that when
+# the store's pack IS our size (cur falls inside the band the rounded unit price allows for our size), the
+# published price MUST equal cur. Runs only when a fresh capture (out\bakers-prices-raw.csv) is present, and any
+# error in the check itself degrades to a warning (a new guard must never block the board by crashing).
+try {
+  $rawBk = Join-Path $root 'out\bakers-prices-raw.csv'
+  if (Test-Path $rawBk) {
+    function ConvBk([double]$v, [string]$of, [string]$u) {
+      if ($v -le 0) { return $null }
+      $b = (([string]$of).ToLower() -replace '\s',''); if (-not $b) { return $null }
+      switch ($u) {
+        'lb'     { if ($b -eq 'lb') { return $v }; if ($b -eq 'oz') { return ($v*16) }; return $null }
+        'oz'     { if ($b -eq 'oz') { return $v }; if ($b -eq 'lb') { return ($v/16) }; return $null }
+        'floz'   { if ($b -eq 'floz') { return $v }; return $null }
+        'gallon' { if ($b -eq 'floz') { return ($v*128) }; return $null }
+        'each'   { if ($b -match '^(ea|ct)$') { return $v }; return $null }
+        'dozen'  { if ($b -match '^(ea|ct)$') { return ($v*12) }; return $null }
+        default  { return $null }
+      }
+    }
+    $rawP = @{}
+    foreach ($ln in (Get-Content $rawBk)) {
+      $c = ([string]$ln) -split ','; if ($c.Count -lt 6) { continue }
+      $u0 = $c[0].Trim(); if (-not $u0) { continue }
+      $cu = 0.0; [void][double]::TryParse((($c[1]) -replace '[^0-9.]',''), [ref]$cu)
+      $uv0 = 0.0; [void][double]::TryParse((($c[3]) -replace '[^0-9.]',''), [ref]$uv0)
+      if ($cu -gt 0) { $rawP[$u0] = [pscustomobject]@{ cur=$cu; uv=$uv0; uof=$c[4].Trim() } }
+    }
+    $pdRaw = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
+    $unitById = @{}; foreach ($cc in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) { $unitById[[string]$cc.id] = [string]$cc.unit }
+    $unitByBkName = @{}
+    foreach ($p in $pdRaw.PSObject.Properties) { $e = $p.Value.'Baker''s'; if ($e -and $e.name -and $unitById.ContainsKey([string]$p.Name)) { $unitByBkName[([string]$e.name).ToLower().Trim()] = $unitById[[string]$p.Name] } }
+
+    $bkFile = RegFiles ('bakers-regular-*.json') | Sort-Object Name -Desc | Select-Object -First 1
+    $bkChecked = 0; $bkBad = 0
+    if ($bkFile) {
+      $bkDoc = Get-Content $bkFile.FullName -Raw | ConvertFrom-Json
+      foreach ($d in $bkDoc.deals) {
+        if (-not $d.upc -or ($null -eq $d.current_price)) { continue }
+        if (([string]$d.source_ad) -notmatch 'bakersplus') { continue }        # only rows priced from the capture
+        $pv = $rawP[[string]$d.upc]; if (-not $pv) { continue }
+        if (($null -eq $pv.uv) -or ([double]$pv.uv -le 0)) { continue }         # weighted rows checked by guards 4/10
+        $unit = $unitByBkName[([string]$d.item).ToLower().Trim()]; if (-not $unit) { continue }
+        $pu1 = Get-LinkPerUnit -size ([string]$d.size) -unit $unit -price 1 -name ([string]$d.item)
+        if (($null -eq $pu1) -or ([double]$pu1 -le 0)) { continue }
+        $ourQty = 1.0 / [double]$pu1
+        $lo = ConvBk ([math]::Max(0.0001, [double]$pv.uv - 0.005)) ([string]$pv.uof) $unit
+        $hi = ConvBk ([double]$pv.uv + 0.005) ([string]$pv.uof) $unit
+        if (($null -eq $lo) -or ($null -eq $hi)) { continue }
+        $loP = $lo * $ourQty; $hiP = $hi * $ourQty
+        $cur = [double]$pv.cur
+        $cp = 0.0; [void][double]::TryParse((([string]$d.current_price) -replace '[^0-9.]',''), [ref]$cp)
+        # only when the pack IS our size (cur sits in the band) is cur the exact our-size price we must publish
+        if (($cur -ge ($loP - 0.011)) -and ($cur -le ($hiP + 0.011))) {
+          $bkChecked++
+          if ([math]::Abs($cp - $cur) -gt 0.02) {
+            $bkBad++
+            [void]$fail.Add(("HARD FAIL: Baker's published price is not the store's exact shelf price  [{0}]  we publish `${1}, the store charges `${2} (unit {3}/{4}) - a rounded-unit-price reconstruction slipped past, not the exact price (the milk bug)" -f [string]$d.item, $cp, $cur, $pv.uv, $pv.uof))
+          }
+        }
+      }
+    }
+    if ($bkBad -eq 0) { Say ("  ok    Baker's prices reconcile with the raw store capture ($bkChecked pack=our-size rows checked against the exact cur)") }
+  }
+} catch {
+  [void]$warn.Add("guard 11 (Baker's raw-capture cross-check) errored and was skipped: " + $_.Exception.Message)
+}
+
 # ---------------------------------------------------------------- report
 Say ''
 foreach ($w in $warn) { Say ("  warn  " + $w) }
