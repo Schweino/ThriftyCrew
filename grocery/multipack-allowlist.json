@@ -1,0 +1,8 @@
+{
+  "readme": "Rows whose NAME declares a pack count but whose SIZE is already the TOTAL, verified against the store's own page. guards.ps1 would otherwise hard-fail them. Add here ONLY after confirming the size really is the pack total - the whole point of the guard is to catch the opposite case (Sam's '1 gal., 2 pk.' recorded as ONE gallon).",
+  "allow": [
+    { "store": "Aldi",   "item": "Summit Cola 12 Pack",                  "why": "12 x 12 fl oz = 144 fl oz, and size already reads 144 fl oz (verified aldi.us 2026-07-14)" },
+    { "store": "Hy-Vee", "item": "Fleischmann's ActiveDry Yeast 3 Pack", "why": "3 x 0.25 oz = 0.75 oz, and size was corrected to 0.75 oz (verified hy-vee.com 2026-07-14)" },
+    { "store": "Walmart","item": "Great Value Cream Cheese Brick (2 pk)","why": "2 x 8 oz = 16 oz, and size already reads 16 oz (verified walmart.com 2026-07-14)" }
+  ]
+}

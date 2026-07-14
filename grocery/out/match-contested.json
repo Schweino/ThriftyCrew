@@ -8,14 +8,97 @@
                       },
                       {
                           "store":  "Family Fare",
+                          "item":  "Daisy Daisy 4% Milkfat Minimum With Pineapple Cottage Cheese 6 Oz",
+                          "winner":  "cottage-cheese",
+                          "losers":  "pineapple"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Daisy Cottage Cheese, With Peaches, 4% Milkfat Minimum 6 Oz",
+                          "winner":  "cottage-cheese",
+                          "losers":  "peaches"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Pringles Potato Crisps Chips, Sour Cream And Onion 5.5 Oz",
+                          "winner":  "sour-cream",
+                          "losers":  "onions"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Core Power Strawberry Banana 26g Protein Shake Bottle 14 Fl Oz",
+                          "winner":  "bananas",
+                          "losers":  "strawberries"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Lifeway Kefir, Strawberry Banana 8 Fl Oz",
+                          "winner":  "bananas",
+                          "losers":  "strawberries"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Electrolit Zero Sugar Strawberry Banana Electrolyte Beverage 21 Fl Oz",
+                          "winner":  "bananas",
+                          "losers":  "strawberries,sports-drinks"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Nesquik Milk, Lowfat, Strawberry 14 Fl Oz",
+                          "winner":  "milk",
+                          "losers":  "strawberries"
+                      },
+                      {
+                          "store":  "Family Fare",
                           "item":  "Fresh Strawberries \u0026 Blueberries Fresh Divide",
                           "winner":  "strawberries",
                           "losers":  "blueberries"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Thomas\u0027 Pre Sliced Blueberry Bagels 6 Ea",
+                          "winner":  "blueberries",
+                          "losers":  "bagels"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Blueberry Flax Granola Our Family",
+                          "winner":  "blueberries",
+                          "losers":  "granola"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Suave Shampoo, Smoothing, Avocado + Olive Oil 28 Oz",
+                          "winner":  "olive-oil",
+                          "losers":  "shampoo"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Pacific Foods Organic Chicken Bone Broth With Sea Salt 32.000 Oz",
+                          "winner":  "chicken-broth",
+                          "losers":  "salt"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Swanson® Sipping Chicken Bone Broth With Ginger And Turmeric 10.750 Oz",
+                          "winner":  "chicken-broth",
+                          "losers":  "fresh-ginger"
                       }
                   ],
     "pairs":  {
+                  "olive-oil \u003e\u003e shampoo":  1,
+                  "milk \u003e\u003e strawberries":  1,
+                  "sour-cream \u003e\u003e onions":  1,
+                  "fresh-green-beans \u003e\u003e canned-green-beans":  1,
                   "strawberries \u003e\u003e blueberries":  1,
-                  "fresh-green-beans \u003e\u003e canned-green-beans":  1
+                  "cottage-cheese \u003e\u003e pineapple":  1,
+                  "blueberries \u003e\u003e bagels":  1,
+                  "chicken-broth \u003e\u003e salt":  1,
+                  "bananas \u003e\u003e strawberries":  3,
+                  "cottage-cheese \u003e\u003e peaches":  1,
+                  "chicken-broth \u003e\u003e fresh-ginger":  1,
+                  "blueberries \u003e\u003e granola":  1,
+                  "bananas \u003e\u003e sports-drinks":  1
               },
-    "scanned":  2182
+    "scanned":  2321
 }

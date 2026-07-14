@@ -78,6 +78,13 @@ if ($ovr.Count) { foreach ($it in $all) { $id=[string]$it.id; if (-not $ovr.Cont
 $mismatch = New-Object System.Collections.Generic.List[object]
 foreach ($it in $all) { $id=[string]$it.id; $unit=[string]$it.unit
   foreach ($s in $it.stores) { $st=[string]$s.store; $b=[double]$s.per_unit; if ($b -le 0) { continue }
+    # SKIP SALE CELLS. A weekly-ad price legitimately differs from the shelf price on the product page
+    # the link opens (Hy-Vee sirloin: $6.99/lb on sale vs $13.99/lb regular) - that is the design, not a
+    # broken link. Counting them inflated this backlog to 69 and kept the audit permanently BREACHED,
+    # which fired the daily Family Fare auto-repair every run for a non-problem (and that repair's
+    # re-merge is what resurrected stale links on 2026-07-14). Only an EVERYDAY cell claims to be the
+    # same number as its linked product, so only an everyday cell can disagree with it.
+    if (([string]$s.type) -ne 'everyday') { continue }
     $e = $pd.$id.$st; if (-not ($e -and $e.url)) { continue }
     $sp=0.0; [void][double]::TryParse((([string]$e.price) -replace '[^0-9.]',''), [ref]$sp)
     $lpu = LinkPU ([string]$e.size) $unit $sp ([string]$e.name); if ($null -eq $lpu) { continue }

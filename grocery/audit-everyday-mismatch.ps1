@@ -21,47 +21,11 @@ $pu  = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Jso
 # ("Fareway 24 Pack Purified Drinking Water", size="each") rather than the size field. Missing that
 # makes a CORRECT board cell look 6x/12x/24x wrong - it was the source of every false positive on
 # the first run of this audit. Read the pack count from size OR name.
-function Qty([string]$size, [string]$name, [string]$unit) {
-  $s = ("" + $size).ToLower()
-  $nm = ("" + $name).ToLower()
-  # The pack count only MULTIPLIES a weight when it appears in the SIZE field ("6 pk 16 oz"), because
-  # our size convention already records the TOTAL when it is a single weight: "Applesauce Cups 6 Count"
-  # with size "24 oz" is 24 oz TOTAL, not 6 x 24. Multiplying by a pack read from the NAME made six
-  # correct cells look 6x-12x wrong. For an 'each' commodity the pack IS the quantity, so there the
-  # name is allowed (Fareway "24 Pack" bottled water, size "each" = 24 bottles).
-  $pkSize = 1
-  $pmS = [regex]::Match($s, '(\d+)\s*(?:x|pk\b|pack\b|ct\b|count\b)')
-  if ($pmS.Success) { $pkSize = [double]$pmS.Groups[1].Value }
-  $pkAny = $pkSize
-  if ($pkAny -le 1) {
-    $pmN = [regex]::Match($nm, '(\d+)\s*(?:x|pk\b|pack\b|ct\b|count\b)')
-    if ($pmN.Success) { $pkAny = [double]$pmN.Groups[1].Value }
-  }
-  $pk = $pkSize
-  $m = [regex]::Matches($s, '([\d.]+)\s*(fl\s?oz|floz|oz|lbs?|pound|gal|qt|l|ml|g)\b')
-  if ($m.Count -eq 0) {
-    if ($unit -eq 'each') { return $pkAny }                               # per-item: qty = item count (name ok)
-    if ($unit -eq 'lb'   -and $s -match '^\s*lb\s*$')   { return 1 }      # a per-lb shelf price
-    if ($unit -eq 'gallon' -and $s -match '^\s*gal') { return 1 }
-    return 0
-  }
-  $last = $m[$m.Count-1]
-  $n = [double]$last.Groups[1].Value
-  $u = $last.Groups[2].Value -replace '\s',''
-  $base = 0.0
-  switch ($unit) {
-    'oz'     { if ($u -eq 'oz') { $base=$n } elseif ($u -match '^(lbs?|pound)$') { $base=$n*16 } elseif ($u -eq 'g') { $base=$n*0.035274 } }
-    'floz'   { if ($u -match '^(floz|oz)$') { $base=$n } elseif ($u -eq 'l') { $base=$n*33.814 } elseif ($u -eq 'ml') { $base=$n*0.033814 } elseif ($u -eq 'gal') { $base=$n*128 } elseif ($u -eq 'qt') { $base=$n*32 } }
-    'lb'     { if ($u -match '^(lbs?|pound)$') { $base=$n } elseif ($u -eq 'oz') { $base=$n/16 } }
-    'gallon' { if ($u -eq 'gal') { $base=$n } elseif ($u -match '^(floz|oz)$') { $base=$n/128 } }
-    'each'   { return $pkAny }
-    'dozen'  { if ($u -match '^(ct|count)$') { $base=$n/12 } else { $base = 0 } }
-    default  { $base = 0 }
-  }
-  if ($base -le 0) { return 0 }
-  if ($pk -gt 1) { $base = $base * $pk }        # N pk of M oz = N*M total, however it was written
-  return $base
-}
+# Per-unit math is shared with build-deals-page (the code that actually publishes the number) via
+# pu-lib.ps1. This file used to carry its own weaker copy, which returned 0 - "skip this cell" - for
+# sizes the published math handles fine ("per lb", a bare "lb", "24 fl oz" on an oz commodity, "dozen",
+# a "$0.07/oz" unit price in the size field), silently excluding 8.6% of linked cells from the check.
+. (Join-Path $root 'pu-lib.ps1')
 
 $bugs = New-Object System.Collections.ArrayList
 $checked = 0; $saleSkipped = 0; $noLink = 0; $uncomputable = 0
@@ -75,14 +39,19 @@ foreach ($row in $cmp.comparison) {
     $e = $link.$store
     if (-not $e -or -not $e.price) { $noLink++; continue }
     if (([string]$s.type) -ne 'everyday') { $saleSkipped++; continue }   # a sale legitimately differs from the shelf price
-    $q = Qty ([string]$e.size) ([string]$e.name) ([string]$row.unit)
-    if ($q -le 0) { $uncomputable++; continue }
-    $linkPu = [double]$e.price / $q
+    $sp = 0.0; [void][double]::TryParse((([string]$e.price) -replace '[^0-9.]',''), [ref]$sp)
+    $linkPu = Get-LinkPerUnit -size ([string]$e.size) -unit ([string]$row.unit) -price $sp -name ([string]$e.name)
+    if ($null -eq $linkPu) { $uncomputable++; continue }
     $boardPu = [double]$s.per_unit
     if ($boardPu -le 0) { continue }
     $checked++
     $diff = [math]::Abs($linkPu - $boardPu) / $boardPu
-    if ($diff -gt 0.02) {
+    # HALF-CENT RULE. Some links record the STORE'S OWN unit price in the size field ("$0.06/oz"), already
+    # rounded to the cent. On a cheap item that rounding is huge in percentage terms and nothing else: a can
+    # of beans at $1.00/15.5 oz is $0.0645/oz, which the store prints as "$0.06/oz" - a 7% "mismatch" that
+    # is really just two decimal places. Anything agreeing to within half a cent per unit is below the
+    # precision either side can express, so it cannot be a real disagreement.
+    if ($diff -gt 0.02 -and [math]::Abs($linkPu - $boardPu) -gt 0.005) {
       [void]$bugs.Add([pscustomobject]@{
         id=$id; store=$store; unit=[string]$row.unit
         board=[math]::Round($boardPu,4); link=[math]::Round($linkPu,4)

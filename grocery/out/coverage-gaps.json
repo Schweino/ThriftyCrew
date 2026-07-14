@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-14 12:58",
-    "gap_count":  145,
+    "generated":  "2026-07-14 08:29",
+    "gap_count":  192,
     "gaps":  [
                  {
                      "commodity":  "chicken-breast",
@@ -13,14 +13,54 @@
                      "candidate":  "Ground Beef, 80/20 (80% lean)"
                  },
                  {
+                     "commodity":  "ground-turkey",
+                     "store":  "Family Fare",
+                     "candidate":  "Jennie O Ground Turkey 85% Lean / 15% Fat   1 Lb. Tray"
+                 },
+                 {
+                     "commodity":  "eggs",
+                     "store":  "Family Fare",
+                     "candidate":  "Large Eggs, Grade A Our Family"
+                 },
+                 {
+                     "commodity":  "milk",
+                     "store":  "Family Fare",
+                     "candidate":  "Kemps 1% Lowfat Milk 1 Gal"
+                 },
+                 {
+                     "commodity":  "butter",
+                     "store":  "Family Fare",
+                     "candidate":  "Fresh \u0026 Finest Cinnamon Butter"
+                 },
+                 {
+                     "commodity":  "cream-cheese",
+                     "store":  "Family Fare",
+                     "candidate":  "Whipped Cream Cheese Spread"
+                 },
+                 {
+                     "commodity":  "bananas",
+                     "store":  "Family Fare",
+                     "candidate":  "Yellow Bananas"
+                 },
+                 {
                      "commodity":  "blueberries",
                      "store":  "Aldi",
                      "candidate":  "Blueberries"
                  },
                  {
+                     "commodity":  "russet-potatoes",
+                     "store":  "Family Fare",
+                     "candidate":  "Russet Potato"
+                 },
+                 {
                      "commodity":  "bread",
                      "store":  "Aldi",
                      "candidate":  "L\u0027oven Fresh White Bread"
+                 },
+                 {
+                     "commodity":  "peanut-butter",
+                     "store":  "Family Fare",
+                     "candidate":  "Our Family Creamy Peanut Butter"
                  },
                  {
                      "commodity":  "orange-juice",
@@ -33,9 +73,44 @@
                      "candidate":  "Folgers Classic Roast Ground Coffee"
                  },
                  {
+                     "commodity":  "whole-chicken",
+                     "store":  "Family Fare",
+                     "candidate":  "Our Family Fresh Whole Chicken"
+                 },
+                 {
+                     "commodity":  "breakfast-sausage",
+                     "store":  "Family Fare",
+                     "candidate":  "Johnsonville Original Recipe Breakfast Sausage 12 Oz"
+                 },
+                 {
+                     "commodity":  "deli-ham",
+                     "store":  "Family Fare",
+                     "candidate":  "Deli Fresh Sliced Ham"
+                 },
+                 {
+                     "commodity":  "canned-tuna",
+                     "store":  "Family Fare",
+                     "candidate":  "Chicken Of The Sea Premium Solid White Tuna In Water 4   5 Oz Cans 4 Ea"
+                 },
+                 {
+                     "commodity":  "sliced-cheese",
+                     "store":  "Family Fare",
+                     "candidate":  "Fresh Sliced American Cheese Kretschmar"
+                 },
+                 {
+                     "commodity":  "oranges",
+                     "store":  "Family Fare",
+                     "candidate":  "Simply Orange Oj High Pulp"
+                 },
+                 {
                      "commodity":  "lemons",
                      "store":  "Aldi",
                      "candidate":  "Lemons, Bag"
+                 },
+                 {
+                     "commodity":  "lemons",
+                     "store":  "Family Fare",
+                     "candidate":  "7 Up Soda, Zero Sugar, Lemon Lime 2.1 Qt"
                  },
                  {
                      "commodity":  "lemons",
@@ -49,6 +124,11 @@
                  },
                  {
                      "commodity":  "limes",
+                     "store":  "Family Fare",
+                     "candidate":  "7 Up Soda, Zero Sugar, Lemon Lime 2.1 Qt"
+                 },
+                 {
+                     "commodity":  "limes",
                      "store":  "Sam\u0027s Club",
                      "candidate":  "Limes, 3-Pound Bag"
                  },
@@ -58,9 +138,19 @@
                      "candidate":  "Fresh Iceberg Lettuce Head"
                  },
                  {
-                     "commodity":  "cucumbers",
+                     "commodity":  "carrots",
                      "store":  "Family Fare",
-                     "candidate":  "Top Care Antibacterial Foaming Cucumber Melon Hand Soap 7.5 Fl Oz"
+                     "candidate":  "Dole Shredded Carrot"
+                 },
+                 {
+                     "commodity":  "celery",
+                     "store":  "Family Fare",
+                     "candidate":  "Celery Hearts"
+                 },
+                 {
+                     "commodity":  "garlic",
+                     "store":  "Family Fare",
+                     "candidate":  "Fresh Garlic"
                  },
                  {
                      "commodity":  "garlic",
@@ -73,14 +163,29 @@
                      "candidate":  "Fresh Express Baby Spinach 5 Oz"
                  },
                  {
+                     "commodity":  "sweet-potatoes",
+                     "store":  "Family Fare",
+                     "candidate":  "Red/Orangy Red Flesh Sweet Potato/Yam/Kumara, Small"
+                 },
+                 {
                      "commodity":  "tortillas",
                      "store":  "Aldi",
                      "candidate":  "Pueblo Lindo Fajita Flour Tortillas"
                  },
                  {
+                     "commodity":  "tortillas",
+                     "store":  "Family Fare",
+                     "candidate":  "Flour Tortillas Mi Mama\u0027s"
+                 },
+                 {
                      "commodity":  "hamburger-buns",
                      "store":  "Aldi",
                      "candidate":  "L\u0027oven Fresh Hamburger Buns"
+                 },
+                 {
+                     "commodity":  "hamburger-buns",
+                     "store":  "Family Fare",
+                     "candidate":  "Fresh \u0026 Finest 8 Ct Egg Hamburger Buns"
                  },
                  {
                      "commodity":  "bagels",
@@ -91,6 +196,16 @@
                      "commodity":  "bagels",
                      "store":  "Family Fare",
                      "candidate":  "Bubba\u0027s Sliced Blueberry Flavored Bagels 6 Ea"
+                 },
+                 {
+                     "commodity":  "rice",
+                     "store":  "Family Fare",
+                     "candidate":  "Vigo Lime Rice, Creamy Avocado, Authentic 8 Oz"
+                 },
+                 {
+                     "commodity":  "pasta-sauce",
+                     "store":  "Family Fare",
+                     "candidate":  "Full Circle Market Pasta Sauce, Marinara 24 Oz"
                  },
                  {
                      "commodity":  "mac-and-cheese",
@@ -118,9 +233,69 @@
                      "candidate":  "Simply Asia Japanese Style Ramen Noodles 8 Oz"
                  },
                  {
+                     "commodity":  "flour",
+                     "store":  "Family Fare",
+                     "candidate":  "Gold Medal All Purpose Flour 5 Lb"
+                 },
+                 {
+                     "commodity":  "sugar",
+                     "store":  "Family Fare",
+                     "candidate":  "Crystal Sugar Sugar, Granulated 4 Lb"
+                 },
+                 {
                      "commodity":  "brown-sugar",
                      "store":  "Family Fare",
                      "candidate":  "Starbucks Coffee, Ground, Brown Sugar Cinnamon 11 Oz"
+                 },
+                 {
+                     "commodity":  "olive-oil",
+                     "store":  "Family Fare",
+                     "candidate":  "Violi Mediterranean Blend, Italian Sunflower \u0026 Extra Virgin Olive Oil 33.8 Oz"
+                 },
+                 {
+                     "commodity":  "vegetable-oil",
+                     "store":  "Family Fare",
+                     "candidate":  "Our Family Vegetable Oil 100% Pure"
+                 },
+                 {
+                     "commodity":  "cereal",
+                     "store":  "Family Fare",
+                     "candidate":  "Cheerios Cereal Large Size 12 Oz"
+                 },
+                 {
+                     "commodity":  "oatmeal",
+                     "store":  "Family Fare",
+                     "candidate":  "Old Fashioned Oats, Whole Grain Our Family"
+                 },
+                 {
+                     "commodity":  "jelly",
+                     "store":  "Family Fare",
+                     "candidate":  "Smucker\u0027s Grape Jelly"
+                 },
+                 {
+                     "commodity":  "canned-black-beans",
+                     "store":  "Family Fare",
+                     "candidate":  "Bush\u0027s Best Black Beans 16 Oz"
+                 },
+                 {
+                     "commodity":  "canned-corn",
+                     "store":  "Family Fare",
+                     "candidate":  "Green Giant Whole Kernal Sweet Corn"
+                 },
+                 {
+                     "commodity":  "diced-tomatoes",
+                     "store":  "Family Fare",
+                     "candidate":  "Our Family Tomatoes, Diced 28 Oz"
+                 },
+                 {
+                     "commodity":  "chicken-broth",
+                     "store":  "Family Fare",
+                     "candidate":  "Full Circle Market Bone Broth, Chicken 32 Oz"
+                 },
+                 {
+                     "commodity":  "ketchup",
+                     "store":  "Family Fare",
+                     "candidate":  "Our Family Squeeze Bottle Ketchup"
                  },
                  {
                      "commodity":  "mustard",
@@ -128,14 +303,34 @@
                      "candidate":  "Our Family Mustard, Yellow 14 Oz"
                  },
                  {
+                     "commodity":  "mayonnaise",
+                     "store":  "Family Fare",
+                     "candidate":  "Hellmann\u0027s Avocado Oil Mayonnaise Dressing 30 Fl Oz"
+                 },
+                 {
                      "commodity":  "ranch-dressing",
                      "store":  "Family Fare",
                      "candidate":  "Kraft Classic Ranch Dressing 16 Fl Oz"
                  },
                  {
+                     "commodity":  "salsa",
+                     "store":  "Family Fare",
+                     "candidate":  "Fresh \u0026 Finest By Our Family Salsa Avocado"
+                 },
+                 {
+                     "commodity":  "salt",
+                     "store":  "Family Fare",
+                     "candidate":  "Morton Iodized Salt 26 Oz"
+                 },
+                 {
                      "commodity":  "black-pepper",
                      "store":  "Family Fare",
                      "candidate":  "That\u0027s Smart! Ground Black Pepper"
+                 },
+                 {
+                     "commodity":  "soda",
+                     "store":  "Family Fare",
+                     "candidate":  "Dr Pepper Soda, 12 Pack 12 Ea"
                  },
                  {
                      "commodity":  "bottled-water",
@@ -153,9 +348,9 @@
                      "candidate":  "Vigo Lime Rice, Creamy Avocado, Authentic 8 Oz"
                  },
                  {
-                     "commodity":  "dishwasher-detergent",
+                     "commodity":  "frozen-vegetables",
                      "store":  "Family Fare",
-                     "candidate":  "Cascade Action Pacs Lemon Scent Dishwasher Detergent 12 Ea"
+                     "candidate":  "Frozen Mixed Vegetables Our Family"
                  },
                  {
                      "commodity":  "aluminum-foil",
@@ -168,19 +363,9 @@
                      "candidate":  "Hy-Vee Clear Hands Soap"
                  },
                  {
-                     "commodity":  "pears",
-                     "store":  "Family Fare",
-                     "candidate":  "Top Care Antibacterial Foaming Fresh Pear Hand Soap 7.5 Fl Oz"
-                 },
-                 {
                      "commodity":  "kiwi",
                      "store":  "Aldi",
                      "candidate":  "Kiwi, Package"
-                 },
-                 {
-                     "commodity":  "kiwi",
-                     "store":  "Family Fare",
-                     "candidate":  "Regular Kiwifruit"
                  },
                  {
                      "commodity":  "kiwi",
@@ -203,9 +388,9 @@
                      "candidate":  "Pineapple, Small"
                  },
                  {
-                     "commodity":  "cherries",
+                     "commodity":  "raspberries",
                      "store":  "Family Fare",
-                     "candidate":  "Downy Gentle Soft+Fresh Cherry Blossom Fabric Softener 93 Fl Oz"
+                     "candidate":  "Faygo Raspberry Blueberry Soda 24 Fl Oz"
                  },
                  {
                      "commodity":  "grapefruit",
@@ -213,14 +398,14 @@
                      "candidate":  "Red Grapefruit"
                  },
                  {
+                     "commodity":  "zucchini",
+                     "store":  "Family Fare",
+                     "candidate":  "Zucchini Squash"
+                 },
+                 {
                      "commodity":  "cauliflower",
                      "store":  "Hy-Vee",
                      "candidate":  "Table Ready Cauliflower"
-                 },
-                 {
-                     "commodity":  "asparagus",
-                     "store":  "Family Fare",
-                     "candidate":  "Birds Eye Gold \u0026 White Corn, Carrots \u0026 Asparagus 10.8 Oz"
                  },
                  {
                      "commodity":  "green-onions",
@@ -263,6 +448,11 @@
                      "candidate":  "Ground Pork Our Family"
                  },
                  {
+                     "commodity":  "italian-sausage",
+                     "store":  "Family Fare",
+                     "candidate":  "Johnsonville Sausage, Italian, Hot 19 Oz"
+                 },
+                 {
                      "commodity":  "bratwurst",
                      "store":  "Sam\u0027s Club",
                      "candidate":  "Johnsonville Brats Original Pork Bratwurst Links"
@@ -273,9 +463,9 @@
                      "candidate":  "Smoked Hot Italian Sausage Hot"
                  },
                  {
-                     "commodity":  "cod",
+                     "commodity":  "rotisserie-chicken",
                      "store":  "Family Fare",
-                     "candidate":  "Fancy Feast Gourmet Classic Pate Cod, Sole \u0026 Shrimp Feast/Savory Salmon Feast/Ocean Whitefish \u0026 Tuna Feast Cat Food 24 Ea"
+                     "candidate":  "Whole Rotisserie Chicken, Savory Hot (No Pick Up/Delivery Before 11am)"
                  },
                  {
                      "commodity":  "pepperoni",
@@ -283,9 +473,9 @@
                      "candidate":  "Hormel Turkey Pepperoni 5 Oz"
                  },
                  {
-                     "commodity":  "turkey-lunchmeat",
+                     "commodity":  "turkey-bacon",
                      "store":  "Family Fare",
-                     "candidate":  "Jimmy Dean Delights Breakfast Bowl, Turkey Sausage, Frozen, Bowl 7 Oz"
+                     "candidate":  "Jennie O Turkey Bacon 12 Oz"
                  },
                  {
                      "commodity":  "whipped-cream",
@@ -306,6 +496,11 @@
                      "commodity":  "muffins",
                      "store":  "Aldi",
                      "candidate":  "Bake Shop Blueberry Muffins"
+                 },
+                 {
+                     "commodity":  "muffins",
+                     "store":  "Family Fare",
+                     "candidate":  "4 Ct Banana Walnut Muffins"
                  },
                  {
                      "commodity":  "donuts",
@@ -331,6 +526,11 @@
                      "commodity":  "pita-bread",
                      "store":  "Hy-Vee",
                      "candidate":  "Toufayan Bakeries Hearth Baked Classic White Pita 6 Each"
+                 },
+                 {
+                     "commodity":  "pancake-mix",
+                     "store":  "Family Fare",
+                     "candidate":  "Fast Shake Pancake Mix, Blueberry 5.3 Oz"
                  },
                  {
                      "commodity":  "cake-mix",
@@ -363,6 +563,11 @@
                      "candidate":  "Sam\u0027s Vanilla Whipped Icing, Frozen Bucket"
                  },
                  {
+                     "commodity":  "cooking-spray",
+                     "store":  "Family Fare",
+                     "candidate":  "Pam Avocado Oil Non Gmo Cooking Spray 5 Oz"
+                 },
+                 {
                      "commodity":  "coconut-oil",
                      "store":  "Family Fare",
                      "candidate":  "Full Circle Market Butter Sticks With Coconut Oil, Plant Based 4 Ea"
@@ -373,9 +578,9 @@
                      "candidate":  "Hy-Vee Apple Cider Flavored Distilled Vinegar"
                  },
                  {
-                     "commodity":  "refried-beans",
+                     "commodity":  "bbq-sauce",
                      "store":  "Family Fare",
-                     "candidate":  "La Preferida Authentic Refried Black Beans 16 Oz"
+                     "candidate":  "Rib Rack Bbq Sauce, Sugar Free, Original 11 Oz"
                  },
                  {
                      "commodity":  "canned-green-beans",
@@ -413,6 +618,11 @@
                      "candidate":  "Tostitos Medium Salsa Con Queso Dip 15 Oz"
                  },
                  {
+                     "commodity":  "hummus",
+                     "store":  "Family Fare",
+                     "candidate":  "Fresh \u0026 Finest By Our Family Garlic Hummus 10 Oz"
+                 },
+                 {
                      "commodity":  "marshmallows",
                      "store":  "Family Fare",
                      "candidate":  "Our Family Marshmallows 10 Oz"
@@ -448,9 +658,19 @@
                      "candidate":  "Our Family Peanuts, Dry Roasted 16 Oz"
                  },
                  {
+                     "commodity":  "almonds",
+                     "store":  "Family Fare",
+                     "candidate":  "Blue Diamond Hot Honey Almonds 6 Oz"
+                 },
+                 {
                      "commodity":  "mixed-nuts",
                      "store":  "Family Fare",
                      "candidate":  "Regal Health Foods Deluxe Mixed Nuts"
+                 },
+                 {
+                     "commodity":  "crackers",
+                     "store":  "Family Fare",
+                     "candidate":  "Triscuit Crackers, Avocado, Cilantro \u0026 Lime 8.5 Oz"
                  },
                  {
                      "commodity":  "cheese-crackers",
@@ -538,9 +758,14 @@
                      "candidate":  "Simply Grape Juice Drink Bottle 52 Fl Oz"
                  },
                  {
-                     "commodity":  "fruit-punch",
+                     "commodity":  "energy-drinks",
                      "store":  "Family Fare",
-                     "candidate":  "Ari Zona Mucho Mango/Watermelon/Fruit Punch/Kiwi Strawberry Juice Cocktails With Real Juice Party Pack 12 Ea"
+                     "candidate":  "Juice Monster Strawberry Lemonade Energy Drink 16 Fl Oz"
+                 },
+                 {
+                     "commodity":  "sparkling-water",
+                     "store":  "Family Fare",
+                     "candidate":  "Sparkling Ice Zero Sugar Strawberry Watermelon Sparkling Water 17 Fl Oz"
                  },
                  {
                      "commodity":  "iced-tea",
@@ -556,11 +781,6 @@
                      "commodity":  "tea-bags",
                      "store":  "Aldi",
                      "candidate":  "USDA Choice Black Angus Petite Sirloin Steak"
-                 },
-                 {
-                     "commodity":  "tea-bags",
-                     "store":  "Family Fare",
-                     "candidate":  "Green Giant Steam In Bag Broccoli, Carrots \u0026 Sweet Peppers Antioxidant Blend Sauced Veggies 7 Oz"
                  },
                  {
                      "commodity":  "hot-cocoa",
@@ -608,11 +828,6 @@
                      "candidate":  "Jimmy Dean Bacon, Egg \u0026 Cheese Breakfast Burrito, 1 ct"
                  },
                  {
-                     "commodity":  "frozen-burritos",
-                     "store":  "Family Fare",
-                     "candidate":  "Mission Super Soft Burrito Flour Tortilla Wraps 6 Ea"
-                 },
-                 {
                      "commodity":  "frozen-meatballs",
                      "store":  "Family Fare",
                      "candidate":  "Hot Pockets Italian Style Seasoned Crust Meatballs \u0026 Mozzarella Sandwiches 4 Ea"
@@ -623,14 +838,14 @@
                      "candidate":  "Mr. Dee\u0027s Hash Brown Potato Patties 15 Ea"
                  },
                  {
-                     "commodity":  "tater-tots",
-                     "store":  "Family Fare",
-                     "candidate":  "Alexia Sweet Potato Bite Sized Tots 20 Oz"
-                 },
-                 {
                      "commodity":  "corn-dogs",
                      "store":  "Aldi",
                      "candidate":  "Bremer Regular Corn Dogs"
+                 },
+                 {
+                     "commodity":  "corn-dogs",
+                     "store":  "Family Fare",
+                     "candidate":  "State Fair Hot Honey Mini Corn Dogs 23.76 Oz"
                  },
                  {
                      "commodity":  "fish-sticks",
@@ -661,11 +876,6 @@
                      "commodity":  "popsicles",
                      "store":  "Family Fare",
                      "candidate":  "Bomb Pop Pops, Strawberry, Watermelon \u0026 Grape, Nerds Candy 12 Ea"
-                 },
-                 {
-                     "commodity":  "fabric-softener",
-                     "store":  "Family Fare",
-                     "candidate":  "Downy Gentle Soft+Fresh Cherry Blossom Fabric Softener 93 Fl Oz"
                  },
                  {
                      "commodity":  "laundry-pods",
@@ -699,11 +909,6 @@
                  },
                  {
                      "commodity":  "air-freshener",
-                     "store":  "Family Fare",
-                     "candidate":  "Glad Bags, Drawstring, Cherry Blossom With Febreze Freshness, Medium 26 Ea"
-                 },
-                 {
-                     "commodity":  "air-freshener",
                      "store":  "Walmart",
                      "candidate":  "Great Value Aerosol Air Freshener Linen Fresh"
                  },
@@ -713,19 +918,49 @@
                      "candidate":  "Suave Shampoo, Smoothing, Avocado + Olive Oil 28 Oz"
                  },
                  {
+                     "commodity":  "conditioner",
+                     "store":  "Family Fare",
+                     "candidate":  "Aussie Conditioner, With Avocado Oil 12.1 Fl Oz"
+                 },
+                 {
                      "commodity":  "bar-soap",
                      "store":  "Aldi",
                      "candidate":  "Lacura Deep Moisturizing Beauty Bar"
                  },
                  {
-                     "commodity":  "facial-tissues",
-                     "store":  "Family Fare",
-                     "candidate":  "Scott One Ply Unscented Bathroom Tissue 4 Ea"
-                 },
-                 {
                      "commodity":  "diapers",
                      "store":  "Sam\u0027s Club",
                      "candidate":  "Luvs Pro Level Leak Protection Diapers, Size 4"
+                 },
+                 {
+                     "commodity":  "baby-food",
+                     "store":  "Family Fare",
+                     "candidate":  "Beech Nut Stage 2 (6+ Months) Sweet Corn \u0026 Green Beans 4 Oz"
+                 },
+                 {
+                     "commodity":  "dog-food",
+                     "store":  "Family Fare",
+                     "candidate":  "Iams Adult 1+ 100% Complete \u0026 Balanced Minichunks Chicken \u0026 Whole Grain Recipe Dog Food 15 Lb"
+                 },
+                 {
+                     "commodity":  "garlic-powder",
+                     "store":  "Family Fare",
+                     "candidate":  "Sugar \u0027N Spice Garlic Powder"
+                 },
+                 {
+                     "commodity":  "onion-powder",
+                     "store":  "Family Fare",
+                     "candidate":  "Spice Supreme Onion Powder 2.5 Oz"
+                 },
+                 {
+                     "commodity":  "chili-powder",
+                     "store":  "Family Fare",
+                     "candidate":  "Spice Supreme Chili Powder 2.75 Oz"
+                 },
+                 {
+                     "commodity":  "ground-cumin",
+                     "store":  "Family Fare",
+                     "candidate":  "Our Family Cumin, Ground 2 Oz"
                  }
              ]
 }

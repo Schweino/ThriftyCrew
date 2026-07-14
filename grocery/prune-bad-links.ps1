@@ -1,4 +1,4 @@
-<#
+﻿<#
   prune-bad-links.ps1 - a "See item" link is only correct if it opens the product whose PRICE the
   board shows. Name similarity is not enough: it happily picked a 3 oz Badia garlic powder for a cell
   priced on the 10.5 oz jar, a 12-pack case of hominy, and a 4-pack of vinegar.
@@ -22,42 +22,11 @@ param([double]$Tol = 0.02, [switch]$WhatIf)
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 
-function Qty([string]$size, [string]$name, [string]$unit) {
-  $s = ("" + $size).ToLower()
-  $nm = ("" + $name).ToLower()
-  $pkSize = 1
-  $pmS = [regex]::Match($s, '(\d+)\s*(?:x|pk\b|pack\b|ct\b|count\b)')
-  if ($pmS.Success) { $pkSize = [double]$pmS.Groups[1].Value }
-  $pkAny = $pkSize
-  if ($pkAny -le 1) {
-    $pmN = [regex]::Match($nm, '(\d+)\s*(?:x|pk\b|pack\b|ct\b|count\b)')
-    if ($pmN.Success) { $pkAny = [double]$pmN.Groups[1].Value }
-  }
-  $pk = $pkSize
-  $m = [regex]::Matches($s, '([\d.]+)\s*(fl\s?oz|floz|oz|lbs?|pound|gal|qt|l|ml|g)\b')
-  if ($m.Count -eq 0) {
-    if ($unit -eq 'each') { return $pkAny }
-    if ($unit -eq 'lb'   -and $s -match '^\s*lb\s*$')   { return 1 }
-    if ($unit -eq 'gallon' -and $s -match '^\s*gal') { return 1 }
-    return 0
-  }
-  $last = $m[$m.Count-1]
-  $n = [double]$last.Groups[1].Value
-  $u = $last.Groups[2].Value -replace '\s',''
-  $base = 0.0
-  switch ($unit) {
-    'oz'     { if ($u -eq 'oz') { $base=$n } elseif ($u -match '^(lbs?|pound)$') { $base=$n*16 } elseif ($u -eq 'g') { $base=$n*0.035274 } }
-    'floz'   { if ($u -match '^(floz|oz)$') { $base=$n } elseif ($u -eq 'l') { $base=$n*33.814 } elseif ($u -eq 'ml') { $base=$n*0.033814 } elseif ($u -eq 'gal') { $base=$n*128 } elseif ($u -eq 'qt') { $base=$n*32 } }
-    'lb'     { if ($u -match '^(lbs?|pound)$') { $base=$n } elseif ($u -eq 'oz') { $base=$n/16 } }
-    'gallon' { if ($u -eq 'gal') { $base=$n } elseif ($u -match '^(floz|oz)$') { $base=$n/128 } }
-    'each'   { return $pkAny }
-    'dozen'  { if ($u -match '^(ct|count)$') { $base=$n/12 } else { $base = 0 } }
-    default  { $base = 0 }
-  }
-  if ($base -le 0) { return 0 }
-  if ($pk -gt 1) { $base = $base * $pk }
-  return $base
-}
+# Per-unit math is shared with build-deals-page (the code that actually publishes the number) via
+# pu-lib.ps1. This file used to carry its own weaker copy, which returned 0 - "skip this cell" - for
+# sizes the published math handles fine ("per lb", a bare "lb", "24 fl oz" on an oz commodity, "dozen",
+# a "$0.07/oz" unit price in the size field), silently excluding 8.6% of linked cells from the check.
+. (Join-Path $root 'pu-lib.ps1')
 
 $puFile = Join-Path $root 'product-urls.json'
 Copy-Item $puFile (Join-Path $root 'out\product-urls.backup-preprune.json') -Force
@@ -74,12 +43,15 @@ foreach ($row in $cmp.comparison) {
     $e = $link.$store
     if (-not $e -or -not $e.price) { continue }
     if (([string]$s.type) -ne 'everyday') { $sale++; continue }
-    $q = Qty ([string]$e.size) ([string]$e.name) ([string]$row.unit)
-    if ($q -le 0) { $uncomputable++; continue }
-    $lpu = [double]$e.price / $q
+    $sp = 0.0; [void][double]::TryParse((([string]$e.price) -replace '[^0-9.]',''), [ref]$sp)
+    $lpu = Get-LinkPerUnit -size ([string]$e.size) -unit ([string]$row.unit) -price $sp -name ([string]$e.name)
+    if ($null -eq $lpu) { $uncomputable++; continue }
     $bpu = [double]$s.per_unit
     if ($bpu -le 0) { continue }
-    if ([math]::Abs($lpu - $bpu) / $bpu -gt $Tol) {
+    # HALF-CENT RULE (same as audit-everyday-mismatch). A link whose size field holds the store's own
+    # cent-rounded unit price ("$0.06/oz" for a $1.00/15.5 oz can, truly $0.0645/oz) is not a bad link - it
+    # is two decimal places. Never delete a good link over rounding.
+    if (([math]::Abs($lpu - $bpu) / $bpu -gt $Tol) -and ([math]::Abs($lpu - $bpu) -gt 0.005)) {
       if (-not $WhatIf) { $link.PSObject.Properties.Remove($store) }
       $dropped++
     } else { $kept++ }

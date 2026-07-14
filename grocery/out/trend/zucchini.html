@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-13","07-14"],"s":{"Aldi":[1.39,2.08,2.08],"Walmart":[1.52,1.52,1.52],"Baker's":[1.79,1.79,1.79],"Hy-Vee":[1.99,1.99,1.99],"Family Fare":[2.29,null,1.99],"Fareway":[null,1.99,1.99]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-13","07-14"],"s":{"Aldi":[1.39,2.08,2.08],"Walmart":[1.52,1.52,1.52],"Baker's":[1.79,1.79,1.79],"Hy-Vee":[1.99,1.99,1.99],"Family Fare":[2.29,null,null],"Fareway":[null,1.99,1.99]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -142,7 +142,6 @@ function tcChart(root, d){
 <tbody>
 <tr class="tp-low"><td>Walmart</td><td>$1.52 per lb</td><td><span class="tp-item">Fresh Zucchini</span></td></tr>
 <tr><td>Baker&#39;s</td><td>$1.79 per lb</td><td><span class="tp-item">Zucchini</span></td></tr>
-<tr><td>Family Fare</td><td>$1.99 per lb</td><td><span class="tp-item">Yellow Zucchini/Yellow Squash</span></td></tr>
 <tr><td>Fareway</td><td>$1.99 per lb</td><td><span class="tp-item">Zucchini Squash</span></td></tr>
 <tr><td>Hy-Vee</td><td>$1.99 per lb</td><td><span class="tp-item">Zucchini Squash</span></td></tr>
 <tr><td>Aldi</td><td>$2.08 per lb</td><td><span class="tp-item">Zucchini, Package</span></td></tr>

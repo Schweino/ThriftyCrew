@@ -113,11 +113,64 @@ foreach ($pf in (Get-ChildItem (Join-Path $regDir 'family-fare-regular-*.json') 
 }
 $file = Join-Path $regDir ("family-fare-regular-$todayS.json")
 if ($prevMax -gt 100 -and @($deals).Count -lt ($prevMax * 0.5)) {
-  $pfile = Join-Path $regDir ("family-fare-regular-$todayS.PARTIAL.json")
+  # WRITE THIS OUTSIDE out\regular ENTIRELY.
+  # It used to be written as "out\regular\family-fare-regular-<date>.PARTIAL.json", which still MATCHES the
+  # 'family-fare-regular-*.json' glob - and because "PARTIAL.json" sorts AFTER "json", every consumer that
+  # takes the newest file by name (compare-deals and ~20 audits) picked the throttled 0-row file instead of
+  # the last good one. The guard defeated itself: Family Fare collapsed to ZERO everyday board rows while
+  # this file claimed to be "keeping the last good FF prices live".
+  # Renaming it inside out\regular was not enough - out\regular is scanned with '*.json' in several places,
+  # so ANY file living there can be read as a store. The only safe home for a diagnostic is a directory that
+  # is not the data directory. A diagnostic must never be able to become the source of truth.
+  $qDir = Join-Path $OutDir 'throttled'
+  if (-not (Test-Path $qDir)) { New-Item -ItemType Directory -Path $qDir -Force | Out-Null }
+  $pfile = Join-Path $qDir ("family-fare-$todayS.throttled.json")
   ([ordered]@{ store='Family Fare'; week_of=$todayS; price_type='everyday'; throttled=$true; deal_count=@($deals).Count; empty_terms=@($empty); deals=$deals } | ConvertTo-Json -Depth 6) | Set-Content $pfile -Encoding UTF8
   Write-Warning ("Family Fare: THROTTLE-WIPEOUT guard tripped - got only " + @($deals).Count + " items vs " + $prevMax + " in the last good file. NOT overwriting; wrote " + $pfile + ". Last good FF prices stay live.")
   return
 }
-$out = [ordered]@{ store='Family Fare'; week_of=$todayS; price_type='everyday'; source='Freshop catalog base_price (store_id 6401, Omaha), NOT Instacart'; deal_count=@($deals).Count; empty_terms=@($empty); deals=$deals }
+# CARRY-FORWARD: a pull that returns FEWER products than last time has NOT proved those products are gone.
+# Freshop rate-limits us into partial catalogues routinely, and a partial pull is a plain overwrite: on
+# 2026-07-14 a 380-item run replaced a 590-item file, silently dropping 210 products - including every
+# commodity registered that morning - and it sailed past the 50%-wipeout guard above (380 > 295) with nothing
+# logged. Family Fare lost 24 board cells and the run reported success.
+# So: today's price ALWAYS wins for a product this run returned; a product it did NOT return is carried
+# forward at its last verified price, stamped with the date that price was captured, and dropped once that
+# capture goes stale. Absence from one throttled response is not evidence of absence from the store.
+$MaxCarryDays = 14
+$carried = 0; $expired = 0
+$prevF = Get-ChildItem (Join-Path $regDir 'family-fare-regular-*.json') -EA SilentlyContinue |
+  Where-Object { $_.BaseName -match '^family-fare-regular-\d{4}-\d{2}-\d{2}$' } |
+  Sort-Object Name -Descending | Select-Object -First 1
+
+# One uniform row shape. Fresh rows are [ordered] hashtables; rows re-read from JSON are PSCustomObjects, and
+# mixing the two breaks both '.prop = x' assignment and Add-Member. Normalise every row through this.
+function Norm-Row($r, $asOf, $isCarried) {
+  $h = [ordered]@{ store='Family Fare'; item=[string]$r.item; ad_price=[string]$r.ad_price; size=[string]$r.size; regular=$r.regular; source_ad=[string]$r.source_ad; as_of=[string]$asOf }
+  if ($isCarried) { $h['carried_forward'] = $true }
+  return $h
+}
+
+$rows = New-Object System.Collections.ArrayList
+$have = @{}
+foreach ($d in $deals) { $k = ([string]$d.item).ToLower(); if ($have.ContainsKey($k)) { continue }; $have[$k] = $true; [void]$rows.Add((Norm-Row $d $todayS $false)) }
+
+if ($prevF) {
+  $pdoc = Get-Content $prevF.FullName -Raw | ConvertFrom-Json
+  foreach ($d in @($pdoc.deals)) {
+    $k = ([string]$d.item).ToLower()
+    if (-not $k -or $have.ContainsKey($k)) { continue }
+    $asOf = if ($d.as_of) { [string]$d.as_of } else { [string]$pdoc.week_of }
+    $age = 9999
+    try { $age = [int](([datetime]$todayS) - ([datetime]$asOf)).TotalDays } catch {}
+    if ($age -gt $MaxCarryDays) { $expired++; continue }
+    $have[$k] = $true
+    [void]$rows.Add((Norm-Row $d $asOf $true))
+    $carried++
+  }
+}
+$deals = $rows.ToArray()
+
+$out = [ordered]@{ store='Family Fare'; week_of=$todayS; price_type='everyday'; source='Freshop catalog base_price (store_id 6401, Omaha), NOT Instacart'; deal_count=@($deals).Count; fresh_count=(@($deals).Count - $carried); carried_count=$carried; expired_count=$expired; max_carry_days=$MaxCarryDays; empty_terms=@($empty); deals=$deals }
 ($out | ConvertTo-Json -Depth 6) | Set-Content $file -Encoding UTF8
-Write-Output ("Family Fare everyday prices: " + @($deals).Count + " catalog items (" + $empty.Count + " terms still empty) -> " + $file)
+Write-Output ("Family Fare everyday prices: " + @($deals).Count + " catalog items (" + (@($deals).Count - $carried) + " fresh, " + $carried + " carried forward, " + $expired + " expired past $MaxCarryDays d; " + $empty.Count + " terms still empty) -> " + $file)

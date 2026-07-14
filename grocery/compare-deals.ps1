@@ -366,7 +366,15 @@ if ($extraF) {
 # newest-per-store auto-load is exactly the unpinned input that made the "frozen" regression drift.
 $regDir = if ($RegularDir) { $RegularDir } else { Join-Path $OutDir 'regular' }
 if (Test-Path $regDir) {
-  $regFiles = Get-ChildItem (Join-Path $regDir '*.json') -ErrorAction SilentlyContinue | Group-Object { ($_.BaseName -replace '-regular-.*$','') } | ForEach-Object { $_.Group | Sort-Object Name -Descending | Select-Object -First 1 }
+  # ONLY canonically-named files are data: "<store>-regular-<yyyy-MM-dd>.json", nothing else. This glob used
+  # to be a bare '*.json', which made every file dropped in out\regular a "store". A throttled 0-row diagnostic
+  # named "family-fare-regular-2026-07-14.PARTIAL.json" therefore (a) matched, and (b) sorted AFTER the good
+  # "...-07-14.json" (case-insensitively 'p' > 'j'), so -Descending picked the EMPTY file and Family Fare
+  # contributed zero everyday rows to the board while every log said the pull had succeeded. Anchor the name.
+  $regFiles = Get-ChildItem (Join-Path $regDir '*-regular-*.json') -ErrorAction SilentlyContinue |
+    Where-Object { $_.BaseName -match '^[a-z0-9-]+-regular-\d{4}-\d{2}-\d{2}$' } |
+    Group-Object { ($_.BaseName -replace '-regular-.*$','') } |
+    ForEach-Object { $_.Group | Sort-Object Name -Descending | Select-Object -First 1 }
   foreach ($rf in $regFiles) {
     $ex = Get-Content $rf.FullName -Raw | ConvertFrom-Json
     $pt = if ($ex.price_type) { [string]$ex.price_type } else { 'everyday' }

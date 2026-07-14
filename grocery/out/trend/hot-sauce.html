@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-13","07-14"],"s":{"Sam's Club":[0.12,0.1209,0.1209],"Baker's":[0.13,null,null],"Walmart":[0.13,0.2783,0.2783],"Aldi":[0.1458,0.1458,0.1292],"Hy-Vee":[0.3325,0.2983,0.2983],"Family Fare":[0.3742,null,0.1658],"Fareway":[null,0.1592,0.1592]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-13","07-14"],"s":{"Sam's Club":[0.12,0.1209,0.1209],"Baker's":[0.13,null,null],"Walmart":[0.13,0.2783,0.2783],"Aldi":[0.1458,0.1458,0.1292],"Hy-Vee":[0.3325,0.2983,0.2983],"Family Fare":[0.3742,null,null],"Fareway":[null,0.1592,0.1592]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -140,10 +140,9 @@ function tcChart(root, d){
 <table class="tp-table">
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
-<tr class="tp-low"><td>Sam&#39;s Club</td><td>$0.1209 per fl oz</td><td><span class="tp-item">Frank&#39;s RedHot Original Cayenne Pepper Hot Sauce</span></td></tr>
+<tr class="tp-low"><td>Sam&#39;s Club</td><td>$0.1209 per fl oz</td><td><span class="tp-item"></span></td></tr>
 <tr><td>Aldi</td><td>$0.1292 per fl oz</td><td><span class="tp-item">Burman&#39;s Hot Sauce</span></td></tr>
 <tr><td>Fareway</td><td>$0.1592 per fl oz</td><td><span class="tp-item">Valentina Hot Sauce, Mexican</span></td></tr>
-<tr><td>Family Fare</td><td>$0.1658 per fl oz</td><td><span class="tp-item">Valentina Hot Sauce, Mexican 12.5 Fl Oz</span></td></tr>
 <tr><td>Walmart</td><td>$0.2783 per fl oz</td><td><span class="tp-item">The Original Louisiana Brand Hot Sauce</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.2983 per fl oz</td><td><span class="tp-item">Chophouse Meats Jalapeno Pepper Hot Sauce</span></td></tr>
 </tbody></table>

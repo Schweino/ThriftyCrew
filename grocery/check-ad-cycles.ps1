@@ -336,7 +336,32 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
 
       # AUTO-PUBLISH only when the board changed. publish-deals-page.ps1 self-gates on coverage, rebuilds
       # (recomputing the sale-window badges), and republishes preserving visibility.
-      if (-not $boardChanged) {
+      # ---- HARD INVARIANT GATE ------------------------------------------------------------------
+      # guards.ps1 blocks the publish if any invariant that is ALWAYS a bug is violated: a mode-sensitive
+      # store off the in-store catalogue, a cleaning product priced as food, an override pin that beats the
+      # engine, a board cell that differs from its own linked product by a FACTOR (the 2x/3x/12x/24x
+      # quantity bugs - ordinary price drift is ignored), or a multipack priced as a single unit.
+      # These are exactly the classes that shipped wrong prices on 2026-07-14 while every existing gate
+      # stayed green, so a failure here must stop the board going live, not just log.
+      $guardsRc = 0
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') | ForEach-Object { Log ('guards: ' + $_) }
+        $guardsRc = $LASTEXITCODE
+      } catch { $guardsRc = 2; Log ('guards threw: ' + $_.Exception.Message) }
+      $guardsBlocked = ($guardsRc -ne 0)
+      if ($guardsBlocked) {
+        # Do NOT reuse $boardChanged here: that would log "no price change today", which is a lie -
+        # the board DID change, we refused to ship it. A misleading log is how an outage goes unnoticed.
+        Log 'GUARDS FAILED - board NOT republished (left at last good state)'
+        $summary += 'BLOCKED   guards failed a hard invariant - live page left at last good, NOT updated'
+        if (-not $NoAlert) {
+          try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: GUARDS FAILED - board not published - $asofS" -Body "guards.ps1 found a hard invariant violation on $asofS (wrong-mode store, cleaner priced as food, a pin overriding the engine, a cell off its linked product by a FACTOR, or a multipack priced as one unit). The live page was left at its last good state. See grocery/ad-cycle-log.txt." | Out-Null } catch {}
+        }
+      }
+
+      if ($guardsBlocked) {
+        # already logged + alerted above; fall through without publishing
+      } elseif (-not $boardChanged) {
         Log 'no price change today - board already current, nothing republished'
         $summary += 'CURRENT   no price change today - live page already current'
       } elseif (-not $NoPublish) {
@@ -365,8 +390,28 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
             Log 'consistency BREACH - auto-repairing Family Fare links + republishing'
             try {
               & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'resolve-ff-boardmatch.ps1') | Out-Null
+              # CAUTION: merge-product-urls re-merges EVERY store-*-urls.json still sitting in
+              # out\url-inputs\, so a stale resolver file left behind can RESURRECT an old link and
+              # overwrite a good one (it silently corrupted ~226 links on 2026-07-14). Old resolver
+              # outputs therefore live in out\url-inputs-archive\, NOT out\url-inputs\.
               & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'merge-product-urls.ps1')     | Out-Null
-              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1')     | Out-Null
+              # Prune at a FACTOR tolerance, NOT the strict 2%. Rationale:
+              #   - strict 2% would delete a perfectly good link the moment a store nudged its price
+              #     (the board refreshes daily; the link's price snapshot does not), eroding coverage;
+              #   - but a link left off by a FACTOR (a wrong SKU / a pack counted as one unit) would
+              #     trip guards.ps1 below and BLOCK the board every single day.
+              # 0.32 drops everything guards would hard-fail on (ratio >=1.5x or <=0.67x) and nothing
+              # else, so the repair is self-healing and the gate can never deadlock the daily publish.
+              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'prune-bad-links.ps1') -Tol 0.32 | Out-Null
+              # This repair path used to publish DIRECTLY, which would have bypassed the invariant gate.
+              # Re-run guards (the links just changed) and only ship if they still hold.
+              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') -Quiet | Out-Null
+              if ($LASTEXITCODE -eq 0) {
+                & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1')   | Out-Null
+              } else {
+                Log 'GUARDS FAILED after consistency auto-repair - NOT republished (left at last good)'
+                $summary += 'BLOCKED   guards failed after consistency auto-repair - live page left at last good'
+              }
             } catch { Log ('consistency auto-repair threw: ' + $_.Exception.Message) }
             & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-board-consistency.ps1') | Out-Null
             if ($LASTEXITCODE -eq 2) {
