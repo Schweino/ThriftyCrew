@@ -6,10 +6,10 @@
     "source":  "Hy-Vee Aisles Online GraphQL storeProducts.price - the CURRENT shelf price at storeId 1465 (Omaha #01). NOT basePrice (the regular price) and NOT ssrPricing (a different store).",
     "size_policy":  "sizes are OUR verified ones, not Hy-Vee\u0027s - their size field mixes totals, single units of a multipack, and mislabelled units",
     "deal_count":  448,
-    "refreshed_today":  403,
+    "refreshed_today":  415,
     "marked_down":  110,
-    "newly_priced":  107,
-    "not_reverified":  45,
+    "newly_priced":  0,
+    "not_reverified":  33,
     "failed":  2,
     "deals":  [
                   {
@@ -36,12 +36,13 @@
                   {
                       "store":  "Hy-Vee",
                       "item":  "Ground Beef Chub 80% Lean 20% Fat (5 lb)",
-                      "ad_price":  "$6.40",
+                      "ad_price":  "$8.39",
                       "size":  "lb",
-                      "regular":  null,
-                      "source_ad":  "everyday shelf price",
+                      "regular":  8.39,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-07-14",
-                      "not_reverified":  true
+                      "product_id":  3846367,
+                      "base_price":  8.39
                   },
                   {
                       "store":  "Hy-Vee",
@@ -2300,10 +2301,11 @@
                       "item":  "Hy-Vee Long Grain Brown Rice",
                       "ad_price":  "$1.99",
                       "size":  "16 oz",
-                      "regular":  null,
-                      "source_ad":  "Aisles Online (Omaha #1, staples300)",
+                      "regular":  1.99,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-07-14",
-                      "not_reverified":  true
+                      "product_id":  254670,
+                      "base_price":  1.99
                   },
                   {
                       "store":  "Hy-Vee",
@@ -2425,8 +2427,7 @@
                       "regular":  0.94,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-07-14",
-                      "product_id":  2970346,
-                      "base_price":  0.94
+                      "not_reverified":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -2960,10 +2961,11 @@
                       "item":  "Hy-Vee Berry Medley Unsweetened",
                       "ad_price":  "$5.99",
                       "size":  "12 oz",
-                      "regular":  null,
-                      "source_ad":  "Aisles Online (Omaha #1, staples300)",
+                      "regular":  5.99,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-07-14",
-                      "not_reverified":  true
+                      "product_id":  57395,
+                      "base_price":  5.99
                   },
                   {
                       "store":  "Hy-Vee",
@@ -3172,10 +3174,11 @@
                       "item":  "Colgate Cavity Protection Great Regular Flavor Fluoride Toothpaste",
                       "ad_price":  "$3.49",
                       "size":  "6 oz",
-                      "regular":  null,
-                      "source_ad":  "Aisles Online (Omaha #1, staples300)",
+                      "regular":  3.49,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-07-14",
-                      "not_reverified":  true
+                      "product_id":  1867779,
+                      "base_price":  3.49
                   },
                   {
                       "store":  "Hy-Vee",
@@ -3547,10 +3550,11 @@
                       "item":  "Hy-Vee Reconstituted Lemon 100% Juice",
                       "ad_price":  "$3.99",
                       "size":  "32 fl oz",
-                      "regular":  null,
-                      "source_ad":  "promoted from verified recipe pricing (Lemon Juice)",
+                      "regular":  3.99,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-07-14",
-                      "not_reverified":  true
+                      "product_id":  24367,
+                      "base_price":  3.99
                   },
                   {
                       "store":  "Hy-Vee",
@@ -3683,60 +3687,66 @@
                       "item":  "Method Squirt + Mop Hard Floor Cleaner, Spearmint Sage, 25 fl oz",
                       "ad_price":  "$7.99",
                       "size":  "25 fl oz",
-                      "regular":  null,
-                      "source_ad":  "new-item fill 2026-07-14 (store search, in-store/everyday price, collision-validated)",
+                      "regular":  7.99,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-07-14",
-                      "not_reverified":  true
+                      "product_id":  4251663,
+                      "base_price":  7.99
                   },
                   {
                       "store":  "Hy-Vee",
                       "item":  "Drano Liquid Drain Cleaner 32 fl oz",
                       "ad_price":  "$4.99",
                       "size":  "32 fl oz",
-                      "regular":  null,
-                      "source_ad":  "new-item fill 2026-07-14 (store search, in-store/everyday price, collision-validated)",
+                      "regular":  4.99,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-07-14",
-                      "not_reverified":  true
+                      "product_id":  40950,
+                      "base_price":  4.99
                   },
                   {
                       "store":  "Hy-Vee",
                       "item":  "Easy-Off Fume Free Lemon Scent Oven Cleaner Spray 14.5 oz",
                       "ad_price":  "$5.99",
                       "size":  "14.5 oz",
-                      "regular":  null,
-                      "source_ad":  "new-item fill 2026-07-14 (store search, in-store/everyday price, collision-validated)",
+                      "regular":  5.99,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-07-14",
-                      "not_reverified":  true
+                      "product_id":  338640,
+                      "base_price":  5.99
                   },
                   {
                       "store":  "Hy-Vee",
                       "item":  "Clean Shower Daily Shower Cleaner Refill, Fresh Clean Scent 60 fl oz",
                       "ad_price":  "$5.99",
                       "size":  "60 fl oz",
-                      "regular":  null,
-                      "source_ad":  "new-item fill 2026-07-14 (store search, in-store/everyday price, collision-validated)",
+                      "regular":  5.99,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-07-14",
-                      "not_reverified":  true
+                      "product_id":  1462152,
+                      "base_price":  5.99
                   },
                   {
                       "store":  "Hy-Vee",
                       "item":  "Pledge Lemon Clean Furniture Spray 9.7 oz",
                       "ad_price":  "$6.99",
                       "size":  "9.7 oz",
-                      "regular":  null,
-                      "source_ad":  "new-item fill 2026-07-14 (store search, in-store/everyday price, collision-validated)",
+                      "regular":  6.99,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-07-14",
-                      "not_reverified":  true
+                      "product_id":  51370,
+                      "base_price":  6.99
                   },
                   {
                       "store":  "Hy-Vee",
                       "item":  "Raid Ant \u0026 Roach Killer, Indoor Insecticide, Fragrance Free, 17.5 oz",
                       "ad_price":  "$6.99",
                       "size":  "17.5 oz",
-                      "regular":  null,
-                      "source_ad":  "new-item fill 2026-07-14 (store search, in-store/everyday price, collision-validated)",
+                      "regular":  6.99,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-07-14",
-                      "not_reverified":  true
+                      "product_id":  17265,
+                      "base_price":  6.99
                   },
                   {
                       "store":  "Hy-Vee",
@@ -3775,20 +3785,22 @@
                       "item":  "Hy-Vee 100% Orange Juice 1 gal",
                       "ad_price":  "$8.99",
                       "size":  "1 gal",
-                      "regular":  null,
-                      "source_ad":  "verified on hy-vee.com 2026-07-14 (cheaper large size the engine was missing)",
+                      "regular":  8.99,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-07-14",
-                      "not_reverified":  true
+                      "product_id":  57270,
+                      "base_price":  8.99
                   },
                   {
                       "store":  "Hy-Vee",
                       "item":  "Hy-Vee Creamy Peanut Butter 40 oz",
                       "ad_price":  "$5.98",
                       "size":  "40 oz",
-                      "regular":  null,
-                      "source_ad":  "verified on hy-vee.com 2026-07-14 (cheaper large size the engine was missing)",
+                      "regular":  5.98,
+                      "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
                       "as_of":  "2026-07-14",
-                      "not_reverified":  true
+                      "product_id":  204508,
+                      "base_price":  5.98
                   },
                   {
                       "store":  "Hy-Vee",
