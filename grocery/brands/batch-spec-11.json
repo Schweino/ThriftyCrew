@@ -1,0 +1,14 @@
+{
+  "sliced-cheese":     {"label":"Sliced Cheese","queries":["sliced cheese","american cheese singles","deli sliced cheese"],"brands":["Kraft","Sargento","Velveeta","Borden","Land O Lakes"],"excludeAdd":"shredded|block|string|cube|spread|cream\\s+cheese|cottage"},
+  "hot-dogs":          {"label":"Hot Dogs","queries":["hot dogs","beef franks","bun length franks"],"brands":["Ball Park","Oscar Mayer","Nathan's","Hebrew National","Bar-S","Hillshire Farm"],"excludeAdd":"corn\\s*dog|chili|\\bbun\\b|lit.?l|cocktail|breakfast|smok(ies|ie)"},
+  "beef-jerky":        {"label":"Beef Jerky","queries":["beef jerky","beef steak strips"],"brands":["Jack Link's","Oberto","Old Trapper","Tillamook","Country Archer"],"excludeAdd":"\\bdog\\b|\\bcat\\b|treat|turkey\\s+jerky"},
+  "granola":           {"label":"Granola","queries":["granola","granola cereal"],"brands":["Nature Valley","Bear Naked","Quaker","Cascadian Farm","Kind","Bob's Red Mill"],"excludeAdd":"\\bbar\\b|bars|snack\\s+bar|clusters?\\s+bar"},
+  "instant-coffee":    {"label":"Instant Coffee","queries":["instant coffee","instant coffee crystals"],"brands":["Folgers","Nescafe","Maxwell House","Starbucks","Mount Hagen"],"excludeAdd":"creamer|cappuccino|latte|k[\\s-]*cup|\\bpods?\\b|whole\\s+bean|ground\\s+coffee"},
+  "cooking-spray":     {"label":"Cooking Spray","queries":["cooking spray","nonstick cooking spray"],"brands":["Pam","Crisco","Bertolli"],"excludeAdd":"air\\s*fresh|hair|sunscreen|tanning"},
+  "whipped-cream":     {"label":"Whipped Cream / Topping","queries":["whipped cream","whipped topping"],"brands":["Reddi-wip","Cool Whip","Kraft"],"excludeAdd":"heavy\\s+cream|creamer|\\bcream\\s+cheese"},
+  "lasagna-noodles":   {"label":"Lasagna Noodles","queries":["lasagna noodles","lasagna pasta"],"brands":["Barilla","Ronzoni","Mueller's","San Giorgio"],"excludeAdd":"frozen|entree|\\bmeal\\b|dinner|with\\s+meat|with\\s+sauce"},
+  "powdered-sugar":    {"label":"Powdered Sugar","queries":["powdered sugar","confectioners sugar"],"brands":["C&H","Domino"],"excludeAdd":"brown|granulated|\\bcookie|\\bfree\\b|substitute"},
+  "brown-rice":        {"label":"Brown Rice","queries":["brown rice","long grain brown rice"],"brands":["Mahatma","Success","Ben's Original","Riceland","Minute"],"excludeAdd":"ready\\s+rice|\\bpouch|microwav|instant|\\bcups?\\b|white\\s+rice|jasmine|\\bcake"},
+  "frozen-meatballs":  {"label":"Frozen Meatballs","queries":["frozen meatballs","italian meatballs"],"brands":["Farm Rich","Cooked Perfect","Rosina","Casa Di Bertacchi"],"excludeAdd":"spaghetti|\\bsub\\b|sandwich|\\bsauce\\b|soup|swedish\\s+sauce"},
+  "relish":            {"label":"Sweet Relish","queries":["sweet relish","pickle relish"],"brands":["Vlasic","Heinz","Mt. Olive","Del Monte","Claussen"],"excludeAdd":"hot\\s*dog\\s*chili|corn\\s+relish|cranberry|pepper\\s+relish"}
+}

@@ -1,0 +1,17 @@
+{
+  "store": "Walmart", "generated": "2026-07-13",
+  "items": {
+    "sliced-cheese":    [{"b":"Store brand","s":1,"per":0.1533},{"b":"Kraft","s":0,"per":0.293},{"b":"Sargento","s":0,"per":0.371}],
+    "hot-dogs":         [{"b":"Bar-S","s":0,"per":0.0833},{"b":"Oscar Mayer","s":0,"per":0.2356},{"b":"Nathan's","s":0,"per":0.455},{"b":"Hebrew National","s":0,"per":0.5573}],
+    "beef-jerky":       [{"b":"Store brand","s":1,"per":1.152},{"b":"Jack Link's","s":0,"per":1.387},{"b":"Old Trapper","s":0,"per":1.594},{"b":"Tillamook","s":0,"per":1.9954}],
+    "granola":          [{"b":"Store brand","s":1,"per":0.2067},{"b":"Quaker","s":0,"per":0.2257},{"b":"Nature Valley","s":0,"per":0.2794},{"b":"Bear Naked","s":0,"per":0.395}],
+    "instant-coffee":   [{"b":"Store brand","s":1,"per":0.7067},{"b":"Maxwell House","s":0,"per":0.9963},{"b":"Folgers","s":0,"per":1.07},{"b":"Starbucks","s":0,"per":1.4213}],
+    "cooking-spray":    [{"b":"Store brand","s":1,"per":0.315},{"b":"Crisco","s":0,"per":0.4017},{"b":"Pam","s":0,"per":0.4963}],
+    "whipped-cream":    [{"b":"Store brand","s":1,"per":0.135},{"b":"Cool Whip","s":0,"per":0.2463},{"b":"Reddi-wip","s":0,"per":0.3554}],
+    "lasagna-noodles":  [{"b":"Store brand","s":1,"per":0.115},{"b":"Barilla","s":0,"per":0.1544},{"b":"Mueller's","s":0,"per":0.4388}],
+    "powdered-sugar":   [{"b":"Store brand","s":1,"per":0.99},{"b":"C&H","s":0,"per":1.87},{"b":"Domino","s":0,"per":2.375}],
+    "brown-rice":       [{"b":"Store brand","s":1,"per":0.88},{"b":"Mahatma","s":0,"per":1.315},{"b":"Ben's Original","s":0,"per":1.546},{"b":"Success","s":0,"per":2.5829}],
+    "frozen-meatballs": [{"b":"Store brand","s":1,"per":0.234},{"b":"Rosina","s":0,"per":0.3062}],
+    "relish":           [{"b":"Mt. Olive","s":0,"per":0.0622},{"b":"Store brand","s":1,"per":0.155},{"b":"Vlasic","s":0,"per":0.172},{"b":"Heinz","s":0,"per":0.1912}]
+  }
+}

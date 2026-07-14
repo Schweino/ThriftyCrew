@@ -1,0 +1,17 @@
+{
+  "store": "Baker's", "generated": "2026-07-13",
+  "items": {
+    "sliced-cheese":    [{"b":"Store brand","s":1,"per":0.21},{"b":"Kraft","s":0,"per":0.31},{"b":"Sargento","s":0,"per":0.44}],
+    "hot-dogs":         [{"b":"Oscar Mayer","s":0,"per":0.24},{"b":"Ball Park","s":0,"per":0.27},{"b":"Store brand","s":1,"per":0.44},{"b":"Hebrew National","s":0,"per":0.53}],
+    "beef-jerky":       [{"b":"Store brand","s":1,"per":1.19},{"b":"Old Trapper","s":0,"per":1.87}],
+    "granola":          [{"b":"Store brand","s":1,"per":0.27},{"b":"Bear Naked","s":0,"per":0.33},{"b":"Nature Valley","s":0,"per":0.37},{"b":"Cascadian Farm","s":0,"per":0.41},{"b":"Kind","s":0,"per":0.57}],
+    "instant-coffee":   [{"b":"Store brand","s":1,"per":0.68},{"b":"Folgers","s":0,"per":1.19},{"b":"Starbucks","s":0,"per":1.61}],
+    "cooking-spray":    [{"b":"Store brand","s":1,"per":0.4},{"b":"Pam","s":0,"per":0.5}],
+    "whipped-cream":    [{"b":"Store brand","s":1,"per":0.16},{"b":"Cool Whip","s":0,"per":0.25}],
+    "lasagna-noodles":  [{"b":"Store brand","s":1,"per":0.2},{"b":"Barilla","s":0,"per":0.2}],
+    "powdered-sugar":   [{"b":"Store brand","s":1,"per":1.12}],
+    "brown-rice":       [{"b":"Store brand","s":1,"per":0.96},{"b":"Success","s":0,"per":2.88}],
+    "frozen-meatballs": [{"b":"Farm Rich","s":0,"per":0.2},{"b":"Store brand","s":1,"per":0.21},{"b":"Cooked Perfect","s":0,"per":0.36}],
+    "relish":           [{"b":"Vlasic","s":0,"per":0.15},{"b":"Store brand","s":1,"per":0.15},{"b":"Heinz","s":0,"per":0.2}]
+  }
+}

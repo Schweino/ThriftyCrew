@@ -1,0 +1,203 @@
+﻿{
+    "commodities":  {
+                        "sliced-cheese":  {
+                                              "label":  "Sliced Cheese",
+                                              "unit":  "oz",
+                                              "queries":  [
+                                                              "sliced cheese",
+                                                              "american cheese singles",
+                                                              "deli sliced cheese"
+                                                          ],
+                                              "include":  "cheese\\s+slices?|sliced\\b.{0,25}cheese|\\bsingles\\b.{0,20}cheese|cheese\\b.{0,15}\\bsingles\\b|american\\s+slices?|american\\s+cheese\\b.{0,15}slices?",
+                                              "exclude":  "shredded|cream\\s*cheese|string|\\bblock\\b|cracker\\s+cuts?|shredded|block|string|cube|spread|cream\\s+cheese|cottage",
+                                              "brands":  [
+                                                             "Kraft",
+                                                             "Sargento",
+                                                             "Velveeta",
+                                                             "Borden",
+                                                             "Land O Lakes"
+                                                         ]
+                                          },
+                        "hot-dogs":  {
+                                         "label":  "Hot Dogs",
+                                         "unit":  "oz",
+                                         "queries":  [
+                                                         "hot dogs",
+                                                         "beef franks",
+                                                         "bun length franks"
+                                                     ],
+                                         "include":  "hot\\s*dogs?|wieners?|beef\\s+franks?|\\bfranks?\\b",
+                                         "exclude":  "\\bbuns?\\b(?!\\s*(?:size|length))|corn\\s*dog|chili|\\bsauce\\b|relish|corn\\s*dogs?|red\\s*hot|corn\\s*dog|chili|\\bbun\\b|lit.?l|cocktail|breakfast|smok(ies|ie)",
+                                         "brands":  [
+                                                        "Ball Park",
+                                                        "Oscar Mayer",
+                                                        "Nathan\u0027s",
+                                                        "Hebrew National",
+                                                        "Bar-S",
+                                                        "Hillshire Farm"
+                                                    ]
+                                     },
+                        "beef-jerky":  {
+                                           "label":  "Beef Jerky",
+                                           "unit":  "oz",
+                                           "queries":  [
+                                                           "beef jerky",
+                                                           "beef steak strips"
+                                                       ],
+                                           "include":  "beef\\s+jerky|\\bjerky\\b",
+                                           "exclude":  "\\bdog\\b|turkey|\\bsticks\\b|\\bdog\\b|\\bcat\\b|treat|turkey\\s+jerky",
+                                           "brands":  [
+                                                          "Jack Link\u0027s",
+                                                          "Oberto",
+                                                          "Old Trapper",
+                                                          "Tillamook",
+                                                          "Country Archer"
+                                                      ]
+                                       },
+                        "granola":  {
+                                        "label":  "Granola",
+                                        "unit":  "oz",
+                                        "queries":  [
+                                                        "granola",
+                                                        "granola cereal"
+                                                    ],
+                                        "include":  "\\bgranola\\b",
+                                        "exclude":  "\\bbars?\\b|yog|\\bbar\\b|bars|snack\\s+bar|clusters?\\s+bar",
+                                        "brands":  [
+                                                       "Nature Valley",
+                                                       "Bear Naked",
+                                                       "Quaker",
+                                                       "Cascadian Farm",
+                                                       "Kind",
+                                                       "Bob\u0027s Red Mill"
+                                                   ]
+                                    },
+                        "instant-coffee":  {
+                                               "label":  "Instant Coffee",
+                                               "unit":  "oz",
+                                               "queries":  [
+                                                               "instant coffee",
+                                                               "instant coffee crystals"
+                                                           ],
+                                               "include":  "instant\\s+coffee",
+                                               "exclude":  "creamer|\\bmix\\b.{0,10}latte|creamer|cappuccino|latte|k[\\s-]*cup|\\bpods?\\b|whole\\s+bean|ground\\s+coffee",
+                                               "brands":  [
+                                                              "Folgers",
+                                                              "Nescafe",
+                                                              "Maxwell House",
+                                                              "Starbucks",
+                                                              "Mount Hagen"
+                                                          ]
+                                           },
+                        "cooking-spray":  {
+                                              "label":  "Cooking Spray",
+                                              "unit":  "oz",
+                                              "queries":  [
+                                                              "cooking spray",
+                                                              "nonstick cooking spray"
+                                                          ],
+                                              "include":  "cooking\\s+spray|non\\s*-?\\s*stick\\s+spray|\\bpam\\b",
+                                              "exclude":  "cleaner|\\bhair\\b|air\\s*fresh|hair|sunscreen|tanning",
+                                              "brands":  [
+                                                             "Pam",
+                                                             "Crisco",
+                                                             "Bertolli"
+                                                         ]
+                                          },
+                        "whipped-cream":  {
+                                              "label":  "Whipped Cream / Topping",
+                                              "unit":  "oz",
+                                              "queries":  [
+                                                              "whipped cream",
+                                                              "whipped topping"
+                                                          ],
+                                              "include":  "whipped\\s+(?:cream|topping)|reddi\\s*-?\\s*wip|cool\\s+whip",
+                                              "exclude":  "\\bcheese\\b|frosting|heavy\\s+cream|creamer|\\bcream\\s+cheese",
+                                              "brands":  [
+                                                             "Reddi-wip",
+                                                             "Cool Whip",
+                                                             "Kraft"
+                                                         ]
+                                          },
+                        "lasagna-noodles":  {
+                                                "label":  "lasagn[ae] Noodles",
+                                                "unit":  "oz",
+                                                "queries":  [
+                                                                "lasagn[ae] noodles",
+                                                                "lasagn[ae] pasta"
+                                                            ],
+                                                "include":  "lasagn[ae]\\s+noodles?|oven\\s+ready\\b.{0,20}lasagn[ae]|no\\s+boil\\b.{0,15}lasagn[ae]|lasagn[ae]\\s+pasta",
+                                                "exclude":  "\\bfrozen\\b|\\bmeal\\b|skillet|\\bsauce\\b|meat|italian-?style|family|frozen|entree|\\bmeal\\b|dinner|with\\s+meat|with\\s+sauce",
+                                                "brands":  [
+                                                               "Barilla",
+                                                               "Ronzoni",
+                                                               "Mueller\u0027s",
+                                                               "San Giorgio"
+                                                           ]
+                                            },
+                        "powdered-sugar":  {
+                                               "label":  "Powdered Sugar",
+                                               "unit":  "lb",
+                                               "queries":  [
+                                                               "powdered sugar",
+                                                               "confectioners sugar"
+                                                           ],
+                                               "include":  "powdered\\s+sugar|confectioners?|10x\\s+sugar",
+                                               "exclude":  "donut|\\bmix\\b|brown|granulated|\\bcookie|\\bfree\\b|substitute",
+                                               "brands":  [
+                                                              "C\u0026H",
+                                                              "Domino"
+                                                          ]
+                                           },
+                        "brown-rice":  {
+                                           "label":  "Brown Rice",
+                                           "unit":  "lb",
+                                           "queries":  [
+                                                           "brown rice",
+                                                           "long grain brown rice"
+                                                       ],
+                                           "include":  "brown\\s+rice|brown\\s+basmati",
+                                           "exclude":  "\\bcup\\b|microwav|ready|cake|cereal|syrup|flour|krisp|instant\\s+brown|\\bpouch\\b|ready\\s+rice|\\bpouch|microwav|instant|\\bcups?\\b|white\\s+rice|jasmine|\\bcake",
+                                           "brands":  [
+                                                          "Mahatma",
+                                                          "Success",
+                                                          "Ben\u0027s Original",
+                                                          "Riceland",
+                                                          "Minute"
+                                                      ]
+                                       },
+                        "frozen-meatballs":  {
+                                                 "label":  "Frozen Meatballs",
+                                                 "unit":  "oz",
+                                                 "queries":  [
+                                                                 "frozen meatballs",
+                                                                 "italian meatballs"
+                                                             ],
+                                                 "include":  "meatballs?",
+                                                 "exclude":  "spaghetti\\s+(?:\u0026|and)|\\bsoup\\b|\\bsub\\b|sauce\\s+jar|spaghetti|\\bsub\\b|sandwich|\\bsauce\\b|soup|swedish\\s+sauce",
+                                                 "brands":  [
+                                                                "Farm Rich",
+                                                                "Cooked Perfect",
+                                                                "Rosina",
+                                                                "Casa Di Bertacchi"
+                                                            ]
+                                             },
+                        "relish":  {
+                                       "label":  "Sweet Relish",
+                                       "unit":  "oz",
+                                       "queries":  [
+                                                       "sweet relish",
+                                                       "pickle relish"
+                                                   ],
+                                       "include":  "relish",
+                                       "exclude":  "cranberry|hot\\s*dog\\s*chili|corn\\s+relish|cranberry|pepper\\s+relish",
+                                       "brands":  [
+                                                      "Vlasic",
+                                                      "Heinz",
+                                                      "Mt. Olive",
+                                                      "Del Monte",
+                                                      "Claussen"
+                                                  ]
+                                   }
+                    }
+}
