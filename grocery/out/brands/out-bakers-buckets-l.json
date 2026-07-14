@@ -1,0 +1,17 @@
+{
+  "store": "Baker's", "generated": "2026-07-13",
+  "items": {
+    "dish-soap":           [{"b":"Store brand","s":1,"per":0.07},{"b":"Ajax","s":0,"per":0.07},{"b":"Palmolive","s":0,"per":0.14},{"b":"Dawn","s":0,"per":0.16}],
+    "bleach":              [{"b":"Store brand","s":1,"per":0.03},{"b":"Clorox","s":0,"per":0.07}],
+    "all-purpose-cleaner": [{"b":"Store brand","s":1,"per":0.07},{"b":"Fabuloso","s":0,"per":0.08},{"b":"Lysol","s":0,"per":0.15},{"b":"Method","s":0,"per":0.18}],
+    "glass-cleaner":       [{"b":"Store brand","s":1,"per":0.11},{"b":"Windex","s":0,"per":0.12},{"b":"Sprayway","s":0,"per":0.18}],
+    "hand-soap":           [{"b":"Store brand","s":1,"per":0.13},{"b":"Dial","s":0,"per":0.17},{"b":"Softsoap","s":0,"per":0.2},{"b":"Method","s":0,"per":0.45}],
+    "toothpaste":          [{"b":"Crest","s":0,"per":0.31},{"b":"Colgate","s":0,"per":0.37},{"b":"Sensodyne","s":0,"per":1.62}],
+    "deodorant":           [{"b":"Degree","s":0,"per":1.44},{"b":"Secret","s":0,"per":2.03},{"b":"Dove","s":0,"per":2.3},{"b":"Old Spice","s":0,"per":2.93}],
+    "shampoo":             [{"b":"Suave","s":0,"per":0.1},{"b":"Dove","s":0,"per":0.35},{"b":"Pantene","s":0,"per":0.38},{"b":"Garnier","s":0,"per":0.38},{"b":"Herbal Essences","s":0,"per":0.52}],
+    "conditioner":         [{"b":"Garnier","s":0,"per":0.28},{"b":"Pantene","s":0,"per":0.42},{"b":"Herbal Essences","s":0,"per":0.52}],
+    "body-wash":           [{"b":"Suave","s":0,"per":0.18},{"b":"Store brand","s":1,"per":0.19},{"b":"Old Spice","s":0,"per":0.31},{"b":"Olay","s":0,"per":0.33},{"b":"Dove","s":0,"per":0.34}],
+    "mouthwash":           [{"b":"Store brand","s":1,"per":0.1},{"b":"Scope","s":0,"per":0.15},{"b":"Listerine","s":0,"per":0.16}],
+    "fabric-softener":     []
+  }
+}

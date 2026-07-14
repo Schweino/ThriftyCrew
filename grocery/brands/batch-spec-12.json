@@ -1,0 +1,14 @@
+{
+  "dish-soap":           {"label":"Dish Soap (liquid)","queries":["dish soap","dishwashing liquid"],"brands":["Dawn","Palmolive","Ajax","Gain"],"excludeAdd":"dishwasher|detergent\\s+pac|\\bpod|tablet|rinse\\s+aid|sponge|hand\\s+soap|body"},
+  "bleach":              {"label":"Bleach","queries":["bleach","liquid bleach"],"brands":["Clorox"],"excludeAdd":"\\bpen\\b|hair|tooth|toilet\\s+bowl|spray\\s+cleaner|wipe"},
+  "all-purpose-cleaner": {"label":"All-Purpose Cleaner","queries":["all purpose cleaner","multi surface cleaner"],"brands":["Lysol","Mr. Clean","Fabuloso","Pine-Sol","Method"],"excludeAdd":"wipe|glass|toilet|air\\s*fresh|dish|laundry|floor\\s+machine"},
+  "glass-cleaner":       {"label":"Glass Cleaner","queries":["glass cleaner","window cleaner"],"brands":["Windex","Invisible Glass","Sprayway"],"excludeAdd":"wipe|cloth|tint|electronic"},
+  "hand-soap":           {"label":"Hand Soap (liquid)","queries":["hand soap","liquid hand soap"],"brands":["Dial","Softsoap","Method","Mrs. Meyer's"],"excludeAdd":"dish|body\\s+wash|sanitizer|bar\\s+soap|laundry|dispenser"},
+  "toothpaste":          {"label":"Toothpaste","queries":["toothpaste"],"brands":["Colgate","Crest","Sensodyne","Aquafresh","Arm & Hammer"],"excludeAdd":"toothbrush|whitening\\s+strip|mouthwash|floss|\\btabs?\\b"},
+  "deodorant":           {"label":"Deodorant","queries":["deodorant","antiperspirant"],"brands":["Old Spice","Degree","Secret","Dove","Speed Stick","Native"],"excludeAdd":"body\\s+wash|\\bsoap\\b|body\\s+spray\\s+can|wipe"},
+  "shampoo":             {"label":"Shampoo","queries":["shampoo"],"brands":["Pantene","Head & Shoulders","Suave","Herbal Essences","Dove","Garnier"],"excludeAdd":"conditioner|2\\s*in\\s*1|body\\s+wash|\\bdog\\b|\\bpet\\b|dry\\s+shampoo|purple"},
+  "conditioner":         {"label":"Hair Conditioner","queries":["hair conditioner","conditioner"],"brands":["Pantene","Suave","Herbal Essences","Dove","Garnier","TRESemme"],"excludeAdd":"shampoo|leave-?in|\\bdog\\b|\\bpet\\b|fabric|dish"},
+  "body-wash":           {"label":"Body Wash","queries":["body wash"],"brands":["Dove","Old Spice","Irish Spring","Suave","Native","Olay"],"excludeAdd":"hand\\s+soap|shampoo|dish|bar\\s+soap|\\bface\\b|laundry"},
+  "mouthwash":           {"label":"Mouthwash","queries":["mouthwash"],"brands":["Listerine","Scope","Act","Crest"],"excludeAdd":"spray|\\btabs?\\b|toothpaste|strip"},
+  "fabric-softener":     {"label":"Fabric Softener (liquid)","queries":["fabric softener","liquid fabric softener"],"brands":["Downy","Snuggle","Gain"],"excludeAdd":"dryer\\s+sheet|\\bbeads\\b|scent\\s+booster|in-?wash|dryer\\s+bar"}
+}

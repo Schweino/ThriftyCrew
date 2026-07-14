@@ -1,0 +1,197 @@
+﻿{
+    "commodities":  {
+                        "dish-soap":  {
+                                          "label":  "Dish Soap (liquid)",
+                                          "unit":  "floz",
+                                          "queries":  [
+                                                          "dish soap",
+                                                          "dishwashing liquid"
+                                                      ],
+                                          "include":  "dish\\s+(?:soap|liquid|detergent)|dishwashing\\s+liquid",
+                                          "exclude":  "dishwasher|\\bpacs?\\b|\\bpods?\\b|\\btabs?\\b|\\bwand\\b|sponge|brush|dishwasher|detergent\\s+pac|\\bpod|tablet|rinse\\s+aid|sponge|hand\\s+soap|body",
+                                          "brands":  [
+                                                         "Dawn",
+                                                         "Palmolive",
+                                                         "Ajax",
+                                                         "Gain"
+                                                     ]
+                                      },
+                        "bleach":  {
+                                       "label":  "Bleach",
+                                       "unit":  "floz",
+                                       "queries":  [
+                                                       "bleach",
+                                                       "liquid bleach"
+                                                   ],
+                                       "include":  "\\bbleach\\b",
+                                       "exclude":  "\\btoilet\\b|\\bspray\\b|wipes|foamer|\\bhair\\b|\\bpen\\b|crystals|\\bgel\\b|\\bpen\\b|hair|tooth|toilet\\s+bowl|spray\\s+cleaner|wipe",
+                                       "brands":  [
+                                                      "Clorox"
+                                                  ]
+                                   },
+                        "all-purpose-cleaner":  {
+                                                    "label":  "All-Purpose Cleaner",
+                                                    "unit":  "floz",
+                                                    "queries":  [
+                                                                    "all purpose cleaner",
+                                                                    "multi surface cleaner"
+                                                                ],
+                                                    "include":  "all[\\s-]*purpose\\s+cleaner|multi[\\s-]*(?:purpose|surface)\\s+cleaner|all\\s+purpose\\s+spray\\s+cleaner|\\bspray\\s+cleaner\\b",
+                                                    "exclude":  "wipes|eraser|wipe|glass|toilet|air\\s*fresh|dish|laundry|floor\\s+machine",
+                                                    "brands":  [
+                                                                   "Lysol",
+                                                                   "Mr. Clean",
+                                                                   "Fabuloso",
+                                                                   "Pine-Sol",
+                                                                   "Method"
+                                                               ]
+                                                },
+                        "glass-cleaner":  {
+                                              "label":  "Glass Cleaner",
+                                              "unit":  "floz",
+                                              "queries":  [
+                                                              "glass cleaner",
+                                                              "window cleaner"
+                                                          ],
+                                              "include":  "glass\\s+cleaner|windex",
+                                              "exclude":  "\\bwipes\\b|wipe|cloth|tint|electronic",
+                                              "brands":  [
+                                                             "Windex",
+                                                             "Invisible Glass",
+                                                             "Sprayway"
+                                                         ]
+                                          },
+                        "hand-soap":  {
+                                          "label":  "Hand Soap (liquid)",
+                                          "unit":  "floz",
+                                          "queries":  [
+                                                          "hand soap",
+                                                          "liquid hand soap"
+                                                      ],
+                                          "include":  "hand\\s+soap|hand\\s+wash\\b",
+                                          "exclude":  "sanitizer|\\bdish\\b|\\bbar\\b|dispenser|\\bbody\\b|dish|body\\s+wash|sanitizer|bar\\s+soap|laundry|dispenser",
+                                          "brands":  [
+                                                         "Dial",
+                                                         "Softsoap",
+                                                         "Method",
+                                                         "Mrs. Meyer\u0027s"
+                                                     ]
+                                      },
+                        "toothpaste":  {
+                                           "label":  "Toothpaste",
+                                           "unit":  "oz",
+                                           "queries":  [
+                                                           "toothpaste"
+                                                       ],
+                                           "include":  "toothpaste",
+                                           "exclude":  "\\bkids\\b|\\bdog\\b|charcoal|toothbrush|whitening\\s+strip|mouthwash|floss|\\btabs?\\b",
+                                           "brands":  [
+                                                          "Colgate",
+                                                          "Crest",
+                                                          "Sensodyne",
+                                                          "Aquafresh",
+                                                          "Arm \u0026 Hammer"
+                                                      ]
+                                       },
+                        "deodorant":  {
+                                          "label":  "Deodorant",
+                                          "unit":  "oz",
+                                          "queries":  [
+                                                          "deodorant",
+                                                          "antiperspirant"
+                                                      ],
+                                          "include":  "deodorant|antiperspirant",
+                                          "exclude":  "\\bcat\\b|litter|\\bcar\\b|\\broom\\b|carpet|body\\s+wash|\\bsoap\\b|body\\s+spray\\s+can|wipe",
+                                          "brands":  [
+                                                         "Old Spice",
+                                                         "Degree",
+                                                         "Secret",
+                                                         "Dove",
+                                                         "Speed Stick",
+                                                         "Native"
+                                                     ]
+                                      },
+                        "shampoo":  {
+                                        "label":  "Shampoo",
+                                        "unit":  "floz",
+                                        "queries":  [
+                                                        "shampoo"
+                                                    ],
+                                        "include":  "shampoo",
+                                        "exclude":  "\\bdog\\b|\\bcat\\b|\\bpet\\b|carpet|\\bkids\\b|\\bbaby\\b|\\bdry\\s+shampoo\\b|conditioner|2\\s*in\\s*1|body\\s+wash|\\bdog\\b|\\bpet\\b|dry\\s+shampoo|purple",
+                                        "brands":  [
+                                                       "Pantene",
+                                                       "Head \u0026 Shoulders",
+                                                       "Suave",
+                                                       "Herbal Essences",
+                                                       "Dove",
+                                                       "Garnier"
+                                                   ]
+                                    },
+                        "conditioner":  {
+                                            "label":  "Hair Conditioner",
+                                            "unit":  "floz",
+                                            "queries":  [
+                                                            "hair conditioner",
+                                                            "conditioner"
+                                                        ],
+                                            "include":  "\\bconditioner\\b",
+                                            "exclude":  "shampoo|\\bdog\\b|\\bpet\\b|leather|\\bair\\b|leave-?in|shampoo|leave-?in|\\bdog\\b|\\bpet\\b|fabric|dish",
+                                            "brands":  [
+                                                           "Pantene",
+                                                           "Suave",
+                                                           "Herbal Essences",
+                                                           "Dove",
+                                                           "Garnier",
+                                                           "TRESemme"
+                                                       ]
+                                        },
+                        "body-wash":  {
+                                          "label":  "Body Wash",
+                                          "unit":  "floz",
+                                          "queries":  [
+                                                          "body wash"
+                                                      ],
+                                          "include":  "body\\s+wash",
+                                          "exclude":  "\\bbaby\\b|\\bkids\\b|hand\\s+soap|shampoo|dish|bar\\s+soap|\\bface\\b|laundry",
+                                          "brands":  [
+                                                         "Dove",
+                                                         "Old Spice",
+                                                         "Irish Spring",
+                                                         "Suave",
+                                                         "Native",
+                                                         "Olay"
+                                                     ]
+                                      },
+                        "mouthwash":  {
+                                          "label":  "Mouthwash",
+                                          "unit":  "floz",
+                                          "queries":  [
+                                                          "mouthwash"
+                                                      ],
+                                          "include":  "mouthwash|mouth\\s+rinse|listerine",
+                                          "exclude":  "\\bkids\\b|whitening\\s+pen|spray|\\btabs?\\b|toothpaste|strip",
+                                          "brands":  [
+                                                         "Listerine",
+                                                         "Scope",
+                                                         "Act",
+                                                         "Crest"
+                                                     ]
+                                      },
+                        "fabric-softener":  {
+                                                "label":  "Fabric Softener (liquid)",
+                                                "unit":  "floz",
+                                                "queries":  [
+                                                                "fabric softener",
+                                                                "liquid fabric softener"
+                                                            ],
+                                                "include":  "fabric\\s+softener",
+                                                "exclude":  "sheets?|\\bballs?\\b|\\bbeads\\b|crystals|dryer\\s+sheet|\\bbeads\\b|scent\\s+booster|in-?wash|dryer\\s+bar",
+                                                "brands":  [
+                                                               "Downy",
+                                                               "Snuggle",
+                                                               "Gain"
+                                                           ]
+                                            }
+                    }
+}

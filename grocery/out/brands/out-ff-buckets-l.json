@@ -1,0 +1,280 @@
+﻿{
+    "store":  "Family Fare",
+    "generated":  "2026-07-14",
+    "items":  {
+                  "dish-soap":  [
+                                    {
+                                        "b":  "Dawn",
+                                        "s":  0,
+                                        "per":  0.1939
+                                    },
+                                    {
+                                        "b":  "Palmolive",
+                                        "s":  0,
+                                        "per":  0.172
+                                    },
+                                    {
+                                        "b":  "Gain",
+                                        "s":  0,
+                                        "per":  0.1523
+                                    },
+                                    {
+                                        "b":  "Ajax",
+                                        "s":  0,
+                                        "per":  0.0888
+                                    },
+                                    {
+                                        "b":  "Store brand",
+                                        "s":  1,
+                                        "per":  0.1329
+                                    }
+                                ],
+                  "bleach":  [
+                                 {
+                                     "b":  "Store brand",
+                                     "s":  1,
+                                     "per":  0.074
+                                 },
+                                 {
+                                     "b":  "Clorox",
+                                     "s":  0,
+                                     "per":  0.0879
+                                 }
+                             ],
+                  "all-purpose-cleaner":  [
+                                              {
+                                                  "b":  "Pine-Sol",
+                                                  "s":  0,
+                                                  "per":  0.2496
+                                              },
+                                              {
+                                                  "b":  "Store brand",
+                                                  "s":  1,
+                                                  "per":  0.1247
+                                              },
+                                              {
+                                                  "b":  "Mr. Clean",
+                                                  "s":  0,
+                                                  "per":  0.1483
+                                              },
+                                              {
+                                                  "b":  "Lysol",
+                                                  "s":  0,
+                                                  "per":  0.1675
+                                              },
+                                              {
+                                                  "b":  "Fabuloso",
+                                                  "s":  0,
+                                                  "per":  0.1248
+                                              }
+                                          ],
+                  "glass-cleaner":  [
+                                        {
+                                            "b":  "Store brand",
+                                            "s":  1,
+                                            "per":  0.0812
+                                        },
+                                        {
+                                            "b":  "Windex",
+                                            "s":  0,
+                                            "per":  0.1448
+                                        },
+                                        {
+                                            "b":  "Sprayway",
+                                            "s":  0,
+                                            "per":  0.1122
+                                        }
+                                    ],
+                  "hand-soap":  [
+                                    {
+                                        "b":  "Softsoap",
+                                        "s":  0,
+                                        "per":  0.1598
+                                    },
+                                    {
+                                        "b":  "Dial",
+                                        "s":  0,
+                                        "per":  0.1729
+                                    }
+                                ],
+                  "toothpaste":  [
+                                     {
+                                         "b":  "Arm \u0026 Hammer",
+                                         "s":  0,
+                                         "per":  0.9983
+                                     },
+                                     {
+                                         "b":  "Sensodyne",
+                                         "s":  0,
+                                         "per":  2.1225
+                                     },
+                                     {
+                                         "b":  "Colgate",
+                                         "s":  0,
+                                         "per":  0.4983
+                                     },
+                                     {
+                                         "b":  "Crest",
+                                         "s":  0,
+                                         "per":  0.4012
+                                     },
+                                     {
+                                         "b":  "Aquafresh",
+                                         "s":  0,
+                                         "per":  0.6232
+                                     }
+                                 ],
+                  "deodorant":  [
+                                    {
+                                        "b":  "Old Spice",
+                                        "s":  0,
+                                        "per":  1.6277
+                                    },
+                                    {
+                                        "b":  "Degree",
+                                        "s":  0,
+                                        "per":  1.9967
+                                    },
+                                    {
+                                        "b":  "Secret",
+                                        "s":  0,
+                                        "per":  1.8512
+                                    },
+                                    {
+                                        "b":  "Dove",
+                                        "s":  0,
+                                        "per":  2.8808
+                                    },
+                                    {
+                                        "b":  "Speed Stick",
+                                        "s":  0,
+                                        "per":  1.0633
+                                    }
+                                ],
+                  "shampoo":  [
+                                  {
+                                      "b":  "Herbal Essences",
+                                      "s":  0,
+                                      "per":  0.3421
+                                  },
+                                  {
+                                      "b":  "Suave",
+                                      "s":  0,
+                                      "per":  0.1018
+                                  },
+                                  {
+                                      "b":  "Pantene",
+                                      "s":  0,
+                                      "per":  0.4657
+                                  },
+                                  {
+                                      "b":  "Head \u0026 Shoulders",
+                                      "s":  0,
+                                      "per":  0.4606
+                                  },
+                                  {
+                                      "b":  "Dove",
+                                      "s":  0,
+                                      "per":  0.4158
+                                  }
+                              ],
+                  "conditioner":  [
+                                      {
+                                          "b":  "Herbal Essences",
+                                          "s":  0,
+                                          "per":  0.3421
+                                      },
+                                      {
+                                          "b":  "Pantene",
+                                          "s":  0,
+                                          "per":  0.5136
+                                      },
+                                      {
+                                          "b":  "Suave",
+                                          "s":  0,
+                                          "per":  0.1018
+                                      },
+                                      {
+                                          "b":  "Dove",
+                                          "s":  0,
+                                          "per":  0.5354
+                                      },
+                                      {
+                                          "b":  "TRESemme",
+                                          "s":  0,
+                                          "per":  0.2854
+                                      }
+                                  ],
+                  "body-wash":  [
+                                    {
+                                        "b":  "Old Spice",
+                                        "s":  0,
+                                        "per":  0.555
+                                    },
+                                    {
+                                        "b":  "Irish Spring",
+                                        "s":  0,
+                                        "per":  0.2997
+                                    },
+                                    {
+                                        "b":  "Olay",
+                                        "s":  0,
+                                        "per":  0.4268
+                                    },
+                                    {
+                                        "b":  "Dove",
+                                        "s":  0,
+                                        "per":  0.4245
+                                    },
+                                    {
+                                        "b":  "Native",
+                                        "s":  0,
+                                        "per":  0.5223
+                                    },
+                                    {
+                                        "b":  "Suave",
+                                        "s":  0,
+                                        "per":  0.2106
+                                    }
+                                ],
+                  "mouthwash":  [
+                                    {
+                                        "b":  "Listerine",
+                                        "s":  0,
+                                        "per":  0.266
+                                    },
+                                    {
+                                        "b":  "Crest",
+                                        "s":  0,
+                                        "per":  0.2364
+                                    },
+                                    {
+                                        "b":  "Act",
+                                        "s":  0,
+                                        "per":  0.3828
+                                    },
+                                    {
+                                        "b":  "Scope",
+                                        "s":  0,
+                                        "per":  0.2067
+                                    }
+                                ],
+                  "fabric-softener":  [
+                                          {
+                                              "b":  "Gain",
+                                              "s":  0,
+                                              "per":  0.1388
+                                          },
+                                          {
+                                              "b":  "Store brand",
+                                              "s":  1,
+                                              "per":  0.0978
+                                          },
+                                          {
+                                              "b":  "Downy",
+                                              "s":  0,
+                                              "per":  0.1353
+                                          }
+                                      ]
+              }
+}

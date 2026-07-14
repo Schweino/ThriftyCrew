@@ -1,0 +1,17 @@
+{
+  "store": "Walmart", "generated": "2026-07-13",
+  "items": {
+    "dish-soap":           [{"b":"Ajax","s":0,"per":0.0663},{"b":"Store brand","s":1,"per":0.0854},{"b":"Palmolive","s":0,"per":0.1067},{"b":"Gain","s":0,"per":0.132},{"b":"Dawn","s":0,"per":0.142}],
+    "bleach":              [{"b":"Store brand","s":1,"per":0.0486},{"b":"Clorox","s":0,"per":0.0641}],
+    "all-purpose-cleaner": [{"b":"Store brand","s":1,"per":0.0488},{"b":"Fabuloso","s":0,"per":0.0888},{"b":"Method","s":0,"per":0.0946},{"b":"Lysol","s":0,"per":0.1334},{"b":"Mr. Clean","s":0,"per":0.1397},{"b":"Pine-Sol","s":0,"per":0.142}],
+    "glass-cleaner":       [{"b":"Store brand","s":1,"per":0.0544},{"b":"Sprayway","s":0,"per":0.1006},{"b":"Windex","s":0,"per":0.103},{"b":"Invisible Glass","s":0,"per":0.2358}],
+    "hand-soap":           [{"b":"Store brand","s":1,"per":0.0594},{"b":"Softsoap","s":0,"per":0.1194},{"b":"Dial","s":0,"per":0.1653}],
+    "toothpaste":          [{"b":"Colgate","s":0,"per":0.3283},{"b":"Crest","s":0,"per":0.3439},{"b":"Arm & Hammer","s":0,"per":0.6633},{"b":"Sensodyne","s":0,"per":1.7425}],
+    "deodorant":           [{"b":"Degree","s":0,"per":1.5211},{"b":"Old Spice","s":0,"per":1.8369},{"b":"Dove","s":0,"per":1.9115},{"b":"Secret","s":0,"per":3.7952},{"b":"Native","s":0,"per":4.7057}],
+    "shampoo":             [{"b":"Suave","s":0,"per":0.0862},{"b":"Garnier","s":0,"per":0.16},{"b":"Herbal Essences","s":0,"per":0.3072},{"b":"Dove","s":0,"per":0.3157},{"b":"Pantene","s":0,"per":0.3599}],
+    "conditioner":         [{"b":"Suave","s":0,"per":0.0862},{"b":"Store brand","s":1,"per":0.0979},{"b":"Garnier","s":0,"per":0.1667},{"b":"Dove","s":0,"per":0.3244},{"b":"Herbal Essences","s":0,"per":0.3837},{"b":"Pantene","s":0,"per":0.3972}],
+    "body-wash":           [{"b":"Suave","s":0,"per":0.165},{"b":"Olay","s":0,"per":0.317},{"b":"Old Spice","s":0,"per":0.349},{"b":"Dove","s":0,"per":0.3585}],
+    "mouthwash":           [{"b":"Store brand","s":1,"per":0.069},{"b":"Scope","s":0,"per":0.113},{"b":"Crest","s":0,"per":0.147},{"b":"Listerine","s":0,"per":0.207},{"b":"Act","s":0,"per":0.221}],
+    "fabric-softener":     [{"b":"Gain","s":0,"per":0.0284},{"b":"Downy","s":0,"per":0.0355},{"b":"Store brand","s":1,"per":0.0376},{"b":"Snuggle","s":0,"per":0.0757}]
+  }
+}
