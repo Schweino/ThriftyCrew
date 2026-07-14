@@ -1,4 +1,4 @@
-<#
+﻿<#
   generate-board-overrides.ps1 - DERIVES board-price-overrides.json instead of hand-maintaining it.
 
   The bug Brad caught: a board price and its "See item" link can describe different products/prices. The strict
@@ -26,7 +26,7 @@ $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvoca
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
 
 # EXACT LinkPU from build-deals-page.ps1 / audit-board-consistency.ps1 - keep these three in lockstep.
-function LinkPU([string]$size, [string]$unit, [double]$price) {
+function LinkPU([string]$size, [string]$unit, [double]$price, [string]$name = '') {
   $s = ([string]$size).ToLower().Trim()
   $up = [regex]::Match($s, '\$?\s*([0-9]+(?:\.[0-9]+)?)\s*/\s*(fl\s*oz|floz|oz|lb|ea|each|ct|count)')
   if ($up.Success) { $v=[double]$up.Groups[1].Value; $un=($up.Groups[2].Value -replace '\s','') -replace 'fl',''; switch ($unit) { 'lb'{if($un -eq 'lb'){return $v}; if($un -eq 'oz'){return $v*16}} 'oz'{if($un -eq 'oz'){return $v}; if($un -eq 'lb'){return $v/16}} 'floz'{if($un -match 'oz'){return $v}; if($un -eq 'lb'){return $v/16}} 'each'{if($un -match '^(ea|each|ct|count)$'){return $v}; return $price} 'dozen'{if($un -match '^(ea|each|ct|count)$'){return $v*12}; return $price} } }
@@ -36,6 +36,16 @@ function LinkPU([string]$size, [string]$unit, [double]$price) {
   $un = if ($q.Success) { ($q.Groups[2].Value -replace '\s','') -replace 'fl','' } else { '' }
   if (-not $q.Success) { $bu=[regex]::Match($s,'\b(lbs?|gal|gallon|dozen|doz|each|ea)\b'); if ($bu.Success) { $n=1; $un=$bu.Groups[1].Value -replace '^gallon$','gal' -replace '^doz$','dozen' } }
   $pk = [regex]::Match($s, '([0-9]+)\s*(pk|pack)\b'); if ($pk.Success -and $n -and ($un -match '^(oz|lbs?|gal)$')) { $n = $n * [double]$pk.Groups[1].Value }
+  # MULTIPACK IN THE NAME: a link whose size is just "each" but whose NAME says "24 Pack" is 24 items,
+  # not 1. Without this the whole pack price is published as the per-item price (Fareway bottled water
+  # went out at $3.87 EACH). Only for 'each' commodities, and only when the size carries no count.
+  if ($unit -eq 'each' -and $name -and (($null -eq $n) -or ($n -eq 1))) {
+    $pn = [regex]::Match(([string]$name).ToLower(), '([0-9]+)\s*(?:pk\b|pack\b|ct\b|count\b)')
+    if ($pn.Success) {
+      $cnt = [double]$pn.Groups[1].Value
+      if ($cnt -gt 1) { return $price / $cnt }
+    }
+  }
   switch ($unit) {
     'lb'    { if ($un -match '^lbs?$' -and $n) { return $price/$n }; if ($un -eq 'oz' -and $n) { return $price/($n/16) }; return $null }
     'oz'    { if ($un -eq 'oz' -and $n) { return $price/$n }; if ($un -match '^lbs?$' -and $n) { return $price/(16*$n) }; if ($un -eq 'gal' -and $n) { return $price/(128*$n) }; return $null }
@@ -80,7 +90,7 @@ foreach ($it in ($staple + $recipe)) {
     if ($drift.ContainsKey($id + '|' + $st)) { $skip.namedrift++; continue }
     $price=0.0; [void][double]::TryParse((([string]$e.price) -replace '[^0-9.]',''), [ref]$price)
     if ($price -le 0) { $skip.badprice++; continue }
-    $lpu = LinkPU ([string]$e.size) $unit $price
+    $lpu = LinkPU ([string]$e.size) $unit $price ([string]$e.name)
     if ($null -eq $lpu -or $lpu -le 0) { $skip.badprice++; continue }
     $off = [math]::Abs($lpu - $board) / $board
     if ($off -le $Tol) { $skip.agree++; continue }
@@ -97,3 +107,5 @@ $obj = [ordered]@{
 }
 $obj | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $root 'board-price-overrides.json') -Encoding UTF8
 Write-Output ("board-overrides: wrote $($cells.Count) corrections  (skipped: sale=$($skip.sale) collision=$($skip.collision) name-drift=$($skip.namedrift) no-link=$($skip.nolink) bad-price=$($skip.badprice) already-agree=$($skip.agree))")
+
+

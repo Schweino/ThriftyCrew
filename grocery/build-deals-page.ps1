@@ -1,4 +1,4 @@
-<#
+﻿<#
   build-deals-page.ps1 - Renders the weekly Omaha cross-store price board into a self-contained,
   filterable HTML page (embeddable in a Ghost page). Data-driven: re-run it whenever the board
   refreshes. Groups commodities by food category (categories.json), one ROW per commodity, and
@@ -160,7 +160,7 @@ function MissingCells([string]$id, $pricedStores) {
   return $out
 }
 # per-unit of a stored link, in the board's $unit, from {price,size} - used to SUPPRESS a clearly-wrong link.
-function LinkPU([string]$size, [string]$unit, [double]$price) {
+function LinkPU([string]$size, [string]$unit, [double]$price, [string]$name = '') {
   $s = ([string]$size).ToLower().Trim()
   $up = [regex]::Match($s, '\$?\s*([0-9]+(?:\.[0-9]+)?)\s*/\s*(fl\s*oz|floz|oz|lb|ea|each|ct|count)')
   if ($up.Success) { $v=[double]$up.Groups[1].Value; $un=($up.Groups[2].Value -replace '\s','') -replace 'fl',''; switch ($unit) { 'lb'{if($un -eq 'lb'){return $v}; if($un -eq 'oz'){return $v*16}} 'oz'{if($un -eq 'oz'){return $v}; if($un -eq 'lb'){return $v/16}} 'floz'{if($un -match 'oz'){return $v}; if($un -eq 'lb'){return $v/16}} 'each'{if($un -match '^(ea|each|ct|count)$'){return $v}; return $price} 'dozen'{if($un -match '^(ea|each|ct|count)$'){return $v*12}; return $price} } }
@@ -171,6 +171,16 @@ function LinkPU([string]$size, [string]$unit, [double]$price) {
   # bare-unit size ("lb","per lb","gallon","dozen","each") = one of that unit -> per-unit is the price itself
   if (-not $q.Success) { $bu=[regex]::Match($s,'\b(lbs?|gal|gallon|dozen|doz|each|ea)\b'); if ($bu.Success) { $n=1; $un=$bu.Groups[1].Value -replace '^gallon$','gal' -replace '^doz$','dozen' } }   # anchored: unanchored 'doz'->'dozen' corrupts 'dozen'
   $pk = [regex]::Match($s, '([0-9]+)\s*(pk|pack)\b'); if ($pk.Success -and $n -and ($un -match '^(oz|lbs?|gal)$')) { $n = $n * [double]$pk.Groups[1].Value }
+  # MULTIPACK IN THE NAME: a link whose size is just "each" but whose NAME says "24 Pack" is 24 items,
+  # not 1. Without this the whole pack price is published as the per-item price (Fareway bottled water
+  # went out at $3.87 EACH). Only for 'each' commodities, and only when the size carries no count.
+  if ($unit -eq 'each' -and $name -and (($null -eq $n) -or ($n -eq 1))) {
+    $pn = [regex]::Match(([string]$name).ToLower(), '([0-9]+)\s*(?:pk\b|pack\b|ct\b|count\b)')
+    if ($pn.Success) {
+      $cnt = [double]$pn.Groups[1].Value
+      if ($cnt -gt 1) { return $price / $cnt }
+    }
+  }
   switch ($unit) {
     'lb'    { if ($un -match '^lbs?$' -and $n) { return $price/$n }; if ($un -eq 'oz' -and $n) { return $price/($n/16) }; return $null }
     'oz'    { if ($un -eq 'oz' -and $n) { return $price/$n }; if ($un -match '^lbs?$' -and $n) { return $price/(16*$n) }; if ($un -eq 'gal' -and $n) { return $price/(128*$n) }; return $null }
@@ -250,7 +260,7 @@ function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$board
       # Missing beats wrong; the fix for a truly wrong link is still to re-resolve its URL, not to loosen this.
       if ($boardPU -gt 0) {
         $lprice = 0.0; [void][double]::TryParse((([string]$lnk.price) -replace '[^0-9.]',''), [ref]$lprice)
-        $lpu = LinkPU ([string]$lnk.size) $unit $lprice
+        $lpu = LinkPU ([string]$lnk.size) $unit $lprice ([string]$lnk.name)
         if ($cellType -eq 'sale') {
           # SALE: validate product IDENTITY by name ALWAYS (a sale price can't confirm identity, and the name check
           # must run even when the size can't be priced into a per-unit, e.g. a "20 oz" loaf on an each-based board -
@@ -260,8 +270,8 @@ function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$board
           # flyer-fluff rescue: word-overlap failed, but the link IS the same commodity (its own include/exclude)
           # AND its per-unit is computable and inside the sale band AND the link name is a GENERIC SUBSET of the
           # board's (every distinctive link word appears in the board item). The subset test is what stops a
-          # brand swap: "Fresh Peaches" ⊂ "Tree Ripened Yellow Flesh Peaches, Small" -> show (same commodity,
-          # less flowery), but "Kroger Thick Cut Bacon" ⊄ "Oscar Mayer Bacon" -> still hidden (different brand,
+          # brand swap: "Fresh Peaches" âŠ‚ "Tree Ripened Yellow Flesh Peaches, Small" -> show (same commodity,
+          # less flowery), but "Kroger Thick Cut Bacon" âŠ„ "Oscar Mayer Bacon" -> still hidden (different brand,
           # even at a plausible price). Band is REQUIRED here.
           if (-not $ident -and ($null -ne $lpu) -and ($lpu -ge $boardPU * 0.85) -and ($lpu -le $boardPU * 3.0) -and (CommodityIdent $id ([string]$lnk.name)) -and (NameMatch ([string]$lnk.name) $boardItem)) { $ident = $true }
           if (-not $ident) { $ok = $false }
@@ -1112,7 +1122,7 @@ if ($histDoc) {
     var d = TCB[id]; if (!d) return; close();
     var sts = d.stores || [];
     var h = '<div class="pg-hx" style="max-width:660px"><div class="pg-hx-top"><h3>Brands: ' + esc(d.label) + '</h3><button type="button" class="pg-hx-x" aria-label="Close">&times;</button></div>';
-    h += '<p class="pg-hx-sub">Price per ' + esc(d.unit) + ', cheapest brand first. The <b>store brand</b> is gold; the cheapest store for each brand is green. A dash means that store’s search did not surface that brand.</p>';
+    h += '<p class="pg-hx-sub">Price per ' + esc(d.unit) + ', cheapest brand first. The <b>store brand</b> is gold; the cheapest store for each brand is green. A dash means that storeâ€™s search did not surface that brand.</p>';
     h += '<div class="pg-bt-wrap"><table class="pg-bt"><thead><tr><th>Brand</th>';
     for (var s = 0; s < sts.length; s++){ h += '<th>' + esc(sts[s]) + '</th>'; }
     h += '</tr></thead><tbody>';
@@ -1125,7 +1135,7 @@ if ($histDoc) {
       h += '</tr>';
     }
     h += '</tbody></table></div>';
-    h += '<p class="pg-hx-note" style="margin-top:11px">Real Omaha shelf prices captured this week. Sam’s Club needs a membership. Aldi and Fareway are not shown here, since neither posts everyday brand prices online.</p></div>';
+    h += '<p class="pg-hx-note" style="margin-top:11px">Real Omaha shelf prices captured this week. Samâ€™s Club needs a membership. Aldi and Fareway are not shown here, since neither posts everyday brand prices online.</p></div>';
     ov = document.createElement('div'); ov.className = 'pg-hx-ov'; ov.innerHTML = h;
     document.body.appendChild(ov);
     ov.addEventListener('click', function(e){ if (e.target === ov || e.target.closest('.pg-hx-x')) close(); });
@@ -1239,4 +1249,6 @@ if ($histDoc) {
 
 ($css + $body + $js + $histBlock) | Set-Content $Out -Encoding UTF8
 Write-Output ("deals page -> " + $Out + "  (" + $totalCommodities + " commodities, " + $totalPrices + " prices, history popup on " + $(if ($entries) { $entries.Count } else { 0 }) + " items)")
+
+
 

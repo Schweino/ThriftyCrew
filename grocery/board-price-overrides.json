@@ -2,80 +2,8 @@
     "readme":  "DERIVED by generate-board-overrides.ps1 - do not hand-edit. Per-cell EVERYDAY per-unit corrections: when a board price disagrees \u003e30% with the verified product its See-item link opens (and name-drift confirms the link is the right product), the board number is stale and is pinned here to the link\u0027s per-unit so price==link==shelf. build-deals-page applies these to EVERYDAY cells only (a live sale always wins) and survives daily regeneration. Sales, wrong-product links (name-drift), and ids present in both the staple+recipe board are intentionally excluded.",
     "updated":  "2026-07-14",
     "tol":  0.3,
-    "count":  24,
+    "count":  16,
     "cells":  [
-                  {
-                      "id":  "bottled-water",
-                      "store":  "Fareway",
-                      "per_unit":  3.87,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.1612,
-                      "link_name":  "Fareway 24 Pack Purified Drinking Water",
-                      "set":  "2026-07-14"
-                  },
-                  {
-                      "id":  "coffee",
-                      "store":  "Family Fare",
-                      "per_unit":  0.5898,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  1.0406,
-                      "link_name":  "Folgers Coffee, Ground, Medium, Classic Roast 30.5 Oz",
-                      "set":  "2026-07-14"
-                  },
-                  {
-                      "id":  "microwave-popcorn",
-                      "store":  "Fareway",
-                      "per_unit":  2.99,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.9967,
-                      "link_name":  "Fareway 3 Pack Butter Movie Theater Microwave Popcorn Bags",
-                      "set":  "2026-07-14"
-                  },
-                  {
-                      "id":  "spinach",
-                      "store":  "Aldi",
-                      "per_unit":  0.2362,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.1219,
-                      "link_name":  "Little Salad Bar Spinach",
-                      "set":  "2026-07-14"
-                  },
-                  {
-                      "id":  "strawberries",
-                      "store":  "Hy-Vee",
-                      "per_unit":  0.1869,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.3119,
-                      "link_name":  "Wish Farms California Strawberries",
-                      "set":  "2026-07-14"
-                  },
-                  {
-                      "id":  "sweet-corn",
-                      "store":  "Baker\u0027s",
-                      "per_unit":  0.4,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.6,
-                      "link_name":  "Fresh Sweet Corn on the Cob-Each",
-                      "set":  "2026-07-14"
-                  },
-                  {
-                      "id":  "yeast",
-                      "store":  "Hy-Vee",
-                      "per_unit":  2.64,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  1.37,
-                      "link_name":  "Fleischmann\u0027s ActiveDry Yeast 3 Pack",
-                      "set":  "2026-07-14"
-                  },
-                  {
-                      "id":  "yeast",
-                      "store":  "Fareway",
-                      "per_unit":  2.6533,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  1.7975,
-                      "link_name":  "Red Star Active Dry Yeast, All-Natural",
-                      "set":  "2026-07-14"
-                  },
                   {
                       "id":  "boneless-skinless-chicken-thigh",
                       "store":  "Hy-Vee",

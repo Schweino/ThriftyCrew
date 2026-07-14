@@ -120,9 +120,12 @@ function Get-SizeAmount([string]$sizeText, [string]$unit) {
     $conv = Convert-ToUnit $q $mf.Groups[3].Value $unit
     if ($conv -ne $null) { return $conv }
   }
-  # "24 ct 16.9 oz" style multipack -> total = count * each-size (only meaningful for oz/floz)
-  $mm = [regex]::Match($s, '(\d+(?:\.\d+)?)\s*(?:ct|count|pk|pack)\D+(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|ml|l)\b')
-  if ($mm.Success -and ($unit -eq 'oz' -or $unit -eq 'floz' -or $unit -eq 'gallon')) {
+  # "24 ct 16.9 oz" style multipack -> total = count * each-size.
+  # The each-size token must include GAL/QT/PT/LB, not just oz: Sam's "Member's Mark Distilled White
+  # Vinegar, 1 gal., 2 pk." is TWO gallons, and with gal missing here it fell through and was priced
+  # as ONE, making Sam's look 2x more expensive than it is.
+  $mm = [regex]::Match($s, '(\d+(?:\.\d+)?)\s*(?:ct|count|pk|pack)\D+(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|ml|l\b|gal|gallon|qt|quart|pt|pint|lbs?|pound)\b')
+  if ($mm.Success -and ($unit -eq 'oz' -or $unit -eq 'floz' -or $unit -eq 'gallon' -or $unit -eq 'lb')) {
     $cnt = [double]$mm.Groups[1].Value; $each = [double]$mm.Groups[2].Value; $tok = $mm.Groups[3].Value
     $per = Convert-ToUnit $each $tok $unit
     if ($per -ne $null) { return $cnt * $per }
