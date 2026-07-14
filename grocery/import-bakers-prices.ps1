@@ -145,8 +145,22 @@ foreach ($d in $doc.deals) {
     [void]$rows.Add($row); continue
   }
 
-  # THE FORMULA. Correct in both bases.
-  $newAd = [math]::Round($bpu * $ourQty, 2)
+  # THE PRICE. Baker's rounds its unit price HARD ($0.02/fl oz), so reconstructing per-unit x qty amplifies
+  # that rounding by the pack size: milk came out 0.02/floz x 128 = $2.56 against the true $3.19 shown as
+  # `cur`. So prefer the store's EXACT pack price `cur` whenever it falls inside the band the rounded unit
+  # price allows for OUR size - that means the pack IS our size and cur is the exact answer. Only when cur
+  # sits OUTSIDE that band (a bigger weighted/multipack, e.g. a 4.5 lb meat tray on a per-lb row, or a 2 lb
+  # butter block on a per-lb row) is the pack a different size and the per-unit price the right basis.
+  $uvv = [double]$pv.uv
+  $bpuLo = Convert-BakersUnit ([math]::Max(0.0001, $uvv - 0.005)) ([string]$pv.uof) $unit
+  $bpuHi = Convert-BakersUnit ($uvv + 0.005) ([string]$pv.uof) $unit
+  $loP = $(if ($bpuLo) { $bpuLo * $ourQty } else { $bpu * $ourQty })
+  $hiP = $(if ($bpuHi) { $bpuHi * $ourQty } else { $bpu * $ourQty })
+  if (($cur -ge ($loP - 0.011)) -and ($cur -le ($hiP + 0.011))) {
+    $newAd = [math]::Round($cur, 2)               # pack == our size: cur is the exact price
+  } else {
+    $newAd = [math]::Round($bpu * $ourQty, 2)     # different pack (weighted / multi): per-unit basis
+  }
   if ($newAd -le 0) { $noPrice++; [void]$rows.Add($row); continue }
 
   # FACTOR RAIL: a price change moves a few percent; a wrong product or bad unit-price parse moves by a FACTOR.
@@ -161,10 +175,12 @@ foreach ($d in $doc.deals) {
     }
   }
 
-  # the was-price ("Discounted From"), brought into OUR basis (it is a PACK/display price like cur)
+  # the was-price ("Discounted From"), brought into OUR basis by the SAME ratio we priced the current one:
+  # was and cur are both pack/display prices in one basis, so (was/cur) is the discount ratio and newAd is
+  # our-size current price - their product is our-size was price. Correct whether newAd came from cur or bpu.
   $newBase = $null
-  if (($null -ne $pv.was) -and ([double]$pv.was -gt 0) -and ($packQty -gt 0)) {
-    $newBase = [math]::Round(([double]$pv.was / $packQty) * $ourQty, 2)
+  if (($null -ne $pv.was) -and ([double]$pv.was -gt 0) -and ($cur -gt 0)) {
+    $newBase = [math]::Round(([double]$pv.was / $cur) * $newAd, 2)
   }
 
   $old = [string]$d.ad_price
