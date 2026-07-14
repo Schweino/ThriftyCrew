@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-07-14 06:37",
+    "generated":  "2026-07-14 07:41",
     "tol":  0.3,
     "no_link_count":  162,
     "max_no_link":  0,
@@ -692,7 +692,7 @@
                          "board":  5.49,
                          "link":  7.99,
                          "off_pct":  46,
-                         "product":  "Ground Beef Meal Deal 80/20",
+                         "product":  "Fresh 80% Lean Ground Beef, Value Pack",
                          "size":  "lb"
                      },
                      {
@@ -746,16 +746,6 @@
                          "size":  "lb"
                      },
                      {
-                         "id":  "bread-crumbs",
-                         "store":  "Baker\u0027s",
-                         "unit":  "oz",
-                         "board":  0.3113,
-                         "link":  0.12,
-                         "off_pct":  61,
-                         "product":  "Kroger Italian Bread Crumbs",
-                         "size":  "$0.12/oz"
-                     },
-                     {
                          "id":  "cereal",
                          "store":  "Hy-Vee",
                          "unit":  "oz",
@@ -773,6 +763,16 @@
                          "link":  2.69,
                          "off_pct":  46,
                          "product":  "Broccoli Florettes",
+                         "size":  "lb"
+                     },
+                     {
+                         "id":  "broccoli",
+                         "store":  "Family Fare",
+                         "unit":  "lb",
+                         "board":  2.49,
+                         "link":  3.69,
+                         "off_pct":  48,
+                         "product":  "Broccoli Crowns",
                          "size":  "lb"
                      },
                      {
@@ -896,14 +896,14 @@
                          "size":  "lb"
                      },
                      {
-                         "id":  "ground-cumin",
+                         "id":  "hot-dogs",
                          "store":  "Family Fare",
                          "unit":  "oz",
-                         "board":  1.145,
-                         "link":  1.745,
-                         "off_pct":  52,
-                         "product":  "Lawry\u0027s Ground Cumin 2 Oz",
-                         "size":  "2 oz"
+                         "board":  0.1389,
+                         "link":  0.2075,
+                         "off_pct":  49,
+                         "product":  "John Morrell Jumbo Franks 12 Oz",
+                         "size":  "12 oz"
                      },
                      {
                          "id":  "instant-mashed-potatoes",
@@ -914,36 +914,6 @@
                          "off_pct":  51,
                          "product":  "Idahoan Four Cheese Mashed Potatoes",
                          "size":  "4 oz"
-                     },
-                     {
-                         "id":  "ketchup",
-                         "store":  "Family Fare",
-                         "unit":  "oz",
-                         "board":  0.0995,
-                         "link":  0.1872,
-                         "off_pct":  88,
-                         "product":  "Heinz Tomato Ketchup 32 Oz",
-                         "size":  "32 oz"
-                     },
-                     {
-                         "id":  "kidney-beans",
-                         "store":  "Family Fare",
-                         "unit":  "oz",
-                         "board":  0.0927,
-                         "link":  0.0639,
-                         "off_pct":  31,
-                         "product":  "Our Family Beans, Kidney, No Salt Added, Dark Red 15.5 Oz",
-                         "size":  "15.5 oz"
-                     },
-                     {
-                         "id":  "lemon-juice",
-                         "store":  "Hy-Vee",
-                         "unit":  "floz",
-                         "board":  0.186,
-                         "link":  0.1247,
-                         "off_pct":  33,
-                         "product":  "Hy-Vee Reconstituted Lemon 100% Juice",
-                         "size":  "32 fl oz"
                      },
                      {
                          "id":  "mangoes",
@@ -986,33 +956,23 @@
                          "size":  "8 oz"
                      },
                      {
-                         "id":  "dried-oregano",
+                         "id":  "parmesan",
                          "store":  "Family Fare",
                          "unit":  "oz",
-                         "board":  1.1067,
-                         "link":  2.92,
-                         "off_pct":  164,
-                         "product":  "Our Family Oregano Leaves 0.75 Oz",
-                         "size":  "0.75 oz"
+                         "board":  0.2878,
+                         "link":  0.4317,
+                         "off_pct":  50,
+                         "product":  "Our Family Natural Finely Cut Parmesan Shredded Cheese 6 Oz",
+                         "size":  "6 oz"
                      },
                      {
-                         "id":  "paprika",
-                         "store":  "Baker\u0027s",
-                         "unit":  "oz",
-                         "board":  0.625,
-                         "link":  1.14,
-                         "off_pct":  82,
-                         "product":  "Kroger Ground Paprika Shaker",
-                         "size":  "$1.14/oz"
-                     },
-                     {
-                         "id":  "peanut-butter",
+                         "id":  "pasta",
                          "store":  "Family Fare",
                          "unit":  "oz",
-                         "board":  0.1431,
-                         "link":  0.2494,
-                         "off_pct":  74,
-                         "product":  "Jif Creamy Peanut Butter 16 Oz",
+                         "board":  0.0781,
+                         "link":  0.1181,
+                         "off_pct":  51,
+                         "product":  "Creamette Spaghetti 16 Oz",
                          "size":  "16 oz"
                      },
                      {
@@ -1032,7 +992,7 @@
                          "board":  2.49,
                          "link":  4.79,
                          "off_pct":  92,
-                         "product":  "Fresh Assorted Bone In Pork Chops",
+                         "product":  "Fresh Assorted Pork Chops Value Pack",
                          "size":  "lb"
                      },
                      {
@@ -1046,6 +1006,16 @@
                          "size":  "8 oz"
                      },
                      {
+                         "id":  "potato-chips",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  0.4306,
+                         "link":  0.6459,
+                         "off_pct":  50,
+                         "product":  "Ruffles Original Potato Chips 8.5 Oz",
+                         "size":  "8.5 oz"
+                     },
+                     {
                          "id":  "queso",
                          "store":  "Hy-Vee",
                          "unit":  "oz",
@@ -1054,16 +1024,6 @@
                          "off_pct":  40,
                          "product":  "The Mad Butcher\u0027s Queso Cheese 15 oz",
                          "size":  "15 oz"
-                     },
-                     {
-                         "id":  "red-pepper-flakes",
-                         "store":  "Family Fare",
-                         "unit":  "oz",
-                         "board":  2.5267,
-                         "link":  1.3289,
-                         "off_pct":  47,
-                         "product":  "Our Family Red Pepper, Crushed 1.5 Oz",
-                         "size":  "1.5 oz"
                      },
                      {
                          "id":  "rotisserie-chicken",
@@ -1106,14 +1066,24 @@
                          "size":  "12 x 12 fl oz"
                      },
                      {
+                         "id":  "sports-drinks",
+                         "store":  "Family Fare",
+                         "unit":  "floz",
+                         "board":  0.0446,
+                         "link":  0.0782,
+                         "off_pct":  75,
+                         "product":  "Gatorade Orange Thirst Quencher 28 Fl Oz",
+                         "size":  "28 fl oz"
+                     },
+                     {
                          "id":  "strawberries",
                          "store":  "Family Fare",
                          "unit":  "oz",
                          "board":  0.1559,
-                         "link":  0.2494,
-                         "off_pct":  60,
-                         "product":  "Fresh Strawberries",
-                         "size":  "16 oz"
+                         "link":  0.4369,
+                         "off_pct":  180,
+                         "product":  "Fresh Strawberries Fresh Divide",
+                         "size":  "lb"
                      },
                      {
                          "id":  "sweet-corn",
@@ -1122,8 +1092,8 @@
                          "board":  0.9975,
                          "link":  1.4975,
                          "off_pct":  50,
-                         "product":  "Fresh Corn Bicolor Tray Pack Usa",
-                         "size":  "4 ct"
+                         "product":  "Fresh Sweet Corn (4 Ct)",
+                         "size":  "1 pk"
                      },
                      {
                          "id":  "relish",
@@ -1134,16 +1104,6 @@
                          "off_pct":  53,
                          "product":  "Hy-Vee Sweet Relish 10 oz",
                          "size":  "10 oz"
-                     },
-                     {
-                         "id":  "salt",
-                         "store":  "Family Fare",
-                         "unit":  "oz",
-                         "board":  0.0765,
-                         "link":  0.0381,
-                         "off_pct":  50,
-                         "product":  "Iodized Salt Our Family",
-                         "size":  "26 oz"
                      },
                      {
                          "id":  "tater-tots",
@@ -1166,16 +1126,6 @@
                          "size":  "8 ct"
                      },
                      {
-                         "id":  "tomato-paste",
-                         "store":  "Family Fare",
-                         "unit":  "oz",
-                         "board":  0.1575,
-                         "link":  0.215,
-                         "off_pct":  37,
-                         "product":  "Our Family Tomato Paste, Italian Herb Style 6 Oz",
-                         "size":  "6 oz"
-                     },
-                     {
                          "id":  "tomatoes",
                          "store":  "Hy-Vee",
                          "unit":  "lb",
@@ -1184,6 +1134,26 @@
                          "off_pct":  189,
                          "product":  "Roma Tomatoes",
                          "size":  "lb"
+                     },
+                     {
+                         "id":  "tomatoes",
+                         "store":  "Family Fare",
+                         "unit":  "lb",
+                         "board":  2.29,
+                         "link":  3.99,
+                         "off_pct":  74,
+                         "product":  "Fresh Tomatoes, Hot House",
+                         "size":  "lb"
+                     },
+                     {
+                         "id":  "tortilla-chips",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  0.3405,
+                         "link":  0.5107,
+                         "off_pct":  50,
+                         "product":  "Doritos Tortilla Chips, Chile Limon, Rolled 10.75 Oz",
+                         "size":  "10.75 oz"
                      },
                      {
                          "id":  "tortillas",
@@ -1217,6 +1187,16 @@
                      },
                      {
                          "id":  "bread-crumbs",
+                         "store":  "Baker\u0027s",
+                         "unit":  "oz",
+                         "board":  0.1193,
+                         "link":  0.3113,
+                         "off_pct":  161,
+                         "product":  "Kikkoman Panko Japanese Style Bread Crumbs",
+                         "size":  "8 oz"
+                     },
+                     {
+                         "id":  "bread-crumbs",
                          "store":  "Hy-Vee",
                          "unit":  "oz",
                          "board":  0.1193,
@@ -1232,7 +1212,7 @@
                          "board":  0.03,
                          "link":  0.0623,
                          "off_pct":  108,
-                         "product":  "Member\u0027s Mark Light Brown Sugar, 7-Pound",
+                         "product":  "Member\u0027s Mark Light Brown Sugar, 7 lbs.",
                          "size":  "7 lb"
                      },
                      {
@@ -1240,10 +1220,10 @@
                          "store":  "Family Fare",
                          "unit":  "oz",
                          "board":  0.2497,
-                         "link":  0.1684,
-                         "off_pct":  33,
-                         "product":  "C\u0026H Dark Brown Pure Cane Sugar 32 Oz",
-                         "size":  "32 oz"
+                         "link":  0.4994,
+                         "off_pct":  100,
+                         "product":  "Splenda Brown Sugar Blend 1 Lb",
+                         "size":  "16 oz"
                      },
                      {
                          "id":  "cheddar-cheese-shredded",
@@ -1252,7 +1232,7 @@
                          "board":  0.2158,
                          "link":  0.3238,
                          "off_pct":  50,
-                         "product":  "Our Family Natural Sharp Cheddar Cheese 8 Oz",
+                         "product":  "Our Family Extra Sharp Cheddar Shredded Cheese 8 Oz",
                          "size":  "8 oz"
                      },
                      {
@@ -1266,24 +1246,34 @@
                          "size":  "32 oz"
                      },
                      {
-                         "id":  "ketchup",
-                         "store":  "Walmart",
+                         "id":  "paprika",
+                         "store":  "Baker\u0027s",
                          "unit":  "oz",
-                         "board":  0.047,
-                         "link":  0.0616,
-                         "off_pct":  31,
-                         "product":  "Great Value Tomato Ketchup",
-                         "size":  "32 oz"
+                         "board":  1.14,
+                         "link":  0.625,
+                         "off_pct":  45,
+                         "product":  "Smart Way Ground Paprika 2 oz",
+                         "size":  "2 oz"
                      },
                      {
-                         "id":  "hot-sauce",
-                         "store":  "Walmart",
-                         "unit":  "floz",
-                         "board":  0.13,
-                         "link":  0.2783,
-                         "off_pct":  114,
-                         "product":  "The Original Louisiana Brand Hot Sauce",
-                         "size":  "6 fl oz"
+                         "id":  "peanut-butter",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  0.25,
+                         "link":  0.1431,
+                         "off_pct":  43,
+                         "product":  "Creamy Reduced Salt \u0026 Sugar Peanut Butter",
+                         "size":  "16 oz"
+                     },
+                     {
+                         "id":  "ground-cumin",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  1.745,
+                         "link":  1.145,
+                         "off_pct":  34,
+                         "product":  "Sugar \u0027N Spice Cumin Ground Pp",
+                         "size":  "2 oz"
                      },
                      {
                          "id":  "zucchini",
@@ -1296,6 +1286,16 @@
                          "size":  "1 lb"
                      },
                      {
+                         "id":  "dried-oregano",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  2.92,
+                         "link":  1.1067,
+                         "off_pct":  62,
+                         "product":  "Badia Spices Whole Oregano   2.5 Oz.",
+                         "size":  "2.25 oz"
+                     },
+                     {
                          "id":  "salt",
                          "store":  "Hy-Vee",
                          "unit":  "oz",
@@ -1303,6 +1303,16 @@
                          "link":  0.0608,
                          "off_pct":  76,
                          "product":  "Hy-Vee Iodized Salt",
+                         "size":  "26 oz"
+                     },
+                     {
+                         "id":  "salt",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  0.0381,
+                         "link":  0.0765,
+                         "off_pct":  101,
+                         "product":  "Morton Iodized Salt 26 Oz",
                          "size":  "26 oz"
                      },
                      {
@@ -1344,16 +1354,6 @@
                          "off_pct":  50,
                          "product":  "Sugar \u0027N Spice Turmeric Ground 2 Oz",
                          "size":  "2 oz"
-                     },
-                     {
-                         "id":  "red-pepper-flakes",
-                         "store":  "Family Fare",
-                         "unit":  "oz",
-                         "board":  1.9933,
-                         "link":  1.3289,
-                         "off_pct":  33,
-                         "product":  "Our Family Red Pepper, Crushed 1.5 Oz",
-                         "size":  "1.5 oz"
                      },
                      {
                          "id":  "frozen-peas",

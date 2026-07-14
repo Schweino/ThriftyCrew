@@ -72,6 +72,18 @@
         "linkItem":  "Great Value Classic Medium Roast Ground Coffee, 40.3 oz"
     },
     {
+        "id":  "cottage-cheese",
+        "store":  "Baker\u0027s",
+        "unit":  "oz",
+        "board":  0.1206,
+        "link":  0.1329,
+        "ratio":  1.1,
+        "price":  3.19,
+        "size":  "24 oz",
+        "boardItem":  "Kroger 4% Milkfat Small Curd Cottage Cheese",
+        "linkItem":  "Kroger 4% Milkfat Small Curd Cottage Cheese"
+    },
+    {
         "id":  "cream-cheese",
         "store":  "Walmart",
         "unit":  "oz",
@@ -154,6 +166,18 @@
         "size":  "15.5 oz",
         "boardItem":  "Full Circle Market Kidney Beans, Low Sodium, Dark Red 15 Oz",
         "linkItem":  "Our Family Beans, Kidney, No Salt Added, Dark Red 15.5 Oz"
+    },
+    {
+        "id":  "lemon-juice",
+        "store":  "Sam\u0027s Club",
+        "unit":  "floz",
+        "board":  0.0675,
+        "link":  0.135,
+        "ratio":  2,
+        "price":  6.48,
+        "size":  "48 fl oz",
+        "boardItem":  "ReaLemon 100% Lemon Juice (2 pk)",
+        "linkItem":  "ReaLemon 100% Lemon Juice (2 pk)"
     },
     {
         "id":  "lemon-juice",
@@ -264,6 +288,18 @@
         "linkItem":  "Hy-Vee Finely Shredded Mild Cheddar Natural Cheese"
     },
     {
+        "id":  "sweet-corn",
+        "store":  "Baker\u0027s",
+        "unit":  "each",
+        "board":  0.6,
+        "link":  0.4,
+        "ratio":  0.67,
+        "price":  0.4,
+        "size":  "each",
+        "boardItem":  "Fresh Sweet Corn on the Cob",
+        "linkItem":  "Fresh Sweet Corn on the Cob-Each"
+    },
+    {
         "id":  "salt",
         "store":  "Family Fare",
         "unit":  "oz",
@@ -300,6 +336,18 @@
         "linkItem":  "Our Family Vegetable Oil, 100% Pure 1 Gal"
     },
     {
+        "id":  "white-vinegar",
+        "store":  "Sam\u0027s Club",
+        "unit":  "floz",
+        "board":  0.0234,
+        "link":  0.0467,
+        "ratio":  2,
+        "price":  5.98,
+        "size":  "1 gal",
+        "boardItem":  "Member\u0027s Mark Distilled White Vinegar, 1 gal., 2 pk.",
+        "linkItem":  "Member\u0027s Mark Distilled White Vinegar, 1 gal., 2 pk."
+    },
+    {
         "id":  "watermelon",
         "store":  "Baker\u0027s",
         "unit":  "each",
@@ -310,6 +358,30 @@
         "size":  "1 ct",
         "boardItem":  "Seedless Whole Watermelon",
         "linkItem":  "Mini Seedless Whole Watermelon"
+    },
+    {
+        "id":  "yeast",
+        "store":  "Hy-Vee",
+        "unit":  "oz",
+        "board":  1.37,
+        "link":  2.64,
+        "ratio":  1.93,
+        "price":  1.98,
+        "size":  "0.75 oz",
+        "boardItem":  "Red Star Active Dry Yeast 4 oz",
+        "linkItem":  "Fleischmann\u0027s ActiveDry Yeast 3 Pack"
+    },
+    {
+        "id":  "yeast",
+        "store":  "Fareway",
+        "unit":  "oz",
+        "board":  1.7975,
+        "link":  2.6533,
+        "ratio":  1.48,
+        "price":  1.99,
+        "size":  "0.75 oz",
+        "boardItem":  "Red Star Active Dry Yeast 4 oz",
+        "linkItem":  "Red Star Active Dry Yeast, All-Natural"
     },
     {
         "id":  "onions",
