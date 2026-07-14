@@ -73,14 +73,40 @@ foreach ($f in $In) {
       $sz = ('{0} oz' -f ($pn * $pintMap[$id]))
     }
     $reg = if ($r.orig -and "$($r.orig)" -ne '') { '$' + [string]$r.orig } else { '' }
-    $byId[$id] = [ordered]@{ store='Fareway'; item=$name; ad_price=$adp; size=$sz; regular=$reg; source_ad='shop.fareway.com' }
+
+    # THE CONTRACT (guards invariant 10): record what the STORE CHARGES, separately from what we publish.
+    # `current_price` is parsed from the number the storefront is showing right now, in the SAME basis as
+    # ad_price (per-lb for weighted goods, pack price for packaged). ad_price is built from that same store
+    # number - but as a SEPARATE assignment, which is the whole point: if anyone ever rewires ad_price to
+    # publish `orig` (the was-price) instead, the two stop agreeing and guard 10 fails the publish. That is
+    # exactly the bug that had Hy-Vee sirloin at $13.99/lb while the store charged $11.99.
+    $curNum = 0.0
+    [void][double]::TryParse(($adp -replace '[^0-9.]',''), [ref]$curNum)
+    $row = [ordered]@{ store='Fareway'; item=$name; ad_price=$adp; size=$sz; regular=$reg; source_ad='shop.fareway.com'; as_of=$asofS }
+    if ($curNum -gt 0) { $row['current_price'] = $curNum }
+
+    # base_price (the was-price) ONLY when it is in the same basis as what we publish. For a weighted good we
+    # publish a per-POUND price while `orig` is the PACK's was-price - recording that as base_price would be
+    # comparing a per-lb number to a per-pack one, which is how you end up "verifying" nonsense.
+    $origNum = 0.0
+    [void][double]::TryParse((([string]$r.orig) -replace '[^0-9.]',''), [ref]$origNum)
+    if (($origNum -gt 0) -and ($sz -ne 'lb')) { $row['base_price'] = $origNum }
+    if (($origNum -gt 0) -and ($sz -ne 'lb') -and ($curNum -lt ($origNum - 0.005))) { $row['marked_down'] = $true }
+
+    $byId[$id] = $row
     # emit the product-URL input using the SAME price+size the board uses, so the "See item" link's per-unit
     # equals the board per-unit by construction (a Fareway price can never render without a matching link).
     if ($r.url -and "$($r.url)" -ne '') { $byUrl[$id] = [ordered]@{ id=$id; url=[string]$r.url; price=($adp -replace '[^0-9.]',''); size=$sz; name=$name } }
   }
 }
 $deals = @($byId.Values)
-$doc = [ordered]@{ store='Fareway'; price_type='everyday'; source='shop.fareway.com (Instacart Storefront, no-markup in-store prices, Omaha)'; generated=$asofS; deals=$deals }
+# price_mode IS MANDATORY FOR FAREWAY - do not drop it.
+# Fareway is an Instacart storefront and its DEFAULT session serves a marked-up DELIVERY price. audit-price-mode
+# hard-fails a Fareway file without price_mode='in-store' precisely so a capture taken in the wrong fulfilment
+# mode can never reach the board (that mistake once cost 50 wrong "cheapest store" verdicts). A rebuild of this
+# file that omitted the flag blocked the publish within a minute of running - which is the guard doing its job,
+# but the flag belongs here so it never comes up.
+$doc = [ordered]@{ store='Fareway'; price_type='everyday'; price_mode='in-store'; source='shop.fareway.com (Instacart Storefront, no-markup in-store prices, Omaha)'; generated=$asofS; deals=$deals }
 $regDir = Join-Path $OutDir 'regular'
 New-Item -ItemType Directory -Force -Path $regDir | Out-Null
 $doc | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $regDir "fareway-regular-$asofS.json") -Encoding UTF8
