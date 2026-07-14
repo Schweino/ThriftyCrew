@@ -2,7 +2,7 @@
     "readme":  "DERIVED by generate-board-overrides.ps1 - do not hand-edit. Per-cell EVERYDAY per-unit corrections: when a board price disagrees \u003e30% with the verified product its See-item link opens (and name-drift confirms the link is the right product), the board number is stale and is pinned here to the link\u0027s per-unit so price==link==shelf. build-deals-page applies these to EVERYDAY cells only (a live sale always wins) and survives daily regeneration. Sales, wrong-product links (name-drift), and ids present in both the staple+recipe board are intentionally excluded.",
     "updated":  "2026-07-14",
     "tol":  0.3,
-    "count":  24,
+    "count":  27,
     "cells":  [
                   {
                       "id":  "bottled-water",
@@ -32,12 +32,39 @@
                       "set":  "2026-07-14"
                   },
                   {
+                      "id":  "spinach",
+                      "store":  "Aldi",
+                      "per_unit":  0.2362,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.1219,
+                      "link_name":  "Little Salad Bar Spinach",
+                      "set":  "2026-07-14"
+                  },
+                  {
                       "id":  "strawberries",
                       "store":  "Family Fare",
                       "per_unit":  0.2494,
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.1053,
                       "link_name":  "Fresh Strawberries",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "strawberries",
+                      "store":  "Hy-Vee",
+                      "per_unit":  0.1869,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.3119,
+                      "link_name":  "Wish Farms California Strawberries",
+                      "set":  "2026-07-14"
+                  },
+                  {
+                      "id":  "onions",
+                      "store":  "Aldi",
+                      "per_unit":  0.7967,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  2.39,
+                      "link_name":  "Yellow Onions, 3 lb Bag",
                       "set":  "2026-07-14"
                   },
                   {

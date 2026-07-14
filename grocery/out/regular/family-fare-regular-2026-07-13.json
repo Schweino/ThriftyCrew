@@ -4728,5 +4728,8 @@
                       "regular":  4.49,
                       "source_ad":  "everyday shelf price (recovered 2026-07-13)"
                   }
-              ]
+              ],
+    "price_mode":  "in-store",
+    "mode_verified":  "2026-07-14",
+    "mode_evidence":  "Freshop base_price (store 6401), explicitly NOT Instacart"
 }
