@@ -1,0 +1,17 @@
+{
+  "store": "Walmart", "generated": "2026-07-13",
+  "items": {
+    "canned-pinto-beans": [{"b":"Store brand","s":1,"per":0.047},{"b":"Bush's","s":0,"per":0.076},{"b":"La Preferida","s":0,"per":0.124}],
+    "frozen-corn":        [{"b":"Store brand","s":1,"per":0.078},{"b":"Green Giant","s":0,"per":0.208}],
+    "frozen-broccoli":    [{"b":"Store brand","s":1,"per":0.059}],
+    "cocoa-powder":       [{"b":"Store brand","s":1,"per":0.583},{"b":"Hershey's","s":0,"per":0.746},{"b":"Ghirardelli","s":0,"per":0.996}],
+    "vanilla-extract":    [{"b":"Watkins","s":0,"per":1.18},{"b":"McCormick","s":0,"per":2.36},{"b":"Store brand","s":1,"per":2.44}],
+    "coconut-oil":        [],
+    "fruit-punch":        [{"b":"Hawaiian Punch","s":0,"per":0.025},{"b":"Minute Maid","s":0,"per":0.033},{"b":"Store brand","s":1,"per":0.054}],
+    "heavy-cream":        [{"b":"Store brand","s":1,"per":0.149},{"b":"Land O Lakes","s":0,"per":0.215},{"b":"Horizon","s":0,"per":0.367}],
+    "evaporated-milk":    [],
+    "condensed-milk":     [{"b":"Store brand","s":1,"per":0.159},{"b":"Eagle Brand","s":0,"per":0.205}],
+    "salt":               [{"b":"Store brand","s":1,"per":0.036},{"b":"Morton","s":0,"per":0.041}],
+    "egg-noodles":        [{"b":"Store brand","s":1,"per":0.109},{"b":"Manischewitz","s":0,"per":0.232}]
+  }
+}

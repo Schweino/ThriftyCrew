@@ -1,0 +1,14 @@
+{
+  "canned-pinto-beans": {"label":"Canned Pinto Beans","queries":["pinto beans"],"brands":["Bush's","La Preferida","Rosarita"]},
+  "frozen-corn":        {"label":"Frozen Corn","queries":["frozen corn"],"brands":["Birds Eye","Green Giant"]},
+  "frozen-broccoli":    {"label":"Frozen Broccoli","queries":["frozen broccoli"],"brands":["Birds Eye","Green Giant"]},
+  "cocoa-powder":       {"label":"Cocoa Powder (baking)","queries":["cocoa powder","baking cocoa"],"brands":["Hershey's","Nestle","Ghirardelli"]},
+  "vanilla-extract":    {"label":"Vanilla Extract","queries":["vanilla extract"],"brands":["McCormick","Watkins"]},
+  "coconut-oil":        {"label":"Coconut Oil","queries":["coconut oil"],"brands":["Nutiva","LouAna","Spectrum"]},
+  "fruit-punch":        {"label":"Fruit Punch","queries":["fruit punch","hawaiian punch"],"brands":["Hawaiian Punch","Minute Maid"]},
+  "heavy-cream":        {"label":"Heavy Whipping Cream","queries":["heavy whipping cream"],"brands":["Land O Lakes","Horizon"]},
+  "evaporated-milk":    {"label":"Evaporated Milk","queries":["evaporated milk"],"brands":["Carnation"],"excludeAdd":"sweetened|condensed"},
+  "condensed-milk":     {"label":"Sweetened Condensed Milk","queries":["condensed milk"],"brands":["Eagle Brand"],"excludeAdd":"evaporated"},
+  "salt":               {"label":"Table Salt","queries":["table salt","iodized salt"],"brands":["Morton","Diamond Crystal"]},
+  "egg-noodles":        {"label":"Egg Noodles","queries":["egg noodles"],"brands":["No Yolks","Reames","Manischewitz"]}
+}

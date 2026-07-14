@@ -1,0 +1,131 @@
+﻿{
+    "store":  "Family Fare",
+    "generated":  "2026-07-13",
+    "items":  {
+                  "canned-pinto-beans":  [
+                                             {
+                                                 "b":  "Bush\u0027s",
+                                                 "s":  0,
+                                                 "per":  0.1119
+                                             },
+                                             {
+                                                 "b":  "Store brand",
+                                                 "s":  1,
+                                                 "per":  0.0639
+                                             },
+                                             {
+                                                 "b":  "La Preferida",
+                                                 "s":  0,
+                                                 "per":  0.1198
+                                             }
+                                         ],
+                  "frozen-corn":  [
+
+                                  ],
+                  "frozen-broccoli":  [
+                                          {
+                                              "b":  "Store brand",
+                                              "s":  1,
+                                              "per":  0.0996
+                                          }
+                                      ],
+                  "cocoa-powder":  [
+                                       {
+                                           "b":  "Store brand",
+                                           "s":  1,
+                                           "per":  0.7475
+                                       },
+                                       {
+                                           "b":  "Ghirardelli",
+                                           "s":  0,
+                                           "per":  1.3738
+                                       }
+                                   ],
+                  "vanilla-extract":  [
+                                          {
+                                              "b":  "McCormick",
+                                              "s":  0,
+                                              "per":  4.995
+                                          },
+                                          {
+                                              "b":  "Store brand",
+                                              "s":  1,
+                                              "per":  0.2112
+                                          }
+                                      ],
+                  "coconut-oil":  [
+                                      {
+                                          "b":  "Store brand",
+                                          "s":  1,
+                                          "per":  0.3207
+                                      }
+                                  ],
+                  "fruit-punch":  [
+                                      {
+                                          "b":  "Minute Maid",
+                                          "s":  0,
+                                          "per":  0.0422
+                                      },
+                                      {
+                                          "b":  "Store brand",
+                                          "s":  1,
+                                          "per":  1.8457
+                                      },
+                                      {
+                                          "b":  "Hawaiian Punch",
+                                          "s":  0,
+                                          "per":  0.2181
+                                      }
+                                  ],
+                  "heavy-cream":  [
+                                      {
+                                          "b":  "Store brand",
+                                          "s":  1,
+                                          "per":  0.2184
+                                      }
+                                  ],
+                  "evaporated-milk":  [
+                                          {
+                                              "b":  "Carnation",
+                                              "s":  0,
+                                              "per":  0.1992
+                                          }
+                                      ],
+                  "condensed-milk":  [
+                                         {
+                                             "b":  "Eagle Brand",
+                                             "s":  0,
+                                             "per":  0.3421
+                                         },
+                                         {
+                                             "b":  "Store brand",
+                                             "s":  1,
+                                             "per":  0.2064
+                                         }
+                                     ],
+                  "salt":  [
+                               {
+                                   "b":  "Store brand",
+                                   "s":  1,
+                                   "per":  0.0381
+                               },
+                               {
+                                   "b":  "Morton",
+                                   "s":  0,
+                                   "per":  0.0765
+                               }
+                           ],
+                  "egg-noodles":  [
+                                      {
+                                          "b":  "Store brand",
+                                          "s":  1,
+                                          "per":  0.1825
+                                      },
+                                      {
+                                          "b":  "Reames",
+                                          "s":  0,
+                                          "per":  0.3746
+                                      }
+                                  ]
+              }
+}

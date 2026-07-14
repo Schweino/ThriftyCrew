@@ -1,0 +1,165 @@
+﻿{
+    "commodities":  {
+                        "canned-pinto-beans":  {
+                                                   "label":  "Canned Pinto Beans",
+                                                   "unit":  "oz",
+                                                   "queries":  [
+                                                                   "pinto beans"
+                                                               ],
+                                                   "include":  "pinto\\s+beans?",
+                                                   "exclude":  "\\bdry\\b|\\bdried\\b|refried|\\bsoup\\b|chili",
+                                                   "brands":  [
+                                                                  "Bush\u0027s",
+                                                                  "La Preferida",
+                                                                  "Rosarita"
+                                                              ]
+                                               },
+                        "frozen-corn":  {
+                                            "label":  "Frozen Corn",
+                                            "unit":  "oz",
+                                            "queries":  [
+                                                            "frozen corn"
+                                                        ],
+                                            "include":  "frozen\\s+(?:sweet\\s+)?corn|steamable\\s+corn|corn\\b.{0,20}\\bfrozen\\b|super\\s+sweet\\s+corn\\b.{0,15}\\bbag|cut\\s+(?:golden\\s+)?corn|steamables?\\b.{0,20}corn|super\\s+sweet\\s+corn|frozen\\b.{0,25}\\bcorn\\b|corn\\b.{0,20}\\bsteamable\\b",
+                                            "exclude":  "\\bcob\\b|fresh|\\bcanned\\b|cream|\\bdogs?\\b",
+                                            "brands":  [
+                                                           "Birds Eye",
+                                                           "Green Giant"
+                                                       ]
+                                        },
+                        "frozen-broccoli":  {
+                                                "label":  "Frozen Broccoli",
+                                                "unit":  "oz",
+                                                "queries":  [
+                                                                "frozen broccoli"
+                                                            ],
+                                                "include":  "frozen\\s+broccoli|broccoli\\s+florets\\b.{0,25}(?:frozen|steam)|steamable\\s+broccoli|broccoli\\s+cuts|cut\\s+broccoli",
+                                                "exclude":  "fresh|cheese|\\brice\\b|\\bsoup\\b",
+                                                "brands":  [
+                                                               "Birds Eye",
+                                                               "Green Giant"
+                                                           ]
+                                            },
+                        "cocoa-powder":  {
+                                             "label":  "Cocoa Powder (baking)",
+                                             "unit":  "oz",
+                                             "queries":  [
+                                                             "cocoa powder",
+                                                             "baking cocoa"
+                                                         ],
+                                             "include":  "cocoa\\s+powder|baking\\s+cocoa|100%\\s+cacao",
+                                             "exclude":  "\\bhot\\b|\\bmix\\b|krispies|cereal|instant",
+                                             "brands":  [
+                                                            "Hershey\u0027s",
+                                                            "Nestle",
+                                                            "Ghirardelli"
+                                                        ]
+                                         },
+                        "vanilla-extract":  {
+                                                "label":  "Vanilla Extract",
+                                                "unit":  "floz",
+                                                "queries":  [
+                                                                "vanilla extract"
+                                                            ],
+                                                "include":  "vanilla\\s+extract|pure\\s+vanilla\\b",
+                                                "exclude":  "\\bbean\\b|almond|yog|creamer|\\bice\\b",
+                                                "brands":  [
+                                                               "McCormick",
+                                                               "Watkins"
+                                                           ]
+                                            },
+                        "coconut-oil":  {
+                                            "label":  "Coconut Oil",
+                                            "unit":  "oz",
+                                            "queries":  [
+                                                            "coconut oil"
+                                                        ],
+                                            "include":  "coconut\\s+oil",
+                                            "exclude":  "\\bhair\\b|\\bskin\\b|\\bsoap\\b|lotion",
+                                            "brands":  [
+                                                           "Nutiva",
+                                                           "LouAna",
+                                                           "Spectrum"
+                                                       ]
+                                        },
+                        "fruit-punch":  {
+                                            "label":  "Fruit Punch",
+                                            "unit":  "floz",
+                                            "queries":  [
+                                                            "fruit punch",
+                                                            "hawaiian punch"
+                                                        ],
+                                            "include":  "fruit\\s+punch|hawaiian\\s+punch",
+                                            "exclude":  "\\bmix\\b|powder|gatorade|powerade|thirst\\s+quencher",
+                                            "brands":  [
+                                                           "Hawaiian Punch",
+                                                           "Minute Maid"
+                                                       ]
+                                        },
+                        "heavy-cream":  {
+                                            "label":  "Heavy Whipping Cream",
+                                            "unit":  "floz",
+                                            "queries":  [
+                                                            "heavy whipping cream"
+                                                        ],
+                                            "include":  "heavy\\s+(?:whipping\\s+)?cream|whipping\\s+cream",
+                                            "exclude":  "whipped|\\bsour\\b|\\bcheese\\b|topping",
+                                            "brands":  [
+                                                           "Land O Lakes",
+                                                           "Horizon"
+                                                       ]
+                                        },
+                        "evaporated-milk":  {
+                                                "label":  "Evaporated Milk",
+                                                "unit":  "oz",
+                                                "queries":  [
+                                                                "evaporated milk"
+                                                            ],
+                                                "include":  "evaporated\\s+milk",
+                                                "exclude":  "sweetened|condensed",
+                                                "brands":  [
+                                                               "Carnation"
+                                                           ]
+                                            },
+                        "condensed-milk":  {
+                                               "label":  "Sweetened Condensed Milk",
+                                               "unit":  "oz",
+                                               "queries":  [
+                                                               "condensed milk"
+                                                           ],
+                                               "include":  "condensed\\s+milk",
+                                               "exclude":  "evaporated",
+                                               "brands":  [
+                                                              "Eagle Brand"
+                                                          ]
+                                           },
+                        "salt":  {
+                                     "label":  "Table Salt",
+                                     "unit":  "oz",
+                                     "queries":  [
+                                                     "table salt",
+                                                     "iodized salt"
+                                                 ],
+                                     "include":  "iodized\\s+salt|table\\s+salt|\\bsalt\\b",
+                                     "exclude":  "salted|chips|vinegar|epsom|\\bbath\\b|caramel|seasoning|\\bsea\\s+salt\\s+(?:caramel|chocolate)|\\bbutter\\b|\\bnuts?\\b|grinder|lamp|no\\s+salt|\\bcorn\\b|unsalted|salt[-\\s]?free|del\\s+monte|peanut",
+                                     "brands":  [
+                                                    "Morton",
+                                                    "Diamond Crystal"
+                                                ]
+                                 },
+                        "egg-noodles":  {
+                                            "label":  "Egg Noodles",
+                                            "unit":  "oz",
+                                            "queries":  [
+                                                            "egg noodles"
+                                                        ],
+                                            "include":  "egg\\s+noodles?|egg\\s+pasta",
+                                            "exclude":  "ramen|\\bfrozen\\b|chow\\s+mein",
+                                            "brands":  [
+                                                           "No Yolks",
+                                                           "Reames",
+                                                           "Manischewitz"
+                                                       ]
+                                        }
+                    }
+}
