@@ -1,0 +1,17 @@
+{
+  "store": "Baker's", "generated": "2026-07-13",
+  "items": {
+    "pancake-mix":             [{"b":"Store brand","s":1,"per":0.07},{"b":"Hungry Jack","s":0,"per":0.07},{"b":"Krusteaz","s":0,"per":0.09},{"b":"Pearl Milling","s":0,"per":0.1}],
+    "canned-chili":            [{"b":"Store brand","s":1,"per":0.15},{"b":"Hormel","s":0,"per":0.16},{"b":"Wolf Brand","s":0,"per":0.17}],
+    "baked-beans":             [{"b":"Store brand","s":1,"per":0.08}],
+    "canned-salmon":           [{"b":"Store brand","s":1,"per":0.27},{"b":"Chicken of the Sea","s":0,"per":0.3}],
+    "cream-of-mushroom-soup":  [{"b":"Store brand","s":1,"per":0.07}],
+    "cream-of-chicken-soup":   [{"b":"Store brand","s":1,"per":0.07}],
+    "stuffing-mix":            [{"b":"Store brand","s":1,"per":0.21},{"b":"Stove Top","s":0,"per":0.5}],
+    "instant-mashed-potatoes": [{"b":"Betty Crocker","s":0,"per":0.18},{"b":"Idahoan","s":0,"per":0.19},{"b":"Store brand","s":1,"per":0.2}],
+    "almonds":                 [{"b":"Store brand","s":1,"per":0.44},{"b":"Blue Diamond","s":0,"per":0.56}],
+    "canned-chicken":          [{"b":"Store brand","s":1,"per":0.25},{"b":"Swanson","s":0,"per":0.38}],
+    "peanuts":                 [{"b":"Store brand","s":1,"per":0.15},{"b":"Planters","s":0,"per":0.2}],
+    "raisins":                 [{"b":"Store brand","s":1,"per":0.24}]
+  }
+}

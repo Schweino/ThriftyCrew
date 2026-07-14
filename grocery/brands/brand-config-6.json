@@ -1,0 +1,165 @@
+﻿{
+    "commodities":  {
+                        "pancake-mix":  {
+                                            "label":  "Pancake Mix",
+                                            "unit":  "oz",
+                                            "queries":  [
+                                                            "pancake mix"
+                                                        ],
+                                            "include":  "pancake\\s*(?:\u0026|and)?\\s*waffle\\s+mix|pancake\\s+mix|complete\\s+pancake",
+                                            "exclude":  "syrup|\\bfrozen\\b|protein",
+                                            "brands":  [
+                                                           "Krusteaz",
+                                                           "Bisquick",
+                                                           "Hungry Jack",
+                                                           "Pearl Milling"
+                                                       ]
+                                        },
+                        "canned-chili":  {
+                                             "label":  "Canned Chili",
+                                             "unit":  "oz",
+                                             "queries":  [
+                                                             "canned chili",
+                                                             "chili with beans"
+                                                         ],
+                                             "include":  "chili\\s+(?:with|no)\\s+beans?|\\bchili\\b.{0,15}\\bcan\\b|hormel\\s+chili",
+                                             "exclude":  "seasoning|\\bmix\\b|\\bsauce\\b|\\bdog\\b|powder|paste|\\boil\\b|crisp|verde|peppers",
+                                             "brands":  [
+                                                            "Hormel",
+                                                            "Wolf Brand",
+                                                            "Chili Man",
+                                                            "Nalley"
+                                                        ]
+                                         },
+                        "baked-beans":  {
+                                            "label":  "Baked Beans",
+                                            "unit":  "oz",
+                                            "queries":  [
+                                                            "baked beans"
+                                                        ],
+                                            "include":  "baked\\s+beans?|pork\\s*(?:\u0026|and)\\s*beans",
+                                            "exclude":  "refried|\\bchili\\b|\\bdip\\b",
+                                            "brands":  [
+                                                           "Bush\u0027s",
+                                                           "Van Camp\u0027s"
+                                                       ]
+                                        },
+                        "canned-salmon":  {
+                                              "label":  "Canned Salmon",
+                                              "unit":  "oz",
+                                              "queries":  [
+                                                              "canned salmon",
+                                                              "pink salmon"
+                                                          ],
+                                              "include":  "pink\\s+salmon|canned\\s+salmon",
+                                              "exclude":  "fresh|atlantic|fillet|smoked|\\bcat\\b|pouch",
+                                              "brands":  [
+                                                             "Chicken of the Sea",
+                                                             "Bumble Bee",
+                                                             "Double Q"
+                                                         ]
+                                          },
+                        "cream-of-mushroom-soup":  {
+                                                       "label":  "Cream of Mushroom Soup",
+                                                       "unit":  "oz",
+                                                       "queries":  [
+                                                                       "cream of mushroom soup"
+                                                                   ],
+                                                       "include":  "cream\\s+of\\s+mushroom",
+                                                       "exclude":  "gravy|\\bmix\\b|\\bdry\\b",
+                                                       "brands":  [
+                                                                      "Campbell\u0027s"
+                                                                  ]
+                                                   },
+                        "cream-of-chicken-soup":  {
+                                                      "label":  "Cream of Chicken Soup",
+                                                      "unit":  "oz",
+                                                      "queries":  [
+                                                                      "cream of chicken soup"
+                                                                  ],
+                                                      "include":  "cream\\s+of\\s+chicken",
+                                                      "exclude":  "gravy|\\bmix\\b|\\bdry\\b",
+                                                      "brands":  [
+                                                                     "Campbell\u0027s"
+                                                                 ]
+                                                  },
+                        "stuffing-mix":  {
+                                             "label":  "Stuffing Mix",
+                                             "unit":  "oz",
+                                             "queries":  [
+                                                             "stuffing mix"
+                                                         ],
+                                             "include":  "stuffing",
+                                             "exclude":  "\\bfrozen\\b|crust",
+                                             "brands":  [
+                                                            "Stove Top",
+                                                            "Pepperidge Farm"
+                                                        ]
+                                         },
+                        "instant-mashed-potatoes":  {
+                                                        "label":  "Instant Mashed Potatoes",
+                                                        "unit":  "oz",
+                                                        "queries":  [
+                                                                        "instant mashed potatoes"
+                                                                    ],
+                                                        "include":  "instant\\s+(?:mashed\\s+)?potatoes|mashed\\s+potatoes?\\b.{0,20}(?:flakes|instant|pouch)|potato\\s+flakes|\\bidahoan\\b|homestyle\\s+(?:butter(?:y)?\\s+)?mashed",
+                                                        "exclude":  "\\bfrozen\\b|refrigerated|\\bcup\\b",
+                                                        "brands":  [
+                                                                       "Idahoan",
+                                                                       "Betty Crocker",
+                                                                       "Hungry Jack"
+                                                                   ]
+                                                    },
+                        "almonds":  {
+                                        "label":  "Almonds",
+                                        "unit":  "oz",
+                                        "queries":  [
+                                                        "almonds"
+                                                    ],
+                                        "include":  "\\balmonds\\b",
+                                        "exclude":  "\\bmilk\\b|butter|chocolate|\\bbar\\b|\\bflour\\b|extract|breeze|yog|granola",
+                                        "brands":  [
+                                                       "Blue Diamond",
+                                                       "Emerald"
+                                                   ]
+                                    },
+                        "canned-chicken":  {
+                                               "label":  "Canned Chicken",
+                                               "unit":  "oz",
+                                               "queries":  [
+                                                               "canned chicken"
+                                                           ],
+                                               "include":  "canned\\s+chicken|chunk\\s+chicken\\s+breast|premium\\s+chicken\\s+breast\\b.{0,20}\\bcan",
+                                               "exclude":  "\\bdog\\b|\\bcat\\b|noodle",
+                                               "brands":  [
+                                                              "Swanson",
+                                                              "Valley Fresh",
+                                                              "Keystone"
+                                                          ]
+                                           },
+                        "peanuts":  {
+                                        "label":  "Peanuts",
+                                        "unit":  "oz",
+                                        "queries":  [
+                                                        "peanuts"
+                                                    ],
+                                        "include":  "\\bpeanuts\\b",
+                                        "exclude":  "butter|candy|chocolate|\\bbar\\b|brittle|\\bm\u0026m\\b",
+                                        "brands":  [
+                                                       "Planters"
+                                                   ]
+                                    },
+                        "raisins":  {
+                                        "label":  "Raisins",
+                                        "unit":  "oz",
+                                        "queries":  [
+                                                        "raisins"
+                                                    ],
+                                        "include":  "raisins?",
+                                        "exclude":  "\\bbran\\b|cereal|cinnamon\\s+swirl|oatmeal|cookie|bread|chocolate",
+                                        "brands":  [
+                                                       "Sun-Maid"
+                                                   ]
+                                    }
+                    }
+}

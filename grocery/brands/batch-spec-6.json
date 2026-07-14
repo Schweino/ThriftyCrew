@@ -1,0 +1,14 @@
+{
+  "pancake-mix":            {"label":"Pancake Mix","queries":["pancake mix"],"brands":["Krusteaz","Bisquick","Hungry Jack","Pearl Milling"]},
+  "canned-chili":           {"label":"Canned Chili","queries":["canned chili","chili with beans"],"brands":["Hormel","Wolf Brand","Chili Man","Nalley"]},
+  "baked-beans":            {"label":"Baked Beans","queries":["baked beans"],"brands":["Bush's","Van Camp's"],"excludeAdd":"refried|\\bchili\\b|\\bdip\\b"},
+  "canned-salmon":          {"label":"Canned Salmon","queries":["canned salmon","pink salmon"],"brands":["Chicken of the Sea","Bumble Bee","Double Q"]},
+  "cream-of-mushroom-soup": {"label":"Cream of Mushroom Soup","queries":["cream of mushroom soup"],"brands":["Campbell's"],"excludeAdd":"gravy|\\bmix\\b|\\bdry\\b"},
+  "cream-of-chicken-soup":  {"label":"Cream of Chicken Soup","queries":["cream of chicken soup"],"brands":["Campbell's"],"excludeAdd":"gravy|\\bmix\\b|\\bdry\\b"},
+  "stuffing-mix":           {"label":"Stuffing Mix","queries":["stuffing mix"],"brands":["Stove Top","Pepperidge Farm"]},
+  "instant-mashed-potatoes":{"label":"Instant Mashed Potatoes","queries":["instant mashed potatoes"],"brands":["Idahoan","Betty Crocker","Hungry Jack"]},
+  "almonds":                {"label":"Almonds","queries":["almonds"],"brands":["Blue Diamond","Emerald"]},
+  "canned-chicken":         {"label":"Canned Chicken","queries":["canned chicken"],"brands":["Swanson","Valley Fresh","Keystone"]},
+  "peanuts":                {"label":"Peanuts","queries":["peanuts"],"brands":["Planters"]},
+  "raisins":                {"label":"Raisins","queries":["raisins"],"brands":["Sun-Maid"]}
+}
