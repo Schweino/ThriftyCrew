@@ -1413,7 +1413,7 @@
                       "store":  "Hy-Vee",
                       "item":  "Fleischmann\u0027s ActiveDry Yeast 3 Pack",
                       "ad_price":  "$1.98",
-                      "size":  "3 ct",
+                      "size":  "0.75 oz",
                       "regular":  null,
                       "source_ad":  "Aisles Online (Omaha #1, staples300)"
                   },
@@ -2712,6 +2712,22 @@
                       "size":  "17.5 oz",
                       "regular":  null,
                       "source_ad":  "new-item fill 2026-07-14 (store search, in-store/everyday price, collision-validated)"
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Red Star Active Dry Yeast 4 oz",
+                      "ad_price":  "$5.48",
+                      "size":  "4 oz",
+                      "regular":  null,
+                      "source_ad":  "verified on store page 2026-07-14 (open-item resolution)"
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Hy-Vee Strawberry Gelatin Dessert 3 oz",
+                      "ad_price":  "$0.99",
+                      "size":  "1 ct",
+                      "regular":  null,
+                      "source_ad":  "verified on store page 2026-07-14 (boxed gelatin, open-item resolution)"
                   }
               ],
     "mode_evidence":  "Hy-Vee Aisles Online PDP: 88c sale / 95c regular; board stores the 95c everyday price",

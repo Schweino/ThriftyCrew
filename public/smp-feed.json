@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-07-14T05:52:13",
+    "generated":  "2026-07-14T06:01:18",
     "week_of":  "2026-07-13",
-    "ingredient_count":  435,
+    "ingredient_count":  436,
     "recipe_count":  113,
     "ingredients":  {
                         "ground-beef-8020":  {
@@ -1205,6 +1205,14 @@
                                               "url":  "https://www.aldi.us/store/aldi/products/19688296-stonemill-garlic-powder-3-12-oz",
                                               "n":  7
                                           },
+                        "gelatin":  {
+                                        "unit":  "each",
+                                        "cheapest":  0.3867,
+                                        "store":  "Walmart",
+                                        "type":  "everyday",
+                                        "url":  "https://www.walmart.com/ip/Winky-Brand-Gelatin-3-5-oz-12-Count-Plastic-Cups-Refrigerated-Gluten-Free/17073412009",
+                                        "n":  5
+                                    },
                         "fresh-ginger":  {
                                              "unit":  "lb",
                                              "cheapest":  3.97,
@@ -2561,11 +2569,11 @@
                                            },
                         "yeast":  {
                                       "unit":  "oz",
-                                      "cheapest":  1.4533,
-                                      "store":  "Aldi",
+                                      "cheapest":  1.37,
+                                      "store":  "Hy-Vee",
                                       "type":  "everyday",
-                                      "url":  "https://www.aldi.us/store/aldi/products/18648697-baker-s-corner-active-dry-yeast-0-75-oz",
-                                      "n":  3
+                                      "url":  "https://www.hy-vee.com/aisles-online/p/385572/fleischmanns-activedry-yeast-3-pack",
+                                      "n":  4
                                   },
                         "onions":  {
                                        "unit":  "lb",

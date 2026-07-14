@@ -324,9 +324,7 @@
                         "\\bjuice\\b",
                         "\\bdrink\\b",
                         "yogurt",
-                        "yoghurt",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "yoghurt"
                     ]
     },
     {
@@ -359,9 +357,7 @@
                         "candy",
                         "liqueur",
                         "\\bnectar\\b",
-                        "concentrate",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "concentrate"
                     ]
     },
     {
@@ -386,9 +382,7 @@
                         "scone",
                         "yogurt",
                         "yoghurt",
-                        "cottage\\s+cheese",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "cottage\\s+cheese"
                     ]
     },
     {
@@ -406,9 +400,7 @@
                         "\\bsalsa\\b",
                         "\\bspray\\b",
                         "hummus",
-                        "wonton",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "wonton"
                     ]
     },
     {
@@ -479,9 +471,7 @@
                         "\\bcanned\\b",
                         "busch",
                         "\\bbeer\\b",
-                        "\\bcans?\\b\\s*12",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "\\bcans?\\b\\s*12"
                     ]
     },
     {
@@ -505,9 +495,7 @@
                         "\\bcandy\\b",
                         "\\bnerds\\b",
                         "freeze\\s*pop",
-                        "ice\\s*pop",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "ice\\s*pop"
                     ]
     },
     {
@@ -571,9 +559,7 @@
                         "fruity",
                         "\\bcubes?\\b",
                         "fillet",
-                        "\\bdots\\b",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "\\bdots\\b"
                     ]
     },
     {
@@ -599,9 +585,7 @@
                         "\\bcup\\b",
                         "syrup",
                         "salsa",
-                        "yoghurt",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "yoghurt"
                     ]
     },
     {
@@ -957,9 +941,7 @@
                         "thirst\\s+quencher",
                         "gelatin",
                         "yogurt",
-                        "yoghurt",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "yoghurt"
                     ]
     },
     {
@@ -990,9 +972,7 @@
                         "spray",
                         "gatorade",
                         "powerade",
-                        "thirst\\s+quencher",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "thirst\\s+quencher"
                     ]
     },
     {
@@ -1026,9 +1006,7 @@
                         "\\btortilla\\b",
                         "\\bseasoning\\b",
                         "\\bsalsa\\b",
-                        "\\bcandy\\b",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "\\bcandy\\b"
                     ]
     },
     {
@@ -2309,9 +2287,7 @@
                         "\\bcup\\b",
                         "juice",
                         "prickly",
-                        "\\bcactus\\b",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "\\bcactus\\b"
                     ]
     },
     {
@@ -2343,9 +2319,7 @@
                         "\\bwipes?\\b",
                         "shampoo",
                         "lotion",
-                        "\\bgel\\b",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "\\bgel\\b"
                     ]
     },
     {
@@ -2363,9 +2337,7 @@
                         "\\bdrink\\b",
                         "strawberry\\s+kiwi",
                         "\\bfrozen\\b",
-                        "dried",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "dried"
                     ]
     },
     {
@@ -2380,9 +2352,7 @@
         "exclude":  [
                         "chunks",
                         "\\bcup\\b",
-                        "\\bfrozen\\b",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "\\bfrozen\\b"
                     ]
     },
     {
@@ -2397,9 +2367,7 @@
         "exclude":  [
                         "chunks",
                         "\\bcup\\b",
-                        "\\bfrozen\\b",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "\\bfrozen\\b"
                     ]
     },
     {
@@ -2423,9 +2391,7 @@
                         "pizza",
                         "\\bpops?\\b",
                         "fruity",
-                        "ice\\s*pop",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "ice\\s*pop"
                     ]
     },
     {
@@ -2447,9 +2413,7 @@
                         "\\btea\\b",
                         "gels",
                         "creamer",
-                        "\\bwash\\b",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "\\bwash\\b"
                     ]
     },
     {
@@ -2468,9 +2432,7 @@
                         "yog",
                         "\\bbar\\b",
                         "gels",
-                        "\\bwash\\b",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "\\bwash\\b"
                     ]
     },
     {
@@ -2503,9 +2465,7 @@
                         "\\bgels\\b",
                         "\\bham\\b",
                         "\\bwood\\b",
-                        "\\bsmoked\\b",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "\\bsmoked\\b"
                     ]
     },
     {
@@ -2521,9 +2481,7 @@
                         "tomato",
                         "dried",
                         "\\bsauce\\b",
-                        "\\bbaby\\b",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "\\bbaby\\b"
                     ]
     },
     {
@@ -2540,9 +2498,7 @@
                         "\\bsoda\\b",
                         "sparkling",
                         "\\bcup\\b",
-                        "\\bcanned\\b",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "\\bcanned\\b"
                     ]
     },
     {
@@ -2561,9 +2517,7 @@
                         "\\bcanned\\b",
                         "\\bcup\\b",
                         "juice",
-                        "\\bjar\\b",
-                        "\\bgelatin\\b",
-                        "jell[\\s-]?o\\b"
+                        "\\bjar\\b"
                     ]
     },
     {
@@ -4862,13 +4816,18 @@
         "label":  "Gelatin (Jell-O)",
         "unit":  "each",
         "band_min":  0.2,
-        "band_max":  2.5,
+        "band_max":  1.5,
+        "relax_global":  [
+                             "\\bsnack\\b",
+                             "flavored"
+                         ],
         "include":  [
                         "gelatin",
                         "jell[\\s-]?o\\b",
                         "juicy\\s+gels"
                     ],
         "exclude":  [
+                        "\\bmix\\b",
                         "unflavored\\s+beef",
                         "collagen",
                         "\\bshots?\\b",
@@ -4876,10 +4835,7 @@
                         "snack\\s+pack",
                         "\\bgels\\b",
                         "ready[\\s-]?to[\\s-]?eat"
-                    ],
-        "relax_global":  [
-                             "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
-                         ]
+                    ]
     },
     {
         "id":  "apple-juice",
