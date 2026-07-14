@@ -1,0 +1,17 @@
+{
+  "store": "Walmart", "generated": "2026-07-13",
+  "items": {
+    "deli-ham":         [{"b":"Store brand","s":1,"per":0.2794},{"b":"Oscar Mayer","s":0,"per":0.3731},{"b":"Hillshire Farm","s":0,"per":0.405}],
+    "turkey-lunchmeat": [{"b":"Oscar Mayer","s":0,"per":0.2481},{"b":"Store brand","s":1,"per":0.265},{"b":"Hillshire Farm","s":0,"per":0.405}],
+    "turkey-bacon":     [{"b":"Butterball","s":0,"per":0.19},{"b":"Oscar Mayer","s":0,"per":0.3731}],
+    "feta":             [{"b":"President","s":0,"per":0.563},{"b":"Athenos","s":0,"per":0.577},{"b":"Store brand","s":1,"per":0.777}],
+    "iced-tea":         [{"b":"Store brand","s":1,"per":0.026},{"b":"Arizona","s":0,"per":0.027},{"b":"Lipton","s":0,"per":0.036},{"b":"Gold Peak","s":0,"per":0.046},{"b":"Pure Leaf","s":0,"per":0.054}],
+    "lemonade":         [{"b":"Store brand","s":1,"per":0.03},{"b":"Minute Maid","s":0,"per":0.033},{"b":"Simply","s":0,"per":0.052},{"b":"Country Time","s":0,"per":0.058}],
+    "sparkling-water":  [{"b":"Store brand","s":1,"per":0.025},{"b":"Bubly","s":0,"per":0.037},{"b":"Waterloo","s":0,"per":0.048}],
+    "almond-milk":      [{"b":"Almond Breeze","s":0,"per":0.049},{"b":"Silk","s":0,"per":0.054}],
+    "oat-milk":         [{"b":"Planet Oat","s":0,"per":0.065},{"b":"Chobani","s":0,"per":0.08},{"b":"Oatly","s":0,"per":0.082}],
+    "half-and-half":    [{"b":"Store brand","s":1,"per":0.078},{"b":"Land O Lakes","s":0,"per":0.09}],
+    "energy-drinks":    [{"b":"Celsius","s":0,"per":0.094},{"b":"Monster","s":0,"per":0.125},{"b":"Red Bull","s":0,"per":0.218}],
+    "black-pepper":     [{"b":"Tone's","s":0,"per":0.974},{"b":"Store brand","s":1,"per":0.988},{"b":"McCormick","s":0,"per":0.99},{"b":"Badia","s":0,"per":1.11}]
+  }
+}

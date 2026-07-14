@@ -1,0 +1,14 @@
+{
+  "deli-ham":         {"label":"Ham (deli / sliced)","queries":["deli ham","sliced ham"],"brands":["Oscar Mayer","Hillshire Farm","Buddig"],"excludeAdd":"lunchable|pizza|\\bsoup\\b|\\bdip\\b|seasoning|flavored\\s+water"},
+  "turkey-lunchmeat": {"label":"Turkey (deli / sliced)","queries":["deli turkey","sliced turkey breast"],"brands":["Oscar Mayer","Hillshire Farm","Buddig"]},
+  "turkey-bacon":     {"label":"Turkey Bacon","queries":["turkey bacon"],"brands":["Oscar Mayer","Butterball","Jennie-O"]},
+  "feta":             {"label":"Feta Cheese","queries":["feta cheese"],"brands":["Athenos","President","Treasure Cave"],"excludeAdd":"dressing|vinaigrette"},
+  "iced-tea":         {"label":"Iced Tea (bottled)","queries":["iced tea","sweet tea"],"brands":["Gold Peak","Lipton","Pure Leaf","Arizona"]},
+  "lemonade":         {"label":"Lemonade","queries":["lemonade"],"brands":["Minute Maid","Simply","Country Time"]},
+  "sparkling-water":  {"label":"Sparkling Water","queries":["sparkling water","seltzer water"],"brands":["La Croix","Bubly","Waterloo","Spindrift"]},
+  "almond-milk":      {"label":"Almond Milk","queries":["almond milk"],"brands":["Almond Breeze","Silk"]},
+  "oat-milk":         {"label":"Oat Milk","queries":["oat milk"],"brands":["Oatly","Chobani","Planet Oat"]},
+  "half-and-half":    {"label":"Half & Half","queries":["half and half"],"brands":["Land O Lakes","Horizon"]},
+  "energy-drinks":    {"label":"Energy Drinks","queries":["energy drink","monster energy"],"brands":["Red Bull","Monster","Celsius","Bang"],"excludeAdd":"powder|\\bmix\\b|hydration"},
+  "black-pepper":     {"label":"Black Pepper (ground)","queries":["black pepper"],"brands":["McCormick","Tone's","Badia"]}
+}

@@ -1,0 +1,17 @@
+{
+  "store": "Hy-Vee", "generated": "2026-07-13",
+  "items": {
+    "deli-ham":         [{"b":"Oscar Mayer","s":0,"per":0.2994},{"b":"Store brand","s":1,"per":0.3731},{"b":"Hillshire Farm","s":0,"per":0.4311},{"b":"Buddig","s":0,"per":0.5433}],
+    "turkey-lunchmeat": [{"b":"Oscar Mayer","s":0,"per":0.2994},{"b":"Store brand","s":1,"per":0.3889},{"b":"Hillshire Farm","s":0,"per":0.4311},{"b":"Buddig","s":0,"per":0.5211}],
+    "turkey-bacon":     [{"b":"Jennie-O","s":0,"per":0.2744},{"b":"Butterball","s":0,"per":0.3325}],
+    "feta":             [{"b":"Athenos","s":0,"per":0.8317}],
+    "iced-tea":         [{"b":"Arizona","s":0,"per":0.0271},{"b":"Store brand","s":1,"per":0.0351},{"b":"Gold Peak","s":0,"per":0.0458},{"b":"Pure Leaf","s":0,"per":0.0561},{"b":"Lipton","s":0,"per":0.0561}],
+    "lemonade":         [{"b":"Minute Maid","s":0,"per":0.0294},{"b":"Store brand","s":1,"per":0.0575},{"b":"Simply","s":0,"per":0.0657}],
+    "sparkling-water":  [],
+    "almond-milk":      [{"b":"Store brand","s":1,"per":0.045},{"b":"Almond Breeze","s":0,"per":0.052},{"b":"Silk","s":0,"per":0.0561}],
+    "oat-milk":         [{"b":"Planet Oat","s":0,"per":0.0767},{"b":"Oatly","s":0,"per":0.0778},{"b":"Chobani","s":0,"per":0.09}],
+    "half-and-half":    [{"b":"Store brand","s":1,"per":0.1091},{"b":"Land O Lakes","s":0,"per":0.1525}],
+    "energy-drinks":    [],
+    "black-pepper":     [{"b":"Store brand","s":1,"per":0.5814},{"b":"McCormick","s":0,"per":1.57}]
+  }
+}

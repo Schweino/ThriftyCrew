@@ -1,0 +1,17 @@
+{
+  "store": "Sam's Club", "generated": "2026-07-13",
+  "items": {
+    "deli-ham":         [{"b":"Store brand","s":1,"per":0.4356}],
+    "turkey-lunchmeat": [{"b":"Store brand","s":1,"per":0.5575}],
+    "turkey-bacon":     [],
+    "feta":             [{"b":"Athenos","s":0,"per":0.3033},{"b":"President","s":0,"per":0.305}],
+    "iced-tea":         [{"b":"Lipton","s":0,"per":0.0295},{"b":"Pure Leaf","s":0,"per":0.0558},{"b":"Gold Peak","s":0,"per":0.0558}],
+    "lemonade":         [{"b":"Store brand","s":1,"per":0.0459}],
+    "sparkling-water":  [{"b":"Store brand","s":1,"per":0.0269},{"b":"Bubly","s":0,"per":0.0329},{"b":"Waterloo","s":0,"per":0.0347}],
+    "almond-milk":      [{"b":"Silk","s":0,"per":0.0582}],
+    "oat-milk":         [],
+    "half-and-half":    [{"b":"Store brand","s":1,"per":0.0675}],
+    "energy-drinks":    [{"b":"Celsius","s":0,"per":0.0931},{"b":"Monster","s":0,"per":0.1006},{"b":"Red Bull","s":0,"per":0.1707}],
+    "black-pepper":     [{"b":"Store brand","s":1,"per":0.4433},{"b":"McCormick","s":0,"per":0.6557}]
+  }
+}

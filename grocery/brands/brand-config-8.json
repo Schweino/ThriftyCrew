@@ -1,0 +1,178 @@
+﻿{
+    "commodities":  {
+                        "deli-ham":  {
+                                         "label":  "Ham (deli / sliced)",
+                                         "unit":  "oz",
+                                         "queries":  [
+                                                         "deli ham",
+                                                         "sliced ham"
+                                                     ],
+                                         "include":  "\\bham\\b",
+                                         "exclude":  "spiral|\\bwhole\\b|bone-?in|\\bsteak\\b|salad|glaze|hamburger|graham|\\bhock\\b|lunchable|pizza|\\bsoup\\b|\\bdip\\b|seasoning|flavored\\s+water",
+                                         "brands":  [
+                                                        "Oscar Mayer",
+                                                        "Hillshire Farm",
+                                                        "Buddig"
+                                                    ]
+                                     },
+                        "turkey-lunchmeat":  {
+                                                 "label":  "Turkey (deli / sliced)",
+                                                 "unit":  "oz",
+                                                 "queries":  [
+                                                                 "deli turkey",
+                                                                 "sliced turkey breast"
+                                                             ],
+                                                 "include":  "turkey\\s+breast\\b.{0,30}(?:sliced|deli|lunch|shaved)|(?:sliced|deli|oven\\s+roasted)\\s+turkey|turkey\\s+lunch\\s*meat",
+                                                 "exclude":  "\\bham\\b|ground|\\bwhole\\b|smoked\\s+sausage|jerky|\\bdog\\b|bacon",
+                                                 "brands":  [
+                                                                "Oscar Mayer",
+                                                                "Hillshire Farm",
+                                                                "Buddig"
+                                                            ]
+                                             },
+                        "turkey-bacon":  {
+                                             "label":  "Turkey Bacon",
+                                             "unit":  "oz",
+                                             "queries":  [
+                                                             "turkey bacon"
+                                                         ],
+                                             "include":  "turkey\\s+bacon",
+                                             "exclude":  "\\bbits\\b",
+                                             "brands":  [
+                                                            "Oscar Mayer",
+                                                            "Butterball",
+                                                            "Jennie-O"
+                                                        ]
+                                         },
+                        "feta":  {
+                                     "label":  "Feta Cheese",
+                                     "unit":  "oz",
+                                     "queries":  [
+                                                     "feta cheese"
+                                                 ],
+                                     "include":  "\\bfeta\\b",
+                                     "exclude":  "salad\\s+kit|spinach\\s+pie|dressing|vinaigrette",
+                                     "brands":  [
+                                                    "Athenos",
+                                                    "President",
+                                                    "Treasure Cave"
+                                                ]
+                                 },
+                        "iced-tea":  {
+                                         "label":  "Iced Tea (bottled)",
+                                         "unit":  "floz",
+                                         "queries":  [
+                                                         "iced tea",
+                                                         "sweet tea"
+                                                     ],
+                                         "include":  "iced\\s+tea|sweet\\s+tea|brewed\\b.{0,20}tea|pure\\s+leaf",
+                                         "exclude":  "\\bmix\\b|\\bbags?\\b|k-?cup|powder",
+                                         "brands":  [
+                                                        "Gold Peak",
+                                                        "Lipton",
+                                                        "Pure Leaf",
+                                                        "Arizona"
+                                                    ]
+                                     },
+                        "lemonade":  {
+                                         "label":  "Lemonade",
+                                         "unit":  "floz",
+                                         "queries":  [
+                                                         "lemonade"
+                                                     ],
+                                         "include":  "lemonade",
+                                         "exclude":  "\\bmix\\b|powder|sparkling|\\bfrozen\\b|\\btea\\b.{0,10}lemonade",
+                                         "brands":  [
+                                                        "Minute Maid",
+                                                        "Simply",
+                                                        "Country Time"
+                                                    ]
+                                     },
+                        "sparkling-water":  {
+                                                "label":  "Sparkling Water",
+                                                "unit":  "floz",
+                                                "queries":  [
+                                                                "sparkling water",
+                                                                "seltzer water"
+                                                            ],
+                                                "include":  "sparkling\\s+water|seltzer\\s+water|belle\\s+vie|sparkling\\s+flavored\\s+water",
+                                                "exclude":  "\\btonic\\b|\\bhard\\b|juice",
+                                                "brands":  [
+                                                               "La Croix",
+                                                               "Bubly",
+                                                               "Waterloo",
+                                                               "Spindrift"
+                                                           ]
+                                            },
+                        "almond-milk":  {
+                                            "label":  "Almond Milk",
+                                            "unit":  "floz",
+                                            "queries":  [
+                                                            "almond milk"
+                                                        ],
+                                            "include":  "almond\\s*milk|almond\\s+beverage",
+                                            "exclude":  "creamer|barista|chocolate|\\byogurt\\b",
+                                            "brands":  [
+                                                           "Almond Breeze",
+                                                           "Silk"
+                                                       ]
+                                        },
+                        "oat-milk":  {
+                                         "label":  "Oat Milk",
+                                         "unit":  "floz",
+                                         "queries":  [
+                                                         "oat milk"
+                                                     ],
+                                         "include":  "oat\\s*milk|oat\\s+beverage",
+                                         "exclude":  "creamer|barista|chocolate",
+                                         "brands":  [
+                                                        "Oatly",
+                                                        "Chobani",
+                                                        "Planet Oat"
+                                                    ]
+                                     },
+                        "half-and-half":  {
+                                              "label":  "Half \u0026 Half",
+                                              "unit":  "floz",
+                                              "queries":  [
+                                                              "half and half"
+                                                          ],
+                                              "include":  "half\\s*(?:\u0026|and)\\s*half",
+                                              "exclude":  "\\btea\\b|lemonade",
+                                              "brands":  [
+                                                             "Land O Lakes",
+                                                             "Horizon"
+                                                         ]
+                                          },
+                        "energy-drinks":  {
+                                              "label":  "Energy Drinks",
+                                              "unit":  "floz",
+                                              "queries":  [
+                                                              "energy drink",
+                                                              "monster energy"
+                                                          ],
+                                              "include":  "energy\\s+drink|red\\s+bull|monster\\s+energy|\\bcelsius\\b",
+                                              "exclude":  "\\bshots?\\b|coffee|powder|\\bmix\\b|hydration",
+                                              "brands":  [
+                                                             "Red Bull",
+                                                             "Monster",
+                                                             "Celsius",
+                                                             "Bang"
+                                                         ]
+                                          },
+                        "black-pepper":  {
+                                             "label":  "Black Pepper (ground)",
+                                             "unit":  "oz",
+                                             "queries":  [
+                                                             "black pepper"
+                                                         ],
+                                             "include":  "black\\s+pepper",
+                                             "exclude":  "\\bbell\\b|turkey|bacon|\\bjack\\b|crusted|grinder\\s+set",
+                                             "brands":  [
+                                                            "McCormick",
+                                                            "Tone\u0027s",
+                                                            "Badia"
+                                                        ]
+                                         }
+                    }
+}
