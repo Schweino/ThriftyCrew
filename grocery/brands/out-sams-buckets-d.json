@@ -1,0 +1,17 @@
+{
+  "store": "Sam's Club", "generated": "2026-07-13",
+  "items": {
+    "orange-juice":       [{"b":"Store brand","s":1,"per":0.0571},{"b":"Tropicana","s":0,"per":0.1127}],
+    "sports-drinks":      [{"b":"Gatorade","s":0,"per":0.0375}],
+    "vegetable-oil":      [{"b":"Store brand","s":1,"per":0.0723}],
+    "worcestershire":     [{"b":"French's","s":0,"per":0.0686},{"b":"Lea & Perrins","s":0,"per":0.2345}],
+    "canned-corn":        [{"b":"Del Monte","s":0,"per":0.0543}],
+    "canned-green-beans": [{"b":"Del Monte","s":0,"per":0.0572},{"b":"Store brand","s":1,"per":0.1209}],
+    "refried-beans":      [{"b":"Old El Paso","s":0,"per":0.0806}],
+    "applesauce":         [{"b":"Mott's","s":0,"per":0.0642}],
+    "sour-cream":         [{"b":"Daisy","s":0,"per":0.1154}],
+    "parmesan":           [{"b":"Store brand","s":1,"per":0.3092},{"b":"Kraft","s":0,"per":0.3594}],
+    "marshmallows":       [],
+    "chocolate-chips":    [{"b":"Toll House","s":0,"per":0.2219}]
+  }
+}

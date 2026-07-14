@@ -1,0 +1,220 @@
+﻿{
+    "store":  "Family Fare",
+    "generated":  "2026-07-13",
+    "items":  {
+                  "orange-juice":  [
+                                       {
+                                           "b":  "Tropicana",
+                                           "s":  0,
+                                           "per":  0.1066
+                                       },
+                                       {
+                                           "b":  "Store brand",
+                                           "s":  1,
+                                           "per":  0.3575
+                                       },
+                                       {
+                                           "b":  "Simply",
+                                           "s":  0,
+                                           "per":  0.1183
+                                       },
+                                       {
+                                           "b":  "Minute Maid",
+                                           "s":  0,
+                                           "per":  0.0931
+                                       },
+                                       {
+                                           "b":  "Florida\u0027s Natural",
+                                           "s":  0,
+                                           "per":  0.1152
+                                       }
+                                   ],
+                  "sports-drinks":  [
+                                        {
+                                            "b":  "BodyArmor",
+                                            "s":  0,
+                                            "per":  0.084
+                                        },
+                                        {
+                                            "b":  "Gatorade",
+                                            "s":  0,
+                                            "per":  0.0782
+                                        },
+                                        {
+                                            "b":  "Powerade",
+                                            "s":  0,
+                                            "per":  0.0568
+                                        }
+                                    ],
+                  "vegetable-oil":  [
+                                        {
+                                            "b":  "Store brand",
+                                            "s":  1,
+                                            "per":  0.0998
+                                        },
+                                        {
+                                            "b":  "Mazola",
+                                            "s":  0,
+                                            "per":  0.1998
+                                        },
+                                        {
+                                            "b":  "Crisco",
+                                            "s":  0,
+                                            "per":  0.1347
+                                        },
+                                        {
+                                            "b":  "Wesson",
+                                            "s":  0,
+                                            "per":  0.1498
+                                        }
+                                    ],
+                  "worcestershire":  [
+                                         {
+                                             "b":  "Store brand",
+                                             "s":  1,
+                                             "per":  0.169
+                                         },
+                                         {
+                                             "b":  "Lea \u0026 Perrins",
+                                             "s":  0,
+                                             "per":  0.649
+                                         },
+                                         {
+                                             "b":  "French\u0027s",
+                                             "s":  0,
+                                             "per":  0.378
+                                         }
+                                     ],
+                  "canned-corn":  [
+                                      {
+                                          "b":  "Green Giant",
+                                          "s":  0,
+                                          "per":  0.3173
+                                      },
+                                      {
+                                          "b":  "Del Monte",
+                                          "s":  0,
+                                          "per":  0.1174
+                                      },
+                                      {
+                                          "b":  "Store brand",
+                                          "s":  1,
+                                          "per":  0.0649
+                                      }
+                                  ],
+                  "canned-green-beans":  [
+                                             {
+                                                 "b":  "Green Giant",
+                                                 "s":  0,
+                                                 "per":  0.1372
+                                             },
+                                             {
+                                                 "b":  "Del Monte",
+                                                 "s":  0,
+                                                 "per":  0.0938
+                                             },
+                                             {
+                                                 "b":  "Store brand",
+                                                 "s":  1,
+                                                 "per":  0.0683
+                                             }
+                                         ],
+                  "refried-beans":  [
+                                        {
+                                            "b":  "Store brand",
+                                            "s":  1,
+                                            "per":  0.0835
+                                        },
+                                        {
+                                            "b":  "Old El Paso",
+                                            "s":  0,
+                                            "per":  0.1681
+                                        },
+                                        {
+                                            "b":  "Rosarita",
+                                            "s":  0,
+                                            "per":  0.1181
+                                        },
+                                        {
+                                            "b":  "La Preferida",
+                                            "s":  0,
+                                            "per":  0.133
+                                        }
+                                    ],
+                  "applesauce":  [
+                                     {
+                                         "b":  "Store brand",
+                                         "s":  1,
+                                         "per":  0.0894
+                                     },
+                                     {
+                                         "b":  "Musselman\u0027s",
+                                         "s":  0,
+                                         "per":  0.1248
+                                     },
+                                     {
+                                         "b":  "Mott\u0027s",
+                                         "s":  0,
+                                         "per":  0.1185
+                                     }
+                                 ],
+                  "sour-cream":  [
+                                     {
+                                         "b":  "Store brand",
+                                         "s":  1,
+                                         "per":  0.1246
+                                     },
+                                     {
+                                         "b":  "Daisy",
+                                         "s":  0,
+                                         "per":  0.1873
+                                     }
+                                 ],
+                  "parmesan":  [
+                                   {
+                                       "b":  "Kraft",
+                                       "s":  0,
+                                       "per":  0.4726
+                                   },
+                                   {
+                                       "b":  "Store brand",
+                                       "s":  1,
+                                       "per":  0.4056
+                                   },
+                                   {
+                                       "b":  "BelGioioso",
+                                       "s":  0,
+                                       "per":  0.8738
+                                   }
+                               ],
+                  "marshmallows":  [
+                                       {
+                                           "b":  "Jet-Puffed",
+                                           "s":  0,
+                                           "per":  0.1746
+                                       },
+                                       {
+                                           "b":  "Store brand",
+                                           "s":  1,
+                                           "per":  0.1244
+                                       }
+                                   ],
+                  "chocolate-chips":  [
+                                          {
+                                              "b":  "Store brand",
+                                              "s":  1,
+                                              "per":  0.0663
+                                          },
+                                          {
+                                              "b":  "Ghirardelli",
+                                              "s":  0,
+                                              "per":  0.8325
+                                          },
+                                          {
+                                              "b":  "Toll House",
+                                              "s":  0,
+                                              "per":  0.4908
+                                          }
+                                      ]
+              }
+}

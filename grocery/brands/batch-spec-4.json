@@ -1,0 +1,14 @@
+{
+  "orange-juice":       {"label":"Orange Juice","queries":["orange juice"],"brands":["Tropicana","Simply","Minute Maid","Florida's Natural"]},
+  "sports-drinks":      {"label":"Sports Drinks","queries":["gatorade","sports drink"],"brands":["Gatorade","Powerade","BodyArmor"]},
+  "vegetable-oil":      {"label":"Vegetable / Canola Oil","queries":["vegetable oil","canola oil"],"brands":["Crisco","Wesson","Mazola","LouAna"]},
+  "worcestershire":     {"label":"Worcestershire Sauce","queries":["worcestershire sauce"],"brands":["Lea & Perrins","French's","Heinz"],"excludeAdd":"white\\s+wine|\\bmix\\b|marinade\\s+packet"},
+  "canned-corn":        {"label":"Canned Corn","queries":["canned corn","whole kernel corn"],"brands":["Del Monte","Green Giant","Libby's"],"excludeAdd":"tortilla|on\\s+the\\s+cob"},
+  "canned-green-beans": {"label":"Canned Green Beans","queries":["canned green beans","green beans"],"brands":["Del Monte","Green Giant","Libby's"]},
+  "refried-beans":      {"label":"Refried Beans","queries":["refried beans"],"brands":["Rosarita","Old El Paso","La Preferida"],"excludeAdd":"\\bdip\\b|seasoning|\\bmix\\b"},
+  "applesauce":         {"label":"Applesauce","queries":["applesauce"],"brands":["Mott's","Musselman's"]},
+  "sour-cream":         {"label":"Sour Cream","queries":["sour cream"],"brands":["Daisy","Breakstone's"]},
+  "parmesan":           {"label":"Parmesan","queries":["parmesan cheese","grated parmesan"],"brands":["Kraft","BelGioioso","Sargento","Stella"]},
+  "marshmallows":       {"label":"Marshmallows","queries":["marshmallows"],"brands":["Jet-Puffed","Campfire"]},
+  "chocolate-chips":    {"label":"Chocolate Chips","queries":["chocolate chips"],"brands":["Toll House","Ghirardelli","Hershey's"]}
+}

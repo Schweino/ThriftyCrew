@@ -1,0 +1,17 @@
+{
+  "store": "Baker's", "generated": "2026-07-13",
+  "items": {
+    "orange-juice":       [{"b":"Store brand","s":1,"per":0.06},{"b":"Minute Maid","s":0,"per":0.08},{"b":"Tropicana","s":0,"per":0.09},{"b":"Simply","s":0,"per":0.11}],
+    "sports-drinks":      [{"b":"Gatorade","s":0,"per":0.06}],
+    "vegetable-oil":      [{"b":"Store brand","s":1,"per":0.07},{"b":"Crisco","s":0,"per":0.11}],
+    "worcestershire":     [{"b":"Store brand","s":1,"per":0.15},{"b":"Heinz","s":0,"per":0.17}],
+    "canned-corn":        [{"b":"Store brand","s":1,"per":0.06},{"b":"Del Monte","s":0,"per":0.1}],
+    "canned-green-beans": [{"b":"Store brand","s":1,"per":0.05},{"b":"Del Monte","s":0,"per":0.11}],
+    "refried-beans":      [{"b":"Store brand","s":1,"per":0.07},{"b":"Rosarita","s":0,"per":0.1},{"b":"La Preferida","s":0,"per":0.12},{"b":"Old El Paso","s":0,"per":0.15}],
+    "applesauce":         [{"b":"Store brand","s":1,"per":0.08}],
+    "sour-cream":         [{"b":"Store brand","s":1,"per":0.12},{"b":"Daisy","s":0,"per":0.17}],
+    "parmesan":           [{"b":"Store brand","s":1,"per":0.33},{"b":"Kraft","s":0,"per":0.53},{"b":"BelGioioso","s":0,"per":1.1}],
+    "marshmallows":       [{"b":"Store brand","s":1,"per":0.12}],
+    "chocolate-chips":    [{"b":"Store brand","s":1,"per":0.33},{"b":"Toll House","s":0,"per":0.36},{"b":"Ghirardelli","s":0,"per":0.58}]
+  }
+}

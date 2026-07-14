@@ -1,0 +1,17 @@
+{
+  "store": "Walmart", "generated": "2026-07-13",
+  "items": {
+    "orange-juice":       [{"b":"Store brand","s":1,"per":0.061},{"b":"Minute Maid","s":0,"per":0.076},{"b":"Florida's Natural","s":0,"per":0.078},{"b":"Tropicana","s":0,"per":0.09},{"b":"Simply","s":0,"per":0.095}],
+    "sports-drinks":      [{"b":"Store brand","s":1,"per":0.032},{"b":"Powerade","s":0,"per":0.036},{"b":"Gatorade","s":0,"per":0.044},{"b":"BodyArmor","s":0,"per":0.067}],
+    "vegetable-oil":      [{"b":"Store brand","s":1,"per":0.068},{"b":"Crisco","s":0,"per":0.085},{"b":"Wesson","s":0,"per":0.087},{"b":"LouAna","s":0,"per":0.094},{"b":"Mazola","s":0,"per":0.132}],
+    "worcestershire":     [{"b":"Store brand","s":1,"per":0.1},{"b":"Heinz","s":0,"per":0.14},{"b":"Lea & Perrins","s":0,"per":0.235}],
+    "canned-corn":        [{"b":"Store brand","s":1,"per":0.052},{"b":"Libby's","s":0,"per":0.061},{"b":"Del Monte","s":0,"per":0.093},{"b":"Green Giant","s":0,"per":0.198}],
+    "canned-green-beans": [{"b":"Store brand","s":1,"per":0.05},{"b":"Libby's","s":0,"per":0.064},{"b":"Del Monte","s":0,"per":0.095}],
+    "refried-beans":      [{"b":"Store brand","s":1,"per":0.063},{"b":"Old El Paso","s":0,"per":0.088},{"b":"Rosarita","s":0,"per":0.098},{"b":"La Preferida","s":0,"per":0.316}],
+    "applesauce":         [{"b":"Store brand","s":1,"per":0.076},{"b":"Mott's","s":0,"per":0.081}],
+    "sour-cream":         [{"b":"Store brand","s":1,"per":0.103},{"b":"Daisy","s":0,"per":0.131}],
+    "parmesan":           [{"b":"Store brand","s":1,"per":0.343},{"b":"Kraft","s":0,"per":0.465},{"b":"BelGioioso","s":0,"per":0.684}],
+    "marshmallows":       [{"b":"Store brand","s":1,"per":0.104},{"b":"Jet-Puffed","s":0,"per":0.112},{"b":"Campfire","s":0,"per":0.165}],
+    "chocolate-chips":    [{"b":"Store brand","s":1,"per":0.259},{"b":"Toll House","s":0,"per":0.305},{"b":"Hershey's","s":0,"per":0.389},{"b":"Ghirardelli","s":0,"per":0.53}]
+  }
+}

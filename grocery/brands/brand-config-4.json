@@ -1,0 +1,177 @@
+﻿{
+    "commodities":  {
+                        "orange-juice":  {
+                                             "label":  "Orange Juice",
+                                             "unit":  "floz",
+                                             "queries":  [
+                                                             "orange juice"
+                                                         ],
+                                             "include":  "orange\\s+juice",
+                                             "exclude":  "drink|punch|soda",
+                                             "brands":  [
+                                                            "Tropicana",
+                                                            "Simply",
+                                                            "Minute Maid",
+                                                            "Florida\u0027s Natural"
+                                                        ]
+                                         },
+                        "sports-drinks":  {
+                                              "label":  "Sports Drinks",
+                                              "unit":  "floz",
+                                              "queries":  [
+                                                              "gatorade",
+                                                              "sports drink"
+                                                          ],
+                                              "include":  "gatorade|powerade|sports?\\s+drink|electrolyte\\s+beverage",
+                                              "exclude":  "powder|\\bmix\\b|zero\\s+sugar\\s+powder|\\btablets\\b",
+                                              "brands":  [
+                                                             "Gatorade",
+                                                             "Powerade",
+                                                             "BodyArmor"
+                                                         ]
+                                          },
+                        "vegetable-oil":  {
+                                              "label":  "Vegetable / Canola Oil",
+                                              "unit":  "floz",
+                                              "queries":  [
+                                                              "vegetable oil",
+                                                              "canola oil"
+                                                          ],
+                                              "include":  "vegetable\\s+oil|canola\\s+oil",
+                                              "exclude":  "\\bspray\\b|shortening|\\bmayo\\b|mayonnaise|butter",
+                                              "brands":  [
+                                                             "Crisco",
+                                                             "Wesson",
+                                                             "Mazola",
+                                                             "LouAna"
+                                                         ]
+                                          },
+                        "worcestershire":  {
+                                               "label":  "Worcestershire Sauce",
+                                               "unit":  "floz",
+                                               "queries":  [
+                                                               "worcestershire sauce"
+                                                           ],
+                                               "include":  "worcestershire",
+                                               "exclude":  "white\\s+wine|\\bmix\\b|marinade\\s+packet",
+                                               "brands":  [
+                                                              "Lea \u0026 Perrins",
+                                                              "French\u0027s",
+                                                              "Heinz"
+                                                          ]
+                                           },
+                        "canned-corn":  {
+                                            "label":  "Canned Corn",
+                                            "unit":  "oz",
+                                            "queries":  [
+                                                            "canned corn",
+                                                            "whole kernel corn"
+                                                        ],
+                                            "include":  "whole\\s+kernel\\s+corn|golden\\s+sweet\\s+corn\\b.{0,20}\\b(?:can|15)|canned\\s+corn|corn,\\s*(?:whole\\s*)?kernel|kernel,\\s*whole|whole\\s+kern[ae]l[^,]*corn",
+                                            "exclude":  "\\bcob\\b|fresh|\\bfrozen\\b|chips|starch|syrup|bread|muffin|\\bdog\\b|flakes|\\bpops?\\b|cream|tortilla|on\\s+the\\s+cob",
+                                            "brands":  [
+                                                           "Del Monte",
+                                                           "Green Giant",
+                                                           "Libby\u0027s"
+                                                       ]
+                                        },
+                        "canned-green-beans":  {
+                                                   "label":  "Canned Green Beans",
+                                                   "unit":  "oz",
+                                                   "queries":  [
+                                                                   "canned green beans",
+                                                                   "green beans"
+                                                               ],
+                                                   "include":  "cut\\s+green\\s+beans?|french\\s+style\\s+green\\s+beans?|green\\s+beans?",
+                                                   "exclude":  "fresh|\\bfrozen\\b|casserole|seasoned\\b.{0,15}pork",
+                                                   "brands":  [
+                                                                  "Del Monte",
+                                                                  "Green Giant",
+                                                                  "Libby\u0027s"
+                                                              ]
+                                               },
+                        "refried-beans":  {
+                                              "label":  "Refried Beans",
+                                              "unit":  "oz",
+                                              "queries":  [
+                                                              "refried beans"
+                                                          ],
+                                              "include":  "refried\\s+beans?",
+                                              "exclude":  "\\bdip\\b|seasoning|\\bmix\\b",
+                                              "brands":  [
+                                                             "Rosarita",
+                                                             "Old El Paso",
+                                                             "La Preferida"
+                                                         ]
+                                          },
+                        "applesauce":  {
+                                           "label":  "Applesauce",
+                                           "unit":  "oz",
+                                           "queries":  [
+                                                           "applesauce"
+                                                       ],
+                                           "include":  "apple\\s*sauce",
+                                           "exclude":  "pouch\\s+organic|\\bbaby\\b",
+                                           "brands":  [
+                                                          "Mott\u0027s",
+                                                          "Musselman\u0027s"
+                                                      ]
+                                       },
+                        "sour-cream":  {
+                                           "label":  "Sour Cream",
+                                           "unit":  "oz",
+                                           "queries":  [
+                                                           "sour cream"
+                                                       ],
+                                           "include":  "sour\\s+cream",
+                                           "exclude":  "dip",
+                                           "brands":  [
+                                                          "Daisy",
+                                                          "Breakstone\u0027s"
+                                                      ]
+                                       },
+                        "parmesan":  {
+                                         "label":  "Parmesan",
+                                         "unit":  "oz",
+                                         "queries":  [
+                                                         "parmesan cheese",
+                                                         "grated parmesan"
+                                                     ],
+                                         "include":  "parmesan|parmigiano",
+                                         "exclude":  "\\bpasta\\b|\\bfrozen\\b|crisps|goldfish|crusted|dressing",
+                                         "brands":  [
+                                                        "Kraft",
+                                                        "BelGioioso",
+                                                        "Sargento",
+                                                        "Stella"
+                                                    ]
+                                     },
+                        "marshmallows":  {
+                                             "label":  "Marshmallows",
+                                             "unit":  "oz",
+                                             "queries":  [
+                                                             "marshmallows"
+                                                         ],
+                                             "include":  "marshmallows?",
+                                             "exclude":  "cereal|\\bcreme\\b|fluff|cookie|\\bbar\\b",
+                                             "brands":  [
+                                                            "Jet-Puffed",
+                                                            "Campfire"
+                                                        ]
+                                         },
+                        "chocolate-chips":  {
+                                                "label":  "Chocolate Chips",
+                                                "unit":  "oz",
+                                                "queries":  [
+                                                                "chocolate chips"
+                                                            ],
+                                                "include":  "chocolate\\s+chips\\b|chocolate\\s+morsels|chocolate\\s+chip\\b(?!\\s*cooki)|chocolate\\s+baking\\s+chips|baking\\s+chips",
+                                                "exclude":  "cookie|granola|pancake|waffle|muffin|\\bmix\\b|\\bbar\\b",
+                                                "brands":  [
+                                                               "Toll House",
+                                                               "Ghirardelli",
+                                                               "Hershey\u0027s"
+                                                           ]
+                                            }
+                    }
+}
