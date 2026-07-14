@@ -1,0 +1,17 @@
+{
+  "store": "Baker's", "generated": "2026-07-13",
+  "items": {
+    "alfredo-sauce":    [{"b":"Store brand","s":1,"per":0.12},{"b":"Ragu","s":0,"per":0.15},{"b":"Prego","s":0,"per":0.19},{"b":"Classico","s":0,"per":0.2},{"b":"Bertolli","s":0,"per":0.24}],
+    "pizza-sauce":      [{"b":"Store brand","s":1,"per":0.1},{"b":"Ragu","s":0,"per":0.17}],
+    "canned-peas":      [{"b":"Store brand","s":1,"per":0.05},{"b":"Del Monte","s":0,"per":0.11},{"b":"Le Sueur","s":0,"per":0.13}],
+    "queso":            [{"b":"Store brand","s":1,"per":0.2},{"b":"Tostitos","s":0,"per":0.26},{"b":"Pace","s":0,"per":0.28}],
+    "fish-sticks":      [],
+    "chicken-nuggets":  [{"b":"Store brand","s":1,"per":0.19},{"b":"Tyson","s":0,"per":0.2}],
+    "cookies":          [{"b":"Store brand","s":1,"per":0.24},{"b":"Chips Ahoy","s":0,"per":0.25},{"b":"Keebler","s":0,"per":0.41}],
+    "sandwich-cookies": [{"b":"Oreo","s":0,"per":0.26}],
+    "tater-tots":       [],
+    "hash-browns":      [{"b":"Store brand","s":1,"per":0.12},{"b":"Simply Potatoes","s":0,"per":0.15}],
+    "frozen-peas":      [{"b":"Store brand","s":1,"per":0.09},{"b":"Birds Eye","s":0,"per":0.15}],
+    "mixed-nuts":       [{"b":"Store brand","s":1,"per":0.44},{"b":"Planters","s":0,"per":0.63}]
+  }
+}

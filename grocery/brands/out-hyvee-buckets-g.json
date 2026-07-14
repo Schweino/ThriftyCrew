@@ -1,0 +1,17 @@
+{
+  "store": "Hy-Vee", "generated": "2026-07-13",
+  "items": {
+    "alfredo-sauce":    [{"b":"Ragu","s":0,"per":0.1244},{"b":"Store brand","s":1,"per":0.1681},{"b":"Prego","s":0,"per":0.1848},{"b":"Classico","s":0,"per":0.2387},{"b":"Bertolli","s":0,"per":0.266}],
+    "pizza-sauce":      [{"b":"Store brand","s":1,"per":0.1193},{"b":"Ragu","s":0,"per":0.1779}],
+    "canned-peas":      [{"b":"Green Giant","s":0,"per":0.0993},{"b":"Store brand","s":1,"per":0.0993},{"b":"Del Monte","s":0,"per":0.1113}],
+    "queso":            [{"b":"Store brand","s":1,"per":0.246},{"b":"Tostitos","s":0,"per":0.2604},{"b":"Pace","s":0,"per":0.266}],
+    "fish-sticks":      [{"b":"Van de Kamp's","s":0,"per":0.3474}],
+    "chicken-nuggets":  [{"b":"Banquet","s":0,"per":0.1559},{"b":"Tyson","s":0,"per":0.2011},{"b":"Store brand","s":1,"per":0.2852},{"b":"Perdue","s":0,"per":0.31}],
+    "cookies":          [{"b":"Chips Ahoy","s":0,"per":0.2759},{"b":"Keebler","s":0,"per":0.3069}],
+    "sandwich-cookies": [{"b":"Oreo","s":0,"per":0.2753}],
+    "tater-tots":       [{"b":"Ore-Ida","s":0,"per":0.1249}],
+    "hash-browns":      [{"b":"Store brand","s":1,"per":0.1248},{"b":"Ore-Ida","s":0,"per":0.1456},{"b":"Simply Potatoes","s":0,"per":0.1645}],
+    "frozen-peas":      [{"b":"Store brand","s":1,"per":0.1454},{"b":"Birds Eye","s":0,"per":0.149}],
+    "mixed-nuts":       [{"b":"Planters","s":0,"per":0.357},{"b":"Store brand","s":1,"per":0.5703}]
+  }
+}

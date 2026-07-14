@@ -1,0 +1,190 @@
+﻿{
+    "store":  "Family Fare",
+    "generated":  "2026-07-13",
+    "items":  {
+                  "alfredo-sauce":  [
+                                        {
+                                            "b":  "Store brand",
+                                            "s":  1,
+                                            "per":  0.3687
+                                        },
+                                        {
+                                            "b":  "Bertolli",
+                                            "s":  0,
+                                            "per":  0.2993
+                                        },
+                                        {
+                                            "b":  "Prego",
+                                            "s":  0,
+                                            "per":  0.2269
+                                        },
+                                        {
+                                            "b":  "Classico",
+                                            "s":  0,
+                                            "per":  0.266
+                                        },
+                                        {
+                                            "b":  "Ragu",
+                                            "s":  0,
+                                            "per":  0.2056
+                                        }
+                                    ],
+                  "pizza-sauce":  [
+                                      {
+                                          "b":  "Store brand",
+                                          "s":  1,
+                                          "per":  0.0993
+                                      },
+                                      {
+                                          "b":  "Contadina",
+                                          "s":  0,
+                                          "per":  0.1327
+                                      },
+                                      {
+                                          "b":  "Ragu",
+                                          "s":  0,
+                                          "per":  0.1993
+                                      }
+                                  ],
+                  "canned-peas":  [
+                                      {
+                                          "b":  "Del Monte",
+                                          "s":  0,
+                                          "per":  0.1193
+                                      },
+                                      {
+                                          "b":  "Store brand",
+                                          "s":  1,
+                                          "per":  0.0793
+                                      }
+                                  ],
+                  "queso":  [
+                                {
+                                    "b":  "Tostitos",
+                                    "s":  0,
+                                    "per":  0.2604
+                                },
+                                {
+                                    "b":  "Store brand",
+                                    "s":  1,
+                                    "per":  0.599
+                                },
+                                {
+                                    "b":  "Pace",
+                                    "s":  0,
+                                    "per":  0.4264
+                                },
+                                {
+                                    "b":  "Ricos",
+                                    "s":  0,
+                                    "per":  0.2927
+                                }
+                            ],
+                  "fish-sticks":  [
+                                      {
+                                          "b":  "Van de Kamp\u0027s",
+                                          "s":  0,
+                                          "per":  0.3654
+                                      }
+                                  ],
+                  "chicken-nuggets":  [
+                                          {
+                                              "b":  "Store brand",
+                                              "s":  1,
+                                              "per":  0.1872
+                                          },
+                                          {
+                                              "b":  "Banquet",
+                                              "s":  0,
+                                              "per":  0.3897
+                                          },
+                                          {
+                                              "b":  "Perdue",
+                                              "s":  0,
+                                              "per":  0.3031
+                                          },
+                                          {
+                                              "b":  "Tyson",
+                                              "s":  0,
+                                              "per":  0.2498
+                                          }
+                                      ],
+                  "cookies":  [
+                                  {
+                                      "b":  "Store brand",
+                                      "s":  1,
+                                      "per":  0.3696
+                                  },
+                                  {
+                                      "b":  "Famous Amos",
+                                      "s":  0,
+                                      "per":  0.5544
+                                  },
+                                  {
+                                      "b":  "Keebler",
+                                      "s":  0,
+                                      "per":  0.3289
+                                  },
+                                  {
+                                      "b":  "Chips Ahoy",
+                                      "s":  0,
+                                      "per":  0.2969
+                                  }
+                              ],
+                  "sandwich-cookies":  [
+                                           {
+                                               "b":  "Oreo",
+                                               "s":  0,
+                                               "per":  0.2895
+                                           }
+                                       ],
+                  "tater-tots":  [
+                                     {
+                                         "b":  "Ore-Ida",
+                                         "s":  0,
+                                         "per":  0.2028
+                                     }
+                                 ],
+                  "hash-browns":  [
+                                      {
+                                          "b":  "Ore-Ida",
+                                          "s":  0,
+                                          "per":  0.1456
+                                      },
+                                      {
+                                          "b":  "Store brand",
+                                          "s":  1,
+                                          "per":  0.1247
+                                      },
+                                      {
+                                          "b":  "Simply Potatoes",
+                                          "s":  0,
+                                          "per":  0.1995
+                                      }
+                                  ],
+                  "frozen-peas":  [
+                                      {
+                                          "b":  "Store brand",
+                                          "s":  1,
+                                          "per":  0.0996
+                                      }
+                                  ],
+                  "mixed-nuts":  [
+                                     {
+                                         "b":  "Planters",
+                                         "s":  0,
+                                         "per":  0.8728
+                                     },
+                                     {
+                                         "b":  "Store brand",
+                                         "s":  1,
+                                         "per":  0.533
+                                     },
+                                     {
+                                         "b":  "Fisher",
+                                         "s":  0,
+                                         "per":  1.256
+                                     }
+                                 ]
+              }
+}

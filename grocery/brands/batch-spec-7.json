@@ -1,0 +1,14 @@
+{
+  "alfredo-sauce":    {"label":"Alfredo Sauce","queries":["alfredo sauce"],"brands":["Ragu","Bertolli","Prego","Classico"]},
+  "pizza-sauce":      {"label":"Pizza Sauce","queries":["pizza sauce"],"brands":["Contadina","Ragu","Don Pepino"],"excludeAdd":"\\bmix\\b|\\bdough\\b|crust|\\bkit\\b"},
+  "canned-peas":      {"label":"Canned Peas","queries":["canned peas","sweet peas"],"brands":["Del Monte","Green Giant","Le Sueur"]},
+  "queso":            {"label":"Queso / Cheese Dip","queries":["queso","cheese dip"],"brands":["Tostitos","Pace","Ricos"]},
+  "fish-sticks":      {"label":"Fish Sticks","queries":["fish sticks"],"brands":["Gorton's","Van de Kamp's","Mrs. Paul's"]},
+  "chicken-nuggets":  {"label":"Chicken Nuggets","queries":["chicken nuggets"],"brands":["Tyson","Perdue","Banquet"]},
+  "cookies":          {"label":"Cookies","queries":["cookies","chocolate chip cookies"],"brands":["Chips Ahoy","Keebler","Famous Amos"]},
+  "sandwich-cookies": {"label":"Sandwich Cookies","queries":["sandwich cookies","oreo"],"brands":["Oreo"]},
+  "tater-tots":       {"label":"Tater Tots","queries":["tater tots"],"brands":["Ore-Ida"]},
+  "hash-browns":      {"label":"Frozen Hash Browns","queries":["hash browns"],"brands":["Ore-Ida","Simply Potatoes"]},
+  "frozen-peas":      {"label":"Frozen Peas","queries":["frozen peas"],"brands":["Birds Eye","Green Giant"]},
+  "mixed-nuts":       {"label":"Mixed Nuts","queries":["mixed nuts"],"brands":["Planters","Fisher"]}
+}

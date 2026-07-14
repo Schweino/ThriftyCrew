@@ -1,0 +1,170 @@
+﻿{
+    "commodities":  {
+                        "alfredo-sauce":  {
+                                              "label":  "Alfredo Sauce",
+                                              "unit":  "oz",
+                                              "queries":  [
+                                                              "alfredo sauce"
+                                                          ],
+                                              "include":  "alfredo",
+                                              "exclude":  "\\bfrozen\\b|\\bmeal\\b|skillet|pasta\\s+side",
+                                              "brands":  [
+                                                             "Ragu",
+                                                             "Bertolli",
+                                                             "Prego",
+                                                             "Classico"
+                                                         ]
+                                          },
+                        "pizza-sauce":  {
+                                            "label":  "Pizza Sauce",
+                                            "unit":  "oz",
+                                            "queries":  [
+                                                            "pizza sauce"
+                                                        ],
+                                            "include":  "pizza\\s+sauce",
+                                            "exclude":  "\\bmix\\b|\\bdough\\b|crust|\\bkit\\b",
+                                            "brands":  [
+                                                           "Contadina",
+                                                           "Ragu",
+                                                           "Don Pepino"
+                                                       ]
+                                        },
+                        "canned-peas":  {
+                                            "label":  "Canned Peas",
+                                            "unit":  "oz",
+                                            "queries":  [
+                                                            "canned peas",
+                                                            "sweet peas"
+                                                        ],
+                                            "include":  "sweet\\s+peas\\b|early\\s+(?:june\\s+)?peas|canned\\s+peas",
+                                            "exclude":  "\\bfrozen\\b|snap|black-?eyed|chick|split|\\bsoup\\b|wasabi|steamable",
+                                            "brands":  [
+                                                           "Del Monte",
+                                                           "Green Giant",
+                                                           "Le Sueur"
+                                                       ]
+                                        },
+                        "queso":  {
+                                      "label":  "Queso / Cheese Dip",
+                                      "unit":  "oz",
+                                      "queries":  [
+                                                      "queso",
+                                                      "cheese dip"
+                                                  ],
+                                      "include":  "\\bqueso\\b|cheese\\s+dip|salsa\\s+con\\s+queso",
+                                      "exclude":  "fresco|blanco\\s+cheese\\b(?!\\s*dip)|shredded",
+                                      "brands":  [
+                                                     "Tostitos",
+                                                     "Pace",
+                                                     "Ricos"
+                                                 ]
+                                  },
+                        "fish-sticks":  {
+                                            "label":  "Fish Sticks",
+                                            "unit":  "oz",
+                                            "queries":  [
+                                                            "fish sticks"
+                                                        ],
+                                            "include":  "fish\\s+sticks?|fish\\s+fillets\\b.{0,20}breaded|crunchy\\s+fish",
+                                            "exclude":  "\\bcat\\b",
+                                            "brands":  [
+                                                           "Gorton\u0027s",
+                                                           "Van de Kamp\u0027s",
+                                                           "Mrs. Paul\u0027s"
+                                                       ]
+                                        },
+                        "chicken-nuggets":  {
+                                                "label":  "Chicken Nuggets",
+                                                "unit":  "oz",
+                                                "queries":  [
+                                                                "chicken nuggets"
+                                                            ],
+                                                "include":  "chicken\\s+nuggets?",
+                                                "exclude":  "\\bdino\\b|plant|meatless|\\bsauce\\b",
+                                                "brands":  [
+                                                               "Tyson",
+                                                               "Perdue",
+                                                               "Banquet"
+                                                           ]
+                                            },
+                        "cookies":  {
+                                        "label":  "Cookies",
+                                        "unit":  "oz",
+                                        "queries":  [
+                                                        "cookies",
+                                                        "chocolate chip cookies"
+                                                    ],
+                                        "include":  "chocolate\\s+chip\\s+cookies|\\bcookies?\\b",
+                                        "exclude":  "\\bdough\\b|sandwich\\s+cookies|\\boreo\\b|\\bmix\\b|\\bdog\\b|girl\\s+scout|\\bcrisp\\b|butter\\s+cookie\\s+tin|sandwich",
+                                        "brands":  [
+                                                       "Chips Ahoy",
+                                                       "Keebler",
+                                                       "Famous Amos"
+                                                   ]
+                                    },
+                        "sandwich-cookies":  {
+                                                 "label":  "Sandwich Cookies",
+                                                 "unit":  "oz",
+                                                 "queries":  [
+                                                                 "sandwich cookies",
+                                                                 "oreo"
+                                                             ],
+                                                 "include":  "sandwich\\s+cookies|\\boreos?\\b|sandwich\\s+creme\\s+cookies|creme\\s+cookies",
+                                                 "exclude":  "ice\\s*cream|\\bcereal\\b",
+                                                 "brands":  [
+                                                                "Oreo"
+                                                            ]
+                                             },
+                        "tater-tots":  {
+                                           "label":  "Tater Tots",
+                                           "unit":  "oz",
+                                           "queries":  [
+                                                           "tater tots"
+                                                       ],
+                                           "include":  "tater\\s+tots?|potato\\s+tots?|\\btots\\b",
+                                           "exclude":  "casserole|\\bveggie\\b",
+                                           "brands":  [
+                                                          "Ore-Ida"
+                                                      ]
+                                       },
+                        "hash-browns":  {
+                                            "label":  "Frozen Hash Browns",
+                                            "unit":  "oz",
+                                            "queries":  [
+                                                            "hash browns"
+                                                        ],
+                                            "include":  "hash\\s*browns?",
+                                            "exclude":  "casserole|refrigerated|restaurant",
+                                            "brands":  [
+                                                           "Ore-Ida",
+                                                           "Simply Potatoes"
+                                                       ]
+                                        },
+                        "frozen-peas":  {
+                                            "label":  "Frozen Peas",
+                                            "unit":  "oz",
+                                            "queries":  [
+                                                            "frozen peas"
+                                                        ],
+                                            "include":  "frozen\\s+(?:sweet\\s+|green\\s+)?peas|steamable\\s+peas|(?:sweet|green)\\s+peas\\b.{0,20}\\b(?:frozen|bag|steam)|steamables?\\b.{0,20}peas|sweet\\s+green\\s+peas|green\\s+peas\\b",
+                                            "exclude":  "\\bcanned\\b|\\bsnap\\b|black-?eyed|carrots",
+                                            "brands":  [
+                                                           "Birds Eye",
+                                                           "Green Giant"
+                                                       ]
+                                        },
+                        "mixed-nuts":  {
+                                           "label":  "Mixed Nuts",
+                                           "unit":  "oz",
+                                           "queries":  [
+                                                           "mixed nuts"
+                                                       ],
+                                           "include":  "mixed\\s+nuts",
+                                           "exclude":  "chocolate|trail",
+                                           "brands":  [
+                                                          "Planters",
+                                                          "Fisher"
+                                                      ]
+                                       }
+                    }
+}

@@ -1,0 +1,17 @@
+{
+  "store": "Walmart", "generated": "2026-07-13",
+  "items": {
+    "alfredo-sauce":    [{"b":"Store brand","s":1,"per":0.113},{"b":"Ragu","s":0,"per":0.128},{"b":"Prego","s":0,"per":0.162},{"b":"Bertolli","s":0,"per":0.181},{"b":"Classico","s":0,"per":0.192}],
+    "pizza-sauce":      [{"b":"Store brand","s":1,"per":0.059},{"b":"Ragu","s":0,"per":0.137},{"b":"Don Pepino","s":0,"per":0.163}],
+    "canned-peas":      [{"b":"Store brand","s":1,"per":0.052},{"b":"Del Monte","s":0,"per":0.095},{"b":"Le Sueur","s":0,"per":0.143}],
+    "queso":            [{"b":"Store brand","s":1,"per":0.181},{"b":"Tostitos","s":0,"per":0.234},{"b":"Pace","s":0,"per":0.342}],
+    "fish-sticks":      [{"b":"Van de Kamp's","s":0,"per":0.203},{"b":"Store brand","s":1,"per":0.22}],
+    "chicken-nuggets":  [{"b":"Store brand","s":1,"per":0.17},{"b":"Tyson","s":0,"per":0.201},{"b":"Banquet","s":0,"per":0.253}],
+    "cookies":          [{"b":"Store brand","s":1,"per":0.115},{"b":"Chips Ahoy","s":0,"per":0.236},{"b":"Keebler","s":0,"per":0.259},{"b":"Famous Amos","s":0,"per":0.577}],
+    "sandwich-cookies": [{"b":"Oreo","s":0,"per":0.235}],
+    "tater-tots":       [{"b":"Store brand","s":1,"per":0.092},{"b":"Ore-Ida","s":0,"per":0.1}],
+    "hash-browns":      [{"b":"Store brand","s":1,"per":0.107}],
+    "frozen-peas":      [{"b":"Store brand","s":1,"per":0.065},{"b":"Birds Eye","s":0,"per":0.127}],
+    "mixed-nuts":       [{"b":"Store brand","s":1,"per":0.355},{"b":"Planters","s":0,"per":0.461}]
+  }
+}
