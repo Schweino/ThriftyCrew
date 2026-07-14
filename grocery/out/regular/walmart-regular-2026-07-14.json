@@ -2667,9 +2667,50 @@
                       "size":  "1 ct",
                       "regular":  null,
                       "source_ad":  "verified on store page 2026-07-14 (boxed gelatin, open-item resolution)"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Great Value Unsalted Gluten-Free Beef Broth, 32 oz Carton",
+                      "ad_price":  "$1.27",
+                      "size":  "32 fl oz",
+                      "regular":  1.27,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-14",
+                      "restored":  "verified Walmart product (product-urls.json, live URL) that the catalogue pull did not return"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Great Value Reduced Sodium Gluten-Free Chicken Broth, 32 oz Carton",
+                      "ad_price":  "$1.27",
+                      "size":  "32 fl oz",
+                      "regular":  1.27,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-14",
+                      "restored":  "verified Walmart product (product-urls.json, live URL) that the catalogue pull did not return"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Great Value Louisiana Hot Sauce, 12 fl oz",
+                      "ad_price":  "$1.56",
+                      "size":  "12 fl oz",
+                      "regular":  1.56,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-14",
+                      "restored":  "verified Walmart product (product-urls.json, live URL) that the catalogue pull did not return"
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Great Value Tomato Ketchup, 38 oz",
+                      "ad_price":  "$1.97",
+                      "size":  "38 oz",
+                      "regular":  1.97,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-14",
+                      "restored":  "verified Walmart product (product-urls.json, live URL) that the catalogue pull did not return"
                   }
               ],
     "mode_evidence":  "walmart.com PDP, Omaha L St Supercenter: $0.96 = 19.2c/oz matches board; no separate delivery catalog",
     "price_mode":  "in-store",
-    "mode_verified":  "2026-07-14"
+    "mode_verified":  "2026-07-14",
+    "deal_count":  337
 }

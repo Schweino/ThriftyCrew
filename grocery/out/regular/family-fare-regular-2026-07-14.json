@@ -6520,8 +6520,28 @@
                       "source_ad":  "everyday shelf price",
                       "as_of":  "2026-07-14",
                       "restored":  "verified Family Fare product (product-urls.json, live URL); dropped by the partial pull of 2026-07-14"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Mixed Vegetables, Fresh Frozen 24 Oz",
+                      "ad_price":  "$2.39",
+                      "size":  "24 oz",
+                      "regular":  2.39,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-14",
+                      "restored":  "verified Family Fare product (product-urls.json, live URL) that the catalogue pull did not return"
+                  },
+                  {
+                      "store":  "Family Fare",
+                      "item":  "Our Family Lemon 100% Juice 32 Fl Oz",
+                      "ad_price":  "$3.99",
+                      "size":  "32 fl oz",
+                      "regular":  3.99,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-14",
+                      "restored":  "verified Family Fare product (product-urls.json, live URL) that the catalogue pull did not return"
                   }
               ],
     "healed":  "union with last good file; today\u0027s pull was rate-limited to a partial catalogue",
-    "deal_count":  764
+    "deal_count":  766
 }
