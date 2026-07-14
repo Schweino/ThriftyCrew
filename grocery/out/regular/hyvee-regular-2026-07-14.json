@@ -2732,7 +2732,8 @@
                       "regular":  1.45,
                       "source_ad":  "everyday shelf price",
                       "as_of":  "2026-07-14",
-                      "restored":  "verified Hy-Vee product (product-urls.json, live URL) that the catalogue pull did not return"
+                      "restored":  "verified Hy-Vee product (product-urls.json, live URL) that the catalogue pull did not return",
+                      "restored_for":  "eggs"
                   }
               ],
     "mode_evidence":  "Hy-Vee Aisles Online PDP: 88c sale / 95c regular; board stores the 95c everyday price",

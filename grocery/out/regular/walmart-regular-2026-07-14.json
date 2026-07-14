@@ -2676,7 +2676,8 @@
                       "regular":  1.27,
                       "source_ad":  "everyday shelf price",
                       "as_of":  "2026-07-14",
-                      "restored":  "verified Walmart product (product-urls.json, live URL) that the catalogue pull did not return"
+                      "restored":  "verified Walmart product (product-urls.json, live URL) that the catalogue pull did not return",
+                      "restored_for":  "beef-broth"
                   },
                   {
                       "store":  "Walmart",
@@ -2686,7 +2687,8 @@
                       "regular":  1.27,
                       "source_ad":  "everyday shelf price",
                       "as_of":  "2026-07-14",
-                      "restored":  "verified Walmart product (product-urls.json, live URL) that the catalogue pull did not return"
+                      "restored":  "verified Walmart product (product-urls.json, live URL) that the catalogue pull did not return",
+                      "restored_for":  "chicken-broth"
                   },
                   {
                       "store":  "Walmart",
@@ -2696,7 +2698,8 @@
                       "regular":  1.56,
                       "source_ad":  "everyday shelf price",
                       "as_of":  "2026-07-14",
-                      "restored":  "verified Walmart product (product-urls.json, live URL) that the catalogue pull did not return"
+                      "restored":  "verified Walmart product (product-urls.json, live URL) that the catalogue pull did not return",
+                      "restored_for":  "hot-sauce"
                   },
                   {
                       "store":  "Walmart",
@@ -2706,7 +2709,8 @@
                       "regular":  1.97,
                       "source_ad":  "everyday shelf price",
                       "as_of":  "2026-07-14",
-                      "restored":  "verified Walmart product (product-urls.json, live URL) that the catalogue pull did not return"
+                      "restored":  "verified Walmart product (product-urls.json, live URL) that the catalogue pull did not return",
+                      "restored_for":  "ketchup"
                   }
               ],
     "mode_evidence":  "walmart.com PDP, Omaha L St Supercenter: $0.96 = 19.2c/oz matches board; no separate delivery catalog",

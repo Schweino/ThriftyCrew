@@ -101,6 +101,11 @@ foreach ($it in $board) {
     source_ad = 'everyday shelf price'
     as_of     = $today
     restored  = ('verified ' + $Store + ' product (product-urls.json, live URL) that the catalogue pull did not return')
+    # The commodity this row exists to fix. verify-heal needs it to tell "outranked by a cheaper product or a
+    # sale" (fine) from "matched no commodity at all" (a silent failure - the row sits in the file doing
+    # nothing). Without it the verifier can only look for the row's own name among the winning cells, which
+    # reports a row that lost to a cheaper sibling as though the restore had failed.
+    restored_for = $id
   })
   $have[$name.ToLower().Trim()] = $true
   $expect[$id] = [double]$linkPu

@@ -1,17 +1,5 @@
 ﻿[
     {
-        "id":  "beef-broth",
-        "store":  "Walmart",
-        "unit":  "floz",
-        "board":  0.0469,
-        "link":  0.0397,
-        "ratio":  0.85,
-        "price":  1.27,
-        "size":  "32 fl oz",
-        "boardItem":  "Great Value Beef Broth",
-        "linkItem":  "Great Value Unsalted Gluten-Free Beef Broth, 32 oz Carton"
-    },
-    {
         "id":  "chicken-breast",
         "store":  "Baker\u0027s",
         "unit":  "lb",
@@ -34,18 +22,6 @@
         "size":  "$0.20/oz",
         "boardItem":  "Kroger Salted Butter Sticks",
         "linkItem":  "Kroger Salted Butter Sticks"
-    },
-    {
-        "id":  "chicken-broth",
-        "store":  "Walmart",
-        "unit":  "floz",
-        "board":  0.0469,
-        "link":  0.0397,
-        "ratio":  0.85,
-        "price":  1.27,
-        "size":  "32 fl oz",
-        "boardItem":  "Great Value Chicken Broth Carton",
-        "linkItem":  "Great Value Reduced Sodium Gluten-Free Chicken Broth, 32 oz Carton"
     },
     {
         "id":  "coffee",
@@ -72,18 +48,6 @@
         "linkItem":  "Frozen Broccoli Florets Our Family Steamable"
     },
     {
-        "id":  "frozen-vegetables",
-        "store":  "Family Fare",
-        "unit":  "oz",
-        "board":  0.1158,
-        "link":  0.0996,
-        "ratio":  0.86,
-        "price":  2.39,
-        "size":  "24 oz",
-        "boardItem":  "Frozen Mixed Vegetables Our Family",
-        "linkItem":  "Our Family Mixed Vegetables, Fresh Frozen 24 Oz"
-    },
-    {
         "id":  "sugar",
         "store":  "Family Fare",
         "unit":  "lb",
@@ -96,30 +60,6 @@
         "linkItem":  "Our Family Sugar, Granulated 32 Oz"
     },
     {
-        "id":  "hot-sauce",
-        "store":  "Walmart",
-        "unit":  "floz",
-        "board":  0.2783,
-        "link":  0.13,
-        "ratio":  0.47,
-        "price":  1.56,
-        "size":  "12 fl oz",
-        "boardItem":  "The Original Louisiana Brand Hot Sauce",
-        "linkItem":  "Great Value Louisiana Hot Sauce, 12 fl oz"
-    },
-    {
-        "id":  "ketchup",
-        "store":  "Walmart",
-        "unit":  "oz",
-        "board":  0.0616,
-        "link":  0.0518,
-        "ratio":  0.84,
-        "price":  1.97,
-        "size":  "38 oz",
-        "boardItem":  "Great Value Tomato Ketchup",
-        "linkItem":  "Great Value Tomato Ketchup, 38 oz"
-    },
-    {
         "id":  "lemon-juice",
         "store":  "Family Fare",
         "unit":  "floz",
@@ -130,18 +70,6 @@
         "size":  "32 fl oz",
         "boardItem":  "Rea Lemon Lemon Juice 32 Fl Oz",
         "linkItem":  "Our Family Lemon 100% Juice 32 Fl Oz"
-    },
-    {
-        "id":  "peanut-butter",
-        "store":  "Baker\u0027s",
-        "unit":  "oz",
-        "board":  0.1014,
-        "link":  0.1622,
-        "ratio":  1.6,
-        "price":  6.49,
-        "size":  "40 oz",
-        "boardItem":  "Kroger Peanut Butter Creamy",
-        "linkItem":  "Kroger Peanut Butter Creamy"
     },
     {
         "id":  "shredded-cheese",
@@ -166,18 +94,6 @@
         "size":  "$0.07/oz",
         "boardItem":  "Kroger Tomato Sauce 29 oz",
         "linkItem":  "Kroger Tomato Sauce"
-    },
-    {
-        "id":  "vegetable-oil",
-        "store":  "Family Fare",
-        "unit":  "floz",
-        "board":  0.1248,
-        "link":  0.1994,
-        "ratio":  1.6,
-        "price":  3.19,
-        "size":  "16 fl oz",
-        "boardItem":  "Our Family Vegetable Oil 100% Pure",
-        "linkItem":  "Our Family Vegetable Oil, 100% Pure 16 Fl Oz"
     },
     {
         "id":  "white-vinegar",

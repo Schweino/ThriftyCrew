@@ -6767,7 +6767,7 @@
         "band_min":  0.02,
         "band_max":  0.45,
         "include":  [
-                        "lemon\\s+juice"
+                        "lemon\\s+(?:\\d+%\\s+)?juice"
                     ],
         "exclude":  [
                         "lemonade",

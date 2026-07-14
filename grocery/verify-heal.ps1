@@ -66,21 +66,38 @@ foreach ($it in $board) {
     $restored.Remove($k)
   }
 }
-# rows left over are in a catalogue but serving no everyday board cell: either a sale is beating them (fine)
-# or nothing matched them (inert - the restore did nothing, and we say so rather than call it a success)
+# Rows left over are in a catalogue but are not the published cell. There are two very different reasons, and
+# collapsing them is how a broken restore passes as a success:
+#   OUTRANKED - some cell for that store DOES exist (a sale, or a cheaper product won). The restore is fine.
+#   INERT     - the product matched NO commodity at all, so the row does nothing. The restore silently failed.
+# Family Fare lemon juice was exactly this: "Our Family Lemon 100% Juice" never matched the commodity's
+# `lemon\s+juice` include (the store puts "100%" between the words), so the row sat in the file achieving
+# nothing while this script reported it as a pass. Name the inert ones.
+# Judge by the COMMODITY the row was restored for (restored_for), not by hunting the row's own product name
+# among the winning cells. A row that loses to a cheaper sibling in the same commodity stops appearing on the
+# board at all - so a name-hunt reports it as a failure when it is nothing of the kind. ReaLemon did exactly
+# that: once the cheaper Our Family lemon juice was restored and won the cell, the ReaLemon row vanished from
+# the board and got flagged INERT, though the commodity was fixed and showing a better price than before.
+# INERT is the real failure: the commodity has NO cell for this store, so the row achieved nothing.
+$outranked = 0
+$inert = New-Object System.Collections.Generic.List[string]
 foreach ($k in $restored.Keys) {
   $st = ($k -split '\|')[0]
-  $nm = [string]$restored[$k].item
-  $hit = $false
-  foreach ($it in $board) {
-    $c = $it.stores | Where-Object { $_.store -eq $st -and $_.type -ne 'everyday' } | Select-Object -First 1
-    if ($c) { $ev = $it.stores | Where-Object { $_.store -eq $st -and $_.type -eq 'everyday' }; if (-not $ev) { } }
-  }
-  $sale++   # counted below as "not currently the published cell"
+  $d = $restored[$k]
+  $nm = [string]$d.item
+  $for = [string]$d.restored_for
+  if (-not $for) { $outranked++; continue }   # untraceable (pre-dates the field) - do not cry wolf
+  $it = $board | Where-Object { $_.id -eq $for } | Select-Object -First 1
+  $cell = $null
+  if ($it) { $cell = $it.stores | Where-Object { $_.store -eq $st } | Select-Object -First 1 }
+  if ($cell) { $outranked++ }
+  else { $inert.Add(('{0,-13} {1,-22} {2}' -f $st, $for, $nm)) }
 }
 Write-Output ''
 Write-Output ("restored rows now serving the board at their verified price : $ok")
-Write-Output ("restored rows not currently the published cell (a sale or a cheaper product wins) : $sale")
+Write-Output ("restored rows outranked by a sale or a cheaper product       : $outranked  (correct)")
 Write-Output ("restored rows the board publishes WRONG                      : $bad")
-if ($bad -gt 0) { exit 1 }
+Write-Output ("restored rows that matched NO commodity (INERT - did nothing): " + $inert.Count)
+foreach ($x in $inert) { Write-Output ('    INERT  ' + $x) }
+if ($bad -gt 0 -or $inert.Count -gt 0) { exit 1 }
 exit 0
