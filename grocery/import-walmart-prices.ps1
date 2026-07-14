@@ -131,6 +131,21 @@ foreach ($d in $doc.deals) {
   $newAd = [math]::Round($wpu * $ourQty, 2)
   if ($newAd -le 0) { $noPrice++; [void]$rows.Add($row); continue }
 
+  # FACTOR RAIL. A store changing its price moves it a few percent; a wrong product or a bad unit-price parse
+  # moves it by a FACTOR. Walmart returned $28.16/lb for jalapenos (our row: $1.76) - a real number, and
+  # completely false. The pack cross-check cannot catch this on a per-lb commodity (there is no pack size to
+  # compare), so gate on the factor: refuse any change that is >3x or <0.33x the price we already publish.
+  # That is a wrong item or a bad basis, not a price change, and it stays off the board.
+  $oldForFactor = 0.0; [void][double]::TryParse((([string]$d.ad_price) -replace '[^0-9.]',''), [ref]$oldForFactor)
+  if ($oldForFactor -gt 0) {
+    $fac = $newAd / $oldForFactor
+    if ($fac -ge 3.0 -or $fac -le 0.33) {
+      $packMismatch++
+      $refused.Add(('  {0,-46} ${1} -> ${2} is a {3}x jump (per-unit {4}/{5}) - a factor move is a wrong item or bad basis, REFUSED' -f ([string]$d.item), $oldForFactor, $newAd, [math]::Round($fac,1), [math]::Round($wpu,3), $unit))
+      [void]$rows.Add($row); continue
+    }
+  }
+
   # the was-price, brought into OUR basis (wasPrice is a PACK price, like currentPrice)
   $newBase = $null
   if (($null -ne $pv.was) -and ([double]$pv.was -gt 0) -and ($packQty -gt 0)) {
