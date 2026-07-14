@@ -1,0 +1,21 @@
+﻿{
+    "contested":  [
+                      {
+                          "store":  "Aldi",
+                          "item":  "French Green Beans, Package",
+                          "winner":  "fresh-green-beans",
+                          "losers":  "canned-green-beans"
+                      },
+                      {
+                          "store":  "Family Fare",
+                          "item":  "Fresh Strawberries \u0026 Blueberries Fresh Divide",
+                          "winner":  "strawberries",
+                          "losers":  "blueberries"
+                      }
+                  ],
+    "pairs":  {
+                  "strawberries \u003e\u003e blueberries":  1,
+                  "fresh-green-beans \u003e\u003e canned-green-beans":  1
+              },
+    "scanned":  2172
+}

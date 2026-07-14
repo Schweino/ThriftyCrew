@@ -355,9 +355,7 @@
                         "unsweetened",
                         "\\bpops?\\b",
                         "candy",
-                        "liqueur",
-                        "\\bnectar\\b",
-                        "concentrate"
+                        "liqueur"
                     ]
     },
     {
@@ -615,9 +613,7 @@
                         "italian\\s+bread",
                         "texas\\s+toast",
                         "crispbread",
-                        "wasa",
-                        "\\bbagels?\\b",
-                        "bread\\s+thins?"
+                        "wasa"
                     ]
     },
     {
@@ -862,12 +858,7 @@
                         "\\bramen\\b",
                         "poppers",
                         "\\bcat\\b",
-                        "\\bflavors\\b",
-                        "\\bboil\\b",
-                        "\\bcrab\\b",
-                        "\\bcombo\\b",
-                        "\\bkit\\b",
-                        "andouille"
+                        "\\bflavors\\b"
                     ]
     },
     {
@@ -1151,9 +1142,7 @@
                         "pickle",
                         "\\bkit\\b",
                         "salad",
-                        "\\bdip\\b",
-                        "\\bmini\\b",
-                        "\\bbag\\b"
+                        "\\bdip\\b"
                     ]
     },
     {
@@ -1514,11 +1503,7 @@
                         "\\bspray\\b",
                         "dressing",
                         "\\bsoap\\b",
-                        "butter",
-                        "\\btomato(?:es)?\\b",
-                        "sun[\\s-]?dried",
-                        "\\bpacked\\s+in\\b",
-                        "\\bmarinated\\b"
+                        "butter"
                     ]
     },
     {
@@ -1648,8 +1633,7 @@
                         "\\bnaan\\b",
                         "muffin",
                         "\\bcarrots?\\b",
-                        "cream\\s+cheese",
-                        "hot\\s+honey"
+                        "cream\\s+cheese"
                     ]
     },
     {
@@ -2997,10 +2981,7 @@
                         "\\bliver\\b",
                         "capsule",
                         "battered",
-                        "beer",
-                        "cape\\s+cod",
-                        "\\bchips?\\b",
-                        "\\bsnack\\b"
+                        "beer"
                     ]
     },
     {
@@ -3768,7 +3749,8 @@
         "band_min":  0.03,
         "band_max":  0.5,
         "include":  [
-                        "apple\\s+cider\\s+vinegar"
+                        "apple\\s+cider\\s+vinegar",
+                        "apple\\s+cider\\s+flavored\\s+(?:distilled\\s+)?vinegar"
                     ],
         "exclude":  [
                         "gummies",
@@ -3815,8 +3797,7 @@
                         "wing",
                         "chicken",
                         "chips",
-                        "ramen",
-                        "\\bhoney\\b"
+                        "ramen"
                     ]
     },
     {
@@ -4830,11 +4811,7 @@
                         "\\bmix\\b",
                         "unflavored\\s+beef",
                         "collagen",
-                        "\\bshots?\\b",
-                        "\\bcups?\\b",
-                        "snack\\s+pack",
-                        "\\bgels\\b",
-                        "ready[\\s-]?to[\\s-]?eat"
+                        "\\bshots?\\b"
                     ]
     },
     {
@@ -5492,9 +5469,7 @@
                         "\\bpen\\b",
                         "carpet",
                         "\\bpet\\b",
-                        "detergent",
-                        "\\bbar\\b",
-                        "\\bpowder\\b"
+                        "detergent"
                     ]
     },
     {

@@ -164,7 +164,17 @@ function ConvertTo-DigitNumerals([string]$t) {
 function Get-ItemPrice([string]$priceText, [string]$nameText, $regular) {
   $p = ConvertTo-DigitNumerals ((("" + $priceText + " " + $nameText) -replace "`n", ' '))
   $note = ''
-  $perlb = ($p -match '(?i)(per\s*lb|/\s*lb|\blb\.?\b|a\s*pound|per\s*pound)')
+  # PACKAGE SIZE vs PER-LB PRICE. This string is priceText + nameText, so a product NAMED
+  # "Yellow Onions, 3 lb Bag" used to trip the per-lb marker and its $2.39 BAG price got published
+  # as $2.39 PER POUND (3x the real price). Hy-Vee's identical bag escaped only because its name
+  # reads "3-Pound Bag". The tell: a real per-lb price has the number attached to a $ ("$1.68 lb."),
+  # while a package size does not ("3 lb Bag"). So strip un-priced "<n> lb" quantities before
+  # looking for the marker; "$1.68 lb." survives and still marks per-lb.
+  # The lookbehind must reject a preceding $, digit OR dot: without (?<![\d.]) the engine skips the
+  # blocked "$1" and instead matches the "88 lb" INSIDE "$1.88 lb.", stripping a real per-lb marker
+  # and pricing Hy-Vee grapes at exactly $1.00/lb (1.88 / 1.88). Decimal fragments must never match.
+  $pForMarker = $p -replace '(?i)(?<![\d.$])(?<!\$\s)\b\d+(?:\.\d+)?\s*-?\s*lbs?\.?\b', ' '
+  $perlb = ($pForMarker -match '(?i)(per\s*lb|/\s*lb|\blb\.?\b|a\s*pound|per\s*pound)')
   $pereach = ($p -match '(?i)(per\s*ea|/\s*ea|\bea\.?\b|each|per\s*ct|/\s*ct)')
   $reg = $null; if ($regular -ne $null -and "$regular" -ne '') { try { $reg = [double]$regular } catch {} }
 
