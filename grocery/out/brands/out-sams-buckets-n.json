@@ -1,0 +1,61 @@
+﻿{
+    "store":  "Sam\u0027s Club",
+    "generated":  "2026-07-13",
+    "items":  {
+                  "stain-remover":  [
+
+                                    ],
+                  "toilet-bowl-cleaner":  [
+
+                                          ],
+                  "disinfectant-spray":  [
+
+                                         ],
+                  "air-freshener":  [
+                                        {
+                                            "b":  "Febreze",
+                                            "s":  0,
+                                            "per":  0.308
+                                        }
+                                    ],
+                  "shaving-cream":  [
+
+                                    ],
+                  "lotion":  [
+                                 {
+                                     "b":  "Aveeno",
+                                     "s":  0,
+                                     "per":  0.42
+                                 }
+                             ],
+                  "hand-sanitizer":  [
+
+                                     ],
+                  "canned-mushrooms":  [
+
+                                       ],
+                  "egg-whites":  [
+
+                                 ],
+                  "dog-treats":  [
+                                     {
+                                         "b":  "Store brand",
+                                         "s":  1,
+                                         "per":  0.27
+                                     },
+                                     {
+                                         "b":  "Beggin\u0027",
+                                         "s":  0,
+                                         "per":  0.7025
+                                     },
+                                     {
+                                         "b":  "Milk-Bone",
+                                         "s":  0,
+                                         "per":  0.2296
+                                     }
+                                 ],
+                  "buttermilk":  [
+
+                                 ]
+              }
+}

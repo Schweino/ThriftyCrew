@@ -1,0 +1,178 @@
+﻿{
+    "store":  "Baker\u0027s",
+    "generated":  "2026-07-13",
+    "items":  {
+                  "stain-remover":  [
+                                        {
+                                            "b":  "Store brand",
+                                            "s":  1,
+                                            "per":  0.11
+                                        },
+                                        {
+                                            "b":  "OxiClean",
+                                            "s":  0,
+                                            "per":  0.12
+                                        },
+                                        {
+                                            "b":  "Shout",
+                                            "s":  0,
+                                            "per":  0.12
+                                        }
+                                    ],
+                  "toilet-bowl-cleaner":  [
+                                              {
+                                                  "b":  "Store brand",
+                                                  "s":  1,
+                                                  "per":  0.09
+                                              },
+                                              {
+                                                  "b":  "Lysol",
+                                                  "s":  0,
+                                                  "per":  0.11
+                                              },
+                                              {
+                                                  "b":  "Clorox",
+                                                  "s":  0,
+                                                  "per":  0.14
+                                              }
+                                          ],
+                  "disinfectant-spray":  [
+                                             {
+                                                 "b":  "Lysol",
+                                                 "s":  0,
+                                                 "per":  0.15
+                                             },
+                                             {
+                                                 "b":  "Clorox",
+                                                 "s":  0,
+                                                 "per":  0.19
+                                             },
+                                             {
+                                                 "b":  "Store brand",
+                                                 "s":  1,
+                                                 "per":  0.26
+                                             }
+                                         ],
+                  "air-freshener":  [
+                                        {
+                                            "b":  "Renuzit",
+                                            "s":  0,
+                                            "per":  0.2
+                                        },
+                                        {
+                                            "b":  "Glade",
+                                            "s":  0,
+                                            "per":  0.23
+                                        },
+                                        {
+                                            "b":  "Febreze",
+                                            "s":  0,
+                                            "per":  0.45
+                                        }
+                                    ],
+                  "shaving-cream":  [
+                                        {
+                                            "b":  "Barbasol",
+                                            "s":  0,
+                                            "per":  0.21
+                                        },
+                                        {
+                                            "b":  "Gillette",
+                                            "s":  0,
+                                            "per":  0.25
+                                        },
+                                        {
+                                            "b":  "Store brand",
+                                            "s":  1,
+                                            "per":  0.43
+                                        },
+                                        {
+                                            "b":  "Edge",
+                                            "s":  0,
+                                            "per":  0.5
+                                        },
+                                        {
+                                            "b":  "Skintimate",
+                                            "s":  0,
+                                            "per":  0.5
+                                        },
+                                        {
+                                            "b":  "Cremo",
+                                            "s":  0,
+                                            "per":  1.47
+                                        }
+                                    ],
+                  "lotion":  [
+                                 {
+                                     "b":  "Store brand",
+                                     "s":  1,
+                                     "per":  0.21
+                                 },
+                                 {
+                                     "b":  "Jergens",
+                                     "s":  0,
+                                     "per":  0.34
+                                 },
+                                 {
+                                     "b":  "Nivea",
+                                     "s":  0,
+                                     "per":  0.5
+                                 },
+                                 {
+                                     "b":  "Aveeno",
+                                     "s":  0,
+                                     "per":  0.69
+                                 },
+                                 {
+                                     "b":  "Eucerin",
+                                     "s":  0,
+                                     "per":  1.01
+                                 }
+                             ],
+                  "hand-sanitizer":  [
+                                         {
+                                             "b":  "Store brand",
+                                             "s":  1,
+                                             "per":  0.23
+                                         },
+                                         {
+                                             "b":  "Purell",
+                                             "s":  0,
+                                             "per":  0.62
+                                         }
+                                     ],
+                  "canned-mushrooms":  [
+                                           {
+                                               "b":  "Store brand",
+                                               "s":  1,
+                                               "per":  0.35
+                                           }
+                                       ],
+                  "egg-whites":  [
+                                     {
+                                         "b":  "Store brand",
+                                         "s":  1,
+                                         "per":  0.21
+                                     },
+                                     {
+                                         "b":  "Bob Evans",
+                                         "s":  0,
+                                         "per":  0.22
+                                     }
+                                 ],
+                  "dog-treats":  [
+                                     {
+                                         "b":  "Milk-Bone",
+                                         "s":  0,
+                                         "per":  0.13
+                                     }
+                                 ],
+                  "buttermilk":  [
+                                     {
+                                         "b":  "Store brand",
+                                         "s":  1,
+                                         "per":  0.06
+                                     }
+                                 ]
+              }
+}

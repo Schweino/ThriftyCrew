@@ -1,0 +1,174 @@
+﻿{
+    "commodities":  {
+                        "stain-remover":  {
+                                              "label":  "Laundry Stain Remover",
+                                              "unit":  "floz",
+                                              "queries":  [
+                                                              "laundry stain remover",
+                                                              "stain remover spray"
+                                                          ],
+                                              "include":  "stain\\s+remover|spray\\s*\u0027?n\\s*wash|shout\\b|oxiclean\\s+(?:versatile|max)",
+                                              "exclude":  "\\bwipes\\b|\\bpen\\b|carpet|\\bpet\\b|detergent|carpet|\\bpen\\b|\\bwipe|\\bbar\\b|dishwasher|\\bpods?\\b|\\bpowder\\b|\\btub\\b",
+                                              "brands":  [
+                                                             "Shout",
+                                                             "OxiClean",
+                                                             "Spray \u0027n Wash",
+                                                             "Zote",
+                                                             "Carbona"
+                                                         ]
+                                          },
+                        "toilet-bowl-cleaner":  {
+                                                    "label":  "Toilet Bowl Cleaner",
+                                                    "unit":  "floz",
+                                                    "queries":  [
+                                                                    "toilet bowl cleaner"
+                                                                ],
+                                                    "include":  "toilet\\s+bowl|toilet\\s+cleaner|\\bbowl\\s+cleaner\\b",
+                                                    "exclude":  "\\bwand\\b|\\bbrush\\b|tablets|\\btablets?\\b|drop-?ins?|\\bbrush\\b|\\bwand\\b|\\bwipe|automatic",
+                                                    "brands":  [
+                                                                   "Lysol",
+                                                                   "Clorox",
+                                                                   "Scrubbing Bubbles",
+                                                                   "Kaboom"
+                                                               ]
+                                                },
+                        "disinfectant-spray":  {
+                                                   "label":  "Disinfectant Spray",
+                                                   "unit":  "oz",
+                                                   "queries":  [
+                                                                   "disinfectant spray"
+                                                               ],
+                                                   "include":  "disinfectant\\s+spray|lysol\\s+spray|disinfecting\\s+spray|disinfectant\\b.{0,45}spray|antibacterial\\s+spray",
+                                                   "exclude":  "\\bwipes\\b|\\bwipe|toilet|hand\\s+sanitizer|\\bmop\\b|refill\\s+pouch|laundry",
+                                                   "brands":  [
+                                                                  "Lysol",
+                                                                  "Microban",
+                                                                  "Clorox"
+                                                              ]
+                                               },
+                        "air-freshener":  {
+                                              "label":  "Air Freshener",
+                                              "unit":  "oz",
+                                              "queries":  [
+                                                              "air freshener spray",
+                                                              "air freshener"
+                                                          ],
+                                              "include":  "air\\s+freshener|febreze|\\bglade\\b|air\\s+wick",
+                                              "exclude":  "\\bcar\\b.{0,10}\\bvent\\b|candle|\\bwipe|refill\\s+oil|plug-?in\\s+refill|\\bcandle\\b|warmer|\\bcar\\b\\s+vent",
+                                              "brands":  [
+                                                             "Febreze",
+                                                             "Glade",
+                                                             "Air Wick",
+                                                             "Renuzit",
+                                                             "Ozium"
+                                                         ]
+                                          },
+                        "shaving-cream":  {
+                                              "label":  "Shaving Cream",
+                                              "unit":  "oz",
+                                              "queries":  [
+                                                              "shaving cream",
+                                                              "shave gel"
+                                                          ],
+                                              "include":  "shav(?:e|ing)\\s+(?:cream|gel|foam|butter)",
+                                              "exclude":  "after\\s*shave|\\brazor\\b|\\bkit\\b|\\bblades?\\b|balm",
+                                              "brands":  [
+                                                             "Barbasol",
+                                                             "Gillette",
+                                                             "Edge",
+                                                             "Cremo",
+                                                             "Skintimate"
+                                                         ]
+                                          },
+                        "lotion":  {
+                                       "label":  "Body Lotion",
+                                       "unit":  "floz",
+                                       "queries":  [
+                                                       "body lotion"
+                                                   ],
+                                       "include":  "\\blotion\\b|skin\\s+moisturizer|healing\\b.{0,30}moisturizer",
+                                       "exclude":  "sunscreen|\\bspf\\b|\\btanning\\b|calamine|\\bface\\b|hand\\s+cream|sunscreen|\\bspf\\b|self\\s*tan|\\bbaby\\b|hair",
+                                       "brands":  [
+                                                      "Jergens",
+                                                      "Vaseline",
+                                                      "Aveeno",
+                                                      "Eucerin",
+                                                      "Lubriderm",
+                                                      "Nivea"
+                                                  ]
+                                   },
+                        "hand-sanitizer":  {
+                                               "label":  "Hand Sanitizer",
+                                               "unit":  "floz",
+                                               "queries":  [
+                                                               "hand sanitizer"
+                                                           ],
+                                               "include":  "hand\\s+sanitizer",
+                                               "exclude":  "\\bwipes\\b|\\bholder\\b|\\bwipe|spray\\s+surface|\\bstand\\b|\\bdispenser\\b|refill\\s+pouch",
+                                               "brands":  [
+                                                              "Purell",
+                                                              "Germ-X"
+                                                          ]
+                                           },
+                        "canned-mushrooms":  {
+                                                 "label":  "Canned Mushrooms",
+                                                 "unit":  "oz",
+                                                 "queries":  [
+                                                                 "canned mushrooms",
+                                                                 "mushrooms pieces and stems"
+                                                             ],
+                                                 "include":  "mushrooms?\\b.{0,25}(?:pieces|stems|sliced\\b.{0,10}can)|canned\\s+mushrooms?|mushroom\\s+pieces|pieces\\s*(?:\u0026|and)\\s*stems",
+                                                 "exclude":  "fresh|\\bsoup\\b|gravy|\\bdried\\b|\\bfresh\\b|\\bsoup\\b|\\bgravy\\b|\\bsauce\\b|marinated\\s+jar|dried",
+                                                 "brands":  [
+                                                                "Green Giant",
+                                                                "Dole",
+                                                                "B in B"
+                                                            ]
+                                             },
+                        "egg-whites":  {
+                                           "label":  "Liquid Egg Whites",
+                                           "unit":  "floz",
+                                           "queries":  [
+                                                           "liquid egg whites",
+                                                           "egg whites carton"
+                                                       ],
+                                           "include":  "egg\\s+whites?|liquid\\s+egg",
+                                           "exclude":  "\\bshell\\b|hard|\\bprotein\\s+powder\\b|powder|dried|whole\\s+egg|hard\\s+boiled|\\bbar\\b|protein\\s+drink",
+                                           "brands":  [
+                                                          "Egg Beaters",
+                                                          "Bob Evans"
+                                                      ]
+                                       },
+                        "dog-treats":  {
+                                           "label":  "Dog Treats",
+                                           "unit":  "oz",
+                                           "queries":  [
+                                                           "dog treats",
+                                                           "dog biscuits"
+                                                       ],
+                                           "include":  "dog\\s+treats?|milk[\\s-]?bones?|dog\\s+biscuits",
+                                           "exclude":  "\\bcat\\b|\\bfood\\b|\\bkibble\\b|\\bcat\\b|\\btoy\\b|litter",
+                                           "brands":  [
+                                                          "Milk-Bone",
+                                                          "Pup-Peroni",
+                                                          "Beggin\u0027",
+                                                          "Greenies",
+                                                          "Milk Bone"
+                                                      ]
+                                       },
+                        "buttermilk":  {
+                                           "label":  "Buttermilk",
+                                           "unit":  "floz",
+                                           "queries":  [
+                                                           "buttermilk"
+                                                       ],
+                                           "include":  "buttermilk",
+                                           "exclude":  "pancake|biscuit|\\branch\\b|bread|fried|waffle|\\bmix\\b|powder|powder|dried|\\bmix\\b|pancake|\\branch\\b|biscuit|dressing",
+                                           "brands":  [
+                                                          "Prairie Farms",
+                                                          "Borden",
+                                                          "Kate\u0027s"
+                                                      ]
+                                       }
+                    }
+}

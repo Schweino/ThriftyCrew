@@ -1,0 +1,13 @@
+{
+  "stain-remover":       {"label":"Laundry Stain Remover","queries":["laundry stain remover","stain remover spray"],"brands":["Shout","OxiClean","Spray 'n Wash","Zote","Carbona"],"excludeAdd":"carpet|\\bpen\\b|\\bwipe|\\bbar\\b|dishwasher|\\bpods?\\b|\\bpowder\\b|\\btub\\b"},
+  "toilet-bowl-cleaner": {"label":"Toilet Bowl Cleaner","queries":["toilet bowl cleaner"],"brands":["Lysol","Clorox","Scrubbing Bubbles","Kaboom"],"excludeAdd":"\\btablets?\\b|drop-?ins?|\\bbrush\\b|\\bwand\\b|\\bwipe|automatic"},
+  "disinfectant-spray":  {"label":"Disinfectant Spray","queries":["disinfectant spray"],"brands":["Lysol","Microban","Clorox"],"excludeAdd":"\\bwipe|toilet|hand\\s+sanitizer|\\bmop\\b|refill\\s+pouch|laundry"},
+  "air-freshener":       {"label":"Air Freshener","queries":["air freshener spray","air freshener"],"brands":["Febreze","Glade","Air Wick","Renuzit","Ozium"],"excludeAdd":"\\bwipe|refill\\s+oil|plug-?in\\s+refill|\\bcandle\\b|warmer|\\bcar\\b\\s+vent"},
+  "shaving-cream":       {"label":"Shaving Cream","queries":["shaving cream","shave gel"],"brands":["Barbasol","Gillette","Edge","Cremo","Skintimate"],"excludeAdd":"after\\s*shave|\\brazor\\b|\\bkit\\b|\\bblades?\\b|balm"},
+  "lotion":              {"label":"Body Lotion","queries":["body lotion"],"brands":["Jergens","Vaseline","Aveeno","Eucerin","Lubriderm","Nivea"],"excludeAdd":"\\bface\\b|hand\\s+cream|sunscreen|\\bspf\\b|self\\s*tan|\\bbaby\\b|hair"},
+  "hand-sanitizer":      {"label":"Hand Sanitizer","queries":["hand sanitizer"],"brands":["Purell","Germ-X"],"excludeAdd":"\\bwipe|spray\\s+surface|\\bstand\\b|\\bdispenser\\b|refill\\s+pouch"},
+  "canned-mushrooms":    {"label":"Canned Mushrooms","queries":["canned mushrooms","mushrooms pieces and stems"],"brands":["Green Giant","Dole","B in B"],"excludeAdd":"\\bfresh\\b|\\bsoup\\b|\\bgravy\\b|\\bsauce\\b|marinated\\s+jar|dried"},
+  "egg-whites":          {"label":"Liquid Egg Whites","queries":["liquid egg whites","egg whites carton"],"brands":["Egg Beaters","Bob Evans"],"excludeAdd":"powder|dried|whole\\s+egg|hard\\s+boiled|\\bbar\\b|protein\\s+drink"},
+  "dog-treats":          {"label":"Dog Treats","queries":["dog treats","dog biscuits"],"brands":["Milk-Bone","Pup-Peroni","Beggin'","Greenies","Milk Bone"],"excludeAdd":"\\bfood\\b|\\bkibble\\b|\\bcat\\b|\\btoy\\b|litter"},
+  "buttermilk":          {"label":"Buttermilk","queries":["buttermilk"],"brands":["Prairie Farms","Borden","Kate's"],"excludeAdd":"powder|dried|\\bmix\\b|pancake|\\branch\\b|biscuit|dressing"}
+}
