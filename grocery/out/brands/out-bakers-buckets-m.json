@@ -1,0 +1,17 @@
+{
+  "store": "Baker's", "generated": "2026-07-13",
+  "items": {
+    "frozen-lasagna":     [{"b":"Store brand","s":1,"per":0.17}],
+    "frozen-vegetables":  [{"b":"Store brand","s":1,"per":0.1},{"b":"Birds Eye","s":0,"per":0.11}],
+    "baking-soda":        [{"b":"Store brand","s":1,"per":0.06}],
+    "baking-powder":      [{"b":"Store brand","s":1,"per":0.31},{"b":"Clabber Girl","s":0,"per":0.43},{"b":"Rumford","s":0,"per":0.53}],
+    "yeast":              [],
+    "apple-cider-vinegar":[{"b":"Store brand","s":1,"per":0.05},{"b":"Heinz","s":0,"per":0.14},{"b":"Bragg","s":0,"per":0.2}],
+    "ranch-dressing":     [{"b":"Store brand","s":1,"per":0.11},{"b":"Hidden Valley","s":0,"per":0.21},{"b":"Kraft","s":0,"per":0.22}],
+    "frosting":           [{"b":"Pillsbury","s":0,"per":0.12},{"b":"Duncan Hines","s":0,"per":0.18},{"b":"Betty Crocker","s":0,"per":0.19}],
+    "chocolate-milk":     [{"b":"Store brand","s":1,"per":0.03},{"b":"Nesquik","s":0,"per":0.15}],
+    "beef-broth":         [{"b":"Store brand","s":1,"per":0.05},{"b":"Swanson","s":0,"per":0.08}],
+    "rice-cakes":         [{"b":"Store brand","s":1,"per":0.46},{"b":"Quaker","s":0,"per":0.55},{"b":"Lundberg","s":0,"per":0.59}],
+    "frozen-fruit":       [{"b":"Store brand","s":1,"per":0.19}]
+  }
+}

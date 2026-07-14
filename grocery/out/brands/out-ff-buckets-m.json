@@ -1,0 +1,160 @@
+﻿{
+    "store":  "Family Fare",
+    "generated":  "2026-07-14",
+    "items":  {
+                  "frozen-lasagna":  [
+                                         {
+                                             "b":  "Store brand",
+                                             "s":  1,
+                                             "per":  0.2641
+                                         }
+                                     ],
+                  "frozen-vegetables":  [
+                                            {
+                                                "b":  "Store brand",
+                                                "s":  1,
+                                                "per":  0.0996
+                                            }
+                                        ],
+                  "baking-soda":  [
+                                      {
+                                          "b":  "Store brand",
+                                          "s":  1,
+                                          "per":  0.0806
+                                      },
+                                      {
+                                          "b":  "Arm \u0026 Hammer",
+                                          "s":  0,
+                                          "per":  0.0375
+                                      }
+                                  ],
+                  "baking-powder":  [
+                                        {
+                                            "b":  "Clabber Girl",
+                                            "s":  0,
+                                            "per":  0.5173
+                                        },
+                                        {
+                                            "b":  "Store brand",
+                                            "s":  1,
+                                            "per":  0.3691
+                                        }
+                                    ],
+                  "yeast":  [
+                                {
+                                    "b":  "Store brand",
+                                    "s":  1,
+                                    "per":  1.4975
+                                },
+                                {
+                                    "b":  "Fleischmann\u0027s",
+                                    "s":  0,
+                                    "per":  1.9975
+                                }
+                            ],
+                  "apple-cider-vinegar":  [
+                                              {
+                                                  "b":  "Heinz",
+                                                  "s":  0,
+                                                  "per":  0.1684
+                                              },
+                                              {
+                                                  "b":  "Store brand",
+                                                  "s":  1,
+                                                  "per":  0.1119
+                                              },
+                                              {
+                                                  "b":  "Bragg",
+                                                  "s":  0,
+                                                  "per":  0.2497
+                                              }
+                                          ],
+                  "ranch-dressing":  [
+                                         {
+                                             "b":  "Store brand",
+                                             "s":  1,
+                                             "per":  0.1744
+                                         },
+                                         {
+                                             "b":  "Ken\u0027s",
+                                             "s":  0,
+                                             "per":  0.2288
+                                         },
+                                         {
+                                             "b":  "Kraft",
+                                             "s":  0,
+                                             "per":  0.2371
+                                         },
+                                         {
+                                             "b":  "Hidden Valley",
+                                             "s":  0,
+                                             "per":  0.2829
+                                         }
+                                     ],
+                  "frosting":  [
+                                   {
+                                       "b":  "Betty Crocker",
+                                       "s":  0,
+                                       "per":  0.2306
+                                   },
+                                   {
+                                       "b":  "Store brand",
+                                       "s":  1,
+                                       "per":  0.1494
+                                   },
+                                   {
+                                       "b":  "Duncan Hines",
+                                       "s":  0,
+                                       "per":  0.1744
+                                   },
+                                   {
+                                       "b":  "Pillsbury",
+                                       "s":  0,
+                                       "per":  0.1431
+                                   }
+                               ],
+                  "chocolate-milk":  [
+                                         {
+                                             "b":  "Nesquik",
+                                             "s":  0,
+                                             "per":  0.1779
+                                         },
+                                         {
+                                             "b":  "TruMoo",
+                                             "s":  0,
+                                             "per":  0.0934
+                                         }
+                                     ],
+                  "beef-broth":  [
+                                     {
+                                         "b":  "Swanson",
+                                         "s":  0,
+                                         "per":  0.0915
+                                     },
+                                     {
+                                         "b":  "Store brand",
+                                         "s":  1,
+                                         "per":  0.0528
+                                     },
+                                     {
+                                         "b":  "Kitchen Basics",
+                                         "s":  0,
+                                         "per":  0.1434
+                                     }
+                                 ],
+                  "rice-cakes":  [
+                                     {
+                                         "b":  "Quaker",
+                                         "s":  0,
+                                         "per":  0.5662
+                                     }
+                                 ],
+                  "frozen-fruit":  [
+                                       {
+                                           "b":  "Store brand",
+                                           "s":  1,
+                                           "per":  0.3306
+                                       }
+                                   ]
+              }
+}

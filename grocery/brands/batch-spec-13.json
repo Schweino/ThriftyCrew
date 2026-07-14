@@ -1,0 +1,14 @@
+{
+  "frozen-lasagna":     {"label":"Frozen Lasagna","queries":["frozen lasagna","lasagna dinner"],"brands":["Stouffer's","Marie Callender's","Michelina's","Amy's"],"excludeAdd":"noodles?\\s+only|\\bsoup\\b|hamburger\\s+helper|garlic\\s+bread"},
+  "frozen-vegetables":  {"label":"Frozen Mixed Vegetables","queries":["frozen mixed vegetables","frozen vegetables"],"brands":["Birds Eye","Green Giant"],"excludeAdd":"riced|\\bcorn\\s+on|steamers?\\s+cheese|cauliflower\\s+only|potato"},
+  "baking-soda":        {"label":"Baking Soda","queries":["baking soda"],"brands":["Arm & Hammer"],"excludeAdd":"toothpaste|detergent|cat\\s+litter|carpet|\\bpool\\b|deodorizer"},
+  "baking-powder":      {"label":"Baking Powder","queries":["baking powder"],"brands":["Clabber Girl","Rumford","Davis"],"excludeAdd":"\\bsoda\\b|corn\\s*starch|\\bmix\\b"},
+  "yeast":              {"label":"Yeast (baking)","queries":["active dry yeast","baking yeast"],"brands":["Fleischmann's","Red Star","SAF"],"excludeAdd":"nutritional\\s+yeast|brewer|infection|extract"},
+  "apple-cider-vinegar":{"label":"Apple Cider Vinegar","queries":["apple cider vinegar"],"brands":["Bragg","Heinz","Spectrum"],"excludeAdd":"\\bpills?\\b|gummies|capsule|\\btonic\\b|white\\s+vinegar|distilled"},
+  "ranch-dressing":     {"label":"Ranch Dressing","queries":["ranch dressing"],"brands":["Hidden Valley","Ken's","Kraft","Marie's"],"excludeAdd":"\\bdip\\b|seasoning|packet|\\bmix\\b|\\bgreek\\b"},
+  "frosting":           {"label":"Frosting","queries":["frosting","cake frosting"],"brands":["Betty Crocker","Pillsbury","Duncan Hines"],"excludeAdd":"\\bmix\\b|cookie|sprinkles|\\bgel\\b|decorating"},
+  "chocolate-milk":     {"label":"Chocolate Milk","queries":["chocolate milk"],"brands":["Nesquik","TruMoo","Hershey's"],"excludeAdd":"\\bmix\\b|powder|syrup|almond|\\boat\\b|creamer|\\bbar\\b"},
+  "beef-broth":         {"label":"Beef Broth / Stock","queries":["beef broth","beef stock"],"brands":["Swanson","Kitchen Basics","Better Than Bouillon","College Inn"],"excludeAdd":"chicken|vegetable|\\bcubes?\\b|ramen|gravy"},
+  "rice-cakes":         {"label":"Rice Cakes","queries":["rice cakes"],"brands":["Quaker","Lundberg"],"excludeAdd":"granola|krispy|\\bcereal\\b|\\bmini\\b\\s+bites"},
+  "frozen-fruit":       {"label":"Frozen Fruit / Berries","queries":["frozen fruit","frozen berries"],"brands":["Dole","Birds Eye"],"excludeAdd":"juice|smoothie\\s+drink|\\bbar\\b|yogurt|\\bpie\\b"}
+}

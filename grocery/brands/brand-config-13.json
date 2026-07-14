@@ -1,0 +1,161 @@
+﻿{
+    "commodities":  {
+                        "frozen-lasagna":  {
+                                               "label":  "Frozen Lasagna",
+                                               "unit":  "oz",
+                                               "queries":  [
+                                                               "frozen lasagna",
+                                                               "lasagna dinner"
+                                                           ],
+                                               "include":  "lasagna\\b.{0,30}(?:frozen|family|meat|cheese)|frozen\\s+lasagna|\\blasagna\\b",
+                                               "exclude":  "noodles\\s+only|\\bdry\\b|\\bboxed\\b|noodles?\\s+only|\\bsoup\\b|hamburger\\s+helper|garlic\\s+bread",
+                                               "brands":  [
+                                                              "Stouffer\u0027s",
+                                                              "Marie Callender\u0027s",
+                                                              "Michelina\u0027s",
+                                                              "Amy\u0027s"
+                                                          ]
+                                           },
+                        "frozen-vegetables":  {
+                                                  "label":  "Frozen Mixed Vegetables",
+                                                  "unit":  "oz",
+                                                  "queries":  [
+                                                                  "frozen mixed vegetables",
+                                                                  "frozen vegetables"
+                                                              ],
+                                                  "include":  "mixed\\s+vegetables|peas\\s+(?:\u0026|and)\\s+carrots|vegetable\\s+medley|vegetables\\b.{0,12}mixed",
+                                                  "exclude":  "\\bsoup\\b|\\bcanned\\b|\\boil\\b|\\bpasta\\b|riced|\\bcorn\\s+on|steamers?\\s+cheese|cauliflower\\s+only|potato",
+                                                  "brands":  [
+                                                                 "Birds Eye",
+                                                                 "Green Giant"
+                                                             ]
+                                              },
+                        "baking-soda":  {
+                                            "label":  "Baking Soda",
+                                            "unit":  "oz",
+                                            "queries":  [
+                                                            "baking soda"
+                                                        ],
+                                            "include":  "baking\\s+soda",
+                                            "exclude":  "toothpaste|detergent|cat\\s+litter|toothpaste|detergent|cat\\s+litter|carpet|\\bpool\\b|deodorizer",
+                                            "brands":  [
+                                                           "Arm \u0026 Hammer"
+                                                       ]
+                                        },
+                        "baking-powder":  {
+                                              "label":  "Baking Powder",
+                                              "unit":  "oz",
+                                              "queries":  [
+                                                              "baking powder"
+                                                          ],
+                                              "include":  "baking\\s+powder",
+                                              "exclude":  "\\bsoda\\b|corn\\s*starch|\\bmix\\b",
+                                              "brands":  [
+                                                             "Clabber Girl",
+                                                             "Rumford",
+                                                             "Davis"
+                                                         ]
+                                          },
+                        "yeast":  {
+                                      "label":  "Yeast (baking)",
+                                      "unit":  "oz",
+                                      "queries":  [
+                                                      "active dry yeast",
+                                                      "baking yeast"
+                                                  ],
+                                      "include":  "(?:active\\s+dry|instant|rapid\\s*-?\\s*rise|bread\\s+machine)\\s+yeast|\\byeast\\b",
+                                      "exclude":  "nutritional|\\binfection\\b|\\brolls?\\b|donut|nutritional\\s+yeast|brewer|infection|extract",
+                                      "brands":  [
+                                                     "Fleischmann\u0027s",
+                                                     "Red Star",
+                                                     "SAF"
+                                                 ]
+                                  },
+                        "apple-cider-vinegar":  {
+                                                    "label":  "Apple Cider Vinegar",
+                                                    "unit":  "floz",
+                                                    "queries":  [
+                                                                    "apple cider vinegar"
+                                                                ],
+                                                    "include":  "apple\\s+cider\\s+vinegar|apple\\s+cider\\s+flavored\\s+(?:distilled\\s+)?vinegar",
+                                                    "exclude":  "gummies|capsule|\\bpills\\b|\\bdrink\\b|\\bpills?\\b|gummies|capsule|\\btonic\\b|white\\s+vinegar|distilled",
+                                                    "brands":  [
+                                                                   "Bragg",
+                                                                   "Heinz",
+                                                                   "Spectrum"
+                                                               ]
+                                                },
+                        "frosting":  {
+                                         "label":  "Frosting",
+                                         "unit":  "oz",
+                                         "queries":  [
+                                                         "frosting",
+                                                         "cake frosting"
+                                                     ],
+                                         "include":  "frosting|\\bicing\\b",
+                                         "exclude":  "cinnamon\\s+roll|cookie\\s+icing|\\bmix\\b|cookie|sprinkles|\\bgel\\b|decorating",
+                                         "brands":  [
+                                                        "Betty Crocker",
+                                                        "Pillsbury",
+                                                        "Duncan Hines"
+                                                    ]
+                                     },
+                        "chocolate-milk":  {
+                                               "label":  "Chocolate Milk",
+                                               "unit":  "floz",
+                                               "queries":  [
+                                                               "chocolate milk"
+                                                           ],
+                                               "include":  "chocolate\\s+milk",
+                                               "exclude":  "almond|\\boat\\b|\\bsoy\\b|powder|\\bmix\\b|protein|\\bmix\\b|powder|syrup|almond|\\boat\\b|creamer|\\bbar\\b",
+                                               "brands":  [
+                                                              "Nesquik",
+                                                              "TruMoo",
+                                                              "Hershey\u0027s"
+                                                          ]
+                                           },
+                        "beef-broth":  {
+                                           "label":  "Beef Broth / Stock",
+                                           "unit":  "floz",
+                                           "queries":  [
+                                                           "beef broth",
+                                                           "beef stock"
+                                                       ],
+                                           "include":  "beef\\s+(?:broth|stock)|beef\\s+bone\\s+broth",
+                                           "exclude":  "bouillon|\\bbase\\b|\\bcubes?\\b|ramen|\\bsoup\\b|chicken|vegetable|\\bcubes?\\b|ramen|gravy",
+                                           "brands":  [
+                                                          "Swanson",
+                                                          "Kitchen Basics",
+                                                          "Better Than Bouillon",
+                                                          "College Inn"
+                                                      ]
+                                       },
+                        "rice-cakes":  {
+                                           "label":  "Rice Cakes",
+                                           "unit":  "oz",
+                                           "queries":  [
+                                                           "rice cakes"
+                                                       ],
+                                           "include":  "rice\\s+cakes?",
+                                           "exclude":  "chocolate\\s+drizzle\\s+mini|krisp|granola|krispy|\\bcereal\\b|\\bmini\\b\\s+bites",
+                                           "brands":  [
+                                                          "Quaker",
+                                                          "Lundberg"
+                                                      ]
+                                       },
+                        "frozen-fruit":  {
+                                             "label":  "Frozen Fruit / Berries",
+                                             "unit":  "oz",
+                                             "queries":  [
+                                                             "frozen fruit",
+                                                             "frozen berries"
+                                                         ],
+                                             "include":  "frozen\\s+(?:mixed\\s+)?(?:berries|fruit|strawberries|blueberries|mango|peaches)|berry\\s+(?:medley|blend)|unsweetened\\s+(?:whole\\s+|sliced\\s+)?(?:strawberries|berries|fruit)|cherry\\s+berry\\s+blend",
+                                             "exclude":  "\\bbars?\\b|yog|\\bcups?\\b|short\\s*cuts|juice|smoothie\\s+drink|\\bbar\\b|yogurt|\\bpie\\b",
+                                             "brands":  [
+                                                            "Dole",
+                                                            "Birds Eye"
+                                                        ]
+                                         }
+                    }
+}
