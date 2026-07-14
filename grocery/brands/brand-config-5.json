@@ -1,0 +1,172 @@
+﻿{
+    "commodities":  {
+                        "cottage-cheese":  {
+                                               "label":  "Cottage Cheese",
+                                               "unit":  "oz",
+                                               "queries":  [
+                                                               "cottage cheese"
+                                                           ],
+                                               "include":  "cottage\\s+cheese",
+                                               "exclude":  "\\bdip\\b|dressing",
+                                               "brands":  [
+                                                              "Daisy",
+                                                              "Good Culture",
+                                                              "Breakstone\u0027s"
+                                                          ]
+                                           },
+                        "string-cheese":  {
+                                              "label":  "String Cheese",
+                                              "unit":  "oz",
+                                              "queries":  [
+                                                              "string cheese"
+                                                          ],
+                                              "include":  "string\\s+cheese|cheese\\s+sticks?\\b.{0,20}mozzarella|mozzarella\\s+sticks?\\b(?!.{0,20}breaded)",
+                                              "exclude":  "breaded|\\bfried\\b|\\bfrozen\\b",
+                                              "brands":  [
+                                                             "Sargento",
+                                                             "Frigo",
+                                                             "Galbani",
+                                                             "Polly-O"
+                                                         ]
+                                          },
+                        "hummus":  {
+                                       "label":  "Hummus",
+                                       "unit":  "oz",
+                                       "queries":  [
+                                                       "hummus"
+                                                   ],
+                                       "include":  "hummus",
+                                       "exclude":  "chips|crackers",
+                                       "brands":  [
+                                                      "Sabra",
+                                                      "Cedar\u0027s",
+                                                      "Boar\u0027s Head"
+                                                  ]
+                                   },
+                        "pepperoni":  {
+                                          "label":  "Pepperoni",
+                                          "unit":  "oz",
+                                          "queries":  [
+                                                          "pepperoni"
+                                                      ],
+                                          "include":  "pepperoni",
+                                          "exclude":  "pizza|hot\\s+pockets|\\brolls?\\b|\\bbites\\b|\\bstick\\b",
+                                          "brands":  [
+                                                         "Hormel",
+                                                         "Boar\u0027s Head",
+                                                         "Margherita"
+                                                     ]
+                                      },
+                        "apple-juice":  {
+                                            "label":  "Apple Juice",
+                                            "unit":  "floz",
+                                            "queries":  [
+                                                            "apple juice"
+                                                        ],
+                                            "include":  "apple\\s+juice|apple\\b.{0,15}100%\\s*juice|(?:100%\\s+)?juice,?\\s+(?:natural,?\\s+)?apple\\b",
+                                            "exclude":  "cider\\s+vinegar|\\bboxes\\b.{0,10}organic|sparkling",
+                                            "brands":  [
+                                                           "Mott\u0027s",
+                                                           "Juicy Juice",
+                                                           "Tree Top",
+                                                           "Musselman\u0027s"
+                                                       ]
+                                        },
+                        "cranberry-juice":  {
+                                                "label":  "Cranberry Juice",
+                                                "unit":  "floz",
+                                                "queries":  [
+                                                                "cranberry juice"
+                                                            ],
+                                                "include":  "cranberry\\s+juice|cranberry\\b.{0,15}100%\\s*juice",
+                                                "exclude":  "sparkling|\\bpills\\b",
+                                                "brands":  [
+                                                               "Ocean Spray",
+                                                               "Old Orchard"
+                                                           ]
+                                            },
+                        "grape-juice":  {
+                                            "label":  "Grape Juice",
+                                            "unit":  "floz",
+                                            "queries":  [
+                                                            "grape juice"
+                                                        ],
+                                            "include":  "grape\\s+juice|(?:100%\\s+)?juice,?\\s+(?:\\w+\\s+)?grape\\b|grape\\b.{0,15}100%\\s*juice",
+                                            "exclude":  "sparkling|white\\s+grape\\s+peach",
+                                            "brands":  [
+                                                           "Welch\u0027s"
+                                                       ]
+                                        },
+                        "canned-peaches":  {
+                                               "label":  "Canned Peaches",
+                                               "unit":  "oz",
+                                               "queries":  [
+                                                               "canned peaches",
+                                                               "sliced peaches"
+                                                           ],
+                                               "include":  "peaches\\b.{0,30}(?:syrup|juice|can|sliced|halves)|canned\\s+peaches|sliced\\s+peaches|peach\\s+slices|peaches\\s+in\\s+(?:heavy\\s+|light\\s+)?syrup",
+                                               "exclude":  "fresh|\\bfrozen\\b|\\bcup\\b|yog|\\btea\\b|\\bring\\b",
+                                               "brands":  [
+                                                              "Del Monte",
+                                                              "Dole"
+                                                          ]
+                                           },
+                        "canned-pineapple":  {
+                                                 "label":  "Canned Pineapple",
+                                                 "unit":  "oz",
+                                                 "queries":  [
+                                                                 "canned pineapple",
+                                                                 "pineapple chunks"
+                                                             ],
+                                                 "include":  "pineapple\\s+(?:chunks|slices|tidbits|crushed|rings)|crushed\\s+pineapple|canned\\s+pineapple",
+                                                 "exclude":  "fresh|\\bfrozen\\b|\\bcup\\b|\\bdrink\\b",
+                                                 "brands":  [
+                                                                "Dole",
+                                                                "Del Monte"
+                                                            ]
+                                             },
+                        "frozen-fries":  {
+                                             "label":  "Frozen French Fries",
+                                             "unit":  "oz",
+                                             "queries":  [
+                                                             "french fries",
+                                                             "frozen fries"
+                                                         ],
+                                             "include":  "french\\s+fri(?:es|ed)|crinkle\\s+cut|\\bfries\\b",
+                                             "exclude":  "sweet\\s+potato|waffle\\s+fries|seasoned|onion|chicken|\\btots\\b|tater|zucchini|pickle|avocado|green\\s+bean",
+                                             "brands":  [
+                                                            "Ore-Ida",
+                                                            "Checkers",
+                                                            "Alexia"
+                                                        ]
+                                         },
+                        "graham-crackers":  {
+                                                "label":  "Graham Crackers",
+                                                "unit":  "oz",
+                                                "queries":  [
+                                                                "graham crackers"
+                                                            ],
+                                                "include":  "graham\\s+crackers?",
+                                                "exclude":  "crust|\\bcrumbs\\b|goldfish|\\bsnacks\\b.{0,10}\\bbear\\b",
+                                                "brands":  [
+                                                               "Honey Maid",
+                                                               "Keebler"
+                                                           ]
+                                            },
+                        "cheese-crackers":  {
+                                                "label":  "Cheese Crackers",
+                                                "unit":  "oz",
+                                                "queries":  [
+                                                                "cheese crackers",
+                                                                "cheez-it"
+                                                            ],
+                                                "include":  "cheese\\s+crackers?|cheez\\s*-?\\s*its?|goldfish",
+                                                "exclude":  "\\bpuffs\\b",
+                                                "brands":  [
+                                                               "Cheez-It",
+                                                               "Goldfish",
+                                                               "Ritz"
+                                                           ]
+                                            }
+                    }
+}

@@ -1,0 +1,17 @@
+{
+  "store": "Hy-Vee", "generated": "2026-07-13",
+  "items": {
+    "cottage-cheese":   [{"b":"Store brand","s":1,"per":0.1325},{"b":"Daisy","s":0,"per":0.1954}],
+    "string-cheese":    [{"b":"Store brand","s":1,"per":0.3158},{"b":"Sargento","s":0,"per":0.4579},{"b":"Galbani","s":0,"per":0.4992}],
+    "hummus":           [{"b":"Store brand","s":1,"per":0.3524},{"b":"Sabra","s":0,"per":0.4363}],
+    "pepperoni":        [{"b":"Store brand","s":1,"per":0.4575},{"b":"Hormel","s":0,"per":0.571}],
+    "apple-juice":      [{"b":"Store brand","s":1,"per":0.0342},{"b":"Mott's","s":0,"per":0.0585},{"b":"Juicy Juice","s":0,"per":0.067},{"b":"Musselman's","s":0,"per":0.0702}],
+    "cranberry-juice":  [{"b":"Store brand","s":1,"per":0.045},{"b":"Old Orchard","s":0,"per":0.0467},{"b":"Ocean Spray","s":0,"per":0.0545}],
+    "grape-juice":      [{"b":"Store brand","s":1,"per":0.0389},{"b":"Welch's","s":0,"per":0.0778}],
+    "canned-peaches":   [{"b":"Store brand","s":1,"per":0.0959},{"b":"Del Monte","s":0,"per":0.1961},{"b":"Dole","s":0,"per":0.2123}],
+    "canned-pineapple": [{"b":"Store brand","s":1,"per":0.081},{"b":"Dole","s":0,"per":0.1345}],
+    "frozen-fries":     [{"b":"Store brand","s":1,"per":0.1088},{"b":"Ore-Ida","s":0,"per":0.1779}],
+    "graham-crackers":  [{"b":"Store brand","s":1,"per":0.2076},{"b":"Honey Maid","s":0,"per":0.2979}],
+    "cheese-crackers":  [{"b":"Cheez-It","s":0,"per":0.2376},{"b":"Goldfish","s":0,"per":0.3293}]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "store": "Sam's Club", "generated": "2026-07-13",
+  "items": {
+    "cottage-cheese":   [],
+    "string-cheese":    [{"b":"Frigo","s":0,"per":0.1973}],
+    "hummus":           [{"b":"Store brand","s":1,"per":0.1395}],
+    "pepperoni":        [{"b":"Store brand","s":1,"per":0.295}],
+    "apple-juice":      [{"b":"Mott's","s":0,"per":0.0428}],
+    "cranberry-juice":  [{"b":"Ocean Spray","s":0,"per":0.0431}],
+    "grape-juice":      [],
+    "canned-peaches":   [{"b":"Store brand","s":1,"per":0.085},{"b":"Del Monte","s":0,"per":0.0973}],
+    "canned-pineapple": [{"b":"Dole","s":0,"per":0.1255}],
+    "frozen-fries":     [{"b":"Ore-Ida","s":0,"per":0.067}],
+    "graham-crackers":  [{"b":"Honey Maid","s":0,"per":0.1559}],
+    "cheese-crackers":  [{"b":"Goldfish","s":0,"per":0.1791},{"b":"Cheez-It","s":0,"per":0.2079}]
+  }
+}

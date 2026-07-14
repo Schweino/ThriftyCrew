@@ -1,0 +1,14 @@
+{
+  "cottage-cheese":   {"label":"Cottage Cheese","queries":["cottage cheese"],"brands":["Daisy","Good Culture","Breakstone's"],"excludeAdd":"\\bdip\\b|dressing"},
+  "string-cheese":    {"label":"String Cheese","queries":["string cheese"],"brands":["Sargento","Frigo","Galbani","Polly-O"]},
+  "hummus":           {"label":"Hummus","queries":["hummus"],"brands":["Sabra","Cedar's","Boar's Head"]},
+  "pepperoni":        {"label":"Pepperoni","queries":["pepperoni"],"brands":["Hormel","Boar's Head","Margherita"]},
+  "apple-juice":      {"label":"Apple Juice","queries":["apple juice"],"brands":["Mott's","Juicy Juice","Tree Top","Musselman's"]},
+  "cranberry-juice":  {"label":"Cranberry Juice","queries":["cranberry juice"],"brands":["Ocean Spray","Old Orchard"]},
+  "grape-juice":      {"label":"Grape Juice","queries":["grape juice"],"brands":["Welch's"]},
+  "canned-peaches":   {"label":"Canned Peaches","queries":["canned peaches","sliced peaches"],"brands":["Del Monte","Dole"]},
+  "canned-pineapple": {"label":"Canned Pineapple","queries":["canned pineapple","pineapple chunks"],"brands":["Dole","Del Monte"]},
+  "frozen-fries":     {"label":"Frozen French Fries","queries":["french fries","frozen fries"],"brands":["Ore-Ida","Checkers","Alexia"],"excludeAdd":"onion|chicken|\\btots\\b|tater|zucchini|pickle|avocado|green\\s+bean"},
+  "graham-crackers":  {"label":"Graham Crackers","queries":["graham crackers"],"brands":["Honey Maid","Keebler"]},
+  "cheese-crackers":  {"label":"Cheese Crackers","queries":["cheese crackers","cheez-it"],"brands":["Cheez-It","Goldfish","Ritz"]}
+}

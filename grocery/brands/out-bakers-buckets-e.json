@@ -1,0 +1,17 @@
+{
+  "store": "Baker's", "generated": "2026-07-13",
+  "items": {
+    "cottage-cheese":   [{"b":"Store brand","s":1,"per":0.12},{"b":"Daisy","s":0,"per":0.21},{"b":"Good Culture","s":0,"per":0.26}],
+    "string-cheese":    [{"b":"Store brand","s":1,"per":0.23},{"b":"Galbani","s":0,"per":0.35},{"b":"Frigo","s":0,"per":0.4},{"b":"Sargento","s":0,"per":0.42}],
+    "hummus":           [{"b":"Store brand","s":1,"per":0.35},{"b":"Sabra","s":0,"per":0.43}],
+    "pepperoni":        [{"b":"Store brand","s":1,"per":0.49},{"b":"Hormel","s":0,"per":0.63}],
+    "apple-juice":      [{"b":"Store brand","s":1,"per":0.04},{"b":"Tree Top","s":0,"per":0.06}],
+    "cranberry-juice":  [{"b":"Ocean Spray","s":0,"per":0.05},{"b":"Store brand","s":1,"per":0.05}],
+    "grape-juice":      [{"b":"Store brand","s":1,"per":0.05}],
+    "canned-peaches":   [{"b":"Store brand","s":1,"per":0.11},{"b":"Del Monte","s":0,"per":0.15}],
+    "canned-pineapple": [{"b":"Store brand","s":1,"per":0.09},{"b":"Dole","s":0,"per":0.12}],
+    "frozen-fries":     [{"b":"Store brand","s":1,"per":0.09}],
+    "graham-crackers":  [{"b":"Store brand","s":1,"per":0.15},{"b":"Honey Maid","s":0,"per":0.28},{"b":"Keebler","s":0,"per":0.32}],
+    "cheese-crackers":  [{"b":"Store brand","s":1,"per":0.23},{"b":"Goldfish","s":0,"per":0.37}]
+  }
+}

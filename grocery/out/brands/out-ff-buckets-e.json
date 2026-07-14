@@ -1,0 +1,161 @@
+﻿{
+    "store":  "Family Fare",
+    "generated":  "2026-07-13",
+    "items":  {
+                  "cottage-cheese":  [
+                                         {
+                                             "b":  "Daisy",
+                                             "s":  0,
+                                             "per":  0.2081
+                                         },
+                                         {
+                                             "b":  "Store brand",
+                                             "s":  1,
+                                             "per":  0.1538
+                                         }
+                                     ],
+                  "string-cheese":  [
+                                        {
+                                            "b":  "Frigo",
+                                            "s":  0,
+                                            "per":  0.599
+                                        },
+                                        {
+                                            "b":  "Store brand",
+                                            "s":  1,
+                                            "per":  0.3992
+                                        },
+                                        {
+                                            "b":  "Sargento",
+                                            "s":  0,
+                                            "per":  0.5408
+                                        }
+                                    ],
+                  "hummus":  [
+                                 {
+                                     "b":  "Sabra",
+                                     "s":  0,
+                                     "per":  0.5988
+                                 },
+                                 {
+                                     "b":  "Store brand",
+                                     "s":  1,
+                                     "per":  0.449
+                                 }
+                             ],
+                  "pepperoni":  [
+                                    {
+                                        "b":  "Store brand",
+                                        "s":  1,
+                                        "per":  0.5317
+                                    },
+                                    {
+                                        "b":  "Hormel",
+                                        "s":  0,
+                                        "per":  0.7139
+                                    }
+                                ],
+                  "apple-juice":  [
+                                      {
+                                          "b":  "Store brand",
+                                          "s":  1,
+                                          "per":  0.0416
+                                      },
+                                      {
+                                          "b":  "Juicy Juice",
+                                          "s":  0,
+                                          "per":  0.078
+                                      },
+                                      {
+                                          "b":  "Mott\u0027s",
+                                          "s":  0,
+                                          "per":  0.067
+                                      }
+                                  ],
+                  "cranberry-juice":  [
+                                          {
+                                              "b":  "Store brand",
+                                              "s":  1,
+                                              "per":  0.053
+                                          },
+                                          {
+                                              "b":  "Ocean Spray",
+                                              "s":  0,
+                                              "per":  0.0623
+                                          }
+                                      ],
+                  "grape-juice":  [
+                                      {
+                                          "b":  "Welch\u0027s",
+                                          "s":  0,
+                                          "per":  0.1077
+                                      },
+                                      {
+                                          "b":  "Store brand",
+                                          "s":  1,
+                                          "per":  0.0623
+                                      }
+                                  ],
+                  "canned-peaches":  [
+                                         {
+                                             "b":  "Store brand",
+                                             "s":  1,
+                                             "per":  0.1327
+                                         },
+                                         {
+                                             "b":  "Del Monte",
+                                             "s":  0,
+                                             "per":  0.1652
+                                         },
+                                         {
+                                             "b":  "Dole",
+                                             "s":  0,
+                                             "per":  0.2549
+                                         }
+                                     ],
+                  "canned-pineapple":  [
+                                           {
+                                               "b":  "Store brand",
+                                               "s":  1,
+                                               "per":  0.1145
+                                           },
+                                           {
+                                               "b":  "Dole",
+                                               "s":  0,
+                                               "per":  0.1445
+                                           }
+                                       ],
+                  "frozen-fries":  [
+                                       {
+                                           "b":  "Store brand",
+                                           "s":  1,
+                                           "per":  0.1247
+                                       },
+                                       {
+                                           "b":  "Ore-Ida",
+                                           "s":  0,
+                                           "per":  0.1559
+                                       }
+                                   ],
+                  "graham-crackers":  [
+
+                                      ],
+                  "cheese-crackers":  [
+                                          {
+                                              "b":  "Ritz",
+                                              "s":  0,
+                                              "per":  0.567
+                                          },
+                                          {
+                                              "b":  "Goldfish",
+                                              "s":  0,
+                                              "per":  0.4238
+                                          },
+                                          {
+                                              "b":  "Cheez-It",
+                                              "s":  0,
+                                              "per":  0.3186
+                                          }
+                                      ]
+              }
+}
