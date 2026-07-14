@@ -2,8 +2,6 @@
     "store":  "Aldi",
     "week_of":  "2026-07-12",
     "price_type":  "everyday",
-    "price_mode":  "in-store",
-    "mode_verified":  "2026-07-14",
     "source":  "aldi.us first-party Omaha storefront (OLA 42, 68137) with fulfillment pinned to IN-STORE. Re-pulled 2026-07-14 after discovering the prior bulk pulls ran in the DEFAULT DELIVERY session, which is marked up ~11%. Per-lb items use the page /lb price, not the each-estimate.",
     "deals":  [
                   {
@@ -2725,6 +2723,56 @@
                       "size":  "1 lb",
                       "regular":  null,
                       "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Stonemill Garlic Powder 3.12 oz",
+                      "ad_price":  "$0.99",
+                      "size":  "3.12 oz",
+                      "regular":  null,
+                      "source_ad":  "new-item fill 2026-07-14 (store search, in-store/everyday price, collision-validated)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Stonemill Onion Powder 2.62 oz",
+                      "ad_price":  "$0.99",
+                      "size":  "2.62 oz",
+                      "regular":  null,
+                      "source_ad":  "new-item fill 2026-07-14 (store search, in-store/everyday price, collision-validated)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Stonemill Chili Powder 2.5 oz",
+                      "ad_price":  "$0.99",
+                      "size":  "2.5 oz",
+                      "regular":  null,
+                      "source_ad":  "new-item fill 2026-07-14 (store search, in-store/everyday price, collision-validated)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Stonemill Ground Cumin 2 oz",
+                      "ad_price":  "$0.99",
+                      "size":  "2 oz",
+                      "regular":  null,
+                      "source_ad":  "new-item fill 2026-07-14 (store search, in-store/everyday price, collision-validated)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Stonemill Italian Seasoning 0.75 oz",
+                      "ad_price":  "$0.99",
+                      "size":  "0.75 oz",
+                      "regular":  null,
+                      "source_ad":  "new-item fill 2026-07-14 (store search, in-store/everyday price, collision-validated)"
+                  },
+                  {
+                      "store":  "Aldi",
+                      "item":  "Power Force Bathroom Cleaner 32 fl oz",
+                      "ad_price":  "$2.69",
+                      "size":  "32 fl oz",
+                      "regular":  null,
+                      "source_ad":  "new-item fill 2026-07-14 (store search, in-store/everyday price, collision-validated)"
                   }
-              ]
+              ],
+    "price_mode":  "in-store",
+    "mode_verified":  "2026-07-14"
 }

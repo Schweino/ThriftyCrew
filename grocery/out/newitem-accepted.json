@@ -1,0 +1,627 @@
+﻿{
+    "verified":  "2026-07-14",
+    "rejected":  [
+                     {
+                         "store":  "Walmart",
+                         "want":  "shower-cleaner",
+                         "item":  "Great Value Bathroom Cleaner with Bleach, 32 fl oz",
+                         "owner":  "bleach"
+                     },
+                     {
+                         "store":  "Sam\u0027s Club",
+                         "want":  "garlic-powder",
+                         "item":  "Member\u0027s Mark Granulated Garlic, 26 oz.",
+                         "owner":  "garlic"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "want":  "shower-cleaner",
+                         "item":  "Kroger Foaming Bathroom Cleaner with Bleach 32 fl oz",
+                         "owner":  "bleach"
+                     }
+                 ],
+    "accepted":  [
+                     {
+                         "store":  "Walmart",
+                         "id":  "dried-oregano",
+                         "item":  "Great Value Oregano Leaves, 0.87 oz",
+                         "price":  1.08,
+                         "size":  "0.87 oz"
+                     },
+                     {
+                         "store":  "Walmart",
+                         "id":  "dried-parsley",
+                         "item":  "Great Value Parsley Flakes, 2.7 oz",
+                         "price":  5.97,
+                         "size":  "2.7 oz"
+                     },
+                     {
+                         "store":  "Walmart",
+                         "id":  "garlic-powder",
+                         "item":  "Great Value Garlic Powder, 3.4 oz",
+                         "price":  1.08,
+                         "size":  "3.4 oz"
+                     },
+                     {
+                         "store":  "Walmart",
+                         "id":  "onion-powder",
+                         "item":  "Great Value Onion Powder, 3.25 oz",
+                         "price":  1.08,
+                         "size":  "3.25 oz"
+                     },
+                     {
+                         "store":  "Walmart",
+                         "id":  "chili-powder",
+                         "item":  "Great Value Chili Powder, 3 oz",
+                         "price":  1.08,
+                         "size":  "3 oz"
+                     },
+                     {
+                         "store":  "Walmart",
+                         "id":  "ground-cumin",
+                         "item":  "Great Value Ground Cumin, 2.5 oz",
+                         "price":  1.37,
+                         "size":  "2.5 oz"
+                     },
+                     {
+                         "store":  "Walmart",
+                         "id":  "italian-seasoning",
+                         "item":  "Great Value Italian Seasoning, 2 oz",
+                         "price":  1.97,
+                         "size":  "2 oz"
+                     },
+                     {
+                         "store":  "Walmart",
+                         "id":  "lemon-juice",
+                         "item":  "ReaLemon 100% Lemon Juice, 32 fl oz bottle",
+                         "price":  3.57,
+                         "size":  "32 fl oz"
+                     },
+                     {
+                         "store":  "Walmart",
+                         "id":  "floor-cleaner",
+                         "item":  "Murphy Oil Soap Cleaning Spray, No-Rinse Floor Cleaner, Orange Scent, 22 fl oz Bottle",
+                         "price":  2.98,
+                         "size":  "22 fl oz"
+                     },
+                     {
+                         "store":  "Walmart",
+                         "id":  "drain-cleaner",
+                         "item":  "Mister Plumber 32oz Drain Opener",
+                         "price":  1.37,
+                         "size":  "32 fl oz"
+                     },
+                     {
+                         "store":  "Walmart",
+                         "id":  "oven-cleaner",
+                         "item":  "Great Value Fume Free Oven Cleaner Aerosol Spray, 16 oz",
+                         "price":  4.47,
+                         "size":  "16 oz"
+                     },
+                     {
+                         "store":  "Walmart",
+                         "id":  "shower-cleaner",
+                         "item":  "Scrub Free Total Bathroom Cleaner with OxiClean, Lemon Scent, 32 fl oz",
+                         "price":  2.97,
+                         "size":  "32 fl oz"
+                     },
+                     {
+                         "store":  "Walmart",
+                         "id":  "furniture-polish",
+                         "item":  "Pledge Expert Care Wood Polish, Lemon Enhancing, Aerosol, 9.7 oz",
+                         "price":  4.84,
+                         "size":  "9.7 oz"
+                     },
+                     {
+                         "store":  "Walmart",
+                         "id":  "insect-spray",
+                         "item":  "Raid Defend Ant \u0026 Roach Killer, Indoor Insecticide, Lemon Scent, 20 oz",
+                         "price":  5.97,
+                         "size":  "20 oz"
+                     },
+                     {
+                         "store":  "Sam\u0027s Club",
+                         "id":  "garlic-powder",
+                         "item":  "Member\u0027s Mark Garlic Powder, 22.5 oz.",
+                         "price":  9.98,
+                         "size":  "22.5 oz"
+                     },
+                     {
+                         "store":  "Sam\u0027s Club",
+                         "id":  "onion-powder",
+                         "item":  "Member\u0027s Mark Onion Powder, 21 oz.",
+                         "price":  8.98,
+                         "size":  "21 oz"
+                     },
+                     {
+                         "store":  "Sam\u0027s Club",
+                         "id":  "chili-powder",
+                         "item":  "Member\u0027s Mark Chili Powder, 20 oz.",
+                         "price":  9.98,
+                         "size":  "20 oz"
+                     },
+                     {
+                         "store":  "Sam\u0027s Club",
+                         "id":  "ground-cumin",
+                         "item":  "Member\u0027s Mark Ground Cumin, 16 oz.",
+                         "price":  8.98,
+                         "size":  "16 oz"
+                     },
+                     {
+                         "store":  "Sam\u0027s Club",
+                         "id":  "italian-seasoning",
+                         "item":  "Member\u0027s Mark Italian Seasoning, 6 oz.",
+                         "price":  6.88,
+                         "size":  "6 oz"
+                     },
+                     {
+                         "store":  "Sam\u0027s Club",
+                         "id":  "cornstarch",
+                         "item":  "Clabber Girl Corn Starch, 16 oz., 2 pk.",
+                         "price":  6.48,
+                         "size":  "2 pk 16 oz"
+                     },
+                     {
+                         "store":  "Sam\u0027s Club",
+                         "id":  "chickpeas",
+                         "item":  "Bush\u0027s Best Fancy Garbanzo Beans 16 oz., 6 pk.",
+                         "price":  6.38,
+                         "size":  "6 pk 16 oz"
+                     },
+                     {
+                         "store":  "Sam\u0027s Club",
+                         "id":  "kidney-beans",
+                         "item":  "Bush\u0027s Dark Red Kidney Beans 16 oz., 6 pk.",
+                         "price":  6.38,
+                         "size":  "6 pk 16 oz"
+                     },
+                     {
+                         "store":  "Sam\u0027s Club",
+                         "id":  "crushed-tomatoes",
+                         "item":  "Tuttorosso Crushed Tomatoes with Basil, 28 oz., 8 pk.",
+                         "price":  11.98,
+                         "size":  "8 pk 28 oz"
+                     },
+                     {
+                         "store":  "Sam\u0027s Club",
+                         "id":  "tomato-paste",
+                         "item":  "Member\u0027s Mark Tomato Paste, 6 oz., 12 pk.",
+                         "price":  7.98,
+                         "size":  "12 pk 6 oz"
+                     },
+                     {
+                         "store":  "Sam\u0027s Club",
+                         "id":  "oven-cleaner",
+                         "item":  "Sprayway Industrial Strength Oven Cleaner 20 oz., 6 pk.",
+                         "price":  29.98,
+                         "size":  "6 pk 20 oz"
+                     },
+                     {
+                         "store":  "Sam\u0027s Club",
+                         "id":  "shower-cleaner",
+                         "item":  "Scrubbing Bubbles Flowers \u0026 Showers Bathroom Grime Fighter Spray, 32 oz., 3 pk.",
+                         "price":  9.94,
+                         "size":  "3 pk 32 oz"
+                     },
+                     {
+                         "store":  "Sam\u0027s Club",
+                         "id":  "furniture-polish",
+                         "item":  "Pledge Furniture Enhancing Polish Spray, Lemon, 3 ct., 29 oz.",
+                         "price":  12.52,
+                         "size":  "29 oz"
+                     },
+                     {
+                         "store":  "Hy-Vee",
+                         "id":  "garlic-powder",
+                         "item":  "That\u0027s Smart Garlic Powder 2.5 oz",
+                         "price":  1.25,
+                         "size":  "2.5 oz"
+                     },
+                     {
+                         "store":  "Hy-Vee",
+                         "id":  "onion-powder",
+                         "item":  "That\u0027s Smart Onion Powder 2.25 oz",
+                         "price":  1.25,
+                         "size":  "2.25 oz"
+                     },
+                     {
+                         "store":  "Hy-Vee",
+                         "id":  "chili-powder",
+                         "item":  "That\u0027s Smart Chili Powder 2.75 oz",
+                         "price":  1.25,
+                         "size":  "2.75 oz"
+                     },
+                     {
+                         "store":  "Hy-Vee",
+                         "id":  "ground-cumin",
+                         "item":  "Lawry\u0027s Ground Cumin, 2 oz",
+                         "price":  2.49,
+                         "size":  "2 oz"
+                     },
+                     {
+                         "store":  "Hy-Vee",
+                         "id":  "italian-seasoning",
+                         "item":  "That\u0027s Smart Italian Seasoning 1 oz",
+                         "price":  1.25,
+                         "size":  "1 oz"
+                     },
+                     {
+                         "store":  "Hy-Vee",
+                         "id":  "lemon-juice",
+                         "item":  "Hy-Vee Reconstituted Lemon Juice 15 fl oz",
+                         "price":  2.79,
+                         "size":  "15 fl oz"
+                     },
+                     {
+                         "store":  "Hy-Vee",
+                         "id":  "floor-cleaner",
+                         "item":  "Method Squirt + Mop Hard Floor Cleaner, Spearmint Sage, 25 fl oz",
+                         "price":  7.99,
+                         "size":  "25 fl oz"
+                     },
+                     {
+                         "store":  "Hy-Vee",
+                         "id":  "drain-cleaner",
+                         "item":  "Drano Liquid Drain Cleaner 32 fl oz",
+                         "price":  4.99,
+                         "size":  "32 fl oz"
+                     },
+                     {
+                         "store":  "Hy-Vee",
+                         "id":  "oven-cleaner",
+                         "item":  "Easy-Off Fume Free Lemon Scent Oven Cleaner Spray 14.5 oz",
+                         "price":  5.99,
+                         "size":  "14.5 oz"
+                     },
+                     {
+                         "store":  "Hy-Vee",
+                         "id":  "shower-cleaner",
+                         "item":  "Clean Shower Daily Shower Cleaner Refill, Fresh Clean Scent 60 fl oz",
+                         "price":  5.99,
+                         "size":  "60 fl oz"
+                     },
+                     {
+                         "store":  "Hy-Vee",
+                         "id":  "furniture-polish",
+                         "item":  "Pledge Lemon Clean Furniture Spray 9.7 oz",
+                         "price":  6.99,
+                         "size":  "9.7 oz"
+                     },
+                     {
+                         "store":  "Hy-Vee",
+                         "id":  "insect-spray",
+                         "item":  "Raid Ant \u0026 Roach Killer, Indoor Insecticide, Fragrance Free, 17.5 oz",
+                         "price":  6.99,
+                         "size":  "17.5 oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "paprika",
+                         "item":  "Smart Way Ground Paprika 2 oz",
+                         "price":  1.25,
+                         "size":  "2 oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "cornstarch",
+                         "item":  "Maizena Corn Starch 14.1 oz",
+                         "price":  1.99,
+                         "size":  "14.1 oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "chickpeas",
+                         "item":  "Kroger Garbanzo Beans 15.5 oz",
+                         "price":  1,
+                         "size":  "15.5 oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "kidney-beans",
+                         "item":  "Kroger Light Red Kidney Beans 15.5 oz",
+                         "price":  1,
+                         "size":  "15.5 oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "crushed-tomatoes",
+                         "item":  "Kroger Crushed Tomatoes in Puree 28 oz",
+                         "price":  1.89,
+                         "size":  "28 oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "tomato-paste",
+                         "item":  "Kroger Tomato Paste 12 oz",
+                         "price":  1.59,
+                         "size":  "12 oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "tomato-sauce",
+                         "item":  "Kroger Tomato Sauce 29 oz",
+                         "price":  1.79,
+                         "size":  "29 oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "soy-sauce",
+                         "item":  "Kroger Brewed Soy Sauce 15 fl oz",
+                         "price":  1.99,
+                         "size":  "15 fl oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "white-vinegar",
+                         "item":  "Kroger Distilled White Vinegar 64 fl oz",
+                         "price":  3.29,
+                         "size":  "64 fl oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "floor-cleaner",
+                         "item":  "Bona Hardwood Floor Cleaner Refill 96 fl oz",
+                         "price":  15.99,
+                         "size":  "96 fl oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "drain-cleaner",
+                         "item":  "Kroger Pro Strength Drain Cleaner Gel 80 fl oz",
+                         "price":  7.29,
+                         "size":  "80 fl oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "oven-cleaner",
+                         "item":  "Easy Off Heavy Duty Oven Cleaner 14.5 oz",
+                         "price":  5.49,
+                         "size":  "14.5 oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "shower-cleaner",
+                         "item":  "Clorox Plus Tilex Daily Shower Cleaner 32 fl oz",
+                         "price":  4.49,
+                         "size":  "32 fl oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "furniture-polish",
+                         "item":  "Kroger Lemon Scent Furniture Polish 9.7 oz",
+                         "price":  5.49,
+                         "size":  "9.7 oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "insect-spray",
+                         "item":  "Hot Shot Ant Roach \u0026 Spider Killer Crisp Linen 17.5 oz",
+                         "price":  4.49,
+                         "size":  "17.5 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "garlic-powder",
+                         "item":  "Badia Spices Garlic Powder 10.5 oz",
+                         "price":  3.99,
+                         "size":  "10.5 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "onion-powder",
+                         "item":  "Badia Spices Onion Powder 9.5 oz",
+                         "price":  3.99,
+                         "size":  "9.5 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "chili-powder",
+                         "item":  "Badia Spices Chili Powder 2.5 oz",
+                         "price":  2.49,
+                         "size":  "2.5 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "ground-cumin",
+                         "item":  "Badia Spices Cumin, Ground 2 oz",
+                         "price":  2.49,
+                         "size":  "2 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "italian-seasoning",
+                         "item":  "McCormick Perfect Pinch Italian Seasoning 2.25 oz",
+                         "price":  8.99,
+                         "size":  "2.25 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "paprika",
+                         "item":  "Badia Spices Paprika 2 oz",
+                         "price":  2.49,
+                         "size":  "2 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "dried-oregano",
+                         "item":  "Badia Spices Oregano 0.5 oz",
+                         "price":  2.49,
+                         "size":  "0.5 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "dried-parsley",
+                         "item":  "McCormick Parsley Flakes 0.25 oz",
+                         "price":  1.99,
+                         "size":  "0.25 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "ground-cinnamon",
+                         "item":  "McCormick Ground Cinnamon 4.12 oz",
+                         "price":  4.99,
+                         "size":  "4.12 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "ground-turmeric",
+                         "item":  "McCormick Ground Turmeric 0.95 oz",
+                         "price":  2.99,
+                         "size":  "0.95 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "red-pepper-flakes",
+                         "item":  "Badia Spices Crushed Red Pepper 4.5 oz",
+                         "price":  3.99,
+                         "size":  "4.5 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "cornstarch",
+                         "item":  "Fareway 100% Pure Corn Starch 16 oz",
+                         "price":  2.49,
+                         "size":  "16 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "bread-crumbs",
+                         "item":  "Fareway Plain Bread Crumbs 15 oz",
+                         "price":  2.49,
+                         "size":  "15 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "chickpeas",
+                         "item":  "Bush\u0027s Best Reduced Sodium Chick Peas 16 oz",
+                         "price":  1.69,
+                         "size":  "16 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "kidney-beans",
+                         "item":  "Fareway Dark Red Kidney Beans 15.5 oz",
+                         "price":  1.34,
+                         "size":  "15.5 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "crushed-tomatoes",
+                         "item":  "Fareway Crushed Tomatoes in Puree 28 oz",
+                         "price":  2.49,
+                         "size":  "28 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "tomato-paste",
+                         "item":  "Fareway Tomato Paste 6 oz",
+                         "price":  0.94,
+                         "size":  "6 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "tomato-sauce",
+                         "item":  "Fareway Tomato Sauce 28 oz",
+                         "price":  2.49,
+                         "size":  "28 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "soy-sauce",
+                         "item":  "Fareway Soy Sauce 10 fl oz",
+                         "price":  2.49,
+                         "size":  "10 fl oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "white-vinegar",
+                         "item":  "Fareway White Distilled Vinegar 128 fl oz",
+                         "price":  4.99,
+                         "size":  "128 fl oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "lemon-juice",
+                         "item":  "ReaLemon 100% Lemon Juice 32 fl oz",
+                         "price":  4.29,
+                         "size":  "32 fl oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "floor-cleaner",
+                         "item":  "Swiffer WetJet Liquid Floor Cleaner, Lavender 42.2 fl oz",
+                         "price":  6.99,
+                         "size":  "42.2 fl oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "drain-cleaner",
+                         "item":  "Drano Liquid Drain Cleaner 32 fl oz",
+                         "price":  4.49,
+                         "size":  "32 fl oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "shower-cleaner",
+                         "item":  "Bright Essentials Bathroom Cleaner, Lime Scent 32 fl oz",
+                         "price":  3.98,
+                         "size":  "32 fl oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "furniture-polish",
+                         "item":  "Behold Furniture Polish, Lemon 12.5 oz",
+                         "price":  3.49,
+                         "size":  "12.5 oz"
+                     },
+                     {
+                         "store":  "Fareway",
+                         "id":  "insect-spray",
+                         "item":  "Raid Ant Killer Insecticide Aerosol Spray, Pine Forest Fresh Scent 17.5 oz",
+                         "price":  6.99,
+                         "size":  "17.5 oz"
+                     },
+                     {
+                         "store":  "Aldi",
+                         "id":  "garlic-powder",
+                         "item":  "Stonemill Garlic Powder 3.12 oz",
+                         "price":  0.99,
+                         "size":  "3.12 oz"
+                     },
+                     {
+                         "store":  "Aldi",
+                         "id":  "onion-powder",
+                         "item":  "Stonemill Onion Powder 2.62 oz",
+                         "price":  0.99,
+                         "size":  "2.62 oz"
+                     },
+                     {
+                         "store":  "Aldi",
+                         "id":  "chili-powder",
+                         "item":  "Stonemill Chili Powder 2.5 oz",
+                         "price":  0.99,
+                         "size":  "2.5 oz"
+                     },
+                     {
+                         "store":  "Aldi",
+                         "id":  "ground-cumin",
+                         "item":  "Stonemill Ground Cumin 2 oz",
+                         "price":  0.99,
+                         "size":  "2 oz"
+                     },
+                     {
+                         "store":  "Aldi",
+                         "id":  "italian-seasoning",
+                         "item":  "Stonemill Italian Seasoning 0.75 oz",
+                         "price":  0.99,
+                         "size":  "0.75 oz"
+                     },
+                     {
+                         "store":  "Aldi",
+                         "id":  "shower-cleaner",
+                         "item":  "Power Force Bathroom Cleaner 32 fl oz",
+                         "price":  2.69,
+                         "size":  "32 fl oz"
+                     }
+                 ]
+}

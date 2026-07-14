@@ -2,7 +2,7 @@
     "readme":  "DERIVED by generate-board-overrides.ps1 - do not hand-edit. Per-cell EVERYDAY per-unit corrections: when a board price disagrees \u003e30% with the verified product its See-item link opens (and name-drift confirms the link is the right product), the board number is stale and is pinned here to the link\u0027s per-unit so price==link==shelf. build-deals-page applies these to EVERYDAY cells only (a live sale always wins) and survives daily regeneration. Sales, wrong-product links (name-drift), and ids present in both the staple+recipe board are intentionally excluded.",
     "updated":  "2026-07-14",
     "tol":  0.3,
-    "count":  27,
+    "count":  24,
     "cells":  [
                   {
                       "id":  "bottled-water",
@@ -59,6 +59,15 @@
                       "set":  "2026-07-14"
                   },
                   {
+                      "id":  "sweet-corn",
+                      "store":  "Baker\u0027s",
+                      "per_unit":  0.4,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.6,
+                      "link_name":  "Fresh Sweet Corn on the Cob-Each",
+                      "set":  "2026-07-14"
+                  },
+                  {
                       "id":  "onions",
                       "store":  "Aldi",
                       "per_unit":  0.7967,
@@ -92,15 +101,6 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.9891,
                       "link_name":  "Full Circle Balsamic Vinegar",
-                      "set":  "2026-07-14"
-                  },
-                  {
-                      "id":  "bread-crumbs",
-                      "store":  "Hy-Vee",
-                      "per_unit":  0.1858,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.1193,
-                      "link_name":  "Gustare Vita Italian Bread Crumbs",
                       "set":  "2026-07-14"
                   },
                   {
@@ -203,24 +203,6 @@
                       "set":  "2026-07-14"
                   },
                   {
-                      "id":  "ground-turmeric",
-                      "store":  "Family Fare",
-                      "per_unit":  0.6725,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  1.345,
-                      "link_name":  "Sugar \u0027N Spice Turmeric Ground 2 Oz",
-                      "set":  "2026-07-14"
-                  },
-                  {
-                      "id":  "red-pepper-flakes",
-                      "store":  "Family Fare",
-                      "per_unit":  1.3289,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  1.9933,
-                      "link_name":  "Our Family Red Pepper, Crushed 1.5 Oz",
-                      "set":  "2026-07-14"
-                  },
-                  {
                       "id":  "all-purpose-flour",
                       "store":  "Family Fare",
                       "per_unit":  0.0711,
@@ -236,15 +218,6 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.3488,
                       "link_name":  "Our Family Bread Crumbs, Plain 15 Oz",
-                      "set":  "2026-07-14"
-                  },
-                  {
-                      "id":  "ground-cinnamon",
-                      "store":  "Family Fare",
-                      "per_unit":  0.2704,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.676,
-                      "link_name":  "That\u0027s Smart! Ground Cinnamon 2.5 Oz",
                       "set":  "2026-07-14"
                   }
               ]

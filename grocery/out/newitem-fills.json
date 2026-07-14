@@ -1,0 +1,20 @@
+{
+  "readme": "Per-store fills for the 27 new board commodities (6 cleaners + 21 pantry). Every row was resolved by searching that store's own storefront and passing the commodity's include/exclude regexes AND its per-unit band. Items a store genuinely does not carry are recorded in not_carried - they are NOT guessed and NOT filled from another store.",
+  "price_mode": "in-store",
+  "verified": "2026-07-14",
+  "fills": [
+    { "store": "Aldi", "id": "garlic-powder",     "item": "Stonemill Garlic Powder 3.12 oz",       "price": 0.99, "size": "3.12 oz" },
+    { "store": "Aldi", "id": "onion-powder",      "item": "Stonemill Onion Powder 2.62 oz",        "price": 0.99, "size": "2.62 oz" },
+    { "store": "Aldi", "id": "chili-powder",      "item": "Stonemill Chili Powder 2.5 oz",         "price": 0.99, "size": "2.5 oz" },
+    { "store": "Aldi", "id": "ground-cumin",      "item": "Stonemill Ground Cumin 2 oz",           "price": 0.99, "size": "2 oz" },
+    { "store": "Aldi", "id": "italian-seasoning", "item": "Stonemill Italian Seasoning 0.75 oz",   "price": 0.99, "size": "0.75 oz" },
+    { "store": "Aldi", "id": "shower-cleaner",    "item": "Power Force Bathroom Cleaner 32 fl oz", "price": 2.69, "size": "32 fl oz" }
+  ],
+  "not_carried": [
+    { "store": "Aldi", "id": "floor-cleaner",    "note": "search returns only all-purpose cleaners (Fabuloso, Power Force) - no dedicated floor cleaner" },
+    { "store": "Aldi", "id": "drain-cleaner",    "note": "zero search results" },
+    { "store": "Aldi", "id": "oven-cleaner",     "note": "zero search results" },
+    { "store": "Aldi", "id": "furniture-polish", "note": "zero search results" },
+    { "store": "Aldi", "id": "insect-spray",     "note": "zero search results" }
+  ]
+}

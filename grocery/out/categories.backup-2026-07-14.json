@@ -1,4 +1,4 @@
-﻿{
+{
     "note":  "Food-category grouping for the public deals page. order = display order of the category section + its filter button.",
     "categories":  [
                        {
@@ -175,12 +175,7 @@
                                                "applesauce",
                                                "pickles",
                                                "beef-broth",
-                                               "chicken-broth",
-                                               "chickpeas",
-                                               "kidney-beans",
-                                               "crushed-tomatoes",
-                                               "tomato-paste",
-                                               "tomato-sauce"
+                                               "chicken-broth"
                                            ]
                        },
                        {
@@ -202,10 +197,7 @@
                                                "queso",
                                                "relish",
                                                "worcestershire",
-                                               "hummus",
-                                               "soy-sauce",
-                                               "white-vinegar",
-                                               "lemon-juice"
+                                               "hummus"
                                            ]
                        },
                        {
@@ -230,20 +222,7 @@
                                                "black-pepper",
                                                "salt",
                                                "condensed-milk",
-                                               "evaporated-milk",
-                                               "cornstarch",
-                                               "bread-crumbs",
-                                               "paprika",
-                                               "dried-oregano",
-                                               "dried-parsley",
-                                               "ground-cinnamon",
-                                               "ground-turmeric",
-                                               "red-pepper-flakes",
-                                               "garlic-powder",
-                                               "onion-powder",
-                                               "chili-powder",
-                                               "ground-cumin",
-                                               "italian-seasoning"
+                                               "evaporated-milk"
                                            ]
                        },
                        {
@@ -387,13 +366,7 @@
                                                "disinfectant-spray",
                                                "air-freshener",
                                                "batteries",
-                                               "charcoal",
-                                               "floor-cleaner",
-                                               "drain-cleaner",
-                                               "oven-cleaner",
-                                               "shower-cleaner",
-                                               "furniture-polish",
-                                               "insect-spray"
+                                               "charcoal"
                                            ]
                        },
                        {
