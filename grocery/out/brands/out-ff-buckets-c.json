@@ -1,0 +1,255 @@
+﻿{
+    "store":  "Family Fare",
+    "generated":  "2026-07-13",
+    "items":  {
+                  "tomato-soup":  [
+                                      {
+                                          "b":  "Progresso",
+                                          "s":  0,
+                                          "per":  0.1732
+                                      },
+                                      {
+                                          "b":  "Store brand",
+                                          "s":  1,
+                                          "per":  0.0848
+                                      },
+                                      {
+                                          "b":  "Campbell\u0027s",
+                                          "s":  0,
+                                          "per":  0.1393
+                                      }
+                                  ],
+                  "diced-tomatoes":  [
+                                         {
+                                             "b":  "Store brand",
+                                             "s":  1,
+                                             "per":  0.0683
+                                         },
+                                         {
+                                             "b":  "Hunt\u0027s",
+                                             "s":  0,
+                                             "per":  0.1234
+                                         },
+                                         {
+                                             "b":  "Contadina",
+                                             "s":  0,
+                                             "per":  0.1068
+                                         }
+                                     ],
+                  "canned-black-beans":  [
+                                             {
+                                                 "b":  "Bush\u0027s",
+                                                 "s":  0,
+                                                 "per":  0.1127
+                                             },
+                                             {
+                                                 "b":  "Store brand",
+                                                 "s":  1,
+                                                 "per":  0.0649
+                                             },
+                                             {
+                                                 "b":  "La Preferida",
+                                                 "s":  0,
+                                                 "per":  0.1247
+                                             }
+                                         ],
+                  "hot-sauce":  [
+                                    {
+                                        "b":  "Store brand",
+                                        "s":  1,
+                                        "per":  0.2908
+                                    },
+                                    {
+                                        "b":  "Frank\u0027s RedHot",
+                                        "s":  0,
+                                        "per":  0.4575
+                                    },
+                                    {
+                                        "b":  "Texas Pete",
+                                        "s":  0,
+                                        "per":  0.3325
+                                    },
+                                    {
+                                        "b":  "Cholula",
+                                        "s":  0,
+                                        "per":  0.8325
+                                    },
+                                    {
+                                        "b":  "Tabasco",
+                                        "s":  0,
+                                        "per":  0.3495
+                                    },
+                                    {
+                                        "b":  "Huy Fong",
+                                        "s":  0,
+                                        "per":  0.2496
+                                    }
+                                ],
+                  "maple-syrup":  [
+                                      {
+                                          "b":  "Hungry Jack",
+                                          "s":  0,
+                                          "per":  0.2496
+                                      },
+                                      {
+                                          "b":  "Store brand",
+                                          "s":  1,
+                                          "per":  0.5934
+                                      },
+                                      {
+                                          "b":  "Pearl Milling",
+                                          "s":  0,
+                                          "per":  0.2454
+                                      },
+                                      {
+                                          "b":  "Log Cabin",
+                                          "s":  0,
+                                          "per":  0.2246
+                                      }
+                                  ],
+                  "jelly":  [
+                                {
+                                    "b":  "Welch\u0027s",
+                                    "s":  0,
+                                    "per":  0.133
+                                },
+                                {
+                                    "b":  "Store brand",
+                                    "s":  1,
+                                    "per":  0.0997
+                                },
+                                {
+                                    "b":  "Bonne Maman",
+                                    "s":  0,
+                                    "per":  0.6915
+                                },
+                                {
+                                    "b":  "Smucker\u0027s",
+                                    "s":  0,
+                                    "per":  0.1727
+                                }
+                            ],
+                  "coffee-creamer":  [
+                                         {
+                                             "b":  "Coffee Mate",
+                                             "s":  0,
+                                             "per":  0.1358
+                                         },
+                                         {
+                                             "b":  "Store brand",
+                                             "s":  1,
+                                             "per":  0.326
+                                         },
+                                         {
+                                             "b":  "International Delight",
+                                             "s":  0,
+                                             "per":  0.1248
+                                         },
+                                         {
+                                             "b":  "Chobani",
+                                             "s":  0,
+                                             "per":  0.2912
+                                         }
+                                     ],
+                  "honey":  [
+                                {
+                                    "b":  "Local Hive",
+                                    "s":  0,
+                                    "per":  0.6869
+                                },
+                                {
+                                    "b":  "Store brand",
+                                    "s":  1,
+                                    "per":  0.2915
+                                },
+                                {
+                                    "b":  "Sue Bee",
+                                    "s":  0,
+                                    "per":  0.5158
+                                }
+                            ],
+                  "oatmeal":  [
+                                  {
+                                      "b":  "Quaker",
+                                      "s":  0,
+                                      "per":  0.1902
+                                  },
+                                  {
+                                      "b":  "Store brand",
+                                      "s":  1,
+                                      "per":  0.126
+                                  },
+                                  {
+                                      "b":  "Bob\u0027s Red Mill",
+                                      "s":  0,
+                                      "per":  0.1996
+                                  }
+                              ],
+                  "italian-dressing":  [
+                                           {
+                                               "b":  "Store brand",
+                                               "s":  1,
+                                               "per":  0.1744
+                                           },
+                                           {
+                                               "b":  "Ken\u0027s",
+                                               "s":  0,
+                                               "per":  0.2306
+                                           },
+                                           {
+                                               "b":  "Wish-Bone",
+                                               "s":  0,
+                                               "per":  0.2079
+                                           },
+                                           {
+                                               "b":  "Olive Garden",
+                                               "s":  0,
+                                               "per":  0.3329
+                                           },
+                                           {
+                                               "b":  "Kraft",
+                                               "s":  0,
+                                               "per":  0.2494
+                                           }
+                                       ],
+                  "chicken-broth":  [
+                                        {
+                                            "b":  "Store brand",
+                                            "s":  1,
+                                            "per":  0.0528
+                                        },
+                                        {
+                                            "b":  "Swanson",
+                                            "s":  0,
+                                            "per":  0.0915
+                                        },
+                                        {
+                                            "b":  "Pacific Foods",
+                                            "s":  0,
+                                            "per":  0.2403
+                                        },
+                                        {
+                                            "b":  "Kitchen Basics",
+                                            "s":  0,
+                                            "per":  0.1247
+                                        }
+                                    ],
+                  "pretzels":  [
+                                   {
+                                       "b":  "Store brand",
+                                       "s":  1,
+                                       "per":  0.1619
+                                   },
+                                   {
+                                       "b":  "Snyder\u0027s",
+                                       "s":  0,
+                                       "per":  0.2994
+                                   },
+                                   {
+                                       "b":  "Rold Gold",
+                                       "s":  0,
+                                       "per":  0.2494
+                                   }
+                               ]
+              }
+}

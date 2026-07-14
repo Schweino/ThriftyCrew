@@ -1,0 +1,45 @@
+﻿{
+    "store":  "Family Fare",
+    "generated":  "2026-07-13",
+    "items":  {
+                  "maple-syrup":  [
+                                      {
+                                          "b":  "Hungry Jack",
+                                          "s":  0,
+                                          "per":  0.2496
+                                      },
+                                      {
+                                          "b":  "Store brand",
+                                          "s":  1,
+                                          "per":  0.5934
+                                      },
+                                      {
+                                          "b":  "Pearl Milling",
+                                          "s":  0,
+                                          "per":  0.2454
+                                      },
+                                      {
+                                          "b":  "Log Cabin",
+                                          "s":  0,
+                                          "per":  0.2246
+                                      }
+                                  ],
+                  "pretzels":  [
+                                   {
+                                       "b":  "Store brand",
+                                       "s":  1,
+                                       "per":  0.1619
+                                   },
+                                   {
+                                       "b":  "Snyder\u0027s",
+                                       "s":  0,
+                                       "per":  0.2994
+                                   },
+                                   {
+                                       "b":  "Rold Gold",
+                                       "s":  0,
+                                       "per":  0.2494
+                                   }
+                               ]
+              }
+}

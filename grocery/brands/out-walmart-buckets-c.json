@@ -1,0 +1,17 @@
+{
+  "store": "Walmart", "generated": "2026-07-13",
+  "items": {
+    "tomato-soup":        [{"b":"Campbell's","s":0,"per":0.091},{"b":"Progresso","s":0,"per":0.131},{"b":"Amy's","s":0,"per":0.332},{"b":"Store brand","s":1,"per":0.355}],
+    "diced-tomatoes":     [{"b":"Store brand","s":1,"per":0.058},{"b":"Red Gold","s":0,"per":0.074},{"b":"Del Monte","s":0,"per":0.079},{"b":"Contadina","s":0,"per":0.108}],
+    "canned-black-beans": [{"b":"La Preferida","s":0,"per":0.044},{"b":"Store brand","s":1,"per":0.054},{"b":"Goya","s":0,"per":0.098},{"b":"Bush's","s":0,"per":0.099}],
+    "hot-sauce":          [{"b":"Store brand","s":1,"per":0.13},{"b":"Texas Pete","s":0,"per":0.202},{"b":"Frank's RedHot","s":0,"per":0.241},{"b":"Tabasco","s":0,"per":0.56},{"b":"Cholula","s":0,"per":0.648}],
+    "maple-syrup":        [{"b":"Store brand","s":1,"per":0.087},{"b":"Mrs. Butterworth's","s":0,"per":0.104},{"b":"Log Cabin","s":0,"per":0.122},{"b":"Hungry Jack","s":0,"per":0.158},{"b":"Pearl Milling","s":0,"per":0.16}],
+    "jelly":              [{"b":"Welch's","s":0,"per":0.089},{"b":"Store brand","s":1,"per":0.091},{"b":"Smucker's","s":0,"per":0.105}],
+    "coffee-creamer":     [{"b":"Store brand","s":1,"per":0.089},{"b":"International Delight","s":0,"per":0.104},{"b":"Coffee Mate","s":0,"per":0.108},{"b":"Chobani","s":0,"per":0.195}],
+    "honey":              [{"b":"Store brand","s":1,"per":0.248},{"b":"Busy Bee","s":0,"per":0.42},{"b":"Local Hive","s":0,"per":0.468}],
+    "oatmeal":            [{"b":"Store brand","s":1,"per":0.1},{"b":"Quaker","s":0,"per":0.122},{"b":"Bob's Red Mill","s":0,"per":0.196}],
+    "italian-dressing":   [{"b":"Store brand","s":1,"per":0.106},{"b":"Kraft","s":0,"per":0.125},{"b":"Ken's","s":0,"per":0.217},{"b":"Newman's Own","s":0,"per":0.246},{"b":"Olive Garden","s":0,"per":0.249}],
+    "chicken-broth":      [{"b":"Store brand","s":1,"per":0.04},{"b":"College Inn","s":0,"per":0.069},{"b":"Swanson","s":0,"per":0.071},{"b":"Pacific Foods","s":0,"per":0.106},{"b":"Kitchen Basics","s":0,"per":0.606}],
+    "pretzels":           [{"b":"Store brand","s":1,"per":0.153},{"b":"Snyder's","s":0,"per":0.203},{"b":"Rold Gold","s":0,"per":0.249},{"b":"Utz","s":0,"per":0.268}]
+  }
+}

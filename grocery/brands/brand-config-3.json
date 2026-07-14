@@ -1,0 +1,88 @@
+{
+  "commodities": {
+    "tomato-soup": {
+      "label": "Tomato Soup", "unit": "oz",
+      "queries": ["tomato soup"],
+      "include": "tomato\\s+soup|tomato\\s+bisque|condensed\\s+tomato\\s+soup",
+      "exclude": "\\bdry\\b|\\bmix\\b|ramen|noodle|\\bcup\\b|garden|basil\\s+parmesan\\s+bowl",
+      "brands": ["Campbell's", "Progresso", "Pacific Foods", "Amy's"]
+    },
+    "diced-tomatoes": {
+      "label": "Diced Tomatoes", "unit": "oz",
+      "queries": ["diced tomatoes", "canned tomatoes"],
+      "include": "diced\\s+tomato(?:es)?|crushed\\s+tomato(?:es)?|whole\\s+peeled\\s+tomato",
+      "exclude": "paste|\\bsauce\\b|sun|\\bsoup\\b|chil(?:i|e)|\\bstewed\\b|fire\\s+roasted\\s+salsa|ketchup",
+      "brands": ["Hunt's", "Del Monte", "Red Gold", "Contadina", "Muir Glen"]
+    },
+    "canned-black-beans": {
+      "label": "Black Beans", "unit": "oz",
+      "queries": ["black beans", "canned black beans"],
+      "include": "black\\s+beans?",
+      "exclude": "\\bsoup\\b|\\bdry\\b|\\bdried\\b|burger|chips|salsa|\\bcorn\\b|refried|seasoned\\s+rice|soy",
+      "brands": ["Bush's", "Goya", "La Preferida"]
+    },
+    "hot-sauce": {
+      "label": "Hot Sauce", "unit": "floz",
+      "queries": ["hot sauce", "sriracha"],
+      "include": "hot\\s+sauce|sriracha|tabasco|red\\s*hot\\b|cholula|texas\\s+pete",
+      "exclude": "wing|\\bchicken\\b|chips|ramen|\\bseasoning\\b|\\bmix\\b|\\bpopcorn\\b|marinade",
+      "brands": ["Frank's RedHot", "Tabasco", "Cholula", "Texas Pete", "Huy Fong"]
+    },
+    "maple-syrup": {
+      "label": "Syrup (pancake)", "unit": "floz",
+      "queries": ["pancake syrup", "maple syrup"],
+      "include": "maple\\s+syrup|pancake\\s+syrup|breakfast\\s+syrup|original\\s+syrup",
+      "exclude": "\\boat|granola|corn\\s+syrup|\\bcandy\\b|sausage|\\bcookie|\\bbar\\b|coffee|latte|\\bcandle\\b",
+      "brands": ["Log Cabin", "Pearl Milling", "Mrs. Butterworth's", "Hungry Jack"]
+    },
+    "jelly": {
+      "label": "Jelly / Jam", "unit": "oz",
+      "queries": ["jelly", "jam", "preserves"],
+      "include": "\\bjelly\\b|\\bjam\\b|preserves",
+      "exclude": "\\bbeans?\\b|donut|\\broll\\b|pepper\\s+jelly|petroleum|toast\\b|jammer|pajama|\\bmix\\b|cracker|cookie",
+      "brands": ["Smucker's", "Welch's", "Bonne Maman", "Polaner"]
+    },
+    "coffee-creamer": {
+      "label": "Coffee Creamer", "unit": "floz",
+      "queries": ["coffee creamer", "creamer"],
+      "include": "\\bcreamer\\b",
+      "exclude": "powder(?:ed)?\\s+creamer|\\bpowder\\b|non-?dairy\\s+powder|hazelnut\\s+powder",
+      "brands": ["Coffee Mate", "International Delight", "Chobani", "Nestle"]
+    },
+    "honey": {
+      "label": "Honey", "unit": "oz",
+      "queries": ["honey"],
+      "include": "\\bhoney\\b",
+      "exclude": "\\bham\\b|mustard|\\bbbq\\b|graham|bread|\\bbun\\b|cereal|\\boats?\\b|\\bnut\\b|glaze|turkey|wing|\\bdew\\b|\\bcomb\\b|roasted|wheat|mango|almond|\\bbeans?\\b|corn\\s*dog|granola|\\bsausage\\b|\\bbars?\\b|habanero|\\bchicken\\b|\\bnaan\\b|muffin|\\bcarrots?\\b|dijon|garlic|teriyaki|barbecue|crackers?|\\bsauce\\b|greek\\s+yog",
+      "brands": ["Sue Bee", "Nature Nate's", "Local Hive", "Busy Bee"]
+    },
+    "oatmeal": {
+      "label": "Oats / Oatmeal", "unit": "oz",
+      "queries": ["oatmeal", "oats"],
+      "include": "oatmeal|rolled\\s+oats|quick\\s+oats|old\\s+fashioned\\s+oats|steel\\s+cut\\s+oats|\\boats\\b",
+      "exclude": "cookie|cream\\s+pie|\\bbar\\b|\\bsoap\\b|\\bbath\\b|granola|\\bcream\\s+pie\\b|lotion|body\\s+wash|moisturiz|\\bmilk\\b|\\bcup\\b|instant\\s+.{0,10}packets?|\\braisin\\b|breakfast\\s+square",
+      "brands": ["Quaker", "Bob's Red Mill", "McCann's"]
+    },
+    "italian-dressing": {
+      "label": "Italian Dressing", "unit": "floz",
+      "queries": ["italian dressing"],
+      "include": "italian\\s+dressing|zesty\\s+italian",
+      "exclude": "\\bmix\\b|seasoning|marinade\\s+packet|dry\\b",
+      "brands": ["Kraft", "Wish-Bone", "Ken's", "Olive Garden", "Newman's Own"]
+    },
+    "chicken-broth": {
+      "label": "Chicken Broth / Stock", "unit": "floz",
+      "queries": ["chicken broth", "chicken stock"],
+      "include": "chicken\\s+(?:broth|stock)|chicken\\s+bone\\s+broth",
+      "exclude": "bouillon|\\bbase\\b|\\bcubes?\\b|ramen|\\bsoup\\b|noodle|gravy|\\bmix\\b|seasoning|granulated",
+      "brands": ["Swanson", "College Inn", "Pacific Foods", "Kitchen Basics"]
+    },
+    "pretzels": {
+      "label": "Pretzels", "unit": "oz",
+      "queries": ["pretzels"],
+      "include": "pretzels?",
+      "exclude": "chocolate|yogurt|\\bbuns?\\b|\\bdog\\b|\\bfrozen\\b|peanut\\s+butter|\\bcandy\\b|dipped|\\bsoft\\b.{0,10}frozen|crisps?\\s+dip",
+      "brands": ["Snyder's", "Rold Gold", "Utz", "Herr's"]
+    }
+  }
+}

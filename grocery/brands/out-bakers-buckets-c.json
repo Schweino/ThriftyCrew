@@ -1,0 +1,17 @@
+{
+  "store": "Baker's", "generated": "2026-07-13",
+  "items": {
+    "tomato-soup":        [{"b":"Store brand","s":1,"per":0.07},{"b":"Pacific Foods","s":0,"per":0.28}],
+    "diced-tomatoes":     [{"b":"Store brand","s":1,"per":0.07},{"b":"Red Gold","s":0,"per":0.07},{"b":"Contadina","s":0,"per":0.14},{"b":"Muir Glen","s":0,"per":0.18}],
+    "canned-black-beans": [{"b":"Store brand","s":1,"per":0.06},{"b":"Goya","s":0,"per":0.1},{"b":"La Preferida","s":0,"per":0.12}],
+    "hot-sauce":          [{"b":"Store brand","s":1,"per":0.13},{"b":"Texas Pete","s":0,"per":0.29},{"b":"Tabasco","s":0,"per":0.67},{"b":"Cholula","s":0,"per":0.75}],
+    "maple-syrup":        [{"b":"Store brand","s":1,"per":0.1},{"b":"Log Cabin","s":0,"per":0.16},{"b":"Hungry Jack","s":0,"per":0.17}],
+    "jelly":              [{"b":"Store brand","s":1,"per":0.09},{"b":"Bonne Maman","s":0,"per":0.58}],
+    "coffee-creamer":     [{"b":"Store brand","s":1,"per":0.09},{"b":"International Delight","s":0,"per":0.11},{"b":"Coffee Mate","s":0,"per":0.12},{"b":"Chobani","s":0,"per":0.27}],
+    "honey":              [{"b":"Store brand","s":1,"per":0.24},{"b":"Sue Bee","s":0,"per":0.47},{"b":"Busy Bee","s":0,"per":0.52},{"b":"Local Hive","s":0,"per":0.58}],
+    "oatmeal":            [{"b":"Store brand","s":1,"per":0.1},{"b":"Quaker","s":0,"per":0.14}],
+    "italian-dressing":   [{"b":"Store brand","s":1,"per":0.11},{"b":"Kraft","s":0,"per":0.21},{"b":"Olive Garden","s":0,"per":0.3}],
+    "chicken-broth":      [{"b":"Store brand","s":1,"per":0.05},{"b":"Swanson","s":0,"per":0.09},{"b":"Pacific Foods","s":0,"per":0.1},{"b":"Kitchen Basics","s":0,"per":0.13}],
+    "pretzels":           [{"b":"Store brand","s":1,"per":0.07},{"b":"Rold Gold","s":0,"per":0.25}]
+  }
+}

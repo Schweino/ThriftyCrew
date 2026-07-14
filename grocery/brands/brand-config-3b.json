@@ -1,0 +1,18 @@
+{
+  "commodities": {
+    "maple-syrup": {
+      "label": "Syrup (pancake)", "unit": "floz",
+      "queries": ["pancake syrup", "syrup", "log cabin"],
+      "include": "maple\\s+syrup|pancake\\s+syrup|breakfast\\s+syrup|original\\s+syrup",
+      "exclude": "\\boat|granola|corn\\s+syrup|\\bcandy\\b|sausage|\\bcookie|\\bbar\\b|coffee|latte|\\bcandle\\b|simple\\s+syrup|agave|chocolate",
+      "brands": ["Log Cabin", "Pearl Milling", "Mrs. Butterworth's", "Hungry Jack"]
+    },
+    "pretzels": {
+      "label": "Pretzels", "unit": "oz",
+      "queries": ["pretzels", "pretzel"],
+      "include": "pretzels?",
+      "exclude": "chocolate|yogurt|\\bbuns?\\b|\\bdog\\b|\\bfrozen\\b|peanut\\s+butter|\\bcandy\\b|dipped|crisps?\\s+dip|bites",
+      "brands": ["Snyder's", "Rold Gold", "Utz", "Herr's"]
+    }
+  }
+}

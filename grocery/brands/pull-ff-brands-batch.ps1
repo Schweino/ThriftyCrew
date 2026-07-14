@@ -3,9 +3,15 @@
   Buckets to the curated brand list + Our Family store brand. Output: out\brands\out-ff-buckets-b.json
   (same {b,s,per} shape as the browser-store bucket files, so assemble reads all stores uniformly).
 #>
+param(
+  [string]$ConfigPath = '',
+  [string]$OutPath = ''
+)
 $ErrorActionPreference='Stop'
 $here=$PSScriptRoot
-$cfg = (Get-Content (Join-Path $here 'brand-config.json') -Raw | ConvertFrom-Json).commodities
+if(-not $ConfigPath){ $ConfigPath = Join-Path $here 'brand-config.json' }
+if(-not $OutPath){ $OutPath = Join-Path $here '..\out\brands\out-ff-buckets-b.json' }
+$cfg = (Get-Content $ConfigPath -Raw | ConvertFrom-Json).commodities
 $storeBrands = @('Our Family','Value Time','ValuTime','Simply Done','Smart Sense','Open Acres','Full Circle','Finest Reserve','Spartan')
 $UA=@{ 'User-Agent'='Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/125 Safari/537.36'; 'Accept'='application/json' }
 $ak='family_fare'; $sid='6401'; $b='https://api.freshop.ncrcloud.com/1'
@@ -58,5 +64,5 @@ foreach($cid in $cfg.PSObject.Properties.Name){
   $out.items[$cid]=@($buckets.Values | Sort-Object per)
   Write-Output ("{0,-22} {1} brands" -f $cid, $buckets.Count)
 }
-($out | ConvertTo-Json -Depth 8) | Set-Content (Join-Path $here '..\out\brands\out-ff-buckets-b.json') -Encoding UTF8
-Write-Output "`n-> out\brands\out-ff-buckets-b.json"
+($out | ConvertTo-Json -Depth 8) | Set-Content $OutPath -Encoding UTF8
+Write-Output ("`n-> " + $OutPath)

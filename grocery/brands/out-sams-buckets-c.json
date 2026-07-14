@@ -1,0 +1,17 @@
+{
+  "store": "Sam's Club", "generated": "2026-07-13",
+  "items": {
+    "tomato-soup":        [{"b":"Campbell's","s":0,"per":0.1006}],
+    "diced-tomatoes":     [{"b":"Store brand","s":1,"per":0.0556},{"b":"Hunt's","s":0,"per":0.0852}],
+    "canned-black-beans": [{"b":"Store brand","s":1,"per":0.052},{"b":"Bush's","s":0,"per":0.0738}],
+    "hot-sauce":          [{"b":"Frank's RedHot","s":0,"per":0.1209},{"b":"Huy Fong","s":0,"per":0.1604},{"b":"Cholula","s":0,"per":0.4158}],
+    "maple-syrup":        [{"b":"Mrs. Butterworth's","s":0,"per":0.0942},{"b":"Pearl Milling","s":0,"per":0.1059}],
+    "jelly":              [{"b":"Smucker's","s":0,"per":0.0545},{"b":"Welch's","s":0,"per":0.083},{"b":"Bonne Maman","s":0,"per":0.4031}],
+    "coffee-creamer":     [{"b":"Store brand","s":1,"per":0.085},{"b":"Coffee Mate","s":0,"per":0.0861},{"b":"International Delight","s":0,"per":0.0876},{"b":"Chobani","s":0,"per":0.1429}],
+    "honey":              [{"b":"Store brand","s":1,"per":0.1663},{"b":"Local Hive","s":0,"per":0.3495}],
+    "oatmeal":            [{"b":"Quaker","s":0,"per":0.0499},{"b":"Store brand","s":1,"per":0.0625},{"b":"Bob's Red Mill","s":0,"per":0.1107}],
+    "italian-dressing":   [{"b":"Store brand","s":1,"per":0.0741},{"b":"Wish-Bone","s":0,"per":0.1108},{"b":"Olive Garden","s":0,"per":0.1663}],
+    "chicken-broth":      [{"b":"Store brand","s":1,"per":0.0416},{"b":"Swanson","s":0,"per":0.0513}],
+    "pretzels":           [{"b":"Utz","s":0,"per":0.133},{"b":"Snyder's","s":0,"per":0.1664}]
+  }
+}
