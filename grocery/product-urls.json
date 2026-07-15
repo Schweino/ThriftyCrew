@@ -550,9 +550,9 @@
                                                                   },
                                               "Walmart":  {
                                                               "url":  "https://www.walmart.com/ip/Great-Value-Apple-Cider-Vinegar-32-fl-oz/10451000",
-                                                              "name":  "Great Value Apple Cider Vinegar",
                                                               "price":  2.37,
-                                                              "size":  "32 fl oz"
+                                                              "size":  "32 fl oz",
+                                                              "name":  "Great Value Apple Cider Vinegar"
                                                           }
                                           },
                   "apple-juice":  {
@@ -2051,6 +2051,13 @@
                                                        "name":  "Fareway Plain Bread Crumbs 15 oz",
                                                        "board_pu":  0.166
                                                    },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/3309869/gustare-vita-italian-bread-crumbs-13-4-oz",
+                                                      "price":  2.99,
+                                                      "size":  "13.4 oz",
+                                                      "name":  "Gustare Vita Italian Bread Crumbs",
+                                                      "verified":  "2026-07-15 Hy-Vee search API (storeId 1465)"
+                                                  },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Vigo-Italian-Style-Bread-Crumbs-5-lbs/13803520339",
                                                                "name":  "Vigo Italian Style Bread Crumbs, 5 lbs.",
@@ -2066,14 +2073,7 @@
                                                        "name":  "Great Value Italian Style Bread Crumbs, 15 oz",
                                                        "board_pu":  0.0813,
                                                        "recipe_pu":  0.081
-                                                   },
-                                       "Hy-Vee":  {
-                                                      "url":  "https://www.hy-vee.com/aisles-online/p/3309869/gustare-vita-italian-bread-crumbs-13-4-oz",
-                                                      "price":  2.99,
-                                                      "size":  "13.4 oz",
-                                                      "name":  "Gustare Vita Italian Bread Crumbs",
-                                                      "verified":  "2026-07-15 Hy-Vee search API (storeId 1465)"
-                                                  }
+                                                   }
                                    },
                   "breakfast-sandwiches":  {
                                                "commodity":  "breakfast-sandwiches",
@@ -2919,6 +2919,13 @@
                                                            "name":  "Dole Pineapple Chunks",
                                                            "board_pu":  0.205
                                                        },
+                                           "Hy-Vee":  {
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/2970344/that-s-smart-pineapple-chunks",
+                                                          "price":  1.62,
+                                                          "size":  "20 oz",
+                                                          "name":  "That\u0027s Smart! Pineapple Chunks",
+                                                          "verified":  "2026-07-15 Hy-Vee search API (storeId 1465)"
+                                                      },
                                            "Sam\u0027s Club":  {
                                                                    "url":  "https://www.samsclub.com/ip/Dole-Tropical-Gold-Pineapple-Chunks-15-25-oz-6-pk/13608108237",
                                                                    "price":  11.48,
@@ -2931,14 +2938,7 @@
                                                            "size":  "20 oz",
                                                            "name":  "Great Value Canned Pineapple Chunks in Pineapple Juice",
                                                            "board_pu":  0.084
-                                                       },
-                                           "Hy-Vee":  {
-                                                          "url":  "https://www.hy-vee.com/aisles-online/p/2970344/that-s-smart-pineapple-chunks",
-                                                          "price":  1.62,
-                                                          "size":  "20 oz",
-                                                          "name":  "That\u0027s Smart! Pineapple Chunks",
-                                                          "verified":  "2026-07-15 Hy-Vee search API (storeId 1465)"
-                                                      }
+                                                       }
                                        },
                   "canned-pinto-beans":  {
                                              "commodity":  "canned-pinto-beans",
@@ -4605,7 +4605,13 @@
                                                          "price":  17.88,
                                                          "size":  "43.5 oz",
                                                          "name":  "Folgers Classic Medium Roast Ground Coffee, 43.5 oz."
-                                                     }
+                                                     },
+                                 "Walmart":  {
+                                                 "url":  "https://www.walmart.com/ip/Folgers-Classic-Roast-Ground-Coffee-Medium-Roast-40-3-Oz-Canister/971362035",
+                                                 "price":  0.44,
+                                                 "size":  "oz",
+                                                 "name":  "Folgers Classic Roast Ground Coffee"
+                                             }
                              },
                   "coffee-creamer":  {
                                          "commodity":  "coffee-creamer",
@@ -7785,6 +7791,13 @@
                                                       "name":  "Fareway Steamables Green Peas",
                                                       "board_pu":  0.12
                                                   },
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/2969855/that-s-smart-sweet-peas",
+                                                     "price":  0.98,
+                                                     "size":  "12 oz",
+                                                     "name":  "That\u0027s Smart! Sweet Peas (Frozen)",
+                                                     "verified":  "2026-07-15 Hy-Vee search API (storeId 1465)"
+                                                 },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/Great-Value-Frozen-Sweet-Peas-16-oz-Steamable-Bag/10315048",
                                                       "price":  0.98,
@@ -7792,14 +7805,7 @@
                                                       "name":  "Great Value Frozen Sweet Peas",
                                                       "board_pu":  0.0612,
                                                       "recipe_pu":  0.065
-                                                  },
-                                      "Hy-Vee":  {
-                                                     "url":  "https://www.hy-vee.com/aisles-online/p/2969855/that-s-smart-sweet-peas",
-                                                     "price":  0.98,
-                                                     "size":  "12 oz",
-                                                     "name":  "That\u0027s Smart! Sweet Peas (Frozen)",
-                                                     "verified":  "2026-07-15 Hy-Vee search API (storeId 1465)"
-                                                 }
+                                                  }
                                   },
                   "frozen-pizza":  {
                                        "commodity":  "frozen-pizza",
@@ -8647,7 +8653,13 @@
                                                          "price":  6.87,
                                                          "size":  "3 lb",
                                                          "name":  "Red Seedless Grapes, 3 lbs."
-                                                     }
+                                                     },
+                                 "Walmart":  {
+                                                 "url":  "https://www.walmart.com/ip/Fresh-Red-Seedless-Grapes-Bag-2-25-lbs-Bag-Est/47770140",
+                                                 "price":  1.87,
+                                                 "size":  "lb",
+                                                 "name":  "Fresh Red Seedless Grapes"
+                                             }
                              },
                   "greek-yogurt":  {
                                        "commodity":  "Greek Yogurt",
@@ -8935,7 +8947,13 @@
                                                                    "price":  5.56,
                                                                    "size":  "$5.56/lb",
                                                                    "name":  "Member\u0027s Mark 80/20 Ground Beef Roll, priced per pound"
-                                                               }
+                                                               },
+                                           "Walmart":  {
+                                                           "url":  "https://www.walmart.com/ip/80-Lean-20-Fat-Ground-Beef-Chuck-1-lb-Tray-Fresh-All-Natural/479601462",
+                                                           "price":  6.28,
+                                                           "size":  "lb",
+                                                           "name":  "80% Lean/20% Fat Ground Beef Chuck"
+                                                       }
                                        },
                   "ground-cinnamon":  {
                                           "commodity":  "Ground Cinnamon",
@@ -8968,6 +8986,15 @@
                                                           "name":  "McCormick Ground Cinnamon 4.12 oz",
                                                           "board_pu":  1.2112
                                                       },
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/2950925/that-s-smart-ground-cinnamon",
+                                                         "price":  1.25,
+                                                         "size":  "2.5 oz",
+                                                         "name":  "That\u0027s Smart Ground Cinnamon",
+                                                         "verified":  "2026-07-15 Hy-Vee search API (storeId 1465)",
+                                                         "board_pu":  0.5,
+                                                         "recipe_pu":  0.5
+                                                     },
                                           "Sam\u0027s Club":  {
                                                                   "url":  "https://www.samsclub.com/ip/Member-s-Mark-Ground-Cinnamon-18-oz/13610768224",
                                                                   "name":  "Member\u0027s Mark Ground Cinnamon",
@@ -8983,14 +9010,7 @@
                                                           "name":  "Great Value Ground Cinnamon, 2.5 oz",
                                                           "board_pu":  0.508,
                                                           "recipe_pu":  0.508
-                                                      },
-                                          "Hy-Vee":  {
-                                                         "url":  "https://www.hy-vee.com/aisles-online/p/2950925/that-s-smart-ground-cinnamon",
-                                                         "price":  1.25,
-                                                         "size":  "2.5 oz",
-                                                         "name":  "That\u0027s Smart Ground Cinnamon",
-                                                         "verified":  "2026-07-15 Hy-Vee search API (storeId 1465)"
-                                                     }
+                                                      }
                                       },
                   "ground-coriander":  {
                                            "commodity":  "Ground Coriander",
@@ -10165,6 +10185,12 @@
                                },
                   "insect-spray":  {
                                        "commodity":  "Insect / Bug Spray (home)",
+                                       "Baker\u0027s":  {
+                                                            "url":  "https://www.bakersplus.com/p/hot-shot-ant-roach-spider-killer-crisp-linen/0007112196923",
+                                                            "price":  4.49,
+                                                            "size":  "17.5 oz",
+                                                            "name":  "Hot Shot Ant Roach \u0026 Spider Killer Crisp Linen"
+                                                        },
                                        "Fareway":  {
                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39164-raid-ant-killer-26-pine-forest-fresh-17-5-oz",
                                                        "price":  6.99,
@@ -12109,6 +12135,12 @@
                                               "name":  "Yellow Onions, 3 lb Bag",
                                               "board_pu":  0.7967
                                           },
+                                 "Baker\u0027s":  {
+                                                      "url":  "https://www.bakersplus.com/p/jumbo-yellow-onions/0000000004093",
+                                                      "price":  1.29,
+                                                      "size":  "lb",
+                                                      "name":  "Jumbo Yellow Onions"
+                                                  },
                                  "Family Fare":  {
                                                      "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/our_family_onion_yellow/p/1764405684715786064",
                                                      "price":  4.99,
@@ -14988,6 +15020,13 @@
                                                "name":  "Morton Iodized Salt",
                                                "board_pu":  0.0758
                                            },
+                               "Hy-Vee":  {
+                                              "url":  "https://www.hy-vee.com/aisles-online/p/55969/hy-vee-iodized-salt",
+                                              "price":  1.58,
+                                              "size":  "26 oz",
+                                              "name":  "Hy-Vee Iodized Salt",
+                                              "verified":  "2026-07-15 Hy-Vee search API (storeId 1465)"
+                                          },
                                "Sam\u0027s Club":  {
                                                        "url":  "https://www.samsclub.com/ip/Morton-Iodized-Salt-64-oz/13589509673",
                                                        "price":  2.38,
@@ -15002,14 +15041,7 @@
                                                "name":  "Great Value Iodized Salt",
                                                "board_pu":  0.0362,
                                                "recipe_pu":  0.036
-                                           },
-                               "Hy-Vee":  {
-                                              "url":  "https://www.hy-vee.com/aisles-online/p/55969/hy-vee-iodized-salt",
-                                              "price":  1.58,
-                                              "size":  "26 oz",
-                                              "name":  "Hy-Vee Iodized Salt",
-                                              "verified":  "2026-07-15 Hy-Vee search API (storeId 1465)"
-                                          }
+                                           }
                            },
                   "sandwich-bags":  {
                                         "commodity":  "sandwich-bags",
@@ -15322,6 +15354,13 @@
                                                           "name":  "Fareway Mild Cheddar Fancy Shredded Cheese",
                                                           "board_pu":  0.31
                                                       },
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/57077/hy-vee-shredded-low-moisture-part-skim-mozzarella-cheese",
+                                                         "price":  7.98,
+                                                         "size":  "32 oz",
+                                                         "name":  "Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Cheese",
+                                                         "verified":  "2026-07-15 Hy-Vee search API (storeId 1465)"
+                                                     },
                                           "Sam\u0027s Club":  {
                                                                   "url":  "https://www.samsclub.com/ip/Member-s-Mark-Standard-Shredded-3-Cheese-Blend-5-lbs/13905455421",
                                                                   "price":  12.97,
@@ -15334,14 +15373,7 @@
                                                           "size":  "8 oz",
                                                           "name":  "Great Value Fiesta Blend Finely Shredded Cheese, 8 oz",
                                                           "board_pu":  0.2462
-                                                      },
-                                          "Hy-Vee":  {
-                                                         "url":  "https://www.hy-vee.com/aisles-online/p/57077/hy-vee-shredded-low-moisture-part-skim-mozzarella-cheese",
-                                                         "price":  7.98,
-                                                         "size":  "32 oz",
-                                                         "name":  "Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Cheese",
-                                                         "verified":  "2026-07-15 Hy-Vee search API (storeId 1465)"
-                                                     }
+                                                      }
                                       },
                   "shrimp":  {
                                  "commodity":  "shrimp",
@@ -17555,6 +17587,12 @@
                                                   "name":  "Seedless Watermelon, Each",
                                                   "board_pu":  4.65
                                               },
+                                     "Baker\u0027s":  {
+                                                          "url":  "https://www.bakersplus.com/p/seedless-whole-watermelon/0000000004032",
+                                                          "price":  5.99,
+                                                          "size":  "each",
+                                                          "name":  "Seedless Whole Watermelon"
+                                                      },
                                      "Family Fare":  {
                                                          "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/melons/watermelon_mini_seedless/p/2310779",
                                                          "price":  5.99,
