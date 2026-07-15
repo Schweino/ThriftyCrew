@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-07-15 16:27",
+    "generated":  "2026-07-15 17:24",
     "tol":  0.3,
-    "no_link_count":  195,
+    "no_link_count":  171,
     "max_no_link":  0,
     "no_link_by_store":  [
                              {
@@ -14,7 +14,7 @@
                              },
                              {
                                  "store":  "Baker\u0027s",
-                                 "count":  36
+                                 "count":  12
                              },
                              {
                                  "store":  "Walmart",
@@ -51,10 +51,6 @@
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "chicken-wings",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "rotisserie-chicken",
                         "store":  "Hy-Vee"
                     },
@@ -89,10 +85,6 @@
                     {
                         "id":  "coffee-creamer",
                         "store":  "Aldi"
-                    },
-                    {
-                        "id":  "coffee-creamer",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "coffee-creamer",
@@ -184,19 +176,11 @@
                     },
                     {
                         "id":  "beef-stew",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "beef-stew",
                         "store":  "Hy-Vee"
                     },
                     {
                         "id":  "corned-beef-hash",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "corned-beef-hash",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "clam-chowder",
@@ -243,10 +227,6 @@
                         "store":  "Fareway"
                     },
                     {
-                        "id":  "canned-pumpkin",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "mandarin-oranges",
                         "store":  "Hy-Vee"
                     },
@@ -272,15 +252,7 @@
                     },
                     {
                         "id":  "tomatoes-green-chilies",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "tomatoes-green-chilies",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "canned-green-chilies",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "canned-green-chilies",
@@ -300,10 +272,6 @@
                     },
                     {
                         "id":  "artichoke-hearts",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "artichoke-hearts",
                         "store":  "Hy-Vee"
                     },
                     {
@@ -313,10 +281,6 @@
                     {
                         "id":  "vegetable-broth",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "bouillon",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "bouillon",
@@ -335,20 +299,8 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "canned-potatoes",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "hominy",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "jarred-gravy",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "jarred-gravy",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "bbq-sauce",
@@ -372,10 +324,6 @@
                     },
                     {
                         "id":  "honey-mustard",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "honey-mustard",
                         "store":  "Hy-Vee"
                     },
                     {
@@ -389,10 +337,6 @@
                     {
                         "id":  "caesar-dressing",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "caesar-dressing",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "blue-cheese-dressing",
@@ -424,10 +368,6 @@
                     },
                     {
                         "id":  "horseradish",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "horseradish",
                         "store":  "Hy-Vee"
                     },
                     {
@@ -443,10 +383,6 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "bottled-marinade",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "minced-garlic",
                         "store":  "Baker\u0027s"
                     },
@@ -457,10 +393,6 @@
                     {
                         "id":  "minced-garlic",
                         "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "pickled-jalapenos",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "pickled-jalapenos",
@@ -472,10 +404,6 @@
                     },
                     {
                         "id":  "banana-peppers",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "banana-peppers",
                         "store":  "Hy-Vee"
                     },
                     {
@@ -485,10 +413,6 @@
                     {
                         "id":  "lime-juice",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "lime-juice",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "lime-juice",
@@ -540,10 +464,6 @@
                     },
                     {
                         "id":  "cereal",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "cereal",
                         "store":  "Family Fare"
                     },
                     {
@@ -561,10 +481,6 @@
                     {
                         "id":  "coffee",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "peanut-butter",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "soda",
@@ -683,10 +599,6 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "oven-cleaner",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "shower-cleaner",
                         "store":  "Family Fare"
                     },
@@ -729,10 +641,6 @@
                     {
                         "id":  "balsamic-vinegar",
                         "store":  "Walmart"
-                    },
-                    {
-                        "id":  "peanut-butter",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "white-vinegar",
@@ -795,10 +703,6 @@
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "hominy",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "kidney-beans",
                         "store":  "Family Fare"
                     },
@@ -815,7 +719,7 @@
                         "store":  "Hy-Vee"
                     }
                 ],
-    "mismatch_count":  18,
+    "mismatch_count":  20,
     "mismatch":  [
                      {
                          "id":  "balsamic-vinegar",
@@ -844,7 +748,7 @@
                          "board":  0.1193,
                          "link":  0.3113,
                          "off_pct":  161,
-                         "product":  "Kikkoman Panko Japanese Style Bread Crumbs",
+                         "product":  "Kikkoman® Panko Japanese Style Bread Crumbs",
                          "size":  "8 oz"
                      },
                      {
@@ -888,6 +792,16 @@
                          "size":  "28 oz"
                      },
                      {
+                         "id":  "hominy",
+                         "store":  "Baker\u0027s",
+                         "unit":  "oz",
+                         "board":  0.1155,
+                         "link":  0.0426,
+                         "off_pct":  63,
+                         "product":  "Juanita\u0027s Foods Mexican Style Hominy, 110 oz, Can 110 oz t",
+                         "size":  "110 oz"
+                     },
+                     {
                          "id":  "ketchup",
                          "store":  "Family Fare",
                          "unit":  "oz",
@@ -916,6 +830,16 @@
                          "off_pct":  45,
                          "product":  "Smart Way Ground Paprika 2 oz",
                          "size":  "2 oz"
+                     },
+                     {
+                         "id":  "peanut-butter",
+                         "store":  "Baker\u0027s",
+                         "unit":  "oz",
+                         "board":  0.143,
+                         "link":  0.0936,
+                         "off_pct":  35,
+                         "product":  "Kroger Peanut Butter Creamy (64 oz)",
+                         "size":  "64 oz"
                      },
                      {
                          "id":  "peanut-butter",
