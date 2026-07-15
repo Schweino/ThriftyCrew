@@ -1,0 +1,502 @@
+﻿[
+    {
+        "id":  "beef-stew",
+        "name":  "Canned Beef Stew",
+        "unit":  "oz",
+        "typical_size":  "20 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "canned beef stew",
+        "notes":  "Ready-to-eat canned stew (Dinty Moore style). Exclude canned chili (existing), canned soup, frozen dinners, dog food stew.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "canned-pasta",
+        "name":  "Canned Pasta (Ravioli / SpaghettiOs)",
+        "unit":  "oz",
+        "typical_size":  "15 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "canned ravioli",
+        "notes":  "Chef Boyardee / SpaghettiOs style canned pasta in sauce. Exclude dry pasta (existing), boxed mac \u0026 cheese (existing), ramen (existing), frozen ravioli.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "corned-beef-hash",
+        "name":  "Corned Beef Hash (canned)",
+        "unit":  "oz",
+        "typical_size":  "14 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "corned beef hash",
+        "notes":  "Canned hash (Hormel Mary Kitchen style). Exclude frozen hash browns (existing), fresh corned beef brisket, plain canned corned beef.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "vegetable-soup",
+        "name":  "Vegetable / Vegetable Beef Soup (canned)",
+        "unit":  "oz",
+        "typical_size":  "18.5 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "canned vegetable soup",
+        "notes":  "Vegetable or vegetable-beef canned soup, condensed or ready-to-serve. Exclude tomato soup (existing), chicken noodle (existing), cream-of soups (existing), broth (existing), V8 juice.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "clam-chowder",
+        "name":  "Clam Chowder (canned)",
+        "unit":  "oz",
+        "typical_size":  "18.5 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "clam chowder canned",
+        "notes":  "New England clam chowder, canned. Exclude fresh deli soup, other canned soups (existing), canned clams.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "chili-beans",
+        "name":  "Chili Beans (in sauce)",
+        "unit":  "oz",
+        "typical_size":  "15.5 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "chili beans",
+        "notes":  "Beans in mild chili sauce (Bush\u0027s Chili Beans style). Exclude prepared canned chili with meat (existing canned-chili), plain kidney/pinto beans (existing), baked beans (existing).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "canned-white-beans",
+        "name":  "Canned White Beans (Great Northern / Cannellini / Navy)",
+        "unit":  "oz",
+        "typical_size":  "15.5 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "great northern beans canned",
+        "notes":  "Canned white beans: great northern, cannellini, navy, butter beans. Exclude chickpeas/kidney/black/pinto (existing), baked beans (existing), dry bagged beans (separate).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "canned-mixed-vegetables",
+        "name":  "Canned Mixed Vegetables",
+        "unit":  "oz",
+        "typical_size":  "15 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "canned mixed vegetables",
+        "notes":  "Veg-All style mixed vegetables in a can. Exclude frozen mixed vegetables (existing), single-vegetable cans (existing corn/peas/green beans).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "canned-beets",
+        "name":  "Canned Beets",
+        "unit":  "oz",
+        "typical_size":  "15 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "canned beets",
+        "notes":  "Sliced or pickled canned beets. Exclude fresh beets, beet juice.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "sauerkraut",
+        "name":  "Sauerkraut (canned/jarred)",
+        "unit":  "oz",
+        "typical_size":  "14 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "sauerkraut",
+        "notes":  "Canned or jarred sauerkraut. Exclude refrigerated bagged kraut, kimchi, coleslaw, fresh cabbage (existing).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "canned-yams",
+        "name":  "Canned Yams / Sweet Potatoes",
+        "unit":  "oz",
+        "typical_size":  "29 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "canned yams",
+        "notes":  "Cut yams/sweet potatoes in syrup. Exclude fresh sweet potatoes (existing), frozen fries, canned pumpkin (separate).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "cranberry-sauce",
+        "name":  "Cranberry Sauce (canned)",
+        "unit":  "oz",
+        "typical_size":  "14 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "cranberry sauce",
+        "notes":  "Jellied or whole-berry canned cranberry sauce. Exclude cranberry juice (existing), fresh cranberries, dried cranberries.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "canned-pumpkin",
+        "name":  "Canned Pumpkin (100% puree)",
+        "unit":  "oz",
+        "typical_size":  "15 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "canned pumpkin",
+        "notes":  "100% pumpkin puree (Libby\u0027s style). Exclude pumpkin pie MIX (sweetened/spiced), pie filling (separate), pumpkin spice flavored products, fresh pumpkins.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "mandarin-oranges",
+        "name":  "Canned Mandarin Oranges",
+        "unit":  "oz",
+        "typical_size":  "15 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "canned mandarin oranges",
+        "notes":  "Mandarin orange segments in juice/syrup, canned. Exclude fresh oranges/clementines (existing), single-serve fruit cups (existing), orange juice (existing).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "fruit-cocktail",
+        "name":  "Canned Fruit Cocktail",
+        "unit":  "oz",
+        "typical_size":  "15 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "fruit cocktail canned",
+        "notes":  "Mixed fruit cocktail in a can. Exclude single-serve fruit cups (existing), canned peaches/pineapple/pears (existing/separate), frozen fruit (existing).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "canned-pears",
+        "name":  "Canned Pears",
+        "unit":  "oz",
+        "typical_size":  "15 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "canned pears",
+        "notes":  "Pear halves/slices in juice or syrup. Exclude fresh pears (existing), fruit cups (existing), fruit cocktail (separate).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "tomatoes-green-chilies",
+        "name":  "Diced Tomatoes with Green Chilies (Ro-Tel style)",
+        "unit":  "oz",
+        "typical_size":  "10 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "rotel diced tomatoes green chilies",
+        "notes":  "Must contain green chilies (Ro-Tel style). Exclude plain diced tomatoes (existing), crushed tomatoes (existing), salsa (existing), plain green chilies (separate). Collision watch with existing diced-tomatoes matcher.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "canned-green-chilies",
+        "name":  "Canned Diced Green Chilies",
+        "unit":  "oz",
+        "typical_size":  "4 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "diced green chiles",
+        "notes":  "Small can of mild diced green chiles (Old El Paso/Hatch style). Exclude pickled jalapenos (separate), Ro-Tel tomatoes (separate), fresh peppers (existing), chili powder (existing).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "black-olives",
+        "name":  "Black Olives (canned, ripe)",
+        "unit":  "oz",
+        "typical_size":  "6 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "black olives canned",
+        "notes":  "Ripe/black olives, sliced or whole, canned. Exclude green/stuffed olives (separate), olive oil (existing), olive tapenade.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "artichoke-hearts",
+        "name":  "Artichoke Hearts (canned/jarred)",
+        "unit":  "oz",
+        "typical_size":  "14 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "artichoke hearts",
+        "notes":  "Canned or jarred artichoke hearts (quartered/whole/marinated). Exclude fresh or frozen artichokes, spinach-artichoke dip.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "vegetable-broth",
+        "name":  "Vegetable Broth / Stock",
+        "unit":  "floz",
+        "typical_size":  "32 floz carton",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "vegetable broth",
+        "notes":  "Vegetable broth or stock, carton or can. Exclude chicken/beef broth (existing), bouillon cubes (separate), canned vegetable soup (separate).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "bouillon",
+        "name":  "Bouillon (cubes / granules / base)",
+        "unit":  "oz",
+        "typical_size":  "3.25 oz jar",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "chicken bouillon cubes",
+        "notes":  "Chicken or beef bouillon cubes, granules, or paste base (Knorr / Better Than Bouillon). Exclude liquid broth/stock (existing), ramen seasoning, gravy mix (separate). Collision watch with existing broth matchers.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "coconut-milk-canned",
+        "name":  "Canned Coconut Milk",
+        "unit":  "floz",
+        "typical_size":  "13.5 floz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "coconut milk canned",
+        "notes":  "Canned coconut milk for cooking. Exclude refrigerated/carton coconut milk beverage, cream of coconut (cocktail mixer), coconut water, coconut oil (existing), shredded coconut (separate).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "canned-potatoes",
+        "name":  "Canned Potatoes",
+        "unit":  "oz",
+        "typical_size":  "15 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "canned potatoes",
+        "notes":  "Whole or sliced white potatoes, canned. Exclude fresh potatoes (existing), instant mashed flakes (existing), frozen fries/hash browns (existing), potato chips (existing).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "hominy",
+        "name":  "Canned Hominy",
+        "unit":  "oz",
+        "typical_size":  "25 oz can",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "canned hominy",
+        "notes":  "White or golden hominy, canned (pozole staple). Exclude canned corn (existing), grits (separate), masa harina (separate), popcorn (existing/separate).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "onion-soup-mix",
+        "name":  "Onion Soup Mix (dry packets)",
+        "unit":  "oz",
+        "typical_size":  "2 oz box (2 envelopes)",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "onion soup mix",
+        "notes":  "Lipton-style dry onion soup/dip mix packets. Exclude canned French onion soup, fresh onions (existing), onion powder (existing), ranch dip mix (separate).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "jarred-gravy",
+        "name":  "Jarred / Canned Gravy",
+        "unit":  "oz",
+        "typical_size":  "12 oz jar",
+        "category":  "Canned \u0026 Soup",
+        "search_term":  "turkey gravy jar",
+        "notes":  "Ready-to-serve gravy in jar or can (turkey/chicken/beef). Exclude dry gravy mix packets (separate), broth/stock (existing), cream-of soups (existing).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "dijon-mustard",
+        "name":  "Dijon Mustard",
+        "unit":  "oz",
+        "typical_size":  "12 oz bottle",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "dijon mustard",
+        "notes":  "Dijon or spicy brown mustard. Exclude yellow mustard (existing), honey mustard (separate), dry ground mustard spice.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "honey-mustard",
+        "name":  "Honey Mustard",
+        "unit":  "oz",
+        "typical_size":  "12 oz bottle",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "honey mustard",
+        "notes":  "Honey mustard condiment or dipping sauce. Exclude plain honey (existing), yellow mustard (existing), dijon (separate), honey mustard pretzels/snacks.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "miracle-whip",
+        "name":  "Salad Dressing Spread (Miracle Whip style)",
+        "unit":  "oz",
+        "typical_size":  "30 oz jar",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "miracle whip",
+        "notes":  "Miracle Whip style sandwich/salad dressing spread. Exclude real mayonnaise (existing), pourable salad dressings (existing/separate).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "caesar-dressing",
+        "name":  "Caesar Dressing",
+        "unit":  "floz",
+        "typical_size":  "16 floz bottle",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "caesar dressing",
+        "notes":  "Caesar salad dressing, shelf bottle. Exclude ranch/italian (existing), blue cheese (separate), caesar salad kits, croutons.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "blue-cheese-dressing",
+        "name":  "Blue Cheese Dressing",
+        "unit":  "floz",
+        "typical_size":  "16 floz bottle",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "blue cheese dressing",
+        "notes":  "Blue cheese salad dressing/dip. Exclude blue cheese crumbles (cheese aisle), ranch (existing), refrigerated produce-case dips.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "balsamic-vinegar",
+        "name":  "Balsamic Vinegar",
+        "unit":  "floz",
+        "typical_size":  "16.9 floz bottle",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "balsamic vinegar",
+        "notes":  "Balsamic vinegar of Modena style. Exclude white/apple cider vinegar (existing), balsamic vinaigrette dressing, balsamic glaze/reduction.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "rice-vinegar",
+        "name":  "Rice Vinegar",
+        "unit":  "floz",
+        "typical_size":  "12 floz bottle",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "rice vinegar",
+        "notes":  "Rice vinegar, plain or seasoned. Exclude white vinegar (existing), mirin/cooking wine, rice (existing).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "red-wine-vinegar",
+        "name":  "Red Wine Vinegar",
+        "unit":  "floz",
+        "typical_size":  "12 floz bottle",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "red wine vinegar",
+        "notes":  "Red wine vinegar. Exclude balsamic (separate), white/cider vinegar (existing), cooking wine, wine.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "teriyaki-sauce",
+        "name":  "Teriyaki Sauce / Marinade",
+        "unit":  "floz",
+        "typical_size":  "10 floz bottle",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "teriyaki sauce",
+        "notes":  "Teriyaki sauce or teriyaki marinade. Exclude soy sauce (existing), generic meat marinades (separate), frozen teriyaki meals.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "steak-sauce",
+        "name":  "Steak Sauce (A.1. style)",
+        "unit":  "floz",
+        "typical_size":  "10 floz bottle",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "a1 steak sauce",
+        "notes":  "A.1. / Heinz 57 style steak sauce. Exclude worcestershire (existing), BBQ sauce (existing), marinades (separate), steak seasoning rub (separate), fresh steak (existing).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "cocktail-sauce",
+        "name":  "Cocktail Sauce",
+        "unit":  "oz",
+        "typical_size":  "12 oz jar",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "cocktail sauce",
+        "notes":  "Seafood cocktail sauce. Exclude ketchup (existing), tartar sauce (separate), shrimp (existing), cocktail mixers.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "tartar-sauce",
+        "name":  "Tartar Sauce",
+        "unit":  "floz",
+        "typical_size":  "12 floz bottle",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "tartar sauce",
+        "notes":  "Tartar sauce. Exclude mayonnaise (existing), cocktail sauce (separate), cream of tartar (baking).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "horseradish",
+        "name":  "Prepared Horseradish",
+        "unit":  "oz",
+        "typical_size":  "5 oz jar",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "prepared horseradish",
+        "notes":  "Prepared horseradish or creamy horseradish sauce. Exclude fresh horseradish root, wasabi, horseradish cheese.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "enchilada-sauce",
+        "name":  "Enchilada Sauce",
+        "unit":  "oz",
+        "typical_size":  "10 oz can",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "red enchilada sauce",
+        "notes":  "Red or green enchilada sauce, canned. Exclude taco sauce (separate), salsa (existing), hot sauce (existing), frozen enchiladas.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "taco-sauce",
+        "name":  "Taco Sauce",
+        "unit":  "oz",
+        "typical_size":  "8 oz bottle",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "taco sauce",
+        "notes":  "Mild/medium taco sauce bottle (Ortega/Taco Bell style). Exclude salsa (existing), hot sauce (existing), enchilada sauce (separate), taco seasoning packets (separate).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "sloppy-joe-sauce",
+        "name":  "Sloppy Joe Sauce (Manwich style)",
+        "unit":  "oz",
+        "typical_size":  "15 oz can",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "sloppy joe sauce manwich",
+        "notes":  "Canned sloppy joe sauce. Exclude BBQ sauce (existing), pasta sauce (existing), ground beef (existing), sloppy joe seasoning packets.",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "bottled-marinade",
+        "name":  "Bottled Meat Marinade",
+        "unit":  "floz",
+        "typical_size":  "12 floz bottle",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "steak marinade",
+        "notes":  "30-minute style bottled marinades (Lawry\u0027s/KC Masterpiece marinade). Exclude teriyaki (separate), italian dressing (existing), BBQ sauce (existing), dry rub seasonings (separate).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "pesto",
+        "name":  "Pesto (jarred)",
+        "unit":  "oz",
+        "typical_size":  "8 oz jar",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "basil pesto",
+        "notes":  "Shelf-stable jarred basil pesto. Exclude refrigerated fresh pesto, marinara/alfredo (existing), dried basil (separate).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "minced-garlic",
+        "name":  "Minced Garlic (jarred)",
+        "unit":  "oz",
+        "typical_size":  "8 oz jar",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "minced garlic jar",
+        "notes":  "Jarred minced/chopped garlic in water or oil. Exclude fresh garlic bulbs (existing), garlic powder (existing), garlic salt, garlic bread (existing).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "pickled-jalapenos",
+        "name":  "Pickled Jalapenos (sliced, jar/can)",
+        "unit":  "oz",
+        "typical_size":  "12 oz jar",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "pickled jalapeno slices",
+        "notes":  "Sliced pickled jalapenos, jarred or canned. Exclude fresh jalapenos (existing), diced green chilies (separate), banana peppers (separate), dill pickles (existing).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "green-olives",
+        "name":  "Green Olives (stuffed manzanilla)",
+        "unit":  "oz",
+        "typical_size":  "5.75 oz jar",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "green olives stuffed",
+        "notes":  "Pimento-stuffed manzanilla green olives, jarred. Exclude ripe black olives (separate), kalamata specialty olives, olive oil (existing).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "banana-peppers",
+        "name":  "Banana Pepper Rings / Pepperoncini",
+        "unit":  "oz",
+        "typical_size":  "12 oz jar",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "banana pepper rings",
+        "notes":  "Jarred mild banana pepper rings or pepperoncini. Exclude pickled jalapenos (separate), fresh bell peppers (existing), dill pickles (existing).",
+        "source":  "agent-4.json"
+    },
+    {
+        "id":  "lime-juice",
+        "name":  "Lime Juice (bottled)",
+        "unit":  "floz",
+        "typical_size":  "8 floz bottle",
+        "category":  "Sauces \u0026 Condiments",
+        "search_term":  "lime juice bottle",
+        "notes":  "Bottled 100% lime juice (ReaLime style). Exclude fresh limes (existing), lemon juice (existing), limeade/margarita mix (beverage).",
+        "source":  "agent-4.json"
+    }
+]

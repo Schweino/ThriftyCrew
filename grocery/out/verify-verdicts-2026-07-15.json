@@ -1,0 +1,127 @@
+{
+  "week_of": "2026-07-15",
+  "verdicts": [
+    {
+      "id": "bacon",
+      "entries": [
+        { "store": "Hy-Vee", "keep": false, "annotation": null, "reason": "Progresso Broccoli Cheese with Bacon is canned SOUP, not bacon; it is also the false winner at $3.19" },
+        { "store": "Sam's Club", "keep": false, "annotation": null, "reason": "Smithfield 'Pork Loin Filet' is a marinated pork loin, not sliced bacon" }
+      ]
+    },
+    {
+      "id": "grapes",
+      "entries": [
+        { "store": "Sam's Club", "keep": false, "annotation": null, "reason": "'Grape Nuts Original, 64 oz.' is breakfast CEREAL, not fresh grapes" }
+      ]
+    },
+    {
+      "id": "honey",
+      "entries": [
+        { "store": "Hy-Vee", "keep": false, "annotation": null, "reason": "Lawry's Honey Teriyaki Marinade is a MARINADE, not honey" }
+      ]
+    },
+    {
+      "id": "jarred-gravy",
+      "entries": [
+        { "store": "Family Fare", "keep": false, "annotation": null, "reason": "Jimmy Dean Sausage & Gravy Breakfast Bowl is a frozen microwave meal, not jarred/canned gravy" }
+      ]
+    },
+    {
+      "id": "instant-mashed-potatoes",
+      "entries": [
+        { "store": "Sam's Club", "keep": false, "annotation": null, "reason": "Idahoan Shredded Hashbrowns are hashbrowns, not mashed potatoes" }
+      ]
+    },
+    {
+      "id": "frozen-fries",
+      "entries": [
+        { "store": "Family Fare", "keep": false, "annotation": null, "reason": "'Frozen Carrots, Crinkle Cut' is CARROTS, not french fries" }
+      ]
+    },
+    {
+      "id": "raspberries",
+      "entries": [
+        { "store": "Family Fare", "keep": false, "annotation": null, "reason": "Ken's Raspberry Walnut Vinaigrette is SALAD DRESSING, not raspberries; it is the false winner at $0.23/oz" },
+        { "store": "Hy-Vee", "keep": false, "annotation": null, "reason": "Alessi Raspberry-Infused White Balsamic Reduction is vinegar, not raspberries" }
+      ]
+    },
+    {
+      "id": "pineapple",
+      "entries": [
+        { "store": "Baker's", "keep": false, "annotation": null, "reason": "'Dole Pineapple 8 oz' is a small canned/cup pineapple, not a whole pineapple; false winner at $1.00 each" }
+      ]
+    },
+    {
+      "id": "pickles",
+      "entries": [
+        { "store": "Family Fare", "keep": false, "annotation": null, "reason": "Mt Olive 'Mild Jalapeno Slices' are pickled jalapenos, not dill pickles" }
+      ]
+    },
+    {
+      "id": "tortillas",
+      "entries": [
+        { "store": "Sam's Club", "keep": false, "annotation": null, "reason": "Quest 'Tortilla Style' Protein Chips are snack chips, not flour tortillas; false winner at $0.11" }
+      ]
+    },
+    {
+      "id": "broccoli",
+      "entries": [
+        { "store": "Sam's Club", "keep": false, "annotation": null, "reason": "Member's Mark Broccoli Normandy is a frozen broccoli/cauliflower/carrot BLEND, not plain fresh broccoli" }
+      ]
+    },
+    {
+      "id": "avocados",
+      "entries": [
+        { "store": "Family Fare", "keep": true, "annotation": "small size", "reason": "labeled 'Hass Avocados, Small' vs medium at other stores" }
+      ]
+    },
+    {
+      "id": "asparagus",
+      "entries": [
+        { "store": "Family Fare", "keep": true, "annotation": "canned, not fresh", "reason": "'Asparagus Cuts & Tips' 14.5 oz is canned; rest are fresh" }
+      ]
+    },
+    {
+      "id": "eggs",
+      "entries": [
+        { "store": "Family Fare", "keep": true, "annotation": "medium, not large", "reason": "'Medium Grade A Eggs' vs Large Eggs commodity" }
+      ]
+    },
+    {
+      "id": "butter",
+      "entries": [
+        { "store": "Sam's Club", "keep": true, "annotation": "unsalted", "reason": "winner is unsalted sweet cream; most others salted" }
+      ]
+    },
+    {
+      "id": "carrots",
+      "entries": [
+        { "store": "Sam's Club", "keep": true, "annotation": "organic, 5 lb bulk", "reason": "winner is organic warehouse bulk bag" }
+      ]
+    },
+    {
+      "id": "blueberries",
+      "entries": [
+        { "store": "Sam's Club", "keep": true, "annotation": "organic", "reason": "organic vs conventional at other stores" }
+      ]
+    },
+    {
+      "id": "salmon",
+      "entries": [
+        { "store": "Aldi", "keep": true, "annotation": "frozen value pack", "reason": "frozen 32 oz value pack; rest are fresh fillets" }
+      ]
+    },
+    {
+      "id": "frozen-pizza",
+      "entries": [
+        { "store": "Baker's", "keep": true, "annotation": "small party pizza", "reason": "Totino's Party Pizza is single-serve; others are full-size" }
+      ]
+    },
+    {
+      "id": "watermelon",
+      "entries": [
+        { "store": "Family Fare", "keep": true, "annotation": "mini melon", "reason": "'Watermelon Mini Seedless' priced like a full melon" }
+      ]
+    }
+  ]
+}

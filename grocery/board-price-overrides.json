@@ -2,8 +2,323 @@
     "readme":  "DERIVED by generate-board-overrides.ps1 - do not hand-edit. Per-cell EVERYDAY per-unit corrections: when a board price disagrees \u003e30% with the verified product its See-item link opens (and name-drift confirms the link is the right product), the board number is stale and is pinned here to the link\u0027s per-unit so price==link==shelf. build-deals-page applies these to EVERYDAY cells only (a live sale always wins) and survives daily regeneration. Sales, wrong-product links (name-drift), and ids present in both the staple+recipe board are intentionally excluded.",
     "updated":  "2026-07-15",
     "tol":  0.3,
-    "count":  22,
+    "count":  56,
     "cells":  [
+                  {
+                      "id":  "all-purpose-cleaner",
+                      "store":  "Hy-Vee",
+                      "per_unit":  0.1247,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.1872,
+                      "link_name":  "Lysol Lemon Breeze All Purpose Cleaner",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "flour",
+                      "store":  "Family Fare",
+                      "per_unit":  1.138,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.5596,
+                      "link_name":  "Gold Medal All Purpose Flour 5 Lb",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "apples",
+                      "store":  "Walmart",
+                      "per_unit":  1.54,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  1.08,
+                      "link_name":  "Fresh Gala Apples, 3 lb Bag",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "apples",
+                      "store":  "Family Fare",
+                      "per_unit":  3.29,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  2.19,
+                      "link_name":  "Fresh Honeycrisp Apples",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "baby-food",
+                      "store":  "Family Fare",
+                      "per_unit":  0.3975,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.2738,
+                      "link_name":  "Beech Nut Stage 2 (6+ Months) Sweet Corn \u0026 Green Beans 4 Oz",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "bbq-sauce",
+                      "store":  "Family Fare",
+                      "per_unit":  0.3865,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.1439,
+                      "link_name":  "Kinder\u0027s Honey Hot Bbq Sauce 15.5 Oz",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "bell-peppers",
+                      "store":  "Baker\u0027s",
+                      "per_unit":  1.66,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.99,
+                      "link_name":  "Fresh Red Bell Pepper",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "blueberries",
+                      "store":  "Aldi",
+                      "per_unit":  0.1579,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.2312,
+                      "link_name":  "Season\u0027s Choice Frozen Blueberries",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "cereal",
+                      "store":  "Baker\u0027s",
+                      "per_unit":  0.2983,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.1106,
+                      "link_name":  "Cap\u0027n Crunch\u0027s Crunch Berries Cereal",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "cereal",
+                      "store":  "Family Fare",
+                      "per_unit":  0.4658,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.192,
+                      "link_name":  "Cheerios Cereal Large Size 12 Oz",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "broccoli",
+                      "store":  "Hy-Vee",
+                      "per_unit":  2.69,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  1.4533,
+                      "link_name":  "Broccoli Florettes",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "canned-black-beans",
+                      "store":  "Family Fare",
+                      "per_unit":  0.1193,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.0649,
+                      "link_name":  "Bush\u0027s Best Black Beans 16 Oz",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "canned-chicken",
+                      "store":  "Hy-Vee",
+                      "per_unit":  0.498,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.1992,
+                      "link_name":  "Hy-Vee Premium Chunk Chicken Breast with Rib Meat",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "canned-corn",
+                      "store":  "Family Fare",
+                      "per_unit":  0.1305,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.0649,
+                      "link_name":  "Green Giant Whole Kernal Sweet Corn",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "chicken-wings",
+                      "store":  "Baker\u0027s",
+                      "per_unit":  2.29,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  1.59,
+                      "link_name":  "Heritage Farm Bone In Skin On Chicken Wings",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "coffee-creamer",
+                      "store":  "Hy-Vee",
+                      "per_unit":  0.2181,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.1244,
+                      "link_name":  "Coffee mate Cafe Mocha Flavored Coffee Creamer, Non-Dairy, Gluten-Free, 32 Servings",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "cooking-spray",
+                      "store":  "Family Fare",
+                      "per_unit":  0.958,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.4983,
+                      "link_name":  "Our Family Cooking Spray, No Stick, Olive Oil 5 Oz",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "dinner-rolls",
+                      "store":  "Hy-Vee",
+                      "per_unit":  0.4158,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.1871,
+                      "link_name":  "King\u0027s Hawaiian Original Hawaiian Sweet Rolls 12Ct",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "dog-food",
+                      "store":  "Hy-Vee",
+                      "per_unit":  1.9971,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.8638,
+                      "link_name":  "Purina Beneful IncrediBites with Real Beef Dog Food",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "feta",
+                      "store":  "Hy-Vee",
+                      "per_unit":  0.9225,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.615,
+                      "link_name":  "Soiree Traditional Feta Cheese Crumble",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "granola-bars",
+                      "store":  "Hy-Vee",
+                      "per_unit":  0.435,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.3328,
+                      "link_name":  "Quaker Chewy Chocolate Chip Granola Bars 8-0.84 oz Bars",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "heavy-cream",
+                      "store":  "Hy-Vee",
+                      "per_unit":  0.3744,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.2184,
+                      "link_name":  "Land O Lakes Heavy Whipping Cream",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "jelly",
+                      "store":  "Family Fare",
+                      "per_unit":  0.183,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.0997,
+                      "link_name":  "Smucker\u0027s Grape Jelly",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "mayonnaise",
+                      "store":  "Family Fare",
+                      "per_unit":  0.2663,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.133,
+                      "link_name":  "Hellmann\u0027s Avocado Oil Mayonnaise Dressing 30 Fl Oz",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "microwave-popcorn",
+                      "store":  "Hy-Vee",
+                      "per_unit":  0.9967,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.615,
+                      "link_name":  "Hy-Vee Extra Butter Microwave Popcorn 3-3.3 Oz",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "parmesan",
+                      "store":  "Hy-Vee",
+                      "per_unit":  0.7633,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.4988,
+                      "link_name":  "Hy-Vee Grated Parmesan Cheese",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "pasta",
+                      "store":  "Family Fare",
+                      "per_unit":  0.1181,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.0778,
+                      "link_name":  "Creamette Spaghetti 16 Oz",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "peaches",
+                      "store":  "Hy-Vee",
+                      "per_unit":  3.99,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  2.99,
+                      "link_name":  "White Flesh Peaches",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "ranch-dressing",
+                      "store":  "Family Fare",
+                      "per_unit":  0.2494,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.1744,
+                      "link_name":  "Kraft Classic Ranch Dressing 16 Fl Oz",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "rotisserie-chicken",
+                      "store":  "Hy-Vee",
+                      "per_unit":  8.99,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  5.99,
+                      "link_name":  "Whole Savory Rotisserie Chicken (Cold)",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "spinach",
+                      "store":  "Family Fare",
+                      "per_unit":  0.665,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.499,
+                      "link_name":  "Fresh Express Baby Spinach 5 Oz",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "tea-bags",
+                      "store":  "Hy-Vee",
+                      "per_unit":  0.0858,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.0449,
+                      "link_name":  "Lipton Yellow Label Black Tea, 50 Ct Tea Bags",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "tortilla-chips",
+                      "store":  "Family Fare",
+                      "per_unit":  0.5107,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  0.1915,
+                      "link_name":  "Doritos Tortilla Chips, Chile Limon, Rolled 10.75 Oz",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "vanilla-extract",
+                      "store":  "Hy-Vee",
+                      "per_unit":  4.88,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  3.395,
+                      "link_name":  "McCormick Pure Vanilla Extract",
+                      "set":  "2026-07-15"
+                  },
+                  {
+                      "id":  "yeast",
+                      "store":  "Fareway",
+                      "per_unit":  7.96,
+                      "source":  "derived: verified product-urls link (board was stale)",
+                      "board_was":  1.7975,
+                      "link_name":  "Red Star Active Dry Yeast, All-Natural",
+                      "set":  "2026-07-15"
+                  },
                   {
                       "id":  "boneless-skinless-chicken-thigh",
                       "store":  "Hy-Vee",
@@ -29,15 +344,6 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.79,
                       "link_name":  "Gala Apples",
-                      "set":  "2026-07-15"
-                  },
-                  {
-                      "id":  "balsamic-vinegar",
-                      "store":  "Hy-Vee",
-                      "per_unit":  0.2361,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.1757,
-                      "link_name":  "Nothing But The Truth Organic Balsamic Vinegar",
                       "set":  "2026-07-15"
                   },
                   {

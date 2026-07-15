@@ -1,0 +1,803 @@
+﻿[
+    {
+        "id":  "eggs",
+        "name":  "Country Daybreak Large White Eggs",
+        "price":  "1.47",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "12 ct"
+    },
+    {
+        "id":  "chicken-breast",
+        "name":  "Boneless Skinless Chicken Breast",
+        "price":  "6.23",
+        "per":  "each",
+        "orig":  "7.80",
+        "unit":  "$3.99/lb",
+        "size":  "About 1.56 lb each"
+    },
+    {
+        "id":  "chicken-thighs",
+        "name":  "Bone-In Chicken Thighs",
+        "price":  "1.49",
+        "per":  "each",
+        "orig":  "",
+        "unit":  "$1.99/lb",
+        "size":  "About 0.75 lb each"
+    },
+    {
+        "id":  "ground-beef-8020",
+        "name":  "80% Lean 20% Fat Ground Beef",
+        "price":  "6.49",
+        "per":  "pound",
+        "orig":  "",
+        "unit":  "$6.49/lb",
+        "size":  ""
+    },
+    {
+        "id":  "ground-turkey",
+        "name":  "Fareway Ground Turkey",
+        "price":  "5.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 oz"
+    },
+    {
+        "id":  "bacon",
+        "name":  "Farmland Thick Cut Naturally Hickory Smoked Bacon",
+        "price":  "5.99",
+        "per":  "",
+        "orig":  "6.99",
+        "unit":  "",
+        "size":  "16 oz"
+    },
+    {
+        "id":  "pork-chops",
+        "name":  "Center Cut Pork Chops",
+        "price":  "2.49",
+        "per":  "each",
+        "orig":  "",
+        "unit":  "$3.99/lb",
+        "size":  "About 0.63 lb each"
+    },
+    {
+        "id":  "milk",
+        "name":  "Fareway Whole Milk",
+        "price":  "5.75",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "1 gal"
+    },
+    {
+        "id":  "butter",
+        "name":  "Fareway Solid Butter",
+        "price":  "3.48",
+        "per":  "",
+        "orig":  "3.98",
+        "unit":  "",
+        "size":  "16 oz"
+    },
+    {
+        "id":  "cottage-cheese",
+        "name":  "Daisy Classic 4% Milkfat Small Curd Cottage Cheese",
+        "price":  "2.88",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "16 oz"
+    },
+    {
+        "id":  "sour-cream",
+        "name":  "Daisy Sour Cream",
+        "price":  "2.68",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "16 oz"
+    },
+    {
+        "id":  "cream-cheese",
+        "name":  "Fareway Cream Cheese Original",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "8 oz"
+    },
+    {
+        "id":  "shredded-cheese",
+        "name":  "Tillamook Farmstyle Medium Cheddar Shredded Cheese",
+        "price":  "3.98",
+        "per":  "",
+        "orig":  "4.99",
+        "unit":  "",
+        "size":  "8 oz"
+    },
+    {
+        "id":  "yogurt",
+        "name":  "Chobani Raspberry on the Bottom Nonfat Greek Yogurt",
+        "price":  "1.38",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "5.3 oz"
+    },
+    {
+        "id":  "bananas",
+        "name":  "Bananas Sold individually",
+        "price":  "0.20",
+        "per":  "each",
+        "orig":  "0.23",
+        "unit":  "$0.49/lb",
+        "size":  "About 0.4 lb each"
+    },
+    {
+        "id":  "strawberries",
+        "name":  "Strawberries",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "16 oz"
+    },
+    {
+        "id":  "blueberries",
+        "name":  "Blueberries 1 pint container",
+        "price":  "4.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "1 pint"
+    },
+    {
+        "id":  "avocados",
+        "name":  "Hass Avocado",
+        "price":  "0.99",
+        "per":  "",
+        "orig":  "1.50",
+        "unit":  "",
+        "size":  "1 each"
+    },
+    {
+        "id":  "russet-potatoes",
+        "name":  "Russet Potato Bag",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "5 lb"
+    },
+    {
+        "id":  "onions",
+        "name":  "Yellow Onions",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "3 lb"
+    },
+    {
+        "id":  "apples",
+        "name":  "Golden Delicious Apple",
+        "price":  "0.84",
+        "per":  "each",
+        "orig":  "1.00",
+        "unit":  "$1.68/lb",
+        "size":  "About 0.5 lb each"
+    },
+    {
+        "id":  "grapes",
+        "name":  "Red Seedless Grapes",
+        "price":  "5.98",
+        "per":  "package",
+        "orig":  "7.98",
+        "unit":  "$2.99/lb",
+        "size":  "About 2.0 lb / package"
+    },
+    {
+        "id":  "bread",
+        "name":  "Fareway Split Top Sandwich Bread",
+        "price":  "1.97",
+        "per":  "",
+        "orig":  "2.49",
+        "unit":  "",
+        "size":  "20 oz"
+    },
+    {
+        "id":  "peanut-butter",
+        "name":  "SKIPPY Creamy Peanut Butter",
+        "price":  "1.94",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "16.3 oz"
+    },
+    {
+        "id":  "orange-juice",
+        "name":  "Fareway 100% Juice Orange",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "5.49",
+        "unit":  "",
+        "size":  "64 oz"
+    },
+    {
+        "id":  "tortillas",
+        "name":  "Guerrero Soft Taco Flour Tortillas",
+        "price":  "2.89",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "10 ct"
+    },
+    {
+        "id":  "coffee",
+        "name":  "Fareway Coffee Ground Medium Classic Roast",
+        "price":  "7.99",
+        "per":  "",
+        "orig":  "8.99",
+        "unit":  "",
+        "size":  "11.3 oz"
+    },
+    {
+        "id":  "flour",
+        "name":  "Fareway Flour All Purpose",
+        "price":  "2.64",
+        "per":  "",
+        "orig":  "3.48",
+        "unit":  "",
+        "size":  "5 lb"
+    },
+    {
+        "id":  "sugar",
+        "name":  "Fareway Sugar Pure Cane Granulated",
+        "price":  "3.48",
+        "per":  "",
+        "orig":  "3.68",
+        "unit":  "",
+        "size":  "4 lb"
+    },
+    {
+        "id":  "rice",
+        "name":  "ParExcellence Extra Long Grain Rice",
+        "price":  "4.48",
+        "per":  "",
+        "orig":  "4.99",
+        "unit":  "",
+        "size":  "5 lb"
+    },
+    {
+        "id":  "pasta",
+        "name":  "Barilla Thin Spaghetti",
+        "price":  "1.50",
+        "per":  "",
+        "orig":  "1.99",
+        "unit":  "",
+        "size":  "16 oz"
+    },
+    {
+        "id":  "vegetable-oil",
+        "name":  "Fareway Vegetable Oil",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "4.99",
+        "unit":  "",
+        "size":  "48 oz"
+    },
+    {
+        "id":  "cereal",
+        "name":  "Fareway Honey \u0026 Nut Flavored Cereal",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "12.25 oz"
+    },
+    {
+        "id":  "oatmeal",
+        "name":  "Quaker Old Fashioned Oatmeal",
+        "price":  "5.99",
+        "per":  "",
+        "orig":  "7.49",
+        "unit":  "",
+        "size":  "42 oz"
+    },
+    {
+        "id":  "salmon",
+        "name":  "Fresh Salmon Fillets",
+        "price":  "14.99",
+        "per":  "pound",
+        "orig":  "",
+        "unit":  "$14.99/lb",
+        "size":  ""
+    },
+    {
+        "id":  "canned-tuna",
+        "name":  "Fareway Chunk Light Tuna in Water",
+        "price":  "0.97",
+        "per":  "",
+        "orig":  "1.18",
+        "unit":  "",
+        "size":  "5 oz"
+    },
+    {
+        "id":  "shrimp",
+        "name":  "Supreme Choice Raw Shrimp 16-20ct",
+        "price":  "11.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 oz"
+    },
+    {
+        "id":  "sirloin-steak",
+        "name":  "USDA Choice Top Of Iowa Sirloin Steak",
+        "price":  "12.49",
+        "per":  "each",
+        "orig":  "16.24",
+        "unit":  "$9.99/lb",
+        "size":  "About 1.25 lb each"
+    },
+    {
+        "id":  "whole-chicken",
+        "name":  "Whole Chicken",
+        "price":  "8.72",
+        "per":  "each",
+        "orig":  "",
+        "unit":  "$2.49/lb",
+        "size":  "About 3.5 lb each"
+    },
+    {
+        "id":  "breakfast-sausage",
+        "name":  "Beelers Breakfast Sausage",
+        "price":  "4.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "16 oz"
+    },
+    {
+        "id":  "deli-ham",
+        "name":  "Shaved Ham",
+        "price":  "6.99",
+        "per":  "pound",
+        "orig":  "",
+        "unit":  "$6.99/lb",
+        "size":  ""
+    },
+    {
+        "id":  "hot-dogs",
+        "name":  "Bar-S Classic Franks Hot Dogs",
+        "price":  "1.17",
+        "per":  "",
+        "orig":  "1.44",
+        "unit":  "",
+        "size":  "12 oz"
+    },
+    {
+        "id":  "sliced-cheese",
+        "name":  "Fareway American Cheese Slices",
+        "price":  "2.48",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "12 oz"
+    },
+    {
+        "id":  "oranges",
+        "name":  "Navel Orange",
+        "price":  "1.30",
+        "per":  "each",
+        "orig":  "1.74",
+        "unit":  "$1.48/lb",
+        "size":  "About 0.88 lb each"
+    },
+    {
+        "id":  "lemons",
+        "name":  "Lemon",
+        "price":  "0.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "1 each"
+    },
+    {
+        "id":  "tomatoes",
+        "name":  "Tomato on the Vine",
+        "price":  "4.48",
+        "per":  "each",
+        "orig":  "",
+        "unit":  "$2.99/lb",
+        "size":  "About 1.5 lb each"
+    },
+    {
+        "id":  "lettuce",
+        "name":  "Iceberg Lettuce",
+        "price":  "2.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "1 each"
+    },
+    {
+        "id":  "carrots",
+        "name":  "Carrot",
+        "price":  "2.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "2 lb"
+    },
+    {
+        "id":  "broccoli",
+        "name":  "Broccoli Crown",
+        "price":  "2.48",
+        "per":  "each",
+        "orig":  "2.99",
+        "unit":  "$2.48/lb",
+        "size":  "About 1.0 lb each"
+    },
+    {
+        "id":  "celery",
+        "name":  "Celery",
+        "price":  "1.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "1 each"
+    },
+    {
+        "id":  "cucumbers",
+        "name":  "Cucumber",
+        "price":  "1.17",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "1 each"
+    },
+    {
+        "id":  "spinach",
+        "name":  "Dole Salad Baby Spinach",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "6 oz"
+    },
+    {
+        "id":  "mushrooms",
+        "name":  "Highline Whole White Mushrooms",
+        "price":  "2.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "8 oz"
+    },
+    {
+        "id":  "sweet-potatoes",
+        "name":  "Sweet Potato (Yam)",
+        "price":  "1.12",
+        "per":  "each",
+        "orig":  "",
+        "unit":  "$1.49/lb",
+        "size":  "About 0.75 lb each"
+    },
+    {
+        "id":  "sweet-corn",
+        "name":  "Yellow Sweet Corn",
+        "price":  "0.75",
+        "per":  "",
+        "orig":  "1.00",
+        "unit":  "",
+        "size":  "1 each"
+    },
+    {
+        "id":  "watermelon",
+        "name":  "Seedless Watermelon",
+        "price":  "5.99",
+        "per":  "",
+        "orig":  "7.99",
+        "unit":  "",
+        "size":  "1 each"
+    },
+    {
+        "id":  "peaches",
+        "name":  "Yellow Flesh Georgia Peaches",
+        "price":  "0.81",
+        "per":  "each",
+        "orig":  "1.21",
+        "unit":  "$1.99/lb",
+        "size":  "About 0.41 lb each"
+    },
+    {
+        "id":  "hamburger-buns",
+        "name":  "Fareway Burger Buns",
+        "price":  "1.67",
+        "per":  "",
+        "orig":  "1.99",
+        "unit":  "",
+        "size":  "8 each"
+    },
+    {
+        "id":  "bagels",
+        "name":  "Fareway Pre-Sliced Original Bagels",
+        "price":  "2.00",
+        "per":  "",
+        "orig":  "3.99",
+        "unit":  "",
+        "size":  "6 each"
+    },
+    {
+        "id":  "mac-and-cheese",
+        "name":  "Fareway Original Macaroni \u0026 Cheese Dinner",
+        "price":  "0.68",
+        "per":  "",
+        "orig":  "0.99",
+        "unit":  "",
+        "size":  "7.25 oz"
+    },
+    {
+        "id":  "pasta-sauce",
+        "name":  "Fareway Traditional Pasta Sauce",
+        "price":  "1.88",
+        "per":  "",
+        "orig":  "2.29",
+        "unit":  "",
+        "size":  "24 oz"
+    },
+    {
+        "id":  "canned-black-beans",
+        "name":  "Fareway Black Beans",
+        "price":  "0.99",
+        "per":  "",
+        "orig":  "1.34",
+        "unit":  "",
+        "size":  "15.25 oz"
+    },
+    {
+        "id":  "canned-corn",
+        "name":  "Fareway Whole Kernel Corn",
+        "price":  "0.78",
+        "per":  "",
+        "orig":  "1.12",
+        "unit":  "",
+        "size":  "15.25 oz"
+    },
+    {
+        "id":  "ketchup",
+        "name":  "Fareway Tomato Ketchup",
+        "price":  "1.97",
+        "per":  "",
+        "orig":  "2.69",
+        "unit":  "",
+        "size":  "32 oz"
+    },
+    {
+        "id":  "mayonnaise",
+        "name":  "Fareway Mayonnaise Homestyle",
+        "price":  "3.79",
+        "per":  "",
+        "orig":  "4.19",
+        "unit":  "",
+        "size":  "30 oz"
+    },
+    {
+        "id":  "mustard",
+        "name":  "Fareway Yellow Mustard",
+        "price":  "1.97",
+        "per":  "",
+        "orig":  "2.29",
+        "unit":  "",
+        "size":  "20 oz"
+    },
+    {
+        "id":  "jelly",
+        "name":  "Fareway Concord Grape Jelly",
+        "price":  "2.78",
+        "per":  "",
+        "orig":  "3.49",
+        "unit":  "",
+        "size":  "32 oz"
+    },
+    {
+        "id":  "honey",
+        "name":  "Fareway Pure Honey",
+        "price":  "5.99",
+        "per":  "",
+        "orig":  "6.99",
+        "unit":  "",
+        "size":  "16 oz"
+    },
+    {
+        "id":  "brown-sugar",
+        "name":  "Fareway Sugar Pure Cane Light Brown",
+        "price":  "2.48",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "32 oz"
+    },
+    {
+        "id":  "olive-oil",
+        "name":  "Fareway Extra Virgin Olive Oil",
+        "price":  "6.98",
+        "per":  "",
+        "orig":  "9.98",
+        "unit":  "",
+        "size":  "16.9 fl oz"
+    },
+    {
+        "id":  "93-7-ground-beef",
+        "name":  "93% Lean 7% Fat Ground Beef",
+        "price":  "7.99",
+        "per":  "pound",
+        "orig":  "",
+        "unit":  "$7.99/lb",
+        "size":  ""
+    },
+    {
+        "id":  "jasmine-rice",
+        "name":  "Mahatma Jasmine Long Grain Thai Fragrant Rice",
+        "price":  "3.99",
+        "per":  "",
+        "orig":  "4.49",
+        "unit":  "",
+        "size":  "2 lb"
+    },
+    {
+        "id":  "penne-pasta",
+        "name":  "Fareway Penne Rigate",
+        "price":  "0.99",
+        "per":  "",
+        "orig":  "1.79",
+        "unit":  "",
+        "size":  "16 oz"
+    },
+    {
+        "id":  "salsa",
+        "name":  "Fareway Chunky Mild Salsa",
+        "price":  "2.50",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "16 oz"
+    },
+    {
+        "id":  "taco-seasoning",
+        "name":  "Fareway Taco Seasoning Mix",
+        "price":  "0.88",
+        "per":  "",
+        "orig":  "1.19",
+        "unit":  "",
+        "size":  "1 oz"
+    },
+    {
+        "id":  "diced-tomatoes",
+        "name":  "Fareway Diced Tomatoes",
+        "price":  "0.99",
+        "per":  "",
+        "orig":  "1.14",
+        "unit":  "",
+        "size":  "14.5 oz"
+    },
+    {
+        "id":  "chicken-broth",
+        "name":  "Fareway Fat Free Chicken Broth",
+        "price":  "1.84",
+        "per":  "",
+        "orig":  "2.68",
+        "unit":  "",
+        "size":  "32 oz"
+    },
+    {
+        "id":  "limes",
+        "name":  "Fresh Limes",
+        "price":  "2.48",
+        "per":  "",
+        "orig":  "2.99",
+        "unit":  "",
+        "size":  "1 lb"
+    },
+    {
+        "id":  "garlic",
+        "name":  "Garlic",
+        "price":  "0.99",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "1 each"
+    },
+    {
+        "id":  "tomato-sauce",
+        "name":  "Fareway Tomato Sauce",
+        "price":  "1.19",
+        "per":  "",
+        "orig":  "1.28",
+        "unit":  "",
+        "size":  "15 oz"
+    },
+    {
+        "id":  "reduced-fat-mozzarella",
+        "name":  "Fareway Low-Moisture Part-Skim Mozzarella Shredded Cheese",
+        "price":  "2.48",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "8 oz"
+    },
+    {
+        "id":  "string-cheese",
+        "name":  "Crystal Farms String Cheese Part-Skim Mozzarella",
+        "price":  "4.48",
+        "per":  "",
+        "orig":  "4.99",
+        "unit":  "",
+        "size":  "12 ct"
+    },
+    {
+        "id":  "half-and-half",
+        "name":  "Kemps Fresh Half \u0026 Half",
+        "price":  "3.35",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "32 fl oz"
+    },
+    {
+        "id":  "frozen-pizza",
+        "name":  "Bellatoria Ultra Thin Crust Ultimate Supreme Pizza",
+        "price":  "6.99",
+        "per":  "",
+        "orig":  "9.99",
+        "unit":  "",
+        "size":  "19.41 oz"
+    },
+    {
+        "id":  "ice-cream",
+        "name":  "Fareway Vintage Vanilla Ice Cream",
+        "price":  "2.99",
+        "per":  "",
+        "orig":  "5.48",
+        "unit":  "",
+        "size":  "48 fl oz"
+    },
+    {
+        "id":  "tortilla-chips",
+        "name":  "Fareway Restaurant Style White Corn Tortilla Chips",
+        "price":  "2.98",
+        "per":  "",
+        "orig":  "3.98",
+        "unit":  "",
+        "size":  "14 oz"
+    },
+    {
+        "id":  "soda",
+        "name":  "Coca-Cola Original Taste Soda Fridge Pack",
+        "price":  "9.49",
+        "per":  "",
+        "orig":  "",
+        "unit":  "",
+        "size":  "12 pk"
+    },
+    {
+        "id":  "toilet-paper",
+        "name":  "Scott ComfortPlus Toilet Paper 1-Ply",
+        "price":  "5.97",
+        "per":  "",
+        "orig":  "8.98",
+        "unit":  "",
+        "size":  "12 ct"
+    },
+    {
+        "id":  "paper-towels",
+        "name":  "Scott Choose-A-Sheet Paper Towels",
+        "price":  "6.99",
+        "per":  "",
+        "orig":  "8.98",
+        "unit":  "",
+        "size":  "6 ct"
+    }
+]

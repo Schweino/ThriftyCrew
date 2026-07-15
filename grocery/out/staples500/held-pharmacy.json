@@ -1,0 +1,242 @@
+﻿[
+    {
+        "id":  "ibuprofen",
+        "name":  "Ibuprofen 200mg",
+        "unit":  "each",
+        "typical_size":  "100 ct bottle",
+        "category":  "Personal Care",
+        "search_term":  "ibuprofen 200 mg",
+        "notes":  "Adult 200mg tablets/caplets (Advil, Motrin, store brand), priced per tablet. Exclude children\u0027s/infants\u0027 liquid (Baby candidate), PM combo formulas, and naproxen/Aleve (different drug).",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "acetaminophen",
+        "name":  "Acetaminophen 500mg",
+        "unit":  "each",
+        "typical_size":  "100 ct bottle",
+        "category":  "Personal Care",
+        "search_term":  "acetaminophen 500 mg",
+        "notes":  "Adult extra-strength 500mg (Tylenol or store brand), priced per caplet. Exclude children\u0027s/infants\u0027 liquid (Baby candidate), PM/combo formulas, and 8-hour arthritis ER versions.",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "low-dose-aspirin",
+        "name":  "Low-Dose Aspirin 81mg",
+        "unit":  "each",
+        "typical_size":  "120-300 ct bottle",
+        "category":  "Personal Care",
+        "search_term":  "low dose aspirin 81 mg",
+        "notes":  "81mg enteric-coated low-dose aspirin, priced per tablet. Exclude full-strength 325mg aspirin and combo pain relievers (separate candidates cover ibuprofen/acetaminophen).",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "allergy-medicine",
+        "name":  "Allergy Medicine (24hr antihistamine)",
+        "unit":  "each",
+        "typical_size":  "30-45 ct",
+        "category":  "Personal Care",
+        "search_term":  "allergy relief loratadine",
+        "notes":  "24-hour non-drowsy antihistamine tablets (loratadine/cetirizine/fexofenadine; Claritin/Zyrtec/store brand collapse), priced per tablet. Exclude diphenhydramine/Benadryl, children\u0027s liquids, and nasal sprays.",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "antacid-tablets",
+        "name":  "Antacid Tablets",
+        "unit":  "each",
+        "typical_size":  "72-96 ct bottle",
+        "category":  "Personal Care",
+        "search_term":  "antacid tablets",
+        "notes":  "Calcium-carbonate chewables (Tums or store brand), priced per tablet. Exclude famotidine/omeprazole acid reducers, liquid bismuth (Pepto), and gas-relief simethicone.",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "cold-flu-medicine",
+        "name":  "Cold \u0026 Flu Medicine",
+        "unit":  "each",
+        "typical_size":  "24 ct caps or 12 floz bottle",
+        "category":  "Personal Care",
+        "search_term":  "cold and flu medicine",
+        "notes":  "Multi-symptom day/night cold-flu relief (DayQuil/NyQuil or store equivalent), priced per package. Exclude children\u0027s versions, single-ingredient cough syrup, cough drops (separate candidate), and zinc remedies.",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "cough-drops",
+        "name":  "Cough Drops",
+        "unit":  "each",
+        "typical_size":  "30-80 ct bag",
+        "category":  "Personal Care",
+        "search_term":  "cough drops",
+        "notes":  "Menthol throat lozenges (Halls, Ricola, store brand), priced per drop. Exclude candy mints (food side), zinc lozenges, and liquid cold medicine (separate candidate).",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "bandages",
+        "name":  "Adhesive Bandages",
+        "unit":  "each",
+        "typical_size":  "60-100 ct assorted box",
+        "category":  "Personal Care",
+        "search_term":  "adhesive bandages",
+        "notes":  "Adhesive bandage strips (Band-Aid or store brand), assorted sizes collapse, priced per bandage. Exclude gauze pads/rolls, medical tape, liquid bandage, and premium blister care.",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "antibiotic-ointment",
+        "name":  "Triple Antibiotic Ointment",
+        "unit":  "oz",
+        "typical_size":  "0.5-1 oz tube",
+        "category":  "Personal Care",
+        "search_term":  "triple antibiotic ointment",
+        "notes":  "Neosporin-style triple antibiotic ointment. Exclude hydrocortisone (separate candidate), antifungal creams (separate), burn gel, and petroleum jelly (separate).",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "hydrocortisone-cream",
+        "name":  "Hydrocortisone Cream 1%",
+        "unit":  "oz",
+        "typical_size":  "1 oz tube",
+        "category":  "Personal Care",
+        "search_term":  "hydrocortisone cream 1%",
+        "notes":  "1% anti-itch hydrocortisone cream. Exclude antibiotic ointment (separate), antifungal cream (separate), calamine lotion, and prescription strengths.",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "antifungal-cream",
+        "name":  "Antifungal Cream",
+        "unit":  "oz",
+        "typical_size":  "1 oz tube",
+        "category":  "Personal Care",
+        "search_term":  "athletes foot antifungal cream",
+        "notes":  "Clotrimazole/tolnaftate/terbinafine athlete\u0027s-foot and jock-itch creams collapse. Exclude powders and sprays (different per-oz math), vaginal antifungal kits, and hydrocortisone (separate).",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "topical-pain-relief-cream",
+        "name":  "Muscle Rub / Topical Pain Relief Cream",
+        "unit":  "oz",
+        "typical_size":  "2-4 oz tube",
+        "category":  "Personal Care",
+        "search_term":  "muscle rub pain relief cream",
+        "notes":  "Menthol muscle rubs (Icy Hot, Bengay, store brand). Exclude lidocaine patches (different form/price), oral pain relievers (separate candidates), and CBD-marketed rubs.",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "rubbing-alcohol",
+        "name":  "Rubbing Alcohol",
+        "unit":  "floz",
+        "typical_size":  "32 floz bottle, 70%",
+        "category":  "Personal Care",
+        "search_term":  "isopropyl rubbing alcohol",
+        "notes":  "70-91% isopropyl alcohol collapse. Must NOT match hand sanitizer (covered as hand-sanitizer), hydrogen peroxide (separate candidate), or alcohol prep pads.",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "hydrogen-peroxide",
+        "name":  "Hydrogen Peroxide",
+        "unit":  "floz",
+        "typical_size":  "32 floz bottle, 3%",
+        "category":  "Personal Care",
+        "search_term":  "hydrogen peroxide",
+        "notes":  "3% first-aid hydrogen peroxide. Exclude rubbing alcohol (separate candidate), peroxide-based cleaning sprays, and teeth-whitening products.",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "multivitamins",
+        "name":  "Adult Multivitamins",
+        "unit":  "each",
+        "typical_size":  "100-200 ct bottle",
+        "category":  "Personal Care",
+        "search_term":  "adult multivitamin",
+        "notes":  "Adult daily multivitamin tablets or gummies (Centrum, One A Day, store brand), priced per count. Exclude single-nutrient vitamins (D3, C), prenatal, children\u0027s vitamins, and protein/collagen powders.",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "melatonin",
+        "name":  "Melatonin",
+        "unit":  "each",
+        "typical_size":  "60-120 ct gummies or tablets",
+        "category":  "Personal Care",
+        "search_term":  "melatonin 5 mg",
+        "notes":  "Melatonin 3-10mg tablets/gummies collapse, priced per count. Exclude diphenhydramine sleep aids (ZzzQuil/Unisom) and kids\u0027 melatonin.",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "fiber-supplement",
+        "name":  "Fiber Supplement Powder",
+        "unit":  "oz",
+        "typical_size":  "20-48 oz canister",
+        "category":  "Personal Care",
+        "search_term":  "fiber supplement powder",
+        "notes":  "Psyllium/methylcellulose powder (Metamucil or store brand). Exclude fiber gummies/capsules (different per-dose math), fiber snack bars (food side), and laxative pills.",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "eye-drops",
+        "name":  "Lubricating Eye Drops",
+        "unit":  "each",
+        "typical_size":  "0.5-1 floz bottle",
+        "category":  "Personal Care",
+        "search_term":  "lubricating eye drops",
+        "notes":  "Artificial tears / redness-relief drops collapse, priced per bottle. Exclude contact lens solution (separate candidate), prescription drops, and pink-eye treatments.",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "contact-solution",
+        "name":  "Contact Lens Solution",
+        "unit":  "floz",
+        "typical_size":  "12 floz bottle",
+        "category":  "Personal Care",
+        "search_term":  "contact lens solution",
+        "notes":  "Multipurpose contact solution (Opti-Free, Biotrue, store brand). Exclude hydrogen-peroxide lens systems, rewetting/eye drops (separate candidate), and lens cases.",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "childrens-pain-reliever",
+        "name":  "Children\u0027s Pain Reliever (liquid)",
+        "unit":  "floz",
+        "typical_size":  "4 floz bottle",
+        "category":  "Baby",
+        "search_term":  "childrens acetaminophen liquid",
+        "notes":  "Infants\u0027/children\u0027s acetaminophen or ibuprofen liquid suspension (Tylenol/Motrin/store brand collapse). Must NOT match adult tablets (Personal Care candidates ibuprofen/acetaminophen) or kids\u0027 multi-symptom cold medicine.",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "pediatric-electrolyte",
+        "name":  "Pediatric Electrolyte Solution",
+        "unit":  "floz",
+        "typical_size":  "33.8 floz (1 liter) bottle",
+        "category":  "Baby",
+        "search_term":  "pediatric electrolyte solution",
+        "notes":  "Pedialyte-style pediatric electrolyte solution incl. store brand; flavors collapse. Must NOT match sports drinks (covered as sports-drinks), adult electrolyte powders, or juice (covered).",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "infant-gas-drops",
+        "name":  "Infant Gas Relief Drops",
+        "unit":  "floz",
+        "typical_size":  "1 floz bottle",
+        "category":  "Baby",
+        "search_term":  "infant gas drops simethicone",
+        "notes":  "Simethicone infant gas drops (Mylicon, Little Remedies, store brand). Exclude gripe water (different product), adult gas relief, and colic probiotic drops.",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "flea-tick-treatment-dog",
+        "name":  "Flea \u0026 Tick Treatment (dog)",
+        "unit":  "each",
+        "typical_size":  "3-dose applicator pack",
+        "category":  "Pet",
+        "search_term":  "flea and tick treatment for dogs",
+        "notes":  "Topical monthly applicators or chewable flea/tick treatment priced per dose (Frontline, Hartz, PetArmor, store brand); dog weight tiers collapse. Exclude flea collars, flea shampoo, cat products (separate candidate), and home foggers (Household insect-spray covered).",
+        "source":  "agent-6.json"
+    },
+    {
+        "id":  "flea-tick-treatment-cat",
+        "name":  "Flea Treatment (cat)",
+        "unit":  "each",
+        "typical_size":  "3-dose applicator pack",
+        "category":  "Pet",
+        "search_term":  "flea treatment for cats",
+        "notes":  "Cat-specific topical flea treatment priced per dose. Exclude dog products (separate candidate), flea collars, flea shampoo, and litter (covered as cat-litter).",
+        "source":  "agent-6.json"
+    }
+]

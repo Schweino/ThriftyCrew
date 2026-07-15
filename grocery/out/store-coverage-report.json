@@ -1,14 +1,55 @@
 ﻿{
-    "generated":  "2026-07-15 06:01",
+    "generated":  "2026-07-15 09:33",
     "stores":  7,
-    "checked":  328,
-    "ok":  325,
+    "checked":  378,
+    "ok":  349,
     "absent":  [
                    "donuts",
                    "cake-mix",
-                   "hot-cocoa"
+                   "hot-cocoa",
+                   "beef-stew",
+                   "canned-pasta",
+                   "vegetable-soup",
+                   "clam-chowder",
+                   "canned-mixed-vegetables",
+                   "canned-beets",
+                   "cranberry-sauce",
+                   "canned-pumpkin",
+                   "mandarin-oranges",
+                   "fruit-cocktail",
+                   "canned-pears",
+                   "black-olives",
+                   "coconut-milk-canned",
+                   "canned-potatoes",
+                   "onion-soup-mix",
+                   "jarred-gravy",
+                   "steak-sauce",
+                   "cocktail-sauce",
+                   "tartar-sauce",
+                   "taco-sauce",
+                   "sloppy-joe-sauce",
+                   "lime-juice"
                ],
     "violations":  [
-
+                       {
+                           "commodity":  "hominy",
+                           "missing":  "Aldi,Fareway,Sam\u0027s Club",
+                           "dupes":  ""
+                       },
+                       {
+                           "commodity":  "red-wine-vinegar",
+                           "missing":  "Fareway,Sam\u0027s Club",
+                           "dupes":  ""
+                       },
+                       {
+                           "commodity":  "teriyaki-sauce",
+                           "missing":  "Fareway",
+                           "dupes":  ""
+                       },
+                       {
+                           "commodity":  "enchilada-sauce",
+                           "missing":  "Aldi,Fareway,Sam\u0027s Club",
+                           "dupes":  ""
+                       }
                    ]
 }

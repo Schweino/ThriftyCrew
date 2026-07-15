@@ -1,0 +1,533 @@
+[
+  {
+    "id": "beef-stew",
+    "label": "Canned Beef Stew",
+    "unit": "oz",
+    "include": [
+      "beef\\s+stew",
+      "dinty\\s+moore\\s+(?:beef\\s+)?stew"
+    ],
+    "exclude": [
+      "stew\\s+meat",
+      "seasoning",
+      "\\bmix\\b",
+      "\\bfrozen\\b",
+      "\\bchili\\b",
+      "\\bsoup\\b"
+    ],
+    "search_term": "canned beef stew",
+    "note": "Anchored to the phrase 'beef stew'; bare '\\bstew\\b' left out (matches raw stew meat, beef stew seasoning, Brunswick stew). Exclude 'stew meat' (raw beef cubes) and 'chili' (Dinty Moore also cans chili = existing canned-chili item)."
+  },
+  {
+    "id": "canned-pasta",
+    "label": "Canned Pasta (Ravioli / SpaghettiOs)",
+    "unit": "oz",
+    "include": [
+      "chef\\s+boyardee",
+      "spaghetti\\s*-?\\s*o'?s",
+      "beefaroni",
+      "canned\\s+ravioli"
+    ],
+    "exclude": [
+      "\\bfrozen\\b",
+      "refrigerated",
+      "\\bdry\\b"
+    ],
+    "search_term": "canned ravioli",
+    "note": "Brand-anchored (Chef Boyardee / SpaghettiOs / Beefaroni) plus 'canned ravioli'. Bare '\\bravioli\\b' intentionally omitted: it collides with frozen/refrigerated ravioli. A store-brand canned ravioli not carrying a brand word may be missed (acceptable, conservative)."
+  },
+  {
+    "id": "corned-beef-hash",
+    "label": "Corned Beef Hash (canned)",
+    "unit": "oz",
+    "include": [
+      "corned\\s+beef\\s+hash"
+    ],
+    "exclude": [
+      "hash\\s*browns?",
+      "brisket",
+      "\\bfrozen\\b"
+    ],
+    "search_term": "corned beef hash",
+    "note": "Full phrase required. Plain canned corned beef (no 'hash') will not match, which is intended. Exclude 'brisket' (fresh corned beef) and 'hash browns'; frozen breakfast hash excluded (board wants the shelf-stable can)."
+  },
+  {
+    "id": "vegetable-soup",
+    "label": "Vegetable / Vegetable Beef Soup (canned)",
+    "unit": "oz",
+    "include": [
+      "vegetable\\s+(?:beef\\s+)?soup"
+    ],
+    "exclude": [
+      "cream\\s+of",
+      "\\bmix\\b",
+      "\\bdry\\b",
+      "\\bjuice\\b",
+      "ramen",
+      "cocktail"
+    ],
+    "search_term": "canned vegetable soup",
+    "note": "Requires the word 'soup', so it will not grab vegetable broth. Exclude 'cream of' ('cream of vegetable soup' is a separate cream-of item) and 'juice/cocktail' (V8 vegetable juice). Tomato/chicken-noodle names cannot match this phrase."
+  },
+  {
+    "id": "clam-chowder",
+    "label": "Clam Chowder (canned)",
+    "unit": "oz",
+    "include": [
+      "clam\\s+chowder"
+    ],
+    "exclude": [
+      "\\bmix\\b",
+      "\\bdry\\b",
+      "bread\\s*bowl"
+    ],
+    "search_term": "clam chowder canned",
+    "note": "Anchored to 'clam chowder'; bare 'chowder' omitted (corn/potato chowder are different products). Plain canned clams will not match. Exclude dry mix and deli bread-bowl prepared soup."
+  },
+  {
+    "id": "chili-beans",
+    "label": "Chili Beans (in sauce)",
+    "unit": "oz",
+    "include": [
+      "chili\\s+(?:style\\s+)?beans?"
+    ],
+    "exclude": [
+      "with\\s+meat",
+      "seasoning",
+      "\\bmix\\b",
+      "powder",
+      "\\bsoup\\b"
+    ],
+    "search_term": "chili beans",
+    "note": "COLLISION WATCH with existing canned-chili. Include is 'chili beans' (adjacent), which does NOT match 'chili WITH beans' / 'chili NO beans' (those belong to canned-chili). Note: canned-chili's secondary pattern '\\bchili\\b.{0,15}\\bcan\\b' could still hijack a title like 'Chili Beans ... can' if the literal word 'can' appears; most Bush's titles use 'oz' not 'can', so low risk. Flag on merge ordering."
+  },
+  {
+    "id": "canned-white-beans",
+    "label": "Canned White Beans (Great Northern / Cannellini / Navy)",
+    "unit": "oz",
+    "include": [
+      "great\\s+northern\\s+beans?",
+      "cannellini",
+      "navy\\s+beans?",
+      "butter\\s+beans?"
+    ],
+    "exclude": [
+      "\\bdry\\b",
+      "\\bdried\\b",
+      "\\bbag\\b",
+      "\\bsoup\\b",
+      "\\bchili\\b",
+      "hummus"
+    ],
+    "search_term": "great northern beans canned",
+    "note": "Uses the four specific white-bean names from the notes. 'white kidney' (a cannellini synonym) deliberately NOT used because it collides with the existing kidney-beans matcher; 'cannellini' is the safe token. Exclude 'soup' (navy bean soup), 'chili' (white bean chili), and dry/bagged beans. Butter beans overlap with limas; kept per notes."
+  },
+  {
+    "id": "canned-mixed-vegetables",
+    "label": "Canned Mixed Vegetables",
+    "unit": "oz",
+    "include": [
+      "mixed\\s+vegetables?",
+      "veg[\\s-]?all"
+    ],
+    "exclude": [
+      "\\bfrozen\\b",
+      "\\bfresh\\b",
+      "stir[\\s-]?fry",
+      "\\bsoup\\b",
+      "steamable"
+    ],
+    "search_term": "canned mixed vegetables",
+    "note": "Veg-All brand plus 'mixed vegetables'. Exclude '\\bfrozen\\b' (critical: existing frozen mixed-vegetables item) and stir-fry / steamable frozen bags. Single-vegetable cans (corn/peas/green beans) cannot match this phrase."
+  },
+  {
+    "id": "canned-beets",
+    "label": "Canned Beets",
+    "unit": "oz",
+    "include": [
+      "\\bbeets?\\b",
+      "beet\\s*root"
+    ],
+    "exclude": [
+      "\\bjuice\\b",
+      "\\bfresh\\b",
+      "greens?",
+      "powder",
+      "chips?",
+      "\\bfrozen\\b"
+    ],
+    "search_term": "canned beets",
+    "note": "Head noun 'beets' plus 'beetroot'. Exclude beet juice, fresh beets/bunches, beet greens, beet-root powder (supplement), and beet chips."
+  },
+  {
+    "id": "sauerkraut",
+    "label": "Sauerkraut (canned/jarred)",
+    "unit": "oz",
+    "include": [
+      "sauerkraut",
+      "sauer\\s+kraut"
+    ],
+    "exclude": [
+      "kimchi",
+      "cole\\s*slaw",
+      "\\bslaw\\b",
+      "refrigerated",
+      "\\bballs?\\b"
+    ],
+    "search_term": "sauerkraut",
+    "note": "Bare 'kraut' omitted (kraut balls / krautburger). Refrigerated bagged kraut is hard to separate from canned/jarred by name; excluded 'refrigerated' as a best-effort. Exclude kimchi, coleslaw, and kraut-ball appetizers."
+  },
+  {
+    "id": "canned-yams",
+    "label": "Canned Yams / Sweet Potatoes",
+    "unit": "oz",
+    "include": [
+      "\\byams?\\b",
+      "cut\\s+sweet\\s+potatoes?",
+      "sweet\\s+potatoes?\\s+in\\s+(?:light\\s+|heavy\\s+|100%\\s+)?(?:juice|syrup)"
+    ],
+    "exclude": [
+      "\\bfresh\\b",
+      "\\bfrozen\\b",
+      "refrigerated",
+      "\\bfries\\b",
+      "\\btots?\\b",
+      "chips?",
+      "\\bpie\\b"
+    ],
+    "search_term": "canned yams",
+    "note": "'yams' is a strong signal for the canned candied product (fresh are labeled 'sweet potatoes', a separate lb item). Sweet-potato include is syrup/juice-anchored to avoid colliding with fresh sweet-potatoes. Exclude fries/tots/chips/pie and fresh/frozen/refrigerated."
+  },
+  {
+    "id": "cranberry-sauce",
+    "label": "Cranberry Sauce (canned)",
+    "unit": "oz",
+    "include": [
+      "cranberry\\s+sauce",
+      "jellied\\s+cranberr(?:y|ies)",
+      "whole\\s+berry\\s+cranberr(?:y|ies)"
+    ],
+    "exclude": [
+      "\\bjuice\\b",
+      "\\bfresh\\b",
+      "\\bdried\\b",
+      "craisins?",
+      "\\bfrozen\\b",
+      "cocktail"
+    ],
+    "search_term": "cranberry sauce",
+    "note": "Jellied and whole-berry both covered. Exclude cranberry juice / juice cocktail (existing beverage), fresh and dried cranberries (Craisins). Cranberry-orange relish left un-excluded since it is essentially whole-berry sauce."
+  },
+  {
+    "id": "canned-pumpkin",
+    "label": "Canned Pumpkin (100% puree)",
+    "unit": "oz",
+    "include": [
+      "100%\\s+pumpkin",
+      "pure\\s+pumpkin",
+      "pumpkin\\s+pur[eé]e",
+      "solid\\s+pack\\s+pumpkin"
+    ],
+    "exclude": [
+      "\\bpie\\b",
+      "\\bmix\\b",
+      "\\bfilling\\b",
+      "spice",
+      "\\bfresh\\b",
+      "seeds?",
+      "pepitas?",
+      "\\bbread\\b",
+      "muffin",
+      "\\bbutter\\b",
+      "latte",
+      "creamer",
+      "waffle",
+      "pancake"
+    ],
+    "search_term": "canned pumpkin",
+    "note": "High-collision item, so anchored to '100%/pure/puree/solid-pack pumpkin' rather than bare 'pumpkin'. Excludes the sweetened/spiced pumpkin-pie MIX and pie filling, plus pumpkin-spice everything (seeds, bread, latte, creamer, butter). Libby's '100% Pure Pumpkin' matches cleanly."
+  },
+  {
+    "id": "mandarin-oranges",
+    "label": "Canned Mandarin Oranges",
+    "unit": "oz",
+    "include": [
+      "mandarin\\s+oranges?"
+    ],
+    "exclude": [
+      "\\bcups?\\b",
+      "cuties",
+      "\\bhalos\\b",
+      "clementine",
+      "\\bfresh\\b",
+      "\\bfrozen\\b"
+    ],
+    "search_term": "canned mandarin oranges",
+    "note": "Anchored to 'mandarin orange(s)'. Bare 'mandarins' omitted because it collides with fresh Cuties/Halos mandarins sold by the bag. Do NOT exclude 'juice' here: canned mandarins are packed 'in juice'. Exclude single-serve 'cups' (routes to the fruit-cups item)."
+  },
+  {
+    "id": "fruit-cocktail",
+    "label": "Canned Fruit Cocktail",
+    "unit": "oz",
+    "include": [
+      "fruit\\s+cocktail",
+      "mixed\\s+fruit"
+    ],
+    "exclude": [
+      "\\bcups?\\b",
+      "\\bfrozen\\b",
+      "\\bdried\\b",
+      "\\bsnacks?\\b",
+      "gummy",
+      "gummies"
+    ],
+    "search_term": "fruit cocktail canned",
+    "note": "'fruit cocktail' plus generic 'mixed fruit'. Do NOT exclude 'juice' (packed in juice). Exclude single-serve cups (fruit-cups item), dried/trail mixed fruit, frozen fruit, and fruit snacks/gummies."
+  },
+  {
+    "id": "canned-pears",
+    "label": "Canned Pears",
+    "unit": "oz",
+    "include": [
+      "pear\\s+halves",
+      "sliced\\s+pears?",
+      "diced\\s+pears?",
+      "pears?\\s+in\\s+(?:light\\s+|heavy\\s+|100%\\s+)?(?:juice|syrup)"
+    ],
+    "exclude": [
+      "\\bfresh\\b",
+      "\\bcups?\\b",
+      "cocktail",
+      "\\bfrozen\\b",
+      "\\bdried\\b",
+      "prickly"
+    ],
+    "search_term": "canned pears",
+    "note": "Bare 'pears' deliberately NOT included: it collides with fresh pears (a separate lb item). Anchored to canned forms (halves / sliced / diced / in juice or syrup). A can simply titled 'Bartlett Pears' may be missed (acceptable, conservative). Exclude fruit cups, fruit cocktail, prickly pear."
+  },
+  {
+    "id": "tomatoes-green-chilies",
+    "label": "Diced Tomatoes with Green Chilies (Ro-Tel style)",
+    "unit": "oz",
+    "include": [
+      "ro[\\s*-]?tel",
+      "tomatoes?\\b.{0,12}green\\s+chil(?:e|i)e?s?",
+      "diced\\s+tomatoes?\\b.{0,12}chil(?:e|i)e?s?"
+    ],
+    "exclude": [
+      "\\bsauce\\b",
+      "\\bpaste\\b",
+      "\\bsoup\\b",
+      "salsa",
+      "enchilada"
+    ],
+    "search_term": "rotel diced tomatoes green chilies",
+    "note": "COLLISION WATCH with diced-tomatoes (which already excludes 'chili/chile', so it won't grab Ro-Tel). Include REQUIRES both a tomato token and a chili token, so plain diced tomatoes and plain green chilies are excluded by construction. Ro*Tel brand allowed via 'ro[\\s*-]?tel'."
+  },
+  {
+    "id": "canned-green-chilies",
+    "label": "Canned Diced Green Chilies",
+    "unit": "oz",
+    "include": [
+      "diced\\s+green\\s+chil(?:e|i)e?s?",
+      "chopped\\s+green\\s+chil(?:e|i)e?s?",
+      "green\\s+chil(?:e|i)e?s?"
+    ],
+    "exclude": [
+      "tomato",
+      "ro[\\s*-]?tel",
+      "jalape",
+      "powder",
+      "\\bsauce\\b",
+      "enchilada",
+      "salsa",
+      "\\bfresh\\b"
+    ],
+    "search_term": "diced green chiles",
+    "note": "COLLISION WATCH with tomatoes-green-chilies: exclude 'tomato' and 'ro-tel' so this only grabs the plain green-chile can (Old El Paso / Hatch). Exclude jalapenos (separate), chili powder (existing), green-chile sauce/enchilada, salsa, and fresh peppers. Chile spelling variants (chile/chiles/chili/chilies) covered."
+  },
+  {
+    "id": "black-olives",
+    "label": "Black Olives (canned, ripe)",
+    "unit": "oz",
+    "include": [
+      "black\\s+olives?",
+      "ripe\\s+olives?"
+    ],
+    "exclude": [
+      "green\\s+olives?",
+      "stuffed",
+      "\\boil\\b",
+      "tapenade",
+      "kalamata",
+      "manzanilla"
+    ],
+    "search_term": "black olives canned",
+    "note": "Black/ripe olives only. Exclude green/stuffed/manzanilla olives (separate item), kalamata specialty olives, olive oil (existing), and tapenade."
+  },
+  {
+    "id": "artichoke-hearts",
+    "label": "Artichoke Hearts (canned/jarred)",
+    "unit": "oz",
+    "include": [
+      "artichoke\\s+hearts?",
+      "artichoke\\s+quarters",
+      "marinated\\s+artichokes?"
+    ],
+    "exclude": [
+      "\\bfresh\\b",
+      "\\bfrozen\\b",
+      "\\bdip\\b",
+      "spinach"
+    ],
+    "search_term": "artichoke hearts",
+    "note": "Canned/jarred hearts, quarters, and marinated. Exclude fresh and frozen whole artichokes and spinach-artichoke DIP (a can of hearts never lists spinach, so the 'spinach' exclude is safe)."
+  },
+  {
+    "id": "vegetable-broth",
+    "label": "Vegetable Broth / Stock",
+    "unit": "floz",
+    "include": [
+      "vegetable\\s+(?:broth|stock)",
+      "veggie\\s+(?:broth|stock)"
+    ],
+    "exclude": [
+      "chicken",
+      "\\bbeef\\b",
+      "bouillon",
+      "\\bcubes?\\b",
+      "\\bbase\\b",
+      "\\bsoup\\b",
+      "ramen"
+    ],
+    "search_term": "vegetable broth",
+    "note": "COLLISION WATCH with the broth family: distinct 'vegetable broth/stock' token. Exclude 'chicken'/'beef' (chicken-vegetable is a soup / chicken broth), 'bouillon/cubes/base' (separate bouillon item), and 'soup' (canned vegetable soup, separate)."
+  },
+  {
+    "id": "bouillon",
+    "label": "Bouillon (cubes / granules / base)",
+    "unit": "oz",
+    "include": [
+      "bouillon",
+      "soup\\s+base",
+      "(?:chicken|beef|vegetable|ham)\\s+base\\b"
+    ],
+    "exclude": [
+      "\\bbroth\\b",
+      "\\bstock\\b",
+      "ramen",
+      "gravy"
+    ],
+    "search_term": "chicken bouillon cubes",
+    "note": "COLLISION WATCH with broth entries (they already exclude bouillon/base/cubes). 'bouillon' covers cubes/granules and Better Than Bouillon; 'soup base' / 'chicken base' cover paste bases. Exclude liquid broth/stock, ramen seasoning, and gravy mix."
+  },
+  {
+    "id": "coconut-milk-canned",
+    "label": "Canned Coconut Milk",
+    "unit": "floz",
+    "include": [
+      "coconut\\s+milk"
+    ],
+    "exclude": [
+      "refrigerated",
+      "\\bcarton\\b",
+      "cream\\s+of\\s+coconut",
+      "coco\\s+lopez",
+      "\\bwater\\b",
+      "\\boil\\b",
+      "shredded",
+      "flake",
+      "\\bsilk\\b",
+      "so\\s+delicious",
+      "vanilla"
+    ],
+    "search_term": "coconut milk canned",
+    "note": "Include is 'coconut milk', so carton/refrigerated beverage versions also match the token; excludes strip them (carton/refrigerated, Silk, So Delicious, vanilla-flavored). Exclude 'cream of coconut' / Coco Lopez (sweetened cocktail mixer), coconut water, coconut oil (existing), shredded/flaked coconut. A shelf-stable aseptic beverage titled only 'Coconut Milk' could slip through; size disambiguation is out of scope for match rules."
+  },
+  {
+    "id": "canned-potatoes",
+    "label": "Canned Potatoes",
+    "unit": "oz",
+    "include": [
+      "canned\\s+potatoes?",
+      "whole\\s+white\\s+potatoes?",
+      "sliced\\s+white\\s+potatoes?",
+      "diced\\s+white\\s+potatoes?"
+    ],
+    "exclude": [
+      "\\bfresh\\b",
+      "\\bfrozen\\b",
+      "refrigerated",
+      "\\bfries\\b",
+      "\\btots?\\b",
+      "tater",
+      "hash\\s*brown",
+      "chips?",
+      "\\bmashed\\b",
+      "instant",
+      "flakes?",
+      "sweet\\s+potato",
+      "\\bsalad\\b",
+      "au\\s+gratin",
+      "scalloped"
+    ],
+    "search_term": "canned potatoes",
+    "note": "Bare 'potatoes' and 'new potatoes' omitted (both collide with fresh, sold by lb). Anchored to canned forms; 'white' qualifier avoids refrigerated Simply-Potatoes 'diced potatoes'. Exclude fries/tots/hash browns/chips (existing), instant mashed flakes (existing), potato salad, sweet potato (canned-yams), and boxed au gratin/scalloped."
+  },
+  {
+    "id": "hominy",
+    "label": "Canned Hominy",
+    "unit": "oz",
+    "include": [
+      "hominy"
+    ],
+    "exclude": [
+      "grits",
+      "\\bmasa\\b",
+      "harina",
+      "\\bflour\\b",
+      "\\bmeal\\b"
+    ],
+    "search_term": "canned hominy",
+    "note": "'hominy' is a specific word; single include is sufficient. Exclude hominy grits and masa/harina/flour/meal (ground corn products, separate). Canned corn and popcorn cannot match 'hominy'."
+  },
+  {
+    "id": "onion-soup-mix",
+    "label": "Onion Soup Mix (dry packets)",
+    "unit": "oz",
+    "include": [
+      "onion\\s+soup\\b.{0,15}\\bmix\\b",
+      "onion\\s+recipe\\s+soup\\b.{0,20}\\bmix\\b",
+      "onion\\s+dip\\s+mix"
+    ],
+    "exclude": [
+      "ranch",
+      "powder",
+      "\\bflakes?\\b",
+      "\\bfresh\\b",
+      "\\bcanned\\b"
+    ],
+    "search_term": "onion soup mix",
+    "note": "Every include REQUIRES the word 'mix', so canned French onion soup (no 'mix') cannot match, and 'French Onion Soup MIX' dry packets remain matchable (so 'french onion' is intentionally NOT excluded). Exclude ranch dip mix (separate), onion powder (existing), dried onion flakes/minced onion, and fresh onions."
+  },
+  {
+    "id": "jarred-gravy",
+    "label": "Jarred / Canned Gravy",
+    "unit": "oz",
+    "include": [
+      "\\bgravy\\b"
+    ],
+    "exclude": [
+      "\\bmix\\b",
+      "packet",
+      "envelope",
+      "powder",
+      "granules?",
+      "\\bdry\\b",
+      "seasoning",
+      "\\bboat\\b"
+    ],
+    "search_term": "turkey gravy jar",
+    "note": "Ready-to-serve jar/can gravy. 'gravy' is specific enough as a single include; excludes remove the dry gravy-mix packets/envelopes/granules (separate item) and the 'gravy boat' serving dish (dishware). Broth/stock and cream-of soups cannot match 'gravy'."
+  }
+]

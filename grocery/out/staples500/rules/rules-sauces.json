@@ -1,0 +1,426 @@
+[
+    {
+        "id": "dijon-mustard",
+        "label": "Dijon Mustard",
+        "unit": "oz",
+        "include": [
+            "dijon",
+            "spicy\\s+brown\\s+mustard"
+        ],
+        "exclude": [
+            "honey",
+            "\\bvinaigrette\\b",
+            "\\bdressing\\b",
+            "mustard\\s+(?:seed|powder)",
+            "ground\\s+mustard",
+            "\\bpretzel"
+        ],
+        "search_term": "dijon mustard",
+        "note": "Claims dijon + spicy brown (both excluded by the yellow-mustard rule). Honey-dijon is routed to honey-mustard on purpose; dry ground/seed mustard spice excluded."
+    },
+    {
+        "id": "honey-mustard",
+        "label": "Honey Mustard",
+        "unit": "oz",
+        "include": [
+            "honey\\s+mustard",
+            "honey\\s+dijon"
+        ],
+        "exclude": [
+            "pretzel",
+            "\\bchips\\b",
+            "cracker",
+            "\\balmonds?\\b",
+            "\\bpeanuts?\\b",
+            "\\bcashews?\\b",
+            "snack",
+            "seasoning"
+        ],
+        "search_term": "honey mustard",
+        "note": "Requires both words together so plain honey (existing) and yellow mustard are unaffected. Honey-dijon claimed here. Snack/pretzel/nut forms excluded."
+    },
+    {
+        "id": "miracle-whip",
+        "label": "Miracle Whip (Salad Dressing Spread)",
+        "unit": "oz",
+        "include": [
+            "miracle\\s+whip",
+            "whipped\\s+(?:salad\\s+)?dressing"
+        ],
+        "exclude": [
+            "mayonnaise",
+            "\\bmayo\\b",
+            "\\baioli\\b"
+        ],
+        "search_term": "miracle whip",
+        "note": "Bare 'salad dressing' deliberately NOT included (would grab pourable ranch/italian/caesar). Matches Miracle Whip + store-brand 'whipped dressing' spreads; real mayo (existing) excluded."
+    },
+    {
+        "id": "caesar-dressing",
+        "label": "Caesar Dressing",
+        "unit": "floz",
+        "include": [
+            "caesar\\s+dressing",
+            "creamy\\s+caesar",
+            "caesar\\s+vinaigrette"
+        ],
+        "exclude": [
+            "crouton",
+            "salad\\s+kit",
+            "\\bkit\\b",
+            "chopped\\s+salad",
+            "\\bmix\\b",
+            "seasoning"
+        ],
+        "search_term": "caesar dressing",
+        "note": "Bottled prepared dressing only; caesar salad kits, croutons, and dry caesar mix packets excluded."
+    },
+    {
+        "id": "blue-cheese-dressing",
+        "label": "Blue Cheese Dressing",
+        "unit": "floz",
+        "include": [
+            "bl(?:ue|eu)\\s+cheese\\s+dressing"
+        ],
+        "exclude": [
+            "crumbl",
+            "\\bwedge\\b",
+            "\\bchunk\\b",
+            "\\bwheel\\b",
+            "gorgonzola",
+            "\\bmix\\b"
+        ],
+        "search_term": "blue cheese dressing",
+        "note": "Requires 'dressing' so cheese-aisle blue cheese crumbles/wedges are excluded. A 'Dressing & Dip' bottle still matches; a purely refrigerated produce-case dip cannot be told apart by name, so it is left in."
+    },
+    {
+        "id": "balsamic-vinegar",
+        "label": "Balsamic Vinegar",
+        "unit": "floz",
+        "include": [
+            "balsamic\\s+vinegar"
+        ],
+        "exclude": [
+            "vinaigrette",
+            "\\bdressing\\b",
+            "\\bglaze\\b",
+            "reduction",
+            "\\bspray\\b"
+        ],
+        "search_term": "balsamic vinegar",
+        "note": "'vinegar' is not a substring of 'vinaigrette', so balsamic vinaigrette dressing and balsamic glaze/reduction are excluded belt-and-suspenders. White/red-wine vinegar unaffected."
+    },
+    {
+        "id": "rice-vinegar",
+        "label": "Rice Vinegar",
+        "unit": "floz",
+        "include": [
+            "rice\\s+(?:wine\\s+)?vinegar"
+        ],
+        "exclude": [
+            "mirin",
+            "cooking\\s+wine",
+            "\\bsake\\b",
+            "\\bglaze\\b",
+            "\\bdressing\\b"
+        ],
+        "search_term": "rice vinegar",
+        "note": "Catches 'rice vinegar' and 'rice wine vinegar' (same product). Seasoned rice vinegar kept (per notes); mirin/cooking wine (near-neighbors on the shelf) excluded. Plain rice grain never matches (needs 'vinegar')."
+    },
+    {
+        "id": "red-wine-vinegar",
+        "label": "Red Wine Vinegar",
+        "unit": "floz",
+        "include": [
+            "red\\s+wine\\s+vinegar"
+        ],
+        "exclude": [
+            "vinaigrette",
+            "\\bdressing\\b",
+            "cooking\\s+wine",
+            "\\bglaze\\b"
+        ],
+        "search_term": "red wine vinegar",
+        "note": "Full phrase required, so WHITE wine vinegar and balsamic never match. Red-wine-vinegar dressings/vinaigrettes excluded."
+    },
+    {
+        "id": "teriyaki-sauce",
+        "label": "Teriyaki Sauce / Marinade",
+        "unit": "floz",
+        "include": [
+            "teriyaki"
+        ],
+        "exclude": [
+            "\\bjerky\\b",
+            "\\bbowl\\b",
+            "\\bfrozen\\b",
+            "\\bmeal\\b",
+            "\\bentree\\b",
+            "\\bwings?\\b",
+            "\\bchips\\b",
+            "\\bramen\\b",
+            "\\bnoodles?\\b",
+            "seasoning",
+            "\\brub\\b",
+            "stir[\\s-]*fry"
+        ],
+        "search_term": "teriyaki sauce",
+        "note": "Claims teriyaki sauce AND teriyaki marinade (same bottle). Soy sauce (existing) already excludes teriyaki, so no reverse collision. Frozen teriyaki meals/bowls, jerky, ramen/noodles, and dry seasoning excluded."
+    },
+    {
+        "id": "steak-sauce",
+        "label": "Steak Sauce (A.1. style)",
+        "unit": "floz",
+        "include": [
+            "steak\\s+sauce",
+            "\\ba\\.?1\\b",
+            "heinz\\s+57"
+        ],
+        "exclude": [
+            "marinade",
+            "seasoning",
+            "\\brub\\b",
+            "\\bjerky\\b"
+        ],
+        "search_term": "a1 steak sauce",
+        "note": "Include 'steak sauce' (not bare 'steak', so raw steak never matches) plus A.1./Heinz 57 brands. Marinades (own item), steak seasoning/rub, and jerky excluded. Worcestershire/BBQ (existing) don't match these includes."
+    },
+    {
+        "id": "cocktail-sauce",
+        "label": "Cocktail Sauce",
+        "unit": "oz",
+        "include": [
+            "cocktail\\s+sauce",
+            "seafood\\s+cocktail\\s+sauce"
+        ],
+        "exclude": [
+            "shrimp\\s+ring",
+            "party\\s+tray",
+            "\\bmixer\\b",
+            "margarita",
+            "bloody\\s+mary",
+            "\\bmocktail\\b"
+        ],
+        "search_term": "cocktail sauce",
+        "note": "Seafood cocktail sauce (the ketchup/horseradish condiment). Excludes shrimp-cocktail party trays and drink 'cocktail mixers' (margarita/bloody mary/mocktail). Ketchup and tartar sauce don't match this phrase."
+    },
+    {
+        "id": "tartar-sauce",
+        "label": "Tartar Sauce",
+        "unit": "floz",
+        "include": [
+            "tartar\\s+sauce",
+            "tartare\\s+sauce"
+        ],
+        "exclude": [
+            "cream\\s+of\\s+tartar"
+        ],
+        "search_term": "tartar sauce",
+        "note": "Requires 'sauce' so the baking ingredient 'cream of tartar' never matches (also explicitly excluded). Mayo (existing) and cocktail sauce don't match this phrase."
+    },
+    {
+        "id": "horseradish",
+        "label": "Prepared Horseradish",
+        "unit": "oz",
+        "include": [
+            "horseradish"
+        ],
+        "exclude": [
+            "wasabi",
+            "\\bmustard\\b",
+            "\\bcheddar\\b",
+            "\\bcheese\\b",
+            "horseradish\\s+root"
+        ],
+        "search_term": "prepared horseradish",
+        "note": "Covers prepared horseradish + creamy horseradish sauce. Excludes wasabi (horseradish-based but distinct), horseradish mustard (a mustard), horseradish cheese spread, and fresh horseradish root."
+    },
+    {
+        "id": "enchilada-sauce",
+        "label": "Enchilada Sauce",
+        "unit": "oz",
+        "include": [
+            "enchilada\\s+sauce"
+        ],
+        "exclude": [
+            "\\bkit\\b",
+            "seasoning",
+            "\\bfrozen\\b",
+            "\\bdinner\\b",
+            "\\bentree\\b"
+        ],
+        "search_term": "red enchilada sauce",
+        "note": "Full phrase 'enchilada sauce' covers red and green canned sauce without grabbing frozen enchilada dinners/kits or enchilada seasoning mix. Taco sauce (candidate) and salsa/hot sauce (existing) don't match."
+    },
+    {
+        "id": "taco-sauce",
+        "label": "Taco Sauce",
+        "unit": "oz",
+        "include": [
+            "taco\\s+sauce"
+        ],
+        "exclude": [
+            "\\bsalsa\\b",
+            "enchilada",
+            "seasoning",
+            "\\bshells?\\b",
+            "\\bkit\\b",
+            "\\bdinner\\b"
+        ],
+        "search_term": "taco sauce",
+        "note": "Include 'taco sauce' (not bare 'taco', so shells/kits/seasoning are avoided). Salsa (existing), enchilada sauce (candidate), and taco seasoning packets explicitly excluded."
+    },
+    {
+        "id": "sloppy-joe-sauce",
+        "label": "Sloppy Joe Sauce (Manwich style)",
+        "unit": "oz",
+        "include": [
+            "sloppy\\s+joe",
+            "manwich"
+        ],
+        "exclude": [
+            "seasoning",
+            "\\bmix\\b",
+            "\\bfrozen\\b",
+            "sandwich"
+        ],
+        "search_term": "sloppy joe sauce manwich",
+        "note": "Canned sloppy joe sauce. Excludes dry sloppy joe seasoning packets and frozen/ready sloppy joe sandwiches. BBQ/pasta sauce (existing) don't match."
+    },
+    {
+        "id": "bottled-marinade",
+        "label": "Meat Marinade (bottled)",
+        "unit": "floz",
+        "include": [
+            "marinade"
+        ],
+        "exclude": [
+            "teriyaki",
+            "italian\\s+dressing",
+            "\\bbbq\\b",
+            "barbecue",
+            "\\brub\\b",
+            "seasoning",
+            "\\bmix\\b",
+            "packet",
+            "envelope"
+        ],
+        "search_term": "steak marinade",
+        "note": "Catch-all bottled liquid marinade. Excludes items that own their board slot (teriyaki, italian dressing, BBQ) and dry marinade MIX packets/rubs. 'marinade' is not a substring of 'marinated', so marinated artichokes/olives are unaffected."
+    },
+    {
+        "id": "pesto",
+        "label": "Pesto (jarred)",
+        "unit": "oz",
+        "include": [
+            "pesto"
+        ],
+        "exclude": [
+            "\\bfrozen\\b",
+            "\\bchips\\b",
+            "tortellini",
+            "ravioli",
+            "\\bpizza\\b",
+            "cracker"
+        ],
+        "search_term": "basil pesto",
+        "note": "Jarred pesto sauce. Prepared pesto dishes (tortellini/ravioli/pizza/frozen) and pesto snack chips/crackers excluded. Refrigerated fresh pesto cannot be distinguished from shelf-stable by name, so it is left in."
+    },
+    {
+        "id": "minced-garlic",
+        "label": "Minced Garlic (jarred)",
+        "unit": "oz",
+        "include": [
+            "minced\\s+garlic",
+            "chopped\\s+garlic",
+            "crushed\\s+garlic"
+        ],
+        "exclude": [
+            "\\bpowder\\b",
+            "garlic\\s+salt",
+            "\\bbread\\b",
+            "\\bbulb",
+            "dehydrated",
+            "\\bdried\\b"
+        ],
+        "search_term": "minced garlic jar",
+        "note": "Wet jarred minced/chopped/crushed garlic in water or oil. Garlic powder, garlic salt, fresh bulbs, and garlic bread excluded. COLLISION RISK: dried spice-aisle 'minced garlic' shares the exact name; 'dried'/'dehydrated' catch the labeled ones but an unlabeled dried jar could still match."
+    },
+    {
+        "id": "pickled-jalapenos",
+        "label": "Pickled Jalapenos (sliced)",
+        "unit": "oz",
+        "include": [
+            "pickled\\s+jalape[nñ]os?",
+            "jalape[nñ]o\\s+(?:slices|rings|nacho)",
+            "(?:nacho|tamed|sliced|diced)\\s+(?:hot\\s+)?jalape[nñ]os?"
+        ],
+        "exclude": [
+            "green\\s+chil",
+            "banana\\s+pepper",
+            "pepperoncini",
+            "candied",
+            "cowboy\\s+candy",
+            "relish"
+        ],
+        "search_term": "pickled jalapeno slices",
+        "note": "Deliberately requires a jarred signal (pickled / sliced / nacho / diced / rings) so it does NOT steal FRESH whole jalapenos (existing produce item). Green chilies (candidate), banana peppers (candidate), and candied 'cowboy candy' jalapenos excluded. Integrator should add a 'pickled|nacho|sliced' exclude to the fresh-jalapeno rule to prevent the reverse hijack."
+    },
+    {
+        "id": "green-olives",
+        "label": "Green Olives (stuffed)",
+        "unit": "oz",
+        "include": [
+            "green\\s+olives",
+            "manzanilla",
+            "spanish\\s+olives",
+            "pimi?ento[\\s-]?stuffed"
+        ],
+        "exclude": [
+            "black\\s+olives",
+            "ripe\\s+olives",
+            "kalamata",
+            "tapenade",
+            "medley",
+            "\\bmix\\b"
+        ],
+        "search_term": "green olives stuffed",
+        "note": "Green/manzanilla/spanish/pimiento-stuffed olives. Black/ripe olives (candidate) and kalamata routed to their own items; olive medleys/mixes and tapenade excluded. No 'oil' exclude needed: olive OIL cannot match any of these includes, and adding it would wrongly drop olives packed in oil."
+    },
+    {
+        "id": "banana-peppers",
+        "label": "Banana Peppers / Pepperoncini",
+        "unit": "oz",
+        "include": [
+            "banana\\s+pepper",
+            "pepp?eroncini"
+        ],
+        "exclude": [
+            "jalape",
+            "bell\\s+pepper",
+            "\\bchili\\b"
+        ],
+        "search_term": "banana pepper rings",
+        "note": "Jarred banana pepper rings + pepperoncini (both spellings). Pickled jalapenos (candidate) and bell peppers excluded. MINOR COLLISION: fresh produce banana peppers share the name and there is no jarred-only keyword to gate on; rely on category/context."
+    },
+    {
+        "id": "lime-juice",
+        "label": "Lime Juice (bottled)",
+        "unit": "floz",
+        "include": [
+            "lime\\s+(?:\\d+%\\s+)?juice"
+        ],
+        "exclude": [
+            "limeade",
+            "margarita",
+            "\\bcocktail\\b",
+            "\\bdrink\\b",
+            "\\bsoda\\b",
+            "water\\s+enhancer",
+            "\\bpie\\b",
+            "\\bpepper\\b"
+        ],
+        "search_term": "lime juice bottle",
+        "note": "Mirrors the existing lemon-juice rule. Requires 'lime ... juice', so fresh limes (produce) never match. Limeade/margarita mix/soda excluded. Bottled 'key lime juice' intentionally allowed; key lime PIE excluded via 'pie'."
+    }
+]
