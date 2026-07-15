@@ -8,20 +8,12 @@
         "per_unit":  7.33
     },
     {
-        "id":  "bacon",
-        "url":  "https://www.shopfamilyfare.com/shop/meat/bacon/hatfield_applewood_smoked_classic_cut_bacon_12_lb/p/7108735",
-        "price":  "$6.99",
-        "size":  "12 lb",
-        "name":  "Hatfield Applewood Smoked Classic Cut Bacon 12 Lb",
-        "per_unit":  0.5825
-    },
-    {
         "id":  "blueberries",
-        "url":  "https://www.shopfamilyfare.com/shop/beverages/tea/ready_to_drink/bai_brasilia_blueberry_antioxidant_beverage_18_fl_oz/p/1564405684715274599",
-        "price":  "$2.69",
-        "size":  "18 fl oz",
-        "name":  "Bai Brasilia Blueberry Antioxidant Beverage 18 Fl Oz",
-        "per_unit":  0.1494
+        "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/berries/fresh_blueberries/p/2471148",
+        "price":  "$5.49",
+        "size":  "1 pt",
+        "name":  "Fresh Blueberries",
+        "per_unit":  0.3431
     },
     {
         "id":  "chicken-breast",
@@ -40,6 +32,22 @@
         "per_unit":  3.69
     },
     {
+        "id":  "carrots",
+        "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/carrots/our_family_whole_carrots_32_oz/p/1564405684712676657",
+        "price":  "$2.29",
+        "size":  "32 oz",
+        "name":  "Our Family Whole Carrots 32 Oz",
+        "per_unit":  1.145
+    },
+    {
+        "id":  "cat-food",
+        "url":  "https://www.shopfamilyfare.com/shop/pets_wildlife/cat/dry_cat_food/friskies_gravy_swirl_d_flavors_of_chicken_salmon_gravy_cat_food_16_lb/p/8143708",
+        "price":  "$20.99",
+        "size":  "16 lb",
+        "name":  "Friskies Gravy Swirl\u0027d Flavors Of Chicken, Salmon \u0026 Gravy Cat Food 16 Lb",
+        "per_unit":  1.3119
+    },
+    {
         "id":  "chicken-thighs",
         "url":  "https://www.shopfamilyfare.com/shop/meat/chicken/fresh_chicken/chicken_thighs_family_pack_gold_n_plump/p/1564405684714631523",
         "price":  "$1.99",
@@ -54,6 +62,14 @@
         "size":  "6 oz",
         "name":  "Our Family Cooking Spray, No Stick, Canola Oil 6 Oz",
         "per_unit":  0.4817
+    },
+    {
+        "id":  "corn-dogs",
+        "url":  "https://www.shopfamilyfare.com/shop/deli/ready_to_go_hot/corn_dogs_hot/p/1564405684714636918",
+        "price":  "$1.49",
+        "size":  "1 ea",
+        "name":  "Corn Dogs Hot",
+        "per_unit":  1.49
     },
     {
         "id":  "crackers",
@@ -72,6 +88,14 @@
         "per_unit":  0.2494
     },
     {
+        "id":  "granola",
+        "url":  "https://www.shopfamilyfare.com/shop/pantry/breakfast/granola_cereals/oat_honey_granola_granola_our_family/p/1564405684712876028",
+        "price":  "$3.39",
+        "size":  "12 oz",
+        "name":  "Oat \u0026 Honey Granola Granola Our Family",
+        "per_unit":  0.2825
+    },
+    {
         "id":  "sugar",
         "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/sweeteners/our_family_sugar_pure_granulated_64_oz/p/7081534",
         "price":  "$3.99",
@@ -81,11 +105,11 @@
     },
     {
         "id":  "grapes",
-        "url":  "https://www.shopfamilyfare.com/shop/beverages/sport_energy/sport/electrolit_grape_electrolyte_beverage_21_fl_oz/p/6124091",
+        "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/grapes/fresh_white_green_seedless_grapes/p/2311218",
         "price":  "$3.49",
-        "size":  "21 fl oz",
-        "name":  "Electrolit Grape Electrolyte Beverage 21 Fl Oz",
-        "per_unit":  2.659
+        "size":  "lb",
+        "name":  "Fresh White/Green Seedless Grapes",
+        "per_unit":  3.49
     },
     {
         "id":  "conditioner",
@@ -96,172 +120,20 @@
         "per_unit":  0.7805
     },
     {
-        "id":  "hot-dogs",
-        "url":  "https://www.shopfamilyfare.com/shop/pets_wildlife/dog/treats/canine_carry_outs_hot_dog_minis_real_beef_dog_snacks_4_5_oz/p/1564405684712125885",
-        "price":  "$1.39",
-        "size":  "4.5 oz",
-        "name":  "Canine Carry Outs Hot Dog Minis Real Beef Dog Snacks 4.5 Oz",
-        "per_unit":  0.3089
-    },
-    {
-        "id":  "italian-sausage",
-        "url":  "https://www.shopfamilyfare.com/shop/meat/sausage/italian/ground_italian_sausage_mild_our_family/p/1564405684702622183",
+        "id":  "hot-dog-buns",
+        "url":  "https://www.shopfamilyfare.com/shop/bakery/buns_sandwich_rolls/hot_dog_brat_buns/village_hearth_hot_dog_buns_old_fashioned_14_oz/p/5785166",
         "price":  "$4.49",
-        "size":  "16 oz",
-        "name":  "Ground Italian Sausage, Mild Our Family",
-        "per_unit":  4.49
-    },
-    {
-        "id":  "jelly",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/jelly_jam_preserves/concord_grape_jelly_our_family/p/6787034",
-        "price":  "$3.19",
-        "size":  "32 oz",
-        "name":  "Concord Grape Jelly Our Family",
-        "per_unit":  0.0997
-    },
-    {
-        "id":  "ketchup",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/ketchup/ketchup_our_family/p/7081442",
-        "price":  "$3.99",
-        "size":  "64 oz",
-        "name":  "Ketchup Our Family",
-        "per_unit":  0.0623
-    },
-    {
-        "id":  "kidney-beans",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/beans/full_circle_market_kidney_beans_low_sodium_dark_red_15_oz/p/573459",
-        "price":  "$1.39",
-        "size":  "15 oz",
-        "name":  "Full Circle Market Kidney Beans, Low Sodium, Dark Red 15 Oz",
-        "per_unit":  0.0927
-    },
-    {
-        "id":  "marshmallows",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/marshmallows/our_family_marshmallows_mini_16_oz/p/7081775",
-        "price":  "$1.99",
-        "size":  "16 oz",
-        "name":  "Our Family Marshmallows, Mini 16 Oz",
-        "per_unit":  0.1244
-    },
-    {
-        "id":  "orange-juice",
-        "url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/orange_juice/100_orange_juice_with_calcium_vitamin_d/p/1564405684704662316",
-        "price":  "$4.79",
-        "size":  "52 fl oz",
-        "name":  "100% Orange Juice With Calcium \u0026 Vitamin D",
-        "per_unit":  0.0921
-    },
-    {
-        "id":  "parmesan",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/crackers/toppers_dips/our_family_grated_cheese_parmesan_16_oz/p/1564405684712451099",
-        "price":  "$6.49",
-        "size":  "16 oz",
-        "name":  "Our Family Grated Cheese, Parmesan 16 Oz",
-        "per_unit":  0.4056
-    },
-    {
-        "id":  "pasta",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/angel_hair_spaghetti/skinner_spaghetti_24_oz_bag/p/559544",
-        "price":  "$2.59",
-        "size":  "24 oz / 680 grm / 1.5 lbr",
-        "name":  "Skinner™ Spaghetti 24 Oz. Bag",
-        "per_unit":  0.0067
-    },
-    {
-        "id":  "pork-chops",
-        "url":  "https://www.shopfamilyfare.com/shop/meat/pork/fresh/fresh_assorted_pork_chops_value_pack/p/1564405684713031264",
-        "price":  "$4.79",
-        "size":  "lb",
-        "name":  "Fresh Assorted Pork Chops Value Pack",
-        "per_unit":  4.79
-    },
-    {
-        "id":  "potato-chips",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/potato_chips/our_family_sweet_heat_barbecue_potato_chips_7_75_oz/p/1564405684716827871",
-        "price":  "$1.99",
-        "size":  "7.75 oz",
-        "name":  "Our Family Sweet Heat Barbecue Potato Chips 7.75 Oz",
-        "per_unit":  0.2568
-    },
-    {
-        "id":  "salmon",
-        "url":  "https://www.shopfamilyfare.com/shop/meat/seafood_fish/frozen_fish/our_family_fillets_salmon_16_oz/p/1564405684713744141",
-        "price":  "$10.49",
-        "size":  "16 oz",
-        "name":  "Our Family Fillets, Salmon 16 Oz",
-        "per_unit":  10.49
-    },
-    {
-        "id":  "salsa",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salsa/mild_thick_chunky_salsa_our_family/p/6787000",
-        "price":  "$2.49",
-        "size":  "16 oz",
-        "name":  "Mild Thick \u0026 Chunky Salsa Our Family",
-        "per_unit":  0.1556
-    },
-    {
-        "id":  "sandwich-cookies",
-        "url":  "https://www.shopfamilyfare.com/shop/pantry/cookies/golden_with_vanilla_creme_vanilla_sandwich_cookies/p/1564405684709979703",
-        "price":  "$3.99",
-        "size":  "19.1 oz",
-        "name":  "Golden With Vanilla Creme Vanilla Sandwich Cookies",
-        "per_unit":  0.2089
-    },
-    {
-        "id":  "shower-cleaner",
-        "url":  "https://www.shopfamilyfare.com/shop/household/cleaners_air_fresheners/bath/lysol_mango_hibiscus_bathroom_cleaner_32_fl_oz/p/1564405684704545592",
-        "price":  "$3.39",
-        "size":  "32 fl oz",
-        "name":  "Lysol Mango \u0026 Hibiscus Bathroom Cleaner 32 Fl Oz",
-        "per_unit":  0.1059
-    },
-    {
-        "id":  "sirloin-steak",
-        "url":  "https://www.shopfamilyfare.com/shop/meat/beef/steaks/fresh_usda_choice_whole_sirloin_tip/p/1564405684714630310",
-        "price":  "$5.49",
-        "size":  "lb",
-        "name":  "Fresh Usda Choice Whole Sirloin Tip",
-        "per_unit":  5.49
-    },
-    {
-        "id":  "sliced-cheese",
-        "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/packaged_sliced/kraft_american_cheese_slices_24_ea/p/17691",
-        "price":  "$5.99",
-        "size":  "16 oz",
-        "name":  "Kraft American Cheese Slices 24 Ea",
-        "per_unit":  0.3744
-    },
-    {
-        "id":  "soda",
-        "url":  "https://www.shopfamilyfare.com/shop/beverages/soda_other_carbonated_beverages/fridge_12_packs_soda/pepsi_cola_12_ea/p/2318320",
-        "price":  "$10.99",
-        "size":  "12 ea",
-        "name":  "Pepsi Cola 12 Ea",
-        "per_unit":  0.9158
-    },
-    {
-        "id":  "sports-drinks",
-        "url":  "https://www.shopfamilyfare.com/shop/beverages/sport_energy/sport/gatorade_cool_blue_thirst_quencher_28_fl_oz/p/589084",
-        "price":  "$2.19",
-        "size":  "28 fl oz",
-        "name":  "Gatorade Cool Blue Thirst Quencher 28 Fl Oz",
-        "per_unit":  0.0782
-    },
-    {
-        "id":  "strawberries",
-        "url":  "https://www.shopfamilyfare.com/shop/beer_wine_spirits/beer/steel_reserve_malt_beverage_spiked_strawberry_24_fl_oz/p/1564405684704824026",
-        "price":  "$2.79",
-        "size":  "24 fl oz",
-        "name":  "Steel Reserve Malt Beverage, Spiked, Strawberry 24 Fl Oz",
-        "per_unit":  0.1162
+        "size":  "14 oz",
+        "name":  "Village Hearth Hot Dog Buns, Old Fashioned 14 Oz",
+        "per_unit":  0.3207
     },
     {
         "id":  "sweet-corn",
-        "url":  "https://www.shopfamilyfare.com/shop/health_beauty/baby_child/infant_meals/beech_nut_stage_2_6_months_sweet_corn_green_beans_4_oz/p/2372003",
-        "price":  "$1.59",
-        "size":  "4 oz",
-        "name":  "Beech Nut Stage 2 (6+ Months) Sweet Corn \u0026 Green Beans 4 Oz",
-        "per_unit":  0.3975
+        "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/corn/fresh_sweet_corn_4_ct/p/1564405684714629780",
+        "price":  "$5.99",
+        "size":  "1 pk",
+        "name":  "Fresh Sweet Corn (4 Ct)",
+        "per_unit":  5.99
     },
     {
         "id":  "tomatoes",
@@ -281,10 +153,114 @@
     },
     {
         "id":  "vegetable-oil",
-        "url":  "https://www.shopfamilyfare.com/shop/dairy/butter_margarine/margarine/blue_bonnet_vegetable_oil_spread_53_16_oz/p/21946",
-        "price":  "$1.59",
-        "size":  "16 oz",
-        "name":  "Blue Bonnet Vegetable Oil Spread, 53% 16 Oz",
-        "per_unit":  0.0994
+        "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/oils_sprays/our_family_vegetable_oil_blended_48_fl_oz/p/6787099",
+        "price":  "$4.79",
+        "size":  "48 fl oz",
+        "name":  "Our Family Vegetable Oil, Blended 48 Fl Oz",
+        "per_unit":  0.0998
+    },
+    {
+        "id":  "cheddar-cheese-shredded",
+        "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/our_family_natural_sharp_cheddar_shredded_cheese_32_oz/p/1564405684689268140",
+        "price":  "$7.89",
+        "size":  "32 oz",
+        "name":  "Our Family Natural Sharp Cheddar Shredded Cheese 32 Oz",
+        "per_unit":  0.2466
+    },
+    {
+        "id":  "fries",
+        "url":  "https://www.shopfamilyfare.com/shop/freezer/frozen_potatoes/french_fries/our_family_fries_crinkle_cut_32_oz/p/1564405684716116167",
+        "price":  "$3.99",
+        "size":  "32 oz",
+        "name":  "Our Family Fries, Crinkle Cut 32 Oz",
+        "per_unit":  0.1247
+    },
+    {
+        "id":  "paprika",
+        "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/paprika_our_family/p/7083809",
+        "price":  "$1.79",
+        "size":  "2.12 oz",
+        "name":  "Paprika Our Family",
+        "per_unit":  0.8443
+    },
+    {
+        "id":  "peanut-butter",
+        "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/nut_butters/creamy_peanut_butter_our_family/p/1564405684704541531",
+        "price":  "$7.99",
+        "size":  "64 oz",
+        "name":  "Creamy Peanut Butter Our Family",
+        "per_unit":  0.1248
+    },
+    {
+        "id":  "red-bell-pepper",
+        "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/fresh_sweet_bell_pepper_red_organic/p/1564405684703422869",
+        "price":  "$5.00",
+        "size":  "1 ea",
+        "name":  "Fresh Sweet Bell Pepper, Red Organic",
+        "per_unit":  5
+    },
+    {
+        "id":  "tomato-paste",
+        "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/tomatoes/our_family_tomato_paste_12_oz/p/7081294",
+        "price":  "$1.89",
+        "size":  "12 oz",
+        "name":  "Our Family Tomato Paste 12 Oz",
+        "per_unit":  0.1575
+    },
+    {
+        "id":  "white-mushrooms",
+        "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/mushrooms/our_family_mushrooms_white_whole_8_oz/p/1564405684713576546",
+        "price":  "$2.49",
+        "size":  "8 oz",
+        "name":  "Our Family Mushrooms, White, Whole 8 Oz",
+        "per_unit":  0.3113
+    },
+    {
+        "id":  "ground-cumin",
+        "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_mixes_toppings/sugar_n_spice_cumin_ground_pp/p/1564405684701719941",
+        "price":  "$2.29",
+        "size":  "2 oz",
+        "name":  "Sugar \u0027N Spice Cumin Ground Pp",
+        "per_unit":  1.145
+    },
+    {
+        "id":  "dried-oregano",
+        "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/herbs/our_family_oregano_leaves_0_75_oz/p/6787152",
+        "price":  "$2.19",
+        "size":  "0.75 oz",
+        "name":  "Our Family Oregano Leaves 0.75 Oz",
+        "per_unit":  2.92
+    },
+    {
+        "id":  "salt",
+        "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/salt_pepper/iodized_salt_our_family/p/6787156",
+        "price":  "$0.99",
+        "size":  "26 oz",
+        "name":  "Iodized Salt Our Family",
+        "per_unit":  0.0381
+    },
+    {
+        "id":  "smoked-paprika",
+        "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/sugar_n_spice_smoked_paprika/p/1564405684715649387",
+        "price":  "$6.99",
+        "size":  "7 oz",
+        "name":  "Sugar \u0027N Spice Smoked Paprika",
+        "per_unit":  0.9986
+    },
+    {
+        "id":  "feta-cheese",
+        "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/artisan_specialty/culinary_tours_feta_chunk_cheese/p/1564405684711368503",
+        "price":  "$6.49",
+        "size":  "8 oz",
+        "name":  "Culinary Tours Feta Chunk Cheese",
+        "per_unit":  0.8112
+    },
+    {
+        "id":  "mozzarella-cheese",
+        "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/our_family_natural_part_skim_mozzarella_shredded_cheese_32_oz/p/7081847",
+        "price":  "$7.89",
+        "size":  "32 oz",
+        "name":  "Our Family Natural Part Skim Mozzarella Shredded Cheese 32 Oz",
+        "per_unit":  0.2466
     }
 ]

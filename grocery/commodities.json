@@ -369,7 +369,10 @@
                         "hard\\s+seltzer",
                         "\\bdrink\\b",
                         "electrolyte",
-                        "\\bsoda\\b"
+                        "\\bsoda\\b",
+                        "\\bmilk\\b",
+                        "nesquik",
+                        "\\bshake\\b"
                     ]
     },
     {
@@ -1567,7 +1570,11 @@
                         "syrup",
                         "cereal",
                         "\\bham\\b",
-                        "cinnamon\\s+roll"
+                        "cinnamon\\s+roll",
+                        "\\bbeans?\\b",
+                        "grillin",
+                        "bush",
+                        "baked\\s+bean"
                     ]
     },
     {
