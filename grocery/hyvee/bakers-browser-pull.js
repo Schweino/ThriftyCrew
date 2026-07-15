@@ -69,7 +69,14 @@ const BK = (() => {
     if (r.status === 403) { S.blocked = true; throw new Error('403 - Akamai has blocked us; stop.'); }
     const doc = new DOMParser().parseFromString(await r.text(), 'text/html');
     const card = findCard(doc, upc);
-    S.out[upc] = card ? parseCard(card, upc) : null;
+    if (card) {
+      const pc = parseCard(card, upc);
+      // capture the product URL too, so import-bakers can store the link on the row (sync-browser-links then
+      // heals a pruned Baker's link from it - Baker's has no numeric item_id like Walmart to rebuild a URL from).
+      const a = card.querySelector('a[href*="/p/"]');
+      try { pc.url = a ? 'https://www.bakersplus.com' + new URL(a.href, location.origin).pathname : ''; } catch (e) { pc.url = ''; }
+      S.out[upc] = pc;
+    } else { S.out[upc] = null; }
   };
 
   return {
@@ -94,9 +101,9 @@ const BK = (() => {
       const got = Object.values(S.out).filter(Boolean).length;
       return { done: S.done, total: S.total, parsed: got, running: S.running, blocked: S.blocked };
     },
-    dump() {
+    dump() {   // CSV: upc,price,was,unitVal,unitOf,elp,url  (url is last - it never contains a comma)
       return Object.entries(S.out).filter(([, v]) => v).map(([u, v]) =>
-        [u, v.price ?? '', v.was ?? '', v.unitVal ?? '', v.unitOf ?? '', v.elp ? 1 : 0].join(',')
+        [u, v.price ?? '', v.was ?? '', v.unitVal ?? '', v.unitOf ?? '', v.elp ? 1 : 0, v.url ?? ''].join(',')
       ).join('\n');
     }
   };

@@ -55,7 +55,7 @@ foreach ($ln in (Get-Content $rawF)) {
   if ($pnum -le 0) { continue }
   $wnum = 0.0; [void][double]::TryParse((($c[2]) -replace '[^0-9.]',''), [ref]$wnum)
   $uvnum = 0.0; [void][double]::TryParse((($c[3]) -replace '[^0-9.]',''), [ref]$uvnum)
-  $price[$upc] = [pscustomobject]@{ cur=$pnum; was=$(if ($wnum -gt 0) { $wnum } else { $null }); uv=$(if ($uvnum -gt 0) { $uvnum } else { $null }); uof=([string]$c[4]).Trim(); elp=($c[5].Trim() -eq '1') }
+  $price[$upc] = [pscustomobject]@{ cur=$pnum; was=$(if ($wnum -gt 0) { $wnum } else { $null }); uv=$(if ($uvnum -gt 0) { $uvnum } else { $null }); uof=([string]$c[4]).Trim(); elp=($c[5].Trim() -eq '1'); url=$(if ($c.Count -ge 7) { ([string]$c[6]).Trim() } else { '' }) }
 }
 Write-Output ("Baker's prices captured from the store  : " + $price.Count)
 
@@ -196,6 +196,9 @@ foreach ($d in $doc.deals) {
   $row['source_ad'] = 'bakersplus.com search card price/unit price (Saddlecreek, Omaha) - the price the store charges today'
   $row['as_of'] = $today
   $row['upc'] = [string]$hit.upc
+  # keep the captured product URL on the row so sync-browser-links can HEAL a pruned Baker's link from it
+  # (Baker's has no numeric item_id to rebuild a URL from, unlike Walmart/Sam's).
+  if ($pv.url) { $row['link_url'] = [string]$pv.url }
 
   if ([math]::Abs($oldN - $newAd) -gt 0.005) {
     $changed.Add(('  {0,-46} {1,-9} -> ${2,-8} ({3} per {4}{5})' -f ([string]$d.item), $old, $newAd, [math]::Round($bpu,4), $unit, $(if($newBase){', was $' + $newBase}else{''})))

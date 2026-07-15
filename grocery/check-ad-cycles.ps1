@@ -420,6 +420,13 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
               # 0.32 drops everything guards would hard-fail on (ratio >=1.5x or <=0.67x) and nothing
               # else, so the repair is self-healing and the gate can never deadlock the daily publish.
               & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'prune-bad-links.ps1') -Tol 0.32 | Out-Null
+              # THE PERMANENT FIX for browser-store link regression: prune just dropped any link that drifted by
+              # a factor (a wrong SKU/size), which would leave a no-link gap. sync-browser-links immediately
+              # re-creates any browser link that is now missing but whose row still carries the product identity
+              # (item_id for Walmart/Sam's, a captured URL for Baker's), board-ANCHORED so it matches by
+              # construction. Net: a browser link pruned for drift is healed in the SAME pass and never stays a
+              # gap. Heal-only (never overwrites a healthy link, so guard 4 keeps checking those independently).
+              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'sync-browser-links.ps1') | Out-Null
               # This repair path used to publish DIRECTLY, which would have bypassed the invariant gate.
               # Re-run guards (the links just changed) and only ship if they still hold.
               & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') -Quiet | Out-Null
