@@ -36,7 +36,11 @@ $cf = Join-Path $root 'commodities.json'
 $cbak = Get-Content $cf -Raw
 $c = $cbak | ConvertFrom-Json
 $m = $c | Where-Object { $_.id -eq 'mangoes' }
-$m.exclude = @($m.exclude | Where-Object { $_ -ne 'cleaner' -and $_ -ne '\blysol\b' })
+# strip EVERY cleaner-ish exclude, including the category-library ones (\bcleaner\b, disinfect, ...) baked in
+# by apply-category-excludes on 2026-07-15 - with any one of them present the Lysol fixture can't even land in
+# the commodity, so the bug this test rebuilds can no longer form (that's the library doing its job; the test
+# must remove the whole defense to prove the AUDIT layer catches what gets through).
+$m.exclude = @($m.exclude | Where-Object { $_ -notmatch 'lysol|cleaner|disinfect|clorox|wipes' })
 ($c | ConvertTo-Json -Depth 6) | Set-Content $cf -Encoding UTF8
 
 $wf = (Get-ChildItem (Join-Path $root 'out\regular\walmart-regular-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName
@@ -156,6 +160,26 @@ if ((Test-Path $bkrCsv) -and $milk) {
   Set-Content $bkf $bkbak -Encoding UTF8 -NoNewline
 } else {
   Write-Output '  SKIP  baker rounding: no raw capture or no milk row to mutate'
+}
+
+# ---- 10. food commodity matched a wrong-CLASS product (the blueberries-as-Bai-beverage bug) ----------
+# Family Fare blueberries went LIVE priced as a "Bai Brasilia Blueberry Antioxidant BEVERAGE" and every guard
+# stayed green - household-in-food only knows cleaning products, and the factor guard only sees link drift.
+# Rebuild the exact shape (a produce cell whose matched item is a beverage) and prove audit-food-category
+# sees it.
+$cmpF2 = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName
+$cbak3 = Get-Content $cmpF2 -Raw
+$cmpD2 = $cbak3 | ConvertFrom-Json
+$bb = $cmpD2.comparison | Where-Object { $_.id -eq 'blueberries' } | Select-Object -First 1
+$bbCell = $null
+if ($bb) { $bbCell = $bb.stores | Where-Object { [double]$_.per_unit -gt 0 } | Select-Object -First 1 }
+if ($bbCell) {
+  $bbCell.item = 'Bai Brasilia Blueberry Antioxidant Beverage 18 Fl Oz'
+  ($cmpD2 | ConvertTo-Json -Depth 8) | Set-Content $cmpF2 -Encoding UTF8
+  Check 'food-class: blueberries priced as a Bai antioxidant BEVERAGE' 2
+  Set-Content $cmpF2 $cbak3 -Encoding UTF8 -NoNewline
+} else {
+  Write-Output '  SKIP  food-class: no priced blueberries cell to mutate'
 }
 
 # ---- restored? ---------------------------------------------------------------------

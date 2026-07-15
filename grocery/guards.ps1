@@ -73,7 +73,12 @@ else { Say '  ok    pu-lib per-unit engine self-check' }
 # ---------------------------------------------------------------- 1 + 2: delegate to the existing audits
 foreach ($g in @(
     @{ f='audit-price-mode.ps1';        n='price-mode (in-store pricing)' },
-    @{ f='audit-household-in-food.ps1'; n='household-in-food' })) {
+    @{ f='audit-household-in-food.ps1'; n='household-in-food' },
+    # blueberries-as-Bai-beverage class (2026-07-15): a FOOD commodity matched to a beverage/baby-food/pet/
+    # household/bakery-carrier/dairy-carrier/candy product. Wrong-class products are usually CHEAPER than the
+    # real item, so they win the cheapest slot and ship as a great-looking lie. Reads category-excludes.json -
+    # the same library apply-category-excludes bakes into commodity rules and build-vet-sheet flags for review.
+    @{ f='audit-food-category.ps1';     n='no food commodity matched a wrong-class product (beverage/baby/pet/household/carrier/candy)' })) {
   $p = Join-Path $root $g.f
   if (-not (Test-Path $p)) { [void]$fail.Add(("MISSING GUARD SCRIPT: " + $g.f)); continue }
   & powershell -NoProfile -ExecutionPolicy Bypass -File $p | Out-Null
