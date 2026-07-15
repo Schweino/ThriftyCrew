@@ -1,32 +1,32 @@
 ﻿{
-    "generated":  "2026-07-15 15:42",
+    "generated":  "2026-07-15 16:27",
     "tol":  0.3,
-    "no_link_count":  212,
+    "no_link_count":  195,
     "max_no_link":  0,
     "no_link_by_store":  [
                              {
                                  "store":  "Hy-Vee",
-                                 "count":  67
+                                 "count":  85
                              },
                              {
                                  "store":  "Family Fare",
-                                 "count":  49
+                                 "count":  61
                              },
                              {
                                  "store":  "Baker\u0027s",
-                                 "count":  41
+                                 "count":  36
                              },
                              {
                                  "store":  "Walmart",
-                                 "count":  35
-                             },
-                             {
-                                 "store":  "Aldi",
-                                 "count":  10
+                                 "count":  5
                              },
                              {
                                  "store":  "Fareway",
-                                 "count":  9
+                                 "count":  5
+                             },
+                             {
+                                 "store":  "Aldi",
+                                 "count":  2
                              },
                              {
                                  "store":  "Sam\u0027s Club",
@@ -51,6 +51,18 @@
                         "store":  "Family Fare"
                     },
                     {
+                        "id":  "chicken-wings",
+                        "store":  "Baker\u0027s"
+                    },
+                    {
+                        "id":  "rotisserie-chicken",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "canned-chicken",
+                        "store":  "Hy-Vee"
+                    },
+                    {
                         "id":  "milk",
                         "store":  "Hy-Vee"
                     },
@@ -59,20 +71,20 @@
                         "store":  "Walmart"
                     },
                     {
-                        "id":  "shredded-cheese",
-                        "store":  "Aldi"
-                    },
-                    {
                         "id":  "heavy-cream",
-                        "store":  "Baker\u0027s"
+                        "store":  "Hy-Vee"
                     },
                     {
                         "id":  "half-and-half",
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "string-cheese",
-                        "store":  "Baker\u0027s"
+                        "id":  "parmesan",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "feta",
+                        "store":  "Hy-Vee"
                     },
                     {
                         "id":  "coffee-creamer",
@@ -84,15 +96,27 @@
                     },
                     {
                         "id":  "coffee-creamer",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "coffee-creamer",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "blueberries",
-                        "store":  "Baker\u0027s"
+                        "id":  "apples",
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "apples",
                         "store":  "Baker\u0027s"
+                    },
+                    {
+                        "id":  "apples",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "peaches",
+                        "store":  "Hy-Vee"
                     },
                     {
                         "id":  "oranges",
@@ -115,12 +139,20 @@
                         "store":  "Family Fare"
                     },
                     {
+                        "id":  "broccoli",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "bell-peppers",
+                        "store":  "Baker\u0027s"
+                    },
+                    {
                         "id":  "cucumbers",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "zucchini",
-                        "store":  "Aldi"
+                        "id":  "spinach",
+                        "store":  "Family Fare"
                     },
                     {
                         "id":  "tortillas",
@@ -135,7 +167,15 @@
                         "store":  "Family Fare"
                     },
                     {
+                        "id":  "dinner-rolls",
+                        "store":  "Hy-Vee"
+                    },
+                    {
                         "id":  "baked-beans",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "canned-corn",
                         "store":  "Family Fare"
                     },
                     {
@@ -144,19 +184,11 @@
                     },
                     {
                         "id":  "beef-stew",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "beef-stew",
                         "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "beef-stew",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "corned-beef-hash",
-                        "store":  "Walmart"
                     },
                     {
                         "id":  "corned-beef-hash",
@@ -168,47 +200,15 @@
                     },
                     {
                         "id":  "clam-chowder",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "clam-chowder",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "chili-beans",
-                        "store":  "Walmart"
                     },
                     {
                         "id":  "chili-beans",
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "chili-beans",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "canned-white-beans",
-                        "store":  "Aldi"
-                    },
-                    {
-                        "id":  "canned-white-beans",
-                        "store":  "Walmart"
-                    },
-                    {
                         "id":  "canned-white-beans",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "canned-white-beans",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "canned-mixed-vegetables",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "canned-mixed-vegetables",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "canned-mixed-vegetables",
@@ -216,31 +216,11 @@
                     },
                     {
                         "id":  "canned-beets",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "canned-beets",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "canned-beets",
                         "store":  "Hy-Vee"
                     },
                     {
                         "id":  "sauerkraut",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "sauerkraut",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "sauerkraut",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "canned-yams",
-                        "store":  "Walmart"
                     },
                     {
                         "id":  "canned-yams",
@@ -256,19 +236,7 @@
                     },
                     {
                         "id":  "cranberry-sauce",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "cranberry-sauce",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "cranberry-sauce",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "canned-pumpkin",
-                        "store":  "Walmart"
                     },
                     {
                         "id":  "canned-pumpkin",
@@ -280,15 +248,7 @@
                     },
                     {
                         "id":  "mandarin-oranges",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "mandarin-oranges",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "fruit-cocktail",
-                        "store":  "Walmart"
                     },
                     {
                         "id":  "fruit-cocktail",
@@ -319,14 +279,6 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "tomatoes-green-chilies",
-                        "store":  "Aldi"
-                    },
-                    {
-                        "id":  "tomatoes-green-chilies",
-                        "store":  "Walmart"
-                    },
-                    {
                         "id":  "canned-green-chilies",
                         "store":  "Baker\u0027s"
                     },
@@ -339,24 +291,12 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "canned-green-chilies",
-                        "store":  "Walmart"
-                    },
-                    {
                         "id":  "black-olives",
                         "store":  "Hy-Vee"
                     },
                     {
                         "id":  "black-olives",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "black-olives",
                         "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "artichoke-hearts",
-                        "store":  "Walmart"
                     },
                     {
                         "id":  "artichoke-hearts",
@@ -365,10 +305,6 @@
                     {
                         "id":  "artichoke-hearts",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "vegetable-broth",
-                        "store":  "Walmart"
                     },
                     {
                         "id":  "vegetable-broth",
@@ -384,15 +320,7 @@
                     },
                     {
                         "id":  "bouillon",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "bouillon",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "coconut-milk-canned",
-                        "store":  "Walmart"
                     },
                     {
                         "id":  "coconut-milk-canned",
@@ -420,11 +348,11 @@
                     },
                     {
                         "id":  "jarred-gravy",
-                        "store":  "Walmart"
+                        "store":  "Baker\u0027s"
                     },
                     {
-                        "id":  "jarred-gravy",
-                        "store":  "Baker\u0027s"
+                        "id":  "bbq-sauce",
+                        "store":  "Family Fare"
                     },
                     {
                         "id":  "hot-sauce",
@@ -444,10 +372,6 @@
                     },
                     {
                         "id":  "honey-mustard",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "honey-mustard",
                         "store":  "Baker\u0027s"
                     },
                     {
@@ -456,23 +380,11 @@
                     },
                     {
                         "id":  "miracle-whip",
-                        "store":  "Aldi"
-                    },
-                    {
-                        "id":  "miracle-whip",
                         "store":  "Hy-Vee"
                     },
                     {
                         "id":  "miracle-whip",
                         "store":  "Fareway"
-                    },
-                    {
-                        "id":  "caesar-dressing",
-                        "store":  "Aldi"
-                    },
-                    {
-                        "id":  "caesar-dressing",
-                        "store":  "Walmart"
                     },
                     {
                         "id":  "caesar-dressing",
@@ -487,23 +399,11 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "blue-cheese-dressing",
-                        "store":  "Fareway"
-                    },
-                    {
                         "id":  "balsamic-vinegar",
                         "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "balsamic-vinegar",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "balsamic-vinegar",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "cocktail-sauce",
                         "store":  "Walmart"
                     },
                     {
@@ -516,10 +416,6 @@
                     },
                     {
                         "id":  "tartar-sauce",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "tartar-sauce",
                         "store":  "Baker\u0027s"
                     },
                     {
@@ -528,39 +424,19 @@
                     },
                     {
                         "id":  "horseradish",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "horseradish",
                         "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "horseradish",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "horseradish",
-                        "store":  "Fareway"
                     },
                     {
                         "id":  "taco-sauce",
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "taco-sauce",
-                        "store":  "Walmart"
-                    },
-                    {
                         "id":  "sloppy-joe-sauce",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "sloppy-joe-sauce",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "bottled-marinade",
-                        "store":  "Walmart"
                     },
                     {
                         "id":  "bottled-marinade",
@@ -577,10 +453,6 @@
                     {
                         "id":  "minced-garlic",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "minced-garlic",
-                        "store":  "Walmart"
                     },
                     {
                         "id":  "minced-garlic",
@@ -588,10 +460,6 @@
                     },
                     {
                         "id":  "pickled-jalapenos",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "pickled-jalapenos",
                         "store":  "Baker\u0027s"
                     },
                     {
@@ -600,15 +468,7 @@
                     },
                     {
                         "id":  "green-olives",
-                        "store":  "Aldi"
-                    },
-                    {
-                        "id":  "green-olives",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "banana-peppers",
-                        "store":  "Walmart"
                     },
                     {
                         "id":  "banana-peppers",
@@ -624,10 +484,6 @@
                     },
                     {
                         "id":  "lime-juice",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "lime-juice",
                         "store":  "Hy-Vee"
                     },
                     {
@@ -636,11 +492,23 @@
                     },
                     {
                         "id":  "lime-juice",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "flour",
                         "store":  "Family Fare"
                     },
                     {
                         "id":  "sugar",
                         "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "vanilla-extract",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "yeast",
+                        "store":  "Fareway"
                     },
                     {
                         "id":  "marshmallows",
@@ -659,6 +527,10 @@
                         "store":  "Family Fare"
                     },
                     {
+                        "id":  "pasta",
+                        "store":  "Family Fare"
+                    },
+                    {
                         "id":  "mac-and-cheese",
                         "store":  "Hy-Vee"
                     },
@@ -667,11 +539,23 @@
                         "store":  "Hy-Vee"
                     },
                     {
+                        "id":  "cereal",
+                        "store":  "Baker\u0027s"
+                    },
+                    {
+                        "id":  "cereal",
+                        "store":  "Family Fare"
+                    },
+                    {
                         "id":  "olive-oil",
                         "store":  "Family Fare"
                     },
                     {
                         "id":  "vegetable-oil",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "cooking-spray",
                         "store":  "Family Fare"
                     },
                     {
@@ -696,6 +580,10 @@
                     },
                     {
                         "id":  "microwave-popcorn",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "microwave-popcorn",
                         "store":  "Family Fare"
                     },
                     {
@@ -711,8 +599,16 @@
                         "store":  "Hy-Vee"
                     },
                     {
+                        "id":  "tea-bags",
+                        "store":  "Hy-Vee"
+                    },
+                    {
                         "id":  "frozen-pizza",
                         "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "ice-cream",
+                        "store":  "Family Fare"
                     },
                     {
                         "id":  "frozen-vegetables",
@@ -763,6 +659,10 @@
                         "store":  "Family Fare"
                     },
                     {
+                        "id":  "all-purpose-cleaner",
+                        "store":  "Hy-Vee"
+                    },
+                    {
                         "id":  "bleach",
                         "store":  "Family Fare"
                     },
@@ -781,10 +681,6 @@
                     {
                         "id":  "disinfecting-wipes",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "floor-cleaner",
-                        "store":  "Fareway"
                     },
                     {
                         "id":  "oven-cleaner",
@@ -807,8 +703,20 @@
                         "store":  "Hy-Vee"
                     },
                     {
+                        "id":  "baby-food",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "dog-food",
+                        "store":  "Hy-Vee"
+                    },
+                    {
                         "id":  "cat-food",
                         "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "milk",
+                        "store":  "Hy-Vee"
                     },
                     {
                         "id":  "fries",
@@ -819,8 +727,16 @@
                         "store":  "Hy-Vee"
                     },
                     {
+                        "id":  "balsamic-vinegar",
+                        "store":  "Walmart"
+                    },
+                    {
                         "id":  "peanut-butter",
                         "store":  "Baker\u0027s"
+                    },
+                    {
+                        "id":  "white-vinegar",
+                        "store":  "Hy-Vee"
                     },
                     {
                         "id":  "hot-sauce",
@@ -829,10 +745,6 @@
                     {
                         "id":  "olive-oil",
                         "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "zucchini",
-                        "store":  "Aldi"
                     },
                     {
                         "id":  "apple-cider-vinegar",
@@ -859,6 +771,10 @@
                         "store":  "Family Fare"
                     },
                     {
+                        "id":  "paprika",
+                        "store":  "Hy-Vee"
+                    },
+                    {
                         "id":  "salt",
                         "store":  "Hy-Vee"
                     },
@@ -867,11 +783,27 @@
                         "store":  "Family Fare"
                     },
                     {
+                        "id":  "black-pepper",
+                        "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "sugar",
+                        "store":  "Family Fare"
+                    },
+                    {
                         "id":  "ground-turmeric",
                         "store":  "Family Fare"
                     },
                     {
+                        "id":  "hominy",
+                        "store":  "Baker\u0027s"
+                    },
+                    {
                         "id":  "kidney-beans",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "vegetable-oil",
                         "store":  "Family Fare"
                     },
                     {
@@ -883,7 +815,7 @@
                         "store":  "Hy-Vee"
                     }
                 ],
-    "mismatch_count":  32,
+    "mismatch_count":  18,
     "mismatch":  [
                      {
                          "id":  "balsamic-vinegar",
@@ -894,116 +826,6 @@
                          "off_pct":  31,
                          "product":  "Kroger Balsamic Vinegar",
                          "size":  "$0.31/fl oz"
-                     },
-                     {
-                         "id":  "balsamic-vinegar",
-                         "store":  "Walmart",
-                         "unit":  "floz",
-                         "board":  0.24,
-                         "link":  0.4639,
-                         "off_pct":  93,
-                         "product":  "Great Value Balsamic Vinegar of Modena, 8.45 fl oz",
-                         "size":  "8.45 fl oz"
-                     },
-                     {
-                         "id":  "black-pepper",
-                         "store":  "Hy-Vee",
-                         "unit":  "oz",
-                         "board":  0.4167,
-                         "link":  0.5814,
-                         "off_pct":  40,
-                         "product":  "That\u0027s Smart! Black Pepper",
-                         "size":  "2.15 oz"
-                     },
-                     {
-                         "id":  "hominy",
-                         "store":  "Baker\u0027s",
-                         "unit":  "oz",
-                         "board":  0.0426,
-                         "link":  0.12,
-                         "off_pct":  182,
-                         "product":  "Kroger White Hominy 15.5oz can",
-                         "size":  "$0.12/oz"
-                     },
-                     {
-                         "id":  "sugar",
-                         "store":  "Family Fare",
-                         "unit":  "lb",
-                         "board":  0.9975,
-                         "link":  1.445,
-                         "off_pct":  45,
-                         "product":  "Our Family Sugar, Granulated 32 Oz",
-                         "size":  "32 oz"
-                     },
-                     {
-                         "id":  "ground-turmeric",
-                         "store":  "Family Fare",
-                         "unit":  "oz",
-                         "board":  0.675,
-                         "link":  3.6182,
-                         "off_pct":  436,
-                         "product":  "Tones Turmeric Ground",
-                         "size":  "0.55 oz"
-                     },
-                     {
-                         "id":  "half-and-half",
-                         "store":  "Hy-Vee",
-                         "unit":  "floz",
-                         "board":  0.1091,
-                         "link":  0.1869,
-                         "off_pct":  71,
-                         "product":  "Hy-Vee Half \u0026 Half",
-                         "size":  "16 fl oz"
-                     },
-                     {
-                         "id":  "milk",
-                         "store":  "Hy-Vee",
-                         "unit":  "gallon",
-                         "board":  3.06,
-                         "link":  4.99,
-                         "off_pct":  63,
-                         "product":  "Hy-Vee 2% Reduced Fat Milk",
-                         "size":  "gallon"
-                     },
-                     {
-                         "id":  "paprika",
-                         "store":  "Hy-Vee",
-                         "unit":  "oz",
-                         "board":  0.625,
-                         "link":  1.4104,
-                         "off_pct":  126,
-                         "product":  "Hy-Vee Paprika",
-                         "size":  "2.12 oz"
-                     },
-                     {
-                         "id":  "vegetable-oil",
-                         "store":  "Family Fare",
-                         "unit":  "floz",
-                         "board":  0.0937,
-                         "link":  0.1248,
-                         "off_pct":  33,
-                         "product":  "Our Family Vegetable Oil 100% Pure",
-                         "size":  "40 oz"
-                     },
-                     {
-                         "id":  "white-vinegar",
-                         "store":  "Hy-Vee",
-                         "unit":  "floz",
-                         "board":  0.039,
-                         "link":  0.0809,
-                         "off_pct":  108,
-                         "product":  "Hy-Vee White Distilled Vinegar",
-                         "size":  "32 fl oz"
-                     },
-                     {
-                         "id":  "zucchini",
-                         "store":  "Aldi",
-                         "unit":  "lb",
-                         "board":  1.39,
-                         "link":  2.08,
-                         "off_pct":  50,
-                         "product":  "Zucchini, Package",
-                         "size":  "1 lb"
                      },
                      {
                          "id":  "balsamic-vinegar",
@@ -1116,16 +938,6 @@
                          "size":  "2 oz"
                      },
                      {
-                         "id":  "zucchini",
-                         "store":  "Aldi",
-                         "unit":  "lb",
-                         "board":  1.39,
-                         "link":  2.08,
-                         "off_pct":  50,
-                         "product":  "Zucchini, Package",
-                         "size":  "1 lb"
-                     },
-                     {
                          "id":  "dried-oregano",
                          "store":  "Family Fare",
                          "unit":  "oz",
@@ -1156,16 +968,6 @@
                          "size":  "26 oz"
                      },
                      {
-                         "id":  "half-and-half",
-                         "store":  "Hy-Vee",
-                         "unit":  "floz",
-                         "board":  0.1091,
-                         "link":  0.1869,
-                         "off_pct":  71,
-                         "product":  "Hy-Vee Half \u0026 Half",
-                         "size":  "16 fl oz"
-                     },
-                     {
                          "id":  "apple-cider-vinegar",
                          "store":  "Walmart",
                          "unit":  "floz",
@@ -1184,16 +986,6 @@
                          "off_pct":  47,
                          "product":  "Hy-Vee Apple Cider Flavored Distilled Vinegar",
                          "size":  "16 fl oz"
-                     },
-                     {
-                         "id":  "ground-turmeric",
-                         "store":  "Family Fare",
-                         "unit":  "oz",
-                         "board":  1.345,
-                         "link":  3.6182,
-                         "off_pct":  169,
-                         "product":  "Tones Turmeric Ground",
-                         "size":  "0.55 oz"
                      },
                      {
                          "id":  "frozen-peas",
