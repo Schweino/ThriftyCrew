@@ -16,9 +16,15 @@
          powershell -File list-browser-nolinks.ps1     (prints board product name + size per store)
     2. Open a warm tab on the store (store set to the Omaha location; clear any bot wall first).
     3. Paste this file, then:
-         await BLR.run('bakers',  CHIPS)   // CHIPS = [{id, q:'<board product name>', size:'<board size>'}]
+         await BLR.run('bakers',  CHIPS)   // CHIPS = [{id, q:'<GENERIC term>', match:'<board product name>', size}]
          await BLR.run('walmart', CHIPS)
        It returns rows [{id,url,name,upc,perunit,size}] for the confident matches; MISS entries are reported.
+       IMPORTANT (root-cause fix 2026-07-15): q is the GENERIC commodity term (build-nolink-chips.ps1 fills it from
+       commodity-search.json), NOT the board product name. Kroger/Baker's search mis-ranks a brand-specific query
+       (searching "Filippo Berio Balsamic..." returns Bertolli first and can OMIT Filippo Berio entirely), which
+       silently produced wrong-brand matches. Searching the generic term returns the full brand set - exactly how
+       the price capture found the product - and we word-match c.match (the board name) to pick the right one.
+       Falls back to c.q for older chip files that lack a match field.
     4. Save the rows into out\url-inputs\store-<store>-urls.json (merge format: {id,url,price,size,name}),
        anchoring price to the board cell (see build-browser-links.ps1), then:
          merge-product-urls.ps1 -> stamp-board-pu.ps1 -> prune-bad-links.ps1 -Tol 0.32 -> guards.ps1 -> publish
@@ -71,8 +77,8 @@ const BLR = (() => {
       const out = [];
       for (const c of chips) {
         try {
-          const cands = await candidates(store, c.q);
-          const qwords = norm(c.q).split(' ').filter(w => w.length > 2 && !/^\d/.test(w));
+          const cands = await candidates(store, c.q);                       // SEARCH the generic term (c.q)
+          const qwords = norm(c.match || c.q).split(' ').filter(w => w.length > 2 && !/^\d/.test(w));  // MATCH the board product name
           const wantQty = c.size ? qtyOf(c.size) : null;
           let best = null, bestScore = -1;
           for (const p of cands) {

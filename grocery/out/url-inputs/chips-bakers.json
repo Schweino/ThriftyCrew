@@ -1,62 +1,38 @@
 ﻿[
     {
         "id":  "apples",
-        "q":  "Kroger Granny Smith Apples 3 Pound Bag",
+        "q":  "apples",
+        "match":  "Kroger Granny Smith Apples 3 Pound Bag",
         "size":  "3 lb"
     },
     {
-        "id":  "bell-peppers",
-        "q":  "Fresh Large Green Bell Pepper",
-        "size":  "each"
-    },
-    {
-        "id":  "canned-yams",
-        "q":  "Bruce\u0027s® Cut Sweet Potato Yams in Syrup 40 oz",
-        "size":  "40 oz"
-    },
-    {
-        "id":  "canned-pears",
-        "q":  "Del Monte Pear Halves 29 oz",
-        "size":  "29 oz"
-    },
-    {
-        "id":  "black-olives",
-        "q":  "Kroger® Small Pitted Ripe Olives 6 oz",
-        "size":  "6 oz"
-    },
-    {
-        "id":  "vegetable-broth",
-        "q":  "Kroger® Fat Free Vegetable Broth 32 oz",
-        "size":  "32 oz"
-    },
-    {
         "id":  "coconut-milk-canned",
-        "q":  "Simple Truth Organic® Unsweetened Coconut Milk 13.5 fl oz",
+        "q":  "coconut milk canned",
+        "match":  "Simple Truth Organic® Unsweetened Coconut Milk 13.5 fl oz",
         "size":  "13.5 fl oz"
     },
     {
         "id":  "balsamic-vinegar",
-        "q":  "Filippo Berio® Balsamic Vinegar of Modena 16.9 fl oz",
+        "q":  "balsamic vinegar",
+        "match":  "Filippo Berio® Balsamic Vinegar of Modena 16.9 fl oz",
         "size":  "16.9 fl oz"
     },
     {
         "id":  "cocktail-sauce",
-        "q":  "Kroger® Cocktail Sauce 12 oz",
+        "q":  "cocktail sauce",
+        "match":  "Kroger® Cocktail Sauce 12 oz",
         "size":  "12 oz"
     },
     {
         "id":  "tartar-sauce",
-        "q":  "Kroger® Tartar Sauce 11.5 fl oz",
+        "q":  "tartar sauce",
+        "match":  "Kroger® Tartar Sauce 11.5 fl oz",
         "size":  "11.5 fl oz"
     },
     {
-        "id":  "minced-garlic",
-        "q":  "Spice World Minced Garlic 32 oz 32 oz",
-        "size":  "32 oz"
-    },
-    {
         "id":  "bread-crumbs",
-        "q":  "Kikkoman® Panko Japanese Style Bread Crumbs",
+        "q":  "bread crumbs",
+        "match":  "Kikkoman® Panko Japanese Style Bread Crumbs",
         "size":  "8 oz"
     }
 ]
