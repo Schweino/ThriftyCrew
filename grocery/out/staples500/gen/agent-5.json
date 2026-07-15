@@ -1,0 +1,785 @@
+[
+  {
+    "name": "Corn Chips",
+    "id": "corn-chips",
+    "unit": "oz",
+    "typical_size": "9.25 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "corn chips",
+    "notes": "Fritos-style fried corn chips (Fritos, store brand). Must NOT match tortilla chips (on board), corn nuts, popcorn, canned corn, or chip variety multipacks."
+  },
+  {
+    "name": "Cheese Puffs",
+    "id": "cheese-puffs",
+    "unit": "oz",
+    "typical_size": "8.5 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "cheese puffs",
+    "notes": "Cheetos-style puffs, curls, and barrel cheese balls. Must NOT match cheese crackers (on board), queso/cheese dip (on board), or white cheddar popcorn (belongs to ready-to-eat popcorn)."
+  },
+  {
+    "name": "Pita Chips",
+    "id": "pita-chips",
+    "unit": "oz",
+    "typical_size": "7.3 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "pita chips",
+    "notes": "Baked pita chips (Stacy's, store brand). Must NOT match fresh pita bread (on board), tortilla chips (on board), or bagel chips."
+  },
+  {
+    "name": "Veggie Straws",
+    "id": "veggie-straws",
+    "unit": "oz",
+    "typical_size": "7 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "veggie straws",
+    "notes": "Vegetable straws and veggie chips (Sensible Portions, store brand). Must NOT match potato chips (on board), fresh vegetables, or veggie trays."
+  },
+  {
+    "name": "Pork Rinds",
+    "id": "pork-rinds",
+    "unit": "oz",
+    "typical_size": "5 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "pork rinds",
+    "notes": "Fried pork rinds/chicharrones. Must NOT match fresh pork or bacon (on board), or pet chews like pig ears/rawhide."
+  },
+  {
+    "name": "Onion Snack Rings",
+    "id": "onion-snack-rings",
+    "unit": "oz",
+    "typical_size": "6 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "funyuns",
+    "notes": "Funyuns-style onion flavored ring snacks (incl. store brand Onyums). Must NOT match frozen breaded onion rings, fresh onions (on board), or French fried onion toppers."
+  },
+  {
+    "name": "Corn Nuts",
+    "id": "corn-nuts",
+    "unit": "oz",
+    "typical_size": "4 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "corn nuts",
+    "notes": "Toasted corn kernel snack (Corn Nuts brand, cantina style). Must NOT match corn chips (separate candidate), popcorn kernels, canned corn (on board), or peanuts (on board)."
+  },
+  {
+    "name": "Ready-to-Eat Popcorn",
+    "id": "bagged-popcorn",
+    "unit": "oz",
+    "typical_size": "4.5-7 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "popcorn bag",
+    "notes": "Pre-popped bagged popcorn incl. kettle corn, white cheddar, caramel corn, Cracker Jack. Must NOT match microwave popcorn (on board) or unpopped kernels (separate candidate)."
+  },
+  {
+    "name": "Popcorn Kernels",
+    "id": "popcorn-kernels",
+    "unit": "oz",
+    "typical_size": "30-32 oz jar or bag",
+    "category": "Snacks & Drinks",
+    "search_term": "popcorn kernels",
+    "notes": "Plain unpopped popping corn. Must NOT match microwave popcorn boxes (on board), ready-to-eat bagged popcorn (separate candidate), or canned/frozen corn (on board)."
+  },
+  {
+    "name": "Peanut Butter Filled Pretzels",
+    "id": "peanut-butter-pretzels",
+    "unit": "oz",
+    "typical_size": "15-44 oz bag or tub",
+    "category": "Snacks & Drinks",
+    "search_term": "peanut butter pretzels",
+    "notes": "PB-filled pretzel nuggets (Aldi and Sam's tubs, Utz). Must NOT match plain pretzels (on board), peanut butter jars (on board), or chocolate covered pretzels (candy)."
+  },
+  {
+    "name": "Cashews",
+    "id": "cashews",
+    "unit": "oz",
+    "typical_size": "8.5-16 oz can or bag",
+    "category": "Snacks & Drinks",
+    "search_term": "cashews",
+    "notes": "Plain roasted/salted cashews, whole or halves and pieces. Must NOT match mixed nuts (on board), trail mix, candied or chocolate cashews, cashew milk, or cashew butter."
+  },
+  {
+    "name": "Pistachios",
+    "id": "pistachios",
+    "unit": "oz",
+    "typical_size": "8-16 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "pistachios",
+    "notes": "In-shell or shelled roasted pistachios (Wonderful, store brand). Must NOT match mixed nuts (on board), trail mix, or pistachio flavored ice cream/pudding."
+  },
+  {
+    "name": "Pecans",
+    "id": "pecans",
+    "unit": "oz",
+    "typical_size": "8-16 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "pecans",
+    "notes": "Pecan halves or pieces, snack or baking aisle bags. Must NOT match mixed nuts (on board), trail mix, candied pecans, or pecan pie."
+  },
+  {
+    "name": "Walnuts",
+    "id": "walnuts",
+    "unit": "oz",
+    "typical_size": "8-16 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "walnuts",
+    "notes": "Walnut halves and pieces, baking or snack bags. Must NOT match mixed nuts (on board), trail mix, or candied walnuts."
+  },
+  {
+    "name": "Sunflower Seeds",
+    "id": "sunflower-seeds",
+    "unit": "oz",
+    "typical_size": "5.25-16 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "sunflower seeds",
+    "notes": "Roasted/salted sunflower seeds, in-shell or kernels. Must NOT match wild bird seed (household), trail mix, sunflower butter, or garden seed packets."
+  },
+  {
+    "name": "Pumpkin Seeds",
+    "id": "pumpkin-seeds",
+    "unit": "oz",
+    "typical_size": "5-10 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "pumpkin seeds",
+    "notes": "Roasted pumpkin seeds/pepitas. Must NOT match bird seed, trail mix, fresh pumpkins, or garden seeds."
+  },
+  {
+    "name": "Trail Mix",
+    "id": "trail-mix",
+    "unit": "oz",
+    "typical_size": "14-26 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "trail mix",
+    "notes": "Nut, dried fruit, and candy trail mixes. Must NOT match plain mixed nuts (on board), Chex-style snack mix (separate candidate), or granola (on board)."
+  },
+  {
+    "name": "Snack Mix",
+    "id": "snack-mix",
+    "unit": "oz",
+    "typical_size": "8.75-15 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "chex mix",
+    "notes": "Chex Mix, Gardetto's, and party mix style cereal-pretzel snack mixes. Must NOT match plain Chex cereal (cereal on board), trail mix (separate candidate), or plain pretzels (on board)."
+  },
+  {
+    "name": "Dried Cranberries",
+    "id": "dried-cranberries",
+    "unit": "oz",
+    "typical_size": "5-12 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "dried cranberries",
+    "notes": "Craisins-style sweetened dried cranberries. Must NOT match fresh cranberries, cranberry juice (on board), canned cranberry sauce, or trail mix."
+  },
+  {
+    "name": "Prunes",
+    "id": "prunes",
+    "unit": "oz",
+    "typical_size": "16 oz canister",
+    "category": "Snacks & Drinks",
+    "search_term": "prunes",
+    "notes": "Dried plums/prunes (Sunsweet, store brand). Must NOT match prune juice (separate candidate), fresh plums (on board), or baby food."
+  },
+  {
+    "name": "Dried Mango",
+    "id": "dried-mango",
+    "unit": "oz",
+    "typical_size": "6-20 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "dried mango",
+    "notes": "Dried mango slices or strips. Must NOT match fresh mangoes (on board), frozen mango (frozen fruit on board), mango juice/nectar, or gummy fruit snacks (on board)."
+  },
+  {
+    "name": "Dates",
+    "id": "dates",
+    "unit": "oz",
+    "typical_size": "8-16 oz tub or bag",
+    "category": "Snacks & Drinks",
+    "search_term": "medjool dates",
+    "notes": "Whole pitted or unpitted dates (medjool, deglet noor). Must NOT match date syrup, date-based snack bars (granola/protein bar family), or expiration-date false hits in item text."
+  },
+  {
+    "name": "Dried Apricots",
+    "id": "dried-apricots",
+    "unit": "oz",
+    "typical_size": "6-16 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "dried apricots",
+    "notes": "Dried apricot halves. Must NOT match fresh apricots, canned apricots, apricot preserves (jelly on board), or baby food pouches."
+  },
+  {
+    "name": "Banana Chips",
+    "id": "banana-chips",
+    "unit": "oz",
+    "typical_size": "6-16 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "banana chips",
+    "notes": "Sweetened dried banana chips. Must NOT match fresh bananas (on board), plantain chips, banana bread, or trail mix containing banana chips."
+  },
+  {
+    "name": "Animal Crackers",
+    "id": "animal-crackers",
+    "unit": "oz",
+    "typical_size": "13-24 oz bag or jug",
+    "category": "Snacks & Drinks",
+    "search_term": "animal crackers",
+    "notes": "Plain animal crackers (Stauffer's bags, big jugs). Must NOT match frosted circus animal cookies (packaged cookies on board), graham crackers (on board), or Teddy Grahams. Watch generic 'cracker' matcher overlap with crackers on board."
+  },
+  {
+    "name": "Sandwich Crackers",
+    "id": "sandwich-crackers",
+    "unit": "oz",
+    "typical_size": "8 pk (11 oz box)",
+    "category": "Snacks & Drinks",
+    "search_term": "cracker sandwiches",
+    "notes": "Filled cracker packs: toast with peanut butter, cheese crackers with cheddar (Lance, Ritz). Must NOT match plain saltine/buttery crackers (on board), cheese crackers (on board), or sandwich cookies (on board). Flag: 'cheese sandwich crackers' text can collide with cheese-crackers matcher."
+  },
+  {
+    "name": "Wheat Snack Crackers",
+    "id": "wheat-crackers",
+    "unit": "oz",
+    "typical_size": "8.5-14 oz box",
+    "category": "Snacks & Drinks",
+    "search_term": "wheat thins",
+    "notes": "Woven wheat and whole grain snack crackers (Wheat Thins, Triscuit, store brand). Must NOT match saltine/buttery crackers (on board), cheese crackers, or graham crackers. Existing crackers matcher may need a wheat/woven exclude."
+  },
+  {
+    "name": "Oyster Crackers",
+    "id": "oyster-crackers",
+    "unit": "oz",
+    "typical_size": "9 oz bag",
+    "category": "Snacks & Drinks",
+    "search_term": "oyster crackers",
+    "notes": "Small soup and chili oyster crackers. Must NOT match saltines (crackers on board) or fresh/canned oysters. Flag: existing crackers matcher likely needs an oyster exclude."
+  },
+  {
+    "name": "Sugar Wafers",
+    "id": "sugar-wafers",
+    "unit": "oz",
+    "typical_size": "8-12 oz pack",
+    "category": "Snacks & Drinks",
+    "search_term": "sugar wafers",
+    "notes": "Layered cream-filled wafer cookies, vanilla/strawberry/chocolate (Voortman, store brand). Must NOT match round vanilla wafers (separate candidate), packaged cookies (on board), or ice cream cones."
+  },
+  {
+    "name": "Vanilla Wafers",
+    "id": "vanilla-wafers",
+    "unit": "oz",
+    "typical_size": "11-12 oz box",
+    "category": "Snacks & Drinks",
+    "search_term": "vanilla wafers",
+    "notes": "Round vanilla wafer cookies for banana pudding (Nilla, store brand). Must NOT match layered sugar wafers (separate candidate), sandwich cookies (on board), or vanilla extract (on board)."
+  },
+  {
+    "name": "Fig Bars",
+    "id": "fig-bars",
+    "unit": "oz",
+    "typical_size": "12-16 oz pack",
+    "category": "Snacks & Drinks",
+    "search_term": "fig bars",
+    "notes": "Fig and fruit-filled soft cookie bars (Newtons, Nature's Bakery). Must NOT match granola bars (on board), protein bars (on board), cereal bars (separate candidate), or fresh figs."
+  },
+  {
+    "name": "Gingersnaps",
+    "id": "gingersnaps",
+    "unit": "oz",
+    "typical_size": "12-16 oz box or bag",
+    "category": "Snacks & Drinks",
+    "search_term": "ginger snaps",
+    "notes": "Crisp gingersnap cookies (Nabisco, store brand). Must NOT match fresh ginger root (on board), gingerbread house kits (seasonal), or generic packaged cookies (on board); this is the specific gingersnap SKU."
+  },
+  {
+    "name": "Breakfast Biscuits",
+    "id": "breakfast-biscuits",
+    "unit": "oz",
+    "typical_size": "8.8 oz box (5 pk)",
+    "category": "Snacks & Drinks",
+    "search_term": "belvita",
+    "notes": "Belvita-style baked breakfast biscuit packs. Must NOT match refrigerated biscuit dough (separate candidate), bakery biscuits, granola bars (on board), or cookies (on board)."
+  },
+  {
+    "name": "Cereal Bars",
+    "id": "cereal-bars",
+    "unit": "oz",
+    "typical_size": "10.4 oz box (8 ct)",
+    "category": "Snacks & Drinks",
+    "search_term": "cereal bars",
+    "notes": "Soft fruit-filled breakfast/cereal bars (Nutri-Grain, store brand). Must NOT match granola bars (on board), protein bars (on board), toaster pastries (on board), or fig bars (separate candidate)."
+  },
+  {
+    "name": "Crispy Rice Treats",
+    "id": "crispy-rice-treats",
+    "unit": "oz",
+    "typical_size": "6.2-12.4 oz box",
+    "category": "Snacks & Drinks",
+    "search_term": "rice krispies treats",
+    "notes": "Packaged marshmallow crispy rice treat squares. Must NOT match Rice Krispies boxed cereal (cereal on board), marshmallow bags (on board), rice cakes (on board), or granola bars."
+  },
+  {
+    "name": "Snack Cakes",
+    "id": "snack-cakes",
+    "unit": "oz",
+    "typical_size": "10-16 oz multipack box",
+    "category": "Snacks & Drinks",
+    "search_term": "little debbie",
+    "notes": "Shelf snack cake multipacks: Swiss rolls, oatmeal creme pies, zebra/cosmic, Twinkies, Hostess cupcakes, honey buns. Must NOT match donuts incl. Donettes (donuts on board), bakery cupcakes (separate candidate), or bread buns; watch 'honey bun' colliding with hamburger/hot dog bun matchers."
+  },
+  {
+    "name": "Meat Snack Sticks",
+    "id": "meat-snack-sticks",
+    "unit": "oz",
+    "typical_size": "14-28 oz pack",
+    "category": "Snacks & Drinks",
+    "search_term": "slim jim",
+    "notes": "Slim Jim and beef/pepperoni smoked snack sticks. Must NOT match beef jerky (on board), sliced pepperoni (on board), hot dogs (on board), summer sausage (deli), or pet treat sticks."
+  },
+  {
+    "name": "Guacamole",
+    "id": "guacamole",
+    "unit": "oz",
+    "typical_size": "8-16 oz tub",
+    "category": "Snacks & Drinks",
+    "search_term": "guacamole",
+    "notes": "Refrigerated prepared guacamole tubs and mini cup packs. Must NOT match fresh avocados (on board), guac seasoning mix packets, hummus (on board), or salsa (on board)."
+  },
+  {
+    "name": "Chip Dip",
+    "id": "chip-dip",
+    "unit": "oz",
+    "typical_size": "12-16 oz tub",
+    "category": "Snacks & Drinks",
+    "search_term": "french onion dip",
+    "notes": "Refrigerated dairy chip dips: French onion, ranch, dill (Dean's, store brand). Must NOT match queso/cheese dip (on board), salsa (on board), hummus (on board), bottled ranch dressing (on board), or plain sour cream (on board)."
+  },
+  {
+    "name": "Pudding Mix",
+    "id": "pudding-mix",
+    "unit": "oz",
+    "typical_size": "3.4-5.1 oz box",
+    "category": "Snacks & Drinks",
+    "search_term": "instant pudding",
+    "notes": "Instant and cook-and-serve pudding/pie filling mix boxes (Jell-O, store brand). Must NOT match ready pudding cups (on board), gelatin boxes (on board), or canned pie filling."
+  },
+  {
+    "name": "Ice Cream Cones",
+    "id": "ice-cream-cones",
+    "unit": "each",
+    "typical_size": "24 ct box",
+    "category": "Snacks & Drinks",
+    "search_term": "ice cream cones",
+    "notes": "Boxed cake, sugar, and waffle cones. Must NOT match ice cream tubs (on board), Drumstick-style frozen cone novelties, or cone-shaped corn snacks (Bugles)."
+  },
+  {
+    "name": "Chocolate Syrup",
+    "id": "chocolate-syrup",
+    "unit": "oz",
+    "typical_size": "24 oz bottle",
+    "category": "Snacks & Drinks",
+    "search_term": "chocolate syrup",
+    "notes": "Squeeze bottle chocolate syrup (Hershey's, store brand). Must NOT match cocoa powder (on board), hot cocoa mix (on board), pancake/maple syrup (on board), hot fudge jars, or RTD chocolate milk (on board)."
+  },
+  {
+    "name": "Pineapple Juice",
+    "id": "pineapple-juice",
+    "unit": "floz",
+    "typical_size": "46 floz can",
+    "category": "Snacks & Drinks",
+    "search_term": "pineapple juice",
+    "notes": "100% pineapple juice cans/bottles (Dole). Must NOT match canned pineapple chunks or rings packed in juice (on board), pina colada mix, or tropical juice blends."
+  },
+  {
+    "name": "Grapefruit Juice",
+    "id": "grapefruit-juice",
+    "unit": "floz",
+    "typical_size": "52-64 floz bottle",
+    "category": "Snacks & Drinks",
+    "search_term": "grapefruit juice",
+    "notes": "Grapefruit juice and juice cocktail (Ocean Spray, Simply, store brand). Must NOT match fresh grapefruit (on board) or grapefruit flavored soda/sparkling water."
+  },
+  {
+    "name": "Tomato / Vegetable Juice",
+    "id": "vegetable-juice",
+    "unit": "floz",
+    "typical_size": "46 floz bottle",
+    "category": "Snacks & Drinks",
+    "search_term": "tomato juice",
+    "notes": "Tomato juice and vegetable juice blends (V8, Campbell's, store brand). Must NOT match tomato sauce, paste, diced tomatoes, or tomato soup (all on board), Bloody Mary mix, Clamato, or V8 Splash fruit drinks."
+  },
+  {
+    "name": "Prune Juice",
+    "id": "prune-juice",
+    "unit": "floz",
+    "typical_size": "48 floz bottle",
+    "category": "Snacks & Drinks",
+    "search_term": "prune juice",
+    "notes": "Prune juice (Sunsweet, store brand). Must NOT match dried prunes (separate candidate) or other 100% juices already on board."
+  },
+  {
+    "name": "Orange Drink / Citrus Punch",
+    "id": "orange-drink",
+    "unit": "floz",
+    "typical_size": "1 gal jug (128 floz)",
+    "category": "Snacks & Drinks",
+    "search_term": "sunny d",
+    "notes": "Orange flavored juice drinks and citrus punch gallon jugs (SunnyD, Tampico, store brand). Must NOT match 100% orange juice (on board), fruit punch (on board, watch 'punch' matcher overlap), or orange soda."
+  },
+  {
+    "name": "Juice Boxes / Pouches",
+    "id": "juice-boxes",
+    "unit": "floz",
+    "typical_size": "10 pk x 6 floz",
+    "category": "Snacks & Drinks",
+    "search_term": "capri sun",
+    "notes": "Kids multipack juice pouches and boxes (Capri Sun, Kool-Aid Jammers, Hi-C, 100% juice box packs). Multipacks only. Must NOT match single-bottle juices (apple, grape, etc. on board), applesauce pouches (on board), or baby juice."
+  },
+  {
+    "name": "Powdered Drink Mix",
+    "id": "powdered-drink-mix",
+    "unit": "oz",
+    "typical_size": "19-30 oz canister or packets",
+    "category": "Snacks & Drinks",
+    "search_term": "drink mix",
+    "notes": "Powdered drink mixes: Kool-Aid packets, Country Time lemonade, Tang, iced tea mix, Crystal Light. Must NOT match ready-to-drink lemonade/tea/punch (on board, watch 'lemonade' matcher overlap), sports drink powder (form of sports drinks on board), protein powder (separate candidate), or hot cocoa mix (on board)."
+  },
+  {
+    "name": "Club Soda / Tonic Water",
+    "id": "club-soda",
+    "unit": "floz",
+    "typical_size": "33.8 floz (1 L)",
+    "category": "Snacks & Drinks",
+    "search_term": "club soda",
+    "notes": "Club soda and tonic water 1 L bottles. Must NOT match flavored sparkling water multipacks (on board, watch seltzer matcher overlap), soda pop (on board), or plain bottled water (on board)."
+  },
+  {
+    "name": "Apple Cider",
+    "id": "apple-cider",
+    "unit": "floz",
+    "typical_size": "64 floz jug",
+    "category": "Snacks & Drinks",
+    "search_term": "apple cider",
+    "notes": "Drinking apple cider jugs, heaviest Sep-Dec. Must NOT match apple cider vinegar (on board, high collision risk), plain apple juice (on board), or hard cider (alcohol)."
+  },
+  {
+    "name": "Coconut Water",
+    "id": "coconut-water",
+    "unit": "floz",
+    "typical_size": "33.8 floz carton",
+    "category": "Snacks & Drinks",
+    "search_term": "coconut water",
+    "notes": "Plain coconut water (Vita Coco, store brand). Must NOT match canned or carton coconut milk, coconut oil (on board), or shredded coconut."
+  },
+  {
+    "name": "Distilled Water",
+    "id": "distilled-water",
+    "unit": "gallon",
+    "typical_size": "1 gal jug",
+    "category": "Snacks & Drinks",
+    "search_term": "distilled water",
+    "notes": "Gallon distilled water jugs (formula mixing, CPAP, irons). Distilled only. Must NOT match bottled drinking water multipacks (on board), gallon spring/purified drinking water, sparkling water, or baby nursery water."
+  },
+  {
+    "name": "Bagged Ice",
+    "id": "bagged-ice",
+    "unit": "lb",
+    "typical_size": "10 lb bag",
+    "category": "Snacks & Drinks",
+    "search_term": "bag of ice",
+    "notes": "Bagged party ice from the store freezer. Must NOT match ice cream (on board), iced tea (on board), dry ice, or reusable ice packs (household)."
+  },
+  {
+    "name": "RTD Iced Coffee",
+    "id": "rtd-coffee",
+    "unit": "floz",
+    "typical_size": "13.7 floz bottle",
+    "category": "Snacks & Drinks",
+    "search_term": "iced coffee",
+    "notes": "Ready-to-drink bottled, canned, and carton iced coffee (Starbucks Frappuccino/Doubleshot, International Delight cartons, store brand). Must NOT match ground/instant coffee or pods (all on board), coffee creamer (on board), energy drinks (on board), or coffee flavor protein shakes (separate candidate)."
+  },
+  {
+    "name": "Protein Shakes (RTD)",
+    "id": "protein-shakes",
+    "unit": "floz",
+    "typical_size": "4 pk x 11.5 floz",
+    "category": "Snacks & Drinks",
+    "search_term": "protein shake",
+    "notes": "Ready-to-drink protein and nutrition shakes (Premier Protein, Fairlife Core Power, Ensure, Boost, SlimFast). Must NOT match protein bars (on board), protein powder (separate candidate), plain milk (on board), or RTD iced coffee (separate candidate); coffee-flavor protein shakes belong here."
+  },
+  {
+    "name": "Protein Powder",
+    "id": "protein-powder",
+    "unit": "lb",
+    "typical_size": "2 lb tub",
+    "category": "Snacks & Drinks",
+    "search_term": "protein powder",
+    "notes": "Whey and plant protein powder tubs (Body Fortress, Premier, ON). Must NOT match RTD shakes (separate candidate), creatine/pre-workout/collagen supplements, powdered drink mix (separate candidate), or pancake mix."
+  },
+  {
+    "name": "Instant Breakfast Mix",
+    "id": "instant-breakfast",
+    "unit": "oz",
+    "typical_size": "12.5 oz box (10 pk)",
+    "category": "Snacks & Drinks",
+    "search_term": "carnation instant breakfast",
+    "notes": "Carnation Breakfast Essentials style powder packets mixed into milk. Must NOT match hot cocoa mix (on board, chocolate powder collision risk), protein powder tubs (separate candidate), Ovaltine/Nesquik powders, or cereal."
+  },
+  {
+    "name": "Corn Tortillas",
+    "id": "corn-tortillas",
+    "unit": "each",
+    "typical_size": "30 ct (27.5 oz)",
+    "category": "Bread & Bakery",
+    "search_term": "corn tortillas",
+    "notes": "White or yellow corn tortillas. Must NOT match flour tortillas (on board), tortilla chips (on board), taco shells (separate candidate), or tostadas (separate candidate)."
+  },
+  {
+    "name": "Taco Shells",
+    "id": "taco-shells",
+    "unit": "each",
+    "typical_size": "12 ct box",
+    "category": "Bread & Bakery",
+    "search_term": "taco shells",
+    "notes": "Hard corn taco shells (Old El Paso, Ortega, store brand). Must NOT match soft tortillas (flour on board, corn separate candidate), tostada shells (separate candidate), taco dinner kits (composite), or taco seasoning."
+  },
+  {
+    "name": "Tostada Shells",
+    "id": "tostada-shells",
+    "unit": "each",
+    "typical_size": "22 ct (12.7 oz)",
+    "category": "Bread & Bakery",
+    "search_term": "tostadas",
+    "notes": "Flat fried tostada shells (Guerrero, Charras). Must NOT match hard taco shells (separate candidate), tortilla chips (on board), or corn tortillas (separate candidate)."
+  },
+  {
+    "name": "Naan Flatbread",
+    "id": "naan",
+    "unit": "each",
+    "typical_size": "2 ct (8.8 oz)",
+    "category": "Bread & Bakery",
+    "search_term": "naan bread",
+    "notes": "Naan flatbread incl. garlic naan, full size 2 ct packs (Stonefire, store brand). Must NOT match pita bread (on board), mini naan dippers, flatbread pizza crusts (separate candidate), or tortillas."
+  },
+  {
+    "name": "Sandwich Thins",
+    "id": "sandwich-thins",
+    "unit": "each",
+    "typical_size": "8 ct (12 oz)",
+    "category": "Bread & Bakery",
+    "search_term": "sandwich thins",
+    "notes": "Thin sandwich rounds (Arnold/Brownberry Sandwich Thins, store brand). Must NOT match regular loaf bread (on board), hamburger buns (on board), bagel thins or mini bagels (bagels on board), or English muffins (on board)."
+  },
+  {
+    "name": "Sub / Hoagie Rolls",
+    "id": "sub-rolls",
+    "unit": "each",
+    "typical_size": "6 ct pack",
+    "category": "Bread & Bakery",
+    "search_term": "hoagie rolls",
+    "notes": "Long sub, hoagie, and French sandwich rolls, bakery or bread aisle. Must NOT match hamburger or hot dog buns (on board), dinner rolls (on board), French bread loaves and baguettes (on board), or brat buns (hot dog bun family)."
+  },
+  {
+    "name": "Kaiser Rolls",
+    "id": "kaiser-rolls",
+    "unit": "each",
+    "typical_size": "8 ct pack",
+    "category": "Bread & Bakery",
+    "search_term": "kaiser rolls",
+    "notes": "Bakery kaiser and hard sandwich rolls. Must NOT match hamburger buns (on board), sub/hoagie rolls (separate candidate), dinner rolls (on board), or pretzel buns."
+  },
+  {
+    "name": "Pizza Crust",
+    "id": "pizza-crust",
+    "unit": "oz",
+    "typical_size": "12-14 oz",
+    "category": "Bread & Bakery",
+    "search_term": "pizza crust",
+    "notes": "Ready-to-top pizza crusts (Boboli, Mama Mary's), refrigerated pizza dough tubes, fresh dough balls, and thin flatbread crusts. Must NOT match frozen topped pizza (on board), pizza sauce (on board), dry pizza crust mix boxes, or garlic bread (on board)."
+  },
+  {
+    "name": "Refrigerated Biscuit Dough",
+    "id": "biscuit-dough",
+    "unit": "oz",
+    "typical_size": "16.3 oz can (8 ct)",
+    "category": "Bread & Bakery",
+    "search_term": "pillsbury biscuits",
+    "notes": "Canned refrigerated biscuit dough (Grands, store brand); frozen biscuit dough bags count. Must NOT match ready-to-eat bakery biscuits, Belvita breakfast biscuits (snack candidate), or dog biscuits (pet)."
+  },
+  {
+    "name": "Crescent Roll Dough",
+    "id": "crescent-rolls",
+    "unit": "oz",
+    "typical_size": "8 oz can",
+    "category": "Bread & Bakery",
+    "search_term": "crescent rolls",
+    "notes": "Refrigerated crescent roll dough cans (Pillsbury, store brand). Must NOT match bakery croissants (on board), dinner rolls (on board), or cinnamon roll dough (separate candidate)."
+  },
+  {
+    "name": "Cinnamon Roll Dough",
+    "id": "cinnamon-rolls",
+    "unit": "oz",
+    "typical_size": "12.4 oz can (8 ct)",
+    "category": "Bread & Bakery",
+    "search_term": "cinnamon rolls",
+    "notes": "Refrigerated cinnamon roll dough cans with icing (Pillsbury, Annie's, store brand). Must NOT match fresh bakery cinnamon rolls (danish candidate), honey buns (snack cakes candidate), or frozen Toaster Strudel."
+  },
+  {
+    "name": "Refrigerated Cookie Dough",
+    "id": "cookie-dough",
+    "unit": "oz",
+    "typical_size": "16.5 oz roll or pack",
+    "category": "Bread & Bakery",
+    "search_term": "cookie dough",
+    "notes": "Ready-to-bake refrigerated cookie dough rolls and break-apart packs (Toll House, Pillsbury, store brand). Must NOT match baked packaged cookies (on board), dry cookie mix pouches (separate candidate), or cookie dough ice cream."
+  },
+  {
+    "name": "Pie Crust",
+    "id": "pie-crust",
+    "unit": "oz",
+    "typical_size": "14.1 oz (2 ct)",
+    "category": "Bread & Bakery",
+    "search_term": "pie crust",
+    "notes": "Refrigerated rolled pie crusts and frozen deep dish pie shells. Must NOT match graham cracker crumb crusts, filled pies (bakery pie candidate), frozen pot pies, or canned pie filling."
+  },
+  {
+    "name": "Puff Pastry",
+    "id": "puff-pastry",
+    "unit": "oz",
+    "typical_size": "17.3 oz (2 sheets)",
+    "category": "Bread & Bakery",
+    "search_term": "puff pastry",
+    "notes": "Frozen puff pastry sheets and shells (Pepperidge Farm, Aldi seasonal). Must NOT match pie crusts (separate candidate), phyllo dough, croissants (on board), or toaster pastries (on board)."
+  },
+  {
+    "name": "Frozen Bread Dough",
+    "id": "frozen-bread-dough",
+    "unit": "oz",
+    "typical_size": "48 oz (3 loaves)",
+    "category": "Bread & Bakery",
+    "search_term": "frozen bread dough",
+    "notes": "Frozen yeast bread loaf and roll dough (Rhodes, store brand), incl. dinner roll dough bags. Must NOT match baked bread loaves (on board), baked dinner rolls (on board), refrigerated canned doughs (separate candidates), or garlic bread (on board)."
+  },
+  {
+    "name": "Cornbread Mix",
+    "id": "cornbread-mix",
+    "unit": "oz",
+    "typical_size": "8.5 oz box",
+    "category": "Bread & Bakery",
+    "search_term": "cornbread mix",
+    "notes": "Cornbread and corn muffin mix boxes (Jiffy, store brand). Must NOT match plain cornmeal (separate candidate), sweet muffin mixes (separate candidate), stuffing mix (on board), or pancake mix (on board)."
+  },
+  {
+    "name": "Muffin Mix",
+    "id": "muffin-mix",
+    "unit": "oz",
+    "typical_size": "6.5-18 oz box",
+    "category": "Bread & Bakery",
+    "search_term": "muffin mix",
+    "notes": "Sweet muffin mix boxes: blueberry, banana nut, chocolate chip (Jiffy, Betty Crocker, Krusteaz). Must NOT match fresh bakery muffins (on board), corn muffin mix (cornbread candidate), pancake mix (on board), or cake mix (on board)."
+  },
+  {
+    "name": "Cookie Mix",
+    "id": "cookie-mix",
+    "unit": "oz",
+    "typical_size": "17.5 oz pouch",
+    "category": "Bread & Bakery",
+    "search_term": "cookie mix",
+    "notes": "Dry cookie mix pouches, chocolate chip and sugar (Betty Crocker, store brand). Must NOT match refrigerated cookie dough (separate candidate), cake mix or brownie mix (on board), or packaged cookies (on board)."
+  },
+  {
+    "name": "Cornmeal",
+    "id": "cornmeal",
+    "unit": "lb",
+    "typical_size": "24 oz canister to 5 lb bag",
+    "category": "Bread & Bakery",
+    "search_term": "corn meal",
+    "notes": "Plain yellow or white cornmeal (Quaker, store brand). Must NOT match cornbread mix (separate candidate), masa harina (separate candidate), cornstarch (on board), or grits."
+  },
+  {
+    "name": "Masa Harina",
+    "id": "masa-harina",
+    "unit": "lb",
+    "typical_size": "4.4 lb bag",
+    "category": "Bread & Bakery",
+    "search_term": "masa harina",
+    "notes": "Instant corn masa flour for tortillas and tamales (Maseca, store brand). Must NOT match all-purpose flour (on board), cornmeal (separate candidate), or prepared tortillas."
+  },
+  {
+    "name": "Croutons",
+    "id": "croutons",
+    "unit": "oz",
+    "typical_size": "5 oz bag",
+    "category": "Bread & Bakery",
+    "search_term": "croutons",
+    "notes": "Salad croutons incl. Texas toast style bags. Must NOT match stuffing mix (on board), bread crumbs or panko (on board), oyster crackers (snack candidate), or bagged bread."
+  },
+  {
+    "name": "Bakery Cupcakes",
+    "id": "bakery-cupcakes",
+    "unit": "each",
+    "typical_size": "6 ct pack",
+    "category": "Bread & Bakery",
+    "search_term": "cupcakes",
+    "notes": "Fresh in-store bakery cupcakes with frosting. Must NOT match packaged Hostess-style cupcakes (snack cakes candidate), bakery muffins (on board), or cake mix and frosting (on board)."
+  },
+  {
+    "name": "Bakery Cookies",
+    "id": "bakery-cookies",
+    "unit": "each",
+    "typical_size": "12 ct tub",
+    "category": "Bread & Bakery",
+    "search_term": "bakery cookies",
+    "notes": "Fresh in-store bakery cookies, 12 ct tubs incl. Lofthouse-style frosted sugar cookies. Must NOT match aisle packaged cookies (on board), sandwich cookies (on board), or cookie dough and cookie mix (separate candidates)."
+  },
+  {
+    "name": "Bakery Brownies",
+    "id": "bakery-brownies",
+    "unit": "oz",
+    "typical_size": "16 oz tray",
+    "category": "Bread & Bakery",
+    "search_term": "bakery brownies",
+    "notes": "Fresh bakery brownie trays and brownie bites. Must NOT match brownie mix (on board), cosmic brownies (snack cakes candidate), or brownie ice cream."
+  },
+  {
+    "name": "Bakery Pie",
+    "id": "bakery-pie",
+    "unit": "each",
+    "typical_size": "8 in pie (22-34 oz)",
+    "category": "Bread & Bakery",
+    "search_term": "apple pie",
+    "notes": "Whole bakery pies, fruit plus seasonal pumpkin (apple, cherry, peach). Must NOT match pie crusts (separate candidate), canned pie filling, snack size hand pies (snack cakes family), frozen pot pies, or frozen cream pies."
+  },
+  {
+    "name": "Angel Food Cake",
+    "id": "angel-food-cake",
+    "unit": "each",
+    "typical_size": "13 oz ring cake",
+    "category": "Bread & Bakery",
+    "search_term": "angel food cake",
+    "notes": "Bakery angel food ring cakes (summer berry display). Must NOT match angel food cake mix (cake mix on board), dessert shells (separate candidate), or pound cake."
+  },
+  {
+    "name": "Dessert Shells",
+    "id": "dessert-shells",
+    "unit": "each",
+    "typical_size": "6 ct (4.5 oz)",
+    "category": "Bread & Bakery",
+    "search_term": "dessert shells",
+    "notes": "Sponge cake dessert cups for strawberry shortcake, usually by the berries. Must NOT match angel food cakes (separate candidate), graham cracker crusts, or ice cream cones (snack candidate)."
+  },
+  {
+    "name": "Danish / Sweet Rolls",
+    "id": "bakery-danish",
+    "unit": "each",
+    "typical_size": "4 ct pack",
+    "category": "Bread & Bakery",
+    "search_term": "danish",
+    "notes": "Bakery danishes, bear claws, and fresh-baked cinnamon and sweet rolls. Must NOT match donuts (on board), croissants (on board), muffins (on board), refrigerated cinnamon roll dough (separate candidate), or packaged honey buns (snack cakes candidate)."
+  },
+  {
+    "name": "Cheesecake",
+    "id": "cheesecake",
+    "unit": "oz",
+    "typical_size": "17-32 oz",
+    "category": "Bread & Bakery",
+    "search_term": "cheesecake",
+    "notes": "Whole and sliced cheesecakes, bakery or frozen (Sara Lee). Must NOT match cream cheese blocks (on board), no-bake cheesecake mix boxes, or cheesecake flavored yogurt and pudding."
+  }
+]

@@ -1,0 +1,1046 @@
+[
+  {
+    "name": "Canned Beef Stew",
+    "id": "beef-stew",
+    "unit": "oz",
+    "typical_size": "20 oz can",
+    "category": "Canned & Soup",
+    "search_term": "canned beef stew",
+    "notes": "Ready-to-eat canned stew (Dinty Moore style). Exclude canned chili (existing), canned soup, frozen dinners, dog food stew."
+  },
+  {
+    "name": "Canned Pasta (Ravioli / SpaghettiOs)",
+    "id": "canned-pasta",
+    "unit": "oz",
+    "typical_size": "15 oz can",
+    "category": "Canned & Soup",
+    "search_term": "canned ravioli",
+    "notes": "Chef Boyardee / SpaghettiOs style canned pasta in sauce. Exclude dry pasta (existing), boxed mac & cheese (existing), ramen (existing), frozen ravioli."
+  },
+  {
+    "name": "Canned Luncheon Meat (Spam)",
+    "id": "luncheon-meat",
+    "unit": "oz",
+    "typical_size": "12 oz can",
+    "category": "Canned & Soup",
+    "search_term": "spam luncheon meat",
+    "notes": "Spam / Treet style canned luncheon meat. Exclude deli lunchmeat (existing ham/turkey), Vienna sausage (separate), potted meat, canned chicken/tuna (existing)."
+  },
+  {
+    "name": "Corned Beef Hash (canned)",
+    "id": "corned-beef-hash",
+    "unit": "oz",
+    "typical_size": "14 oz can",
+    "category": "Canned & Soup",
+    "search_term": "corned beef hash",
+    "notes": "Canned hash (Hormel Mary Kitchen style). Exclude frozen hash browns (existing), fresh corned beef brisket, plain canned corned beef."
+  },
+  {
+    "name": "Vienna Sausages",
+    "id": "vienna-sausages",
+    "unit": "oz",
+    "typical_size": "4.6 oz can",
+    "category": "Canned & Soup",
+    "search_term": "vienna sausage",
+    "notes": "Canned Vienna sausages. Exclude hot dogs (existing), smoked/kielbasa sausage (existing), luncheon meat (separate)."
+  },
+  {
+    "name": "Canned Sardines",
+    "id": "sardines",
+    "unit": "oz",
+    "typical_size": "3.75 oz tin",
+    "category": "Canned & Soup",
+    "search_term": "canned sardines",
+    "notes": "Sardines in oil/water/mustard. Exclude canned tuna (existing), canned salmon (existing), anchovies, kipper snacks, cat food."
+  },
+  {
+    "name": "Vegetable / Vegetable Beef Soup (canned)",
+    "id": "vegetable-soup",
+    "unit": "oz",
+    "typical_size": "18.5 oz can",
+    "category": "Canned & Soup",
+    "search_term": "canned vegetable soup",
+    "notes": "Vegetable or vegetable-beef canned soup, condensed or ready-to-serve. Exclude tomato soup (existing), chicken noodle (existing), cream-of soups (existing), broth (existing), V8 juice."
+  },
+  {
+    "name": "Clam Chowder (canned)",
+    "id": "clam-chowder",
+    "unit": "oz",
+    "typical_size": "18.5 oz can",
+    "category": "Canned & Soup",
+    "search_term": "clam chowder canned",
+    "notes": "New England clam chowder, canned. Exclude fresh deli soup, other canned soups (existing), canned clams."
+  },
+  {
+    "name": "Chili Beans (in sauce)",
+    "id": "chili-beans",
+    "unit": "oz",
+    "typical_size": "15.5 oz can",
+    "category": "Canned & Soup",
+    "search_term": "chili beans",
+    "notes": "Beans in mild chili sauce (Bush's Chili Beans style). Exclude prepared canned chili with meat (existing canned-chili), plain kidney/pinto beans (existing), baked beans (existing)."
+  },
+  {
+    "name": "Canned White Beans (Great Northern / Cannellini / Navy)",
+    "id": "canned-white-beans",
+    "unit": "oz",
+    "typical_size": "15.5 oz can",
+    "category": "Canned & Soup",
+    "search_term": "great northern beans canned",
+    "notes": "Canned white beans: great northern, cannellini, navy, butter beans. Exclude chickpeas/kidney/black/pinto (existing), baked beans (existing), dry bagged beans (separate)."
+  },
+  {
+    "name": "Canned Mixed Vegetables",
+    "id": "canned-mixed-vegetables",
+    "unit": "oz",
+    "typical_size": "15 oz can",
+    "category": "Canned & Soup",
+    "search_term": "canned mixed vegetables",
+    "notes": "Veg-All style mixed vegetables in a can. Exclude frozen mixed vegetables (existing), single-vegetable cans (existing corn/peas/green beans)."
+  },
+  {
+    "name": "Canned Beets",
+    "id": "canned-beets",
+    "unit": "oz",
+    "typical_size": "15 oz can",
+    "category": "Canned & Soup",
+    "search_term": "canned beets",
+    "notes": "Sliced or pickled canned beets. Exclude fresh beets, beet juice."
+  },
+  {
+    "name": "Sauerkraut (canned/jarred)",
+    "id": "sauerkraut",
+    "unit": "oz",
+    "typical_size": "14 oz can",
+    "category": "Canned & Soup",
+    "search_term": "sauerkraut",
+    "notes": "Canned or jarred sauerkraut. Exclude refrigerated bagged kraut, kimchi, coleslaw, fresh cabbage (existing)."
+  },
+  {
+    "name": "Canned Yams / Sweet Potatoes",
+    "id": "canned-yams",
+    "unit": "oz",
+    "typical_size": "29 oz can",
+    "category": "Canned & Soup",
+    "search_term": "canned yams",
+    "notes": "Cut yams/sweet potatoes in syrup. Exclude fresh sweet potatoes (existing), frozen fries, canned pumpkin (separate)."
+  },
+  {
+    "name": "Cranberry Sauce (canned)",
+    "id": "cranberry-sauce",
+    "unit": "oz",
+    "typical_size": "14 oz can",
+    "category": "Canned & Soup",
+    "search_term": "cranberry sauce",
+    "notes": "Jellied or whole-berry canned cranberry sauce. Exclude cranberry juice (existing), fresh cranberries, dried cranberries."
+  },
+  {
+    "name": "Canned Pumpkin (100% puree)",
+    "id": "canned-pumpkin",
+    "unit": "oz",
+    "typical_size": "15 oz can",
+    "category": "Canned & Soup",
+    "search_term": "canned pumpkin",
+    "notes": "100% pumpkin puree (Libby's style). Exclude pumpkin pie MIX (sweetened/spiced), pie filling (separate), pumpkin spice flavored products, fresh pumpkins."
+  },
+  {
+    "name": "Canned Mandarin Oranges",
+    "id": "mandarin-oranges",
+    "unit": "oz",
+    "typical_size": "15 oz can",
+    "category": "Canned & Soup",
+    "search_term": "canned mandarin oranges",
+    "notes": "Mandarin orange segments in juice/syrup, canned. Exclude fresh oranges/clementines (existing), single-serve fruit cups (existing), orange juice (existing)."
+  },
+  {
+    "name": "Canned Fruit Cocktail",
+    "id": "fruit-cocktail",
+    "unit": "oz",
+    "typical_size": "15 oz can",
+    "category": "Canned & Soup",
+    "search_term": "fruit cocktail canned",
+    "notes": "Mixed fruit cocktail in a can. Exclude single-serve fruit cups (existing), canned peaches/pineapple/pears (existing/separate), frozen fruit (existing)."
+  },
+  {
+    "name": "Canned Pears",
+    "id": "canned-pears",
+    "unit": "oz",
+    "typical_size": "15 oz can",
+    "category": "Canned & Soup",
+    "search_term": "canned pears",
+    "notes": "Pear halves/slices in juice or syrup. Exclude fresh pears (existing), fruit cups (existing), fruit cocktail (separate)."
+  },
+  {
+    "name": "Diced Tomatoes with Green Chilies (Ro-Tel style)",
+    "id": "tomatoes-green-chilies",
+    "unit": "oz",
+    "typical_size": "10 oz can",
+    "category": "Canned & Soup",
+    "search_term": "rotel diced tomatoes green chilies",
+    "notes": "Must contain green chilies (Ro-Tel style). Exclude plain diced tomatoes (existing), crushed tomatoes (existing), salsa (existing), plain green chilies (separate). Collision watch with existing diced-tomatoes matcher."
+  },
+  {
+    "name": "Canned Diced Green Chilies",
+    "id": "canned-green-chilies",
+    "unit": "oz",
+    "typical_size": "4 oz can",
+    "category": "Canned & Soup",
+    "search_term": "diced green chiles",
+    "notes": "Small can of mild diced green chiles (Old El Paso/Hatch style). Exclude pickled jalapenos (separate), Ro-Tel tomatoes (separate), fresh peppers (existing), chili powder (existing)."
+  },
+  {
+    "name": "Black Olives (canned, ripe)",
+    "id": "black-olives",
+    "unit": "oz",
+    "typical_size": "6 oz can",
+    "category": "Canned & Soup",
+    "search_term": "black olives canned",
+    "notes": "Ripe/black olives, sliced or whole, canned. Exclude green/stuffed olives (separate), olive oil (existing), olive tapenade."
+  },
+  {
+    "name": "Artichoke Hearts (canned/jarred)",
+    "id": "artichoke-hearts",
+    "unit": "oz",
+    "typical_size": "14 oz can",
+    "category": "Canned & Soup",
+    "search_term": "artichoke hearts",
+    "notes": "Canned or jarred artichoke hearts (quartered/whole/marinated). Exclude fresh or frozen artichokes, spinach-artichoke dip."
+  },
+  {
+    "name": "Vegetable Broth / Stock",
+    "id": "vegetable-broth",
+    "unit": "floz",
+    "typical_size": "32 floz carton",
+    "category": "Canned & Soup",
+    "search_term": "vegetable broth",
+    "notes": "Vegetable broth or stock, carton or can. Exclude chicken/beef broth (existing), bouillon cubes (separate), canned vegetable soup (separate)."
+  },
+  {
+    "name": "Bouillon (cubes / granules / base)",
+    "id": "bouillon",
+    "unit": "oz",
+    "typical_size": "3.25 oz jar",
+    "category": "Canned & Soup",
+    "search_term": "chicken bouillon cubes",
+    "notes": "Chicken or beef bouillon cubes, granules, or paste base (Knorr / Better Than Bouillon). Exclude liquid broth/stock (existing), ramen seasoning, gravy mix (separate). Collision watch with existing broth matchers."
+  },
+  {
+    "name": "Canned Coconut Milk",
+    "id": "coconut-milk-canned",
+    "unit": "floz",
+    "typical_size": "13.5 floz can",
+    "category": "Canned & Soup",
+    "search_term": "coconut milk canned",
+    "notes": "Canned coconut milk for cooking. Exclude refrigerated/carton coconut milk beverage, cream of coconut (cocktail mixer), coconut water, coconut oil (existing), shredded coconut (separate)."
+  },
+  {
+    "name": "Canned Potatoes",
+    "id": "canned-potatoes",
+    "unit": "oz",
+    "typical_size": "15 oz can",
+    "category": "Canned & Soup",
+    "search_term": "canned potatoes",
+    "notes": "Whole or sliced white potatoes, canned. Exclude fresh potatoes (existing), instant mashed flakes (existing), frozen fries/hash browns (existing), potato chips (existing)."
+  },
+  {
+    "name": "Canned Hominy",
+    "id": "hominy",
+    "unit": "oz",
+    "typical_size": "25 oz can",
+    "category": "Canned & Soup",
+    "search_term": "canned hominy",
+    "notes": "White or golden hominy, canned (pozole staple). Exclude canned corn (existing), grits (separate), masa harina (separate), popcorn (existing/separate)."
+  },
+  {
+    "name": "Onion Soup Mix (dry packets)",
+    "id": "onion-soup-mix",
+    "unit": "oz",
+    "typical_size": "2 oz box (2 envelopes)",
+    "category": "Canned & Soup",
+    "search_term": "onion soup mix",
+    "notes": "Lipton-style dry onion soup/dip mix packets. Exclude canned French onion soup, fresh onions (existing), onion powder (existing), ranch dip mix (separate)."
+  },
+  {
+    "name": "Jarred / Canned Gravy",
+    "id": "jarred-gravy",
+    "unit": "oz",
+    "typical_size": "12 oz jar",
+    "category": "Canned & Soup",
+    "search_term": "turkey gravy jar",
+    "notes": "Ready-to-serve gravy in jar or can (turkey/chicken/beef). Exclude dry gravy mix packets (separate), broth/stock (existing), cream-of soups (existing)."
+  },
+  {
+    "name": "Dijon Mustard",
+    "id": "dijon-mustard",
+    "unit": "oz",
+    "typical_size": "12 oz bottle",
+    "category": "Sauces & Condiments",
+    "search_term": "dijon mustard",
+    "notes": "Dijon or spicy brown mustard. Exclude yellow mustard (existing), honey mustard (separate), dry ground mustard spice."
+  },
+  {
+    "name": "Honey Mustard",
+    "id": "honey-mustard",
+    "unit": "oz",
+    "typical_size": "12 oz bottle",
+    "category": "Sauces & Condiments",
+    "search_term": "honey mustard",
+    "notes": "Honey mustard condiment or dipping sauce. Exclude plain honey (existing), yellow mustard (existing), dijon (separate), honey mustard pretzels/snacks."
+  },
+  {
+    "name": "Salad Dressing Spread (Miracle Whip style)",
+    "id": "miracle-whip",
+    "unit": "oz",
+    "typical_size": "30 oz jar",
+    "category": "Sauces & Condiments",
+    "search_term": "miracle whip",
+    "notes": "Miracle Whip style sandwich/salad dressing spread. Exclude real mayonnaise (existing), pourable salad dressings (existing/separate)."
+  },
+  {
+    "name": "Caesar Dressing",
+    "id": "caesar-dressing",
+    "unit": "floz",
+    "typical_size": "16 floz bottle",
+    "category": "Sauces & Condiments",
+    "search_term": "caesar dressing",
+    "notes": "Caesar salad dressing, shelf bottle. Exclude ranch/italian (existing), blue cheese (separate), caesar salad kits, croutons."
+  },
+  {
+    "name": "Blue Cheese Dressing",
+    "id": "blue-cheese-dressing",
+    "unit": "floz",
+    "typical_size": "16 floz bottle",
+    "category": "Sauces & Condiments",
+    "search_term": "blue cheese dressing",
+    "notes": "Blue cheese salad dressing/dip. Exclude blue cheese crumbles (cheese aisle), ranch (existing), refrigerated produce-case dips."
+  },
+  {
+    "name": "Balsamic Vinegar",
+    "id": "balsamic-vinegar",
+    "unit": "floz",
+    "typical_size": "16.9 floz bottle",
+    "category": "Sauces & Condiments",
+    "search_term": "balsamic vinegar",
+    "notes": "Balsamic vinegar of Modena style. Exclude white/apple cider vinegar (existing), balsamic vinaigrette dressing, balsamic glaze/reduction."
+  },
+  {
+    "name": "Rice Vinegar",
+    "id": "rice-vinegar",
+    "unit": "floz",
+    "typical_size": "12 floz bottle",
+    "category": "Sauces & Condiments",
+    "search_term": "rice vinegar",
+    "notes": "Rice vinegar, plain or seasoned. Exclude white vinegar (existing), mirin/cooking wine, rice (existing)."
+  },
+  {
+    "name": "Red Wine Vinegar",
+    "id": "red-wine-vinegar",
+    "unit": "floz",
+    "typical_size": "12 floz bottle",
+    "category": "Sauces & Condiments",
+    "search_term": "red wine vinegar",
+    "notes": "Red wine vinegar. Exclude balsamic (separate), white/cider vinegar (existing), cooking wine, wine."
+  },
+  {
+    "name": "Teriyaki Sauce / Marinade",
+    "id": "teriyaki-sauce",
+    "unit": "floz",
+    "typical_size": "10 floz bottle",
+    "category": "Sauces & Condiments",
+    "search_term": "teriyaki sauce",
+    "notes": "Teriyaki sauce or teriyaki marinade. Exclude soy sauce (existing), generic meat marinades (separate), frozen teriyaki meals."
+  },
+  {
+    "name": "Steak Sauce (A.1. style)",
+    "id": "steak-sauce",
+    "unit": "floz",
+    "typical_size": "10 floz bottle",
+    "category": "Sauces & Condiments",
+    "search_term": "a1 steak sauce",
+    "notes": "A.1. / Heinz 57 style steak sauce. Exclude worcestershire (existing), BBQ sauce (existing), marinades (separate), steak seasoning rub (separate), fresh steak (existing)."
+  },
+  {
+    "name": "Cocktail Sauce",
+    "id": "cocktail-sauce",
+    "unit": "oz",
+    "typical_size": "12 oz jar",
+    "category": "Sauces & Condiments",
+    "search_term": "cocktail sauce",
+    "notes": "Seafood cocktail sauce. Exclude ketchup (existing), tartar sauce (separate), shrimp (existing), cocktail mixers."
+  },
+  {
+    "name": "Tartar Sauce",
+    "id": "tartar-sauce",
+    "unit": "floz",
+    "typical_size": "12 floz bottle",
+    "category": "Sauces & Condiments",
+    "search_term": "tartar sauce",
+    "notes": "Tartar sauce. Exclude mayonnaise (existing), cocktail sauce (separate), cream of tartar (baking)."
+  },
+  {
+    "name": "Prepared Horseradish",
+    "id": "horseradish",
+    "unit": "oz",
+    "typical_size": "5 oz jar",
+    "category": "Sauces & Condiments",
+    "search_term": "prepared horseradish",
+    "notes": "Prepared horseradish or creamy horseradish sauce. Exclude fresh horseradish root, wasabi, horseradish cheese."
+  },
+  {
+    "name": "Enchilada Sauce",
+    "id": "enchilada-sauce",
+    "unit": "oz",
+    "typical_size": "10 oz can",
+    "category": "Sauces & Condiments",
+    "search_term": "red enchilada sauce",
+    "notes": "Red or green enchilada sauce, canned. Exclude taco sauce (separate), salsa (existing), hot sauce (existing), frozen enchiladas."
+  },
+  {
+    "name": "Taco Sauce",
+    "id": "taco-sauce",
+    "unit": "oz",
+    "typical_size": "8 oz bottle",
+    "category": "Sauces & Condiments",
+    "search_term": "taco sauce",
+    "notes": "Mild/medium taco sauce bottle (Ortega/Taco Bell style). Exclude salsa (existing), hot sauce (existing), enchilada sauce (separate), taco seasoning packets (separate)."
+  },
+  {
+    "name": "Sloppy Joe Sauce (Manwich style)",
+    "id": "sloppy-joe-sauce",
+    "unit": "oz",
+    "typical_size": "15 oz can",
+    "category": "Sauces & Condiments",
+    "search_term": "sloppy joe sauce manwich",
+    "notes": "Canned sloppy joe sauce. Exclude BBQ sauce (existing), pasta sauce (existing), ground beef (existing), sloppy joe seasoning packets."
+  },
+  {
+    "name": "Bottled Meat Marinade",
+    "id": "bottled-marinade",
+    "unit": "floz",
+    "typical_size": "12 floz bottle",
+    "category": "Sauces & Condiments",
+    "search_term": "steak marinade",
+    "notes": "30-minute style bottled marinades (Lawry's/KC Masterpiece marinade). Exclude teriyaki (separate), italian dressing (existing), BBQ sauce (existing), dry rub seasonings (separate)."
+  },
+  {
+    "name": "Pesto (jarred)",
+    "id": "pesto",
+    "unit": "oz",
+    "typical_size": "8 oz jar",
+    "category": "Sauces & Condiments",
+    "search_term": "basil pesto",
+    "notes": "Shelf-stable jarred basil pesto. Exclude refrigerated fresh pesto, marinara/alfredo (existing), dried basil (separate)."
+  },
+  {
+    "name": "Minced Garlic (jarred)",
+    "id": "minced-garlic",
+    "unit": "oz",
+    "typical_size": "8 oz jar",
+    "category": "Sauces & Condiments",
+    "search_term": "minced garlic jar",
+    "notes": "Jarred minced/chopped garlic in water or oil. Exclude fresh garlic bulbs (existing), garlic powder (existing), garlic salt, garlic bread (existing)."
+  },
+  {
+    "name": "Pickled Jalapenos (sliced, jar/can)",
+    "id": "pickled-jalapenos",
+    "unit": "oz",
+    "typical_size": "12 oz jar",
+    "category": "Sauces & Condiments",
+    "search_term": "pickled jalapeno slices",
+    "notes": "Sliced pickled jalapenos, jarred or canned. Exclude fresh jalapenos (existing), diced green chilies (separate), banana peppers (separate), dill pickles (existing)."
+  },
+  {
+    "name": "Green Olives (stuffed manzanilla)",
+    "id": "green-olives",
+    "unit": "oz",
+    "typical_size": "5.75 oz jar",
+    "category": "Sauces & Condiments",
+    "search_term": "green olives stuffed",
+    "notes": "Pimento-stuffed manzanilla green olives, jarred. Exclude ripe black olives (separate), kalamata specialty olives, olive oil (existing)."
+  },
+  {
+    "name": "Banana Pepper Rings / Pepperoncini",
+    "id": "banana-peppers",
+    "unit": "oz",
+    "typical_size": "12 oz jar",
+    "category": "Sauces & Condiments",
+    "search_term": "banana pepper rings",
+    "notes": "Jarred mild banana pepper rings or pepperoncini. Exclude pickled jalapenos (separate), fresh bell peppers (existing), dill pickles (existing)."
+  },
+  {
+    "name": "Lime Juice (bottled)",
+    "id": "lime-juice",
+    "unit": "floz",
+    "typical_size": "8 floz bottle",
+    "category": "Sauces & Condiments",
+    "search_term": "lime juice bottle",
+    "notes": "Bottled 100% lime juice (ReaLime style). Exclude fresh limes (existing), lemon juice (existing), limeade/margarita mix (beverage)."
+  },
+  {
+    "name": "Ground Ginger",
+    "id": "ground-ginger",
+    "unit": "oz",
+    "typical_size": "1.1 oz jar",
+    "category": "Baking & Spices",
+    "search_term": "ground ginger",
+    "notes": "Dried ground ginger spice. Exclude fresh ginger root (existing), ginger ale, candied ginger, gingersnap cookies."
+  },
+  {
+    "name": "Ground Nutmeg",
+    "id": "ground-nutmeg",
+    "unit": "oz",
+    "typical_size": "1.1 oz jar",
+    "category": "Baking & Spices",
+    "search_term": "ground nutmeg",
+    "notes": "Ground nutmeg spice. Exclude whole nutmeg ok to include; exclude eggnog, pumpkin pie spice blend (separate)."
+  },
+  {
+    "name": "Bay Leaves",
+    "id": "bay-leaves",
+    "unit": "oz",
+    "typical_size": "0.2 oz jar",
+    "category": "Baking & Spices",
+    "search_term": "bay leaves",
+    "notes": "Dried whole bay leaves. Tiny net weights, watch per-oz math. Exclude fresh herbs, tea leaves."
+  },
+  {
+    "name": "Dried Basil",
+    "id": "dried-basil",
+    "unit": "oz",
+    "typical_size": "0.75 oz jar",
+    "category": "Baking & Spices",
+    "search_term": "dried basil leaves",
+    "notes": "Dried basil leaves spice. Exclude fresh basil (produce), pesto (separate), italian seasoning blend (existing)."
+  },
+  {
+    "name": "Dried Thyme",
+    "id": "dried-thyme",
+    "unit": "oz",
+    "typical_size": "0.75 oz jar",
+    "category": "Baking & Spices",
+    "search_term": "dried thyme",
+    "notes": "Dried thyme leaves. Exclude fresh thyme (produce), poultry seasoning blend (separate)."
+  },
+  {
+    "name": "Dried Rosemary",
+    "id": "dried-rosemary",
+    "unit": "oz",
+    "typical_size": "0.75 oz jar",
+    "category": "Baking & Spices",
+    "search_term": "dried rosemary",
+    "notes": "Dried rosemary leaves. Exclude fresh rosemary (produce), rosemary bread/crackers."
+  },
+  {
+    "name": "Dill Weed (dried)",
+    "id": "dried-dill",
+    "unit": "oz",
+    "typical_size": "0.5 oz jar",
+    "category": "Baking & Spices",
+    "search_term": "dried dill weed",
+    "notes": "Dried dill weed spice. Exclude dill pickles (existing), fresh dill (produce), dill seed ok to include, ranch mix (separate)."
+  },
+  {
+    "name": "Cayenne Pepper (ground)",
+    "id": "cayenne-pepper",
+    "unit": "oz",
+    "typical_size": "2 oz jar",
+    "category": "Baking & Spices",
+    "search_term": "ground cayenne pepper",
+    "notes": "Ground cayenne / ground red pepper. Exclude red pepper flakes (existing), chili powder (existing), black pepper (existing), hot sauce (existing)."
+  },
+  {
+    "name": "Curry Powder",
+    "id": "curry-powder",
+    "unit": "oz",
+    "typical_size": "2 oz jar",
+    "category": "Baking & Spices",
+    "search_term": "curry powder",
+    "notes": "Yellow curry powder spice. Exclude curry paste, jarred curry simmer sauce, turmeric (existing)."
+  },
+  {
+    "name": "Ground Cloves",
+    "id": "ground-cloves",
+    "unit": "oz",
+    "typical_size": "1 oz jar",
+    "category": "Baking & Spices",
+    "search_term": "ground cloves",
+    "notes": "Ground cloves spice (whole cloves also count). Exclude garlic cloves (existing garlic), clove cigarettes obviously, pumpkin pie spice blend (separate)."
+  },
+  {
+    "name": "Pumpkin Pie Spice",
+    "id": "pumpkin-pie-spice",
+    "unit": "oz",
+    "typical_size": "1.12 oz jar",
+    "category": "Baking & Spices",
+    "search_term": "pumpkin pie spice",
+    "notes": "Pumpkin pie spice blend. Exclude plain cinnamon (existing), canned pumpkin (separate), pumpkin spice coffee/creamer/snacks."
+  },
+  {
+    "name": "Taco Seasoning (packet)",
+    "id": "taco-seasoning",
+    "unit": "oz",
+    "typical_size": "1 oz packet",
+    "category": "Baking & Spices",
+    "search_term": "taco seasoning packet",
+    "notes": "Dry taco seasoning mix packets. Exclude taco sauce (separate), salsa (existing), chili seasoning (separate), taco shells/kits."
+  },
+  {
+    "name": "Chili Seasoning Mix (packet)",
+    "id": "chili-seasoning-mix",
+    "unit": "oz",
+    "typical_size": "1.25 oz packet",
+    "category": "Baking & Spices",
+    "search_term": "chili seasoning mix",
+    "notes": "Dry chili seasoning packets. Exclude plain chili powder spice (existing), canned chili (existing), taco seasoning (separate)."
+  },
+  {
+    "name": "Ranch Seasoning / Dip Mix (packets)",
+    "id": "ranch-seasoning-mix",
+    "unit": "oz",
+    "typical_size": "1 oz packet",
+    "category": "Baking & Spices",
+    "search_term": "ranch seasoning mix",
+    "notes": "Hidden Valley style dry ranch dressing/dip mix packets. Exclude bottled ranch dressing (existing), onion soup/dip mix (separate)."
+  },
+  {
+    "name": "Seasoned Salt (Lawry's style)",
+    "id": "seasoned-salt",
+    "unit": "oz",
+    "typical_size": "8 oz shaker",
+    "category": "Baking & Spices",
+    "search_term": "seasoned salt",
+    "notes": "Seasoned salt blend. Exclude plain table salt (existing), garlic salt, celery salt, steak seasoning (separate)."
+  },
+  {
+    "name": "Lemon Pepper Seasoning",
+    "id": "lemon-pepper",
+    "unit": "oz",
+    "typical_size": "2.25 oz shaker",
+    "category": "Baking & Spices",
+    "search_term": "lemon pepper seasoning",
+    "notes": "Lemon pepper blend. Exclude fresh lemons (existing), plain black pepper (existing), lemon juice (existing)."
+  },
+  {
+    "name": "Steak Seasoning (Montreal style)",
+    "id": "steak-seasoning",
+    "unit": "oz",
+    "typical_size": "3.4 oz shaker",
+    "category": "Baking & Spices",
+    "search_term": "montreal steak seasoning",
+    "notes": "Montreal/steak grill seasoning rub. Exclude steak sauce (separate), marinades (separate), fresh steak (existing), seasoned salt (separate)."
+  },
+  {
+    "name": "Poultry Seasoning",
+    "id": "poultry-seasoning",
+    "unit": "oz",
+    "typical_size": "0.65 oz jar",
+    "category": "Baking & Spices",
+    "search_term": "poultry seasoning",
+    "notes": "Poultry seasoning blend (sage/thyme). Exclude fresh chicken (existing), stuffing mix (existing), rotisserie seasoning blends ok."
+  },
+  {
+    "name": "Almond Extract",
+    "id": "almond-extract",
+    "unit": "floz",
+    "typical_size": "1 floz bottle",
+    "category": "Baking & Spices",
+    "search_term": "almond extract",
+    "notes": "Pure or imitation almond extract. Exclude vanilla extract (existing), almonds (existing), almond milk (existing), almond butter (separate)."
+  },
+  {
+    "name": "Food Coloring",
+    "id": "food-coloring",
+    "unit": "each",
+    "typical_size": "4-count box (1 floz total)",
+    "category": "Baking & Spices",
+    "search_term": "food coloring",
+    "notes": "Liquid or gel food color sets (McCormick 4-pack). Compare per box. Exclude Easter egg dye kits, icing/frosting (existing), sprinkles (separate)."
+  },
+  {
+    "name": "Sprinkles (jimmies / nonpareils)",
+    "id": "sprinkles",
+    "unit": "oz",
+    "typical_size": "3.5 oz bottle",
+    "category": "Baking & Spices",
+    "search_term": "rainbow sprinkles",
+    "notes": "Dessert sprinkles/jimmies/nonpareils. Exclude chocolate chips (existing), colored sanding sugar ok, frosting (existing)."
+  },
+  {
+    "name": "Yellow Cornmeal",
+    "id": "cornmeal",
+    "unit": "lb",
+    "typical_size": "2 lb bag",
+    "category": "Baking & Spices",
+    "search_term": "yellow cornmeal",
+    "notes": "Plain yellow/white cornmeal. Exclude cornstarch (existing), corn muffin mix (separate), masa harina (separate), grits (separate), corn flour blends."
+  },
+  {
+    "name": "Masa Harina (corn flour for tortillas)",
+    "id": "masa-harina",
+    "unit": "lb",
+    "typical_size": "4.4 lb bag",
+    "category": "Baking & Spices",
+    "search_term": "masa harina maseca",
+    "notes": "Instant corn masa flour (Maseca style). Exclude cornmeal (separate), cornstarch (existing), ready-made tortillas (existing), all-purpose flour (existing)."
+  },
+  {
+    "name": "Corn Muffin Mix (Jiffy style)",
+    "id": "corn-muffin-mix",
+    "unit": "oz",
+    "typical_size": "8.5 oz box",
+    "category": "Baking & Spices",
+    "search_term": "jiffy corn muffin mix",
+    "notes": "Corn muffin/cornbread boxed mix. Exclude plain cornmeal (separate), cake/brownie mix (existing), ready-made cornbread, blueberry muffin mixes."
+  },
+  {
+    "name": "Cookie Mix (pouch/box)",
+    "id": "cookie-mix",
+    "unit": "oz",
+    "typical_size": "17.5 oz pouch",
+    "category": "Baking & Spices",
+    "search_term": "chocolate chip cookie mix",
+    "notes": "Dry cookie mix pouches (Betty Crocker style). Exclude cake mix (existing), brownie mix (existing), packaged ready cookies (existing), refrigerated cookie dough."
+  },
+  {
+    "name": "Graham Cracker Pie Crust (ready)",
+    "id": "graham-cracker-crust",
+    "unit": "each",
+    "typical_size": "6 oz crust",
+    "category": "Baking & Spices",
+    "search_term": "graham cracker pie crust",
+    "notes": "Ready-to-fill graham/shortbread pie crust. Exclude graham crackers (existing), refrigerated rolled pie crust, frozen deep-dish shells."
+  },
+  {
+    "name": "Pie Filling (cherry / apple, canned)",
+    "id": "pie-filling",
+    "unit": "oz",
+    "typical_size": "21 oz can",
+    "category": "Baking & Spices",
+    "search_term": "cherry pie filling",
+    "notes": "Canned fruit pie filling. Exclude canned fruit in juice/syrup (existing peaches etc.), pumpkin puree (separate), pudding (existing/separate), fresh fruit."
+  },
+  {
+    "name": "Molasses",
+    "id": "molasses",
+    "unit": "floz",
+    "typical_size": "12 floz bottle",
+    "category": "Baking & Spices",
+    "search_term": "molasses",
+    "notes": "Baking molasses (Grandma's style). Exclude pancake syrup (existing), brown sugar (existing), sorghum ok."
+  },
+  {
+    "name": "Corn Syrup (Karo style)",
+    "id": "corn-syrup",
+    "unit": "floz",
+    "typical_size": "16 floz bottle",
+    "category": "Baking & Spices",
+    "search_term": "light corn syrup",
+    "notes": "Light or dark corn syrup for baking. Exclude pancake syrup (existing), honey (existing), molasses (separate)."
+  },
+  {
+    "name": "Pecans (halves/chopped, baking)",
+    "id": "pecans",
+    "unit": "oz",
+    "typical_size": "8 oz bag",
+    "category": "Baking & Spices",
+    "search_term": "pecan halves",
+    "notes": "Bagged pecan halves or pieces. Exclude mixed nuts (existing), candied/praline snack pecans, pecan pie."
+  },
+  {
+    "name": "Walnuts (halves/chopped, baking)",
+    "id": "walnuts",
+    "unit": "oz",
+    "typical_size": "8 oz bag",
+    "category": "Baking & Spices",
+    "search_term": "chopped walnuts",
+    "notes": "Bagged walnut halves or pieces. Exclude mixed nuts (existing), almonds/peanuts (existing), trail mix, black walnut flavoring."
+  },
+  {
+    "name": "Shredded Coconut (sweetened flakes)",
+    "id": "coconut-flakes",
+    "unit": "oz",
+    "typical_size": "14 oz bag",
+    "category": "Baking & Spices",
+    "search_term": "sweetened shredded coconut",
+    "notes": "Baking coconut flakes. Exclude coconut oil (existing), canned coconut milk (separate), fresh coconuts, coconut water."
+  },
+  {
+    "name": "Instant Pudding Mix (dry box)",
+    "id": "instant-pudding-mix",
+    "unit": "oz",
+    "typical_size": "3.4 oz box",
+    "category": "Baking & Spices",
+    "search_term": "instant pudding mix",
+    "notes": "Jell-O style dry instant pudding boxes. Exclude ready pudding cups (existing), gelatin boxes (existing), cook-and-serve ok to include."
+  },
+  {
+    "name": "Sugar Substitute (stevia / sucralose)",
+    "id": "sugar-substitute",
+    "unit": "oz",
+    "typical_size": "9.7 oz pouch",
+    "category": "Baking & Spices",
+    "search_term": "stevia sweetener",
+    "notes": "Zero-calorie sweetener, granulated pouch or packet box (Splenda/stevia/monk fruit). Exclude granulated sugar (existing), honey (existing), agave (separate)."
+  },
+  {
+    "name": "Ground Flaxseed",
+    "id": "ground-flaxseed",
+    "unit": "oz",
+    "typical_size": "16 oz bag",
+    "category": "Baking & Spices",
+    "search_term": "ground flaxseed",
+    "notes": "Ground/milled flaxseed (whole seed also counts). Exclude flaxseed oil supplements, chia seeds (separate), bird seed."
+  },
+  {
+    "name": "Chia Seeds",
+    "id": "chia-seeds",
+    "unit": "oz",
+    "typical_size": "12 oz bag",
+    "category": "Baking & Spices",
+    "search_term": "chia seeds",
+    "notes": "Whole chia seeds. Exclude flaxseed (separate), chia drinks, supplement capsules."
+  },
+  {
+    "name": "Maraschino Cherries",
+    "id": "maraschino-cherries",
+    "unit": "oz",
+    "typical_size": "10 oz jar",
+    "category": "Baking & Spices",
+    "search_term": "maraschino cherries",
+    "notes": "Jarred maraschino cherries. Exclude fresh cherries (existing), cherry pie filling (separate), frozen cherries, dried cherries."
+  },
+  {
+    "name": "Quinoa (dry)",
+    "id": "quinoa",
+    "unit": "oz",
+    "typical_size": "16 oz bag",
+    "category": "Pasta, Rice & Grains",
+    "search_term": "quinoa",
+    "notes": "Plain dry quinoa. Exclude microwave ready-to-serve pouches, quinoa-rice blend boxed sides (separate seasoned mixes), quinoa salads (deli)."
+  },
+  {
+    "name": "Couscous",
+    "id": "couscous",
+    "unit": "oz",
+    "typical_size": "10 oz box",
+    "category": "Pasta, Rice & Grains",
+    "search_term": "couscous",
+    "notes": "Regular or pearl couscous, plain or boxed seasoned. Exclude quinoa (separate), rice mixes (separate), orzo/pasta (existing)."
+  },
+  {
+    "name": "Dried Pinto Beans (bag)",
+    "id": "dried-pinto-beans",
+    "unit": "lb",
+    "typical_size": "2 lb bag",
+    "category": "Pasta, Rice & Grains",
+    "search_term": "dry pinto beans",
+    "notes": "Dry bagged pinto beans. Exclude canned pinto (existing), refried beans (existing), chili beans (separate)."
+  },
+  {
+    "name": "Dried Black Beans (bag)",
+    "id": "dried-black-beans",
+    "unit": "lb",
+    "typical_size": "1 lb bag",
+    "category": "Pasta, Rice & Grains",
+    "search_term": "dry black beans",
+    "notes": "Dry bagged black beans. Exclude canned black beans (existing), black bean soup, refried black beans."
+  },
+  {
+    "name": "Dried Lentils (bag)",
+    "id": "dried-lentils",
+    "unit": "lb",
+    "typical_size": "1 lb bag",
+    "category": "Pasta, Rice & Grains",
+    "search_term": "dry lentils",
+    "notes": "Dry brown/green lentils. Exclude canned lentil soup, split peas (separate), red lentil pasta."
+  },
+  {
+    "name": "Split Peas (dry, bag)",
+    "id": "split-peas",
+    "unit": "lb",
+    "typical_size": "1 lb bag",
+    "category": "Pasta, Rice & Grains",
+    "search_term": "green split peas",
+    "notes": "Dry green/yellow split peas. Exclude canned peas (existing), frozen peas (existing), lentils (separate), snap peas (produce)."
+  },
+  {
+    "name": "Dried Navy / Great Northern Beans (bag)",
+    "id": "dried-navy-beans",
+    "unit": "lb",
+    "typical_size": "1 lb bag",
+    "category": "Pasta, Rice & Grains",
+    "search_term": "dry great northern beans",
+    "notes": "Dry white beans: navy, great northern. Exclude canned white beans (separate), baked beans (existing), lima beans ok to include."
+  },
+  {
+    "name": "Bean Soup Mix (15-bean, dry)",
+    "id": "bean-soup-mix",
+    "unit": "oz",
+    "typical_size": "20 oz bag",
+    "category": "Pasta, Rice & Grains",
+    "search_term": "15 bean soup mix",
+    "notes": "Hurst's HamBeens style dry multi-bean soup mix with seasoning. Exclude single-variety dry beans (separate), canned soups (existing), onion soup mix (separate)."
+  },
+  {
+    "name": "Pearl Barley",
+    "id": "pearl-barley",
+    "unit": "oz",
+    "typical_size": "16 oz bag",
+    "category": "Pasta, Rice & Grains",
+    "search_term": "pearl barley",
+    "notes": "Dry pearled barley. Exclude barley-containing canned soups, malt beverages, cereal (existing)."
+  },
+  {
+    "name": "Grits (corn, quick/old-fashioned)",
+    "id": "grits",
+    "unit": "oz",
+    "typical_size": "24 oz canister",
+    "category": "Pasta, Rice & Grains",
+    "search_term": "quick grits",
+    "notes": "Corn grits, quick or old-fashioned (instant packets ok). Exclude cream of wheat (separate), cornmeal (separate), oatmeal (existing), hominy (separate), frozen shrimp-and-grits meals."
+  },
+  {
+    "name": "Hot Wheat Cereal (Cream of Wheat / Malt-O-Meal)",
+    "id": "hot-wheat-cereal",
+    "unit": "oz",
+    "typical_size": "28 oz box",
+    "category": "Pasta, Rice & Grains",
+    "search_term": "cream of wheat",
+    "notes": "Hot wheat farina cereal. Exclude cold boxed cereal (existing), oatmeal (existing), grits (separate), Malt-O-Meal bagged COLD cereals."
+  },
+  {
+    "name": "Rice Noodles (pad thai / vermicelli)",
+    "id": "rice-noodles",
+    "unit": "oz",
+    "typical_size": "8 oz box",
+    "category": "Pasta, Rice & Grains",
+    "search_term": "rice noodles",
+    "notes": "Dry Asian rice noodles. Exclude ramen (existing), egg noodles (existing), Italian dry pasta (existing), rice (existing), frozen noodle meals."
+  },
+  {
+    "name": "Gnocchi (shelf-stable)",
+    "id": "gnocchi",
+    "unit": "oz",
+    "typical_size": "16 oz package",
+    "category": "Pasta, Rice & Grains",
+    "search_term": "potato gnocchi",
+    "notes": "Shelf-stable potato gnocchi. Exclude frozen or refrigerated gnocchi, regular dry pasta (existing), instant mashed potatoes (existing)."
+  },
+  {
+    "name": "Seasoned Rice Mix (Rice-A-Roni / Knorr rice sides)",
+    "id": "seasoned-rice-mix",
+    "unit": "oz",
+    "typical_size": "6.8 oz box",
+    "category": "Pasta, Rice & Grains",
+    "search_term": "rice a roni",
+    "notes": "Flavored boxed/pouch rice side mixes. Exclude plain white/brown rice (existing), pasta sides (separate), microwave plain rice pouches. Collision watch with existing rice matcher."
+  },
+  {
+    "name": "Pasta Side Kits (Knorr / Pasta Roni)",
+    "id": "pasta-sides",
+    "unit": "oz",
+    "typical_size": "4.3 oz pouch",
+    "category": "Pasta, Rice & Grains",
+    "search_term": "knorr pasta sides",
+    "notes": "Seasoned pasta side-dish pouches/boxes. Exclude plain dry pasta (existing), boxed mac & cheese (existing), rice sides (separate), ramen (existing). Collision watch with existing pasta matcher."
+  },
+  {
+    "name": "Popcorn Kernels (unpopped)",
+    "id": "popcorn-kernels",
+    "unit": "oz",
+    "typical_size": "32 oz jar",
+    "category": "Pasta, Rice & Grains",
+    "search_term": "popcorn kernels",
+    "notes": "Jar/bag of unpopped popcorn kernels. Exclude microwave popcorn bags (existing), ready-popped bagged popcorn, caramel corn, popcorn seasoning."
+  },
+  {
+    "name": "Avocado Oil",
+    "id": "avocado-oil",
+    "unit": "floz",
+    "typical_size": "16.9 floz bottle",
+    "category": "Coffee, Oils & Spreads",
+    "search_term": "avocado oil",
+    "notes": "Avocado cooking oil. Exclude fresh avocados (existing), olive oil (existing), avocado oil SPRAY (existing cooking-spray family), mayo made with avocado oil."
+  },
+  {
+    "name": "Sesame Oil (toasted)",
+    "id": "sesame-oil",
+    "unit": "floz",
+    "typical_size": "5 floz bottle",
+    "category": "Coffee, Oils & Spreads",
+    "search_term": "toasted sesame oil",
+    "notes": "Sesame or toasted sesame oil. Exclude sesame seeds, tahini, soy sauce (existing), stir-fry sauces."
+  },
+  {
+    "name": "Peanut Oil",
+    "id": "peanut-oil",
+    "unit": "floz",
+    "typical_size": "24 floz bottle",
+    "category": "Coffee, Oils & Spreads",
+    "search_term": "peanut oil",
+    "notes": "Peanut frying oil. Exclude peanut butter (existing), peanuts (existing), vegetable/canola oil (existing)."
+  },
+  {
+    "name": "Vegetable Shortening (Crisco style)",
+    "id": "shortening",
+    "unit": "oz",
+    "typical_size": "48 oz can",
+    "category": "Coffee, Oils & Spreads",
+    "search_term": "vegetable shortening crisco",
+    "notes": "Solid vegetable shortening, can or baking sticks. Exclude lard (separate), butter (existing), coconut oil (existing), liquid oils (existing)."
+  },
+  {
+    "name": "Lard (manteca)",
+    "id": "lard",
+    "unit": "oz",
+    "typical_size": "16 oz carton",
+    "category": "Coffee, Oils & Spreads",
+    "search_term": "lard manteca",
+    "notes": "Rendered pork lard/manteca. Exclude vegetable shortening (separate), butter (existing), bacon (existing), tallow ok to include."
+  },
+  {
+    "name": "Almond Butter",
+    "id": "almond-butter",
+    "unit": "oz",
+    "typical_size": "16 oz jar",
+    "category": "Coffee, Oils & Spreads",
+    "search_term": "almond butter",
+    "notes": "Almond butter spread. Exclude peanut butter (existing), almond milk (existing), whole almonds (existing), hazelnut spread (separate)."
+  },
+  {
+    "name": "Hazelnut Spread (Nutella style)",
+    "id": "hazelnut-spread",
+    "unit": "oz",
+    "typical_size": "13 oz jar",
+    "category": "Coffee, Oils & Spreads",
+    "search_term": "nutella hazelnut spread",
+    "notes": "Chocolate hazelnut spread. Exclude chocolate frosting (existing), almond/peanut butter (existing/separate), cocoa powder (existing), Nutella snack packs with breadsticks (single-serve)."
+  },
+  {
+    "name": "Apple Butter",
+    "id": "apple-butter",
+    "unit": "oz",
+    "typical_size": "17 oz jar",
+    "category": "Coffee, Oils & Spreads",
+    "search_term": "apple butter",
+    "notes": "Apple butter spread. Exclude applesauce (existing), dairy butter (existing), jelly/jam (existing), fresh apples (existing)."
+  },
+  {
+    "name": "Agave Nectar",
+    "id": "agave-nectar",
+    "unit": "oz",
+    "typical_size": "11.75 oz bottle",
+    "category": "Coffee, Oils & Spreads",
+    "search_term": "agave nectar",
+    "notes": "Agave syrup/nectar sweetener. Exclude honey (existing), pancake/maple syrup (existing), corn syrup (separate), sugar substitutes (separate)."
+  },
+  {
+    "name": "Sunflower Seed Butter",
+    "id": "sunflower-butter",
+    "unit": "oz",
+    "typical_size": "16 oz jar",
+    "category": "Coffee, Oils & Spreads",
+    "search_term": "sunflower seed butter",
+    "notes": "SunButter style sunflower seed spread. Exclude peanut/almond butter (existing/separate), sunflower seeds (snack), sunflower oil."
+  }
+]

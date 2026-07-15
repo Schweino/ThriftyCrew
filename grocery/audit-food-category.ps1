@@ -30,7 +30,9 @@ foreach ($c in (Get-Content (Join-Path $root 'categories.json') -Raw | ConvertFr
 }
 $allow = @()
 $af = Join-Path $root 'food-class-allowlist.json'
-if (Test-Path $af) { $allow = @(Get-Content $af -Raw | ConvertFrom-Json) }
+# NOTE: assign the parse result and let foreach unwrap it - @(pipe | ConvertFrom-Json) NESTS a JSON array in
+# PS 5.1 (one element = the whole array), which would make every allowlist entry invisible once populated.
+if (Test-Path $af) { $parsedAllow = Get-Content $af -Raw | ConvertFrom-Json; foreach ($a in $parsedAllow) { $allow += $a } }
 
 function ClassesFor([string]$label) {
   if (-not $label) { return @($lib.universal_for_unknown) }

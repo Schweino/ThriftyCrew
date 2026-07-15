@@ -32,9 +32,13 @@ $keep = New-Object System.Collections.Generic.List[object]
 $rejects = New-Object System.Collections.Generic.List[string]
 $seenIds = @{}; $seenLabels = @{}
 foreach ($f in (Get-ChildItem (Join-Path $genDir 'agent-*.json') -ErrorAction SilentlyContinue | Sort-Object Name)) {
-  $arr = @()
-  try { $arr = @(Get-Content $f.FullName -Raw | ConvertFrom-Json) } catch { $rejects.Add("$($f.Name): UNPARSEABLE JSON - entire file skipped"); continue }
-  foreach ($x in $arr) {
+  # PS 5.1: ConvertFrom-Json emits a JSON array as ONE pipeline item; wrapping that in @() NESTS it, and the
+  # foreach then sees the whole file as a single "candidate" (whose .id member-enumerates to every id joined -
+  # that rejected all 542 candidates as one bad slug each on the first run). foreach unwraps a bare collection
+  # correctly, so iterate the parse result directly.
+  $parsed = $null
+  try { $parsed = Get-Content $f.FullName -Raw | ConvertFrom-Json } catch { $rejects.Add("$($f.Name): UNPARSEABLE JSON - entire file skipped"); continue }
+  foreach ($x in $parsed) {
     $id = ([string]$x.id).Trim().ToLower()
     $name = ([string]$x.name).Trim()
     $unit = ([string]$x.unit).Trim().ToLower()

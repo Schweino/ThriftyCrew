@@ -1,0 +1,767 @@
+[
+  {
+    "name": "Honeycrisp Apples",
+    "id": "honeycrisp-apples",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Fruit",
+    "search_term": "honeycrisp apples",
+    "notes": "Fresh Honeycrisp variety only, loose or bagged, normalized per lb. Generic 'apples' board item stays the cheapest-variety catch-all. Must NOT match other varieties (Gala, Fuji, Granny Smith, Red Delicious), apple juice, cider, applesauce, dried apple chips, or caramel/candy apples."
+  },
+  {
+    "name": "Granny Smith Apples",
+    "id": "granny-smith-apples",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Fruit",
+    "search_term": "granny smith apples",
+    "notes": "Fresh Granny Smith (green baking apple) only, per lb. Exclude all other apple varieties, apple juice/cider, applesauce, pie filling, dried apples, candy apples."
+  },
+  {
+    "name": "Gala Apples",
+    "id": "gala-apples",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Fruit",
+    "search_term": "gala apples",
+    "notes": "Fresh Gala variety only, loose or 3 lb bag normalized per lb. Exclude other varieties, juice, cider, applesauce, dried apples. Weekly ads price Gala separately from Honeycrisp/Granny Smith."
+  },
+  {
+    "name": "Fuji Apples",
+    "id": "fuji-apples",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Fruit",
+    "search_term": "fuji apples",
+    "notes": "Fresh Fuji variety only, per lb. Exclude other apple varieties, juice, applesauce, dried apples, Fuji film or any non-produce 'fuji' hits."
+  },
+  {
+    "name": "Red Delicious Apples",
+    "id": "red-delicious-apples",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Fruit",
+    "search_term": "red delicious apples",
+    "notes": "Fresh Red Delicious variety only, per lb. Exclude other varieties, juice, applesauce, dried apples. Must not match generic 'red apples' phrases pointing at other varieties."
+  },
+  {
+    "name": "Bartlett Pears",
+    "id": "bartlett-pears",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Fruit",
+    "search_term": "bartlett pears",
+    "notes": "Fresh Bartlett variety only, per lb. Generic 'pears' board item remains the cheapest-pear catch-all (Anjou/Bosc/red stay there). Exclude canned pears, pear juice, pear cups, baby food."
+  },
+  {
+    "name": "Asian Pears",
+    "id": "asian-pears",
+    "unit": "each",
+    "typical_size": "1 each",
+    "category": "Fruit",
+    "search_term": "asian pear",
+    "notes": "Fresh Asian/apple pears sold by count. Distinct item from regular pears (existing 'pears' item) and Bartlett. Exclude canned pears, pear juice."
+  },
+  {
+    "name": "Nectarines",
+    "id": "nectarines",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Fruit",
+    "search_term": "nectarines",
+    "notes": "Fresh yellow or white nectarines per lb. Exclude peaches (existing item), canned or frozen fruit, fruit cups, juice."
+  },
+  {
+    "name": "Apricots",
+    "id": "apricots",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Fruit",
+    "search_term": "fresh apricots",
+    "notes": "Fresh apricots per lb (seasonal). Must NOT match dried apricots, canned apricots, apricot preserves/jam (existing jelly item), apricot nectar, or baby food."
+  },
+  {
+    "name": "Pomegranate",
+    "id": "pomegranates",
+    "unit": "each",
+    "typical_size": "1 each",
+    "category": "Fruit",
+    "search_term": "pomegranate",
+    "notes": "Whole fresh pomegranate sold by count. Exclude pomegranate juice (POM), aril cups, sparkling drinks, dried arils, and 'pomegranate flavored' anything."
+  },
+  {
+    "name": "Papaya",
+    "id": "papaya",
+    "unit": "each",
+    "typical_size": "1 each",
+    "category": "Fruit",
+    "search_term": "papaya",
+    "notes": "Whole fresh papaya (Red/Maradol or Solo) by count; if a store prices per lb, normalize. Exclude dried papaya spears, papaya juice/nectar, fruit cups."
+  },
+  {
+    "name": "Fresh Cranberries",
+    "id": "fresh-cranberries",
+    "unit": "oz",
+    "typical_size": "12 oz bag",
+    "category": "Fruit",
+    "search_term": "fresh cranberries",
+    "notes": "Fresh whole cranberries in 12 oz bags (fall/holiday season). Must NOT match cranberry juice (existing item), dried cranberries/Craisins (separate candidate), canned cranberry sauce, or trail mixes."
+  },
+  {
+    "name": "Plantains",
+    "id": "plantains",
+    "unit": "each",
+    "typical_size": "1 each",
+    "category": "Fruit",
+    "search_term": "plantains",
+    "notes": "Fresh green or yellow plantains sold by count. Exclude bananas (existing item), plantain chips (snack aisle), frozen sweet plantains."
+  },
+  {
+    "name": "Whole Coconut",
+    "id": "coconut",
+    "unit": "each",
+    "typical_size": "1 each",
+    "category": "Fruit",
+    "search_term": "whole coconut",
+    "notes": "Whole fresh coconut in the produce section. Must NOT match coconut oil (existing item), coconut milk/cream/water, shredded or flaked baking coconut, coconut-flavored products."
+  },
+  {
+    "name": "Medjool Dates",
+    "id": "medjool-dates",
+    "unit": "oz",
+    "typical_size": "16 oz tub",
+    "category": "Fruit",
+    "search_term": "medjool dates",
+    "notes": "Whole Medjool (or pitted) dates sold in produce-section tubs/bags, normalized per oz. Exclude date syrup, date-filled bars/rolls, chopped baking dates only if brand-flavored, and fig products."
+  },
+  {
+    "name": "Cara Cara Oranges",
+    "id": "cara-cara-oranges",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Fruit",
+    "search_term": "cara cara oranges",
+    "notes": "Cara Cara pink navel oranges only, loose or 3 lb bag normalized per lb. Generic 'oranges' item keeps regular navels; clementines/mandarins have their own item. Exclude orange juice and mandarin cups."
+  },
+  {
+    "name": "Honey (Ataulfo) Mangoes",
+    "id": "honey-mangoes",
+    "unit": "each",
+    "typical_size": "1 each",
+    "category": "Fruit",
+    "search_term": "honey mango",
+    "notes": "Honey/Ataulfo/champagne mangoes sold by count. Regular Tommy Atkins mangoes stay on the existing 'mangoes' item. Exclude dried mango, frozen mango chunks, mango juice/nectar, fruit cups."
+  },
+  {
+    "name": "Rainier Cherries",
+    "id": "rainier-cherries",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Fruit",
+    "search_term": "rainier cherries",
+    "notes": "Fresh Rainier (yellow/red) cherries per lb, summer seasonal, priced well above dark sweet cherries. Existing 'cherries' item keeps dark sweet. Exclude maraschino, frozen, dried cherries, pie filling, juice."
+  },
+  {
+    "name": "Red Seedless Grapes",
+    "id": "red-seedless-grapes",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Fruit",
+    "search_term": "red seedless grapes",
+    "notes": "Fresh red seedless table grapes per lb. Generic 'grapes' item stays the cheapest-color catch-all. Must NOT match green/black grapes, cotton candy grapes, grape juice (existing), grape jelly, raisins, grape tomatoes, frozen grapes."
+  },
+  {
+    "name": "Green Seedless Grapes",
+    "id": "green-seedless-grapes",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Fruit",
+    "search_term": "green seedless grapes",
+    "notes": "Fresh green seedless table grapes per lb. Must NOT match red/black grapes, cotton candy grapes, grape juice/jelly, raisins, grape tomatoes, frozen grapes."
+  },
+  {
+    "name": "Dried Cranberries",
+    "id": "dried-cranberries",
+    "unit": "oz",
+    "typical_size": "6 oz",
+    "category": "Fruit",
+    "search_term": "dried cranberries",
+    "notes": "Sweetened dried cranberries (Craisins or store brand), plain original flavor, per oz. Exclude fresh cranberries (separate candidate), cranberry juice (existing), cranberry sauce, trail mix blends, flavored/infused varieties preferred out."
+  },
+  {
+    "name": "Prunes / Dried Plums",
+    "id": "prunes",
+    "unit": "oz",
+    "typical_size": "16 oz",
+    "category": "Fruit",
+    "search_term": "prunes",
+    "notes": "Pitted prunes/dried plums (Sunsweet or store brand) per oz. Must NOT match fresh plums (existing item), prune juice, baby food prunes, or raisins (existing item)."
+  },
+  {
+    "name": "Red Onions",
+    "id": "red-onions",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "red onions",
+    "notes": "Fresh red onions, loose or bagged, per lb. Existing 'onions' item covers only yellow/sweet. Exclude white onions (separate candidate), green onions (existing), pearl onions, pickled red onions, onion powder (existing)."
+  },
+  {
+    "name": "White Onions",
+    "id": "white-onions",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "white onions",
+    "notes": "Fresh white onions per lb (Mexican-cooking staple SKU, priced separately from yellow). Exclude yellow/sweet onions (existing item), red onions, green onions, pearl onions, onion powder/dried minced onion."
+  },
+  {
+    "name": "Shallots",
+    "id": "shallots",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "shallots",
+    "notes": "Fresh shallots, loose per lb or small net bag normalized. Exclude green onions/scallions (existing item), regular onions, dried/fried shallot toppings."
+  },
+  {
+    "name": "Yellow / Yukon Gold Potatoes",
+    "id": "yukon-gold-potatoes",
+    "unit": "lb",
+    "typical_size": "5 lb bag",
+    "category": "Vegetables",
+    "search_term": "yukon gold potatoes",
+    "notes": "Fresh yellow/gold/Yukon Gold potatoes, loose or 5 lb bag normalized per lb. Russet and red potatoes are existing items. Exclude sweet potatoes (existing), baby/petite medley packs, instant mashed (existing), frozen potato products."
+  },
+  {
+    "name": "Roma Tomatoes",
+    "id": "roma-tomatoes",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "roma tomatoes",
+    "notes": "Fresh Roma/plum tomatoes per lb. Existing 'tomatoes' item keeps slicing/on-the-vine. Must NOT match canned diced/crushed/whole tomatoes (existing items), tomato sauce/paste, grape/cherry tomatoes, sun-dried tomatoes."
+  },
+  {
+    "name": "Grape / Cherry Tomatoes",
+    "id": "grape-tomatoes",
+    "unit": "oz",
+    "typical_size": "10 oz",
+    "category": "Vegetables",
+    "search_term": "grape tomatoes",
+    "notes": "Fresh grape or cherry tomatoes in pint/10-16 oz clamshells, normalized per oz. Exclude slicing and Roma tomatoes, canned tomatoes, sun-dried tomatoes; and never match table grapes, grape juice, or grape jelly."
+  },
+  {
+    "name": "Campari / Cocktail Tomatoes",
+    "id": "campari-tomatoes",
+    "unit": "oz",
+    "typical_size": "16 oz",
+    "category": "Vegetables",
+    "search_term": "campari tomatoes",
+    "notes": "Cocktail-size on-the-vine tomatoes (Campari type) in 1 lb packs, per oz. Exclude grape/cherry tomatoes (separate candidate), slicing tomatoes, canned tomatoes, and Campari the liquor."
+  },
+  {
+    "name": "Red Bell Peppers",
+    "id": "red-bell-peppers",
+    "unit": "each",
+    "typical_size": "1 each",
+    "category": "Vegetables",
+    "search_term": "red bell pepper",
+    "notes": "Fresh red bell peppers by count (multi-packs normalized per pepper). Existing 'bell-peppers' item stays the cheapest/green catch-all. Exclude green/yellow/orange bells, mini sweet peppers (separate candidate), jarred roasted red peppers, red pepper flakes (existing)."
+  },
+  {
+    "name": "Mini Sweet Peppers",
+    "id": "mini-sweet-peppers",
+    "unit": "oz",
+    "typical_size": "16 oz bag",
+    "category": "Vegetables",
+    "search_term": "mini sweet peppers",
+    "notes": "Bagged mini sweet snacking peppers (red/yellow/orange mix), typically 1 lb, per oz. Exclude full-size bell peppers, jalapenos (existing), pickled peppers, pepper-flavored snacks."
+  },
+  {
+    "name": "Poblano Peppers",
+    "id": "poblano-peppers",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "poblano peppers",
+    "notes": "Fresh poblano peppers per lb (some stores label them pasilla). Exclude dried ancho/pasilla pods, canned diced green chiles, jalapenos (existing item), stuffed prepared peppers."
+  },
+  {
+    "name": "Serrano Peppers",
+    "id": "serrano-peppers",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "serrano peppers",
+    "notes": "Fresh serrano chile peppers per lb. Exclude jalapenos (existing item), canned/pickled serranos, hot sauce (existing item), salsa."
+  },
+  {
+    "name": "Anaheim Peppers",
+    "id": "anaheim-peppers",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "anaheim peppers",
+    "notes": "Fresh Anaheim/long green chiles per lb (includes fresh Hatch-type in season). Must NOT match canned diced green chiles, dried chile pods, jalapenos, poblanos."
+  },
+  {
+    "name": "Habanero Peppers",
+    "id": "habanero-peppers",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "habanero peppers",
+    "notes": "Fresh habanero peppers per lb (some stores price per each or small clamshell; normalize). Exclude habanero hot sauce, salsa, cheese or snacks with 'habanero' flavoring."
+  },
+  {
+    "name": "Tomatillos",
+    "id": "tomatillos",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "tomatillos",
+    "notes": "Fresh husked tomatillos per lb. Must NOT match salsa verde (existing salsa item), canned tomatillos, green enchilada sauce, or regular tomatoes."
+  },
+  {
+    "name": "Eggplant",
+    "id": "eggplant",
+    "unit": "each",
+    "typical_size": "1 each",
+    "category": "Vegetables",
+    "search_term": "eggplant",
+    "notes": "Fresh whole globe eggplant by count (per-lb stores normalized). Exclude frozen eggplant parmesan/entrees, baba ganoush, breaded eggplant cutlets, Chinese/graffiti specialty types optional but fine if cheapest."
+  },
+  {
+    "name": "Beets (fresh)",
+    "id": "beets",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "fresh beets",
+    "notes": "Fresh red beets, loose or bunched with greens, per lb. Must NOT match canned or pickled beets, beet juice, cooked ready-to-eat vacuum-packed beets, or sugar beet products."
+  },
+  {
+    "name": "Turnips",
+    "id": "turnips",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "turnips",
+    "notes": "Fresh purple-top turnip roots per lb. Exclude turnip greens (separate candidate), rutabagas (separate candidate), canned turnip greens."
+  },
+  {
+    "name": "Parsnips",
+    "id": "parsnips",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "parsnips",
+    "notes": "Fresh parsnips, loose or 1 lb bag, per lb. Exclude carrots (existing item), turnips, frozen root vegetable medleys."
+  },
+  {
+    "name": "Rutabagas",
+    "id": "rutabagas",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "rutabaga",
+    "notes": "Fresh waxed rutabagas per lb. Exclude turnips (separate candidate), frozen mashed root products."
+  },
+  {
+    "name": "Leeks",
+    "id": "leeks",
+    "unit": "each",
+    "typical_size": "1 bunch",
+    "category": "Vegetables",
+    "search_term": "leeks",
+    "notes": "Fresh leeks sold per stalk or bunch. Exclude green onions/scallions (existing item), dried leek soup mix, frozen soup blends."
+  },
+  {
+    "name": "Collard Greens (bunch)",
+    "id": "collard-greens",
+    "unit": "each",
+    "typical_size": "1 bunch",
+    "category": "Vegetables",
+    "search_term": "collard greens",
+    "notes": "Fresh collard greens by the bunch (bagged chopped fresh collards acceptable if cheapest, normalized). Must NOT match canned seasoned collards (Glory), frozen collards, kale (existing item)."
+  },
+  {
+    "name": "Mustard Greens (bunch)",
+    "id": "mustard-greens",
+    "unit": "each",
+    "typical_size": "1 bunch",
+    "category": "Vegetables",
+    "search_term": "mustard greens",
+    "notes": "Fresh mustard greens by the bunch. CRITICAL: must NOT match yellow mustard condiment (existing 'mustard' item), Dijon/spicy brown mustard, mustard seed spice, or canned mustard greens."
+  },
+  {
+    "name": "Turnip Greens (bunch)",
+    "id": "turnip-greens",
+    "unit": "each",
+    "typical_size": "1 bunch",
+    "category": "Vegetables",
+    "search_term": "turnip greens",
+    "notes": "Fresh turnip greens by the bunch. Exclude turnip roots (separate candidate), canned/frozen turnip greens, collard or mustard greens."
+  },
+  {
+    "name": "Swiss Chard (bunch)",
+    "id": "swiss-chard",
+    "unit": "each",
+    "typical_size": "1 bunch",
+    "category": "Vegetables",
+    "search_term": "swiss chard",
+    "notes": "Fresh green or rainbow chard by the bunch. Exclude kale (existing), spinach (existing), spring mix blends."
+  },
+  {
+    "name": "Red Cabbage",
+    "id": "red-cabbage",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "red cabbage",
+    "notes": "Fresh whole red/purple cabbage per lb. Existing 'cabbage' item is green only. Exclude coleslaw mix (separate candidate), sauerkraut, pickled red cabbage jars."
+  },
+  {
+    "name": "Napa Cabbage",
+    "id": "napa-cabbage",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "napa cabbage",
+    "notes": "Fresh napa (Chinese) cabbage per lb. Exclude green/red cabbage, kimchi (refrigerated jars), bok choy (separate candidate)."
+  },
+  {
+    "name": "Bok Choy",
+    "id": "bok-choy",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "bok choy",
+    "notes": "Fresh bok choy or baby bok choy per lb (per-each stores normalized). Exclude napa cabbage (separate candidate), frozen stir-fry blends, prepared Asian salad kits."
+  },
+  {
+    "name": "Butternut Squash",
+    "id": "butternut-squash",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "butternut squash",
+    "notes": "Whole fresh butternut squash per lb. Must NOT match pre-cut cubed butternut (pricier convenience SKU), frozen butternut, butternut squash soup, ravioli, or baby food."
+  },
+  {
+    "name": "Acorn Squash",
+    "id": "acorn-squash",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "acorn squash",
+    "notes": "Whole fresh acorn squash per lb (per-each pricing normalized). Exclude butternut/spaghetti squash (separate candidates), zucchini/yellow squash (existing item), frozen squash."
+  },
+  {
+    "name": "Spaghetti Squash",
+    "id": "spaghetti-squash",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "spaghetti squash",
+    "notes": "Whole fresh spaghetti squash per lb. CRITICAL: must NOT match spaghetti pasta (existing 'pasta' item), spaghetti sauce, canned spaghetti (SpaghettiOs), or other squash types."
+  },
+  {
+    "name": "Sugar Snap Peas",
+    "id": "sugar-snap-peas",
+    "unit": "oz",
+    "typical_size": "8 oz",
+    "category": "Vegetables",
+    "search_term": "sugar snap peas",
+    "notes": "Fresh sugar snap peas in 8-16 oz packs, per oz. Exclude snow peas (separate candidate), frozen peas (existing), canned peas (existing), snap pea crisps snack, split peas."
+  },
+  {
+    "name": "Snow Peas",
+    "id": "snow-peas",
+    "unit": "oz",
+    "typical_size": "6 oz",
+    "category": "Vegetables",
+    "search_term": "snow peas",
+    "notes": "Fresh snow pea pods in 6-8 oz packs, per oz. Exclude sugar snap peas (separate candidate), frozen/canned peas, stir-fry veggie blends."
+  },
+  {
+    "name": "Portobello Mushroom Caps",
+    "id": "portobello-mushrooms",
+    "unit": "oz",
+    "typical_size": "6 oz",
+    "category": "Vegetables",
+    "search_term": "portobello mushroom caps",
+    "notes": "Large portabella/portobello caps (typically 2-ct, 6 oz), per oz. Existing 'mushrooms' item covers white button and baby bella/cremini. Exclude sliced baby bellas, canned mushrooms (existing), stuffed prepared mushrooms."
+  },
+  {
+    "name": "Baby Carrots",
+    "id": "baby-carrots",
+    "unit": "oz",
+    "typical_size": "16 oz bag",
+    "category": "Vegetables",
+    "search_term": "baby carrots",
+    "notes": "Peeled baby-cut carrots in 1-2 lb bags, per oz. Whole/bunch carrots are the existing 'carrots' item. Exclude matchstick/shredded carrots, canned/frozen carrots, carrot juice, carrot cake, baby food."
+  },
+  {
+    "name": "Romaine Lettuce / Hearts",
+    "id": "romaine-lettuce",
+    "unit": "each",
+    "typical_size": "3 ct hearts",
+    "category": "Vegetables",
+    "search_term": "romaine hearts",
+    "notes": "Romaine hearts 3-ct pack or whole romaine head. Existing 'lettuce' item stays iceberg/head. Exclude bagged chopped romaine salads, caesar kits (separate candidate), leaf lettuce."
+  },
+  {
+    "name": "Green / Red Leaf Lettuce",
+    "id": "green-leaf-lettuce",
+    "unit": "each",
+    "typical_size": "1 head",
+    "category": "Vegetables",
+    "search_term": "green leaf lettuce",
+    "notes": "Fresh green or red leaf lettuce heads. Must NOT match iceberg (existing 'lettuce' item), romaine (separate candidate), butter lettuce (separate candidate), or bagged salad blends."
+  },
+  {
+    "name": "Butter Lettuce (living)",
+    "id": "butter-lettuce",
+    "unit": "each",
+    "typical_size": "1 head",
+    "category": "Vegetables",
+    "search_term": "butter lettuce",
+    "notes": "Butter/Bibb/Boston lettuce, often hydroponic living lettuce clamshell. CRITICAL: must NOT match dairy butter (existing 'butter' item), peanut butter, or other lettuce types."
+  },
+  {
+    "name": "Spring Mix Salad Greens",
+    "id": "spring-mix",
+    "unit": "oz",
+    "typical_size": "5 oz",
+    "category": "Vegetables",
+    "search_term": "spring mix",
+    "notes": "Bagged/clamshell spring mix or 50/50 blend, per oz. Exclude spinach-only packs (existing 'spinach' item), arugula-only (separate candidate), salad kits with dressing, iceberg garden blends (separate candidate)."
+  },
+  {
+    "name": "Arugula",
+    "id": "arugula",
+    "unit": "oz",
+    "typical_size": "5 oz",
+    "category": "Vegetables",
+    "search_term": "arugula",
+    "notes": "Bagged/clamshell baby arugula, per oz. Exclude spring mix blends that merely contain arugula, spinach, salad kits."
+  },
+  {
+    "name": "Garden Salad Blend (bagged)",
+    "id": "garden-salad",
+    "unit": "oz",
+    "typical_size": "12 oz bag",
+    "category": "Vegetables",
+    "search_term": "garden salad bag",
+    "notes": "Classic iceberg-based garden salad bag (iceberg, carrots, red cabbage), per oz. Exclude salad kits with dressing/toppings (separate candidate), spring mix, coleslaw mix, shredded lettuce only."
+  },
+  {
+    "name": "Caesar Salad Kit",
+    "id": "caesar-salad-kit",
+    "unit": "oz",
+    "typical_size": "10 oz kit",
+    "category": "Vegetables",
+    "search_term": "caesar salad kit",
+    "notes": "Complete caesar salad kit (greens + dressing + croutons), per oz. Exclude plain romaine hearts (separate candidate), bottled caesar dressing alone, crouton bags, chopped-salad kits of other flavors acceptable only if labeled caesar."
+  },
+  {
+    "name": "Coleslaw Mix",
+    "id": "coleslaw-mix",
+    "unit": "oz",
+    "typical_size": "14 oz bag",
+    "category": "Vegetables",
+    "search_term": "coleslaw mix",
+    "notes": "Bagged shredded cabbage/carrot slaw mix (classic or tri-color), per oz. Must NOT match prepared deli coleslaw with dressing, coleslaw dressing bottles, broccoli slaw, whole cabbage."
+  },
+  {
+    "name": "Stir-Fry Vegetable Blend (fresh)",
+    "id": "fresh-stir-fry-blend",
+    "unit": "oz",
+    "typical_size": "12 oz bag",
+    "category": "Vegetables",
+    "search_term": "fresh stir fry vegetables",
+    "notes": "Refrigerated fresh stir-fry vegetable mix (produce section), per oz. Must NOT match frozen stir-fry vegetables (existing 'frozen-vegetables' item), noodle/sauce meal kits, canned water chestnuts."
+  },
+  {
+    "name": "English / Hothouse Cucumber",
+    "id": "english-cucumbers",
+    "unit": "each",
+    "typical_size": "1 each",
+    "category": "Vegetables",
+    "search_term": "english cucumber",
+    "notes": "Shrink-wrapped English/hothouse seedless cucumbers by count. Regular slicing cucumbers are the existing 'cucumbers' item. Exclude mini/Persian cucumbers (separate candidate), pickles (existing item)."
+  },
+  {
+    "name": "Mini / Persian Cucumbers",
+    "id": "mini-cucumbers",
+    "unit": "oz",
+    "typical_size": "16 oz bag",
+    "category": "Vegetables",
+    "search_term": "mini cucumbers",
+    "notes": "Bagged mini/Persian seedless cucumbers (typically 1 lb or 6-ct), per oz. Exclude slicing cucumbers (existing), English hothouse (separate candidate), pickles and pickle spears."
+  },
+  {
+    "name": "Pickling Cucumbers",
+    "id": "pickling-cucumbers",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "pickling cucumbers",
+    "notes": "Fresh pickling/Kirby cucumbers per lb (summer canning season staple). Must NOT match jarred dill pickles (existing 'pickles' item), relish (existing), slicing or mini cucumbers."
+  },
+  {
+    "name": "Fresh Bean Sprouts",
+    "id": "bean-sprouts",
+    "unit": "oz",
+    "typical_size": "12 oz",
+    "category": "Vegetables",
+    "search_term": "bean sprouts",
+    "notes": "Fresh refrigerated mung bean sprouts, per oz. CRITICAL: must NOT match Brussels sprouts (existing item), canned bean sprouts (La Choy), alfalfa sprouts, sprouted grain bread."
+  },
+  {
+    "name": "Broccolini / Baby Broccoli",
+    "id": "broccolini",
+    "unit": "each",
+    "typical_size": "1 bunch",
+    "category": "Vegetables",
+    "search_term": "broccolini",
+    "notes": "Fresh broccolini/baby broccoli bunches. Must NOT match regular broccoli crowns or bunches (existing 'broccoli' item), frozen broccoli (existing), broccoli slaw. Watch substring overlap: 'broccolini' contains 'broccoli'."
+  },
+  {
+    "name": "Fennel Bulb",
+    "id": "fennel",
+    "unit": "each",
+    "typical_size": "1 each",
+    "category": "Vegetables",
+    "search_term": "fennel bulb",
+    "notes": "Fresh fennel/anise bulb by count. Exclude fennel seed (spice aisle), fennel tea, sausage seasoned with fennel."
+  },
+  {
+    "name": "Chayote Squash",
+    "id": "chayote",
+    "unit": "each",
+    "typical_size": "1 each",
+    "category": "Vegetables",
+    "search_term": "chayote",
+    "notes": "Fresh chayote squash by count (standard at Omaha Walmart/Baker's/Family Fare). Exclude zucchini/yellow squash (existing item), winter squash candidates."
+  },
+  {
+    "name": "Yuca / Cassava Root",
+    "id": "yuca-root",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "yuca root",
+    "notes": "Fresh waxed yuca (cassava) root per lb. Exclude frozen yuca, cassava flour, yuca/cassava chips, taro."
+  },
+  {
+    "name": "Jicama",
+    "id": "jicama",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "jicama",
+    "notes": "Fresh whole jicama root per lb. Exclude pre-cut jicama sticks with chile/lime seasoning, jicama chips."
+  },
+  {
+    "name": "Fresh Okra",
+    "id": "okra",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "fresh okra",
+    "notes": "Fresh whole okra pods per lb. Must NOT match frozen breaded okra, frozen cut okra, pickled okra jars, canned okra & tomatoes."
+  },
+  {
+    "name": "Artichokes",
+    "id": "artichokes",
+    "unit": "each",
+    "typical_size": "1 each",
+    "category": "Vegetables",
+    "search_term": "artichokes",
+    "notes": "Fresh whole globe artichokes by count. Must NOT match canned/jarred artichoke hearts, marinated artichokes, spinach-artichoke dip, frozen artichoke hearts."
+  },
+  {
+    "name": "Fresh Rhubarb",
+    "id": "rhubarb",
+    "unit": "lb",
+    "typical_size": "lb",
+    "category": "Vegetables",
+    "search_term": "fresh rhubarb",
+    "notes": "Fresh rhubarb stalks per lb (spring/summer Midwest staple). Exclude frozen rhubarb, strawberry-rhubarb pie/jam/yogurt."
+  },
+  {
+    "name": "Pie Pumpkins",
+    "id": "pie-pumpkins",
+    "unit": "each",
+    "typical_size": "1 each",
+    "category": "Vegetables",
+    "search_term": "pie pumpkin",
+    "notes": "Small sugar/pie pumpkins by count (fall seasonal). Must NOT match large carving/jack-o-lantern pumpkins, canned pumpkin, pumpkin pie (bakery), pumpkin spice flavored products."
+  },
+  {
+    "name": "Fresh Basil",
+    "id": "fresh-basil",
+    "unit": "oz",
+    "typical_size": "0.75 oz",
+    "category": "Vegetables",
+    "search_term": "fresh basil",
+    "notes": "Fresh basil clamshell/pack (0.5-2 oz) or living basil plant if that is the store's standard SKU, per oz. Exclude dried basil (spice aisle), pesto sauce, basil seeds."
+  },
+  {
+    "name": "Fresh Parsley (bunch)",
+    "id": "fresh-parsley",
+    "unit": "each",
+    "typical_size": "1 bunch",
+    "category": "Vegetables",
+    "search_term": "fresh parsley",
+    "notes": "Fresh curly or Italian flat-leaf parsley by the bunch. Must NOT match dried parsley (existing 'dried-parsley' item) or cilantro (existing item)."
+  },
+  {
+    "name": "Fresh Dill",
+    "id": "fresh-dill",
+    "unit": "oz",
+    "typical_size": "0.75 oz",
+    "category": "Vegetables",
+    "search_term": "fresh dill",
+    "notes": "Fresh dill herb pack or bunch, per oz. CRITICAL: must NOT match dill pickles (existing 'pickles' item), dill dip, dried dill weed, ranch 'with dill' products."
+  },
+  {
+    "name": "Fresh Rosemary",
+    "id": "fresh-rosemary",
+    "unit": "oz",
+    "typical_size": "0.75 oz",
+    "category": "Vegetables",
+    "search_term": "fresh rosemary",
+    "notes": "Fresh rosemary herb pack, per oz. Exclude dried rosemary (spice aisle), rosemary crackers/bread, rosemary-scented household items."
+  },
+  {
+    "name": "Fresh Thyme",
+    "id": "fresh-thyme",
+    "unit": "oz",
+    "typical_size": "0.75 oz",
+    "category": "Vegetables",
+    "search_term": "fresh thyme",
+    "notes": "Fresh thyme herb pack, per oz. Exclude dried thyme (spice aisle) and seasoning blends."
+  },
+  {
+    "name": "Fresh Mint",
+    "id": "fresh-mint",
+    "unit": "oz",
+    "typical_size": "0.75 oz",
+    "category": "Vegetables",
+    "search_term": "fresh mint",
+    "notes": "Fresh mint herb pack or bunch, per oz. Must NOT match mint candy/gum, mint chocolate, peppermint extract, mint tea, or toothpaste."
+  },
+  {
+    "name": "Fresh Chives",
+    "id": "fresh-chives",
+    "unit": "oz",
+    "typical_size": "0.75 oz",
+    "category": "Vegetables",
+    "search_term": "fresh chives",
+    "notes": "Fresh chives herb pack, per oz. Must NOT match dried/freeze-dried chives, sour cream & chives dip or chips, cream cheese with chives."
+  }
+]

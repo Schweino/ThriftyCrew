@@ -1,0 +1,713 @@
+[
+  {
+    "name": "Margarine / Buttery Spread",
+    "id": "margarine",
+    "unit": "oz",
+    "typical_size": "45 oz tub",
+    "category": "Dairy & Eggs",
+    "search_term": "margarine",
+    "notes": "Vegetable-oil tub spreads and stick margarine (Country Crock, Blue Bonnet, Imperial, I Can't Believe It's Not Butter; plant-butter tubs count here). Board butter item already excludes spread/crock/imperial/canola so no collision. Exclude real butter, spray bottles, butter-with-canola blends (separate item)."
+  },
+  {
+    "name": "Spreadable Butter with Canola/Olive Oil",
+    "id": "spreadable-butter-blend",
+    "unit": "oz",
+    "typical_size": "15 oz tub",
+    "category": "Dairy & Eggs",
+    "search_term": "butter with canola oil",
+    "notes": "Real-butter tub blends labeled 'butter with canola oil / olive oil' (Land O'Lakes, Challenge, store brand). Board butter item excludes canola/oil so clean. Exclude margarine (no real butter, own item) and plain stick/whipped butter (covered)."
+  },
+  {
+    "name": "Lactose-Free Milk",
+    "id": "lactose-free-milk",
+    "unit": "floz",
+    "typical_size": "64 floz",
+    "category": "Dairy & Eggs",
+    "search_term": "lactaid milk",
+    "notes": "Lactaid and store-brand lactose-free DAIRY milk. Board milk item already excludes 'lactose' so clean. Must EXCLUDE ultra-filtered (Fairlife carries both keywords; those titles resolve to ultra-filtered-milk item). Exclude plant milks and baby formula."
+  },
+  {
+    "name": "Ultra-Filtered Milk",
+    "id": "ultra-filtered-milk",
+    "unit": "floz",
+    "typical_size": "52 floz",
+    "category": "Dairy & Eggs",
+    "search_term": "fairlife milk",
+    "notes": "Fairlife and store-brand ultra-filtered high-protein milk. Wins over lactose-free-milk when title says ultra-filtered/ultrafiltered. COLLISION: plain milk commodity matches \\bmilk\\b broadly; add ultra-filtered/fairlife exclude there. Exclude protein shakes (Core Power) and flavored ultra-filtered coffee drinks."
+  },
+  {
+    "name": "Soy Milk",
+    "id": "soy-milk",
+    "unit": "floz",
+    "typical_size": "64 floz",
+    "category": "Dairy & Eggs",
+    "search_term": "soy milk",
+    "notes": "Silk/Great Value soy beverage; this IS the non-dairy item. Pattern must catch one-word 'Soymilk' (board milk item's \\bsoy\\b exclude and \\bmilk\\b include both miss it). Exclude soy sauce (covered), soy baby formula, almond/oat milk (covered)."
+  },
+  {
+    "name": "Coconut Milk Beverage (refrigerated)",
+    "id": "coconut-milk-beverage",
+    "unit": "floz",
+    "typical_size": "64 floz",
+    "category": "Dairy & Eggs",
+    "search_term": "coconut milk half gallon",
+    "notes": "Carton coconut milk beverage (Silk, So Delicious); this IS the non-dairy item. Board milk item excludes 'coconut' so clean. EXCLUDE canned culinary coconut milk/cream (Thai Kitchen, shelf-stable), coconut water, cream of coconut."
+  },
+  {
+    "name": "Kefir",
+    "id": "kefir",
+    "unit": "floz",
+    "typical_size": "32 floz",
+    "category": "Dairy & Eggs",
+    "search_term": "kefir",
+    "notes": "Drinkable cultured milk (Lifeway, store brand). COLLISION: titles often read 'kefir cultured lowfat milk' which matches the plain milk commodity; add 'kefir' exclude there. Exclude water kefir, kombucha, and yogurt drinks that say yogurt (yogurt item catches those)."
+  },
+  {
+    "name": "Eggnog",
+    "id": "eggnog",
+    "unit": "floz",
+    "typical_size": "64 floz",
+    "category": "Dairy & Eggs",
+    "search_term": "eggnog",
+    "notes": "SEASONAL (roughly Oct-Jan; expect long availability gaps rest of year). Dairy eggnog/holiday nog (TruMoo, Anderson Erickson, store brand). Board eggs item already excludes 'nog'. Exclude eggnog-flavored creamer, ice cream, and liquor blends."
+  },
+  {
+    "name": "Ricotta Cheese",
+    "id": "ricotta",
+    "unit": "oz",
+    "typical_size": "15 oz tub",
+    "category": "Dairy & Eggs",
+    "search_term": "ricotta cheese",
+    "notes": "Whole-milk or part-skim ricotta tubs (Galbani, store brand). No existing board pattern matches 'ricotta'. Exclude ricotta-FILLED items (ravioli, manicotti, cannoli) and cheesecake."
+  },
+  {
+    "name": "Processed Cheese Loaf (Velveeta-style)",
+    "id": "velveeta-cheese-loaf",
+    "unit": "oz",
+    "typical_size": "32 oz loaf",
+    "category": "Dairy & Eggs",
+    "search_term": "velveeta",
+    "notes": "Melting cheese loaf (Velveeta, GV Easy Melt, Hy-Vee melting loaf). Exclude Velveeta Shells & Cheese and Skillets (boxed-mac territory), Velveeta slices (sliced-cheese item catches 'cheese slices'), and jarred queso dip (queso item)."
+  },
+  {
+    "name": "Fresh Mozzarella",
+    "id": "fresh-mozzarella",
+    "unit": "oz",
+    "typical_size": "8 oz ball",
+    "category": "Dairy & Eggs",
+    "search_term": "fresh mozzarella",
+    "notes": "Refrigerated fresh mozzarella balls/logs/pearls in brine (BelGioioso, store brand); require 'fresh'. COLLISION: 'mozzarella cheese' matches shredded-cheese includes; that item needs a 'fresh' exclude. Exclude shredded/block/string mozzarella (covered) and breaded sticks (frozen item)."
+  },
+  {
+    "name": "Blue Cheese Crumbles",
+    "id": "blue-cheese-crumbles",
+    "unit": "oz",
+    "typical_size": "5 oz tub",
+    "category": "Dairy & Eggs",
+    "search_term": "blue cheese crumbles",
+    "notes": "Crumbled blue/gorgonzola tubs. No existing cheese pattern matches crumbles. MUST exclude blue cheese DRESSING and dip (dressing items), wing sauce, and blue-cheese-stuffed olives."
+  },
+  {
+    "name": "Goat Cheese",
+    "id": "goat-cheese",
+    "unit": "oz",
+    "typical_size": "4 oz log",
+    "category": "Dairy & Eggs",
+    "search_term": "goat cheese",
+    "notes": "Chevre logs and crumbles (Montchevre, store brand). Exclude goat MILK, and let titles containing 'feta' stay with the feta item (\\bfeta\\b already matches). Exclude salad kits."
+  },
+  {
+    "name": "Queso Fresco",
+    "id": "queso-fresco",
+    "unit": "oz",
+    "typical_size": "10 oz round",
+    "category": "Dairy & Eggs",
+    "search_term": "queso fresco",
+    "notes": "Hispanic fresh cheese rounds (Cacique, La Chona, V&V Supremo); queso blanco rounds count. COLLISION: verify queso (cheese dip) item include; if it matches bare 'queso' it needs fresco/blanco/cotija excludes. Exclude jarred queso dip/sauce and shredded blends."
+  },
+  {
+    "name": "Snack Cheese Cubes / Rounds",
+    "id": "snack-cheese-cubes",
+    "unit": "oz",
+    "typical_size": "8 oz bag",
+    "category": "Dairy & Eggs",
+    "search_term": "cheese cubes",
+    "notes": "Snack cubes (colby-jack/cheddar cubes, Sargento) and wax rounds (Babybel). COLLISION: 'colby jack cheese cubes' matches shredded-cheese named-cheese includes; that item should exclude cubes/rounds (it already excludes 'snack'). Exclude string cheese (covered) and party trays."
+  },
+  {
+    "name": "Brie Cheese",
+    "id": "brie",
+    "unit": "oz",
+    "typical_size": "8 oz wheel",
+    "category": "Dairy & Eggs",
+    "search_term": "brie cheese",
+    "notes": "Brie/camembert wheels (President, Aldi Emporium Selection, store brand). No existing board pattern matches. Exclude baked-brie frozen appetizers, brie bites (frozen), and cracker assortments."
+  },
+  {
+    "name": "Cheese Curds",
+    "id": "cheese-curds",
+    "unit": "oz",
+    "typical_size": "12 oz bag",
+    "category": "Dairy & Eggs",
+    "search_term": "cheese curds",
+    "notes": "Fresh squeaky curds, a Midwest dairy-case staple (Hy-Vee, Fareway carry). COLLISION: 'white cheddar cheese curds' contains 'cheddar cheese' which matches shredded-cheese; add curds exclude there. EXCLUDE breaded/fried frozen curds (appetizer, different product)."
+  },
+  {
+    "name": "Mexican Crema",
+    "id": "mexican-crema",
+    "unit": "oz",
+    "typical_size": "15 oz bottle",
+    "category": "Dairy & Eggs",
+    "search_term": "crema mexicana",
+    "notes": "Table cream / crema mexicana or agria (Cacique, El Mexicano); sold by net weight. 'Crema' does not trip \\bcream\\b patterns so no collision. Exclude sour cream (covered), canned media crema (shelf-stable), and coffee creamer."
+  },
+  {
+    "name": "Liquid Whole Eggs / Egg Substitute",
+    "id": "liquid-eggs",
+    "unit": "floz",
+    "typical_size": "32 floz carton",
+    "category": "Dairy & Eggs",
+    "search_term": "liquid eggs",
+    "notes": "Cartoned whole-egg product (Egg Beaters Original, Bob Evans liquid eggs, GV). Board eggs item already excludes 'substitute'. COLLISION: egg-whites item includes 'liquid egg'; restrict this item to whole/original/scramble products and have egg-whites require 'white'. Exclude shell eggs and liquid egg whites (covered)."
+  },
+  {
+    "name": "Hard-Boiled Eggs (peeled, ready-to-eat)",
+    "id": "hard-boiled-eggs",
+    "unit": "each",
+    "typical_size": "6 ct",
+    "category": "Dairy & Eggs",
+    "search_term": "hard boiled eggs",
+    "notes": "Refrigerated peeled hard-boiled/hard-cooked eggs (GV, Eggland's Best). Board eggs item excludes 'hard-cooked' and 'peeled' but NOT 'hard boiled'; add that exclude to eggs. Exclude pickled eggs, deviled egg kits, egg salad, Easter dye kits."
+  },
+  {
+    "name": "French Onion Dip (refrigerated)",
+    "id": "french-onion-dip",
+    "unit": "oz",
+    "typical_size": "16 oz tub",
+    "category": "Dairy & Eggs",
+    "search_term": "french onion dip",
+    "notes": "Dairy-case sour-cream chip dip (Dean's, Heluva Good, store brand); other sour-cream dips (ranch dip, dill) count. COLLISION: verify onions produce item excludes 'dip'. Exclude shelf-stable jarred dips, onion soup/dip MIX packets, hummus/queso/salsa (own items)."
+  },
+  {
+    "name": "Frozen Green Beans",
+    "id": "frozen-green-beans",
+    "unit": "oz",
+    "typical_size": "12 oz bag",
+    "category": "Frozen",
+    "search_term": "frozen green beans",
+    "notes": "Cut/whole green beans, steamable bags. COLLISION: fresh-green-beans and canned-green-beans items exist; this must require frozen/steamable/bag context and those items need 'frozen' excludes. Exclude green bean casserole kits and seasoned skillet sides."
+  },
+  {
+    "name": "Frozen Spinach",
+    "id": "frozen-spinach",
+    "unit": "oz",
+    "typical_size": "12 oz bag",
+    "category": "Frozen",
+    "search_term": "frozen spinach",
+    "notes": "Chopped or cut-leaf frozen spinach (box/bag). COLLISION: fresh spinach item matches bare 'spinach'; it needs a 'frozen' exclude. Exclude creamed spinach sides, spinach-artichoke dip, and fresh salad spinach (covered)."
+  },
+  {
+    "name": "Frozen Cauliflower Florets",
+    "id": "frozen-cauliflower",
+    "unit": "oz",
+    "typical_size": "12 oz bag",
+    "category": "Frozen",
+    "search_term": "frozen cauliflower florets",
+    "notes": "Plain frozen florets, steamable. COLLISION: fresh cauliflower item matches bare 'cauliflower'; needs frozen exclude. EXCLUDE riced cauliflower (own item), cheese-sauce florets, cauliflower-crust pizza, veggie tots."
+  },
+  {
+    "name": "Frozen Riced Cauliflower",
+    "id": "frozen-cauliflower-rice",
+    "unit": "oz",
+    "typical_size": "12 oz bag",
+    "category": "Frozen",
+    "search_term": "cauliflower rice",
+    "notes": "Plain riced cauliflower (Green Giant, Season's Choice, GV). COLLISION: verify white-rice item cannot match 'cauliflower rice'; and keep separate from frozen-cauliflower florets item. Exclude seasoned rice-vegetable blends containing real rice."
+  },
+  {
+    "name": "Frozen Stir-Fry Vegetable Blend",
+    "id": "frozen-stir-fry-vegetables",
+    "unit": "oz",
+    "typical_size": "16 oz bag",
+    "category": "Frozen",
+    "search_term": "frozen stir fry vegetables",
+    "notes": "Asian/stir-fry veg blends (broccoli, snap peas, water chestnuts), sauce packet OK. MUST NOT match 'mixed vegetables' (frozen-vegetables item owns medley/mixed). Exclude skillet meals with meat or noodles (own item) and fresh produce blends."
+  },
+  {
+    "name": "Frozen Edamame",
+    "id": "frozen-edamame",
+    "unit": "oz",
+    "typical_size": "12 oz bag",
+    "category": "Frozen",
+    "search_term": "frozen edamame",
+    "notes": "In-shell or shelled edamame (soybeans). No existing board pattern matches. Exclude dry-roasted edamame snacks (pantry) and edamame in stir-fry blends (own item)."
+  },
+  {
+    "name": "Frozen Brussels Sprouts",
+    "id": "frozen-brussels-sprouts",
+    "unit": "oz",
+    "typical_size": "12 oz bag",
+    "category": "Frozen",
+    "search_term": "frozen brussels sprouts",
+    "notes": "Plain frozen sprouts, steamable. COLLISION: fresh brussels-sprouts item matches bare 'brussels sprouts'; needs frozen exclude. Exclude sauced/seasoned versions (balsamic glaze kits) and fresh produce (covered)."
+  },
+  {
+    "name": "Frozen Carrots",
+    "id": "frozen-carrots",
+    "unit": "oz",
+    "typical_size": "16 oz bag",
+    "category": "Frozen",
+    "search_term": "frozen carrots",
+    "notes": "Crinkle-cut or whole baby frozen carrots. COLLISION: fresh carrots item matches bare 'carrots'; needs frozen exclude. Peas-and-carrots blends belong to frozen-vegetables (mixed) item; exclude here. Exclude canned carrots and glazed sides."
+  },
+  {
+    "name": "Frozen Pepper & Onion Blend",
+    "id": "frozen-pepper-onion-blend",
+    "unit": "oz",
+    "typical_size": "16 oz bag",
+    "category": "Frozen",
+    "search_term": "frozen pepper onion blend",
+    "notes": "Fajita/3-pepper and onion strips (GV, Birds Eye). COLLISION: fresh bell-peppers and onions items may have loose includes; require frozen/blend/strips context. Exclude full stir-fry blends (own item) and fresh produce."
+  },
+  {
+    "name": "Frozen Broccoli-Cauliflower Blend",
+    "id": "frozen-california-blend",
+    "unit": "oz",
+    "typical_size": "16 oz bag",
+    "category": "Frozen",
+    "search_term": "california blend frozen vegetables",
+    "notes": "California/Normandy/winter blend (broccoli, cauliflower, carrots). NOT covered by frozen-vegetables item (that only matches mixed vegetables/medley wording). Exclude cheese-sauce versions and plain single-veg bags (own items)."
+  },
+  {
+    "name": "Frozen Corn on the Cob",
+    "id": "frozen-corn-cob",
+    "unit": "each",
+    "typical_size": "4 ct mini ears",
+    "category": "Frozen",
+    "search_term": "frozen corn on the cob",
+    "notes": "Mini or full frozen ears. Frozen-corn item explicitly excludes 'cob' so clean. COLLISION: fresh sweet-corn (per ear) item; it needs a frozen exclude. Price per ear. Exclude cut/steamable corn (covered)."
+  },
+  {
+    "name": "Frozen Sweet Potato Fries",
+    "id": "frozen-sweet-potato-fries",
+    "unit": "oz",
+    "typical_size": "20 oz bag",
+    "category": "Frozen",
+    "search_term": "sweet potato fries",
+    "notes": "Alexia/Ore-Ida/GV sweet potato fries and waffle cuts. Frozen-fries item explicitly excludes 'sweet potato' so clean. COLLISION: fresh sweet-potatoes item matches bare 'sweet potato'; needs 'fries' exclude. Exclude regular potato fries (covered)."
+  },
+  {
+    "name": "Frozen Juice Concentrate",
+    "id": "frozen-juice-concentrate",
+    "unit": "floz",
+    "typical_size": "12 floz can",
+    "category": "Frozen",
+    "search_term": "frozen orange juice concentrate",
+    "notes": "Frozen OJ/apple/lemonade concentrate cans (Old Orchard, GV). REQUIRES 'concentrate'. COLLISION: orange-juice item matches 'orange juice' with no concentrate exclude; add 'concentrate' exclude there (apple-juice/lemonade items too). Exclude ready-to-drink juice."
+  },
+  {
+    "name": "Frozen Pancakes",
+    "id": "frozen-pancakes",
+    "unit": "each",
+    "typical_size": "12 ct",
+    "category": "Frozen",
+    "search_term": "frozen pancakes",
+    "notes": "Eggo/De Wafelbakkers/GV frozen pancakes incl. mini pancakes. MUST NOT match pancake-mix item (that requires 'mix') or syrup. Exclude refrigerated batter, waffles (covered), and pancake breakfast bowls (own item)."
+  },
+  {
+    "name": "French Toast Sticks (frozen)",
+    "id": "french-toast-sticks",
+    "unit": "oz",
+    "typical_size": "16 oz box",
+    "category": "Frozen",
+    "search_term": "french toast sticks",
+    "notes": "Frozen french toast and sticks (Eggo, GV). No collision: french-bread item wants bread/baguette wording, bread item wants 'bread'. Exclude French Toast Crunch cereal (pantry) and fresh bakery french bread."
+  },
+  {
+    "name": "Toaster Strudel (frozen pastries)",
+    "id": "toaster-strudel",
+    "unit": "each",
+    "typical_size": "6 ct box",
+    "category": "Frozen",
+    "search_term": "toaster strudel",
+    "notes": "Frozen filled toaster pastries (Pillsbury Toaster Strudel and store equivalents); include 'strudel'. Toaster-pastries item covers shelf-stable Pop-Tarts; EXCLUDE Pop-Tarts and shelf-stable pastries here. Exclude Toaster Scrambles? No: savory Scrambles count here too."
+  },
+  {
+    "name": "Frozen Dinners (single-serve entrees)",
+    "id": "frozen-dinners",
+    "unit": "each",
+    "typical_size": "9-10 oz meal",
+    "category": "Frozen",
+    "search_term": "frozen dinner",
+    "notes": "Single-serve TV dinners/entrees (Banquet, Hungry-Man, Lean Cuisine, Healthy Choice, Michelina's, Stouffer's singles). EXCLUDE lasagna (own item), pot pies (own item), family-size bags (skillet item), breakfast bowls (own item), pizza (covered)."
+  },
+  {
+    "name": "Frozen Pot Pies",
+    "id": "frozen-pot-pies",
+    "unit": "each",
+    "typical_size": "7 oz pie",
+    "category": "Frozen",
+    "search_term": "chicken pot pie frozen",
+    "notes": "Banquet/Swanson/Marie Callender's pot pies; REQUIRE 'pot pie'. Must not leak into frozen-dessert-pie item (that one excludes 'pot pie'). Exclude refrigerated/deli pot pies and soup (chicken-noodle-soup item)."
+  },
+  {
+    "name": "Frozen Family Skillet Meals",
+    "id": "frozen-skillet-meals",
+    "unit": "oz",
+    "typical_size": "21 oz bag",
+    "category": "Frozen",
+    "search_term": "frozen skillet meal",
+    "notes": "Bagged 2+ serving meals (Birds Eye Voila!, Bertolli, GV skillet meals, PF Chang's home menu family bags count if pasta/meat blends). Exclude boxed Hamburger Helper (pantry), single-serve dinners (own item), plain veg blends (own items)."
+  },
+  {
+    "name": "Frozen Mac & Cheese",
+    "id": "frozen-mac-and-cheese",
+    "unit": "oz",
+    "typical_size": "12 oz",
+    "category": "Frozen",
+    "search_term": "stouffers macaroni and cheese",
+    "notes": "Frozen macaroni and cheese (Stouffer's, Devour, GV). Boxed mac-and-cheese item explicitly excludes 'frozen' so clean; this REQUIRES frozen context. Exclude boxed dry mac, Velveeta Skillets, deli-case mac sides."
+  },
+  {
+    "name": "Frozen Ravioli / Tortellini",
+    "id": "frozen-ravioli",
+    "unit": "oz",
+    "typical_size": "25 oz bag",
+    "category": "Frozen",
+    "search_term": "frozen ravioli",
+    "notes": "Bagged frozen filled pasta (GV, Louisa, Rosetto). EXCLUDE canned ravioli (Chef Boyardee, shelf-stable), refrigerated fresh pasta (Buitoni/Rana), dry pasta (covered), and breaded/toasted ravioli appetizers."
+  },
+  {
+    "name": "Frozen Orange Chicken / Asian Entree",
+    "id": "frozen-orange-chicken",
+    "unit": "oz",
+    "typical_size": "22 oz bag",
+    "category": "Frozen",
+    "search_term": "frozen orange chicken",
+    "notes": "Bagged orange/General Tso/sesame chicken (InnovAsian, Fusia, PF Chang's, Crazy Cuizine). COLLISION: verify fresh oranges item excludes 'chicken'. Exclude sauce-only bottles (pantry), fresh deli asian entrees, plain frozen chicken (meat)."
+  },
+  {
+    "name": "Frozen Fried Rice",
+    "id": "frozen-fried-rice",
+    "unit": "oz",
+    "typical_size": "26 oz bag",
+    "category": "Frozen",
+    "search_term": "frozen fried rice",
+    "notes": "Bagged fried rice (Fusia, InnovAsian, GV). COLLISION: verify white-rice item cannot match 'fried rice' (anchor its include). Exclude shelf-stable ready-rice pouches, Rice-A-Roni (pantry), and dry rice (covered)."
+  },
+  {
+    "name": "Hot Pockets / Stuffed Sandwiches",
+    "id": "frozen-hot-pockets",
+    "unit": "each",
+    "typical_size": "2 ct (9 oz)",
+    "category": "Frozen",
+    "search_term": "hot pockets",
+    "notes": "Hot Pockets, Lean Pockets, store-brand stuffed sandwiches/melts. COLLISION: breakfast varieties can match breakfast-sandwiches includes ('sandwiches...egg'); keep croissant/biscuit/muffin breakfast sandwiches there. Exclude Uncrustables (own item) and pizza rolls."
+  },
+  {
+    "name": "Frozen PB&J Sandwiches (crustless)",
+    "id": "frozen-pbj-sandwiches",
+    "unit": "each",
+    "typical_size": "4 ct",
+    "category": "Frozen",
+    "search_term": "uncrustables",
+    "notes": "Smucker's Uncrustables and store-brand crustless PB&J. COLLISION: peanut-butter item matches 'peanut butter' with no sandwich exclude; add 'uncrustable' and 'sandwich' excludes there, and check jelly item likewise. Exclude jarred PB and jelly (covered)."
+  },
+  {
+    "name": "Pizza Rolls / Pizza Snacks",
+    "id": "pizza-rolls",
+    "unit": "oz",
+    "typical_size": "24 oz bag",
+    "category": "Frozen",
+    "search_term": "pizza rolls",
+    "notes": "Totino's/GV pizza rolls and pizza bites. Frozen-pizza item excludes rolls/bites so clean. Exclude Bagel Bites (bagel-based, do not force-match), pizza sticks lunch kits, and whole frozen pizza (covered)."
+  },
+  {
+    "name": "Frozen Mozzarella Sticks (breaded)",
+    "id": "frozen-mozzarella-sticks",
+    "unit": "oz",
+    "typical_size": "24 oz box",
+    "category": "Frozen",
+    "search_term": "frozen mozzarella sticks",
+    "notes": "Breaded appetizer sticks (Farm Rich, TGI Fridays, GV); REQUIRE breaded/battered/frozen context. String-cheese item has a negative lookahead plus breaded/fried/frozen excludes so clean. Exclude fresh string cheese (covered) and cheese curds (dairy item)."
+  },
+  {
+    "name": "Frozen Egg Rolls / Spring Rolls",
+    "id": "frozen-egg-rolls",
+    "unit": "oz",
+    "typical_size": "20 oz box",
+    "category": "Frozen",
+    "search_term": "frozen egg rolls",
+    "notes": "Pagoda/Tai Pei/Fusia egg rolls and spring rolls. Board eggs item already excludes 'egg roll' so clean. Exclude pizza rolls (own item), cabbage (produce), and restaurant/deli egg rolls."
+  },
+  {
+    "name": "Frozen Taquitos",
+    "id": "frozen-taquitos",
+    "unit": "oz",
+    "typical_size": "20 oz box",
+    "category": "Frozen",
+    "search_term": "frozen taquitos",
+    "notes": "Jose Ole/El Monterey/GV taquitos and rolled tacos. Exclude taco shells and tortillas (covered), taco seasoning/kits (pantry), burritos and chimichangas (frozen-burritos item matches 'burrito')."
+  },
+  {
+    "name": "Frozen Soft Pretzels",
+    "id": "frozen-soft-pretzels",
+    "unit": "oz",
+    "typical_size": "13 oz (6 ct)",
+    "category": "Frozen",
+    "search_term": "superpretzel soft pretzels",
+    "notes": "SuperPretzel/store-brand soft pretzels and pretzel bites. Snack pretzels item excludes 'frozen' but titles lacking that word could still land there; recommend adding a 'soft' exclude to pretzels. Exclude hard snack pretzels (covered) and bakery pretzel buns."
+  },
+  {
+    "name": "Frozen Potstickers / Dumplings",
+    "id": "frozen-potstickers",
+    "unit": "oz",
+    "typical_size": "24 oz bag",
+    "category": "Frozen",
+    "search_term": "frozen potstickers",
+    "notes": "Bibigo/Pagoda/Fusia potstickers, gyoza, mini wontons, dumplings. Exclude canned wonton soup (pantry), fresh sushi-case items, and pierogies (own item)."
+  },
+  {
+    "name": "Frozen Pierogies",
+    "id": "frozen-pierogies",
+    "unit": "oz",
+    "typical_size": "16 oz box",
+    "category": "Frozen",
+    "search_term": "pierogies",
+    "notes": "Mrs. T's/store-brand potato and cheese pierogies. No existing board pattern matches. Exclude asian dumplings/potstickers (own item) and refrigerated deli pierogies."
+  },
+  {
+    "name": "Frozen Tamales",
+    "id": "frozen-tamales",
+    "unit": "oz",
+    "typical_size": "15 oz",
+    "category": "Frozen",
+    "search_term": "frozen tamales",
+    "notes": "El Monterey/store-brand beef or chicken tamales. EXCLUDE canned tamales (Hormel, shelf-stable) and masa/corn husks (pantry). Exclude burritos and taquitos (own items)."
+  },
+  {
+    "name": "Frozen Sliders",
+    "id": "frozen-sliders",
+    "unit": "each",
+    "typical_size": "6 ct",
+    "category": "Frozen",
+    "search_term": "white castle sliders",
+    "notes": "White Castle/store-brand microwave cheeseburger sliders. Exclude slider BUNS (hamburger-buns item can match 'slider buns'), fresh deli sliders, and breakfast sandwiches (covered)."
+  },
+  {
+    "name": "Frozen Chicken Tenders (breaded)",
+    "id": "frozen-chicken-tenders",
+    "unit": "oz",
+    "typical_size": "25 oz bag",
+    "category": "Frozen",
+    "search_term": "frozen chicken tenders",
+    "notes": "Breaded/crispy tenders and strips (Tyson, Just Bare, GV). Chicken-breast item excludes tender/strip/breaded, chicken-nuggets only matches 'nuggets', so clean. EXCLUDE fresh raw tenderloins (meat dept) by requiring breaded/crispy/battered/frozen context."
+  },
+  {
+    "name": "Frozen Chicken Patties (breaded)",
+    "id": "frozen-chicken-patties",
+    "unit": "oz",
+    "typical_size": "26 oz bag",
+    "category": "Frozen",
+    "search_term": "frozen chicken patties",
+    "notes": "Breaded chicken sandwich patties (Tyson, Fast Fixin', GV); spicy versions count. Chicken-breast item excludes patty/patties so clean. Exclude fresh ground-chicken patties (meat dept) and plant-based patties (veggie-burger item)."
+  },
+  {
+    "name": "Frozen Popcorn Chicken",
+    "id": "frozen-popcorn-chicken",
+    "unit": "oz",
+    "typical_size": "24 oz bag",
+    "category": "Frozen",
+    "search_term": "popcorn chicken",
+    "notes": "Bite-size breaded popcorn chicken (Tyson Anytizers, GV). Chicken-nuggets item only matches 'nuggets' so clean. COLLISION: verify microwave-popcorn item cannot match 'popcorn chicken' (needs 'chicken' exclude if include is loose)."
+  },
+  {
+    "name": "Frozen Breaded Shrimp",
+    "id": "frozen-breaded-shrimp",
+    "unit": "oz",
+    "typical_size": "18 oz box",
+    "category": "Frozen",
+    "search_term": "breaded shrimp",
+    "notes": "Popcorn/butterfly breaded shrimp (SeaPak, GV). Shrimp item explicitly excludes breaded/popcorn/fried so clean; REQUIRE breaded/popcorn/butterfly/battered. Exclude raw frozen shrimp (covered) and shrimp cocktail."
+  },
+  {
+    "name": "Frozen Veggie / Black Bean Burgers",
+    "id": "frozen-veggie-burgers",
+    "unit": "oz",
+    "typical_size": "9.5 oz (4 ct)",
+    "category": "Frozen",
+    "search_term": "veggie burgers",
+    "notes": "Morningstar/Boca/GV veggie and black bean patties; this IS the meatless item (chicken-nuggets excludes plant/meatless). Exclude canned black beans (covered), fresh produce, and beef patties (deliberately not on board as separate item)."
+  },
+  {
+    "name": "Frozen Onion Rings",
+    "id": "frozen-onion-rings",
+    "unit": "oz",
+    "typical_size": "16 oz bag",
+    "category": "Frozen",
+    "search_term": "frozen onion rings",
+    "notes": "Breaded onion rings (Ore-Ida, Alexia, GV). COLLISION: verify fresh onions item excludes 'rings'. Exclude Funyuns-style snack rings (pantry) and restaurant items. Frozen-fries item does not match 'rings' so clean."
+  },
+  {
+    "name": "Frozen Diced Breakfast Potatoes",
+    "id": "frozen-diced-potatoes",
+    "unit": "oz",
+    "typical_size": "28 oz bag",
+    "category": "Frozen",
+    "search_term": "potatoes obrien",
+    "notes": "Diced hash/O'Brien potatoes with peppers-onions (Ore-Ida, GV). Hash-browns item only matches 'hash brown' wording so diced/O'Brien is clean. COLLISION: fresh russet/red potato items must not match; require diced/O'Brien/frozen context. Exclude fries and tots (covered)."
+  },
+  {
+    "name": "Ice Cream Sandwiches",
+    "id": "ice-cream-sandwiches",
+    "unit": "each",
+    "typical_size": "12 ct",
+    "category": "Frozen",
+    "search_term": "ice cream sandwiches",
+    "notes": "Vanilla/Neapolitan ice cream sandwiches (GV, Fat Boy, Klondike). Ice-cream item explicitly excludes 'sandwich' so clean. Exclude breakfast sandwiches (savory) and cookie dough sandwiches sold fresh in bakery."
+  },
+  {
+    "name": "Ice Cream Bars",
+    "id": "ice-cream-bars",
+    "unit": "each",
+    "typical_size": "6 ct",
+    "category": "Frozen",
+    "search_term": "klondike bars",
+    "notes": "Chocolate-coated ice cream bars and fudge bars (Klondike, Magnum, Fudgsicle, GV). Ice-cream item excludes 'bars' so clean. EXCLUDE fruit/juice bars (own item) and popsicles/ice pops (covered)."
+  },
+  {
+    "name": "Sundae Cones (Drumstick-style)",
+    "id": "sundae-cones",
+    "unit": "each",
+    "typical_size": "8 ct",
+    "category": "Frozen",
+    "search_term": "drumstick cones",
+    "notes": "Filled frozen novelty cones (Drumstick, GV sundae cones). Ice-cream item excludes 'cones' so clean. EXCLUDE empty cake/sugar/waffle cones (pantry baking aisle) and chicken drumsticks (chicken-thighs item matches 'drumstick' - require cone/sundae context)."
+  },
+  {
+    "name": "Sherbet / Sorbet",
+    "id": "sherbet-sorbet",
+    "unit": "floz",
+    "typical_size": "56 floz",
+    "category": "Frozen",
+    "search_term": "orange sherbet",
+    "notes": "Sherbet and sorbet tubs (Kemps, GV, Blue Bunny). Does not contain 'ice cream' so no collision. Exclude sherbet punch/drink mixers, gelato (leave unmatched), and popsicles (covered)."
+  },
+  {
+    "name": "Frozen Yogurt (tubs)",
+    "id": "frozen-yogurt",
+    "unit": "floz",
+    "typical_size": "48 floz",
+    "category": "Frozen",
+    "search_term": "frozen yogurt",
+    "notes": "Froyo tubs (Kemps, GV, Blue Bunny FrozFruit-style). COLLISION: yogurt item matches bare 'yogurt' with no frozen exclude; add 'frozen' exclude to yogurt commodity. Exclude refrigerated yogurt (covered) and yogurt-covered snacks."
+  },
+  {
+    "name": "Frozen Fruit Bars",
+    "id": "frozen-fruit-bars",
+    "unit": "each",
+    "typical_size": "6 ct",
+    "category": "Frozen",
+    "search_term": "outshine fruit bars",
+    "notes": "Whole-fruit/juice bars (Outshine, GV, Helados Mexico paletas count). Popsicles item matches 'pops' wording, frozen-fruit item excludes 'bars', ice cream excludes 'bars' - so clean. Exclude granola/cereal bars (pantry) and ice cream bars (own item)."
+  },
+  {
+    "name": "Italian Ice",
+    "id": "italian-ice",
+    "unit": "floz",
+    "typical_size": "24 floz (6 ct)",
+    "category": "Frozen",
+    "search_term": "luigis italian ice",
+    "notes": "Italian ice cups (Luigi's, store brand). Requires 'italian ice' so it cannot match ice cream or bagged ice; keep bagged-ice item anchored to bag wording. Exclude snow-cone syrups (pantry) and slush drink mixes."
+  },
+  {
+    "name": "Frozen Dessert Pie",
+    "id": "frozen-dessert-pie",
+    "unit": "each",
+    "typical_size": "1 pie (27-38 oz)",
+    "category": "Frozen",
+    "search_term": "frozen apple pie",
+    "notes": "Whole frozen dessert pies (Edwards, Sara Lee, Marie Callender's fruit and cream pies). MUST exclude 'pot pie' (own item) and pie CRUSTS (own item). Exclude fresh bakery pies and snack pies (Hostess, pantry)."
+  },
+  {
+    "name": "Frozen Cheesecake",
+    "id": "frozen-cheesecake",
+    "unit": "oz",
+    "typical_size": "19 oz",
+    "category": "Frozen",
+    "search_term": "sara lee cheesecake",
+    "notes": "Frozen cheesecakes (Sara Lee, Edwards, GV). Shredded-cheese item already excludes 'cheesecake' and cream-cheese item requires 'cream cheese' wording, so clean. Exclude cheesecake pudding mix (pantry) and fresh bakery cheesecake."
+  },
+  {
+    "name": "Frozen Bread & Roll Dough",
+    "id": "frozen-bread-dough",
+    "unit": "oz",
+    "typical_size": "48 oz (3 loaves)",
+    "category": "Frozen",
+    "search_term": "rhodes bread dough",
+    "notes": "Rhodes/store-brand frozen loaf and dinner-roll dough. COLLISION: bread item matches bare 'bread'; verify it excludes 'dough'. Dinner-rolls item excludes 'frozen' so clean. EXCLUDE refrigerated canned dough (dairy case) and pizza dough."
+  },
+  {
+    "name": "Frozen Pie Crusts",
+    "id": "frozen-pie-crust",
+    "unit": "each",
+    "typical_size": "2 ct (9 in)",
+    "category": "Frozen",
+    "search_term": "frozen pie crust",
+    "notes": "Deep-dish frozen crusts/shells (Pet-Ritz, GV). EXCLUDE graham cracker crusts (shelf-stable pantry), refrigerated rolled crusts (Pillsbury, dairy case), and filled dessert pies (own item)."
+  },
+  {
+    "name": "Frozen Biscuits",
+    "id": "frozen-biscuits",
+    "unit": "each",
+    "typical_size": "12 ct (25 oz)",
+    "category": "Frozen",
+    "search_term": "frozen biscuits",
+    "notes": "Pillsbury Grands frozen/store-brand bake-from-frozen biscuits. EXCLUDE refrigerated canned biscuits (dairy case) and biscuit sandwiches (breakfast-sandwiches item matches 'biscuit sandwich'). Exclude biscuit mix (pantry)."
+  },
+  {
+    "name": "Frozen Mashed Potatoes",
+    "id": "frozen-mashed-potatoes",
+    "unit": "oz",
+    "typical_size": "24 oz bag",
+    "category": "Frozen",
+    "search_term": "frozen mashed potatoes",
+    "notes": "Steam-bag frozen mashed (Ore-Ida, GV). EXCLUDE instant flakes (instant-mashed-potatoes item) and refrigerated tubs (Bob Evans). Butter item already excludes 'mashed' so clean. Exclude gravy and fresh potatoes (covered)."
+  },
+  {
+    "name": "Frozen Breakfast Bowls",
+    "id": "frozen-breakfast-bowls",
+    "unit": "each",
+    "typical_size": "7 oz bowl",
+    "category": "Frozen",
+    "search_term": "jimmy dean breakfast bowl",
+    "notes": "Jimmy Dean/GV frozen breakfast bowls (eggs, potatoes, sausage). Frozen-burritos item excludes 'bowl' so clean. Exclude oatmeal cups (pantry), dinner/pasta bowls (frozen-dinners item), and breakfast sandwiches (covered)."
+  },
+  {
+    "name": "Frozen Egg Bites",
+    "id": "frozen-egg-bites",
+    "unit": "each",
+    "typical_size": "4 ct",
+    "category": "Frozen",
+    "search_term": "egg bites",
+    "notes": "Sous-vide-style egg bites (Jimmy Dean, Three Bridges; refrigerated versions count too). Board eggs item already excludes 'egg bite' so clean. Exclude quiche, egg white liquid (covered), and protein snack boxes."
+  },
+  {
+    "name": "Frozen Jalapeno Poppers",
+    "id": "frozen-jalapeno-poppers",
+    "unit": "oz",
+    "typical_size": "22 oz box",
+    "category": "Frozen",
+    "search_term": "jalapeno poppers",
+    "notes": "Breaded cream-cheese/cheddar stuffed jalapenos (Farm Rich, TGI Fridays). COLLISION: fresh jalapenos produce item matches bare 'jalapeno'; needs 'popper' exclude. Shrimp item already excludes 'poppers'. Exclude fresh deli poppers."
+  },
+  {
+    "name": "Bagged Ice",
+    "id": "bagged-ice",
+    "unit": "lb",
+    "typical_size": "10 lb bag",
+    "category": "Frozen",
+    "search_term": "bag of ice",
+    "notes": "Party/cubed ice bags (Reddy Ice, store brand). Anchor include to bag+ice wording so it cannot match Italian ice (own item), ice cream, iced tea, or dry ice. Exclude ice cream novelties and ice packs (household)."
+  }
+]

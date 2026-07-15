@@ -1,0 +1,857 @@
+[
+  {
+    "name": "Dishwasher Rinse Aid",
+    "id": "dishwasher-rinse-aid",
+    "unit": "floz",
+    "typical_size": "8.45 floz bottle",
+    "category": "Household",
+    "search_term": "dishwasher rinse aid",
+    "notes": "Rinse aid additive only (Finish Jet-Dry or store brand). Must NOT match dishwasher detergent pacs/gel/powder (already on board as dishwasher-detergent) or dishwasher machine-cleaner tablets."
+  },
+  {
+    "name": "Laundry Scent Booster Beads",
+    "id": "laundry-scent-boosters",
+    "unit": "oz",
+    "typical_size": "10 oz bottle",
+    "category": "Household",
+    "search_term": "laundry scent booster beads",
+    "notes": "In-wash scent beads (Downy Unstopables, Gain Fireworks, store brand); collapse all scents. Must NOT match laundry detergent, pods, fabric softener, or dryer sheets (all already on board)."
+  },
+  {
+    "name": "Color Catcher Laundry Sheets",
+    "id": "color-catcher-sheets",
+    "unit": "each",
+    "typical_size": "24 ct box",
+    "category": "Household",
+    "search_term": "color catcher laundry sheets",
+    "notes": "In-wash dye-trapping sheets (Shout Color Catcher or store brand), priced per sheet. Not dryer sheets (covered) and not laundry stain remover (covered)."
+  },
+  {
+    "name": "Lint Rollers",
+    "id": "lint-rollers",
+    "unit": "each",
+    "typical_size": "2-pack, 60 sheets per roller",
+    "category": "Household",
+    "search_term": "lint roller",
+    "notes": "Adhesive-tape lint rollers; refill rolls collapse in. Exclude fabric shavers, pet-hair brushes, and packing tape."
+  },
+  {
+    "name": "Magic Eraser Cleaning Pads",
+    "id": "magic-erasers",
+    "unit": "each",
+    "typical_size": "4 ct pack",
+    "category": "Household",
+    "search_term": "magic eraser",
+    "notes": "Melamine-foam erasing pads (Mr. Clean Magic Eraser or store equivalent), priced per pad. Must NOT match regular cellulose dish sponges (covered as sponges) or scrub brushes."
+  },
+  {
+    "name": "Steel Wool Soap Pads",
+    "id": "steel-wool-pads",
+    "unit": "each",
+    "typical_size": "10 ct box",
+    "category": "Household",
+    "search_term": "steel wool soap pads",
+    "notes": "Soap-filled steel wool pads (S.O.S, Brillo, store brand); plain steel wool collapses in. Exclude cellulose sponges (covered), scouring powder (separate candidate), and copper scrubbers."
+  },
+  {
+    "name": "Rubber Cleaning Gloves (reusable)",
+    "id": "rubber-gloves",
+    "unit": "each",
+    "typical_size": "1 pair",
+    "category": "Household",
+    "search_term": "rubber cleaning gloves",
+    "notes": "Reusable latex/rubber household gloves priced per pair. Must NOT match disposable glove boxes (separate candidate disposable-gloves) or leather/work gloves."
+  },
+  {
+    "name": "Disposable Gloves (nitrile/vinyl)",
+    "id": "disposable-gloves",
+    "unit": "each",
+    "typical_size": "100 ct box",
+    "category": "Household",
+    "search_term": "disposable nitrile gloves",
+    "notes": "Single-use nitrile/vinyl/poly gloves priced per glove; food-prep and cleaning boxes collapse. Exclude reusable rubber pairs (separate candidate) and sterile medical exam packs."
+  },
+  {
+    "name": "Carpet Spot & Stain Remover",
+    "id": "carpet-spot-cleaner",
+    "unit": "floz",
+    "typical_size": "22 floz trigger spray",
+    "category": "Household",
+    "search_term": "carpet stain remover spray",
+    "notes": "Carpet/upholstery spot spray (Resolve, Woolite, store brand). Must NOT match laundry stain remover (covered as stain-remover), liquid floor cleaner (covered), carpet powder (separate candidate), or gallon carpet-machine solution."
+  },
+  {
+    "name": "Carpet Deodorizer Powder",
+    "id": "carpet-deodorizer-powder",
+    "unit": "oz",
+    "typical_size": "16-30 oz shaker",
+    "category": "Household",
+    "search_term": "carpet deodorizer powder",
+    "notes": "Sprinkle-and-vacuum rug deodorizing powder (Arm & Hammer, Glade). Must NOT match spray/solid air fresheners (covered as air-freshener) or cat-litter deodorizer (Pet candidate)."
+  },
+  {
+    "name": "Stainless Steel Cleaner",
+    "id": "stainless-steel-cleaner",
+    "unit": "floz",
+    "typical_size": "12-16 oz spray or aerosol",
+    "category": "Household",
+    "search_term": "stainless steel cleaner",
+    "notes": "Appliance stainless cleaner/polish (Weiman or store brand); trigger and aerosol collapse. Exclude glass cleaner (covered), all-purpose cleaner (covered), furniture polish (covered), and cooktop cleaner kits."
+  },
+  {
+    "name": "Calcium, Lime & Rust Remover",
+    "id": "lime-scale-remover",
+    "unit": "floz",
+    "typical_size": "28 floz bottle",
+    "category": "Household",
+    "search_term": "calcium lime rust remover",
+    "notes": "CLR / Lime-A-Way style hard-water and rust removers. Must NOT match toilet bowl cleaner (covered), shower/bathroom cleaner (covered), or white vinegar (covered on food side)."
+  },
+  {
+    "name": "Powder Scouring Cleanser",
+    "id": "powder-cleanser",
+    "unit": "oz",
+    "typical_size": "21 oz canister",
+    "category": "Household",
+    "search_term": "comet powder cleanser",
+    "notes": "Abrasive scouring powder canisters (Comet, Ajax, Bar Keepers Friend). Powder only; exclude spray all-purpose cleaner (covered as all-purpose-cleaner) and cream cleansers like Soft Scrub so per-oz stays comparable."
+  },
+  {
+    "name": "Washing Machine Cleaner",
+    "id": "washing-machine-cleaner",
+    "unit": "each",
+    "typical_size": "5 ct tablets",
+    "category": "Household",
+    "search_term": "washing machine cleaner tablets",
+    "notes": "Machine-cleaning tablets/pouches (Affresh, Tide Washing Machine Cleaner), priced per treatment. Cleans the machine, NOT laundry; must not match laundry detergent/pods/boosters (covered) or dishwasher products."
+  },
+  {
+    "name": "Sweeper Dry Cloth Refills",
+    "id": "sweeper-dry-refills",
+    "unit": "each",
+    "typical_size": "32 ct dry cloths",
+    "category": "Household",
+    "search_term": "sweeper dry cloth refills",
+    "notes": "Swiffer-style DRY sweeping cloth refills incl. store brand, priced per cloth. Exclude wet mopping pads, duster refills, mop heads, and liquid floor cleaner (covered as floor-cleaner)."
+  },
+  {
+    "name": "Flushable Wipes (adult)",
+    "id": "flushable-wipes",
+    "unit": "each",
+    "typical_size": "42 ct pack",
+    "category": "Household",
+    "search_term": "flushable wipes",
+    "notes": "Adult moist bathroom/flushable wipes (Cottonelle, Dude Wipes, store brand), priced per wipe. Must NOT match baby wipes (covered), disinfecting wipes (covered), or makeup wipes (Personal Care candidate)."
+  },
+  {
+    "name": "Brown Paper Lunch Bags",
+    "id": "paper-lunch-bags",
+    "unit": "each",
+    "typical_size": "50 ct pack",
+    "category": "Household",
+    "search_term": "brown paper lunch bags",
+    "notes": "Kraft lunch-size paper sacks, priced per bag. Exclude gift bags, grocery-size kraft bags, and plastic sandwich bags (covered as sandwich-bags)."
+  },
+  {
+    "name": "Disposable Paper Bowls",
+    "id": "paper-bowls",
+    "unit": "each",
+    "typical_size": "50 ct pack, 12-20 oz bowls",
+    "category": "Household",
+    "search_term": "disposable paper bowls",
+    "notes": "Disposable paper/foam BOWLS priced per bowl. Deliberately separate from paper plates (covered as paper-plates); plates must NOT match this item. Exclude reusable plastic serving bowls."
+  },
+  {
+    "name": "Disposable Party Cups",
+    "id": "disposable-cups",
+    "unit": "each",
+    "typical_size": "50 ct, 16-18 oz plastic cups",
+    "category": "Household",
+    "search_term": "plastic party cups",
+    "notes": "Rigid plastic (Solo-style) or foam cold cups, priced per cup. Exclude paper hot/coffee cups, kids' reusable tumblers, and bottled drinks."
+  },
+  {
+    "name": "Plastic Cutlery",
+    "id": "plastic-cutlery",
+    "unit": "each",
+    "typical_size": "48 ct forks or combo pack",
+    "category": "Household",
+    "search_term": "plastic forks disposable cutlery",
+    "notes": "Disposable forks/spoons/knives or combo packs, priced per utensil. Exclude party cups/plates (separate items) and reusable flatware sets."
+  },
+  {
+    "name": "Drinking Straws",
+    "id": "drinking-straws",
+    "unit": "each",
+    "typical_size": "100 ct box",
+    "category": "Household",
+    "search_term": "drinking straws",
+    "notes": "Disposable plastic or paper straws priced per straw; flexible/smoothie variants collapse. Exclude reusable metal/silicone straws and juice boxes with straws."
+  },
+  {
+    "name": "Coffee Filters",
+    "id": "coffee-filters",
+    "unit": "each",
+    "typical_size": "200 ct basket-style",
+    "category": "Household",
+    "search_term": "coffee filters",
+    "notes": "Paper basket or cone filters priced per filter. Must NOT match coffee itself, K-Cups (covered as coffee-pods), instant coffee (covered), or reusable mesh filters."
+  },
+  {
+    "name": "Wax Paper",
+    "id": "wax-paper",
+    "unit": "each",
+    "typical_size": "75 sq ft roll",
+    "category": "Household",
+    "search_term": "wax paper roll",
+    "notes": "Waxed paper rolls priced per roll. A different product from parchment paper (covered as parchment-paper); parchment, freezer paper, plastic wrap (covered), and foil (covered) must NOT match."
+  },
+  {
+    "name": "Disposable Foil Pans",
+    "id": "disposable-foil-pans",
+    "unit": "each",
+    "typical_size": "2-3 ct 9x13 or roaster pans",
+    "category": "Household",
+    "search_term": "aluminum foil pans",
+    "notes": "Disposable aluminum baking/roasting/steam-table pans priced per pan. Must NOT match aluminum foil rolls (covered as aluminum-foil) or permanent metal bakeware."
+  },
+  {
+    "name": "Slow Cooker Liners",
+    "id": "slow-cooker-liners",
+    "unit": "each",
+    "typical_size": "4-6 ct box",
+    "category": "Household",
+    "search_term": "slow cooker liners",
+    "notes": "Crock-pot liner bags priced per liner. Exclude oven roasting bags, food storage bags (covered as storage-bags), and trash bags (covered)."
+  },
+  {
+    "name": "Cupcake Liners / Baking Cups",
+    "id": "cupcake-liners",
+    "unit": "each",
+    "typical_size": "75-100 ct pack",
+    "category": "Household",
+    "search_term": "cupcake liners baking cups",
+    "notes": "Paper baking cups priced per liner. Exclude reusable silicone cups, parchment sheets (parchment covered), and foil pans (separate candidate)."
+  },
+  {
+    "name": "Bamboo Skewers",
+    "id": "bamboo-skewers",
+    "unit": "each",
+    "typical_size": "100 ct pack",
+    "category": "Household",
+    "search_term": "bamboo skewers",
+    "notes": "Wood/bamboo grilling skewers priced per skewer; lengths collapse. Exclude metal skewers and toothpicks (separate candidate)."
+  },
+  {
+    "name": "Food Storage Containers (plastic, with lids)",
+    "id": "food-storage-containers",
+    "unit": "each",
+    "typical_size": "set of 5-10 containers with lids",
+    "category": "Household",
+    "search_term": "plastic food storage containers",
+    "notes": "Ziploc/GladWare/Rubbermaid-style plastic meal-prep containers, priced per container in the multi-pack. Must NOT match food storage bags (covered as storage-bags); exclude glass sets and single premium containers."
+  },
+  {
+    "name": "Water Filter Pitcher Replacement Cartridges",
+    "id": "water-filter-cartridges",
+    "unit": "each",
+    "typical_size": "3 ct filters",
+    "category": "Household",
+    "search_term": "water filter pitcher replacement filters",
+    "notes": "Brita-compatible pitcher replacement cartridges priced per filter. Exclude complete pitchers, faucet-mount systems, and refrigerator filters."
+  },
+  {
+    "name": "LED Light Bulbs (60W-equivalent A19)",
+    "id": "light-bulbs-led",
+    "unit": "each",
+    "typical_size": "4 ct pack",
+    "category": "Household",
+    "search_term": "led light bulbs 60 watt",
+    "notes": "Standard A19 soft-white LED bulbs priced per bulb. Exclude smart bulbs, candelabra/flood/specialty shapes, and appliance bulbs. Not related to batteries (covered)."
+  },
+  {
+    "name": "Pocket Lighters",
+    "id": "lighters",
+    "unit": "each",
+    "typical_size": "2 ct pack",
+    "category": "Household",
+    "search_term": "bic lighters",
+    "notes": "Disposable pocket lighters (BIC-style) priced per lighter. Exclude long-reach grill/utility wand lighters, matches, and butane refill cans."
+  },
+  {
+    "name": "Charcoal Lighter Fluid",
+    "id": "charcoal-lighter-fluid",
+    "unit": "floz",
+    "typical_size": "32 floz bottle",
+    "category": "Household",
+    "search_term": "charcoal lighter fluid",
+    "notes": "Petroleum lighter fluid for briquets. Must NOT match charcoal itself (covered as charcoal), fire-starter cubes, or butane."
+  },
+  {
+    "name": "Water Softener Salt",
+    "id": "water-softener-salt",
+    "unit": "lb",
+    "typical_size": "40 lb bag",
+    "category": "Household",
+    "search_term": "water softener salt pellets",
+    "notes": "Softener pellets/crystals (Morton, Diamond Crystal). Must NOT match table salt (covered on food side as salt), kosher/canning salt, pool salt, or winter ice melt."
+  },
+  {
+    "name": "Ant & Roach Bait Stations",
+    "id": "ant-roach-baits",
+    "unit": "each",
+    "typical_size": "6-8 ct bait stations",
+    "category": "Household",
+    "search_term": "ant bait stations",
+    "notes": "Enclosed ant/roach bait stations or gel bait, priced per station. Must NOT match aerosol home insect spray (covered as insect-spray), skin-applied repellent (Personal Care candidate), or mouse traps (separate candidate)."
+  },
+  {
+    "name": "Mouse Traps",
+    "id": "mouse-traps",
+    "unit": "each",
+    "typical_size": "4 ct pack",
+    "category": "Household",
+    "search_term": "mouse traps",
+    "notes": "Snap or glue mouse traps priced per trap. Exclude rodent poison bait blocks, live-catch premium traps, and insect baits (separate candidate)."
+  },
+  {
+    "name": "Scented Jar Candles",
+    "id": "scented-candles",
+    "unit": "each",
+    "typical_size": "1 jar, 14-20 oz",
+    "category": "Household",
+    "search_term": "scented jar candle",
+    "notes": "Jar/tumbler scented candles (Glade, Mainstays, store brand); collapse scents. Must NOT match air freshener sprays/plug-ins (covered as air-freshener), wax melts, birthday candles (separate candidate), or outdoor citronella."
+  },
+  {
+    "name": "Birthday Candles",
+    "id": "birthday-candles",
+    "unit": "each",
+    "typical_size": "24 ct pack",
+    "category": "Household",
+    "search_term": "birthday candles",
+    "notes": "Cake candles priced per pack count. Exclude scented jar candles (separate candidate), tea lights, and number-shaped premium candles collapse in if same aisle."
+  },
+  {
+    "name": "Wooden Toothpicks",
+    "id": "toothpicks",
+    "unit": "each",
+    "typical_size": "250-500 ct box",
+    "category": "Household",
+    "search_term": "wooden toothpicks",
+    "notes": "Round wooden toothpicks priced per pick. Exclude bamboo skewers (separate candidate) and dental floss picks (Personal Care candidate)."
+  },
+  {
+    "name": "Dental Floss",
+    "id": "dental-floss",
+    "unit": "each",
+    "typical_size": "1 pack (40-55 yd) or 75 ct picks",
+    "category": "Personal Care",
+    "search_term": "dental floss",
+    "notes": "String floss or floss picks collapse, priced per pack. Must NOT match toothpaste/toothbrushes/mouthwash (all covered), wooden toothpicks (Household), or water flosser hardware."
+  },
+  {
+    "name": "Hairspray",
+    "id": "hairspray",
+    "unit": "oz",
+    "typical_size": "7-10 oz aerosol",
+    "category": "Personal Care",
+    "search_term": "hairspray",
+    "notes": "Aerosol or pump hairspray, any hold level collapses. Not a shampoo/conditioner variant (those are covered). Exclude travel sizes under 3 oz, dry shampoo, and mousse."
+  },
+  {
+    "name": "Hair Styling Gel",
+    "id": "hair-gel",
+    "unit": "oz",
+    "typical_size": "6-13 oz tube or tub",
+    "category": "Personal Care",
+    "search_term": "hair gel",
+    "notes": "Styling gel only. Exclude hairspray (separate candidate), mousse, pomade/paste, and shampoo/conditioner (covered). Travel sizes excluded."
+  },
+  {
+    "name": "Box Hair Color Kit",
+    "id": "hair-color",
+    "unit": "each",
+    "typical_size": "1 kit",
+    "category": "Personal Care",
+    "search_term": "hair color permanent kit",
+    "notes": "At-home box hair color kits (permanent or semi-permanent collapse), priced per kit; shades collapse. Exclude root touch-up sprays, salon developer/bleach components, and beard dye."
+  },
+  {
+    "name": "Hair Ties / Elastics",
+    "id": "hair-ties",
+    "unit": "each",
+    "typical_size": "30-100 ct pack",
+    "category": "Personal Care",
+    "search_term": "hair ties elastics",
+    "notes": "Elastic ponytail holders priced per pack count. Exclude bobby pins, headbands, scrunchie fashion packs, and salon-grade accessories."
+  },
+  {
+    "name": "Facial Cleanser / Face Wash",
+    "id": "face-wash",
+    "unit": "floz",
+    "typical_size": "6-8 floz",
+    "category": "Personal Care",
+    "search_term": "facial cleanser face wash",
+    "notes": "Liquid/foaming face-specific cleansers (Cetaphil, CeraVe, store brand). Must NOT match body wash (covered), bar soap (covered), hand soap (covered), makeup wipes (separate candidate), or acne spot treatments."
+  },
+  {
+    "name": "Facial Moisturizer",
+    "id": "facial-moisturizer",
+    "unit": "oz",
+    "typical_size": "1.7-4 oz",
+    "category": "Personal Care",
+    "search_term": "facial moisturizer",
+    "notes": "Face-specific daily moisturizer/cream, SPF versions collapse. Must NOT match body lotion (covered as lotion). Exclude serums, eye creams, and prestige anti-aging lines."
+  },
+  {
+    "name": "Sunscreen",
+    "id": "sunscreen",
+    "unit": "floz",
+    "typical_size": "8 floz lotion",
+    "category": "Personal Care",
+    "search_term": "sunscreen spf 50",
+    "notes": "General-use SPF 30-50 sunscreen; lotion and spray collapse, kids/sport variants collapse. Exclude after-sun aloe (separate candidate), SPF lip balm, small facial-only tubes, and travel sizes."
+  },
+  {
+    "name": "Aloe Vera Gel (after-sun)",
+    "id": "aloe-vera-gel",
+    "unit": "floz",
+    "typical_size": "12-16 floz",
+    "category": "Personal Care",
+    "search_term": "aloe vera gel",
+    "notes": "After-sun aloe gel. Must NOT match sunscreen (separate candidate), body lotion (covered), or drinkable aloe juice (food side)."
+  },
+  {
+    "name": "Lip Balm",
+    "id": "lip-balm",
+    "unit": "each",
+    "typical_size": "3 ct sticks",
+    "category": "Personal Care",
+    "search_term": "lip balm chapstick",
+    "notes": "Balm sticks/tubes (ChapStick, Blistex, Carmex collapse), priced per stick. Exclude cold-sore treatments like Abreva, tinted lipstick/gloss, and SPF-only lip sunscreen."
+  },
+  {
+    "name": "Petroleum Jelly",
+    "id": "petroleum-jelly",
+    "unit": "oz",
+    "typical_size": "13 oz jar",
+    "category": "Personal Care",
+    "search_term": "petroleum jelly",
+    "notes": "100% petroleum jelly (Vaseline or store brand). Must NOT match body lotion (covered), baby oil (Baby candidate), or lip balm minis (separate candidate)."
+  },
+  {
+    "name": "Cotton Balls",
+    "id": "cotton-balls",
+    "unit": "each",
+    "typical_size": "100-200 ct bag",
+    "category": "Personal Care",
+    "search_term": "cotton balls",
+    "notes": "Cotton balls or rounds collapse, priced per piece. Must NOT match cotton swabs (covered as cotton-swabs) or makeup wipes (separate candidate)."
+  },
+  {
+    "name": "Makeup Remover Wipes",
+    "id": "makeup-remover-wipes",
+    "unit": "each",
+    "typical_size": "25 ct pack",
+    "category": "Personal Care",
+    "search_term": "makeup remover wipes",
+    "notes": "Facial cleansing towelettes priced per wipe. Must NOT match baby wipes (covered), flushable wipes (Household candidate), disinfecting wipes (covered), or micellar water bottles."
+  },
+  {
+    "name": "Nail Polish Remover",
+    "id": "nail-polish-remover",
+    "unit": "floz",
+    "typical_size": "6-10 floz bottle",
+    "category": "Personal Care",
+    "search_term": "nail polish remover",
+    "notes": "Acetone or non-acetone remover bottles collapse. Exclude nail polish itself, remover-soaked pads/jars, and salon gallon sizes."
+  },
+  {
+    "name": "Incontinence Protective Underwear",
+    "id": "incontinence-underwear",
+    "unit": "each",
+    "typical_size": "16-20 ct pack",
+    "category": "Personal Care",
+    "search_term": "incontinence underwear",
+    "notes": "Adult protective underwear (Depend, Always Discreet, store brand), sizes collapse, priced per count. Must NOT match feminine pads (covered as feminine-pads), bladder-control PADS (excluded to avoid collision), tampons (covered), or baby diapers (covered)."
+  },
+  {
+    "name": "Insect Repellent (skin)",
+    "id": "insect-repellent",
+    "unit": "oz",
+    "typical_size": "6 oz aerosol",
+    "category": "Personal Care",
+    "search_term": "insect repellent spray",
+    "notes": "Skin-applied mosquito/tick repellent (OFF!, Repel, store brand; DEET or picaridin collapse). Must NOT match home insect killer spray (covered as insect-spray), ant baits (Household candidate), or citronella candles."
+  },
+  {
+    "name": "Ibuprofen 200mg",
+    "id": "ibuprofen",
+    "unit": "each",
+    "typical_size": "100 ct bottle",
+    "category": "Personal Care",
+    "search_term": "ibuprofen 200 mg",
+    "notes": "Adult 200mg tablets/caplets (Advil, Motrin, store brand), priced per tablet. Exclude children's/infants' liquid (Baby candidate), PM combo formulas, and naproxen/Aleve (different drug)."
+  },
+  {
+    "name": "Acetaminophen 500mg",
+    "id": "acetaminophen",
+    "unit": "each",
+    "typical_size": "100 ct bottle",
+    "category": "Personal Care",
+    "search_term": "acetaminophen 500 mg",
+    "notes": "Adult extra-strength 500mg (Tylenol or store brand), priced per caplet. Exclude children's/infants' liquid (Baby candidate), PM/combo formulas, and 8-hour arthritis ER versions."
+  },
+  {
+    "name": "Low-Dose Aspirin 81mg",
+    "id": "low-dose-aspirin",
+    "unit": "each",
+    "typical_size": "120-300 ct bottle",
+    "category": "Personal Care",
+    "search_term": "low dose aspirin 81 mg",
+    "notes": "81mg enteric-coated low-dose aspirin, priced per tablet. Exclude full-strength 325mg aspirin and combo pain relievers (separate candidates cover ibuprofen/acetaminophen)."
+  },
+  {
+    "name": "Allergy Medicine (24hr antihistamine)",
+    "id": "allergy-medicine",
+    "unit": "each",
+    "typical_size": "30-45 ct",
+    "category": "Personal Care",
+    "search_term": "allergy relief loratadine",
+    "notes": "24-hour non-drowsy antihistamine tablets (loratadine/cetirizine/fexofenadine; Claritin/Zyrtec/store brand collapse), priced per tablet. Exclude diphenhydramine/Benadryl, children's liquids, and nasal sprays."
+  },
+  {
+    "name": "Antacid Tablets",
+    "id": "antacid-tablets",
+    "unit": "each",
+    "typical_size": "72-96 ct bottle",
+    "category": "Personal Care",
+    "search_term": "antacid tablets",
+    "notes": "Calcium-carbonate chewables (Tums or store brand), priced per tablet. Exclude famotidine/omeprazole acid reducers, liquid bismuth (Pepto), and gas-relief simethicone."
+  },
+  {
+    "name": "Cold & Flu Medicine",
+    "id": "cold-flu-medicine",
+    "unit": "each",
+    "typical_size": "24 ct caps or 12 floz bottle",
+    "category": "Personal Care",
+    "search_term": "cold and flu medicine",
+    "notes": "Multi-symptom day/night cold-flu relief (DayQuil/NyQuil or store equivalent), priced per package. Exclude children's versions, single-ingredient cough syrup, cough drops (separate candidate), and zinc remedies."
+  },
+  {
+    "name": "Cough Drops",
+    "id": "cough-drops",
+    "unit": "each",
+    "typical_size": "30-80 ct bag",
+    "category": "Personal Care",
+    "search_term": "cough drops",
+    "notes": "Menthol throat lozenges (Halls, Ricola, store brand), priced per drop. Exclude candy mints (food side), zinc lozenges, and liquid cold medicine (separate candidate)."
+  },
+  {
+    "name": "Adhesive Bandages",
+    "id": "bandages",
+    "unit": "each",
+    "typical_size": "60-100 ct assorted box",
+    "category": "Personal Care",
+    "search_term": "adhesive bandages",
+    "notes": "Adhesive bandage strips (Band-Aid or store brand), assorted sizes collapse, priced per bandage. Exclude gauze pads/rolls, medical tape, liquid bandage, and premium blister care."
+  },
+  {
+    "name": "Triple Antibiotic Ointment",
+    "id": "antibiotic-ointment",
+    "unit": "oz",
+    "typical_size": "0.5-1 oz tube",
+    "category": "Personal Care",
+    "search_term": "triple antibiotic ointment",
+    "notes": "Neosporin-style triple antibiotic ointment. Exclude hydrocortisone (separate candidate), antifungal creams (separate), burn gel, and petroleum jelly (separate)."
+  },
+  {
+    "name": "Hydrocortisone Cream 1%",
+    "id": "hydrocortisone-cream",
+    "unit": "oz",
+    "typical_size": "1 oz tube",
+    "category": "Personal Care",
+    "search_term": "hydrocortisone cream 1%",
+    "notes": "1% anti-itch hydrocortisone cream. Exclude antibiotic ointment (separate), antifungal cream (separate), calamine lotion, and prescription strengths."
+  },
+  {
+    "name": "Antifungal Cream",
+    "id": "antifungal-cream",
+    "unit": "oz",
+    "typical_size": "1 oz tube",
+    "category": "Personal Care",
+    "search_term": "athletes foot antifungal cream",
+    "notes": "Clotrimazole/tolnaftate/terbinafine athlete's-foot and jock-itch creams collapse. Exclude powders and sprays (different per-oz math), vaginal antifungal kits, and hydrocortisone (separate)."
+  },
+  {
+    "name": "Muscle Rub / Topical Pain Relief Cream",
+    "id": "topical-pain-relief-cream",
+    "unit": "oz",
+    "typical_size": "2-4 oz tube",
+    "category": "Personal Care",
+    "search_term": "muscle rub pain relief cream",
+    "notes": "Menthol muscle rubs (Icy Hot, Bengay, store brand). Exclude lidocaine patches (different form/price), oral pain relievers (separate candidates), and CBD-marketed rubs."
+  },
+  {
+    "name": "Rubbing Alcohol",
+    "id": "rubbing-alcohol",
+    "unit": "floz",
+    "typical_size": "32 floz bottle, 70%",
+    "category": "Personal Care",
+    "search_term": "isopropyl rubbing alcohol",
+    "notes": "70-91% isopropyl alcohol collapse. Must NOT match hand sanitizer (covered as hand-sanitizer), hydrogen peroxide (separate candidate), or alcohol prep pads."
+  },
+  {
+    "name": "Hydrogen Peroxide",
+    "id": "hydrogen-peroxide",
+    "unit": "floz",
+    "typical_size": "32 floz bottle, 3%",
+    "category": "Personal Care",
+    "search_term": "hydrogen peroxide",
+    "notes": "3% first-aid hydrogen peroxide. Exclude rubbing alcohol (separate candidate), peroxide-based cleaning sprays, and teeth-whitening products."
+  },
+  {
+    "name": "Adult Multivitamins",
+    "id": "multivitamins",
+    "unit": "each",
+    "typical_size": "100-200 ct bottle",
+    "category": "Personal Care",
+    "search_term": "adult multivitamin",
+    "notes": "Adult daily multivitamin tablets or gummies (Centrum, One A Day, store brand), priced per count. Exclude single-nutrient vitamins (D3, C), prenatal, children's vitamins, and protein/collagen powders."
+  },
+  {
+    "name": "Melatonin",
+    "id": "melatonin",
+    "unit": "each",
+    "typical_size": "60-120 ct gummies or tablets",
+    "category": "Personal Care",
+    "search_term": "melatonin 5 mg",
+    "notes": "Melatonin 3-10mg tablets/gummies collapse, priced per count. Exclude diphenhydramine sleep aids (ZzzQuil/Unisom) and kids' melatonin."
+  },
+  {
+    "name": "Fiber Supplement Powder",
+    "id": "fiber-supplement",
+    "unit": "oz",
+    "typical_size": "20-48 oz canister",
+    "category": "Personal Care",
+    "search_term": "fiber supplement powder",
+    "notes": "Psyllium/methylcellulose powder (Metamucil or store brand). Exclude fiber gummies/capsules (different per-dose math), fiber snack bars (food side), and laxative pills."
+  },
+  {
+    "name": "Lubricating Eye Drops",
+    "id": "eye-drops",
+    "unit": "each",
+    "typical_size": "0.5-1 floz bottle",
+    "category": "Personal Care",
+    "search_term": "lubricating eye drops",
+    "notes": "Artificial tears / redness-relief drops collapse, priced per bottle. Exclude contact lens solution (separate candidate), prescription drops, and pink-eye treatments."
+  },
+  {
+    "name": "Contact Lens Solution",
+    "id": "contact-solution",
+    "unit": "floz",
+    "typical_size": "12 floz bottle",
+    "category": "Personal Care",
+    "search_term": "contact lens solution",
+    "notes": "Multipurpose contact solution (Opti-Free, Biotrue, store brand). Exclude hydrogen-peroxide lens systems, rewetting/eye drops (separate candidate), and lens cases."
+  },
+  {
+    "name": "Epsom Salt",
+    "id": "epsom-salt",
+    "unit": "lb",
+    "typical_size": "4 lb bag",
+    "category": "Personal Care",
+    "search_term": "epsom salt",
+    "notes": "Magnesium sulfate soaking salt; scented soak versions collapse. Must NOT match table salt (food side), water softener salt (Household candidate), or bath bombs."
+  },
+  {
+    "name": "Denture Cleanser Tablets",
+    "id": "denture-cleanser",
+    "unit": "each",
+    "typical_size": "78-120 ct box",
+    "category": "Personal Care",
+    "search_term": "denture cleanser tablets",
+    "notes": "Effervescent denture cleaning tablets (Polident, Efferdent, store brand), priced per tablet. Exclude denture adhesive cream (different product) and toothpaste (covered)."
+  },
+  {
+    "name": "Training Pants (potty training)",
+    "id": "training-pants",
+    "unit": "each",
+    "typical_size": "44-74 ct box",
+    "category": "Baby",
+    "search_term": "training pants pull-ups",
+    "notes": "Pull-Ups/Easy Ups-style potty training pants, all sizes collapse, priced per pant. Must NOT match regular diapers (covered as diapers), overnight diapers, or swim diapers. Distinct product stage from diapers."
+  },
+  {
+    "name": "Baby Cereal (infant oatmeal/rice)",
+    "id": "baby-cereal",
+    "unit": "oz",
+    "typical_size": "8 oz canister",
+    "category": "Baby",
+    "search_term": "baby oatmeal cereal",
+    "notes": "Infant rice/oatmeal cereal canisters (Gerber, Beech-Nut, store brand). Must NOT match adult oatmeal (covered as oatmeal), baby food jars/pouches (covered as baby-food), or toddler snack bars."
+  },
+  {
+    "name": "Baby Puffs / Toddler Snacks",
+    "id": "baby-puffs-snacks",
+    "unit": "oz",
+    "typical_size": "1.48 oz canister",
+    "category": "Baby",
+    "search_term": "baby puffs",
+    "notes": "Baby/toddler puff snacks and yogurt melts collapse (Gerber, Happy Baby, store brand). Must NOT match baby food jars/pouches (covered) or regular chips/crackers (food side)."
+  },
+  {
+    "name": "Diaper Rash Cream",
+    "id": "diaper-rash-cream",
+    "unit": "oz",
+    "typical_size": "4 oz tube",
+    "category": "Baby",
+    "search_term": "diaper rash cream",
+    "notes": "Zinc-oxide rash cream/paste (Desitin, Boudreaux's Butt Paste, store brand). Exclude petroleum jelly (Personal Care candidate), baby lotion, and baby powder (separate candidate)."
+  },
+  {
+    "name": "Baby Powder",
+    "id": "baby-powder",
+    "unit": "oz",
+    "typical_size": "15-22 oz bottle",
+    "category": "Baby",
+    "search_term": "baby powder",
+    "notes": "Cornstarch (talc-free) baby powder. Must NOT match carpet deodorizer powder (Household candidate), adult body/foot powders, or cornstarch sold for baking (food side, covered as cornstarch)."
+  },
+  {
+    "name": "Baby Oil",
+    "id": "baby-oil",
+    "unit": "floz",
+    "typical_size": "14-20 floz bottle",
+    "category": "Baby",
+    "search_term": "baby oil",
+    "notes": "Mineral baby oil (Johnson's or store brand). Must NOT match body lotion (covered as lotion), petroleum jelly (Personal Care candidate), cooking oils (food side), or adult massage oils."
+  },
+  {
+    "name": "Children's Pain Reliever (liquid)",
+    "id": "childrens-pain-reliever",
+    "unit": "floz",
+    "typical_size": "4 floz bottle",
+    "category": "Baby",
+    "search_term": "childrens acetaminophen liquid",
+    "notes": "Infants'/children's acetaminophen or ibuprofen liquid suspension (Tylenol/Motrin/store brand collapse). Must NOT match adult tablets (Personal Care candidates ibuprofen/acetaminophen) or kids' multi-symptom cold medicine."
+  },
+  {
+    "name": "Pediatric Electrolyte Solution",
+    "id": "pediatric-electrolyte",
+    "unit": "floz",
+    "typical_size": "33.8 floz (1 liter) bottle",
+    "category": "Baby",
+    "search_term": "pediatric electrolyte solution",
+    "notes": "Pedialyte-style pediatric electrolyte solution incl. store brand; flavors collapse. Must NOT match sports drinks (covered as sports-drinks), adult electrolyte powders, or juice (covered)."
+  },
+  {
+    "name": "Infant Gas Relief Drops",
+    "id": "infant-gas-drops",
+    "unit": "floz",
+    "typical_size": "1 floz bottle",
+    "category": "Baby",
+    "search_term": "infant gas drops simethicone",
+    "notes": "Simethicone infant gas drops (Mylicon, Little Remedies, store brand). Exclude gripe water (different product), adult gas relief, and colic probiotic drops."
+  },
+  {
+    "name": "Diaper Pail Refill Cassettes",
+    "id": "diaper-pail-refills",
+    "unit": "each",
+    "typical_size": "3 ct cassettes",
+    "category": "Baby",
+    "search_term": "diaper genie refills",
+    "notes": "Diaper Genie-style pail refill cassettes priced per cassette. Must NOT match regular trash bags (covered as trash-bags) or scented diaper disposal sacks (different product/price)."
+  },
+  {
+    "name": "Wet Dog Food (canned)",
+    "id": "wet-dog-food",
+    "unit": "oz",
+    "typical_size": "13 oz can",
+    "category": "Pet",
+    "search_term": "canned wet dog food",
+    "notes": "Canned/wet dog food priced per oz; flavors and life stages collapse. Existing dog-food covers DRY only, and dry must NOT match here. Exclude food toppers/broths and dog treats (covered as dog-treats)."
+  },
+  {
+    "name": "Wet Cat Food (cans/pouches)",
+    "id": "wet-cat-food",
+    "unit": "oz",
+    "typical_size": "5.5 oz can or 3 oz multipack",
+    "category": "Pet",
+    "search_term": "canned wet cat food",
+    "notes": "Canned or pouch wet cat food priced per oz; flavors collapse. Existing cat-food covers DRY only; dry must NOT match. Exclude cat treats (separate candidate) and lickable squeeze treats."
+  },
+  {
+    "name": "Cat Treats",
+    "id": "cat-treats",
+    "unit": "oz",
+    "typical_size": "3 oz pouch",
+    "category": "Pet",
+    "search_term": "cat treats",
+    "notes": "Crunchy/soft cat treats (Temptations, store brand); flavors collapse. Must NOT match dog treats (covered as dog-treats), wet cat food (separate candidate), squeeze-tube treats, or catnip."
+  },
+  {
+    "name": "Dog Waste Bags",
+    "id": "dog-poop-bags",
+    "unit": "each",
+    "typical_size": "120 ct roll pack",
+    "category": "Pet",
+    "search_term": "dog waste bags",
+    "notes": "Pet waste pickup bags priced per bag; dispenser combos collapse. Must NOT match kitchen trash bags (covered as trash-bags), sandwich bags (covered), or diaper sacks."
+  },
+  {
+    "name": "Puppy Training Pads",
+    "id": "puppy-pads",
+    "unit": "each",
+    "typical_size": "50 ct pack",
+    "category": "Pet",
+    "search_term": "puppy training pads",
+    "notes": "Absorbent pet training pads priced per pad. Exclude human incontinence bed pads, baby diapers/changing pads, and paper towels (covered)."
+  },
+  {
+    "name": "Wild Bird Seed",
+    "id": "wild-bird-seed",
+    "unit": "lb",
+    "typical_size": "10 lb bag",
+    "category": "Pet",
+    "search_term": "wild bird seed",
+    "notes": "Wild bird seed mix or black-oil sunflower for feeders. Must NOT match snack peanuts/mixed nuts or sunflower seeds for people (food side, covered), suet cakes, or caged-bird (parakeet) food."
+  },
+  {
+    "name": "Flea & Tick Treatment (dog)",
+    "id": "flea-tick-treatment-dog",
+    "unit": "each",
+    "typical_size": "3-dose applicator pack",
+    "category": "Pet",
+    "search_term": "flea and tick treatment for dogs",
+    "notes": "Topical monthly applicators or chewable flea/tick treatment priced per dose (Frontline, Hartz, PetArmor, store brand); dog weight tiers collapse. Exclude flea collars, flea shampoo, cat products (separate candidate), and home foggers (Household insect-spray covered)."
+  },
+  {
+    "name": "Flea Treatment (cat)",
+    "id": "flea-tick-treatment-cat",
+    "unit": "each",
+    "typical_size": "3-dose applicator pack",
+    "category": "Pet",
+    "search_term": "flea treatment for cats",
+    "notes": "Cat-specific topical flea treatment priced per dose. Exclude dog products (separate candidate), flea collars, flea shampoo, and litter (covered as cat-litter)."
+  },
+  {
+    "name": "Cat Litter Deodorizer",
+    "id": "cat-litter-deodorizer",
+    "unit": "oz",
+    "typical_size": "20-30 oz shaker",
+    "category": "Pet",
+    "search_term": "cat litter deodorizer",
+    "notes": "Litter-box deodorizing powder (Arm & Hammer). Must NOT match cat litter itself (covered as cat-litter), carpet deodorizer powder (Household candidate), or plain baking soda (food side, covered)."
+  },
+  {
+    "name": "Fish Food Flakes",
+    "id": "fish-food",
+    "unit": "oz",
+    "typical_size": "2-3 oz container",
+    "category": "Pet",
+    "search_term": "fish food flakes",
+    "notes": "Tropical/goldfish flakes or pellets collapse. Exclude aquarium hardware/filters, wild bird seed (separate candidate), and pond-size buckets."
+  }
+]

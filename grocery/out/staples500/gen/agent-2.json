@@ -1,0 +1,722 @@
+[
+    {
+        "name": "New York Strip Steak",
+        "id": "ny-strip-steak",
+        "unit": "lb",
+        "typical_size": "1 lb pkg (1-2 steaks)",
+        "category": "Meat & Poultry",
+        "search_term": "new york strip steak",
+        "notes": "Beef NY strip / Kansas City strip / top loin steak, bone-in or boneless. Must NOT match strip-steak sandwich kits, pork loin strips, chicken strips, jerky, frozen meals, or seasoned/marinated value-added packs."
+    },
+    {
+        "name": "T-Bone / Porterhouse Steak",
+        "id": "t-bone-steak",
+        "unit": "lb",
+        "typical_size": "1.25 lb steak",
+        "category": "Meat & Poultry",
+        "search_term": "t-bone steak",
+        "notes": "Beef T-bone or porterhouse steak, fresh. Must NOT match pork t-bone chops, dog treats/bones, frozen dinners, or steak sauce."
+    },
+    {
+        "name": "Filet Mignon / Beef Tenderloin Steak",
+        "id": "filet-mignon",
+        "unit": "lb",
+        "typical_size": "8 oz (2 x 4 oz filets)",
+        "category": "Meat & Poultry",
+        "search_term": "filet mignon beef tenderloin steak",
+        "notes": "Beef tenderloin filet steaks or tenderloin roast portion. Must NOT match pork tenderloin (separate existing item), fish fillets, bacon-wrapped prepared entrees, or 'filet' fish products."
+    },
+    {
+        "name": "Flank Steak",
+        "id": "flank-steak",
+        "unit": "lb",
+        "typical_size": "1.5 lb",
+        "category": "Meat & Poultry",
+        "search_term": "beef flank steak",
+        "notes": "Fresh beef flank steak. Must NOT match marinated fajita kits, pre-cooked carne asada meals, or London broil labels (those map to round steak)."
+    },
+    {
+        "name": "Skirt Steak",
+        "id": "skirt-steak",
+        "unit": "lb",
+        "typical_size": "1 lb",
+        "category": "Meat & Poultry",
+        "search_term": "beef skirt steak",
+        "notes": "Fresh beef skirt steak (inside or outside), plain. Must NOT match pre-marinated/seasoned fajita meat, cooked strips, or frozen meal kits."
+    },
+    {
+        "name": "Flat Iron Steak",
+        "id": "flat-iron-steak",
+        "unit": "lb",
+        "typical_size": "1 lb",
+        "category": "Meat & Poultry",
+        "search_term": "flat iron steak",
+        "notes": "Beef flat iron (top blade) steak, fresh; regularly stocked at Aldi/Hy-Vee. Must NOT match flat-iron seasoned entrees, irons/housewares, or chuck roast."
+    },
+    {
+        "name": "Beef Brisket",
+        "id": "beef-brisket",
+        "unit": "lb",
+        "typical_size": "3-5 lb flat cut",
+        "category": "Meat & Poultry",
+        "search_term": "beef brisket",
+        "notes": "Fresh/raw beef brisket flat or point (whole packer at Sam's). Must NOT match corned beef brisket (separate candidate), pre-cooked/smoked BBQ brisket tubs, brisket sandwiches, or burnt-end prepared items."
+    },
+    {
+        "name": "Beef Stew Meat",
+        "id": "beef-stew-meat",
+        "unit": "lb",
+        "typical_size": "1 lb tray",
+        "category": "Meat & Poultry",
+        "search_term": "beef stew meat",
+        "notes": "Raw cubed beef for stew. Must NOT match canned beef stew (Dinty Moore), frozen stew meals, stew vegetables, dog food stew, or pork stew meat."
+    },
+    {
+        "name": "Beef Short Ribs",
+        "id": "beef-short-ribs",
+        "unit": "lb",
+        "typical_size": "2 lb tray",
+        "category": "Meat & Poultry",
+        "search_term": "beef short ribs",
+        "notes": "Bone-in or boneless beef short ribs / flanken style, raw. Must NOT match baby back or pork ribs (existing items), pre-cooked braised short rib entrees, or rib-flavored sauces."
+    },
+    {
+        "name": "Cube Steak",
+        "id": "cube-steak",
+        "unit": "lb",
+        "typical_size": "1 lb tray",
+        "category": "Meat & Poultry",
+        "search_term": "beef cube steak",
+        "notes": "Tenderized beef cube steak (minute steak), raw. Must NOT match breaded country-fried steak (frozen), pork cutlets, steak-umm sliced steaks (separate shaved-beef candidate), or bouillon cubes."
+    },
+    {
+        "name": "Beef Round Steak",
+        "id": "beef-round-steak",
+        "unit": "lb",
+        "typical_size": "1.5 lb",
+        "category": "Meat & Poultry",
+        "search_term": "beef round steak",
+        "notes": "Top/bottom round steak or London broil, raw. Must NOT match ground round (maps to ground beef), round roasts (separate rump-roast candidate), cube steak, or eye of round labels priced as roast."
+    },
+    {
+        "name": "Beef Rump / Bottom Round Roast",
+        "id": "beef-rump-roast",
+        "unit": "lb",
+        "typical_size": "3 lb roast",
+        "category": "Meat & Poultry",
+        "search_term": "beef bottom round rump roast",
+        "notes": "Bottom round, rump, or eye of round roast, raw. Must NOT match chuck roast (existing item), pot roast frozen meals, deli roast beef, or gravy/seasoning packets."
+    },
+    {
+        "name": "Sirloin Tip Roast",
+        "id": "sirloin-tip-roast",
+        "unit": "lb",
+        "typical_size": "3 lb roast",
+        "category": "Meat & Poultry",
+        "search_term": "sirloin tip roast",
+        "notes": "Beef sirloin tip (round tip) roast, raw. COLLISION FLAG: existing sirloin-steak matcher includes bare 'sirloin'; that entry must exclude 'tip' and 'roast'. Must NOT match sirloin steak, ground sirloin, or pork sirloin."
+    },
+    {
+        "name": "Shaved Beef / Sandwich Steaks",
+        "id": "shaved-beef",
+        "unit": "lb",
+        "typical_size": "1 lb tray (or 9 oz frozen)",
+        "category": "Meat & Poultry",
+        "search_term": "shaved beef sandwich steaks",
+        "notes": "Thin-shaved beef for philly cheesesteaks: fresh shaved steak trays or frozen wafer sandwich steaks (Steak-umm type). Must NOT match cheesesteak frozen meals/hot pockets, deli roast beef, or beef jerky."
+    },
+    {
+        "name": "Corned Beef Brisket",
+        "id": "corned-beef-brisket",
+        "unit": "lb",
+        "typical_size": "3 lb flat cut",
+        "category": "Meat & Poultry",
+        "search_term": "corned beef brisket",
+        "notes": "Raw cured corned beef brisket (point or flat, with spice packet). Must NOT match canned corned beef (separate candidate), corned beef hash, deli-sliced corned beef, or plain beef brisket."
+    },
+    {
+        "name": "Beef Liver",
+        "id": "beef-liver",
+        "unit": "lb",
+        "typical_size": "1 lb tray (sliced)",
+        "category": "Meat & Poultry",
+        "search_term": "beef liver sliced",
+        "notes": "Sliced beef liver, raw (fresh or frozen). Must NOT match liverwurst/braunschweiger (separate candidate), chicken livers (separate candidate), liver dog treats, pate, or liver-flavored pet food."
+    },
+    {
+        "name": "Beef Oxtail",
+        "id": "beef-oxtail",
+        "unit": "lb",
+        "typical_size": "2 lb tray",
+        "category": "Meat & Poultry",
+        "search_term": "beef oxtail",
+        "notes": "Raw beef oxtail pieces (stocked at Baker's/Family Fare). Must NOT match oxtail soup mix/seasoning, canned soup, or dog chews."
+    },
+    {
+        "name": "Beef Soup Bones / Shank",
+        "id": "beef-soup-bones",
+        "unit": "lb",
+        "typical_size": "1.5 lb tray",
+        "category": "Meat & Poultry",
+        "search_term": "beef soup bones shank",
+        "notes": "Raw beef soup bones, shank cross-cut, or marrow bones for cooking. Must NOT match dog bones/chews, broth/stock (existing item), or bouillon."
+    },
+    {
+        "name": "Beef Tongue",
+        "id": "beef-tongue",
+        "unit": "lb",
+        "typical_size": "2.5 lb",
+        "category": "Meat & Poultry",
+        "search_term": "beef tongue lengua",
+        "notes": "Whole raw beef tongue / res lengua (Hispanic meat case at Baker's/Family Fare/Walmart). Must NOT match tongue-shaped candy, pickled/canned tongue, or pet products."
+    },
+    {
+        "name": "Ground Bison",
+        "id": "ground-bison",
+        "unit": "lb",
+        "typical_size": "1 lb brick",
+        "category": "Meat & Poultry",
+        "search_term": "ground bison",
+        "notes": "Ground bison/buffalo 90%+ lean, 1-lb brick. Must NOT match bison jerky, bison burger patties in frozen meals, ground beef blends, or buffalo-style chicken products ('buffalo' sauce items)."
+    },
+    {
+        "name": "Meatloaf Mix (Beef & Pork)",
+        "id": "meatloaf-mix",
+        "unit": "lb",
+        "typical_size": "1 lb tray",
+        "category": "Meat & Poultry",
+        "search_term": "meatloaf mix ground beef pork",
+        "notes": "Fresh ground beef+pork (sometimes veal) meatloaf blend tray. Must NOT match plain 80/20 ground beef (existing item), boxed meatloaf seasoning mix, breadcrumb kits, or prepared/frozen meatloaf entrees."
+    },
+    {
+        "name": "Pork Loin Roast (Whole/Half)",
+        "id": "pork-loin-roast",
+        "unit": "lb",
+        "typical_size": "4 lb boneless",
+        "category": "Meat & Poultry",
+        "search_term": "boneless pork loin roast",
+        "notes": "Whole or half boneless pork center loin roast. Must NOT match pork TENDERLOIN (existing separate item), pork chops cut from loin, marinated/seasoned loin filets, or pork shoulder."
+    },
+    {
+        "name": "Pork Spare Ribs / St. Louis Ribs",
+        "id": "pork-spare-ribs",
+        "unit": "lb",
+        "typical_size": "3.5 lb rack",
+        "category": "Meat & Poultry",
+        "search_term": "pork spare ribs st louis",
+        "notes": "Raw pork spareribs or St. Louis style cut rack. Must NOT match baby back ribs (existing item), beef ribs, pre-cooked/sauced rib tubs, riblet sandwiches, or BBQ sauce."
+    },
+    {
+        "name": "Country-Style Pork Ribs",
+        "id": "country-style-ribs",
+        "unit": "lb",
+        "typical_size": "2.5 lb tray",
+        "category": "Meat & Poultry",
+        "search_term": "country style pork ribs",
+        "notes": "Boneless or bone-in country-style pork ribs, raw. Must NOT match baby back/spare ribs, beef short ribs, country-fried steak, or pre-sauced cooked ribs."
+    },
+    {
+        "name": "Pork Steak (Shoulder Steak)",
+        "id": "pork-steak",
+        "unit": "lb",
+        "typical_size": "2 lb tray (2-3 steaks)",
+        "category": "Meat & Poultry",
+        "search_term": "pork shoulder steak",
+        "notes": "Sliced pork shoulder/blade steaks (Midwest 'pork steak'), raw. COLLISION FLAG: labels reading 'pork shoulder steak' can hit the existing pork-shoulder matcher; that entry should exclude 'steak'. Must NOT match pork chops (existing), ham steak, or whole shoulder roasts."
+    },
+    {
+        "name": "Pork Belly",
+        "id": "pork-belly",
+        "unit": "lb",
+        "typical_size": "2.5 lb slab",
+        "category": "Meat & Poultry",
+        "search_term": "pork belly",
+        "notes": "Fresh uncured pork belly, slab or sliced. Must NOT match bacon (existing item, cured/smoked), cured pork belly bites/burnt ends (pre-cooked), salt pork, or ramen kits mentioning pork belly."
+    },
+    {
+        "name": "Spiral / Half Ham (Bone-In)",
+        "id": "spiral-ham",
+        "unit": "lb",
+        "typical_size": "9 lb half ham",
+        "category": "Meat & Poultry",
+        "search_term": "spiral sliced half ham",
+        "notes": "Whole/half bone-in smoked ham, spiral-cut or shank/butt portion. Existing deli-ham matcher deliberately excludes 'spiral/whole/bone-in', so this slot is open. Must NOT match deli sliced ham (existing), ham steak (separate candidate), canned ham, or ham glaze packets."
+    },
+    {
+        "name": "Ham Steak",
+        "id": "ham-steak",
+        "unit": "oz",
+        "typical_size": "8 oz pkg",
+        "category": "Meat & Poultry",
+        "search_term": "ham steak",
+        "notes": "Packaged cured ham steak/slice (fixed weight, often bone-in center slice). Existing deli-ham matcher excludes 'steak', so open. Must NOT match deli sliced ham, spiral ham, diced ham cups, or pork steak."
+    },
+    {
+        "name": "Smoked Ham Hocks",
+        "id": "ham-hocks",
+        "unit": "lb",
+        "typical_size": "1.5 lb (2-3 ct)",
+        "category": "Meat & Poultry",
+        "search_term": "smoked ham hocks",
+        "notes": "Smoked pork hocks/shanks for beans and greens. Existing deli-ham matcher excludes 'hock', so open. Must NOT match fresh pork hocks mislabeled as roasts, dog bones, ham base/bouillon, or canned beans with ham."
+    },
+    {
+        "name": "Pork Neck Bones",
+        "id": "pork-neck-bones",
+        "unit": "lb",
+        "typical_size": "2 lb tray",
+        "category": "Meat & Poultry",
+        "search_term": "pork neck bones",
+        "notes": "Raw or smoked pork neck bones (budget staple at Baker's/Family Fare). Must NOT match beef soup bones (separate candidate), turkey necks, dog bones, or broth."
+    },
+    {
+        "name": "Refrigerated Pulled Pork (Tub)",
+        "id": "pulled-pork-tub",
+        "unit": "oz",
+        "typical_size": "16 oz tub",
+        "category": "Meat & Poultry",
+        "search_term": "pulled pork tub",
+        "notes": "Ready-to-heat refrigerated pulled pork in BBQ sauce (Lloyd's/Jack Daniel's/store brand). Existing pork-shoulder matcher excludes 'pulled', so open. Must NOT match raw pork shoulder, pulled chicken/beef tubs, canned pork, or frozen pulled-pork meals/sandwiches."
+    },
+    {
+        "name": "Canadian Bacon",
+        "id": "canadian-bacon",
+        "unit": "oz",
+        "typical_size": "6 oz pkg",
+        "category": "Meat & Poultry",
+        "search_term": "canadian bacon",
+        "notes": "Sliced Canadian-style back bacon rounds. Existing bacon matcher excludes 'canadian', so open. Must NOT match regular bacon, turkey bacon (existing), deli ham, pizza topping kits, or frozen breakfast sandwiches."
+    },
+    {
+        "name": "Chicken Tenderloins (Fresh)",
+        "id": "chicken-tenderloins",
+        "unit": "lb",
+        "typical_size": "1.5 lb tray",
+        "category": "Meat & Poultry",
+        "search_term": "fresh chicken tenderloins",
+        "notes": "Raw/uncooked chicken breast tenderloins. Existing chicken-breast matcher excludes 'tender', so open. Must NOT match breaded tenders/strips (fresh or frozen), cooked popcorn chicken, chicken fries, or canned chicken."
+    },
+    {
+        "name": "Ground Chicken",
+        "id": "ground-chicken",
+        "unit": "lb",
+        "typical_size": "1 lb tray",
+        "category": "Meat & Poultry",
+        "search_term": "ground chicken",
+        "notes": "Raw ground chicken (tray or chub). Must NOT match ground turkey (existing), ground beef, chicken burger patties, canned chicken, or chicken sausage."
+    },
+    {
+        "name": "Bone-In Split Chicken Breast",
+        "id": "bone-in-chicken-breast",
+        "unit": "lb",
+        "typical_size": "3 lb tray",
+        "category": "Meat & Poultry",
+        "search_term": "bone-in split chicken breast",
+        "notes": "Raw bone-in, skin-on split chicken breasts (much cheaper per lb than boneless). Existing chicken-breast matcher excludes 'bone-in' and 'split', so open. Must NOT match boneless skinless breast (existing), thighs/drumsticks (existing), or whole chicken."
+    },
+    {
+        "name": "Chicken Sausage",
+        "id": "chicken-sausage",
+        "unit": "oz",
+        "typical_size": "12 oz (4 links)",
+        "category": "Meat & Poultry",
+        "search_term": "chicken sausage links",
+        "notes": "Fully-cooked or fresh chicken sausage links (apple, spinach-feta, etc.). Existing kielbasa and breakfast-sausage matchers exclude 'chicken', so open. Must NOT match pork/turkey sausage, corn dogs, or frozen breakfast links labeled pork."
+    },
+    {
+        "name": "Chicken Livers",
+        "id": "chicken-livers",
+        "unit": "lb",
+        "typical_size": "1 lb tub",
+        "category": "Meat & Poultry",
+        "search_term": "chicken livers",
+        "notes": "Raw chicken livers (tub/tray, fresh or frozen). Must NOT match beef liver (separate candidate), liverwurst, pate, gizzards (separate candidate), or liver-flavor cat/dog food."
+    },
+    {
+        "name": "Chicken Gizzards",
+        "id": "chicken-gizzards",
+        "unit": "lb",
+        "typical_size": "1 lb tray",
+        "category": "Meat & Poultry",
+        "search_term": "chicken gizzards",
+        "notes": "Raw chicken gizzards (and gizzard/heart mixes). Must NOT match chicken livers (separate candidate), fried gizzard deli items, or pet treats."
+    },
+    {
+        "name": "Cornish Hens",
+        "id": "cornish-hens",
+        "unit": "each",
+        "typical_size": "1 hen (22-24 oz), often twin pack",
+        "category": "Meat & Poultry",
+        "search_term": "cornish game hens",
+        "notes": "Frozen whole Cornish game hens. Must NOT match whole chicken (existing item), rotisserie chicken, or chicken parts. If sold per lb, normalize to per-hen using stated weight."
+    },
+    {
+        "name": "Deli Fried Chicken (8-Piece)",
+        "id": "deli-fried-chicken",
+        "unit": "each",
+        "typical_size": "8-piece box",
+        "category": "Meat & Poultry",
+        "search_term": "deli fried chicken 8 piece",
+        "notes": "Hot deli case fried chicken, 8-piece dark/mixed box (Walmart/Hy-Vee/Baker's/Family Fare deli). Must NOT match rotisserie chicken (existing item), frozen fried chicken bags, chicken tenders by-the-pound, or restaurant items."
+    },
+    {
+        "name": "Whole Turkey (Frozen)",
+        "id": "whole-turkey",
+        "unit": "lb",
+        "typical_size": "12-16 lb bird",
+        "category": "Meat & Poultry",
+        "search_term": "whole frozen turkey",
+        "notes": "Whole frozen turkey (Butterball/Honeysuckle/store brand). Must NOT match turkey breast roast (separate candidate), ground turkey/turkey bacon/deli turkey (existing items), or cooked holiday meal bundles."
+    },
+    {
+        "name": "Turkey Breast Roast (Bone-In/Netted)",
+        "id": "turkey-breast-roast",
+        "unit": "lb",
+        "typical_size": "3 lb roast",
+        "category": "Meat & Poultry",
+        "search_term": "turkey breast roast",
+        "notes": "Raw bone-in turkey breast or boneless netted turkey breast roast (incl. Butterball roast in bag). Must NOT match deli sliced turkey (existing turkey-lunchmeat), smoked turkey deli chubs, ground turkey, or lunchmeat tubs."
+    },
+    {
+        "name": "Turkey Sausage",
+        "id": "turkey-sausage",
+        "unit": "oz",
+        "typical_size": "16 oz roll",
+        "category": "Meat & Poultry",
+        "search_term": "turkey breakfast sausage",
+        "notes": "Turkey breakfast sausage roll, links, or smoked turkey sausage rope. Existing breakfast-sausage and kielbasa matchers exclude 'turkey', so open. COLLISION FLAG: 'Italian turkey sausage' labels hit the existing italian-sausage matcher; keep those out. Must NOT match pork sausage or turkey franks."
+    },
+    {
+        "name": "Smoked Turkey Legs / Parts",
+        "id": "smoked-turkey-legs",
+        "unit": "lb",
+        "typical_size": "1.5 lb pkg",
+        "category": "Meat & Poultry",
+        "search_term": "smoked turkey legs",
+        "notes": "Smoked turkey drumsticks, wings, or necks (for greens/beans). Must NOT match fresh turkey parts, chicken drumsticks (existing chicken-thighs item), deli turkey, or turkey jerky."
+    },
+    {
+        "name": "Ground Lamb",
+        "id": "ground-lamb",
+        "unit": "lb",
+        "typical_size": "1 lb brick",
+        "category": "Meat & Poultry",
+        "search_term": "ground lamb",
+        "notes": "Raw ground lamb (Aldi/Walmart/Hy-Vee stock year-round). Must NOT match ground beef/turkey/pork (existing), lamb & rice dog food, or gyro meat cones (prepared)."
+    },
+    {
+        "name": "Lamb Loin Chops",
+        "id": "lamb-loin-chops",
+        "unit": "lb",
+        "typical_size": "1 lb (4 chops)",
+        "category": "Meat & Poultry",
+        "search_term": "lamb loin chops",
+        "notes": "Raw lamb loin or shoulder chops. Must NOT match pork chops (existing), lamb-flavor pet food, frozen lamb entrees, or leg of lamb roasts."
+    },
+    {
+        "name": "Catfish Fillets",
+        "id": "catfish-fillets",
+        "unit": "lb",
+        "typical_size": "1 lb (fresh or IQF bag)",
+        "category": "Meat & Poultry",
+        "search_term": "catfish fillets",
+        "notes": "Raw catfish fillets or nuggets, fresh or plain frozen. Must NOT match breaded/battered catfish, cornmeal-coated kits, fish sticks (existing), or cat food."
+    },
+    {
+        "name": "Pollock Fillets (Frozen)",
+        "id": "pollock-fillets",
+        "unit": "lb",
+        "typical_size": "2 lb bag",
+        "category": "Meat & Poultry",
+        "search_term": "alaska pollock fillets frozen",
+        "notes": "Plain frozen wild Alaska pollock fillets. Must NOT match breaded/battered fillets, fish sticks (existing), imitation crab (made from pollock, separate candidate), or fish sandwich patties."
+    },
+    {
+        "name": "Swai Fillets (Frozen)",
+        "id": "swai-fillets",
+        "unit": "lb",
+        "typical_size": "2 lb bag",
+        "category": "Meat & Poultry",
+        "search_term": "swai fillets frozen",
+        "notes": "Plain frozen swai/basa fillets (budget white fish at Walmart/Family Fare). Must NOT match breaded fish, tilapia or cod (existing items), or seasoned/marinated fillets."
+    },
+    {
+        "name": "Haddock Fillets (Frozen)",
+        "id": "haddock-fillets",
+        "unit": "lb",
+        "typical_size": "1 lb box/bag",
+        "category": "Meat & Poultry",
+        "search_term": "haddock fillets frozen",
+        "notes": "Plain frozen wild haddock fillets. Must NOT match beer-battered/breaded haddock, cod (existing item), or frozen fish dinners."
+    },
+    {
+        "name": "Steelhead Trout Fillets",
+        "id": "steelhead-trout",
+        "unit": "lb",
+        "typical_size": "1 lb fillet",
+        "category": "Meat & Poultry",
+        "search_term": "steelhead trout fillet",
+        "notes": "Fresh or frozen steelhead/rainbow trout fillets (Aldi/Hy-Vee regulars). Must NOT match salmon (existing item, similar look), smoked trout, or canned fish."
+    },
+    {
+        "name": "Mahi Mahi Fillets (Frozen)",
+        "id": "mahi-mahi",
+        "unit": "lb",
+        "typical_size": "1 lb bag (portions)",
+        "category": "Meat & Poultry",
+        "search_term": "mahi mahi fillets frozen",
+        "notes": "Plain frozen mahi mahi portions. Must NOT match breaded fish, fish tacos kits, tilapia/cod (existing), or seasoned skillet meals."
+    },
+    {
+        "name": "Ahi Tuna Steaks (Frozen)",
+        "id": "tuna-steaks",
+        "unit": "lb",
+        "typical_size": "12 oz (2 x 6 oz)",
+        "category": "Meat & Poultry",
+        "search_term": "ahi tuna steaks frozen",
+        "notes": "Frozen yellowfin/ahi tuna steaks. Existing canned-tuna matcher excludes 'steak/fresh/ahi', so open. Must NOT match canned/pouched tuna (existing), tuna salad kits, sushi trays, or cat food."
+    },
+    {
+        "name": "Snow Crab Legs",
+        "id": "crab-legs",
+        "unit": "lb",
+        "typical_size": "1 lb cluster",
+        "category": "Meat & Poultry",
+        "search_term": "snow crab legs",
+        "notes": "Frozen/thawed snow or king crab leg clusters. Must NOT match imitation crab (separate candidate), canned crab (separate candidate), crab cakes, crab dip, or crab boil seasoning."
+    },
+    {
+        "name": "Lobster Tails",
+        "id": "lobster-tails",
+        "unit": "each",
+        "typical_size": "4 oz tail",
+        "category": "Meat & Poultry",
+        "search_term": "lobster tails frozen",
+        "notes": "Frozen raw lobster tails (Aldi/Hy-Vee/Sam's). Priced each; normalize per-lb listings using stated tail weight. Must NOT match lobster dip, lobster mac frozen meals, langostino, or imitation lobster."
+    },
+    {
+        "name": "Sea Scallops (Frozen)",
+        "id": "sea-scallops",
+        "unit": "lb",
+        "typical_size": "1 lb bag",
+        "category": "Meat & Poultry",
+        "search_term": "sea scallops frozen",
+        "notes": "Frozen raw sea or bay scallops, plain. Must NOT match breaded scallops, bacon-wrapped appetizers, imitation scallops, or scampi meal kits."
+    },
+    {
+        "name": "Imitation Crab (Surimi)",
+        "id": "imitation-crab",
+        "unit": "oz",
+        "typical_size": "8 oz pkg",
+        "category": "Meat & Poultry",
+        "search_term": "imitation crab meat",
+        "notes": "Refrigerated surimi imitation crab flakes/sticks/chunks. Must NOT match real crab legs or canned crab (separate candidates), seafood salad tubs, or sushi rolls."
+    },
+    {
+        "name": "Smoked Salmon (Cold-Smoked/Lox)",
+        "id": "smoked-salmon",
+        "unit": "oz",
+        "typical_size": "4 oz pkg",
+        "category": "Meat & Poultry",
+        "search_term": "smoked salmon lox",
+        "notes": "Refrigerated cold-smoked salmon/lox slices (Aldi/Hy-Vee/Sam's). Existing salmon matcher excludes 'smoked', so open. Must NOT match fresh salmon fillets (existing), canned salmon (existing), salmon dip/spread, or salmon jerky."
+    },
+    {
+        "name": "Pickled Herring",
+        "id": "pickled-herring",
+        "unit": "oz",
+        "typical_size": "12 oz jar",
+        "category": "Meat & Poultry",
+        "search_term": "pickled herring",
+        "notes": "Refrigerated jarred pickled herring in wine sauce or sour cream (Midwest dairy-case staple). Must NOT match sardines (separate candidate), kipper snacks, anchovies, or pickled vegetables."
+    },
+    {
+        "name": "Canned Sardines",
+        "id": "canned-sardines",
+        "unit": "oz",
+        "typical_size": "3.75 oz can",
+        "category": "Meat & Poultry",
+        "search_term": "canned sardines",
+        "notes": "Tinned sardines in oil/water/mustard. Must NOT match canned tuna/salmon (existing), anchovies, kipper herring snacks (close cousin, allow only if labeled sardines), or cat food tins."
+    },
+    {
+        "name": "Canned Mackerel",
+        "id": "canned-mackerel",
+        "unit": "oz",
+        "typical_size": "15 oz can",
+        "category": "Meat & Poultry",
+        "search_term": "canned mackerel",
+        "notes": "Canned jack mackerel (budget protein at Walmart/Baker's). Must NOT match canned tuna/salmon/sardines (covered elsewhere), fresh mackerel, or cat food."
+    },
+    {
+        "name": "Canned Clams",
+        "id": "canned-clams",
+        "unit": "oz",
+        "typical_size": "6.5 oz can",
+        "category": "Meat & Poultry",
+        "search_term": "canned chopped clams",
+        "notes": "Canned chopped/minced/whole baby clams and clam juice combos. Must NOT match clam chowder soup (existing tomato/chicken soups pattern; chowder is a soup), clam strips (frozen breaded), or clam dip."
+    },
+    {
+        "name": "Canned / Smoked Oysters",
+        "id": "canned-oysters",
+        "unit": "oz",
+        "typical_size": "3.75 oz tin",
+        "category": "Meat & Poultry",
+        "search_term": "smoked oysters tin",
+        "notes": "Tinned smoked or whole oysters. Must NOT match oyster crackers (existing crackers space), oyster sauce, fresh shucked oyster tubs, or oyster stew."
+    },
+    {
+        "name": "Canned Crab Meat",
+        "id": "canned-crab-meat",
+        "unit": "oz",
+        "typical_size": "6 oz can",
+        "category": "Meat & Poultry",
+        "search_term": "canned crab meat",
+        "notes": "Shelf-stable canned lump/white crab meat. Must NOT match imitation crab (separate candidate), refrigerated pasteurized crab tubs (allow if present), crab legs, crab cakes, or crab dip."
+    },
+    {
+        "name": "Roast Beef (Deli / Sliced)",
+        "id": "deli-roast-beef",
+        "unit": "oz",
+        "typical_size": "8 oz pkg / per-lb counter",
+        "category": "Meat & Poultry",
+        "search_term": "deli roast beef sliced",
+        "notes": "Deli-counter or prepackaged sliced roast beef lunchmeat. Must NOT match raw beef roasts (rump/chuck), canned roast beef, roast beef frozen meals, or beef jerky."
+    },
+    {
+        "name": "Chicken Breast (Deli / Sliced)",
+        "id": "deli-chicken-breast",
+        "unit": "oz",
+        "typical_size": "9 oz tub",
+        "category": "Meat & Poultry",
+        "search_term": "deli sliced chicken breast",
+        "notes": "Deli-counter or prepackaged oven-roasted/grilled chicken breast lunchmeat. Must NOT match raw chicken breast (existing), canned chicken (existing), chicken salad (separate candidate), or turkey lunchmeat (existing)."
+    },
+    {
+        "name": "Pastrami (Deli / Sliced)",
+        "id": "deli-pastrami",
+        "unit": "oz",
+        "typical_size": "7 oz pkg",
+        "category": "Meat & Poultry",
+        "search_term": "sliced pastrami",
+        "notes": "Sliced beef pastrami (prepackaged or deli counter); include deli corned beef slices if labeled together. Must NOT match raw corned beef brisket (separate candidate), pastrami-seasoned salmon, or frozen sandwiches."
+    },
+    {
+        "name": "Bologna",
+        "id": "bologna",
+        "unit": "oz",
+        "typical_size": "16 oz pkg",
+        "category": "Meat & Poultry",
+        "search_term": "bologna",
+        "notes": "Sliced bologna (regular/beef/thick-cut, Oscar Mayer/Bar-S/store brand). Must NOT match ring bologna (smoked sausage ring), braunschweiger (separate candidate), hot dogs (existing), or Lunchables-type kits."
+    },
+    {
+        "name": "Salami (Sliced)",
+        "id": "salami",
+        "unit": "oz",
+        "typical_size": "8 oz pkg",
+        "category": "Meat & Poultry",
+        "search_term": "sliced salami",
+        "notes": "Sliced hard/Genoa/cotto salami for sandwiches or snacking. Must NOT match pepperoni (existing item), summer sausage (separate candidate), salami whole chubs in gift sets, or charcuterie sampler trays."
+    },
+    {
+        "name": "Braunschweiger / Liverwurst",
+        "id": "braunschweiger",
+        "unit": "oz",
+        "typical_size": "16 oz chub",
+        "category": "Meat & Poultry",
+        "search_term": "braunschweiger liverwurst",
+        "notes": "Braunschweiger or liver sausage chub/sliced (Midwest staple). Must NOT match beef or chicken liver raw (separate candidates), pate, or liver-flavor pet products."
+    },
+    {
+        "name": "Summer Sausage",
+        "id": "summer-sausage",
+        "unit": "oz",
+        "typical_size": "20 oz chub",
+        "category": "Meat & Poultry",
+        "search_term": "summer sausage",
+        "notes": "Beef/original summer sausage chub (Old Wisconsin/Hillshire/store brand). Must NOT match snack sticks (separate candidate), pepperoni, holiday gift sets, or jerky."
+    },
+    {
+        "name": "Prosciutto (Sliced)",
+        "id": "prosciutto",
+        "unit": "oz",
+        "typical_size": "4 oz pkg",
+        "category": "Meat & Poultry",
+        "search_term": "sliced prosciutto",
+        "notes": "Prepackaged sliced prosciutto (Aldi/Hy-Vee carry). Must NOT match deli ham (existing), pancetta, serrano ham, or charcuterie trays with cheese."
+    },
+    {
+        "name": "Cocktail Sausages (Lit'l Smokies)",
+        "id": "cocktail-sausages",
+        "unit": "oz",
+        "typical_size": "14 oz pkg",
+        "category": "Meat & Poultry",
+        "search_term": "little smokies cocktail sausages",
+        "notes": "Miniature smoked cocktail sausages/wieners (Hillshire Lit'l Smokies type). Existing kielbasa matcher excludes 'cocktail', so open. COLLISION FLAG: 'cocktail franks/wieners' labels can hit the existing hot-dogs matcher (includes bare 'franks/wieners'); that entry should exclude 'cocktail/lit'l/little smokies'. Must NOT match full-size hot dogs or pigs-in-blanket frozen appetizers."
+    },
+    {
+        "name": "Chorizo (Fresh Mexican)",
+        "id": "chorizo-fresh",
+        "unit": "oz",
+        "typical_size": "9 oz tube",
+        "category": "Meat & Poultry",
+        "search_term": "pork chorizo",
+        "notes": "Fresh Mexican pork or beef chorizo tube (Cacique/store brand; big seller in Omaha). Must NOT match Spanish cured chorizo links, soy chorizo (allow only meat), breakfast sausage (existing), or chorizo-flavored frozen meals."
+    },
+    {
+        "name": "Chicken Salad (Deli Tub)",
+        "id": "deli-chicken-salad",
+        "unit": "lb",
+        "typical_size": "1 lb tub",
+        "category": "Meat & Poultry",
+        "search_term": "deli chicken salad",
+        "notes": "Refrigerated deli chicken salad tub (store deli or Resers/Willow Tree type). Must NOT match canned chicken (existing), chicken salad kits with crackers (allow only if the tub is the product), tuna/ham salad, or salad greens."
+    },
+    {
+        "name": "Vienna Sausages (Canned)",
+        "id": "vienna-sausages",
+        "unit": "oz",
+        "typical_size": "4.6 oz can",
+        "category": "Meat & Poultry",
+        "search_term": "vienna sausage",
+        "notes": "Canned Vienna sausages (Libby's/Armour). Must NOT match cocktail smokies (refrigerated, separate candidate), hot dogs, potted meat (separate candidate), or Vienna bread/pastry."
+    },
+    {
+        "name": "Canned Luncheon Meat (Spam)",
+        "id": "spam-luncheon-meat",
+        "unit": "oz",
+        "typical_size": "12 oz can",
+        "category": "Meat & Poultry",
+        "search_term": "spam luncheon meat",
+        "notes": "Canned pork luncheon meat (Spam/Treet/store brand). Must NOT match canned corned beef (separate candidate), potted meat (separate candidate), deli lunchmeat, or Spam-flavored snacks."
+    },
+    {
+        "name": "Potted Meat (Canned)",
+        "id": "potted-meat",
+        "unit": "oz",
+        "typical_size": "3 oz can",
+        "category": "Meat & Poultry",
+        "search_term": "potted meat",
+        "notes": "Small-can potted meat spread (Armour/Libby's budget shelf item). Must NOT match Vienna sausages or Spam (separate candidates), deviled ham (close cousin, allow if labeled potted meat only), or pet food."
+    },
+    {
+        "name": "Canned Corned Beef",
+        "id": "canned-corned-beef",
+        "unit": "oz",
+        "typical_size": "12 oz can",
+        "category": "Meat & Poultry",
+        "search_term": "canned corned beef",
+        "notes": "Shelf-stable canned corned beef (Libby's/Hormel). Must NOT match raw corned beef brisket (separate candidate), corned beef HASH (potato blend, different product), or deli corned beef slices."
+    },
+    {
+        "name": "Meat Snack Sticks",
+        "id": "meat-snack-sticks",
+        "unit": "oz",
+        "typical_size": "3.9 oz pkg / multi-ct",
+        "category": "Meat & Poultry",
+        "search_term": "beef snack sticks",
+        "notes": "Cured meat snack sticks (Slim Jim/Old Wisconsin/Jack Link's sticks). Existing beef-jerky matcher excludes 'sticks', so open. Must NOT match beef jerky (existing), string cheese combo packs, pepperoni slices, or dog treat sticks."
+    }
+]
