@@ -398,9 +398,15 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         try {
           & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-board-consistency.ps1') | Out-Null
           if ($LASTEXITCODE -eq 2) {
-            Log 'consistency BREACH - auto-repairing Family Fare links + republishing'
+            Log 'consistency BREACH - auto-repairing Family Fare + Hy-Vee links + republishing'
             try {
               & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'resolve-ff-boardmatch.ps1') | Out-Null
+              # Hy-Vee no-link + wrong-size chips self-heal the SAME way, headless via Hy-Vee's search API.
+              # Added 2026-07-14: this repair ran Family Fare ONLY, so Hy-Vee no-link gaps never closed on their
+              # own and the board sat at 25 linkless Hy-Vee chips. resolve-hyvee-links board-matches by
+              # size+brand+price and writes product-urls.json directly, so it runs BEFORE the merge; the
+              # prune-bad-links + guards gate below still catch anything it produces that drifts by a factor.
+              & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'resolve-hyvee-links.ps1') | Out-Null
               # CAUTION: merge-product-urls re-merges EVERY store-*-urls.json still sitting in
               # out\url-inputs\, so a stale resolver file left behind can RESURRECT an old link and
               # overwrite a good one (it silently corrupted ~226 links on 2026-07-14). Old resolver
