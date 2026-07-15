@@ -46,8 +46,8 @@ foreach ($c in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertF
 $regF = (Get-ChildItem (Join-Path $root 'out\regular\hyvee-regular-*.json') |
   Where-Object { $_.BaseName -match '^hyvee-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1)
 $rows = @((Get-Content $regF.FullName -Raw | ConvertFrom-Json).deals)
-$unver = @{}
-foreach ($r in $rows) { if ($r.not_reverified) { $unver[([string]$r.item).Trim()] = $r } }
+$unver = @{}; $rowByName = @{}
+foreach ($r in $rows) { $rowByName[([string]$r.item).Trim()] = $r; if ($r.not_reverified) { $unver[([string]$r.item).Trim()] = $r } }
 
 $cmpF = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
 $board = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)
@@ -55,22 +55,29 @@ $board = @((Get-Content $cmpF -Raw | ConvertFrom-Json).comparison)
 $puF = Join-Path $root 'product-urls.json'
 $doc = Get-Content $puF -Raw | ConvertFrom-Json
 
-# only bother with unverified rows that are actually SERVING a board cell
+# A NO-LINK chip (from the consistency report) needs the SAME board-match resolution as a not_reverified row:
+# it has no product id to fetch a price with, exactly like a carried-forward row. The two lists only partly
+# overlap - a row can be linked-but-suppressed by the identity gate, or unlinked-but-never-flagged - so we
+# resolve the UNION. Resolving only not_reverified left the no-link gaps open forever, which is why the board
+# sat at 25 linkless Hy-Vee chips.
+$noLinkIds = @{}
+$crF = Join-Path $root 'out\consistency-report.json'
+if (Test-Path $crF) { foreach ($nl in @((Get-Content $crF -Raw | ConvertFrom-Json).no_link)) { if (([string]$nl.store) -eq 'Hy-Vee') { $noLinkIds[[string]$nl.id] = $true } } }
+
+# every Hy-Vee board cell that is unverified OR renders no link, resolved once (by id)
 $targets = New-Object System.Collections.ArrayList
+$seenT = @{}
 foreach ($it in $board) {
   $cell = $it.stores | Where-Object { $_.store -eq 'Hy-Vee' } | Select-Object -First 1
   if (-not $cell) { continue }
   $nm = ([string]$cell.item).Trim()
-  if (-not $unver.ContainsKey($nm)) { continue }
-  # Take EVERY unverified row, linked or not. A row can be unverified for two different reasons and both need
-  # the same repair:
-  #   * no link at all - there is no product id to fetch a price with;
-  #   * a link whose product id is a DIFFERENT SIZE than our row (the pull refuses those: Hy-Vee reuses names
-  #     across sizes, so "Hy-Vee 100% Orange Juice" resolved to the 1 gallon jug while our row is the 64 oz).
-  # In both cases the answer is to find the product that actually matches our size and point the link at it.
+  if (-not ($unver.ContainsKey($nm) -or $noLinkIds.ContainsKey([string]$it.id))) { continue }
+  if ($seenT.ContainsKey([string]$it.id)) { continue }; $seenT[[string]$it.id] = $true
+  # read our size/price from the not_reverified row, else the matching regular row, else the board cell itself
+  $row = if ($unver.ContainsKey($nm)) { $unver[$nm] } elseif ($rowByName.ContainsKey($nm)) { $rowByName[$nm] } else { [pscustomobject]@{ size=[string]$cell.size; ad_price=('$' + [string]$cell.per_unit) } }
   $ex = $doc.items.($it.id).'Hy-Vee'
   $had = [bool]($ex -and $ex.url)
-  [void]$targets.Add([pscustomobject]@{ id=[string]$it.id; unit=[string]$it.unit; name=$nm; row=$unver[$nm]; relink=$had })
+  [void]$targets.Add([pscustomobject]@{ id=[string]$it.id; unit=[string]$it.unit; name=$nm; row=$row; relink=$had })
 }
 Write-Output ("unverified Hy-Vee rows serving a live board cell: " + $targets.Count + " (" + @($targets | Where-Object { $_.relink }).Count + " have a link pointing at the WRONG SIZE and need re-pointing)")
 Write-Output ''

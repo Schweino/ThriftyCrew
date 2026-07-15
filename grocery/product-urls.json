@@ -2051,13 +2051,6 @@
                                                        "name":  "Fareway Plain Bread Crumbs 15 oz",
                                                        "board_pu":  0.166
                                                    },
-                                       "Hy-Vee":  {
-                                                      "url":  "https://www.hy-vee.com/aisles-online/p/3309869/gustare-vita-italian-bread-crumbs-134-oz",
-                                                      "name":  "Gustare Vita Italian Bread Crumbs",
-                                                      "price":  2.99,
-                                                      "size":  "13.4 oz",
-                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
-                                                  },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Vigo-Italian-Style-Bread-Crumbs-5-lbs/13803520339",
                                                                "name":  "Vigo Italian Style Bread Crumbs, 5 lbs.",
@@ -2073,7 +2066,14 @@
                                                        "name":  "Great Value Italian Style Bread Crumbs, 15 oz",
                                                        "board_pu":  0.0813,
                                                        "recipe_pu":  0.081
-                                                   }
+                                                   },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/3309869/gustare-vita-italian-bread-crumbs-13-4-oz",
+                                                      "price":  2.99,
+                                                      "size":  "13.4 oz",
+                                                      "name":  "Gustare Vita Italian Bread Crumbs",
+                                                      "verified":  "2026-07-15 Hy-Vee search API (storeId 1465)"
+                                                  }
                                    },
                   "breakfast-sandwiches":  {
                                                "commodity":  "breakfast-sandwiches",
@@ -2931,7 +2931,14 @@
                                                            "size":  "20 oz",
                                                            "name":  "Great Value Canned Pineapple Chunks in Pineapple Juice",
                                                            "board_pu":  0.084
-                                                       }
+                                                       },
+                                           "Hy-Vee":  {
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/2970344/that-s-smart-pineapple-chunks",
+                                                          "price":  1.62,
+                                                          "size":  "20 oz",
+                                                          "name":  "That\u0027s Smart! Pineapple Chunks",
+                                                          "verified":  "2026-07-15 Hy-Vee search API (storeId 1465)"
+                                                      }
                                        },
                   "canned-pinto-beans":  {
                                              "commodity":  "canned-pinto-beans",
@@ -7778,12 +7785,6 @@
                                                       "name":  "Fareway Steamables Green Peas",
                                                       "board_pu":  0.12
                                                   },
-                                      "Hy-Vee":  {
-                                                     "url":  "https://www.hy-vee.com/aisles-online/p/2969855/thats-smart-sweet-peas",
-                                                     "price":  0.98,
-                                                     "size":  "12 oz",
-                                                     "name":  "That\u0027s Smart! Sweet Peas (Frozen)"
-                                                 },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/Great-Value-Frozen-Sweet-Peas-16-oz-Steamable-Bag/10315048",
                                                       "price":  0.98,
@@ -7791,7 +7792,14 @@
                                                       "name":  "Great Value Frozen Sweet Peas",
                                                       "board_pu":  0.0612,
                                                       "recipe_pu":  0.065
-                                                  }
+                                                  },
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/2969855/that-s-smart-sweet-peas",
+                                                     "price":  0.98,
+                                                     "size":  "12 oz",
+                                                     "name":  "That\u0027s Smart! Sweet Peas (Frozen)",
+                                                     "verified":  "2026-07-15 Hy-Vee search API (storeId 1465)"
+                                                 }
                                   },
                   "frozen-pizza":  {
                                        "commodity":  "frozen-pizza",
@@ -14980,12 +14988,6 @@
                                                "name":  "Morton Iodized Salt",
                                                "board_pu":  0.0758
                                            },
-                               "Hy-Vee":  {
-                                              "url":  "https://www.hy-vee.com/aisles-online/p/55969/hy-vee-iodized-salt",
-                                              "price":  1.58,
-                                              "size":  "26 oz",
-                                              "name":  "Hy-Vee Iodized Salt"
-                                          },
                                "Sam\u0027s Club":  {
                                                        "url":  "https://www.samsclub.com/ip/Morton-Iodized-Salt-64-oz/13589509673",
                                                        "price":  2.38,
@@ -15000,7 +15002,14 @@
                                                "name":  "Great Value Iodized Salt",
                                                "board_pu":  0.0362,
                                                "recipe_pu":  0.036
-                                           }
+                                           },
+                               "Hy-Vee":  {
+                                              "url":  "https://www.hy-vee.com/aisles-online/p/55969/hy-vee-iodized-salt",
+                                              "price":  1.58,
+                                              "size":  "26 oz",
+                                              "name":  "Hy-Vee Iodized Salt",
+                                              "verified":  "2026-07-15 Hy-Vee search API (storeId 1465)"
+                                          }
                            },
                   "sandwich-bags":  {
                                         "commodity":  "sandwich-bags",
@@ -15325,7 +15334,14 @@
                                                           "size":  "8 oz",
                                                           "name":  "Great Value Fiesta Blend Finely Shredded Cheese, 8 oz",
                                                           "board_pu":  0.2462
-                                                      }
+                                                      },
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/57077/hy-vee-shredded-low-moisture-part-skim-mozzarella-cheese",
+                                                         "price":  7.98,
+                                                         "size":  "32 oz",
+                                                         "name":  "Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Cheese",
+                                                         "verified":  "2026-07-15 Hy-Vee search API (storeId 1465)"
+                                                     }
                                       },
                   "shrimp":  {
                                  "commodity":  "shrimp",
