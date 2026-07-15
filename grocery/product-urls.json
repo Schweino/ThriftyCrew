@@ -8960,15 +8960,6 @@
                                                           "name":  "McCormick Ground Cinnamon 4.12 oz",
                                                           "board_pu":  1.2112
                                                       },
-                                          "Hy-Vee":  {
-                                                         "url":  "https://www.hy-vee.com/aisles-online/p/2950925/that-s-smart-ground-cinnamon",
-                                                         "price":  1.25,
-                                                         "size":  "2.5 oz",
-                                                         "name":  "That\u0027s Smart Ground Cinnamon",
-                                                         "verified":  "2026-07-14 Hy-Vee search API (storeId 1465)",
-                                                         "board_pu":  0.5,
-                                                         "recipe_pu":  0.5
-                                                     },
                                           "Sam\u0027s Club":  {
                                                                   "url":  "https://www.samsclub.com/ip/Member-s-Mark-Ground-Cinnamon-18-oz/13610768224",
                                                                   "name":  "Member\u0027s Mark Ground Cinnamon",
@@ -8984,7 +8975,14 @@
                                                           "name":  "Great Value Ground Cinnamon, 2.5 oz",
                                                           "board_pu":  0.508,
                                                           "recipe_pu":  0.508
-                                                      }
+                                                      },
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/2950925/that-s-smart-ground-cinnamon",
+                                                         "price":  1.25,
+                                                         "size":  "2.5 oz",
+                                                         "name":  "That\u0027s Smart Ground Cinnamon",
+                                                         "verified":  "2026-07-15 Hy-Vee search API (storeId 1465)"
+                                                     }
                                       },
                   "ground-coriander":  {
                                            "commodity":  "Ground Coriander",
