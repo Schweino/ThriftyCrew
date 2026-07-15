@@ -29,7 +29,7 @@
 <div class="tp-hero">
   <p class="tp-kicker">This week in Omaha</p>
   <div class="tp-price">$0.48<span class="tp-unit">/lb</span></div>
-  <div class="tp-where">Cheapest at Aldi, week of Jul 14</div>
+  <div class="tp-where">Cheapest at Aldi, week of Jul 15</div>
 </div>
 <p class="tp-record"><strong>Record low we have tracked:</strong> $0.48 per lb at Aldi (week of Jul 6). This week ties that low.</p>
 <p class="tp-read">At $0.48 per lb, this is the best price we have tracked for bananas. If it is on your list, this is a good week to stock up.</p>
@@ -125,13 +125,14 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-05","07-06","07-08","07-09","07-10","07-11","07-12","07-13","07-14"],"s":{"Hy-Vee":[0.49,0.49,0.49,0.49,0.49,0.49,0.49,0.49,0.49],"Sam's Club":[0.49,0.49,0.49,0.49,0.49,0.49,0.49,0.49,0.49],"Walmart":[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5],"Baker's":[0.55,0.55,0.55,0.55,0.55,0.55,0.55,0.55,0.55],"Family Fare":[0.65,0.65,0.65,0.65,0.65,0.65,0.65,0.65,null],"Aldi":[null,0.48,0.48,0.48,0.48,0.48,0.49,0.49,0.48],"Fareway":[null,null,null,null,null,null,0.49,0.49,0.49]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-05","07-06","07-08","07-09","07-10","07-11","07-12","07-13","07-14","07-15"],"s":{"Hy-Vee":[0.49,0.49,0.49,0.49,0.49,0.49,0.49,0.49,0.49,0.5],"Sam's Club":[0.49,0.49,0.49,0.49,0.49,0.49,0.49,0.49,0.49,0.49],"Walmart":[0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5],"Baker's":[0.55,0.55,0.55,0.55,0.55,0.55,0.55,0.55,0.55,0.55],"Family Fare":[0.65,0.65,0.65,0.65,0.65,0.65,0.65,0.65,null,0.65],"Aldi":[null,0.48,0.48,0.48,0.48,0.48,0.49,0.49,0.48,0.48],"Fareway":[null,null,null,null,null,null,0.49,0.49,0.49,0.49]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
 <table class="tp-table">
 <thead><tr><th>Week of</th><th>Cheapest price</th><th>Store</th></tr></thead>
 <tbody>
+<tr class="tp-low"><td>Jul 15</td><td>$0.48 per lb</td><td>Aldi</td></tr>
 <tr class="tp-low"><td>Jul 14</td><td>$0.48 per lb</td><td>Aldi</td></tr>
 <tr><td>Jul 13</td><td>$0.49 per lb</td><td>Aldi</td></tr>
 <tr><td>Jul 12</td><td>$0.49 per lb</td><td>Aldi</td></tr>
@@ -144,14 +145,15 @@ function tcChart(root, d){
 </tbody></table>
 <h2>Who has it cheapest this week</h2>
 <table class="tp-table">
-<thead><tr><th>Store</th><th>Price</th></tr></thead>
+<thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
-<tr class="tp-low"><td>Aldi</td><td>$0.48 per lb</td></tr>
-<tr><td>Fareway</td><td>$0.49 per lb</td></tr>
-<tr><td>Hy-Vee</td><td>$0.49 per lb</td></tr>
-<tr><td>Sam&#39;s Club</td><td>$0.49 per lb</td></tr>
-<tr><td>Walmart</td><td>$0.50 per lb</td></tr>
-<tr><td>Baker&#39;s</td><td>$0.55 per lb</td></tr>
+<tr class="tp-low"><td>Aldi</td><td>$0.48 per lb</td><td><span class="tp-item">Bananas, per lb</span></td></tr>
+<tr><td>Fareway</td><td>$0.49 per lb</td><td><span class="tp-item">Banana</span></td></tr>
+<tr><td>Sam&#39;s Club</td><td>$0.49 per lb</td><td><span class="tp-item"></span></td></tr>
+<tr><td>Hy-Vee</td><td>$0.50 per lb</td><td><span class="tp-item">Fresh Chiquita Bananas</span></td></tr>
+<tr><td>Walmart</td><td>$0.50 per lb</td><td><span class="tp-item">Fresh Banana</span></td></tr>
+<tr><td>Baker&#39;s</td><td>$0.55 per lb</td><td><span class="tp-item">Fresh Bunch of Bananas</span></td></tr>
+<tr><td>Family Fare</td><td>$0.65 per lb</td><td><span class="tp-item">Yellow Bananas</span></td></tr>
 </tbody></table>
 <p class="tp-links"><a href="/omaha-grocery-prices/?ref=trend">See the full live Omaha price board</a> &middot; <a href="/omaha-price-tracker/?ref=trend">All tracked staples</a></p>
 <p class="tp-foot">Tracked weekly across Hy-Vee, Baker&#39;s, Family Fare, Aldi, Sam&#39;s Club and Walmart in Omaha since June 2026. This page updates every week.</p>

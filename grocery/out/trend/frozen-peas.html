@@ -29,7 +29,7 @@
 <div class="tp-hero">
   <p class="tp-kicker">This week in Omaha</p>
   <div class="tp-price">$0.0612<span class="tp-unit">/oz</span></div>
-  <div class="tp-where">Cheapest at Walmart, week of Jul 14</div>
+  <div class="tp-where">Cheapest at Walmart, week of Jul 15</div>
 </div>
 <p class="tp-record"><strong>Record low we have tracked:</strong> $0.0612 per oz at Walmart (week of Jul 13). This week ties that low.</p>
 <p class="tp-read">At $0.0612 per oz, this is the best price we have tracked for frozen peas. If it is on your list, this is a good week to stock up.</p>
@@ -125,26 +125,28 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-13","07-14"],"s":{"Walmart":[0.065,0.0612,0.0612],"Aldi":[0.0908,null,0.0808],"Baker's":[0.0915,0.1075,0.1075],"Family Fare":[0.1158,null,null],"Hy-Vee":[0.128,0.0817,0.0817],"Fareway":[null,0.12,0.12]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-13","07-14","07-15"],"s":{"Walmart":[0.065,0.0612,0.0612,0.0612],"Aldi":[0.0908,null,0.0808,0.0808],"Baker's":[0.0915,0.1075,0.1075,0.1075],"Family Fare":[0.1158,null,null,0.1158],"Hy-Vee":[0.128,0.0817,0.0817,0.0817],"Fareway":[null,0.12,0.12,0.12]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
 <table class="tp-table">
 <thead><tr><th>Week of</th><th>Cheapest price</th><th>Store</th></tr></thead>
 <tbody>
+<tr class="tp-low"><td>Jul 15</td><td>$0.0612 per oz</td><td>Walmart</td></tr>
 <tr class="tp-low"><td>Jul 14</td><td>$0.0612 per oz</td><td>Walmart</td></tr>
 <tr class="tp-low"><td>Jul 13</td><td>$0.0612 per oz</td><td>Walmart</td></tr>
 <tr><td>Jul 12</td><td>$0.065 per oz</td><td>Walmart</td></tr>
 </tbody></table>
 <h2>Who has it cheapest this week</h2>
 <table class="tp-table">
-<thead><tr><th>Store</th><th>Price</th></tr></thead>
+<thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
-<tr class="tp-low"><td>Walmart</td><td>$0.0612 per oz</td></tr>
-<tr><td>Aldi</td><td>$0.0808 per oz</td></tr>
-<tr><td>Hy-Vee</td><td>$0.0817 per oz</td></tr>
-<tr><td>Baker&#39;s</td><td>$0.1075 per oz</td></tr>
-<tr><td>Fareway</td><td>$0.12 per oz</td></tr>
+<tr class="tp-low"><td>Walmart</td><td>$0.0612 per oz</td><td><span class="tp-item">Great Value Frozen Sweet Peas</span></td></tr>
+<tr><td>Aldi</td><td>$0.0808 per oz</td><td><span class="tp-item">Season&#39;s Choice Steamable Sweet Peas</span></td></tr>
+<tr><td>Hy-Vee</td><td>$0.0817 per oz</td><td><span class="tp-item">That&#39;s Smart! Sweet Peas (Frozen)</span></td></tr>
+<tr><td>Baker&#39;s</td><td>$0.1075 per oz</td><td><span class="tp-item">Kroger Frozen Sweet Green Peas</span></td></tr>
+<tr><td>Family Fare</td><td>$0.1158 per oz</td><td><span class="tp-item">Our Family Green Peas, Sweet, Fresh Frozen 12 Oz</span></td></tr>
+<tr><td>Fareway</td><td>$0.12 per oz</td><td><span class="tp-item">Fareway Steamables Green Peas</span></td></tr>
 </tbody></table>
 <p class="tp-links"><a href="/omaha-grocery-prices/?ref=trend">See the full live Omaha price board</a> &middot; <a href="/omaha-price-tracker/?ref=trend">All tracked staples</a></p>
 <p class="tp-foot">Tracked weekly across Hy-Vee, Baker&#39;s, Family Fare, Aldi, Sam&#39;s Club and Walmart in Omaha since June 2026. This page updates every week.</p>

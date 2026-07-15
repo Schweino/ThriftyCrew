@@ -2959,7 +2959,9 @@
                         "laundry",
                         "fabric\\s+softener",
                         "dryer\\s+sheets?",
-                        "trash\\s+bags?"
+                        "trash\\s+bags?",
+                        "sauerkraut",
+                        "\\bkraut\\b"
                     ]
     },
     {
@@ -5573,7 +5575,11 @@
                         "\\bfor\\s+cats?\\b",
                         "\\bnutrish\\b",
                         "\\bpet\\s+food\\b",
-                        "gravy\\s+train"
+                        "gravy\\s+train",
+                        "ravioli",
+                        "beefaroni",
+                        "chef\\s+boyardee",
+                        "spaghetti\\s*-?\\s*o"
                     ]
     },
     {
@@ -7561,6 +7567,8 @@
         "exclude":  [
                         "\\bsoup\\b",
                         "\\bcanned\\b",
+                        "\\bcans?\\b",
+                        "\\d+\\s*oz\\s+can",
                         "\\boil\\b",
                         "\\bpasta\\b",
                         "beech\\s*nut",
@@ -7609,7 +7617,12 @@
                         "\\bfor\\s+cats?\\b",
                         "\\bnutrish\\b",
                         "\\bpet\\s+food\\b",
-                        "gravy\\s+train"
+                        "gravy\\s+train",
+                        "canned\\s+vegetable",
+                        "\\d+(?:\\.\\d+)?\\s*oz\\s+can\\b",
+                        "\\bcan\\b",
+                        "veg[\\s-]?all",
+                        "great\\s+value\\s+mixed\\s+vegetables,"
                     ]
     },
     {
@@ -9256,6 +9269,9 @@
                         "\\bcanned\\b",
                         "\\bcup\\b",
                         "juice",
+                        "\\bsyrup\\b",
+                        "\\bcans?\\b",
+                        "no\\s+sugar\\s+added",
                         "\\bjar\\b",
                         "\\bgelatin\\b",
                         "jell[\\s-]?o\\b",
@@ -15362,7 +15378,8 @@
                         "\\bfor\\s+cats?\\b",
                         "\\bnutrish\\b",
                         "\\bpet\\s+food\\b",
-                        "gravy\\s+train"
+                        "gravy\\s+train",
+                        "chili\\s+beans"
                     ]
     },
     {
@@ -23141,7 +23158,10 @@
                         "\\bnutrish\\b",
                         "\\bpet\\s+food\\b",
                         "gravy\\s+train"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bsauce\\b"
+                         ]
     },
     {
         "id":  "canned-pumpkin",
@@ -23278,7 +23298,10 @@
                         "\\bnutrish\\b",
                         "\\bpet\\s+food\\b",
                         "gravy\\s+train"
-                    ]
+                    ],
+        "relax_global":  [
+                             "(?\u003c!orange\\s)\\bjuice\\b"
+                         ]
     },
     {
         "id":  "fruit-cocktail",
@@ -23342,7 +23365,10 @@
                         "\\bnutrish\\b",
                         "\\bpet\\s+food\\b",
                         "gravy\\s+train"
-                    ]
+                    ],
+        "relax_global":  [
+                             "cocktail"
+                         ]
     },
     {
         "id":  "canned-pears",
@@ -24063,7 +24089,11 @@
                         "\\bnutrish\\b",
                         "\\bpet\\s+food\\b",
                         "gravy\\s+train"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bsoup\\b",
+                             "\\bmix\\b(?!\\s*(?:\u0026|and)\\s*match)"
+                         ]
     },
     {
         "id":  "jarred-gravy",
@@ -24073,6 +24103,11 @@
                         "\\bgravy\\b"
                     ],
         "exclude":  [
+                        "\\bbowl\\b",
+                        "breakfast",
+                        "jimmy\\s+dean",
+                        "\\bentree\\b",
+                        "biscuits?\\s+(?:\u0026|and)\\s+gravy",
                         "\\bmix\\b",
                         "packet",
                         "envelope",
@@ -24632,7 +24667,10 @@
                         "\\bnutrish\\b",
                         "\\bpet\\s+food\\b",
                         "gravy\\s+train"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bwine\\b"
+                         ]
     },
     {
         "id":  "teriyaki-sauce",
@@ -24828,7 +24866,11 @@
                         "\\bnutrish\\b",
                         "\\bpet\\s+food\\b",
                         "gravy\\s+train"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bsauce\\b",
+                             "cocktail"
+                         ]
     },
     {
         "id":  "tartar-sauce",
@@ -24887,7 +24929,10 @@
                         "\\bnutrish\\b",
                         "\\bpet\\s+food\\b",
                         "gravy\\s+train"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bsauce\\b"
+                         ]
     },
     {
         "id":  "horseradish",
@@ -25011,7 +25056,10 @@
                         "\\bnutrish\\b",
                         "\\bpet\\s+food\\b",
                         "gravy\\s+train"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bsauce\\b"
+                         ]
     },
     {
         "id":  "taco-sauce",
@@ -25074,7 +25122,10 @@
                         "\\bnutrish\\b",
                         "\\bpet\\s+food\\b",
                         "gravy\\s+train"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bsauce\\b"
+                         ]
     },
     {
         "id":  "sloppy-joe-sauce",
@@ -25136,7 +25187,10 @@
                         "\\bnutrish\\b",
                         "\\bpet\\s+food\\b",
                         "gravy\\s+train"
-                    ]
+                    ],
+        "relax_global":  [
+                             "\\bsauce\\b"
+                         ]
     },
     {
         "id":  "bottled-marinade",
@@ -25540,6 +25594,9 @@
         "exclude":  [
                         "limeade",
                         "margarita",
+                        "sweetened",
+                        "\\bmixer\\b",
+                        "daily\u0027?s",
                         "\\bcocktail\\b",
                         "\\bdrink\\b",
                         "\\bsoda\\b",
@@ -25593,6 +25650,9 @@
                         "\\bnutrish\\b",
                         "\\bpet\\s+food\\b",
                         "gravy\\s+train"
-                    ]
+                    ],
+        "relax_global":  [
+                             "(?\u003c!orange\\s)\\bjuice\\b"
+                         ]
     }
 ]

@@ -2,7 +2,7 @@
     "readme":  "DERIVED by generate-board-overrides.ps1 - do not hand-edit. Per-cell EVERYDAY per-unit corrections: when a board price disagrees \u003e30% with the verified product its See-item link opens (and name-drift confirms the link is the right product), the board number is stale and is pinned here to the link\u0027s per-unit so price==link==shelf. build-deals-page applies these to EVERYDAY cells only (a live sale always wins) and survives daily regeneration. Sales, wrong-product links (name-drift), and ids present in both the staple+recipe board are intentionally excluded.",
     "updated":  "2026-07-15",
     "tol":  0.3,
-    "count":  56,
+    "count":  50,
     "cells":  [
                   {
                       "id":  "all-purpose-cleaner",
@@ -90,7 +90,7 @@
                       "store":  "Family Fare",
                       "per_unit":  0.4658,
                       "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.192,
+                      "board_was":  0.3474,
                       "link_name":  "Cheerios Cereal Large Size 12 Oz",
                       "set":  "2026-07-15"
                   },
@@ -101,15 +101,6 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  1.4533,
                       "link_name":  "Broccoli Florettes",
-                      "set":  "2026-07-15"
-                  },
-                  {
-                      "id":  "canned-black-beans",
-                      "store":  "Family Fare",
-                      "per_unit":  0.1193,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.0649,
-                      "link_name":  "Bush\u0027s Best Black Beans 16 Oz",
                       "set":  "2026-07-15"
                   },
                   {
@@ -203,24 +194,6 @@
                       "set":  "2026-07-15"
                   },
                   {
-                      "id":  "jelly",
-                      "store":  "Family Fare",
-                      "per_unit":  0.183,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.0997,
-                      "link_name":  "Smucker\u0027s Grape Jelly",
-                      "set":  "2026-07-15"
-                  },
-                  {
-                      "id":  "mayonnaise",
-                      "store":  "Family Fare",
-                      "per_unit":  0.2663,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.133,
-                      "link_name":  "Hellmann\u0027s Avocado Oil Mayonnaise Dressing 30 Fl Oz",
-                      "set":  "2026-07-15"
-                  },
-                  {
                       "id":  "microwave-popcorn",
                       "store":  "Hy-Vee",
                       "per_unit":  0.9967,
@@ -257,15 +230,6 @@
                       "set":  "2026-07-15"
                   },
                   {
-                      "id":  "ranch-dressing",
-                      "store":  "Family Fare",
-                      "per_unit":  0.2494,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.1744,
-                      "link_name":  "Kraft Classic Ranch Dressing 16 Fl Oz",
-                      "set":  "2026-07-15"
-                  },
-                  {
                       "id":  "rotisserie-chicken",
                       "store":  "Hy-Vee",
                       "per_unit":  8.99,
@@ -290,15 +254,6 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.0449,
                       "link_name":  "Lipton Yellow Label Black Tea, 50 Ct Tea Bags",
-                      "set":  "2026-07-15"
-                  },
-                  {
-                      "id":  "tortilla-chips",
-                      "store":  "Family Fare",
-                      "per_unit":  0.5107,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.1915,
-                      "link_name":  "Doritos Tortilla Chips, Chile Limon, Rolled 10.75 Oz",
                       "set":  "2026-07-15"
                   },
                   {
@@ -344,15 +299,6 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.79,
                       "link_name":  "Gala Apples",
-                      "set":  "2026-07-15"
-                  },
-                  {
-                      "id":  "enchilada-sauce",
-                      "store":  "Hy-Vee",
-                      "per_unit":  0.1246,
-                      "source":  "derived: verified product-urls link (board was stale)",
-                      "board_was":  0.269,
-                      "link_name":  "Hy-Vee Mild Enchilada Sauce",
                       "set":  "2026-07-15"
                   },
                   {

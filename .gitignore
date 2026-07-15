@@ -40,6 +40,13 @@
 /grocery/out/fareway/weekly/
 /grocery/out/fareway/monthly/
 
+# ad-hoc item-onboarding vet outputs (isolated diff-board runs while adding a batch; throwaway diagnostics)
+/grocery/out/after-*.json
+/grocery/out/detA-*.json
+/grocery/out/detB-*.json
+/grocery/out/final-batch1-*.json
+/grocery/out/staples500/*.bak
+
 # --- never commit, anywhere in the tree ---
 # secrets (the Ghost admin key lives here locally; it is a GitHub Actions secret in CI)
 .ghostkey

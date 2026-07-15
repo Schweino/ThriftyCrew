@@ -502,6 +502,13 @@ function SummaryHtml($best, [string]$unit) {
 # (The "Deals right now" strip was removed 2026-07-13 per Brad. Record-low / sale badges still ride inline on
 # each item's row, and the On-sale filter pill surfaces the sales - so nothing is lost by dropping the strip.)
 
+# Registered staples (commodities.json). Every one owes shoppers all 7 stores WHEREVER it renders - the
+# store-coverage gate holds the whole registry to that rule. $stapleRendered records which of them actually got
+# a staple row below; a registered staple that has NO staple row (priced only as a recipe ingredient) must
+# instead pick up the 7-store guarantee on its recipe row (see the recipe section) so build and audit agree.
+$stapleIdSet = @{}
+try { foreach ($sc in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) { $stapleIdSet[[string]$sc.id] = $true } } catch {}
+$stapleRendered = @{}
 $totalCommodities = 0; $totalPrices = 0
 foreach ($c in $cats) {
   [void]$sb.Append("<section class='pg-cat' data-cat='" + $c.key + "'><h2 class='pg-cath'>" + (HtmlEnc $c.label) + "</h2>")
@@ -514,6 +521,7 @@ foreach ($c in $cats) {
     # emit a "No price yet" card for it (a duplicate/wrong-name store on the row). Fail the build before publish.
     foreach ($chk in $ranked) { if ($storeOrder -notcontains [string]$chk.store) { throw ("build-deals-page: commodity '" + $r.id + "' is priced at unknown store '" + [string]$chk.store + "' (not in storeOrder) - would break the all-stores-shown guarantee. Fix the store name in the data.") } }
     $totalCommodities++
+    $stapleRendered[[string]$r.id] = $true
     $unit = [string]$r.unit
     [void]$sb.Append("<article class='pg-row' data-cat='" + $c.key + "' data-id='" + [string]$r.id + "'>")
     $rb = $recBadge[[string]$r.id]
@@ -591,7 +599,15 @@ if ($riDoc) {
         [void]$sb.Append("</div>")
         $i++
       }
-      [void]$sb.Append((NoneCells ([string]$r.id)))
+      # A commodities.json STAPLE priced only as a recipe ingredient (no staple row above) still owes shoppers
+      # all 7 stores: this is its one and only row, and the coverage gate holds every registered staple to that
+      # rule. Emit the full MissingCells set so every missing store shows an honest "No price yet"/"Doesn't carry"
+      # tile. Pure recipe-only ingredients stay exempt (NoneCells) - 7 mostly-empty cards on a niche item is noise.
+      if ($stapleIdSet.ContainsKey([string]$r.id) -and -not $stapleRendered.ContainsKey([string]$r.id)) {
+        [void]$sb.Append((MissingCells ([string]$r.id) (@($ranked | ForEach-Object { [string]$_.store }))))
+      } else {
+        [void]$sb.Append((NoneCells ([string]$r.id)))
+      }
     [void]$sb.Append("</div></article>")
     }
     [void]$sb.Append("</section>")
