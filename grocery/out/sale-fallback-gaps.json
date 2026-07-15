@@ -1,66 +1,51 @@
 ﻿{
-    "generated":  "2026-07-14 08:29",
-    "gap_count":  37,
+    "generated":  "2026-07-15 13:04",
+    "gap_count":  20,
     "gaps":  [
                  {
-                     "commodity":  "ground-beef-8020",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  5.49
+                     "commodity":  "almond-milk",
+                     "store":  "Baker\u0027s",
+                     "sale_per_unit":  0.052
                  },
                  {
-                     "commodity":  "apples",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  2.99
+                     "commodity":  "baked-beans",
+                     "store":  "Baker\u0027s",
+                     "sale_per_unit":  0.0667
                  },
                  {
-                     "commodity":  "avocados",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  1.6667
+                     "commodity":  "bar-soap",
+                     "store":  "Baker\u0027s",
+                     "sale_per_unit":  1.7475
                  },
                  {
-                     "commodity":  "bacon",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  4.99
+                     "commodity":  "body-wash",
+                     "store":  "Baker\u0027s",
+                     "sale_per_unit":  0.3495
                  },
                  {
-                     "commodity":  "blueberries",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.3563
+                     "commodity":  "cat-food",
+                     "store":  "Baker\u0027s",
+                     "sale_per_unit":  2.4271
                  },
                  {
-                     "commodity":  "chicken-breast",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  1.99
+                     "commodity":  "cheese-crackers",
+                     "store":  "Baker\u0027s",
+                     "sale_per_unit":  0.2194
                  },
                  {
-                     "commodity":  "bread",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  3
+                     "commodity":  "coffee-pods",
+                     "store":  "Baker\u0027s",
+                     "sale_per_unit":  0.2666
                  },
                  {
-                     "commodity":  "broccoli",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  2.49
+                     "commodity":  "crackers",
+                     "store":  "Baker\u0027s",
+                     "sale_per_unit":  0.3207
                  },
                  {
-                     "commodity":  "chicken-thighs",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  1.49
-                 },
-                 {
-                     "commodity":  "clementines",
-                     "store":  "Aldi",
-                     "sale_per_unit":  0.9967
-                 },
-                 {
-                     "commodity":  "cookies",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.3016
-                 },
-                 {
-                     "commodity":  "cottage-cheese",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.2306
+                     "commodity":  "croissants",
+                     "store":  "Baker\u0027s",
+                     "sale_per_unit":  1.25
                  },
                  {
                      "commodity":  "dishwasher-detergent",
@@ -68,64 +53,39 @@
                      "sale_per_unit":  0.1665
                  },
                  {
-                     "commodity":  "frozen-fries",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.1184
+                     "commodity":  "dryer-sheets",
+                     "store":  "Baker\u0027s",
+                     "sale_per_unit":  0.0291
                  },
                  {
-                     "commodity":  "grapes",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  2.99
+                     "commodity":  "fruit-snacks",
+                     "store":  "Baker\u0027s",
+                     "sale_per_unit":  0.2268
                  },
                  {
-                     "commodity":  "hot-dogs",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.1389
+                     "commodity":  "conditioner",
+                     "store":  "Baker\u0027s",
+                     "sale_per_unit":  0.2908
                  },
                  {
-                     "commodity":  "laundry-detergent",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.0941
+                     "commodity":  "oat-milk",
+                     "store":  "Baker\u0027s",
+                     "sale_per_unit":  0.0702
                  },
                  {
-                     "commodity":  "lemonade",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.0498
+                     "commodity":  "paper-plates",
+                     "store":  "Baker\u0027s",
+                     "sale_per_unit":  0.0584
                  },
                  {
-                     "commodity":  "mushrooms",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.2488
+                     "commodity":  "pretzels",
+                     "store":  "Baker\u0027s",
+                     "sale_per_unit":  0.1667
                  },
                  {
-                     "commodity":  "parmesan",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.2878
-                 },
-                 {
-                     "commodity":  "pasta",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.0781
-                 },
-                 {
-                     "commodity":  "peaches",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  2.99
-                 },
-                 {
-                     "commodity":  "pork-chops",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  2.49
-                 },
-                 {
-                     "commodity":  "potato-chips",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.4306
-                 },
-                 {
-                     "commodity":  "salmon",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  11.99
+                     "commodity":  "protein-bars",
+                     "store":  "Baker\u0027s",
+                     "sale_per_unit":  1.998
                  },
                  {
                      "commodity":  "sandwich-cookies",
@@ -133,59 +93,14 @@
                      "sale_per_unit":  0.2745
                  },
                  {
-                     "commodity":  "shredded-cheese",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.2158
+                     "commodity":  "shampoo",
+                     "store":  "Baker\u0027s",
+                     "sale_per_unit":  0.2908
                  },
                  {
-                     "commodity":  "sirloin-steak",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  11.99
-                 },
-                 {
-                     "commodity":  "sour-cream",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.2136
-                 },
-                 {
-                     "commodity":  "sports-drinks",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.0446
-                 },
-                 {
-                     "commodity":  "strawberries",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.1559
-                 },
-                 {
-                     "commodity":  "sweet-corn",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.9975
-                 },
-                 {
-                     "commodity":  "tomatoes",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  2.29
-                 },
-                 {
-                     "commodity":  "tortilla-chips",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.3405
-                 },
-                 {
-                     "commodity":  "watermelon",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  5.99
-                 },
-                 {
-                     "commodity":  "onions",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.9967
-                 },
-                 {
-                     "commodity":  "yogurt",
-                     "store":  "Family Fare",
-                     "sale_per_unit":  0.1333
+                     "commodity":  "turkey-bacon",
+                     "store":  "Baker\u0027s",
+                     "sale_per_unit":  0.3329
                  }
              ]
 }

@@ -14086,10 +14086,11 @@
                                                      },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/3923781/hy-vee-ranch-dressing",
-                                                        "price":  4.99,
-                                                        "size":  "36 fl oz",
                                                         "name":  "Hy-Vee Ranch Dressing",
-                                                        "board_pu":  0.1386
+                                                        "board_pu":  0.1386,
+                                                        "price":  4.49,
+                                                        "size":  "36 fl oz",
+                                                        "verified":  "2026-07-15 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/Member-s-Mark-Ranch-Dressing-1-gal/7874227011",
@@ -15061,10 +15062,11 @@
                                                     },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/2909707/thats-smart-recloseable-sandwich-bags",
-                                                       "price":  1,
-                                                       "size":  "35 ct",
                                                        "name":  "That\u0027s Smart! Recloseable Sandwich Bags",
-                                                       "board_pu":  0.0286
+                                                       "board_pu":  0.0286,
+                                                       "price":  1.19,
+                                                       "size":  "35 ct",
+                                                       "verified":  "2026-07-15 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                    },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/Ziploc-Brand-Snack-Bags-with-EasyGuide-Texture-Grip-n-Seal-Technology-300-ct/13901355799",
@@ -15978,9 +15980,10 @@
                                                    },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2913524/thats-smart-reclosable-freezer-storage-bags-1-gallon",
-                                                      "price":  1,
+                                                      "name":  "That\u0027s Smart! Reclosable Freezer Storage Bags 1 Gallon",
+                                                      "price":  1.19,
                                                       "size":  "12 ct",
-                                                      "name":  "That\u0027s Smart! Reclosable Freezer Storage Bags 1 Gallon"
+                                                      "verified":  "2026-07-15 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Ziploc-Brand-Gallon-Freezer-Storage-Bags-Stay-Open-Design-Easy-to-Fill-152-ct/2570014887",
@@ -17352,10 +17355,11 @@
                                                  },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/2913522/tall-kitchen-bags-with-twist-ties",
-                                                    "price":  3.98,
-                                                    "size":  "70 ct",
                                                     "name":  "Tall Kitchen Bags With Twist Ties",
-                                                    "board_pu":  0.0569
+                                                    "board_pu":  0.0569,
+                                                    "price":  4.49,
+                                                    "size":  "70 ct",
+                                                    "verified":  "2026-07-15 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/Member-s-Mark-Power-Flex-13-Gallon-Tall-Kitchen-Trash-Bags-200-ct/7874222509",
