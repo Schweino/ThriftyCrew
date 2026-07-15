@@ -1,15 +1,5 @@
 ﻿[
     {
-        "id":  "chicken-wings",
-        "q":  "Heritage Farm Bone In Skin On Chicken Wings",
-        "size":  "lb"
-    },
-    {
-        "id":  "coffee-creamer",
-        "q":  "Kroger Coffee Creamer (Caramel Vanilla/Italian Sweet Cream)",
-        "size":  "32 fl oz"
-    },
-    {
         "id":  "apples",
         "q":  "Kroger Granny Smith Apples 3 Pound Bag",
         "size":  "3 lb"
@@ -20,24 +10,9 @@
         "size":  "each"
     },
     {
-        "id":  "beef-stew",
-        "q":  "Kroger® Beef Stew 20 oz",
-        "size":  "20 oz"
-    },
-    {
-        "id":  "corned-beef-hash",
-        "q":  "Hormel® Mary Kitchen® Corned Beef Hash NET WT 14 oz. (397g",
-        "size":  "14 oz"
-    },
-    {
         "id":  "canned-yams",
         "q":  "Bruce\u0027s® Cut Sweet Potato Yams in Syrup 40 oz",
         "size":  "40 oz"
-    },
-    {
-        "id":  "canned-pumpkin",
-        "q":  "Kroger® 100% Pure Pumpkin 15 oz",
-        "size":  "15 oz"
     },
     {
         "id":  "canned-pears",
@@ -45,24 +20,9 @@
         "size":  "29 oz"
     },
     {
-        "id":  "tomatoes-green-chilies",
-        "q":  "Kroger Diced Tomatoes with Green Chilies Original 14.5 oz",
-        "size":  "14.5 oz"
-    },
-    {
-        "id":  "canned-green-chilies",
-        "q":  "Kroger® Diced Green Chile Peppers 4 oz",
-        "size":  "4 oz"
-    },
-    {
         "id":  "black-olives",
         "q":  "Kroger® Small Pitted Ripe Olives 6 oz",
         "size":  "6 oz"
-    },
-    {
-        "id":  "artichoke-hearts",
-        "q":  "Kroger® Quartered Artichoke Hearts in Brine 14 oz",
-        "size":  "14 oz"
     },
     {
         "id":  "vegetable-broth",
@@ -70,39 +30,9 @@
         "size":  "32 oz"
     },
     {
-        "id":  "bouillon",
-        "q":  "Knorr Chicken Cube Bouillon 8 ct / 3.1 oz",
-        "size":  "8 pk 3.1 oz"
-    },
-    {
         "id":  "coconut-milk-canned",
         "q":  "Simple Truth Organic® Unsweetened Coconut Milk 13.5 fl oz",
         "size":  "13.5 fl oz"
-    },
-    {
-        "id":  "canned-potatoes",
-        "q":  "Kroger Whole White Potatoes - 15oz can 15 oz",
-        "size":  "15 oz"
-    },
-    {
-        "id":  "hominy",
-        "q":  "Juanita\u0027s Foods Mexican Style Hominy, 110 oz, Can 110 oz t",
-        "size":  "110 oz"
-    },
-    {
-        "id":  "jarred-gravy",
-        "q":  "Campbell\u0027s Turkey Gravy 10.5 oz Can 10.5 oz",
-        "size":  "10.5 oz"
-    },
-    {
-        "id":  "honey-mustard",
-        "q":  "Kroger® Honey Mustard 12 oz",
-        "size":  "12 oz"
-    },
-    {
-        "id":  "caesar-dressing",
-        "q":  "Ken\u0027s Steak House® Creamy Caesar Salad Dressing 16 fl oz t",
-        "size":  "16 fl oz"
     },
     {
         "id":  "balsamic-vinegar",
@@ -120,63 +50,13 @@
         "size":  "11.5 fl oz"
     },
     {
-        "id":  "horseradish",
-        "q":  "Silver Spring® Coarse Cut Prepared Horseradish 8 oz",
-        "size":  "8 oz"
-    },
-    {
-        "id":  "bottled-marinade",
-        "q":  "Lawry\u0027s Steak \u0026 Chop Marinade, 12.0 fl oz 12 fl oz",
-        "size":  "12.0 fl oz"
-    },
-    {
         "id":  "minced-garlic",
         "q":  "Spice World Minced Garlic 32 oz 32 oz",
         "size":  "32 oz"
     },
     {
-        "id":  "pickled-jalapenos",
-        "q":  "La Costena® Sliced Jalapeno Peppers 12 oz",
-        "size":  "12 oz"
-    },
-    {
-        "id":  "banana-peppers",
-        "q":  "Mezzetta® Mild Banana Pepper Rings 16 FL OZ",
-        "size":  "16 fl oz"
-    },
-    {
-        "id":  "lime-juice",
-        "q":  "ReaLime 100% Lime Juice, 15 fl oz bottle 15 oz",
-        "size":  "15 fl oz"
-    },
-    {
-        "id":  "cereal",
-        "q":  "Kroger Bite Size Frosted Shredded Wheat Cereal (18 oz)",
-        "size":  "18 oz"
-    },
-    {
-        "id":  "peanut-butter",
-        "q":  "Kroger Peanut Butter Creamy (64 oz)",
-        "size":  "64 oz"
-    },
-    {
-        "id":  "oven-cleaner",
-        "q":  "Easy Off Heavy Duty Oven Cleaner 14.5 oz",
-        "size":  "14.5 oz"
-    },
-    {
-        "id":  "peanut-butter",
-        "q":  "Kroger Peanut Butter Creamy (64 oz)",
-        "size":  "64 oz"
-    },
-    {
         "id":  "bread-crumbs",
         "q":  "Kikkoman® Panko Japanese Style Bread Crumbs",
         "size":  "8 oz"
-    },
-    {
-        "id":  "hominy",
-        "q":  "Juanita\u0027s Foods Mexican Style Hominy, 110 oz, Can 110 oz t",
-        "size":  "110 oz"
     }
 ]

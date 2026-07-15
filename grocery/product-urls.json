@@ -1561,6 +1561,12 @@
                                                     "name":  "Green Bell Peppers, Package",
                                                     "board_pu":  0.83
                                                 },
+                                       "Baker\u0027s":  {
+                                                            "url":  "https://www.bakersplus.com/p/fresh-large-green-bell-pepper/0000000004065",
+                                                            "price":  0.99,
+                                                            "size":  "each",
+                                                            "name":  "Fresh Large Green Bell Pepper"
+                                                        },
                                        "Fareway":  {
                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3256531",
                                                        "price":  1.17,
@@ -1630,6 +1636,12 @@
                                    },
                   "black-olives":  {
                                        "commodity":  "Black Olives (canned, ripe)",
+                                       "Baker\u0027s":  {
+                                                            "url":  "https://www.bakersplus.com/p/kroger-small-pitted-ripe-olives/0001111082201",
+                                                            "price":  1.99,
+                                                            "size":  "6 oz",
+                                                            "name":  "Kroger® Small Pitted Ripe Olives 6 oz"
+                                                        },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/10315444",
                                                        "price":  1.97,
@@ -2961,6 +2973,15 @@
                                                          "size":  "14.75 oz"
                                                      }
                                      },
+                  "canned-pears":  {
+                                       "commodity":  "Canned Pears",
+                                       "Baker\u0027s":  {
+                                                            "url":  "https://www.bakersplus.com/p/del-monte-pear-halves/0002400001022",
+                                                            "price":  4.29,
+                                                            "size":  "29 oz",
+                                                            "name":  "Del Monte Pear Halves 29 oz"
+                                                        }
+                                   },
                   "canned-peas":  {
                                       "commodity":  "canned-peas",
                                       "Aldi":  {
@@ -3248,6 +3269,12 @@
                                          },
                   "canned-yams":  {
                                       "commodity":  "Canned Yams / Sweet Potatoes",
+                                      "Baker\u0027s":  {
+                                                           "url":  "https://www.bakersplus.com/p/bruce-s-cut-sweet-potato-yams-in-syrup/0001760004386",
+                                                           "price":  3.99,
+                                                           "size":  "40 oz",
+                                                           "name":  "Bruce\u0027s® Cut Sweet Potato Yams in Syrup 40 oz"
+                                                       },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/10308381",
                                                       "price":  2.47,
@@ -11898,6 +11925,12 @@
                            },
                   "minced-garlic":  {
                                         "commodity":  "Minced Garlic (jarred)",
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/spice-world-minced-garlic-32-oz/0007096900111",
+                                                             "price":  6.99,
+                                                             "size":  "32 oz",
+                                                             "name":  "Spice World Minced Garlic 32 oz 32 oz"
+                                                         },
                                         "Walmart":  {
                                                         "url":  "https://www.walmart.com/ip/10320871",
                                                         "price":  3.24,
@@ -17871,6 +17904,12 @@
                                       },
                   "vegetable-broth":  {
                                           "commodity":  "Vegetable Broth / Stock",
+                                          "Baker\u0027s":  {
+                                                               "url":  "https://www.bakersplus.com/p/kroger-fat-free-vegetable-broth/0001111004968",
+                                                               "price":  1.59,
+                                                               "size":  "32 oz",
+                                                               "name":  "Kroger® Fat Free Vegetable Broth 32 oz"
+                                                           },
                                           "Walmart":  {
                                                           "url":  "https://www.walmart.com/ip/54258473",
                                                           "price":  1.27,
