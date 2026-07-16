@@ -7,7 +7,7 @@
     "household": ["\\blysol\\b", "\\bclorox\\b", "disinfect", "\\bcleaner\\b", "detergent", "\\bbleach\\b", "air\\s+freshener", "febreze", "\\bcandle\\b", "deodorant", "\\bwipes\\b", "\\bdrano\\b", "windex", "swiffer", "dish\\s+soap", "laundry", "fabric\\s+softener", "dryer\\s+sheets?", "trash\\s+bags?", "\\bshampoo\\b", "body\\s*wash", "\\bconditioner\\b", "\\blotion\\b", "toothpaste", "\\bmouthwash\\b", "hand\\s+soap", "body\\s+spray", "\\bsunscreen\\b"],
     "bakery_carrier": ["\\bbagels?\\b", "\\bmuffins?\\b", "\\bscones?\\b", "\\bwaffles?\\b", "pancake", "toaster\\s+pastr", "pop[\\s-]?tarts?", "\\bcereal\\b", "granola", "\\bcake\\b", "\\bpies?\\b", "\\bcookies?\\b", "donuts?", "doughnuts?", "\\bloaf\\b", "strudel", "turnovers?", "\\bdanish\\b"],
     "dairy_carrier": ["yog(h)?urt", "\\bkefir\\b", "cottage\\s+cheese", "cream\\s+cheese", "ice\\s+cream", "\\bmilk\\b"],
-    "candy": ["\\bcandy\\b", "gumm(y|ies|i)", "chocolate[\\s-]covered", "\\bnerds\\b", "freeze\\s*pops?", "popsicles?", "skittles", "starburst", "twizzlers", "jelly\\s+beans"]
+    "candy": ["\\bcandy\\b", "gumm(y|ies|i)", "chocolate[\\s-]covered", "\\bnerds\\b", "freeze\\s*pops?", "popsicles?", "skittles", "starburst", "twizzlers", "jelly\\s+beans", "fruit\\s+bars?", "fruit\\s+pops?", "ice\\s+bars?", "\\bhelados\\b", "\\boutshine\\b"]
   },
   "apply": [
     { "categories": "^(Fruit|Vegetables)$", "classes": ["beverage", "babyfood", "pet", "household", "bakery_carrier", "dairy_carrier", "candy"] },

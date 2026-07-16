@@ -182,7 +182,19 @@ function Get-ItemPrice([string]$priceText, [string]$nameText, $regular) {
   # and pricing Hy-Vee grapes at exactly $1.00/lb (1.88 / 1.88). Decimal fragments must never match.
   $pForMarker = $p -replace '(?i)(?<![\d.$])(?<!\$\s)\b\d+(?:\.\d+)?\s*-?\s*lbs?\.?\b', ' '
   $perlb = ($pForMarker -match '(?i)(per\s*lb|/\s*lb|\blb\.?\b|a\s*pound|per\s*pound)')
-  $pereach = ($p -match '(?i)(per\s*ea|/\s*ea|\bea\.?\b|each|per\s*ct|/\s*ct)')
+  # THE PER-LB TRAP ABOVE, TWICE OVER, ON PER-EACH (found 2026-07-16):
+  # (1) "each" carried NO WORD BOUNDARY, so any product whose name contains it set the per-each marker and the
+  #     engine published the PACK price as the price of ONE ITEM. "Clorox Disinfecting BLEACH Free Wipes"
+  #     ($3.99, 35 ct) priced at $3.99 PER WIPE; "Member's Mark Diced PEACH Cups" ($10.98, 24 pk) at $10.98 PER
+  #     CUP. B-l-each. P-each. Both 24-35x over, both silently dropped by the band, so the stores just vanished
+  #     from those rows instead of publishing an obvious lie - which is why it survived so long.
+  # (2) "\bea\b" matched a pack COUNT, not a price marker: "Arm & Hammer ... Power Paks 42 Ea" ($12.49) came out
+  #     $12.49 per POD instead of $0.297.
+  # The tell is the same one $pForMarker uses for lb: a real per-each price has its number attached to a $
+  # ("$1.99 ea"), a pack size does not ("42 Ea"). So strip un-priced "<n> ea/each/ct/pk" quantities BEFORE
+  # looking for the marker, and require a whole word for "each".
+  $pForEach = $p -replace '(?i)(?<![\d.$])(?<!\$\s)\b\d+(?:\.\d+)?\s*-?\s*(?:ea|each|ct|count|pk|packs?)\.?\b', ' '
+  $pereach = ($pForEach -match '(?i)(per\s*ea|/\s*ea|\bea\.?\b|\beach\b|per\s*ct|/\s*ct)')
   $reg = $null; if ($regular -ne $null -and "$regular" -ne '') { try { $reg = [double]$regular } catch {} }
 
   # BOGO: buy N get K free
@@ -225,7 +237,11 @@ function Get-ItemPrice([string]$priceText, [string]$nameText, $regular) {
 function Get-PackCount($text) {
   if (-not $text) { return $null }
   $t = ("" + $text).ToLower()
-  $m = [regex]::Match($t, '(?:per\s*)?(\d+)\s*[- ]?\s*(?:pack|pk|ct|count)\b')
+  # 'ea'/'each' belong here: stores write a pack count as "42 Ea" / "12 Ea" every bit as often as "12 ct"
+  # (Family Fare's Freshop feed does it throughout). Without them a 42-pod tub of laundry pacs had NO pack count
+  # at all and priced as ONE pod. Safe next to a weight: "About 1.56 lb each" cannot match, because the count
+  # must sit immediately before the unit and " lb " breaks it.
+  $m = [regex]::Match($t, '(?:per\s*)?(\d+)\s*[- ]?\s*(?:pack|pk|count|ct|each|ea)\b')
   if ($m.Success) { $n = [int]$m.Groups[1].Value; if ($n -gt 1) { return $n } }
   return $null
 }
