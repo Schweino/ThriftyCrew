@@ -104,19 +104,38 @@ Remove-Item $strayF -Force
 # Jul 19", when the store was charging $11.99/lb. It came from a 2-day-old undated "Aisles Online markdown"
 # in extra-deals. Because the cell is typed `sale`, every price audit skips it BY DESIGN - so this class was
 # invisible to all seven other guards. Rebuild the exact shape and prove guard 8 sees it.
+#
+# THIS TEST INJECTS ITS OWN extra-deals ROW, and must. It used to mutate only the BOARD and rely on a matching
+# markdown still existing in out\extra-deals-*.json. That file rotates: on 2026-07-16 the newest one had ZERO
+# rows, so guard 8's suspect list was empty, nothing matched, the guard passed, and the test failed - having
+# proved nothing about guard 8 for however long the file had been empty. Exactly the trap called out on the
+# household-in-food test above: A NEGATIVE TEST MUST CREATE ITS OWN FIXTURE. (Guard 8 only looks at extra-deals
+# files dated BEFORE today, which is the point - a markdown captured today is still live.)
 $cmpF = (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName
 $cbak2 = Get-Content $cmpF -Raw
 $cmpD  = $cbak2 | ConvertFrom-Json
 $sirloin = $cmpD.comparison | Where-Object { $_.id -eq 'sirloin-steak' } | Select-Object -First 1
 $hv = $sirloin.stores | Where-Object { $_.store -eq 'Hy-Vee' } | Select-Object -First 1
 if ($hv) {
+  $stale = 'Hy-Vee Angus Reserve Beef Loin Boneless Sirloin Steak'
+  # The fixture must go into the NEWEST extra-deals file, because that is the only one guard 8 reads
+  # (Sort-Object Name -Descending | Select -First 1). My first attempt wrote a fresh <today-2> file and the
+  # test still failed - the real, EMPTY <yesterday> file outsorted it and the guard read that instead.
+  $exF = (Get-ChildItem (Join-Path $root 'out\extra-deals-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
+  $exBak = Get-Content $exF -Raw
+  $exD = $exBak | ConvertFrom-Json
+  # an UNDATED markdown (no sale_end) cheaper than its own regular - the exact shape of the sirloin bug
+  $exD.deals = @(@($exD.deals) + ([pscustomobject]@{ store = 'Hy-Vee'; item = $stale; ad_price = '$6.99'; regular = 11.99; size = 'lb' }))
+  ($exD | ConvertTo-Json -Depth 6) | Set-Content $exF -Encoding UTF8
+
   $hv.type     = 'sale'
   $hv.per_unit = 6.99
   $hv.ad       = '$6.99'
-  $hv.item     = 'Hy-Vee Angus Reserve Beef Loin Boneless Sirloin Steak'
+  $hv.item     = $stale
   ($cmpD | ConvertTo-Json -Depth 8) | Set-Content $cmpF -Encoding UTF8
   Check 'stale sale: a 2-day-old undated markdown republished as a live sale' 2
   Set-Content $cmpF $cbak2 -Encoding UTF8 -NoNewline
+  Set-Content $exF $exBak -Encoding UTF8 -NoNewline
 } else {
   Write-Output '  SKIP  stale sale: no Hy-Vee sirloin cell to mutate'
 }
@@ -180,6 +199,35 @@ if ($bbCell) {
   Set-Content $cmpF2 $cbak3 -Encoding UTF8 -NoNewline
 } else {
   Write-Output '  SKIP  food-class: no priced blueberries cell to mutate'
+}
+
+# ---- 12/13. override pins must be DERIVABLE from their own link -----------------------
+# Guard 3 was rewritten 2026-07-16 because the old invariant ("a pin must not disagree with the engine") both
+# contradicted generate-board-overrides (whose whole job is to emit pins that DO disagree - the board is stale,
+# the link is right) and was a NO-OP anyway: it read only comparison-*.json while every pin in the file is a
+# RECIPE-board id, so it skipped all 20 and reported "ok". These two cases are what stop it going quiet again.
+$of = Join-Path $root 'board-price-overrides.json'
+if (Test-Path $of) {
+  $obak = Get-Content $of -Raw
+  $o = $obak | ConvertFrom-Json
+  if (@($o.cells).Count -gt 0) {
+    # 12. a HAND-EDITED pin: doubling per_unit must no longer match the link it claims to be derived from
+    $o.cells[0].per_unit = [math]::Round([double]$o.cells[0].per_unit * 2, 4)
+    ($o | ConvertTo-Json -Depth 6) | Set-Content $of -Encoding UTF8
+    Check 'pin: hand-edited per_unit no longer matches its own verified link' 2
+    Set-Content $of $obak -Encoding UTF8 -NoNewline
+
+    # 13. an UNSOURCED pin: a pin beats the engine, so one with no link is a number nothing can correct
+    $o2 = $obak | ConvertFrom-Json
+    $fake = $o2.cells[0].PSObject.Copy()
+    $fake.id = 'milk'; $fake.store = 'Nonexistent Store'; $fake.per_unit = 1.23
+    $o2.cells = @(@($o2.cells) + $fake)
+    ($o2 | ConvertTo-Json -Depth 6) | Set-Content $of -Encoding UTF8
+    Check 'pin: unsourced pin (no product-urls link to derive from)' 2
+    Set-Content $of $obak -Encoding UTF8 -NoNewline
+  } else {
+    Write-Output '  SKIP  pin: no override pins to mutate'
+  }
 }
 
 # ---- restored? ---------------------------------------------------------------------

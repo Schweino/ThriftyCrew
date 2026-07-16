@@ -1,11 +1,70 @@
-{
-  "readme": "Rows guards.ps1 invariant 5 would hard-fail, that a human has REVIEWED and cleared. Two kinds live here, and each entry must say which it is and how it was checked. (1) SIZE IS ALREADY THE TOTAL, verified against the store's own page - needed only when the name states no per-unit weight for the guard to multiply ('Summit Cola 12 Pack'), since as of 2026-07-16 the guard does that arithmetic itself whenever the name carries the weight. (2) REVIEWED, NOT A PER-UNIT BUG - the name's pack count does not describe the priced unit, and the row's own price proves it. Never add an entry to silence a gate you have not actually checked: the point of the guard is to catch the opposite case (Sam's '1 gal., 2 pk.' recorded as ONE gallon, published at 2x).",
-  "allow": [
-    { "store": "Aldi",   "item": "Summit Cola 12 Pack",                  "why": "TOTAL: 12 x 12 fl oz = 144 fl oz, and size already reads 144 fl oz (verified aldi.us 2026-07-14). The name states no per-unit weight, so the guard cannot do this multiplication itself." },
-    { "store": "Hy-Vee", "item": "Fleischmann's ActiveDry Yeast 3 Pack", "why": "TOTAL: 3 x 0.25 oz = 0.75 oz, and size was corrected to 0.75 oz (verified hy-vee.com 2026-07-14). The name states no per-unit weight." },
-    { "store": "Walmart","item": "Great Value Cream Cheese Brick (2 pk)","why": "TOTAL: 2 x 8 oz = 16 oz, and size already reads 16 oz (verified walmart.com 2026-07-14). The name states no per-unit weight." },
-    { "store": "Walmart","item": "Knorr Chicken Flavor Bouillon Cubes, 3.1 oz, 8 Pack Box", "why": "NOT A PER-UNIT BUG (reviewed 2026-07-16): the '8 Pack' counts CUBES INSIDE the box, and the stated 3.1 oz is the box's TOTAL weight, not one cube (8 cubes at ~0.4 oz each). size=3.1 oz is correct and $1.08 / 3.1 oz = $0.348/oz is the right per-unit. The guard flags it only because 8 x 3.1 does not equal 3.1." },
-    { "store": "Walmart","item": "Knorr Shelf Stable Cubes Chicken Bouillon, 9.3 oz, 24 Pack B", "why": "NOT A PER-UNIT BUG (reviewed 2026-07-16): same shape as the 8-pack box above - '24 Pack' counts cubes, 9.3 oz is the box total. $2.48 / 9.3 oz = $0.267/oz, correct." },
-    { "store": "Walmart","item": "HORMEL Chili Chicken Chipotle with Beans, 15 oz Can (12 pack", "why": "NOT A PER-UNIT BUG (reviewed 2026-07-16), but the ROW IS MISLABELLED and must be re-verified on the next Walmart capture. Walmart's title says '(12 pack)' while the price and the size are both for ONE 15 oz can: $3.64 cannot be 12 cans (that would be $0.30/can) and $3.64 / 15 oz = $0.243/oz is a normal single-can price. So the per-unit we publish is RIGHT and the title is wrong - the opposite of the bug this guard hunts (a pack price on a one-unit size, which publishes 12x HIGH). The row is also inert: canned-chili's Walmart cell is Wolf Brand at $0.152/oz, not this. If the listing really is a 12-pack then the PRICE is wrong and this entry must be deleted, not kept." }
-  ]
+﻿{
+    "readme":  "Rows guards.ps1 invariant 5 would hard-fail, that a human has REVIEWED and cleared. Two kinds live here, and each entry must say which it is and how it was checked. (1) SIZE IS ALREADY THE TOTAL, verified against the store\u0027s own page - needed only when the name states no per-unit weight for the guard to multiply (\u0027Summit Cola 12 Pack\u0027), since as of 2026-07-16 the guard does that arithmetic itself whenever the name carries the weight. (2) REVIEWED, NOT A PER-UNIT BUG - the name\u0027s pack count does not describe the priced unit, and the row\u0027s own price proves it. Never add an entry to silence a gate you have not actually checked: the point of the guard is to catch the opposite case (Sam\u0027s \u00271 gal., 2 pk.\u0027 recorded as ONE gallon, published at 2x).",
+    "allow":  [
+                  {
+                      "store":  "Aldi",
+                      "item":  "Summit Cola 12 Pack",
+                      "why":  "TOTAL: 12 x 12 fl oz = 144 fl oz, and size already reads 144 fl oz (verified aldi.us 2026-07-14). The name states no per-unit weight, so the guard cannot do this multiplication itself."
+                  },
+                  {
+                      "store":  "Hy-Vee",
+                      "item":  "Fleischmann\u0027s ActiveDry Yeast 3 Pack",
+                      "why":  "TOTAL: 3 x 0.25 oz = 0.75 oz, and size was corrected to 0.75 oz (verified hy-vee.com 2026-07-14). The name states no per-unit weight."
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Great Value Cream Cheese Brick (2 pk)",
+                      "why":  "TOTAL: 2 x 8 oz = 16 oz, and size already reads 16 oz (verified walmart.com 2026-07-14). The name states no per-unit weight."
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Knorr Chicken Flavor Bouillon Cubes, 3.1 oz, 8 Pack Box",
+                      "why":  "NOT A PER-UNIT BUG (reviewed 2026-07-16): the \u00278 Pack\u0027 counts CUBES INSIDE the box, and the stated 3.1 oz is the box\u0027s TOTAL weight, not one cube (8 cubes at ~0.4 oz each). size=3.1 oz is correct and $1.08 / 3.1 oz = $0.348/oz is the right per-unit. The guard flags it only because 8 x 3.1 does not equal 3.1."
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "Knorr Shelf Stable Cubes Chicken Bouillon, 9.3 oz, 24 Pack B",
+                      "why":  "NOT A PER-UNIT BUG (reviewed 2026-07-16): same shape as the 8-pack box above - \u002724 Pack\u0027 counts cubes, 9.3 oz is the box total. $2.48 / 9.3 oz = $0.267/oz, correct."
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "HORMEL Chili Chicken Chipotle with Beans, 15 oz Can (12 pack",
+                      "why":  "NOT A PER-UNIT BUG (reviewed 2026-07-16), but the ROW IS MISLABELLED and must be re-verified on the next Walmart capture. Walmart\u0027s title says \u0027(12 pack)\u0027 while the price and the size are both for ONE 15 oz can: $3.64 cannot be 12 cans (that would be $0.30/can) and $3.64 / 15 oz = $0.243/oz is a normal single-can price. So the per-unit we publish is RIGHT and the title is wrong - the opposite of the bug this guard hunts (a pack price on a one-unit size, which publishes 12x HIGH). The row is also inert: canned-chili\u0027s Walmart cell is Wolf Brand at $0.152/oz, not this. If the listing really is a 12-pack then the PRICE is wrong and this entry must be deleted, not kept."
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "(4 pack) Armour Star Classic Homestyle Beef Stew, 13g Protei",
+                      "why":  "TOTAL: 80 oz / 4 = 20 oz, which is Armour Star Beef Stew\u0027s can size. The board publishes $10.72/80oz = $0.134/oz, correct. The guard cannot verify it because the name is TRUNCATED AT 60 CHARS and loses its \"20 oz Can\" (\"13g\" is protein, not pack weight). Reviewed 2026-07-16. DELETE THIS ENTRY once the 60-char name truncation (hyvee\\browser-link-resolve.js .slice(0,60)) is fixed and the full name comes back - the guard will then verify it by arithmetic and need no human."
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "(4 pack) Chef Boyardee Overstuffed Beef Ravioli in Pasta Sau",
+                      "why":  "TOTAL: 59.8 oz / 4 = 14.95 oz, Chef Boyardee\u0027s Overstuffed can size. Name truncated at 60 chars, so no per-unit weight survives for the arithmetic. Reviewed 2026-07-16. DELETE THIS ENTRY once the 60-char name truncation (hyvee\\browser-link-resolve.js .slice(0,60)) is fixed and the full name comes back - the guard will then verify it by arithmetic and need no human."
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "(2 pack) Chef Boyardee Mini Beef Ravioli And Meatballs In To",
+                      "why":  "TOTAL: 29.9 oz / 2 = 14.95 oz, the standard Chef Boyardee can. Name truncated at 60 chars. Reviewed 2026-07-16. DELETE THIS ENTRY once the 60-char name truncation (hyvee\\browser-link-resolve.js .slice(0,60)) is fixed and the full name comes back - the guard will then verify it by arithmetic and need no human."
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "(4 pack) Chef Boyardee Cheese Ravioli in Tomato Sauce, Ready",
+                      "why":  "TOTAL: 59.7 oz / 4 = 14.9 oz, the standard Chef Boyardee can. Name truncated at 60 chars. Reviewed 2026-07-16. DELETE THIS ENTRY once the 60-char name truncation (hyvee\\browser-link-resolve.js .slice(0,60)) is fixed and the full name comes back - the guard will then verify it by arithmetic and need no human."
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "(12 pack) Del Monte Pear Halves in 100% Juice, Canned Fruit,",
+                      "why":  "TOTAL: 179.9 oz / 12 = 15 oz, Del Monte\u0027s can size. Name truncated at 60 chars. Reviewed 2026-07-16. DELETE THIS ENTRY once the 60-char name truncation (hyvee\\browser-link-resolve.js .slice(0,60)) is fixed and the full name comes back - the guard will then verify it by arithmetic and need no human."
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "(6 pack) Knorr Shelf Stable Granulated Chicken Bouillon, 32",
+                      "why":  "TOTAL: 192.5 oz / 6 = 32 oz - and the truncation cut the name mid-number (\"...Bouillon, 32\"), so the \"32 oz\" the arithmetic needs is literally half-gone. Reviewed 2026-07-16. DELETE THIS ENTRY once the 60-char name truncation (hyvee\\browser-link-resolve.js .slice(0,60)) is fixed and the full name comes back - the guard will then verify it by arithmetic and need no human."
+                  },
+                  {
+                      "store":  "Walmart",
+                      "item":  "(12 pack) Lipton Recipe Secrets Onion Dry Recipe Soup and Di",
+                      "why":  "TOTAL: 24 oz / 12 = 2 oz, Lipton Recipe Secrets\u0027 box size. Name truncated at 60 chars. Reviewed 2026-07-16. DELETE THIS ENTRY once the 60-char name truncation (hyvee\\browser-link-resolve.js .slice(0,60)) is fixed and the full name comes back - the guard will then verify it by arithmetic and need no human."
+                  }
+              ]
 }

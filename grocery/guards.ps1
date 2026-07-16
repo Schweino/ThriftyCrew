@@ -1,4 +1,4 @@
-<#
+﻿<#
   guards.ps1 - the BLOCKING invariant gate. Run before every publish; a hard failure means the board
   must NOT go live.
 
@@ -11,8 +11,14 @@
     1. price-mode      : a mode-sensitive store (Aldi/Fareway - Instacart storefronts) not pinned to
                          the IN-STORE catalogue. Their delivery catalogue is marked up ~11%.
     2. household-in-food: a cleaning product resolving to an EDIBLE commodity.
-    3. rogue pin       : a board-price-override pin that disagrees with what the engine computed. A pin
-                         BEATS the engine, so a wrong pin publishes a number nothing else can correct.
+    3. underivable pin : a board-price-override pin that does NOT equal the verified link it claims to be
+                         derived from (hand-edited, or its link moved), has no link at all, or was derived
+                         from a link name-drift flags as the wrong product. A pin BEATS the engine, so a pin
+                         nobody can re-derive publishes a number nothing else can correct.
+                         NOT "a pin that disagrees with the engine" - disagreeing with the engine is a pin's
+                         whole JOB (generate-board-overrides pins a cell whose board price is >30% off its
+                         verified link). That old test contradicted the generator AND was a no-op: it read
+                         only the staple board while every pin is a recipe-board id. See the note at guard 3.
     4. factor mismatch : an EVERYDAY cell whose linked product's per-unit differs from the board's by a
                          FACTOR (>=1.5x or <=0.67x).
                          *** THE KEY IDEA ***: a store changing its price moves it a few percent. A
@@ -98,25 +104,67 @@ $cmpF = Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Na
 $cmp  = Get-Content $cmpF.FullName -Raw | ConvertFrom-Json
 $pu   = (Get-Content (Join-Path $root 'product-urls.json') -Raw | ConvertFrom-Json).items
 
-# ---------------------------------------------------------------- 3: a pin must never beat the engine
+# ---------------------------------------------------------------- 3: a pin must be DERIVABLE from its own link
+# REWRITTEN 2026-07-16. The old invariant was "a pin must not disagree with the engine (>2%)", which was wrong
+# twice over:
+#
+#  1. IT CONTRADICTED THE THING IT GUARDED. generate-board-overrides.ps1 EXISTS to pin a cell whose board price
+#     disagrees with its verified link by >30% - "the board number is stale, pin it to the link". So the
+#     generator only ever emits pins that fail the old test. Every legitimate staple pin blocked the publish;
+#     this morning's blueberries/Aldi and granola-bars/Hy-Vee pins did exactly that.
+#  2. IT WAS A NO-OP ANYWAY. It read only comparison-*.json (the STAPLE board), but the generator pins BOTH
+#     boards ($staple + out\recipe-board.json). All 20 pins in the file right now are recipe-board ids
+#     (parmesan-cheese, smoked-paprika, apple, fries...) - so `if (-not $row) { continue }` skipped every single
+#     one. The guard has been reporting "ok" while checking nothing, same fail-open shape as the dead
+#     name-drift check in generate-board-overrides.
+#
+# THE REAL INVARIANT: a pin BEATS the engine by design, so what must hold is that it is REPRODUCIBLE - it must
+# equal the per-unit of the verified link it claims to come from, and that link must not be a wrong product.
+# That catches what actually hurts (a hand-edited pin, a pin left behind after its link moved, a pin derived
+# from a mis-resolved link) without failing the pin for doing its job. Checked across BOTH boards, with pu-lib -
+# the same math build-deals-page publishes with.
 $ovrF = Join-Path $root 'board-price-overrides.json'
-$rogue = 0
+$rogue = 0; $pinChecked = 0; $pinSkipped = 0
 if (Test-Path $ovrF) {
   $ovr = Get-Content $ovrF -Raw | ConvertFrom-Json
+  # unit per id, from BOTH boards
+  $unitById = @{}
+  foreach ($r in $cmp.comparison) { $unitById[[string]$r.id] = [string]$r.unit }
+  $rbF = Join-Path $root 'out\recipe-board.json'
+  if (Test-Path $rbF) { foreach ($r in (Get-Content $rbF -Raw | ConvertFrom-Json).comparison) { if (-not $unitById.ContainsKey([string]$r.id)) { $unitById[[string]$r.id] = [string]$r.unit } } }
+  # name-drift: a pin must never be derived from a wrong-product link
+  $pinDrift = @{}
+  $ndF = Join-Path $root 'out\name-drift.json'
+  if (Test-Path $ndF) { foreach ($d in (Get-Content $ndF -Raw | ConvertFrom-Json).flags) { $pinDrift[([string]$d.id + '|' + [string]$d.store)] = [string]$d.reason } }
+
   foreach ($c in $ovr.cells) {
-    $row  = $cmp.comparison | Where-Object { $_.id -eq $c.id }
-    if (-not $row) { continue }
-    $cell = $row.stores | Where-Object { $_.store -eq $c.store }
-    if (-not $cell) { continue }
-    $pin = [double]$c.per_unit; $eng = [double]$cell.per_unit
-    if ($eng -le 0) { continue }
-    if ([math]::Abs($eng - $pin) / $eng -gt 0.02) {
+    $id = [string]$c.id; $st = [string]$c.store
+    $unit = $unitById[$id]
+    if (-not $unit) { $pinSkipped++; continue }          # id on neither board -> nothing to price against
+    $lnk = $pu.$id.$st
+    if (-not $lnk -or -not $lnk.price) {
       $rogue++
-      [void]$fail.Add(("HARD FAIL: pin OVERRIDES engine  {0} / {1}  pin={2} engine={3}" -f $c.id, $c.store, [math]::Round($pin,4), [math]::Round($eng,4)))
+      [void]$fail.Add(("HARD FAIL: pin has NO LINK to derive from  {0} / {1}  pin={2} - a pin beats the engine, so one that cannot be re-derived is an unsourced number nothing can correct" -f $id, $st, $c.per_unit))
+      continue
+    }
+    if ($pinDrift.ContainsKey($id + '|' + $st)) {
+      $rogue++
+      [void]$fail.Add(("HARD FAIL: pin derived from a WRONG-PRODUCT link  {0} / {1}  [{2}]  link='{3}' - name-drift flags this link, so its price must not be pinned onto the board" -f $id, $st, $pinDrift[$id + '|' + $st], [string]$lnk.name))
+      continue
+    }
+    $sp = 0.0; [void][double]::TryParse((([string]$lnk.price) -replace '[^0-9.]', ''), [ref]$sp)
+    $lpu = Get-LinkPerUnit -size ([string]$lnk.size) -unit $unit -price $sp -name ([string]$lnk.name)
+    if ($null -eq $lpu -or $lpu -le 0) { $pinSkipped++; continue }   # link carries no usable basis - guard 4 reports that class
+    $pin = [double]$c.per_unit
+    $pinChecked++
+    if ([math]::Abs($lpu - $pin) / $lpu -gt 0.02) {
+      $rogue++
+      [void]$fail.Add(("HARD FAIL: pin does NOT match its own link  {0} / {1}  pin={2} link={3} ('{4}') - a derived pin must equal the link it came from; this one was hand-edited or its link moved" -f $id, $st, [math]::Round($pin, 4), [math]::Round($lpu, 4), [string]$lnk.name))
     }
   }
 }
-if ($rogue -eq 0) { Say '  ok    no override pin disagrees with the engine' }
+if ($rogue -eq 0) { Say ("  ok    every override pin is derivable from its own verified link ($pinChecked checked)") }
+if ($pinSkipped -gt 0) { [void]$warn.Add("$pinSkipped pin(s) could NOT be re-derived (id on neither board, or the link carries no usable unit basis) - not a pass, an unknown") }
 
 # ---------------------------------------------------------------- 4: factor mismatch (board vs its own link)
 # Per-unit math comes from pu-lib.ps1 - the SAME function build-deals-page uses to publish the number. This
@@ -210,21 +258,21 @@ foreach ($f in (RegFiles)) {
     if (Test-SizeIsPackTotal $name $sv) { $mpTotals++; continue }
     $key = [string]$doc.store + '|' + $name
     if ($allow -contains $key) { continue }
-    # NOTHING TO MULTIPLY -> "unknown", not "guilty". Product names reach us TRUNCATED AT 60 CHARS (the browser
-    # bridge caps them: hyvee\browser-link-resolve.js slices to 60 so results fit through the tool output limit),
-    # which cuts the per-unit weight clean off - "(4 pack) Armour Star ... Beef Stew, 13g Protei" loses its
-    # "20 oz Can", and "13g" is protein, not pack weight. With no weight token there is no arithmetic to do, and
-    # hard-failing on a capture artifact blocks the nightly publish forever over rows that are provably fine
-    # ($10.72 / 80 oz IS the $0.134/oz the board publishes). So: COUNT it and SAY it, the same way guard 4 reports
-    # its unpriceable cells. Not a pass - an unknown. Guard 4's board-vs-link factor check still covers these
-    # rows if they carry a link. The durable fix is upstream: stop truncating the names.
-    if (-not [regex]::IsMatch($name.ToLower(), '([\d.]+)\s*(?:fl\s?oz|oz|lb)\b')) { $mpUnknown++; continue }
+    # NOTHING TO MULTIPLY -> STILL A HARD FAIL. This gate fails CLOSED, on purpose.
+    # I first made this case an "unknown" (count it, warn, move on), reasoning that names reach us TRUNCATED AT
+    # 60 CHARS (hyvee\browser-link-resolve.js slices to 60 to fit the tool output limit) so the per-unit weight
+    # is simply gone - "(4 pack) Armour Star ... Beef Stew, 13g Protei" lost its "20 oz Can". test-guards.ps1
+    # immediately failed: the ORIGINAL Sam's bug this guard was built for is "ReaLemon 100% Lemon Juice (2 pk)"
+    # with size "48 fl oz" (one bottle; truth 2 x 48) - a name with a pack count and NO weight. My escape hatch
+    # swallowed it. A price guard that goes quiet when it cannot tell is worse than one that cries wolf: the
+    # wolf here publishes a 2x price. So when the arithmetic cannot decide, FAIL, and let a human clear it in
+    # multipack-allowlist.json with the reasoning written down. The 60-char truncation is the real fix.
     $mp++
     [void]$fail.Add(("HARD FAIL: multipack size  [{0}] '{1}' size=[{2}] records ONE unit (name says a pack count and its stated weight does not reconcile with the size)" -f $doc.store, $name, $size))
   }
 }
 if ($mp -eq 0) { Say ("  ok    no multipack row prices a pack as a single unit ($mpTotals pack-total size(s) verified by arithmetic)") }
-if ($mpUnknown -gt 0) { [void]$warn.Add("$mpUnknown multipack row(s) state a pack count but no per-unit weight (names truncated at 60 chars by the browser bridge) - the pack-total arithmetic could NOT check them; not a pass, an unknown") }
+
 
 # ---------------------------------------------------------------- 6: a store's data collapsed
 # A throttled / half-failed pull that writes a thin file must never become a store's source of truth.
