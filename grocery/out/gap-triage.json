@@ -1,15 +1,7 @@
 ﻿{
-    "generated":  "2026-07-16 09:00",
-    "count":  59,
+    "generated":  "2026-07-16 09:14",
+    "count":  6,
     "rows":  [
-                 {
-                     "commodity":  "lettuce",
-                     "store":  "Family Fare",
-                     "candidate":  "Fresh Iceberg Lettuce Head",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "lettuce",
-                     "detail":  ""
-                 },
                  {
                      "commodity":  "bagels",
                      "store":  "Fareway",
@@ -19,68 +11,12 @@
                      "detail":  ""
                  },
                  {
-                     "commodity":  "brown-sugar",
-                     "store":  "Family Fare",
-                     "candidate":  "Starbucks Coffee, Ground, Brown Sugar Cinnamon 11 Oz",
-                     "cause":  "STOLEN",
-                     "owner":  "coffee",
-                     "detail":  "coffee"
-                 },
-                 {
-                     "commodity":  "hand-soap",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Hy-Vee Clear Hands Soap",
-                     "cause":  "NO-INCLUDE",
-                     "owner":  "",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "pears",
-                     "store":  "Family Fare",
-                     "candidate":  "Fresh Pears, Bartlett Melissa\u0027s",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "pears",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "kiwi",
-                     "store":  "Family Fare",
-                     "candidate":  "Regular Kiwifruit",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "kiwi",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "blackberries",
-                     "store":  "Family Fare",
-                     "candidate":  "Lacroix Blackberry Cucumber Sparkling Water",
-                     "cause":  "GLOBAL-EXCL",
-                     "owner":  "sparkling-water",
-                     "detail":  "sparkling"
-                 },
-                 {
-                     "commodity":  "asparagus",
-                     "store":  "Family Fare",
-                     "candidate":  "Birds Eye Gold \u0026 White Corn, Carrots \u0026 Asparagus 10.8 Oz",
-                     "cause":  "STOLEN",
-                     "owner":  "carrots",
-                     "detail":  "carrots"
-                 },
-                 {
-                     "commodity":  "cilantro",
-                     "store":  "Family Fare",
-                     "candidate":  "Ro Tel Mexican Style Lime \u0026 Cilantro Diced Tomatoes With Lime Juice \u0026 Cilantro 10 Oz",
-                     "cause":  "GLOBAL-EXCL",
-                     "owner":  "diced-tomatoes",
-                     "detail":  "(?\u003c!orange\\s)\\bjuice\\b"
-                 },
-                 {
                      "commodity":  "fresh-ginger",
                      "store":  "Family Fare",
-                     "candidate":  "Fresh Gourmet Fresh Gourmet Garlic Ginger Wonton Strips 3.5 Oz",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "fresh-ginger",
-                     "detail":  ""
+                     "candidate":  "Swanson® Sipping Chicken Bone Broth With Ginger And Turmeric 10.750 Oz",
+                     "cause":  "STOLEN",
+                     "owner":  "chicken-broth",
+                     "detail":  "chicken-broth"
                  },
                  {
                      "commodity":  "ribeye-steak",
@@ -88,22 +24,6 @@
                      "candidate":  "USDA Choice Thick Cut Ribeye Steak",
                      "cause":  "OUT-OF-BAND",
                      "owner":  "ribeye-steak",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "kielbasa",
-                     "store":  "Family Fare",
-                     "candidate":  "Smoked Hot Italian Sausage Hot",
-                     "cause":  "NO-INCLUDE",
-                     "owner":  "italian-sausage",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "turkey-lunchmeat",
-                     "store":  "Family Fare",
-                     "candidate":  "Jimmy Dean Delights Breakfast Bowl, Turkey Sausage, Frozen, Bowl 7 Oz",
-                     "cause":  "NO-INCLUDE",
-                     "owner":  "",
                      "detail":  ""
                  },
                  {
@@ -115,94 +35,6 @@
                      "detail":  ""
                  },
                  {
-                     "commodity":  "donuts",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Hostess donettes mini donuts, 9.5 to 11.25 oz., 2/ $5.00",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "donuts",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "donuts",
-                     "store":  "Fareway",
-                     "candidate":  "Hostess Donettes Frosted Mini Donuts",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "donuts",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "frosting",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Sam\u0027s Vanilla Whipped Icing, Frozen Bucket",
-                     "cause":  "GLOBAL-EXCL",
-                     "owner":  "",
-                     "detail":  "\\bfrozen\\b"
-                 },
-                 {
-                     "commodity":  "apple-cider-vinegar",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Hy-Vee Apple Cider Flavored Distilled Vinegar",
-                     "cause":  "NO-INCLUDE",
-                     "owner":  "",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "queso",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Litehouse Chunky Blue Cheese Dressing \u0026 Dip, 20 fl oz 20 f",
-                     "cause":  "NO-INCLUDE",
-                     "owner":  "",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "applesauce",
-                     "store":  "Family Fare",
-                     "candidate":  "Mott\u0027s Apple Sauce 6 Ea",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "applesauce",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "applesauce",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Unsweetened Applesauce",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "applesauce",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "pretzels",
-                     "store":  "Family Fare",
-                     "candidate":  "Snyder\u0027s Of Hanover® Seasoned Twisted Pretzel Sticks 12.000 Oz",
-                     "cause":  "GLOBAL-EXCL",
-                     "owner":  "",
-                     "detail":  "seasoned"
-                 },
-                 {
-                     "commodity":  "fruit-snacks",
-                     "store":  "Family Fare",
-                     "candidate":  "Del Monte Fruit Cup Snacks Mandarin Oranges In 100% Juice Family Pack 12 Ea",
-                     "cause":  "NO-INCLUDE",
-                     "owner":  "fruit-cups",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "fruit-cups",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Mandarin Oranges in 100% Juice",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "fruit-cups",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "fruit-cups",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Kroger® Canned Mandarin Oranges in Juice 10.5 oz",
-                     "cause":  "GLOBAL-EXCL",
-                     "owner":  "mandarin-oranges",
-                     "detail":  "\\bcanned\\b"
-                 },
-                 {
                      "commodity":  "pudding-cups",
                      "store":  "Fareway",
                      "candidate":  "Snack Pack Butterscotch Flavored Pudding",
@@ -211,268 +43,12 @@
                      "detail":  ""
                  },
                  {
-                     "commodity":  "fruit-punch",
-                     "store":  "Family Fare",
-                     "candidate":  "Ari Zona Mucho Mango/Watermelon/Fruit Punch/Kiwi Strawberry Juice Cocktails With Real Juice Party Pack 12 Ea",
-                     "cause":  "GLOBAL-EXCL",
-                     "owner":  "",
-                     "detail":  "cocktail"
-                 },
-                 {
-                     "commodity":  "sparkling-water",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Liquid Death Sparkling Water",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "sparkling-water",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "iced-tea",
-                     "store":  "Family Fare",
-                     "candidate":  "Our Family Sweet Corn, Super, Steamable 10 Oz",
-                     "cause":  "NO-INCLUDE",
-                     "owner":  "frozen-corn",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "iced-tea",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Kroger Thin Sliced Beef Ribeye Steak",
-                     "cause":  "NO-INCLUDE",
-                     "owner":  "ribeye-steak",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "tea-bags",
-                     "store":  "Aldi",
-                     "candidate":  "USDA Choice Black Angus Petite Sirloin Steak",
-                     "cause":  "NO-INCLUDE",
-                     "owner":  "sirloin-steak",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "tea-bags",
-                     "store":  "Family Fare",
-                     "candidate":  "Green Giant Steam In Bag Broccoli, Carrots \u0026 Sweet Peppers Antioxidant Blend Sauced Veggies 7 Oz",
-                     "cause":  "NO-INCLUDE",
-                     "owner":  "carrots",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "hot-cocoa",
-                     "store":  "Fareway",
-                     "candidate":  "Nestle Hot Cocoa Rich Milk Chocolate Flavored Mix Powder",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "hot-cocoa",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "frozen-burritos",
-                     "store":  "Family Fare",
-                     "candidate":  "Mission Super Soft Burrito Flour Tortilla Wraps 6 Ea",
-                     "cause":  "STOLEN",
-                     "owner":  "tortillas",
-                     "detail":  "tortillas"
-                 },
-                 {
-                     "commodity":  "frozen-meatballs",
-                     "store":  "Family Fare",
-                     "candidate":  "Hot Pockets Italian Style Seasoned Crust Meatballs \u0026 Mozzarella Sandwiches 4 Ea",
-                     "cause":  "GLOBAL-EXCL",
-                     "owner":  "",
-                     "detail":  "seasoned"
-                 },
-                 {
-                     "commodity":  "frozen-meatballs",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "SpaghettiOs® Canned Pasta with Meatballs 15.6 oz",
-                     "cause":  "GLOBAL-EXCL",
-                     "owner":  "canned-pasta",
-                     "detail":  "\\bcanned\\b"
-                 },
-                 {
                      "commodity":  "tater-tots",
                      "store":  "Family Fare",
                      "candidate":  "Alexia Sweet Potato Bite Sized Tots 20 Oz",
                      "cause":  "OUT-OF-BAND",
                      "owner":  "tater-tots",
                      "detail":  ""
-                 },
-                 {
-                     "commodity":  "fish-sticks",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Gorton\u0027s Fish Fillets or Sticks, Frozen",
-                     "cause":  "NO-INCLUDE",
-                     "owner":  "",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "garlic-bread",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Cole\u0027s Garlic Texas Toast, Frozen",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "garlic-bread",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "garlic-bread",
-                     "store":  "Walmart",
-                     "candidate":  "Great Value Garlic Texas Toast",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "garlic-bread",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "air-freshener",
-                     "store":  "Walmart",
-                     "candidate":  "Great Value Aerosol Air Freshener Linen Fresh",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "air-freshener",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "facial-tissues",
-                     "store":  "Family Fare",
-                     "candidate":  "Scott One Ply Unscented Bathroom Tissue 4 Ea",
-                     "cause":  "STOLEN",
-                     "owner":  "toilet-paper",
-                     "detail":  "toilet-paper"
-                 },
-                 {
-                     "commodity":  "facial-tissues",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Kroger Facial Tissues",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "facial-tissues",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "beef-stew",
-                     "store":  "Fareway",
-                     "candidate":  "DINTY MOORE Beef Stew With Potatoes \u0026 Carrots,",
-                     "cause":  "STOLEN",
-                     "owner":  "carrots",
-                     "detail":  "carrots"
-                 },
-                 {
-                     "commodity":  "canned-pasta",
-                     "store":  "Walmart",
-                     "candidate":  "(4 pack) Chef Boyardee Overstuffed Beef Ravioli in Pasta Sau",
-                     "cause":  "GLOBAL-EXCL",
-                     "owner":  "",
-                     "detail":  "stuffed"
-                 },
-                 {
-                     "commodity":  "vegetable-soup",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Vegetable Beef Condensed Soup10.75 oz",
-                     "cause":  "NO-INCLUDE",
-                     "owner":  "",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "clam-chowder",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Campbell\u0027s Chunky OLD BAY Seasoned Clam Chowder 18.8 oz Ca",
-                     "cause":  "GLOBAL-EXCL",
-                     "owner":  "",
-                     "detail":  "seasoned"
-                 },
-                 {
-                     "commodity":  "chili-beans",
-                     "store":  "Aldi",
-                     "candidate":  "Brookdale Chili with Beans",
-                     "cause":  "NO-INCLUDE",
-                     "owner":  "canned-chili",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "chili-beans",
-                     "store":  "Fareway",
-                     "candidate":  "Hormel Chili with Beans, No Artificial Ingredients, 15 Oz",
-                     "cause":  "NO-INCLUDE",
-                     "owner":  "canned-chili",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "chili-beans",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Hormel Chili with Beans",
-                     "cause":  "NO-INCLUDE",
-                     "owner":  "canned-chili",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "canned-mixed-vegetables",
-                     "store":  "Family Fare",
-                     "candidate":  "Birds Eye White Rice, With Mixed Vegetables, Long Grain 10 Oz",
-                     "cause":  "STOLEN",
-                     "owner":  "rice",
-                     "detail":  "rice"
-                 },
-                 {
-                     "commodity":  "canned-mixed-vegetables",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Mixed Vegetables",
-                     "cause":  "STOLEN",
-                     "owner":  "frozen-vegetables",
-                     "detail":  "frozen-vegetables"
-                 },
-                 {
-                     "commodity":  "canned-yams",
-                     "store":  "Fareway",
-                     "candidate":  "Sweet Potato (Yam)",
-                     "cause":  "STOLEN",
-                     "owner":  "sweet-potatoes",
-                     "detail":  "sweet-potatoes"
-                 },
-                 {
-                     "commodity":  "canned-pumpkin",
-                     "store":  "Family Fare",
-                     "candidate":  "Pumpkin Tree Fruit \u0026 Vegetable Puree, Apple, Sweet Potato \u0026 Corn, Organic 4.4 Oz",
-                     "cause":  "NO-INCLUDE",
-                     "owner":  "apples",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "mandarin-oranges",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Mandarin Oranges in 100% Juice",
-                     "cause":  "STOLEN",
-                     "owner":  "fruit-cups",
-                     "detail":  "fruit-cups"
-                 },
-                 {
-                     "commodity":  "blue-cheese-dressing",
-                     "store":  "Walmart",
-                     "candidate":  "Wish-Bone Chunky Blue Cheese Salad Dressing, 15 fl oz",
-                     "cause":  "NO-INCLUDE",
-                     "owner":  "",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "rice-vinegar",
-                     "store":  "Aldi",
-                     "candidate":  "Nakano Seasoned Rice Vinegar",
-                     "cause":  "GLOBAL-EXCL",
-                     "owner":  "",
-                     "detail":  "seasoned"
-                 },
-                 {
-                     "commodity":  "rice-vinegar",
-                     "store":  "Fareway",
-                     "candidate":  "Marukan Seasoned Gourmet Rice Vinegar12 fl oz",
-                     "cause":  "GLOBAL-EXCL",
-                     "owner":  "",
-                     "detail":  "seasoned"
-                 },
-                 {
-                     "commodity":  "green-olives",
-                     "store":  "Walmart",
-                     "candidate":  "Great Value Stuffed Feta Cheese Green Olives, 7 oz Jar",
-                     "cause":  "GLOBAL-EXCL",
-                     "owner":  "",
-                     "detail":  "stuffed"
                  }
              ]
 }

@@ -4688,7 +4688,8 @@
                         "fruit\\s+pops?",
                         "ice\\s+bars?",
                         "\\bhelados\\b",
-                        "\\boutshine\\b"
+                        "\\boutshine\\b",
+                        "beef\\s+stew"
                     ]
     },
     {
@@ -8860,7 +8861,7 @@
         "band_min":  0.04,
         "band_max":  1.5,
         "include":  [
-                        "hand\\s+soap",
+                        "hands?\\s+soap",
                         "hand\\s+wash\\b"
                     ],
         "exclude":  [
@@ -11767,7 +11768,9 @@
                         "fruit\\s+pops?",
                         "ice\\s+bars?",
                         "\\bhelados\\b",
-                        "\\boutshine\\b"
+                        "\\boutshine\\b",
+                        "wonton",
+                        "crispy\\s+strips"
                     ]
     },
     {
@@ -16069,7 +16072,8 @@
         "band_min":  0.05,
         "band_max":  0.4,
         "relax_global":  [
-                             "\\bcake\\b"
+                             "\\bcake\\b",
+                             "\\bfrozen\\b"
                          ],
         "include":  [
                         "frosting",
@@ -19388,7 +19392,8 @@
         "band_max":  0.6,
         "relax_global":  [
                              "pretzel",
-                             "\\bsnack\\b"
+                             "\\bsnack\\b",
+                             "seasoned"
                          ],
         "include":  [
                         "pretzels?"
@@ -25232,7 +25237,8 @@
                         "\\bsunscreen\\b"
                     ],
         "relax_global":  [
-                             "\\bcanned\\b"
+                             "\\bcanned\\b",
+                             "stuffed"
                          ]
     },
     {
@@ -25443,7 +25449,10 @@
                         "hand\\s+soap",
                         "body\\s+spray",
                         "\\bsunscreen\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "seasoned"
+                         ]
     },
     {
         "id":  "chili-beans",
@@ -27403,7 +27412,7 @@
         "label":  "Blue Cheese Dressing",
         "unit":  "floz",
         "include":  [
-                        "bl(?:ue|eu)\\s+cheese\\s+dressing"
+                        "bl(?:ue|eu)\\s+cheese\\b.{0,12}dressing"
                     ],
         "exclude":  [
                         "crumbl",
@@ -28652,7 +28661,10 @@
                         "hand\\s+soap",
                         "body\\s+spray",
                         "\\bsunscreen\\b"
-                    ]
+                    ],
+        "relax_global":  [
+                             "stuffed"
+                         ]
     },
     {
         "id":  "banana-peppers",

@@ -1,18 +1,7 @@
 ﻿{
-    "generated":  "2026-07-16 09:00",
-    "count":  20,
+    "generated":  "2026-07-16 09:14",
+    "count":  5,
     "rows":  [
-                 {
-                     "commodity":  "lettuce",
-                     "store":  "Family Fare",
-                     "unit":  "each",
-                     "pu":  0.1204,
-                     "band":  "0.8-4.5",
-                     "ratio":  -6.64,
-                     "price_text":  "$2.89",
-                     "size_text":  "24 ct",
-                     "name":  "Fresh Iceberg Lettuce Head"
-                 },
                  {
                      "commodity":  "bagels",
                      "store":  "Fareway",
@@ -23,39 +12,6 @@
                      "price_text":  "$2.00",
                      "size_text":  "each",
                      "name":  "Fareway Pre-Sliced Original Bagels"
-                 },
-                 {
-                     "commodity":  "pears",
-                     "store":  "Family Fare",
-                     "unit":  "lb",
-                     "pu":  4.99,
-                     "band":  "0.5-4",
-                     "ratio":  1.25,
-                     "price_text":  "$4.99",
-                     "size_text":  "lb",
-                     "name":  "Fresh Pears, Bartlett Melissa\u0027s"
-                 },
-                 {
-                     "commodity":  "kiwi",
-                     "store":  "Family Fare",
-                     "unit":  "each",
-                     "pu":  45,
-                     "band":  "0.2-2",
-                     "ratio":  22.5,
-                     "price_text":  "$45",
-                     "size_text":  "1 ct",
-                     "name":  "Regular Kiwifruit"
-                 },
-                 {
-                     "commodity":  "fresh-ginger",
-                     "store":  "Family Fare",
-                     "unit":  "lb",
-                     "pu":  15.9543,
-                     "band":  "1-7",
-                     "ratio":  2.28,
-                     "price_text":  "$3.49",
-                     "size_text":  "3.5 oz",
-                     "name":  "Fresh Gourmet Fresh Gourmet Garlic Ginger Wonton Strips 3.5 Oz"
                  },
                  {
                      "commodity":  "ribeye-steak",
@@ -80,61 +36,6 @@
                      "name":  "Friendly Farms Whipped Topping"
                  },
                  {
-                     "commodity":  "donuts",
-                     "store":  "Hy-Vee",
-                     "unit":  "each",
-                     "pu":  2.5,
-                     "band":  "0.25-2",
-                     "ratio":  1.25,
-                     "price_text":  "Hostess donettes mini donuts, 9.5 to 11.25 oz., 2/ $5.00",
-                     "size_text":  "",
-                     "name":  "Hostess donettes mini donuts, 9.5 to 11.25 oz., 2/ $5.00"
-                 },
-                 {
-                     "commodity":  "donuts",
-                     "store":  "Fareway",
-                     "unit":  "each",
-                     "pu":  2.98,
-                     "band":  "0.25-2",
-                     "ratio":  1.49,
-                     "price_text":  "$2.98",
-                     "size_text":  "each",
-                     "name":  "Hostess Donettes Frosted Mini Donuts"
-                 },
-                 {
-                     "commodity":  "applesauce",
-                     "store":  "Family Fare",
-                     "unit":  "oz",
-                     "pu":  2.3267,
-                     "band":  "0.03-0.25",
-                     "ratio":  9.31,
-                     "price_text":  "$3.49",
-                     "size_text":  "6/4 oz",
-                     "name":  "Mott\u0027s Apple Sauce 6 Ea"
-                 },
-                 {
-                     "commodity":  "applesauce",
-                     "store":  "Fareway",
-                     "unit":  "oz",
-                     "pu":  0.4975,
-                     "band":  "0.03-0.25",
-                     "ratio":  1.99,
-                     "price_text":  "$1.99",
-                     "size_text":  "4 oz",
-                     "name":  "Fareway Unsweetened Applesauce"
-                 },
-                 {
-                     "commodity":  "fruit-cups",
-                     "store":  "Fareway",
-                     "unit":  "each",
-                     "pu":  2.78,
-                     "band":  "0.3-1.5",
-                     "ratio":  1.85,
-                     "price_text":  "$2.78",
-                     "size_text":  "each",
-                     "name":  "Fareway Mandarin Oranges in 100% Juice"
-                 },
-                 {
                      "commodity":  "pudding-cups",
                      "store":  "Fareway",
                      "unit":  "each",
@@ -146,28 +47,6 @@
                      "name":  "Snack Pack Butterscotch Flavored Pudding"
                  },
                  {
-                     "commodity":  "sparkling-water",
-                     "store":  "Baker\u0027s",
-                     "unit":  "floz",
-                     "pu":  0.5825,
-                     "band":  "0.015-0.12",
-                     "ratio":  4.85,
-                     "price_text":  "$6.99",
-                     "size_text":  "6-pack 12 fl oz",
-                     "name":  "Liquid Death Sparkling Water"
-                 },
-                 {
-                     "commodity":  "hot-cocoa",
-                     "store":  "Fareway",
-                     "unit":  "each",
-                     "pu":  2.99,
-                     "band":  "0.1-1",
-                     "ratio":  2.99,
-                     "price_text":  "$2.99",
-                     "size_text":  "each",
-                     "name":  "Nestle Hot Cocoa Rich Milk Chocolate Flavored Mix Powder"
-                 },
-                 {
                      "commodity":  "tater-tots",
                      "store":  "Family Fare",
                      "unit":  "oz",
@@ -177,50 +56,6 @@
                      "price_text":  "$6.99",
                      "size_text":  "20 oz",
                      "name":  "Alexia Sweet Potato Bite Sized Tots 20 Oz"
-                 },
-                 {
-                     "commodity":  "garlic-bread",
-                     "store":  "Sam\u0027s Club",
-                     "unit":  "each",
-                     "pu":  0.2806,
-                     "band":  "1-6",
-                     "ratio":  -3.56,
-                     "price_text":  "$8.98",
-                     "size_text":  "32 ct",
-                     "name":  "Cole\u0027s Garlic Texas Toast, Frozen"
-                 },
-                 {
-                     "commodity":  "garlic-bread",
-                     "store":  "Walmart",
-                     "unit":  "each",
-                     "pu":  0.2462,
-                     "band":  "1-6",
-                     "ratio":  -4.06,
-                     "price_text":  "$1.97",
-                     "size_text":  "8 ct",
-                     "name":  "Great Value Garlic Texas Toast"
-                 },
-                 {
-                     "commodity":  "air-freshener",
-                     "store":  "Walmart",
-                     "unit":  "oz",
-                     "pu":  0.1212,
-                     "band":  "0.15-1.5",
-                     "ratio":  -1.24,
-                     "price_text":  "$0.97",
-                     "size_text":  "8 oz",
-                     "name":  "Great Value Aerosol Air Freshener Linen Fresh"
-                 },
-                 {
-                     "commodity":  "facial-tissues",
-                     "store":  "Baker\u0027s",
-                     "unit":  "each",
-                     "pu":  1.4975,
-                     "band":  "0.005-0.05",
-                     "ratio":  29.95,
-                     "price_text":  "$5.99",
-                     "size_text":  "4 ct",
-                     "name":  "Kroger Facial Tissues"
                  }
              ]
 }

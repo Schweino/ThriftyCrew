@@ -310,6 +310,251 @@
                       "commodity":  "mandarin-oranges",
                       "store":  "Family Fare",
                       "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$4.19] size_text=[4 pack] for \"Dole In 100% Fruit Juice Mandarin Oranges 4 Ea\" (unit oz). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "iced-tea",
+                      "store":  "Baker\u0027s",
+                      "why":  "LOOSENED-REGEX PHANTOM: the gap audit widens \"iced\\s+tea\" to \"iced.{0,25}tea\", which spans \"Thin SLICED Beef Ribeye S-TEA-k\". Not iced tea. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "iced-tea",
+                      "store":  "Family Fare",
+                      "why":  "LOOSENED-REGEX PHANTOM: \"iced.{0,25}tea\" spans \"Sweet Corn, Super, S-TEA-mable\". Not iced tea. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "tea-bags",
+                      "store":  "Aldi",
+                      "why":  "LOOSENED-REGEX PHANTOM: \"tea.{0,25}bags?\" spans \"Petite Sirloin S-TEA-k\". Not tea bags. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "tea-bags",
+                      "store":  "Family Fare",
+                      "why":  "LOOSENED-REGEX PHANTOM: \"tea.{0,25}bags?\" spans \"Green Giant S-TEA-m In BAG Broccoli\". Not tea bags. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "canned-pumpkin",
+                      "store":  "Family Fare",
+                      "why":  "LOOSENED-REGEX PHANTOM: \"Pumpkin Tree\" is a baby-food BRAND (\"Pumpkin Tree Fruit \u0026 Vegetable Puree, Apple, Sweet Potato \u0026 Corn\"). Not canned pumpkin. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "queso",
+                      "store":  "Baker\u0027s",
+                      "why":  "LOOSENED-REGEX PHANTOM: \"cheese.{0,25}dip\" spans \"Blue Cheese DRESSING \u0026 DIP\" (Litehouse). That product is blue-cheese-dressing, not queso. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "turkey-lunchmeat",
+                      "store":  "Family Fare",
+                      "why":  "NOT THIS PRODUCT: \"Jimmy Dean Delights Breakfast Bowl, Turkey Sausage, Frozen\" is a frozen breakfast bowl, not sliced turkey lunchmeat. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "kielbasa",
+                      "store":  "Family Fare",
+                      "why":  "NOT THIS PRODUCT: \"Smoked Hot Italian Sausage\" is Italian sausage, not kielbasa. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "fruit-snacks",
+                      "store":  "Family Fare",
+                      "why":  "NOT THIS PRODUCT: \"Del Monte Fruit CUP Snacks Mandarin Oranges in Juice\" is a fruit cup (fruit-cups owns that shape), not a gummy fruit snack. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "chili-beans",
+                      "store":  "Aldi",
+                      "why":  "CORRECTLY OWNED ELSEWHERE: \"Brookdale Chili with Beans\" is canned chili con carne, and canned-chili owns it ($0.1327/oz on the board). chili-beans is beans in chili sauce - a different product. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "chili-beans",
+                      "store":  "Fareway",
+                      "why":  "CORRECTLY OWNED ELSEWHERE: \"Hormel Chili with Beans\" -\u003e canned-chili ($0.176/oz on the board). Different product from chili beans. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "chili-beans",
+                      "store":  "Sam\u0027s Club",
+                      "why":  "CORRECTLY OWNED ELSEWHERE: \"Hormel Chili with Beans\" -\u003e canned-chili ($0.1176/oz on the board). Different product from chili beans. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "apple-cider-vinegar",
+                      "store":  "Hy-Vee",
+                      "why":  "NOT THIS PRODUCT: \"Apple Cider FLAVORED DISTILLED Vinegar\" is distilled vinegar with flavouring, not cider vinegar. Correctly excluded. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "fish-sticks",
+                      "store":  "Baker\u0027s",
+                      "why":  "UNPRICEABLE AD LINE: \"Gorton\u0027s Fish Fillets OR Sticks\" is a combined A-or-B ad line covering two products at one price; there is no like-for-like per-unit. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "vegetable-soup",
+                      "store":  "Fareway",
+                      "why":  "NOT THIS PRODUCT: \"Fareway Vegetable BEEF Condensed Soup\" is vegetable beef soup, a different product from plain vegetable soup. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "blackberries",
+                      "store":  "Family Fare",
+                      "why":  "CORRECTLY EXCLUDED: \"Lacroix Blackberry Cucumber SPARKLING WATER\" is seltzer, not blackberries. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "cilantro",
+                      "store":  "Family Fare",
+                      "why":  "CORRECTLY EXCLUDED: \"Ro-Tel Diced Tomatoes with Lime Juice \u0026 Cilantro\" is canned tomatoes, not fresh cilantro. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "fruit-cups",
+                      "store":  "Baker\u0027s",
+                      "why":  "WRONG OWNER: \"Kroger CANNED Mandarin Oranges in Juice 10.5 oz\" is a CAN; mandarin-oranges is the right commodity for it, not fruit-cups. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "fruit-punch",
+                      "store":  "Family Fare",
+                      "why":  "NOT THIS PRODUCT: \"AriZona Mucho Mango/Watermelon/Fruit Punch/Kiwi Strawberry Juice Cocktails Party Pack\" is a mixed-flavour variety pack, not fruit punch. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "frozen-meatballs",
+                      "store":  "Family Fare",
+                      "why":  "NOT THIS PRODUCT: \"Hot Pockets Italian Style Seasoned Crust Meatballs \u0026 Mozzarella Sandwiches\" is a sandwich. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "frozen-meatballs",
+                      "store":  "Baker\u0027s",
+                      "why":  "NOT THIS PRODUCT: \"SpaghettiOs Canned Pasta with Meatballs\" is canned pasta (canned-pasta owns it). (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "rice-vinegar",
+                      "store":  "Aldi",
+                      "why":  "DIFFERENT PRODUCT: \"Nakano SEASONED Rice Vinegar\" has added sugar/salt and is not interchangeable with plain rice vinegar; comparing it per-floz against plain across stores is apples-to-oranges. Revisit if Aldi starts stocking plain. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "rice-vinegar",
+                      "store":  "Fareway",
+                      "why":  "DIFFERENT PRODUCT: \"Marukan SEASONED Gourmet Rice Vinegar\" - same reasoning as Aldi. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "brown-sugar",
+                      "store":  "Family Fare",
+                      "why":  "CORRECTLY OWNED ELSEWHERE: \"Starbucks Coffee, Ground, Brown Sugar Cinnamon\" is coffee, and coffee owns it. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "asparagus",
+                      "store":  "Family Fare",
+                      "why":  "NOT THIS PRODUCT: \"Birds Eye Gold \u0026 White Corn, Carrots \u0026 Asparagus\" is a mixed vegetable bag, not asparagus. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "frozen-burritos",
+                      "store":  "Family Fare",
+                      "why":  "CORRECTLY OWNED ELSEWHERE: \"Mission Super Soft Burrito Flour Tortilla Wraps\" are tortillas, and tortillas owns them. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "facial-tissues",
+                      "store":  "Family Fare",
+                      "why":  "CORRECTLY OWNED ELSEWHERE: \"Scott One Ply Unscented BATHROOM Tissue\" is toilet paper, and toilet-paper owns it. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "canned-mixed-vegetables",
+                      "store":  "Family Fare",
+                      "why":  "CORRECTLY OWNED ELSEWHERE: \"Birds Eye White RICE, With Mixed Vegetables\" is a rice dish, and rice owns it. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "canned-mixed-vegetables",
+                      "store":  "Fareway",
+                      "why":  "AMBIGUOUS FORM: \"Fareway Mixed Vegetables\" carries no canned/frozen signal; frozen-vegetables currently owns it. Not evidence Fareway lacks canned mixed veg - re-check when the row carries a form. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "canned-yams",
+                      "store":  "Fareway",
+                      "why":  "CORRECTLY OWNED ELSEWHERE: \"Sweet Potato (Yam)\" is FRESH produce, and sweet-potatoes owns it. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "mandarin-oranges",
+                      "store":  "Fareway",
+                      "why":  "OWNERSHIP TIE, LEFT ALONE ON PURPOSE: \"Fareway Mandarin Oranges in 100% Juice\" is claimed by fruit-cups via its \"mandarin oranges ... juice\" include. That include legitimately catches real cup packs (Our Family Mandarin Oranges in 100% Juice 4 Ea), and the row carries no count to tell can from cup - tightening it would drop real fruit-cups cells to fix one. Revisit if Fareway publishes a size. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "facial-tissues",
+                      "store":  "Baker\u0027s",
+                      "why":  "BAND CAUGHT IT, CORRECTLY: \"Kroger Facial Tissues\" is $5.99 for \"4 ct\" = 4 BOXES, but the commodity is priced per TISSUE. $1.4975/box is not a per-tissue price and the tissues-per-box is unknown, so it cannot be compared. 29.95x its band. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "kiwi",
+                      "store":  "Family Fare",
+                      "why":  "SOURCE DATA BUG (not ours): Family Fare publishes \"Regular Kiwifruit\" at $45 for \"1 ct\". $45 for one kiwi is wrong at the store\u0027s end; the band rejected it (22.5x) rather than print it. Re-check when Freshop fixes the row. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "lettuce",
+                      "store":  "Family Fare",
+                      "why":  "CASE-PACK TRAP: \"Fresh Iceberg Lettuce Head\" $2.89 with size \"24 ct\" - the 24 is heads per CASE, the $2.89 is per head. Dividing gives $0.12/head (6.6x BELOW band), which would have been badly wrong; the band caught it. Needs a per-head size from the source, not a rule change. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "garlic-bread",
+                      "store":  "Walmart",
+                      "why":  "DIFFERENT FORM: \"Great Value Garlic Texas Toast\" is 8 SLICES; garlic-bread is priced per LOAF. $0.25/slice against a per-loaf band is not comparable. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "garlic-bread",
+                      "store":  "Sam\u0027s Club",
+                      "why":  "DIFFERENT FORM: \"Cole\u0027s Garlic Texas Toast, Frozen\" 32 ct - slices, not loaves. Same reasoning as Walmart. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "hot-cocoa",
+                      "store":  "Fareway",
+                      "why":  "UNIT MISMATCH: \"Nestle Hot Cocoa Mix\" priced per \"each\" (the box) against a per-PACKET band. The packets-per-box is not on the row. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "applesauce",
+                      "store":  "Fareway",
+                      "why":  "SINGLE-SERVE vs JAR: \"Fareway Unsweetened Applesauce\" $1.99 for a 4 oz cup = $0.50/oz, 2x the band, because the band is set for 24 oz jars. A single cup genuinely costs that per ounce; it is not a like-for-like applesauce price. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "fruit-cups",
+                      "store":  "Fareway",
+                      "why":  "WRONG FORM: \"Fareway Mandarin Oranges in 100% Juice\" priced per each is a CAN, not a fruit cup (see the mandarin-oranges|Fareway note - same product, ownership tie left alone on purpose). (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "donuts",
+                      "store":  "Fareway",
+                      "why":  "UNIT MISMATCH: \"Hostess Donettes Frosted Mini Donuts\" priced per \"each\" is a BAG of mini donuts against a per-donut band. Count not on the row. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "donuts",
+                      "store":  "Hy-Vee",
+                      "why":  "UNIT MISMATCH: same Donettes shape - a bag priced as one donut, 1.25x band. Count not on the row. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "pears",
+                      "store":  "Family Fare",
+                      "why":  "MARGINAL (1.25x band): reviewed and left dropped rather than widen the band on a per-each fruit. Revisit only with a band review, not a rule change. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "air-freshener",
+                      "store":  "Walmart",
+                      "why":  "MARGINAL (1.24x BELOW band): reviewed and left dropped. A band change is the only honest fix and that is a separate, evidence-led job. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "fresh-ginger",
+                      "store":  "Family Fare",
+                      "why":  "CORRECTLY OWNED ELSEWHERE: \"Swanson Sipping Chicken Bone Broth With Ginger And Turmeric\" is broth, and chicken-broth owns it. Not fresh ginger root. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "ribeye-steak",
+                      "store":  "Fareway",
+                      "why":  "BAND SLIGHTLY TIGHT (1.14x): \"USDA Choice Thick Cut Ribeye Steak\" at $24.99/lb is a REAL premium ribeye price; the band tops out at $22. Left dropped rather than widened - a band is evidence about what a price CAN be, and moving one to make a gap disappear is how a band stops protecting anything. Fix by reviewing the ribeye band against several stores, as its own job. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "bagels",
+                      "store":  "Fareway",
+                      "why":  "UNIT AMBIGUITY (1.11x): \"Fareway Pre-Sliced Original Bagels\" $2.00 priced per \"each\" - the each is the BAG, not the bagel, and the count is not on the row. $2.00/bagel is wrong and $0.33/bagel is unprovable from this data, so the band correctly refused it. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "pudding-cups",
+                      "store":  "Fareway",
+                      "why":  "UNIT AMBIGUITY (1.2x): \"Snack Pack Butterscotch Flavored Pudding\" $1.44 per \"each\" - the each is the multi-cup box; cups-per-box is not on the row. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "tater-tots",
+                      "store":  "Family Fare",
+                      "why":  "PREMIUM VARIANT (1.16x): \"Alexia Sweet Potato Bite Sized Tots\" $6.99/20oz = $0.35/oz against a band built for ordinary potato tots. A sweet-potato specialty product genuinely costs that; it is not a like-for-like tater-tot price. (reviewed 2026-07-16)"
+                  },
+                  {
+                      "commodity":  "whipped-cream",
+                      "store":  "Aldi",
+                      "why":  "DIFFERENT PRODUCT (1.1x below band): \"Friendly Farms Whipped TOPPING\" is a Cool-Whip style topping, not dairy whipped cream - which is exactly why it is cheaper per oz. Not evidence Aldi lacks whipped cream. (reviewed 2026-07-16)"
                   }
               ]
 }

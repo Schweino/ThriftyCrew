@@ -1,5 +1,5 @@
 ﻿{
-    "built_at":  "2026-07-16T08:58:23",
+    "built_at":  "2026-07-16T09:03:21",
     "week_of":  "2026-07-15",
     "source":  "C:\\Codex\\income\\grocery\\out\\ads-2026-07-15.json",
     "commodities_compared":  378,
@@ -15,7 +15,7 @@
                                         ],
                    "store_count":  7,
                    "commodities_compared":  378,
-                   "flagged_out_of_band":  183,
+                   "flagged_out_of_band":  180,
                    "multibuy_unpriced":  12
                },
     "comparison":  [
@@ -1180,6 +1180,20 @@
                                               "basis":  "size 24 oz",
                                               "note":  "",
                                               "source_ad":  "walmart.com currentPrice/unitPrice (Omaha L St Supercenter) - the price the store charges today"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.1454,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Mott\u0027s Apple Sauce 6 Ea",
+                                              "ad":  "$3.49",
+                                              "size":  "6/4 oz",
+                                              "basis":  "size 24 oz",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price (recovered 2026-07-13)"
                                           }
                                       ]
                        },
@@ -28733,13 +28747,27 @@
                            "commodity":  "Soda (12-pack)",
                            "id":  "soda",
                            "unit":  "floz",
-                           "cheapest_store":  "Aldi",
-                           "cheapest_price":  0.0263,
-                           "cheapest_type":  "everyday",
-                           "nomem_store":  "Aldi",
-                           "nomem_price":  0.0263,
-                           "nomem_type":  "everyday",
+                           "cheapest_store":  "Baker\u0027s",
+                           "cheapest_price":  0.0242,
+                           "cheapest_type":  "sale",
+                           "nomem_store":  "Baker\u0027s",
+                           "nomem_price":  0.0242,
+                           "nomem_type":  "sale",
                            "stores":  [
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.0242,
+                                              "unit":  "floz",
+                                              "type":  "sale",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Big K Soda",
+                                              "ad":  "$3.49",
+                                              "size":  "12-pack 12 fl oz",
+                                              "basis":  "size 144 floz",
+                                              "note":  "",
+                                              "source_ad":  "weekly ad"
+                                          },
                                           {
                                               "store":  "Aldi",
                                               "per_unit":  0.0263,
@@ -28767,20 +28795,6 @@
                                               "basis":  "size 144 floz",
                                               "note":  "",
                                               "source_ad":  "walmart.com (Omaha, staples100 2026-07-12)"
-                                          },
-                                          {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  0.0312,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Big K Cola Soda Cans",
-                                              "ad":  "$4.49",
-                                              "size":  "144 fl oz",
-                                              "basis":  "size 144 floz",
-                                              "note":  "",
-                                              "source_ad":  "bakersplus.com search card price/unit price (Saddlecreek, Omaha) - the price the store charges today"
                                           },
                                           {
                                               "store":  "Fareway",
@@ -29156,6 +29170,20 @@
                                               "basis":  "size 17 floz",
                                               "note":  "",
                                               "source_ad":  "everyday shelf price"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.0971,
+                                              "unit":  "floz",
+                                              "type":  "sale",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Liquid Death Sparkling Water",
+                                              "ad":  "$6.99",
+                                              "size":  "6-pack 12 fl oz",
+                                              "basis":  "size 72 floz",
+                                              "note":  "",
+                                              "source_ad":  "weekly ad"
                                           }
                                       ]
                        },
