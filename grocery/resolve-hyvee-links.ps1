@@ -73,8 +73,24 @@ foreach ($it in $board) {
   $nm = ([string]$cell.item).Trim()
   if (-not ($unver.ContainsKey($nm) -or $noLinkIds.ContainsKey([string]$it.id))) { continue }
   if ($seenT.ContainsKey([string]$it.id)) { continue }; $seenT[[string]$it.id] = $true
-  # read our size/price from the not_reverified row, else the matching regular row, else the board cell itself
-  $row = if ($unver.ContainsKey($nm)) { $unver[$nm] } elseif ($rowByName.ContainsKey($nm)) { $rowByName[$nm] } else { [pscustomobject]@{ size=[string]$cell.size; ad_price=('$' + [string]$cell.per_unit) } }
+  # read our size/price from the regular row THE BOARD ACTUALLY PRICED.
+  # $rowByName/$unver are keyed by NAME, and Hy-Vee sells the same name in more than one size - "Spice World
+  # Minced Garlic" is both 32 oz/$8.99 and 4.5 oz/$3.49; "Hy-Vee Sloppy Joe Sauce" is both 15 oz/$0.99 and
+  # 24 oz/$2.39. A name-keyed hashtable keeps only the LAST such row, so the resolver sized itself against a
+  # product the board never priced and linked the wrong jar: the board published 32 oz at $0.2809/oz while the
+  # link opened the 4.5 oz at $0.7756/oz. The factor guard caught both. Same family as the board-match
+  # collisions already documented - a name-keyed lookup silently collapsing distinct products.
+  # So: among the rows sharing this name, take the one whose SIZE matches the board cell. The board is what we
+  # publish, so the board is what the link has to agree with.
+  $cands = @($rows | Where-Object { ([string]$_.item).Trim() -eq $nm })
+  $row = $null
+  if ($cands.Count) {
+    $row = $cands | Where-Object { ([string]$_.size).Trim() -eq ([string]$cell.size).Trim() } | Select-Object -First 1
+    # no size-exact row: only safe to proceed if the name is unambiguous (one row). Otherwise we cannot tell
+    # WHICH product the board meant, and guessing is how the wrong jar got linked in the first place.
+    if (-not $row -and $cands.Count -eq 1) { $row = $cands[0] }
+  }
+  if (-not $row) { $row = [pscustomobject]@{ size = [string]$cell.size; ad_price = '' } }
   $ex = $doc.items.($it.id).'Hy-Vee'
   $had = [bool]($ex -and $ex.url)
   [void]$targets.Add([pscustomobject]@{ id=[string]$it.id; unit=[string]$it.unit; name=$nm; row=$row; relink=$had })
