@@ -25,13 +25,36 @@ foreach ($it in $c) {
     $lnk = $purls.$id.$store
     if (-not $lnk -or -not $lnk.url) { continue }
     $lname = ([string]$lnk.name).ToLower()
+    # FORM FLIP AND COUNT MISMATCH ARE INDEPENDENT OF THE TOKEN TEST, so compute them BEFORE the token bail-out.
+    # The old order checked distinctive tokens first and `continue`d when there were none - and a board item named
+    # with nothing BUT commodity words has none, because those words are all in $stop. That is exactly how Aldi's
+    # FRESH blueberries stayed linked to "Season's Choice FROZEN Blueberries": the board item is literally
+    # "Blueberries", so $btoks came back empty, the cell was skipped before the form check could fire, the wrong
+    # link went unflagged, generate-board-overrides trusted it as ground truth and pinned the board to it, and the
+    # page published Aldi fresh blueberries at the FROZEN price (16c/oz) with a CHEAPEST flag on it. The most
+    # generic product names are the ones a token test can say least about, so they must not be the ones it skips.
+    # NB the second clause needs "and the board item is not itself frozen": a product legitimately called
+    # "Fresh Frozen" (Our Family's frozen veg / peas) contains BOTH words, so fresh->frozen fired on a link whose
+    # name was byte-identical to the board item. A flag on an identical name is pure noise, and noise here has a
+    # cost - generate-board-overrides refuses to pin any cell name-drift flags, so a false flag silently blocks a
+    # legitimate price correction.
+    $formFlip = ((($lname -match 'frozen|canned|dried') -and ($item.ToLower() -notmatch 'frozen|canned|dried')) -or (($item.ToLower() -match 'fresh') -and ($item.ToLower() -notmatch 'frozen|canned') -and ($lname -match 'frozen|canned')))
+    # COUNT MISMATCH: when the board item and the link BOTH declare a pack count and the counts differ, they are
+    # different products however similar the words are - the token test cannot see this at all (Hy-Vee's own
+    # "Chewy Granola Bars Variety Pack 18Ct" vs a "Quaker Chewy ... 8 ct" link share "chewy"/"granola"/"bars", so
+    # ONE shared word passed it). Same class as the Hy-Vee orange-juice 64oz-vs-gallon bug. Only fires when both
+    # sides state a count, so a bare "Bananas" never trips it.
+    function CountOf([string]$t) { $m = [regex]::Match(([string]$t).ToLower(), '(\d+)\s*(?:ct\b|count\b|pk\b|pack\b)'); if ($m.Success) { return [int]$m.Groups[1].Value } return 0 }
+    $bCount = CountOf $item
+    $lCount = CountOf ($lname + ' ' + [string]$lnk.size)
+    $countMismatch = ($bCount -gt 0 -and $lCount -gt 0 -and $bCount -ne $lCount)
     $btoks = @(($item.ToLower() -replace '[^a-z0-9 ]',' ' -split '\s+') | Where-Object { $_ -and $_.Length -gt 3 -and $_ -notmatch ('^(' + $stop + ')$') })
-    if ($btoks.Count -eq 0) { continue }
     $hit = $false; foreach ($t in $btoks) { if ($lname -match [regex]::Escape($t)) { $hit = $true; break } }
-    # form flip is a strong signal even if a token matches
-    $formFlip = ((($lname -match 'frozen|canned|dried') -and ($item.ToLower() -notmatch 'frozen|canned|dried')) -or ((($item.ToLower() -match 'fresh') -and ($lname -match 'frozen|canned'))))
-    if ((-not $hit) -or $formFlip) {
-      $flags += [pscustomobject]@{ id=$id; store=$store; reason=$(if ($formFlip){'form-flip'}else{'name-drift'}); board_item=$item; link_name=[string]$lnk.name; link_price=$lnk.price }
+    # no distinctive tokens = the token test has NO opinion; it must not read as "clean" (that was the bug above)
+    if ($btoks.Count -eq 0) { $hit = $true }
+    if ((-not $hit) -or $formFlip -or $countMismatch) {
+      $reason = if ($formFlip) { 'form-flip' } elseif ($countMismatch) { 'count-mismatch' } else { 'name-drift' }
+      $flags += [pscustomobject]@{ id=$id; store=$store; reason=$reason; board_item=$item; link_name=[string]$lnk.name; link_price=$lnk.price }
     }
   }
 }

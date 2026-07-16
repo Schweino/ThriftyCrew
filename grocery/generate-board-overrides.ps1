@@ -71,10 +71,27 @@ $stapleIds = @{}; foreach ($r in $staple) { $stapleIds[[string]$r.id] = $true }
 $recipeIds = @{}; foreach ($r in $recipe) { $recipeIds[[string]$r.id] = $true }
 $collision = @{}; foreach ($k in $stapleIds.Keys) { if ($recipeIds.ContainsKey($k)) { $collision[$k] = $true } }
 
-# name-drift: links flagged as the WRONG product must NOT have their price trusted
+# name-drift: links flagged as the WRONG product must NOT have their price trusted.
+#
+# THIS CHECK WAS DEAD FOR ITS ENTIRE LIFE, AND IT FAILED OPEN (2026-07-16). It looked for name-drift.json in
+# $root; audit-name-drift.ps1 writes it to $root\out. Test-Path simply returned false, there was no else, and an
+# ABSENT FILE READ AS "NOTHING IS FLAGGED" - so the only defence this generator has against a wrong-product link
+# never ran once, while the readme (and the report line "name-drift=N") stated it did.
+#
+# What it cost: Aldi's FRESH blueberries were linked to "Season's Choice FROZEN Blueberries", so this generator
+# "corrected" the board to the frozen price and the page published Aldi fresh blueberries at 16c/oz WITH A
+# CHEAPEST FLAG - a wrong number that a pin makes authoritative, because a pin beats the engine by design.
+#
+# So it now resolves the real path AND REFUSES TO RUN without it. A safety check that cannot find its input must
+# stop, never shrug: writing pins with no drift data is precisely the failure this file was built to prevent.
 $drift = @{}
-$ndF = Join-Path $root 'name-drift.json'
-if (Test-Path $ndF) { try { foreach ($d in (Get-Content $ndF -Raw | ConvertFrom-Json).flags) { $drift[([string]$d.id + '|' + [string]$d.store)] = $true } } catch {} }
+$ndF = Join-Path $root 'out\name-drift.json'
+if (-not (Test-Path $ndF)) {
+  Write-Error ("generate-board-overrides: REFUSING to run - name-drift data not found at $ndF. Pins beat the engine, so writing them without the wrong-product check is how a frozen-blueberry price gets published as fresh. Run audit-name-drift.ps1 first.")
+  exit 2
+}
+foreach ($d in (Get-Content $ndF -Raw | ConvertFrom-Json).flags) { $drift[([string]$d.id + '|' + [string]$d.store)] = $true }
+if ($drift.Count -eq 0) { Write-Warning 'generate-board-overrides: name-drift flagged NOTHING - verify that is real before trusting these pins.' }
 
 $cells = New-Object System.Collections.Generic.List[object]
 $skip  = [ordered]@{ collision=0; sale=0; namedrift=0; nolink=0; badprice=0; agree=0 }

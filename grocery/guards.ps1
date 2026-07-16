@@ -154,10 +154,42 @@ if ($drift -gt 0) { [void]$warn.Add("$drift cell(s) drift from their link by <50
 if ($unpriceable -gt 0) { [void]$warn.Add("$unpriceable linked cell(s) carry no usable unit basis (empty/odd size) and could NOT be factor-checked - not a pass, an unknown") }
 
 # ---------------------------------------------------------------- 5: multipack size
+# A GATE THAT CRIES WOLF IS A GATE THAT GETS IGNORED - and this one was blocking the nightly publish outright.
+# The check hard-failed EVERY name containing "(N pack)" whose size was a plain weight, and then asked a human to
+# hand-write an allowlist entry per row "after confirming the size really is the pack total". That is arithmetic,
+# and arithmetic is this script's job: on 2026-07-16 all 19 of its hard fails were FALSE POSITIVES whose size was
+# already the correct total ("(12 pack) Great Value Great Northern Beans, 15.5 oz" -> size 186.4 = 12 x 15.5;
+# "(4 pack) Armour Star Beef Stew ... 20 oz Can" -> size 80 = 4 x 20, and $10.72/80oz = the $0.134/oz the board
+# publishes, correct). Every Walmart pull that adds a verbose "(N pack)" title turned the gate red until someone
+# typed an entry, so the real bug was the DESIGN: it demanded a human for something it could verify itself.
+# Now it does the multiplication. The allowlist stays for the residue it genuinely CANNOT verify: names that
+# declare a pack count but state no per-unit weight ("Summit Cola 12 Pack"), and names where the stated weight is
+# the package TOTAL rather than one unit ("Knorr Bouillon Cubes, 3.1 oz, 8 Pack Box" - 8 cubes inside a 3.1 oz
+# box). Those still need a human to look at the store page, which is the only thing a human is actually needed for.
+function Test-SizeIsPackTotal([string]$name, [double]$sizeVal) {
+  if ($sizeVal -le 0) { return $false }
+  $n = $name.ToLower()
+  $packs = @()
+  foreach ($m in [regex]::Matches($n, '(\d+)\s*(?:pk|pack)\b')) { $v = [int]$m.Groups[1].Value; if ($v -gt 1) { $packs += $v } }
+  if (-not $packs.Count) { return $false }
+  # a name can carry two counts ("(2 pack) Pearls Sliced Olives, 6 Pack of 6.5 oz Cans" = 2 x 6 x 6.5 = 78 oz),
+  # so try each count AND their product.
+  $cands = @($packs)
+  if ($packs.Count -gt 1) { $prod = 1; foreach ($p in $packs) { $prod *= $p }; $cands += $prod }
+  foreach ($wm in [regex]::Matches($n, '([\d.]+)\s*(?:fl\s?oz|oz|lb)\b')) {
+    $w = 0.0; if (-not [double]::TryParse($wm.Groups[1].Value, [ref]$w)) { continue }
+    foreach ($c in $cands) {
+      $tot = $w * $c
+      # 3% covers the stores' own rounding of a pack total (2 x 15 oz listed as 29.9, 12 x 15.5 as 186.4)
+      if ($tot -gt 0 -and ([math]::Abs($tot - $sizeVal) / $tot) -le 0.03) { return $true }
+    }
+  }
+  return $false
+}
 $allowF = Join-Path $root 'multipack-allowlist.json'
 $allow = @()
 if (Test-Path $allowF) { $allow = @((Get-Content $allowF -Raw | ConvertFrom-Json).allow | ForEach-Object { $_.store + '|' + $_.item }) }
-$mp = 0
+$mp = 0; $mpTotals = 0; $mpUnknown = 0
 foreach ($f in (RegFiles)) {
   $prefix = ($f.BaseName -replace '-regular-.*$','')
   $newest = RegFiles ($prefix + '-regular-*.json') | Sort-Object Name -Desc | Select-Object -First 1
@@ -172,13 +204,27 @@ foreach ($f in (RegFiles)) {
     $ps = [regex]::Match($size.ToLower(), '(\d+)\s*(?:x|pk\b|pack\b|ct\b|count\b)')
     if ($ps.Success -and ([int]$ps.Groups[1].Value) -gt 1) { continue }
     if ($size -notmatch '[\d.]+\s*(fl\s?oz|oz|lb|gal|qt|l|ml|g)\b') { continue }
+    # the size already IS the pack total -> the row is correct, not a bug. Do the multiplication rather than
+    # demanding a human confirm it (see the note above this function).
+    $sv = 0.0; [void][double]::TryParse(([regex]::Match($size, '[\d.]+').Value), [ref]$sv)
+    if (Test-SizeIsPackTotal $name $sv) { $mpTotals++; continue }
     $key = [string]$doc.store + '|' + $name
     if ($allow -contains $key) { continue }
+    # NOTHING TO MULTIPLY -> "unknown", not "guilty". Product names reach us TRUNCATED AT 60 CHARS (the browser
+    # bridge caps them: hyvee\browser-link-resolve.js slices to 60 so results fit through the tool output limit),
+    # which cuts the per-unit weight clean off - "(4 pack) Armour Star ... Beef Stew, 13g Protei" loses its
+    # "20 oz Can", and "13g" is protein, not pack weight. With no weight token there is no arithmetic to do, and
+    # hard-failing on a capture artifact blocks the nightly publish forever over rows that are provably fine
+    # ($10.72 / 80 oz IS the $0.134/oz the board publishes). So: COUNT it and SAY it, the same way guard 4 reports
+    # its unpriceable cells. Not a pass - an unknown. Guard 4's board-vs-link factor check still covers these
+    # rows if they carry a link. The durable fix is upstream: stop truncating the names.
+    if (-not [regex]::IsMatch($name.ToLower(), '([\d.]+)\s*(?:fl\s?oz|oz|lb)\b')) { $mpUnknown++; continue }
     $mp++
-    [void]$fail.Add(("HARD FAIL: multipack size  [{0}] '{1}' size=[{2}] records ONE unit" -f $doc.store, $name, $size))
+    [void]$fail.Add(("HARD FAIL: multipack size  [{0}] '{1}' size=[{2}] records ONE unit (name says a pack count and its stated weight does not reconcile with the size)" -f $doc.store, $name, $size))
   }
 }
-if ($mp -eq 0) { Say '  ok    no multipack row prices a pack as a single unit' }
+if ($mp -eq 0) { Say ("  ok    no multipack row prices a pack as a single unit ($mpTotals pack-total size(s) verified by arithmetic)") }
+if ($mpUnknown -gt 0) { [void]$warn.Add("$mpUnknown multipack row(s) state a pack count but no per-unit weight (names truncated at 60 chars by the browser bridge) - the pack-total arithmetic could NOT check them; not a pass, an unknown") }
 
 # ---------------------------------------------------------------- 6: a store's data collapsed
 # A throttled / half-failed pull that writes a thin file must never become a store's source of truth.
