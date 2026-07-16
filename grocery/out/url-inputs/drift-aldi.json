@@ -1,0 +1,34 @@
+﻿[
+    {
+        "id":  "apples",
+        "q":  "apples",
+        "match":  "Gala Apples, Bag",
+        "size":  "",
+        "reason":  "name-drift",
+        "was":  "Envy Apple, Each"
+    },
+    {
+        "id":  "blueberries",
+        "q":  "blueberries",
+        "match":  "Blueberries",
+        "size":  "",
+        "reason":  "form-flip",
+        "was":  "Season\u0027s Choice Frozen Blueberries"
+    },
+    {
+        "id":  "chicken-thighs",
+        "q":  "chicken thighs",
+        "match":  "Fresh Antibiotic Free Family Pack Chicken Drumsticks",
+        "size":  "",
+        "reason":  "name-drift",
+        "was":  "Kirkwood Family Pack Bone-In Chicken Thighs, per lb"
+    },
+    {
+        "id":  "sweet-potatoes",
+        "q":  "sweet potatoes",
+        "match":  "each (estimated)each (est.)Sweet Potatoes",
+        "size":  "",
+        "reason":  "name-drift",
+        "was":  "Sweet Potatoes"
+    }
+]
