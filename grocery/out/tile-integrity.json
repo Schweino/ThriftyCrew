@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-07-16 15:30",
+    "generated":  "2026-07-16 15:41",
     "board":  "comparison-2026-07-15.json",
     "total_tiles":  2047,
-    "violations":  213,
+    "violations":  193,
     "by_store":  {
                      "Walmart":  {
                                      "violations":  27,
@@ -13,11 +13,11 @@
                                      "tiles":  323
                                  },
                      "Family Fare":  {
-                                         "violations":  30,
+                                         "violations":  18,
                                          "tiles":  196
                                      },
                      "Hy-Vee":  {
-                                    "violations":  57,
+                                    "violations":  49,
                                     "tiles":  364
                                 },
                      "Sam\u0027s Club":  {
@@ -65,14 +65,6 @@
                      "detail":  "priced tile with no See-item link",
                      "board":  "All Purpose Flour Our Family",
                      "link":  ""
-                 },
-                 {
-                     "id":  "almond-milk",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.0467 vs link $0.0577  (19% off)",
-                     "board":  "Hy Vee Almondmilk Original Unsweetened",
-                     "link":  "Blue Diamond Almond Breeze Unsweetened Original Almond Milk"
                  },
                  {
                      "id":  "almond-milk",
@@ -163,14 +155,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "baking-soda",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.0806 vs link $0.0931  (13.4% off)",
-                     "board":  "Hy Vee Pure Baking Soda",
-                     "link":  "ARM \u0026 HAMMER Baking Soda, Multi-Purpose 100% Pure Sodium Bicarbonate, 1-Pound Box"
-                 },
-                 {
                      "id":  "balsamic-vinegar",
                      "store":  "Baker\u0027s",
                      "fault":  "WRONG-PRODUCT",
@@ -193,14 +177,6 @@
                      "detail":  "priced tile with no See-item link",
                      "board":  "Dove Bar Soap",
                      "link":  ""
-                 },
-                 {
-                     "id":  "beef-broth",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.0622 vs link $0.0683  (8.9% off)",
-                     "board":  "Hy Vee Fat Free Beef Broth",
-                     "link":  "Hy-Vee Fat Free Beef Broth"
                  },
                  {
                      "id":  "black-pepper",
@@ -321,14 +297,6 @@
                      "detail":  "name-drift",
                      "board":  "That\u0027s Smart! cereal, 12 to 18 oz., $1.99",
                      "link":  "Hy-Vee Whole Grain Raisin Bran"
-                 },
-                 {
-                     "id":  "brown-rice",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $1.895 vs link $1.99  (4.8% off)",
-                     "board":  "Hy Vee Long Grain Brown Rice",
-                     "link":  "Hy-Vee Long Grain Brown Rice"
                  },
                  {
                      "id":  "beef-stew",
@@ -521,14 +489,6 @@
                      "detail":  "link carries no price to compare",
                      "board":  "Member\u0027s Mark Chili Powder, 20 oz.",
                      "link":  "Member\u0027s Mark Chili Powder"
-                 },
-                 {
-                     "id":  "chocolate-chips",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.315 vs link $0.385  (18.2% off)",
-                     "board":  "Hy Vee Semi Sweet Chocolate Baking Chips",
-                     "link":  "Hershey\u0027s Kitchens Semi-Sweet Chocolate Chips"
                  },
                  {
                      "id":  "chocolate-milk",
@@ -990,9 +950,9 @@
                      "id":  "italian-sausage",
                      "store":  "Hy-Vee",
                      "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $4.88 vs link $5.48  (10.9% off)",
+                     "detail":  "board $4.88 vs link $4.49  (8.7% off)",
                      "board":  "Hy Vee Midwest Pork Italian Pork Sausage",
-                     "link":  "Purnells Old Folks Italian Sausage 16 oz"
+                     "link":  "Hy Vee Midwest Pork Italian Pork Sausage"
                  },
                  {
                      "id":  "italian-seasoning",
@@ -1059,27 +1019,11 @@
                      "link":  "Mangoes"
                  },
                  {
-                     "id":  "marshmallows",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Our Family Marshmallows 10 Oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "microwave-popcorn",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy Vee Extra Butter Microwave Popcorn 6Ct",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "microwave-popcorn",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Sweet \u0026 Salty Kettle Corn Microwave Popcorn Cousin Willies (6 Ct)",
                      "link":  ""
                  },
                  {
@@ -1097,14 +1041,6 @@
                      "detail":  "board $3.72 vs link $3.62  (2.8% off)",
                      "board":  "Member\u0027s Mark 2% Reduced Fat Milk (1 gal)",
                      "link":  "Member\u0027s Mark 1% Low Fat Milk (1 gal.)"
-                 },
-                 {
-                     "id":  "minced-garlic",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Dan\u0027s Pantry Minced Garlic",
-                     "link":  ""
                  },
                  {
                      "id":  "miracle-whip",
@@ -1153,14 +1089,6 @@
                      "detail":  "board $0.413 vs link $0.2956  (39.7% off)",
                      "board":  "Fareway Extra Virgin Olive Oil",
                      "link":  "Fareway Extra Virgin Olive Oil"
-                 },
-                 {
-                     "id":  "olive-oil",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.47 vs link $0.5288  (11.1% off)",
-                     "board":  "Hy Vee Extra Virgin Olive Oil",
-                     "link":  "Gustare Vita Classic Olive Oil"
                  },
                  {
                      "id":  "onion-powder",
@@ -1259,14 +1187,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "pepperoni",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.5817 vs link $0.6633  (12.3% off)",
-                     "board":  "Hy Vee Pepperoni Original",
-                     "link":  "Hy-Vee Original Pepperoni"
-                 },
-                 {
                      "id":  "pesto",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -1304,14 +1224,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger Pretzels",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "pretzels",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Snyder\u0027s Of Hanover® Seasoned Twisted Pretzel Sticks 12.000 Oz",
                      "link":  ""
                  },
                  {
@@ -1412,27 +1324,11 @@
                  },
                  {
                      "id":  "salsa",
-                     "store":  "Family Fare",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.1556 vs link $0.1606  (3.1% off)",
-                     "board":  "Mild Thick \u0026 Chunky Salsa Our Family",
-                     "link":  "Mild Salsa Our Family Original"
-                 },
-                 {
-                     "id":  "salsa",
                      "store":  "Fareway",
                      "fault":  "PRICE-MISMATCH",
                      "detail":  "board $0.1562 vs link $0.1246  (25.4% off)",
                      "board":  "Fareway Chunky Mild Salsa",
                      "link":  "Fareway Chunky Mild Salsa"
-                 },
-                 {
-                     "id":  "shampoo",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Suave Shampoo, Smoothing, Avocado + Olive Oil 28 Oz",
-                     "link":  ""
                  },
                  {
                      "id":  "shampoo",
@@ -1467,14 +1363,6 @@
                      "link":  "Kroger Colby Jack Shredded Cheese Family Size"
                  },
                  {
-                     "id":  "shrimp",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Our Family Shrimp Raw Small",
-                     "link":  ""
-                 },
-                 {
                      "id":  "sliced-cheese",
                      "store":  "Fareway",
                      "fault":  "PRICE-MISMATCH",
@@ -1505,14 +1393,6 @@
                      "detail":  "board $0.299 vs link $0.3738  (20% off)",
                      "board":  "Dole Spinach",
                      "link":  "Dole Spinach"
-                 },
-                 {
-                     "id":  "spinach",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Fresh Express Salad, Baby Spinach 10 Oz",
-                     "link":  ""
                  },
                  {
                      "id":  "steak-sauce",
@@ -1587,14 +1467,6 @@
                      "link":  "Great Value Teriyaki Sauce"
                  },
                  {
-                     "id":  "toaster-pastries",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Our Family Toaster Pastries, Brown Sugar Cinnamon, Frosted 12 Ea",
-                     "link":  ""
-                 },
-                 {
                      "id":  "toilet-bowl-cleaner",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
@@ -1627,28 +1499,12 @@
                      "link":  "Fareway Tomato Sauce 28 oz"
                  },
                  {
-                     "id":  "tomato-soup",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.1133 vs link $0.1191  (4.8% off)",
-                     "board":  "Hy Vee Tomato Condensed Soup",
-                     "link":  "Campbell\u0027s Condensed Tomato Soup, 10.75 oz Can"
-                 },
-                 {
                      "id":  "tortillas",
                      "store":  "Hy-Vee",
                      "fault":  "WRONG-PRODUCT",
                      "detail":  "count-mismatch",
                      "board":  "Mission fajita tortillas, 20 ct., $2.99",
                      "link":  "Hy-Vee Flour Tortilla Great for Fajitas 10Ct"
-                 },
-                 {
-                     "id":  "tortillas",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Frescados Taqueria Style Mini Flour Tortillas 12 Ea",
-                     "link":  ""
                  },
                  {
                      "id":  "turkey-lunchmeat",
@@ -1675,28 +1531,12 @@
                      "link":  "Hy-Vee Vegetable Oil"
                  },
                  {
-                     "id":  "vegetable-oil",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Our Family Vegetable Oil, 100% Pure 1 Gal",
-                     "link":  ""
-                 },
-                 {
                      "id":  "vegetable-soup",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Amy\u0027s Organic Low Fat Chunky Vegetable Soups 14.3 oz",
                      "link":  ""
-                 },
-                 {
-                     "id":  "rice",
-                     "store":  "Family Fare",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $1 vs link $1.19  (16% off)",
-                     "board":  "Pampa Rice, White, Long Grain 16 Oz",
-                     "link":  "Enriched Long Grain White Rice"
                  },
                  {
                      "id":  "white-vinegar",

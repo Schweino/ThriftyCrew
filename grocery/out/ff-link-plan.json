@@ -1,130 +1,213 @@
 ﻿{
     "resolved":  [
-
+                     {
+                         "id":  "marshmallows",
+                         "fault":  "NO-LINK",
+                         "board":  "Our Family Marshmallows 10 Oz",
+                         "board_pu":  0.139,
+                         "name":  "Our Family Marshmallows 10 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/marshmallows/our_family_marshmallows_10_oz/p/6787356",
+                         "price":  "$1.39",
+                         "size":  "10 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "microwave-popcorn",
+                         "fault":  "NO-LINK",
+                         "board":  "Sweet \u0026 Salty Kettle Corn Microwave Popcorn Cousin Willies (6 Ct)",
+                         "board_pu":  0.865,
+                         "name":  "Sweet \u0026 Salty Kettle Corn Microwave Popcorn Cousin Willies (6 Ct)",
+                         "url":  "https://www.shopfamilyfare.com/shop/pantry/snacks/popping_corn/sweet_salty_kettle_corn_microwave_popcorn_cousin_willies_6_ct/p/1564405684689184887",
+                         "price":  "$5.19",
+                         "size":  "6 ct",
+                         "score":  1
+                     },
+                     {
+                         "id":  "minced-garlic",
+                         "fault":  "NO-LINK",
+                         "board":  "Dan\u0027s Pantry Minced Garlic",
+                         "board_pu":  0.6988,
+                         "name":  "Dan\u0027s Pantry Minced Garlic",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/dan_s_pantry_minced_garlic/p/5782393",
+                         "price":  "$5.59",
+                         "size":  "8 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "pretzels",
+                         "fault":  "NO-LINK",
+                         "board":  "Snyder\u0027s Of Hanover® Seasoned Twisted Pretzel Sticks 12.000 Oz",
+                         "board_pu":  0.3992,
+                         "name":  "Snyder\u0027s Of Hanover® Seasoned Twisted Pretzel Sticks 12.000 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/pantry/snacks/pretzels/snyder_s_of_hanover_seasoned_twisted_pretzel_sticks_12_000_oz/p/1564405684704966525",
+                         "price":  "$4.79",
+                         "size":  "12.000 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "salsa",
+                         "fault":  "PRICE-MISMATCH",
+                         "board":  "Mild Thick \u0026 Chunky Salsa Our Family",
+                         "board_pu":  0.1556,
+                         "name":  "Our Family Salsa, Thick \u0026 Chunky, Mild 24 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salsa/our_family_salsa_thick_chunky_mild_24_oz/p/7194122",
+                         "price":  "$3.79",
+                         "size":  "24 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "shampoo",
+                         "fault":  "NO-LINK",
+                         "board":  "Suave Shampoo, Smoothing, Avocado + Olive Oil 28 Oz",
+                         "board_pu":  0.2354,
+                         "name":  "Suave Shampoo, Smoothing, Avocado + Olive Oil 28 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/health_beauty/grooming_hygiene/shampoo_conditioner/suave_shampoo_smoothing_avocado_olive_oil_28_oz/p/7301137",
+                         "price":  "$6.59",
+                         "size":  "28 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "shrimp",
+                         "fault":  "NO-LINK",
+                         "board":  "Our Family Shrimp Raw Small",
+                         "board_pu":  9.99,
+                         "name":  "Our Family Shrimp Raw Small",
+                         "url":  "https://www.shopfamilyfare.com/shop/meat/seafood_fish/frozen_seafood/our_family_shrimp_raw_small/p/1564405684714906255",
+                         "price":  "$9.99",
+                         "size":  "16 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "spinach",
+                         "fault":  "NO-LINK",
+                         "board":  "Fresh Express Salad, Baby Spinach 10 Oz",
+                         "board_pu":  0.499,
+                         "name":  "Fresh Express Salad, Baby Spinach 10 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/lettuce_cabbage_greens/fresh_express_salad_baby_spinach_10_oz/p/268917",
+                         "price":  "$4.99",
+                         "size":  "10 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "toaster-pastries",
+                         "fault":  "NO-LINK",
+                         "board":  "Our Family Toaster Pastries, Brown Sugar Cinnamon, Frosted 12 Ea",
+                         "board_pu":  0.2325,
+                         "name":  "Our Family Toaster Pastries, Brown Sugar Cinnamon, Frosted 12 Ea",
+                         "url":  "https://www.shopfamilyfare.com/shop/pantry/breakfast/cereal_bars_pastries/our_family_toaster_pastries_brown_sugar_cinnamon_frosted_12_ea/p/1564405684715497305",
+                         "price":  "$2.79",
+                         "size":  "12 ea",
+                         "score":  1
+                     },
+                     {
+                         "id":  "tortillas",
+                         "fault":  "NO-LINK",
+                         "board":  "Frescados Taqueria Style Mini Flour Tortillas 12 Ea",
+                         "board_pu":  0.1825,
+                         "name":  "Frescados Taqueria Style Mini Flour Tortillas 12 Ea",
+                         "url":  "https://www.shopfamilyfare.com/shop/bakery/tortillas/frescados_taqueria_style_mini_flour_tortillas_12_ea/p/1564405684706470500",
+                         "price":  "$2.19",
+                         "size":  "12 ea",
+                         "score":  1
+                     },
+                     {
+                         "id":  "vegetable-oil",
+                         "fault":  "NO-LINK",
+                         "board":  "Our Family Vegetable Oil, 100% Pure 1 Gal",
+                         "board_pu":  0.0937,
+                         "name":  "Our Family Vegetable Oil, 100% Pure 1 Gal",
+                         "url":  "https://www.shopfamilyfare.com/shop/pantry/baking/oils_sprays/our_family_vegetable_oil_100_pure_1_gal/p/7081453",
+                         "price":  "$11.99",
+                         "size":  "1 gal",
+                         "score":  1
+                     },
+                     {
+                         "id":  "rice",
+                         "fault":  "PRICE-MISMATCH",
+                         "board":  "Pampa Rice, White, Long Grain 16 Oz",
+                         "board_pu":  1,
+                         "name":  "Pampa Rice, White, Long Grain 16 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/seasonal_special_occasion/trial_sizes_store/pampa_rice_white_long_grain_16_oz/p/7017358",
+                         "price":  "$1",
+                         "size":  "16 oz",
+                         "score":  1
+                     }
                  ],
     "refused":  [
                     {
                         "id":  "flour",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but per-unit disagrees: board $0.5596 vs link $0.598 (6.4%)"
                     },
                     {
                         "id":  "applesauce",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but per-unit disagrees: board $0.1454 vs link $0.8725 (83.3%)"
                     },
                     {
                         "id":  "bottled-water",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but its size \"10 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "tomatoes-green-chilies",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but per-unit disagrees: board $0.0683 vs link $0.119 (42.6%)"
                     },
                     {
                         "id":  "storage-bags",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but per-unit disagrees: board $0.113 vs link $0.226 (50%)"
                     },
                     {
                         "id":  "breakfast-sandwiches",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but its size \"18 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "gelatin",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but its size \"3 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "ground-cinnamon",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "ground-turmeric",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "deli-ham",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "hamburger-buns",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
-                    },
-                    {
-                        "id":  "marshmallows",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
-                    },
-                    {
-                        "id":  "microwave-popcorn",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
-                    },
-                    {
-                        "id":  "minced-garlic",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but its size \"16 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "muffins",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but its size \"16 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "oatmeal",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but its size \"8 ea\" gives no per-unit in oz"
                     },
                     {
                         "id":  "paper-towels",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
-                    },
-                    {
-                        "id":  "pretzels",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but its size \"1 rl\" gives no per-unit in each"
                     },
                     {
                         "id":  "ramen",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
-                    },
-                    {
-                        "id":  "salsa",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
-                    },
-                    {
-                        "id":  "shampoo",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but its size \"3 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "shower-cleaner",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
-                    },
-                    {
-                        "id":  "shrimp",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
-                    },
-                    {
-                        "id":  "spinach",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
-                    },
-                    {
-                        "id":  "toaster-pastries",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "toilet-bowl-cleaner",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but its size \"2 ea\" gives no per-unit in floz"
                     },
                     {
                         "id":  "toilet-paper",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
-                    },
-                    {
-                        "id":  "tortillas",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
-                    },
-                    {
-                        "id":  "vegetable-oil",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
-                    },
-                    {
-                        "id":  "rice",
-                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                        "why":  "match found but per-unit disagrees: board $0.8121 vs link $1.0619 (23.5%)"
                     }
                 ],
     "worked":  30,
-    "generated":  "2026-07-16 14:09",
+    "generated":  "2026-07-16 15:31",
     "board":  "comparison-2026-07-15.json"
 }
