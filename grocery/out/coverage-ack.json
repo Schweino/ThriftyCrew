@@ -1,0 +1,10 @@
+{
+  "_comment": "Acknowledged, INTENTIONAL coverage drops for audit-coverage-regression.ps1. An entry silences the guard for one store until 'expires', then the guard re-arms itself - an intentional drop must never decay into a permanent blind spot. Delete an entry once the store is whole again.",
+  "acks": [
+    {
+      "store": "Fareway",
+      "reason": "2026-07-15: the price-mode gate proved Fareway's Instacart storefront was serving marked-up DELIVERY prices, not in-store shelf prices (butter +14%, cream cheese +50%, tuna +22%, OJ +37%). Brad's call was 'drop now, re-capture next', so ~286 cells were pulled on purpose. Re-capture with fulfillment set to In-Store, then stamp via build-fareway-regular.ps1 -ModeVerified <date> and delete this ack.",
+      "expires": "2026-08-15"
+    }
+  ]
+}

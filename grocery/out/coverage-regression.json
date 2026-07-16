@@ -1,0 +1,77 @@
+﻿{
+    "checked":  "2026-07-15",
+    "new_board":  "comparison-2026-07-15.json",
+    "prev_board":  "comparison-2026-07-14.json",
+    "rows_was":  364,
+    "rows_now":  377,
+    "thresholds":  {
+                       "max_drop_cells":  15,
+                       "max_drop_pct":  10
+                   },
+    "stores":  [
+                   {
+                       "store":  "Aldi",
+                       "was":  283,
+                       "now":  286,
+                       "drop":  -3,
+                       "pct":  -1.1,
+                       "regression":  false,
+                       "acked":  false
+                   },
+                   {
+                       "store":  "Baker\u0027s",
+                       "was":  189,
+                       "now":  226,
+                       "drop":  -37,
+                       "pct":  -19.6,
+                       "regression":  false,
+                       "acked":  false
+                   },
+                   {
+                       "store":  "Family Fare",
+                       "was":  187,
+                       "now":  182,
+                       "drop":  5,
+                       "pct":  2.7,
+                       "regression":  false,
+                       "acked":  false
+                   },
+                   {
+                       "store":  "Fareway",
+                       "was":  314,
+                       "now":  3,
+                       "drop":  311,
+                       "pct":  99,
+                       "regression":  true,
+                       "acked":  true
+                   },
+                   {
+                       "store":  "Hy-Vee",
+                       "was":  349,
+                       "now":  361,
+                       "drop":  -12,
+                       "pct":  -3.4,
+                       "regression":  false,
+                       "acked":  false
+                   },
+                   {
+                       "store":  "Sam\u0027s Club",
+                       "was":  116,
+                       "now":  276,
+                       "drop":  -160,
+                       "pct":  -137.9,
+                       "regression":  false,
+                       "acked":  false
+                   },
+                   {
+                       "store":  "Walmart",
+                       "was":  322,
+                       "now":  361,
+                       "drop":  -39,
+                       "pct":  -12.1,
+                       "regression":  false,
+                       "acked":  false
+                   }
+               ],
+    "fail_count":  0
+}

@@ -15,6 +15,10 @@ param(
   [string]$AdsFile = "",
   [string]$BakersFile = "",
   [string]$SamsFile = "",
+# Sam's captures are partial (see the loader below): every capture inside this window is loaded, and the
+# freshest one that covers a given commodity wins it. Warehouse "everyday" prices are stable enough for this;
+# tighten it if Sam's starts moving prices weekly.
+[int]$SamsMaxAgeDays = 14,
   [string]$FarewayFile = "",
   [int]$MinStores = 2,
   [string]$OutDir = "",
@@ -323,9 +327,12 @@ if ($SelfTest) {
 
 # ---------------------------------------------------------------- load + normalize all sources
 $deals = New-Object System.Collections.Generic.List[object]
-function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale') {
+function Add-Norm($store,$name,$price,$size,$regular,$src,$ptype='sale',$srcDate='') {
   if (-not $name) { return }
-  $deals.Add([pscustomobject]@{ store=$store; name=[string]$name; price_text=[string]$price; size_text=[string]$size; regular=$regular; source_ad=$src; price_type=$ptype })
+  # src_date = the date of the CAPTURE FILE this row came from (not the ad cycle). Only rows loaded from dated
+  # per-store capture files carry it; it is how the ranking step below can prefer the freshest capture that
+  # covers a commodity instead of letting an older capture's price compete with it.
+  $deals.Add([pscustomobject]@{ store=$store; name=[string]$name; price_text=[string]$price; size_text=[string]$size; regular=$regular; source_ad=$src; price_type=$ptype; src_date=[string]$srcDate })
 }
 $ads = Get-Content $AdsFile -Raw | ConvertFrom-Json
 $today = $ads.today
@@ -348,13 +355,34 @@ foreach ($d in $ads.deals) {                                                    
 # Sam's/Baker's/Hy-Vee/Walmart, and the publish coverage gate did not catch it because 112 > its MinPerStore.
 # A store must never disappear because of how the engine was invoked. Explicit args still win.
 if (-not $BakersFile)  { $f = Get-ChildItem (Join-Path $OutDir 'bakers\bakers-deals-*.json')   -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1; if ($f) { $BakersFile  = $f.FullName; Write-Warning ("compare-deals: -BakersFile not passed; auto-using "  + $f.Name) } }
-if (-not $SamsFile)    { $f = Get-ChildItem (Join-Path $OutDir 'sams\sams-deals-*.json')       -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1; if ($f) { $SamsFile    = $f.FullName; Write-Warning ("compare-deals: -SamsFile not passed; auto-using "    + $f.Name) } }
 if (-not $FarewayFile) { $f = Get-ChildItem (Join-Path $OutDir 'fareway\fareway-deals-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1; if ($f) { $FarewayFile = $f.FullName; Write-Warning ("compare-deals: -FarewayFile not passed; auto-using " + $f.Name) } }
-foreach ($extra in @($BakersFile,$SamsFile,$FarewayFile)) {
+
+# Sam's is captured in PARTIAL SLICES - the club catalog is CAPTCHA-walled, so each run only gets the categories
+# it got through before the wall. "Newest file wins" is right for a store we pull whole every week and WRONG for
+# Sam's: the 2026-07-15 Omaha-club capture (428 rows) covers ~118 commodities where the 2026-07-08 national
+# capture (263 rows) covered ~251, so taking only the newest cut 153 priced cells off the board with no warning.
+# Load EVERY Sam's capture inside the age window instead, and let the ranking step keep - per commodity - only
+# the rows from the freshest capture that actually covers it. A blind union would be worse than the bug it fixes:
+# "cheapest per store" would let a stale-low price from an old capture beat today's real one.
+# An explicit -SamsFile still wins (the regression harness pins one file).
+$samsFiles = @()
+if ($SamsFile) { $samsFiles = @($SamsFile) }
+else {
+  foreach ($f in (Get-ChildItem (Join-Path $OutDir 'sams\sams-deals-*.json') -EA SilentlyContinue | Sort-Object Name -Descending)) {
+    if ($f.BaseName -notmatch '(\d{4}-\d{2}-\d{2})$') { continue }
+    $age = [math]::Abs(([datetime]$Matches[1] - [datetime]$today).TotalDays)
+    if ($age -gt $SamsMaxAgeDays) { Write-Warning ("compare-deals: skipping " + $f.Name + " (" + [int]$age + "d old > -SamsMaxAgeDays $SamsMaxAgeDays)"); continue }
+    $samsFiles += $f.FullName
+  }
+  if ($samsFiles.Count) { Write-Warning ("compare-deals: -SamsFile not passed; auto-using " + $samsFiles.Count + " Sam's capture(s): " + (($samsFiles | ForEach-Object { Split-Path $_ -Leaf }) -join ', ')) }
+}
+foreach ($extra in (@($BakersFile,$FarewayFile) + $samsFiles)) {
   if ($extra -and (Test-Path $extra)) {
     $ex = Get-Content $extra -Raw | ConvertFrom-Json
     $pt = if ($ex.price_type) { [string]$ex.price_type } else { 'sale' }
-    foreach ($d in $ex.deals) { Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt }
+    $sd = ''
+    if ([IO.Path]::GetFileNameWithoutExtension($extra) -match '(\d{4}-\d{2}-\d{2})$') { $sd = $Matches[1] }
+    foreach ($d in $ex.deals) { Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $sd }
   }
 }
 # supplemental agent-authored deals: out\extra-deals-<date>.json (newest). This is how a Hy-Vee/Aldi BOGO gets
@@ -449,8 +477,25 @@ $GLOBAL_EXCLUDE = @(
 )
 # a wrapper rule-file can replace the global list (the recipe set relaxes sauce/canned/frozen/juice)
 if ($GEX_OVERRIDE) { $GLOBAL_EXCLUDE = $GEX_OVERRIDE }
-function Match-Category($name) {
+# A store can rename a product without changing the product, and the rename silently un-matches it. Sam's moved
+# from hand-shortened names to real catalog titles: "Member's Mark Boneless Skinless Chicken Breast" became
+# "Member's Mark Boneless and Skinless Chicken Breast, priced per pound". Every include pattern here was written
+# against the short form, so one inserted "and" turned a priced cell into a "doesn't carry" tile - and NOTHING
+# caught it, because "doesn't carry" is a legitimate state that no audit can tell apart from a real gap.
+# So: test includes against the raw name AND a normalized variant (drop the store's per-unit suffix, treat
+# "X and Y" as "X Y"). The variant is used for INCLUDES ONLY. Excludes and the global list keep matching the RAW
+# name, which is what makes this safe in one direction: normalizing can only ever ADD an include match, it can
+# never quietly un-exclude something. (It matters concretely: "mix and match" normalizes to "mix match", which
+# WOULD fall into the '\bmix\b' global whose lookahead is written to spare "mix & match".)
+function Get-MatchTexts([string]$name) {
   $n = $name.ToLower()
+  $v = $n -replace ',?\s*priced per\s+\w+', ''            # Sam's "..., priced per pound" / "per each" suffix
+  $v = (($v -replace '\band\b', ' ') -replace '\s{2,}', ' ').Trim()
+  return ,@($n, $v)                                        # [0] is always the RAW name
+}
+function Match-Category($name) {
+  $texts = Get-MatchTexts $name
+  $n = $texts[0]
   # Which global prepared-food tokens hit this name (usually none). A commodity whose PLAIN form legitimately
   # IS one of these (pasta-sauce is a sauce, soda is soda, ice-cream is ice cream...) declares relax_global:
   # ["\\bsauce\\b", ...] in commodities.json to waive EXACTLY those tokens for itself - every other commodity
@@ -458,7 +503,7 @@ function Match-Category($name) {
   $ghits = @(); foreach ($g in $GLOBAL_EXCLUDE) { if ($n -match $g) { $ghits += $g } }
   foreach ($c in $commodities) {
     $hit = $false
-    foreach ($inc in $c.include) { if ($n -match $inc) { $hit=$true; break } }
+    foreach ($inc in $c.include) { foreach ($t in $texts) { if ($t -match $inc) { $hit=$true; break } }; if ($hit) { break } }
     if (-not $hit) { continue }
     if ($ghits.Count) {
       $relax = @($c.relax_global | Where-Object { $_ })
@@ -514,7 +559,7 @@ foreach ($d in $deals) {
     # Carry the SOURCE through to the page. Without it build-deals-page cannot tell an ad-backed sale from a
     # one-off price snapshot, so it stamped every sale chip with the store's ad-cycle end date - dressing an
     # undated Aisles Online markdown up as "Sale thru Jul 19". A date we invented is worse than no date.
-    source_ad=$d.source_ad;
+    source_ad=$d.source_ad; src_date=$d.src_date;
     unit_price=$uprice; basis=$basis; note=$note })
 }
 
@@ -531,7 +576,20 @@ $candPfx = if ($OutName -eq 'comparison') { 'candidates' } else { "$OutName-cand
 $report = New-Object System.Collections.Generic.List[object]
 foreach ($g in ($matched | Where-Object { $_.unit_price -ne $null } | Group-Object id)) {
   $priced = $g.Group
-  $byStore = $priced | Group-Object store | ForEach-Object { $_.Group | Sort-Object unit_price | Select-Object -First 1 }
+  # Per store: the FRESHEST capture that covers this commodity wins it outright; only then take that capture's
+  # cheapest row. Without this, loading Sam's partial captures together (see the loader) would let a stale-low
+  # price from an old capture out-rank today's real price - a worse bug than the coverage gap it fixes.
+  # Rows with NO src_date (weekly ads, out\regular\ everyday files) are never filtered out - they are a store's
+  # only source and carry no capture-date to compare, so they always stay eligible alongside the newest capture.
+  $byStore = $priced | Group-Object store | ForEach-Object {
+    $rows = $_.Group
+    $dated = @($rows | Where-Object { $_.src_date })
+    if ($dated.Count) {
+      $newest = @($dated | ForEach-Object { [string]$_.src_date } | Sort-Object -Descending)[0]
+      $rows = @($rows | Where-Object { -not $_.src_date -or [string]$_.src_date -eq $newest })
+    }
+    $rows | Sort-Object unit_price | Select-Object -First 1
+  }
   $ranked = @($byStore | Sort-Object unit_price)
   if ($ranked.Count -lt $MinStores) { continue }
   $f = $priced[0]

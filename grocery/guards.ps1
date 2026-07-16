@@ -78,7 +78,14 @@ foreach ($g in @(
     # household/bakery-carrier/dairy-carrier/candy product. Wrong-class products are usually CHEAPER than the
     # real item, so they win the cheapest slot and ship as a great-looking lie. Reads category-excludes.json -
     # the same library apply-category-excludes bakes into commodity rules and build-vet-sheet flags for review.
-    @{ f='audit-food-category.ps1';     n='no food commodity matched a wrong-class product (beverage/baby/pet/household/carrier/candy)' })) {
+    @{ f='audit-food-category.ps1';     n='no food commodity matched a wrong-class product (beverage/baby/pet/household/carrier/candy)' },
+    # coverage regression (2026-07-16): a store QUIETLY LOSING cells it had on the previous board. Guard 6 below
+    # checks the same idea at the FILE level, and cannot see this class at all - it reads out\regular\, and Sam's
+    # has no regular file (its prices come only from out\sams\ captures). So Sam's fell 251 -> 116 priced cells
+    # with every guard on this page green: the publish gate enforces only a FLOOR (~15/store, which 116 clears),
+    # and a store missing from a row renders as a lawful "doesn't carry" tile that no audit can distinguish from
+    # a real gap. Brad caught it by eye. Intentional drops are acked in out\coverage-ack.json with an expiry.
+    @{ f='audit-coverage-regression.ps1'; n='no store lost coverage vs the previous board' })) {
   $p = Join-Path $root $g.f
   if (-not (Test-Path $p)) { [void]$fail.Add(("MISSING GUARD SCRIPT: " + $g.f)); continue }
   & powershell -NoProfile -ExecutionPolicy Bypass -File $p | Out-Null

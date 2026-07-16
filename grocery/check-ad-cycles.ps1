@@ -215,12 +215,16 @@ if (-not $NoAlert) {
 # dates every day, not just on the weekly ad flip.
 if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
   $bakers = Get-ChildItem (Join-Path $OutDir 'bakers\bakers-deals-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
-  $sams   = Get-ChildItem (Join-Path $OutDir 'sams\sams-deals-*.json')     -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
   $fareway = Get-ChildItem (Join-Path $OutDir 'fareway\fareway-deals-*.json') -ErrorAction SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1
   $args = @('-ExecutionPolicy','Bypass','-File',(Join-Path $root 'compare-deals.ps1'),'-MinStores','1')
   if ($bakers)  { $args += @('-BakersFile',  $bakers.FullName) }
-  if ($sams)    { $args += @('-SamsFile',    $sams.FullName) }
   if ($fareway) { $args += @('-FarewayFile', $fareway.FullName) }
+  # Sam's is deliberately NOT pinned here. Its club catalog is CAPTCHA-walled, so each capture only covers the
+  # categories that run got through - pinning "the newest file" made every night's board only as broad as the
+  # last partial capture (the 07-15 Omaha capture covered 118 commodities where 07-08 covered 251: 167 priced
+  # cells vanished, chicken-breast among them). compare-deals loads EVERY capture inside its age window and
+  # lets the freshest one that covers a commodity win it, so leaving -SamsFile off is what keeps coverage whole.
+  # "Newest file wins" lived in two places; this was the copy that would have silently overridden the fix.
   try {
     $sigBefore = BoardSignature
     & powershell @args | Out-Null
@@ -233,6 +237,10 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
     } else {
       & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'update-history.ps1') | Out-Null
       & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'sanity-check.ps1') | Out-Null   # exit 1 = flags (expected), not a crash -> guards-<week>.json
+      # NOTE: the coverage-REGRESSION check (a store quietly shrinking between boards) is NOT run here. It is a
+      # hard invariant, so it lives in guards.ps1 where a failure actually stops the publish. Setting $hardFail
+      # at this point would not: the publish below gates on $guardsBlocked, and $hardFail was already read at the
+      # top of this block - so it would log "publish HELD" while the board shipped anyway.
       # ---- COVERAGE GAP GUARD: a store SILENTLY dropped from a commodity it actually carries (a too-strict
       # include regex not matching that store's real product name - the Hy-Vee "Pork Loin TOP Loin Chops" bug).
       # audit-coverage-gaps.ps1 scans each missing store's raw pull for a loosened-include match; a hit = fix the
