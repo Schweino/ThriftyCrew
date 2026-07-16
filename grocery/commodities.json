@@ -9,9 +9,13 @@
                         "b\\.?s\\.?b\\.?\\s+chicken",
                         "boneless,?\\s*skinless\\b.{0,25}chicken\\s+breast",
                         "chicken\\s+breasts?,\\s*(?:boneless|skinless)",
+                        "\\bchicken\\s+breasts?\\b",
                         "(?:boneless|skinless)\\s*[,\u0026/ ]+\\s*(?:boneless|skinless)[^,]*chicken\\s+breast"
                     ],
         "exclude":  [
+                        "\\bchunk\\b",
+                        "\\bdeli\\b",
+                        "rotisserie",
                         "thigh",
                         "tender",
                         "strip",
