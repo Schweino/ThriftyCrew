@@ -1,126 +1,11 @@
 ﻿{
-    "generated":  "2026-07-16 07:43",
-    "gap_count":  454,
+    "generated":  "2026-07-16 08:41",
+    "gap_count":  132,
     "gaps":  [
-                 {
-                     "commodity":  "chicken-breast",
-                     "store":  "Aldi",
-                     "candidate":  "Never Any! Family Pack Boneless Skinless Chicken Breasts"
-                 },
-                 {
-                     "commodity":  "chicken-breast",
-                     "store":  "Fareway",
-                     "candidate":  "Boneless Skinless Chicken Breast"
-                 },
-                 {
-                     "commodity":  "chicken-thighs",
-                     "store":  "Fareway",
-                     "candidate":  "Bone-In Chicken Thighs"
-                 },
-                 {
-                     "commodity":  "ground-beef-8020",
-                     "store":  "Fareway",
-                     "candidate":  "80% Lean 20% Fat Ground Beef"
-                 },
-                 {
-                     "commodity":  "ground-turkey",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Ground Turkey"
-                 },
-                 {
-                     "commodity":  "bacon",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Hickory Smoked Bacon"
-                 },
-                 {
-                     "commodity":  "pork-chops",
-                     "store":  "Fareway",
-                     "candidate":  "Center Cut Pork Chops"
-                 },
-                 {
-                     "commodity":  "eggs",
-                     "store":  "Fareway",
-                     "candidate":  "Dutch Farms 18 Grade A Large Eggs"
-                 },
-                 {
-                     "commodity":  "milk",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Skim Milk"
-                 },
-                 {
-                     "commodity":  "butter",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Sweet Cream Salted Butter"
-                 },
-                 {
-                     "commodity":  "cottage-cheese",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Cottage Cheese, Small Curd"
-                 },
-                 {
-                     "commodity":  "sour-cream",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Sour Cream"
-                 },
-                 {
-                     "commodity":  "cream-cheese",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Cream Cheese, Original"
-                 },
-                 {
-                     "commodity":  "shredded-cheese",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Mild Cheddar Fancy Shredded Cheese"
-                 },
-                 {
-                     "commodity":  "yogurt",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Nonfat Plain Greek Yogurt"
-                 },
-                 {
-                     "commodity":  "strawberries",
-                     "store":  "Fareway",
-                     "candidate":  "Strawberries"
-                 },
-                 {
-                     "commodity":  "blueberries",
-                     "store":  "Fareway",
-                     "candidate":  "Blueberries"
-                 },
                  {
                      "commodity":  "avocados",
                      "store":  "Hy-Vee",
                      "candidate":  "Hass Avocados"
-                 },
-                 {
-                     "commodity":  "russet-potatoes",
-                     "store":  "Fareway",
-                     "candidate":  "Russet Potato Bag"
-                 },
-                 {
-                     "commodity":  "onions",
-                     "store":  "Fareway",
-                     "candidate":  "Yellow Onions"
-                 },
-                 {
-                     "commodity":  "apples",
-                     "store":  "Fareway",
-                     "candidate":  "Gala Apple"
-                 },
-                 {
-                     "commodity":  "sweet-corn",
-                     "store":  "Fareway",
-                     "candidate":  "Yellow Sweet Corn"
-                 },
-                 {
-                     "commodity":  "watermelon",
-                     "store":  "Fareway",
-                     "candidate":  "Seedless Watermelon"
-                 },
-                 {
-                     "commodity":  "peaches",
-                     "store":  "Fareway",
-                     "candidate":  "Peach"
                  },
                  {
                      "commodity":  "bread",
@@ -128,89 +13,9 @@
                      "candidate":  "L\u0027oven Fresh Keto Friendly Bread"
                  },
                  {
-                     "commodity":  "bread",
-                     "store":  "Fareway",
-                     "candidate":  "Corner Store Bread, Original, White"
-                 },
-                 {
-                     "commodity":  "peanut-butter",
-                     "store":  "Fareway",
-                     "candidate":  "SKIPPY Peanut Butter, Creamy"
-                 },
-                 {
-                     "commodity":  "orange-juice",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Orange Juice, from Concentrate"
-                 },
-                 {
-                     "commodity":  "coffee",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Coffee, Ground, Classic Roast, Medium Roast Style"
-                 },
-                 {
-                     "commodity":  "laundry-detergent",
-                     "store":  "Fareway",
-                     "candidate":  "Arm \u0026 Hammer Plus OxiClean Ultra Stain Fighters Liquid Laundry Detergent"
-                 },
-                 {
-                     "commodity":  "whole-chicken",
-                     "store":  "Fareway",
-                     "candidate":  "Whole Chicken"
-                 },
-                 {
-                     "commodity":  "breakfast-sausage",
-                     "store":  "Fareway",
-                     "candidate":  "Farmland Original Pork Sausage"
-                 },
-                 {
-                     "commodity":  "hot-dogs",
-                     "store":  "Fareway",
-                     "candidate":  "Bar-S Classic Franks Hot Dogs"
-                 },
-                 {
-                     "commodity":  "deli-ham",
-                     "store":  "Fareway",
-                     "candidate":  "Cedar Hollow Foods Cherry Wood Ham"
-                 },
-                 {
-                     "commodity":  "salmon",
-                     "store":  "Fareway",
-                     "candidate":  "Northern Fisheries Salmon Portions"
-                 },
-                 {
-                     "commodity":  "canned-tuna",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Chunk Light Tuna in Water"
-                 },
-                 {
-                     "commodity":  "shrimp",
-                     "store":  "Fareway",
-                     "candidate":  "Supreme Choice Raw Shrimp Shell-On 51-60 ct"
-                 },
-                 {
-                     "commodity":  "sirloin-steak",
-                     "store":  "Fareway",
-                     "candidate":  "USDA Choice Sirloin Tip Steak"
-                 },
-                 {
-                     "commodity":  "sliced-cheese",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway American Cheese Slices"
-                 },
-                 {
-                     "commodity":  "oranges",
-                     "store":  "Fareway",
-                     "candidate":  "Navel Orange"
-                 },
-                 {
                      "commodity":  "lemons",
                      "store":  "Aldi",
                      "candidate":  "Lemons, Bag"
-                 },
-                 {
-                     "commodity":  "lemons",
-                     "store":  "Fareway",
-                     "candidate":  "Lemon"
                  },
                  {
                      "commodity":  "lemons",
@@ -224,18 +29,8 @@
                  },
                  {
                      "commodity":  "limes",
-                     "store":  "Fareway",
-                     "candidate":  "Limes"
-                 },
-                 {
-                     "commodity":  "limes",
                      "store":  "Sam\u0027s Club",
                      "candidate":  "Limes, 3-Pound Bag"
-                 },
-                 {
-                     "commodity":  "tomatoes",
-                     "store":  "Fareway",
-                     "candidate":  "Roma Tomato"
                  },
                  {
                      "commodity":  "lettuce",
@@ -248,44 +43,9 @@
                      "candidate":  "Fresh Iceberg Lettuce Head"
                  },
                  {
-                     "commodity":  "lettuce",
-                     "store":  "Fareway",
-                     "candidate":  "Iceberg Lettuce"
-                 },
-                 {
-                     "commodity":  "carrots",
-                     "store":  "Fareway",
-                     "candidate":  "Carrot"
-                 },
-                 {
-                     "commodity":  "broccoli",
-                     "store":  "Fareway",
-                     "candidate":  "Broccoli Crown"
-                 },
-                 {
                      "commodity":  "bell-peppers",
                      "store":  "Hy-Vee",
                      "candidate":  "Green Bell Pepper"
-                 },
-                 {
-                     "commodity":  "bell-peppers",
-                     "store":  "Fareway",
-                     "candidate":  "Green Bell Pepper"
-                 },
-                 {
-                     "commodity":  "celery",
-                     "store":  "Fareway",
-                     "candidate":  "Celery"
-                 },
-                 {
-                     "commodity":  "cucumbers",
-                     "store":  "Fareway",
-                     "candidate":  "Cucumber"
-                 },
-                 {
-                     "commodity":  "garlic",
-                     "store":  "Fareway",
-                     "candidate":  "Spice World Fresh Garlic"
                  },
                  {
                      "commodity":  "garlic",
@@ -293,34 +53,9 @@
                      "candidate":  "Fresh Garlic Bulbs, 2-Pound"
                  },
                  {
-                     "commodity":  "spinach",
-                     "store":  "Fareway",
-                     "candidate":  "Dole Salad Baby Spinach"
-                 },
-                 {
-                     "commodity":  "mushrooms",
-                     "store":  "Fareway",
-                     "candidate":  "Highline Sliced White Mushrooms"
-                 },
-                 {
-                     "commodity":  "sweet-potatoes",
-                     "store":  "Fareway",
-                     "candidate":  "Sweet Potato (Yam)"
-                 },
-                 {
                      "commodity":  "tortillas",
                      "store":  "Aldi",
                      "candidate":  "Pueblo Lindo Fajita Tortillas"
-                 },
-                 {
-                     "commodity":  "tortillas",
-                     "store":  "Fareway",
-                     "candidate":  "Frescados Flour Taco Style Tortillas"
-                 },
-                 {
-                     "commodity":  "hamburger-buns",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Premium Hamburger Buns"
                  },
                  {
                      "commodity":  "bagels",
@@ -338,21 +73,6 @@
                      "candidate":  "Fareway Pre-Sliced Original Bagels"
                  },
                  {
-                     "commodity":  "rice",
-                     "store":  "Fareway",
-                     "candidate":  "ParExcellence Premium Long Grain Rice"
-                 },
-                 {
-                     "commodity":  "pasta",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Long Spaghetti"
-                 },
-                 {
-                     "commodity":  "pasta-sauce",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Traditional Pasta Sauce"
-                 },
-                 {
                      "commodity":  "mac-and-cheese",
                      "store":  "Aldi",
                      "candidate":  "Cheese Club Macaroni and Cheese Dinner"
@@ -361,11 +81,6 @@
                      "commodity":  "mac-and-cheese",
                      "store":  "Family Fare",
                      "candidate":  "Bob Evans Macaroni \u0026 Cheese, Family Size 28 Oz"
-                 },
-                 {
-                     "commodity":  "mac-and-cheese",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Original Macaroni \u0026 Cheese Dinner"
                  },
                  {
                      "commodity":  "mac-and-cheese",
@@ -378,134 +93,9 @@
                      "candidate":  "Simply Asia Japanese Style Ramen Noodles 8 Oz"
                  },
                  {
-                     "commodity":  "ramen",
-                     "store":  "Fareway",
-                     "candidate":  "Maruchan Ramen Noodle Soup, Chicken"
-                 },
-                 {
-                     "commodity":  "flour",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Flour, All Purpose"
-                 },
-                 {
-                     "commodity":  "sugar",
-                     "store":  "Fareway",
-                     "candidate":  "Corner Store Sugar, Granulated"
-                 },
-                 {
                      "commodity":  "brown-sugar",
                      "store":  "Family Fare",
                      "candidate":  "Starbucks Coffee, Ground, Brown Sugar Cinnamon 11 Oz"
-                 },
-                 {
-                     "commodity":  "brown-sugar",
-                     "store":  "Fareway",
-                     "candidate":  "Corner Store Sugar, Brown"
-                 },
-                 {
-                     "commodity":  "olive-oil",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Extra Virgin Olive Oil"
-                 },
-                 {
-                     "commodity":  "vegetable-oil",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Vegetable Oil"
-                 },
-                 {
-                     "commodity":  "cereal",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Bran Flakes Cereal"
-                 },
-                 {
-                     "commodity":  "oatmeal",
-                     "store":  "Fareway",
-                     "candidate":  "Ralston Foods Oats, Quick"
-                 },
-                 {
-                     "commodity":  "jelly",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Concord Grape Jelly"
-                 },
-                 {
-                     "commodity":  "honey",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Pure Honey"
-                 },
-                 {
-                     "commodity":  "canned-black-beans",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Black Beans"
-                 },
-                 {
-                     "commodity":  "canned-corn",
-                     "store":  "Fareway",
-                     "candidate":  "Corner Store Corn, Kernel, Whole"
-                 },
-                 {
-                     "commodity":  "diced-tomatoes",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Diced Tomatoes in Tomato Juice"
-                 },
-                 {
-                     "commodity":  "chicken-broth",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Fat Free Chicken Broth"
-                 },
-                 {
-                     "commodity":  "ketchup",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Tomato Ketchup"
-                 },
-                 {
-                     "commodity":  "mustard",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Yellow Mustard"
-                 },
-                 {
-                     "commodity":  "mayonnaise",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Mayonnaise, Homestyle"
-                 },
-                 {
-                     "commodity":  "ranch-dressing",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Ranch Dressing"
-                 },
-                 {
-                     "commodity":  "salsa",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Chunky Mild Salsa"
-                 },
-                 {
-                     "commodity":  "salt",
-                     "store":  "Fareway",
-                     "candidate":  "Morton Iodized Salt"
-                 },
-                 {
-                     "commodity":  "black-pepper",
-                     "store":  "Fareway",
-                     "candidate":  "Badia Spices Ground Black Pepper"
-                 },
-                 {
-                     "commodity":  "tortilla-chips",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Restaurant Style White Corn Tortilla Chips"
-                 },
-                 {
-                     "commodity":  "potato-chips",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Original Potato Chips"
-                 },
-                 {
-                     "commodity":  "soda",
-                     "store":  "Fareway",
-                     "candidate":  "Shasta Cola"
-                 },
-                 {
-                     "commodity":  "bottled-water",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway 24 Pack Purified Drinking Water"
                  },
                  {
                      "commodity":  "frozen-pizza",
@@ -513,54 +103,9 @@
                      "candidate":  "Red Baron Classic Crust Pepperoni Pizza 20.6 Oz"
                  },
                  {
-                     "commodity":  "frozen-pizza",
-                     "store":  "Fareway",
-                     "candidate":  "Jack\u0027s Original Thin Cheese Pizza"
-                 },
-                 {
-                     "commodity":  "ice-cream",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Vanilla Flavored Ice Cream"
-                 },
-                 {
-                     "commodity":  "frozen-vegetables",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Mixed Vegetables"
-                 },
-                 {
-                     "commodity":  "frozen-fries",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Crinkle Fries"
-                 },
-                 {
-                     "commodity":  "paper-towels",
-                     "store":  "Fareway",
-                     "candidate":  "Scott One-Ply Choose-A-Sheet Fast Absorbing Double Rolls Paper Towels"
-                 },
-                 {
-                     "commodity":  "toilet-paper",
-                     "store":  "Fareway",
-                     "candidate":  "Scott ComfortPlus Toilet Paper, 1-Ply"
-                 },
-                 {
-                     "commodity":  "dish-soap",
-                     "store":  "Fareway",
-                     "candidate":  "Bright Essentials Original Scent Dish Soap"
-                 },
-                 {
                      "commodity":  "dishwasher-detergent",
                      "store":  "Family Fare",
                      "candidate":  "Cascade Action Pacs Lemon Scent Dishwasher Detergent 12 Ea"
-                 },
-                 {
-                     "commodity":  "dishwasher-detergent",
-                     "store":  "Fareway",
-                     "candidate":  "Bright Essentials Dishwasher Pacs, Fresh Scent, Triple Action"
-                 },
-                 {
-                     "commodity":  "trash-bags",
-                     "store":  "Fareway",
-                     "candidate":  "Bright Essentials Trash Bags, Tall Kitchen, Drawstring, Unscented"
                  },
                  {
                      "commodity":  "aluminum-foil",
@@ -568,44 +113,14 @@
                      "candidate":  "Hy-Vee aluminum foil, 130 or 200 sq. ft., $11.99"
                  },
                  {
-                     "commodity":  "aluminum-foil",
-                     "store":  "Fareway",
-                     "candidate":  "Reynolds Everyday Aluminum Foil"
-                 },
-                 {
-                     "commodity":  "storage-bags",
-                     "store":  "Fareway",
-                     "candidate":  "Bright Essentials Freezer Bags, Double Zipper, Gallon Size"
-                 },
-                 {
-                     "commodity":  "bleach",
-                     "store":  "Fareway",
-                     "candidate":  "Sun Brite Ultra Bleach"
-                 },
-                 {
                      "commodity":  "hand-soap",
                      "store":  "Hy-Vee",
                      "candidate":  "Hy-Vee Clear Hands Soap"
                  },
                  {
-                     "commodity":  "hand-soap",
-                     "store":  "Fareway",
-                     "candidate":  "Softsoap Aquarium Liquid Hand Soap Refill"
-                 },
-                 {
                      "commodity":  "pears",
                      "store":  "Family Fare",
-                     "candidate":  "Top Care Antibacterial Foaming Fresh Pear Hand Soap 7.5 Fl Oz"
-                 },
-                 {
-                     "commodity":  "pears",
-                     "store":  "Fareway",
-                     "candidate":  "Bartlett Pear"
-                 },
-                 {
-                     "commodity":  "mangoes",
-                     "store":  "Fareway",
-                     "candidate":  "Red Mango"
+                     "candidate":  "Fresh Pears, Bartlett Melissa\u0027s"
                  },
                  {
                      "commodity":  "kiwi",
@@ -616,11 +131,6 @@
                      "commodity":  "kiwi",
                      "store":  "Family Fare",
                      "candidate":  "Regular Kiwifruit"
-                 },
-                 {
-                     "commodity":  "kiwi",
-                     "store":  "Fareway",
-                     "candidate":  "Kiwi Fruit"
                  },
                  {
                      "commodity":  "kiwi",
@@ -638,29 +148,9 @@
                      "candidate":  "Fresh Kiwi Package"
                  },
                  {
-                     "commodity":  "cantaloupe",
-                     "store":  "Fareway",
-                     "candidate":  "Cantaloupe Melon"
-                 },
-                 {
-                     "commodity":  "honeydew",
-                     "store":  "Fareway",
-                     "candidate":  "Honeydew Melon"
-                 },
-                 {
                      "commodity":  "pineapple",
                      "store":  "Family Fare",
                      "candidate":  "Fresh \u0026 Finest Pineapple Cubes"
-                 },
-                 {
-                     "commodity":  "pineapple",
-                     "store":  "Fareway",
-                     "candidate":  "Whole Pineapple"
-                 },
-                 {
-                     "commodity":  "raspberries",
-                     "store":  "Fareway",
-                     "candidate":  "Raspberries"
                  },
                  {
                      "commodity":  "blackberries",
@@ -668,34 +158,9 @@
                      "candidate":  "Lacroix Blackberry Cucumber Sparkling Water"
                  },
                  {
-                     "commodity":  "blackberries",
-                     "store":  "Fareway",
-                     "candidate":  "Blackberries"
-                 },
-                 {
-                     "commodity":  "cherries",
-                     "store":  "Fareway",
-                     "candidate":  "Red Cherries"
-                 },
-                 {
                      "commodity":  "grapefruit",
                      "store":  "Hy-Vee",
                      "candidate":  "Red Grapefruit"
-                 },
-                 {
-                     "commodity":  "grapefruit",
-                     "store":  "Fareway",
-                     "candidate":  "Red Grapefruit"
-                 },
-                 {
-                     "commodity":  "clementines",
-                     "store":  "Fareway",
-                     "candidate":  "Mandarin Clementine"
-                 },
-                 {
-                     "commodity":  "zucchini",
-                     "store":  "Fareway",
-                     "candidate":  "Zucchini Squash"
                  },
                  {
                      "commodity":  "cauliflower",
@@ -703,34 +168,9 @@
                      "candidate":  "Table Ready Cauliflower"
                  },
                  {
-                     "commodity":  "cauliflower",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Cauliflower"
-                 },
-                 {
                      "commodity":  "asparagus",
                      "store":  "Family Fare",
                      "candidate":  "Birds Eye Gold \u0026 White Corn, Carrots \u0026 Asparagus 10.8 Oz"
-                 },
-                 {
-                     "commodity":  "asparagus",
-                     "store":  "Fareway",
-                     "candidate":  "Asparagus"
-                 },
-                 {
-                     "commodity":  "brussels-sprouts",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Brussels Sprouts"
-                 },
-                 {
-                     "commodity":  "cabbage",
-                     "store":  "Fareway",
-                     "candidate":  "Green Cabbage"
-                 },
-                 {
-                     "commodity":  "kale",
-                     "store":  "Fareway",
-                     "candidate":  "Kale"
                  },
                  {
                      "commodity":  "green-onions",
@@ -738,24 +178,9 @@
                      "candidate":  "Green Onions, Bag"
                  },
                  {
-                     "commodity":  "green-onions",
-                     "store":  "Fareway",
-                     "candidate":  "Green Onions (Scallions)"
-                 },
-                 {
-                     "commodity":  "jalapenos",
-                     "store":  "Fareway",
-                     "candidate":  "Jalapeno Pepper"
-                 },
-                 {
                      "commodity":  "cilantro",
                      "store":  "Family Fare",
                      "candidate":  "Ro Tel Mexican Style Lime \u0026 Cilantro Diced Tomatoes With Lime Juice \u0026 Cilantro 10 Oz"
-                 },
-                 {
-                     "commodity":  "cilantro",
-                     "store":  "Fareway",
-                     "candidate":  "Cilantro"
                  },
                  {
                      "commodity":  "fresh-ginger",
@@ -763,69 +188,14 @@
                      "candidate":  "Fresh Gourmet Fresh Gourmet Garlic Ginger Wonton Strips 3.5 Oz"
                  },
                  {
-                     "commodity":  "fresh-ginger",
-                     "store":  "Fareway",
-                     "candidate":  "Ginger Root"
-                 },
-                 {
-                     "commodity":  "radishes",
-                     "store":  "Fareway",
-                     "candidate":  "Radishes Fresh, Bag"
-                 },
-                 {
-                     "commodity":  "red-potatoes",
-                     "store":  "Fareway",
-                     "candidate":  "Summertime Farms Baby Red Potatoes"
-                 },
-                 {
                      "commodity":  "fresh-green-beans",
                      "store":  "Family Fare",
                      "candidate":  "Fresh Green Beans Pero"
                  },
                  {
-                     "commodity":  "fresh-green-beans",
-                     "store":  "Fareway",
-                     "candidate":  "Pero Family Farms Fresh Snipped Green Beans"
-                 },
-                 {
                      "commodity":  "ribeye-steak",
                      "store":  "Fareway",
                      "candidate":  "USDA Choice Thick Cut Ribeye Steak"
-                 },
-                 {
-                     "commodity":  "chuck-roast",
-                     "store":  "Fareway",
-                     "candidate":  "USDA Choice Boneless Chuck Roast"
-                 },
-                 {
-                     "commodity":  "pork-tenderloin",
-                     "store":  "Fareway",
-                     "candidate":  "Whole Pork Tenderloin"
-                 },
-                 {
-                     "commodity":  "pork-shoulder",
-                     "store":  "Fareway",
-                     "candidate":  "Whole Boneless Pork Butt"
-                 },
-                 {
-                     "commodity":  "baby-back-ribs",
-                     "store":  "Fareway",
-                     "candidate":  "Baby Back Pork Ribs"
-                 },
-                 {
-                     "commodity":  "ground-pork",
-                     "store":  "Fareway",
-                     "candidate":  "80% Lean 20% Fat Ground Pork"
-                 },
-                 {
-                     "commodity":  "italian-sausage",
-                     "store":  "Fareway",
-                     "candidate":  "Purnells Italian Sausage"
-                 },
-                 {
-                     "commodity":  "bratwurst",
-                     "store":  "Fareway",
-                     "candidate":  "Johnsonville Stadium Brats Cooked Bratwurst"
                  },
                  {
                      "commodity":  "bratwurst",
@@ -838,69 +208,9 @@
                      "candidate":  "Smoked Hot Italian Sausage Hot"
                  },
                  {
-                     "commodity":  "kielbasa",
-                     "store":  "Fareway",
-                     "candidate":  "Hillshire Farm Polska Kielbasa Smoked Sausage, 14 oz."
-                 },
-                 {
-                     "commodity":  "chicken-wings",
-                     "store":  "Fareway",
-                     "candidate":  "Fresh Cut Chicken Wings"
-                 },
-                 {
-                     "commodity":  "rotisserie-chicken",
-                     "store":  "Fareway",
-                     "candidate":  "Roasted Whole Chicken"
-                 },
-                 {
-                     "commodity":  "tilapia",
-                     "store":  "Fareway",
-                     "candidate":  "Supreme Choice Tilapia, Boneless, Fillets"
-                 },
-                 {
-                     "commodity":  "cod",
-                     "store":  "Fareway",
-                     "candidate":  "Supreme Choice Cod, Boneless, Fillets"
-                 },
-                 {
-                     "commodity":  "canned-chicken",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Premium Chunk Chicken Breast"
-                 },
-                 {
-                     "commodity":  "canned-salmon",
-                     "store":  "Fareway",
-                     "candidate":  "Chicken of the Sea Wild Caught Alaskan Pink Salmon, Skinless \u0026 Boneless"
-                 },
-                 {
-                     "commodity":  "pepperoni",
-                     "store":  "Fareway",
-                     "candidate":  "HORMEL Pepperoni Original Pepperoni"
-                 },
-                 {
                      "commodity":  "turkey-lunchmeat",
                      "store":  "Family Fare",
                      "candidate":  "Jimmy Dean Delights Breakfast Bowl, Turkey Sausage, Frozen, Bowl 7 Oz"
-                 },
-                 {
-                     "commodity":  "turkey-lunchmeat",
-                     "store":  "Fareway",
-                     "candidate":  "Oscar Mayer Deli Fresh Oven Roasted Turkey Breast"
-                 },
-                 {
-                     "commodity":  "turkey-bacon",
-                     "store":  "Fareway",
-                     "candidate":  "Oscar Mayer Gluten Free Fully Cooked Turkey Bacon with 55% Less Fat \u0026 44% Less Sodium"
-                 },
-                 {
-                     "commodity":  "heavy-cream",
-                     "store":  "Fareway",
-                     "candidate":  "Hiland Dairy Whipping Cream, Heavy"
-                 },
-                 {
-                     "commodity":  "half-and-half",
-                     "store":  "Fareway",
-                     "candidate":  "Kemps Fresh Half \u0026 Half"
                  },
                  {
                      "commodity":  "whipped-cream",
@@ -908,89 +218,14 @@
                      "candidate":  "Friendly Farms Whipped Topping"
                  },
                  {
-                     "commodity":  "whipped-cream",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Original Whipped Topping"
-                 },
-                 {
-                     "commodity":  "almond-milk",
-                     "store":  "Fareway",
-                     "candidate":  "Silk Almond Milk, Unsweet, Dairy Free, Gluten Free, Seriously Creamy Vegan Plant Based Milk with 5 Essential Nutrients, 64 fl oz Half Gallon"
-                 },
-                 {
-                     "commodity":  "oat-milk",
-                     "store":  "Fareway",
-                     "candidate":  "Planet Oat Oatmilk"
-                 },
-                 {
-                     "commodity":  "string-cheese",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Low-Moisture Part-Skim Sticks Mozzarella String Cheese"
-                 },
-                 {
-                     "commodity":  "parmesan",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Parmesan Fancy Shredded Cheese"
-                 },
-                 {
-                     "commodity":  "feta",
-                     "store":  "Fareway",
-                     "candidate":  "Crystal Farms Cheese, Feta, Crumbled"
-                 },
-                 {
-                     "commodity":  "egg-whites",
-                     "store":  "Fareway",
-                     "candidate":  "Bob Evans Farms Egg Whites, 100% Liquid"
-                 },
-                 {
-                     "commodity":  "buttermilk",
-                     "store":  "Fareway",
-                     "candidate":  "Kemps Buttermilk"
-                 },
-                 {
-                     "commodity":  "coffee-creamer",
-                     "store":  "Fareway",
-                     "candidate":  "International Delight Caramel Macchiato Coffee Creamer, Refrigerated Flavored Creamer, Lactose Free and Gluten Free, 32 fl oz Bottle"
-                 },
-                 {
-                     "commodity":  "chocolate-milk",
-                     "store":  "Fareway",
-                     "candidate":  "Hiland Dairy Chocolate Milk"
-                 },
-                 {
-                     "commodity":  "hot-dog-buns",
-                     "store":  "Fareway",
-                     "candidate":  "Corner Store Hot Dog Buns, White"
-                 },
-                 {
-                     "commodity":  "dinner-rolls",
-                     "store":  "Fareway",
-                     "candidate":  "King\u0027s Hawaiian Original Hawaiian Sweet Rolls"
-                 },
-                 {
                      "commodity":  "english-muffins",
                      "store":  "Aldi",
                      "candidate":  "L\u0027oven Fresh Plain English Muffins"
                  },
                  {
-                     "commodity":  "english-muffins",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Pre-Split Original English Muffins"
-                 },
-                 {
-                     "commodity":  "croissants",
-                     "store":  "Fareway",
-                     "candidate":  "Bakery Fresh Croissants"
-                 },
-                 {
                      "commodity":  "muffins",
                      "store":  "Aldi",
                      "candidate":  "Bake Shop Blueberry Muffins"
-                 },
-                 {
-                     "commodity":  "muffins",
-                     "store":  "Fareway",
-                     "candidate":  "Otis Spunkmeyer Muffin, Wild Blueberry"
                  },
                  {
                      "commodity":  "donuts",
@@ -1013,64 +248,9 @@
                      "candidate":  "Specially Selected French Bread"
                  },
                  {
-                     "commodity":  "french-bread",
-                     "store":  "Fareway",
-                     "candidate":  "Bakery Fresh French Baguette"
-                 },
-                 {
                      "commodity":  "pita-bread",
                      "store":  "Hy-Vee",
                      "candidate":  "Toufayan Bakeries Hearth Baked Classic White Pita 6 Each"
-                 },
-                 {
-                     "commodity":  "pita-bread",
-                     "store":  "Fareway",
-                     "candidate":  "Kronos 6 Inch Handmade Pita Bread"
-                 },
-                 {
-                     "commodity":  "pancake-mix",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Complete Buttermilk Pancake \u0026 Waffle Mix"
-                 },
-                 {
-                     "commodity":  "maple-syrup",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Pancake Syrup"
-                 },
-                 {
-                     "commodity":  "baking-powder",
-                     "store":  "Fareway",
-                     "candidate":  "Clabber Girl Hearth Club Baking Powder"
-                 },
-                 {
-                     "commodity":  "baking-soda",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Baking Soda"
-                 },
-                 {
-                     "commodity":  "yeast",
-                     "store":  "Fareway",
-                     "candidate":  "Red Star Active Dry Yeast, All-Natural"
-                 },
-                 {
-                     "commodity":  "vanilla-extract",
-                     "store":  "Fareway",
-                     "candidate":  "McCormick Pure Vanilla Extract"
-                 },
-                 {
-                     "commodity":  "chocolate-chips",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Semi-Sweet Real Chocolate Chips"
-                 },
-                 {
-                     "commodity":  "cocoa-powder",
-                     "store":  "Fareway",
-                     "candidate":  "Toll House Baking Cocoa"
-                 },
-                 {
-                     "commodity":  "powdered-sugar",
-                     "store":  "Fareway",
-                     "candidate":  "C\u0026H Premium Cane Powdered Sugar"
                  },
                  {
                      "commodity":  "cake-mix",
@@ -1089,11 +269,6 @@
                  },
                  {
                      "commodity":  "cake-mix",
-                     "store":  "Fareway",
-                     "candidate":  "Jiffy Golden Yellow Cake Mix"
-                 },
-                 {
-                     "commodity":  "cake-mix",
                      "store":  "Walmart",
                      "candidate":  "Great Value Deluxe Moist Yellow Cake Mix"
                  },
@@ -1104,38 +279,13 @@
                  },
                  {
                      "commodity":  "brownie-mix",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Ultra Moist Fudge Brownie Mix"
-                 },
-                 {
-                     "commodity":  "brownie-mix",
                      "store":  "Walmart",
                      "candidate":  "Duncan Hines Chewy Fudge Brownie Mix"
                  },
                  {
                      "commodity":  "frosting",
-                     "store":  "Fareway",
-                     "candidate":  "Pillsbury Creamy Supreme Vanilla Frosting, 16 Oz Tub"
-                 },
-                 {
-                     "commodity":  "frosting",
                      "store":  "Sam\u0027s Club",
                      "candidate":  "Sam\u0027s Vanilla Whipped Icing, Frozen Bucket"
-                 },
-                 {
-                     "commodity":  "evaporated-milk",
-                     "store":  "Fareway",
-                     "candidate":  "Carnation Vitamin D Added Evaporated Milk"
-                 },
-                 {
-                     "commodity":  "condensed-milk",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Sweetened Condensed Milk"
-                 },
-                 {
-                     "commodity":  "cooking-spray",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Non-Stick Canola Oil Cooking Spray"
                  },
                  {
                      "commodity":  "coconut-oil",
@@ -1148,169 +298,14 @@
                      "candidate":  "Hy-Vee Apple Cider Flavored Distilled Vinegar"
                  },
                  {
-                     "commodity":  "apple-cider-vinegar",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Apple Cider Vinegar"
-                 },
-                 {
-                     "commodity":  "worcestershire",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Classic Worcestershire Sauce"
-                 },
-                 {
-                     "commodity":  "hot-sauce",
-                     "store":  "Fareway",
-                     "candidate":  "Valentina Hot Sauce, Mexican"
-                 },
-                 {
-                     "commodity":  "bbq-sauce",
-                     "store":  "Fareway",
-                     "candidate":  "KC Masterpiece Original Barbecue Sauce"
-                 },
-                 {
-                     "commodity":  "italian-dressing",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Zesty Italian Dressing"
-                 },
-                 {
-                     "commodity":  "pickles",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Dill Spears Pickles"
-                 },
-                 {
-                     "commodity":  "relish",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Sweet Relish"
-                 },
-                 {
-                     "commodity":  "canned-pinto-beans",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Pinto Beans"
-                 },
-                 {
-                     "commodity":  "refried-beans",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Traditional Refried Beans"
-                 },
-                 {
-                     "commodity":  "baked-beans",
-                     "store":  "Fareway",
-                     "candidate":  "Bush\u0027s Best Original Baked Beans"
-                 },
-                 {
-                     "commodity":  "canned-chili",
-                     "store":  "Fareway",
-                     "candidate":  "Hormel Chili with Beans, No Artificial Ingredients, 15 Oz"
-                 },
-                 {
-                     "commodity":  "canned-green-beans",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Cut Green Beans"
-                 },
-                 {
-                     "commodity":  "canned-peas",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Sweet Peas"
-                 },
-                 {
-                     "commodity":  "canned-mushrooms",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Pieces \u0026 Stems Mushrooms"
-                 },
-                 {
-                     "commodity":  "chicken-noodle-soup",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Condensed Chicken Noodle Soup"
-                 },
-                 {
-                     "commodity":  "tomato-soup",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Condensed Tomato Soup"
-                 },
-                 {
-                     "commodity":  "cream-of-mushroom-soup",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Condensed Cream of Mushroom Soup"
-                 },
-                 {
-                     "commodity":  "cream-of-chicken-soup",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Condensed Cream of Chicken Soup"
-                 },
-                 {
-                     "commodity":  "instant-mashed-potatoes",
-                     "store":  "Fareway",
-                     "candidate":  "Idahoan Buttery Homestyle Mashed Potatoes"
-                 },
-                 {
-                     "commodity":  "stuffing-mix",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Cornbread Stuffing Mix"
-                 },
-                 {
-                     "commodity":  "egg-noodles",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Wide Egg Noodles"
-                 },
-                 {
-                     "commodity":  "lasagna-noodles",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Oven Ready Lasagna"
-                 },
-                 {
-                     "commodity":  "alfredo-sauce",
-                     "store":  "Fareway",
-                     "candidate":  "Ragu Classic Alfredo Sauce, 16 oz, White Pasta Sauce"
-                 },
-                 {
-                     "commodity":  "pizza-sauce",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Pizza Sauce"
-                 },
-                 {
-                     "commodity":  "queso",
-                     "store":  "Fareway",
-                     "candidate":  "Tostitos Salsa Con Queso, Medium"
-                 },
-                 {
                      "commodity":  "queso",
                      "store":  "Baker\u0027s",
                      "candidate":  "Litehouse Chunky Blue Cheese Dressing \u0026 Dip, 20 fl oz 20 f"
                  },
                  {
-                     "commodity":  "hummus",
-                     "store":  "Fareway",
-                     "candidate":  "Sabra Hummus Red Pepper"
-                 },
-                 {
-                     "commodity":  "marshmallows",
-                     "store":  "Fareway",
-                     "candidate":  "Fireside Marshmallows"
-                 },
-                 {
                      "commodity":  "graham-crackers",
                      "store":  "Family Fare",
                      "candidate":  "Crav\u0027n Flavor Graham Crackers, Honey, 3 Packs 3 Ea"
-                 },
-                 {
-                     "commodity":  "graham-crackers",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Honey Graham Crackers"
-                 },
-                 {
-                     "commodity":  "beef-broth",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Beef Broth"
-                 },
-                 {
-                     "commodity":  "canned-peaches",
-                     "store":  "Fareway",
-                     "candidate":  "Del Monte Yellow Cling Sliced Peaches in Heavy Syrup, Canned Fruit"
-                 },
-                 {
-                     "commodity":  "canned-pineapple",
-                     "store":  "Fareway",
-                     "candidate":  "Dole Pineapple Chunks"
                  },
                  {
                      "commodity":  "applesauce",
@@ -1328,54 +323,9 @@
                      "candidate":  "Mott\u0027s Applesauce"
                  },
                  {
-                     "commodity":  "peanuts",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Peanuts, Salted, Dry Roasted"
-                 },
-                 {
-                     "commodity":  "almonds",
-                     "store":  "Fareway",
-                     "candidate":  "Blue Diamond Smokehouse Almonds"
-                 },
-                 {
-                     "commodity":  "raisins",
-                     "store":  "Fareway",
-                     "candidate":  "Sun-Maid California Sun-Dried Raisins"
-                 },
-                 {
-                     "commodity":  "mixed-nuts",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Mixed Nuts, Roasted and Salted"
-                 },
-                 {
-                     "commodity":  "crackers",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Saltines Crackers"
-                 },
-                 {
-                     "commodity":  "cheese-crackers",
-                     "store":  "Fareway",
-                     "candidate":  "Stauffers Whales Baked Cheddar Cheese Crackers"
-                 },
-                 {
                      "commodity":  "pretzels",
                      "store":  "Family Fare",
                      "candidate":  "Snyder\u0027s Of Hanover® Seasoned Twisted Pretzel Sticks 12.000 Oz"
-                 },
-                 {
-                     "commodity":  "pretzels",
-                     "store":  "Fareway",
-                     "candidate":  "Shultz Mini Pretzel Twists"
-                 },
-                 {
-                     "commodity":  "microwave-popcorn",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway 3 Pack Butter Movie Theater Microwave Popcorn Bags"
-                 },
-                 {
-                     "commodity":  "cookies",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Chocolate Chip Cookies"
                  },
                  {
                      "commodity":  "cookies",
@@ -1383,24 +333,9 @@
                      "candidate":  "Marinela Cookies"
                  },
                  {
-                     "commodity":  "sandwich-cookies",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Vanilla Cremes Sandwich Cookies"
-                 },
-                 {
                      "commodity":  "granola-bars",
                      "store":  "Family Fare",
                      "candidate":  "Sunbelt Bakery Oats \u0026 Honey Chewy Granola Bars 10 Ea"
-                 },
-                 {
-                     "commodity":  "granola-bars",
-                     "store":  "Fareway",
-                     "candidate":  "Quaker Granola Bars, Chocolate Chip"
-                 },
-                 {
-                     "commodity":  "protein-bars",
-                     "store":  "Fareway",
-                     "candidate":  "CLIF BAR Energy Protein Bars, Chocolate Chip, Non-Gmo 12 oz"
                  },
                  {
                      "commodity":  "fruit-snacks",
@@ -1413,29 +348,9 @@
                      "candidate":  "Del Monte Fruit Cup Snacks Mandarin Oranges In 100% Juice Family Pack 12 Ea"
                  },
                  {
-                     "commodity":  "fruit-snacks",
-                     "store":  "Fareway",
-                     "candidate":  "Welch\u0027s Strawberry Fruit Snacks"
-                 },
-                 {
                      "commodity":  "toaster-pastries",
                      "store":  "Family Fare",
                      "candidate":  "Pop Tarts Toaster Pastries, Star Spangled Blueberry 13.5 Oz"
-                 },
-                 {
-                     "commodity":  "toaster-pastries",
-                     "store":  "Fareway",
-                     "candidate":  "Toast\u0027em Pop-ups Toaster Pastries, Strawberry"
-                 },
-                 {
-                     "commodity":  "granola",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Classic Granola"
-                 },
-                 {
-                     "commodity":  "rice-cakes",
-                     "store":  "Fareway",
-                     "candidate":  "Quaker Rice Cakes, Caramel"
                  },
                  {
                      "commodity":  "rice-cakes",
@@ -1473,59 +388,14 @@
                      "candidate":  "Snack Pack Butterscotch Flavored Pudding"
                  },
                  {
-                     "commodity":  "gelatin",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Orange Gelatin Dessert"
-                 },
-                 {
-                     "commodity":  "apple-juice",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Apple 100% Juice"
-                 },
-                 {
-                     "commodity":  "grape-juice",
-                     "store":  "Fareway",
-                     "candidate":  "Old Orchard 100% Juice, Grape"
-                 },
-                 {
-                     "commodity":  "cranberry-juice",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Cranberry Juice Cocktail"
-                 },
-                 {
-                     "commodity":  "lemonade",
-                     "store":  "Fareway",
-                     "candidate":  "Simply Lemonade"
-                 },
-                 {
                      "commodity":  "fruit-punch",
                      "store":  "Family Fare",
                      "candidate":  "Ari Zona Mucho Mango/Watermelon/Fruit Punch/Kiwi Strawberry Juice Cocktails With Real Juice Party Pack 12 Ea"
                  },
                  {
-                     "commodity":  "fruit-punch",
-                     "store":  "Fareway",
-                     "candidate":  "Hawaiian Punch Fruit Juicy Red"
-                 },
-                 {
-                     "commodity":  "sports-drinks",
-                     "store":  "Fareway",
-                     "candidate":  "Gatorade Frost Thirst Quencher, Glacier Freeze"
-                 },
-                 {
                      "commodity":  "sports-drinks",
                      "store":  "Baker\u0027s",
                      "candidate":  "Gatorade"
-                 },
-                 {
-                     "commodity":  "energy-drinks",
-                     "store":  "Fareway",
-                     "candidate":  "Alani Nu Cotton Candy Energy Drink Can"
-                 },
-                 {
-                     "commodity":  "sparkling-water",
-                     "store":  "Fareway",
-                     "candidate":  "Clear Frost Sparkling Water, Black Cherry"
                  },
                  {
                      "commodity":  "sparkling-water",
@@ -1536,11 +406,6 @@
                      "commodity":  "iced-tea",
                      "store":  "Family Fare",
                      "candidate":  "Our Family Sweet Corn, Super, Steamable 10 Oz"
-                 },
-                 {
-                     "commodity":  "iced-tea",
-                     "store":  "Fareway",
-                     "candidate":  "AriZona Sun Brewed Style with Raspberry Flavor Iced Tea"
                  },
                  {
                      "commodity":  "iced-tea",
@@ -1558,11 +423,6 @@
                      "candidate":  "Green Giant Steam In Bag Broccoli, Carrots \u0026 Sweet Peppers Antioxidant Blend Sauced Veggies 7 Oz"
                  },
                  {
-                     "commodity":  "tea-bags",
-                     "store":  "Fareway",
-                     "candidate":  "Lipton Yellow Label Black Tea"
-                 },
-                 {
                      "commodity":  "hot-cocoa",
                      "store":  "Fareway",
                      "candidate":  "Nestle Hot Cocoa Rich Milk Chocolate Flavored Mix Powder"
@@ -1571,11 +431,6 @@
                      "commodity":  "hot-cocoa",
                      "store":  "Walmart",
                      "candidate":  "Great Value Milk Chocolate Hot Cocoa Drink Mix"
-                 },
-                 {
-                     "commodity":  "coffee-pods",
-                     "store":  "Fareway",
-                     "candidate":  "Caribou Coffee Caribou Blend Medium Roast Coffee K-Cup Pods"
                  },
                  {
                      "commodity":  "instant-coffee",
@@ -1593,34 +448,9 @@
                      "candidate":  "Eggo Blueberry Waffles 10 Ea"
                  },
                  {
-                     "commodity":  "frozen-waffles",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway 10 Pack Buttermilk Waffles"
-                 },
-                 {
-                     "commodity":  "frozen-broccoli",
-                     "store":  "Fareway",
-                     "candidate":  "Birds Eye Baby Broccoli Florets, Frozen Vegetables"
-                 },
-                 {
-                     "commodity":  "frozen-corn",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Steamables Cut Corn"
-                 },
-                 {
-                     "commodity":  "frozen-peas",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Steamables Green Peas"
-                 },
-                 {
                      "commodity":  "breakfast-sandwiches",
                      "store":  "Aldi",
                      "candidate":  "Breakfast Best Sausage, Egg \u0026 Cheese Biscuit Sandwiches"
-                 },
-                 {
-                     "commodity":  "breakfast-sandwiches",
-                     "store":  "Fareway",
-                     "candidate":  "Jimmy Dean Croissant Breakfast Sandwiches with Sausage, Egg, and Cheese, Frozen, 4 Count"
                  },
                  {
                      "commodity":  "frozen-burritos",
@@ -1633,19 +463,9 @@
                      "candidate":  "Mission Super Soft Burrito Flour Tortilla Wraps 6 Ea"
                  },
                  {
-                     "commodity":  "frozen-burritos",
-                     "store":  "Fareway",
-                     "candidate":  "Tina\u0027s Big Burrito Beef \u0026 Bean Green Chili, Quick Meal"
-                 },
-                 {
                      "commodity":  "frozen-meatballs",
                      "store":  "Family Fare",
                      "candidate":  "Hot Pockets Italian Style Seasoned Crust Meatballs \u0026 Mozzarella Sandwiches 4 Ea"
-                 },
-                 {
-                     "commodity":  "frozen-meatballs",
-                     "store":  "Fareway",
-                     "candidate":  "Armour Italian Meatballs"
                  },
                  {
                      "commodity":  "frozen-meatballs",
@@ -1653,19 +473,9 @@
                      "candidate":  "SpaghettiOs® Canned Pasta with Meatballs 15.6 oz"
                  },
                  {
-                     "commodity":  "frozen-lasagna",
-                     "store":  "Fareway",
-                     "candidate":  "Michelina\u0027s Lasagna with Meat Sauce Meal"
-                 },
-                 {
                      "commodity":  "hash-browns",
                      "store":  "Family Fare",
                      "candidate":  "Mr. Dee\u0027s Hash Brown Potato Patties 15 Ea"
-                 },
-                 {
-                     "commodity":  "hash-browns",
-                     "store":  "Fareway",
-                     "candidate":  "Simply Potatoes Shredded Hash Browns Potatoes"
                  },
                  {
                      "commodity":  "tater-tots",
@@ -1673,24 +483,9 @@
                      "candidate":  "Alexia Sweet Potato Bite Sized Tots 20 Oz"
                  },
                  {
-                     "commodity":  "tater-tots",
-                     "store":  "Fareway",
-                     "candidate":  "Ore-Ida Crispy Tater Tots"
-                 },
-                 {
                      "commodity":  "corn-dogs",
                      "store":  "Aldi",
                      "candidate":  "Bremer Regular Corn Dogs"
-                 },
-                 {
-                     "commodity":  "corn-dogs",
-                     "store":  "Fareway",
-                     "candidate":  "Corner Store Hot Dog Buns, White"
-                 },
-                 {
-                     "commodity":  "fish-sticks",
-                     "store":  "Fareway",
-                     "candidate":  "Van de Kamp\u0027s Crunchy Fish Sticks"
                  },
                  {
                      "commodity":  "fish-sticks",
@@ -1714,11 +509,6 @@
                  },
                  {
                      "commodity":  "garlic-bread",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Garlic Bread"
-                 },
-                 {
-                     "commodity":  "garlic-bread",
                      "store":  "Sam\u0027s Club",
                      "candidate":  "Cole\u0027s Garlic Texas Toast, Frozen"
                  },
@@ -1728,29 +518,9 @@
                      "candidate":  "Great Value Garlic Texas Toast"
                  },
                  {
-                     "commodity":  "frozen-fruit",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Unsweetened Whole Strawberries"
-                 },
-                 {
                      "commodity":  "popsicles",
                      "store":  "Family Fare",
                      "candidate":  "Bomb Pop Pops, Strawberry, Watermelon \u0026 Grape, Nerds Candy 12 Ea"
-                 },
-                 {
-                     "commodity":  "popsicles",
-                     "store":  "Fareway",
-                     "candidate":  "Bomb Pop Original Ice Pops"
-                 },
-                 {
-                     "commodity":  "dryer-sheets",
-                     "store":  "Fareway",
-                     "candidate":  "Bright Essentials Dryer Sheets, Fresh Scent, Wrinkle Reducing"
-                 },
-                 {
-                     "commodity":  "fabric-softener",
-                     "store":  "Fareway",
-                     "candidate":  "Gain Liquid Fabric Softener, Moonlight Breeze Scent"
                  },
                  {
                      "commodity":  "laundry-pods",
@@ -1758,39 +528,9 @@
                      "candidate":  "Arm \u0026 Hammer Laundry Detergent, Concentrated, 5 In 1, Fresh Burst, Power Paks 42 Ea"
                  },
                  {
-                     "commodity":  "laundry-pods",
-                     "store":  "Fareway",
-                     "candidate":  "Tide PODS Liquid Laundry Detergent Pacs, 4-in-1 Ultra Oxi"
-                 },
-                 {
-                     "commodity":  "sponges",
-                     "store":  "Fareway",
-                     "candidate":  "Scotch-Brite Ocelo Handy Sponge, Assorted Colors"
-                 },
-                 {
-                     "commodity":  "paper-plates",
-                     "store":  "Fareway",
-                     "candidate":  "Bright Essentials Heavy-Duty Designer 7 Inch Paper Plates"
-                 },
-                 {
-                     "commodity":  "paper-napkins",
-                     "store":  "Fareway",
-                     "candidate":  "Bright Essentials 2-Ply Everyday Napkins"
-                 },
-                 {
-                     "commodity":  "sandwich-bags",
-                     "store":  "Fareway",
-                     "candidate":  "Bright Essentials Sandwich Bags, Double Zipper, Sandwich Size"
-                 },
-                 {
                      "commodity":  "plastic-wrap",
                      "store":  "Aldi",
                      "candidate":  "Boulder Plastic Wrap"
-                 },
-                 {
-                     "commodity":  "plastic-wrap",
-                     "store":  "Fareway",
-                     "candidate":  "Saran Cling Plus Clear Plastic Wrap"
                  },
                  {
                      "commodity":  "parchment-paper",
@@ -1804,23 +544,8 @@
                  },
                  {
                      "commodity":  "parchment-paper",
-                     "store":  "Fareway",
-                     "candidate":  "Bright Essentials Parchment Paper"
-                 },
-                 {
-                     "commodity":  "parchment-paper",
                      "store":  "Sam\u0027s Club",
                      "candidate":  "Member\u0027s Mark Unbleached Parchment Paper"
-                 },
-                 {
-                     "commodity":  "toilet-bowl-cleaner",
-                     "store":  "Fareway",
-                     "candidate":  "Lysol Power Toilet Bowl Cleaner Gel"
-                 },
-                 {
-                     "commodity":  "glass-cleaner",
-                     "store":  "Fareway",
-                     "candidate":  "Bright Essentials Glass Cleaner, Streak Free, Scent Free"
                  },
                  {
                      "commodity":  "disinfecting-wipes",
@@ -1828,104 +553,14 @@
                      "candidate":  "Clorox Disinfecting Wipes, Bleach Free Cleaning Wipes, Fresh Scent"
                  },
                  {
-                     "commodity":  "disinfectant-spray",
-                     "store":  "Fareway",
-                     "candidate":  "Lysol Disinfectant, Sanitizing and Antibacterial Spray, Crisp Linen"
-                 },
-                 {
-                     "commodity":  "air-freshener",
-                     "store":  "Fareway",
-                     "candidate":  "Glade Cashmere Woods Air Freshener"
-                 },
-                 {
                      "commodity":  "air-freshener",
                      "store":  "Walmart",
                      "candidate":  "Great Value Aerosol Air Freshener Linen Fresh"
                  },
                  {
-                     "commodity":  "batteries",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway 8 Pack 1.5 V AA Alkaline Batteries"
-                 },
-                 {
-                     "commodity":  "charcoal",
-                     "store":  "Fareway",
-                     "candidate":  "Kingsford Original Charcoal Briquettes, BBQ Charcoal for Grilling"
-                 },
-                 {
-                     "commodity":  "toothpaste",
-                     "store":  "Fareway",
-                     "candidate":  "Crest Baking Soda \u0026 Peroxide Whitening Toothpaste, Fresh Mint"
-                 },
-                 {
-                     "commodity":  "toothbrushes",
-                     "store":  "Fareway",
-                     "candidate":  "GoodSense Complete Clean With Tongue Cleaner Medium Toothbrush"
-                 },
-                 {
-                     "commodity":  "mouthwash",
-                     "store":  "Fareway",
-                     "candidate":  "GoodSense Mouth Rinse, Antiseptic, Spring Mint"
-                 },
-                 {
-                     "commodity":  "shampoo",
-                     "store":  "Family Fare",
-                     "candidate":  "Suave Shampoo, Smoothing, Avocado + Olive Oil 28 Oz"
-                 },
-                 {
-                     "commodity":  "shampoo",
-                     "store":  "Fareway",
-                     "candidate":  "Suave Tropical Coconut Nourishing Shampoo with Coconut Extract \u0026 Vitamin E, Gently Cleanses, Softens \u0026 Smooths For All Hair Types, 22.5 FL OZ"
-                 },
-                 {
-                     "commodity":  "conditioner",
-                     "store":  "Fareway",
-                     "candidate":  "Suave Conditioner, Daily Clarifying, Hydrating, Family Size"
-                 },
-                 {
-                     "commodity":  "body-wash",
-                     "store":  "Family Fare",
-                     "candidate":  "Dove Refresh Cucumber + Green Tea Body Wash 20 Fl Oz"
-                 },
-                 {
-                     "commodity":  "body-wash",
-                     "store":  "Fareway",
-                     "candidate":  "Suave Cocoa Butter + Shea Moisturizing Body Wash with Glycerin \u0026 Vitamin E, Hydrating Skin Cleanser For Soft, Smooth Skin, Long Lasting Scent, Paraben-Free, 18 FL OZ"
-                 },
-                 {
                      "commodity":  "bar-soap",
                      "store":  "Aldi",
                      "candidate":  "Lacura Deep Moisturizing Beauty Bar"
-                 },
-                 {
-                     "commodity":  "bar-soap",
-                     "store":  "Fareway",
-                     "candidate":  "Irish Spring Men\u0027s Bar Soap, Original Clean"
-                 },
-                 {
-                     "commodity":  "deodorant",
-                     "store":  "Fareway",
-                     "candidate":  "Suave Invisible Solid Powder Antiperspirant Deodorant"
-                 },
-                 {
-                     "commodity":  "razors",
-                     "store":  "Fareway",
-                     "candidate":  "Venus Sensitive Women\u0027s Disposable Razor"
-                 },
-                 {
-                     "commodity":  "shaving-cream",
-                     "store":  "Fareway",
-                     "candidate":  "Barbasol Thick \u0026 Rich Soothing Aloe Shaving Cream"
-                 },
-                 {
-                     "commodity":  "lotion",
-                     "store":  "Fareway",
-                     "candidate":  "Jergens Ultra Healing Hand and Body Dry Skin Lotion"
-                 },
-                 {
-                     "commodity":  "hand-sanitizer",
-                     "store":  "Fareway",
-                     "candidate":  "PURELL Advanced Hand Sanitizer, Refreshing Gel"
                  },
                  {
                      "commodity":  "facial-tissues",
@@ -1934,33 +569,8 @@
                  },
                  {
                      "commodity":  "facial-tissues",
-                     "store":  "Fareway",
-                     "candidate":  "Kleenex Trusted Care Facial Tissues Flat Box 2 Ply"
-                 },
-                 {
-                     "commodity":  "facial-tissues",
                      "store":  "Baker\u0027s",
                      "candidate":  "Kroger Facial Tissues"
-                 },
-                 {
-                     "commodity":  "cotton-swabs",
-                     "store":  "Fareway",
-                     "candidate":  "Q-tips Cotton Swabs"
-                 },
-                 {
-                     "commodity":  "feminine-pads",
-                     "store":  "Fareway",
-                     "candidate":  "Always Maxi Extra Heavy Overnight Pads Size 5"
-                 },
-                 {
-                     "commodity":  "tampons",
-                     "store":  "Fareway",
-                     "candidate":  "Playtex Plastic Tampons Unscented Super Absorbency"
-                 },
-                 {
-                     "commodity":  "diapers",
-                     "store":  "Fareway",
-                     "candidate":  "Luvs Platinum Protection Baby Diapers, Size 5"
                  },
                  {
                      "commodity":  "diapers",
@@ -1968,169 +578,9 @@
                      "candidate":  "Luvs Pro Level Leak Protection Diapers, Size 4"
                  },
                  {
-                     "commodity":  "baby-wipes",
-                     "store":  "Fareway",
-                     "candidate":  "Huggies Simply Clean Unscented Baby Wipes"
-                 },
-                 {
-                     "commodity":  "baby-formula",
-                     "store":  "Fareway",
-                     "candidate":  "Similac Advance Infant Formula with Iron Powder Canister"
-                 },
-                 {
-                     "commodity":  "dog-food",
-                     "store":  "Fareway",
-                     "candidate":  "Pedigree Adult Small Dog Dry Dog Food, Grilled Steak and Vegetable Flavor, 3.5-Pound. Bag"
-                 },
-                 {
-                     "commodity":  "cat-food",
-                     "store":  "Fareway",
-                     "candidate":  "Purina Friskies Dry Cat Food Seafood Sensations With Salmon, Tuna, and Shrimp Flavors"
-                 },
-                 {
-                     "commodity":  "cat-litter",
-                     "store":  "Fareway",
-                     "candidate":  "Purina Tidy Cats Non Clumping Cat Litter, 24/7 Performance Multi Cat Litter Odor Control Formula"
-                 },
-                 {
-                     "commodity":  "dog-treats",
-                     "store":  "Fareway",
-                     "candidate":  "Canine Carry Outs Dog Treat"
-                 },
-                 {
-                     "commodity":  "floor-cleaner",
-                     "store":  "Fareway",
-                     "candidate":  "Swiffer WetJet Liquid Floor Cleaner, Lavender 42.2 fl oz"
-                 },
-                 {
-                     "commodity":  "drain-cleaner",
-                     "store":  "Fareway",
-                     "candidate":  "Drano Liquid Drain Cleaner 32 fl oz"
-                 },
-                 {
-                     "commodity":  "shower-cleaner",
-                     "store":  "Fareway",
-                     "candidate":  "Bright Essentials Bathroom Cleaner, Lime Scent 32 fl oz"
-                 },
-                 {
-                     "commodity":  "furniture-polish",
-                     "store":  "Fareway",
-                     "candidate":  "Behold Furniture Polish, Lemon 12.5 oz"
-                 },
-                 {
-                     "commodity":  "insect-spray",
-                     "store":  "Fareway",
-                     "candidate":  "Raid Ant Killer Insecticide Aerosol Spray, Pine Forest Fresh Scent 17.5 oz"
-                 },
-                 {
-                     "commodity":  "cornstarch",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway 100% Pure Corn Starch 16 oz"
-                 },
-                 {
-                     "commodity":  "bread-crumbs",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Plain Bread Crumbs 15 oz"
-                 },
-                 {
-                     "commodity":  "paprika",
-                     "store":  "Fareway",
-                     "candidate":  "Badia Spices Paprika 2 oz"
-                 },
-                 {
-                     "commodity":  "dried-oregano",
-                     "store":  "Fareway",
-                     "candidate":  "Badia Spices Oregano 0.5 oz"
-                 },
-                 {
-                     "commodity":  "dried-parsley",
-                     "store":  "Fareway",
-                     "candidate":  "McCormick Parsley Flakes 0.25 oz"
-                 },
-                 {
-                     "commodity":  "ground-cinnamon",
-                     "store":  "Fareway",
-                     "candidate":  "McCormick Ground Cinnamon 4.12 oz"
-                 },
-                 {
-                     "commodity":  "ground-turmeric",
-                     "store":  "Fareway",
-                     "candidate":  "McCormick Ground Turmeric 0.95 oz"
-                 },
-                 {
-                     "commodity":  "red-pepper-flakes",
-                     "store":  "Fareway",
-                     "candidate":  "Badia Spices Crushed Red Pepper 4.5 oz"
-                 },
-                 {
-                     "commodity":  "garlic-powder",
-                     "store":  "Fareway",
-                     "candidate":  "Badia Spices Garlic Powder 10.5 oz"
-                 },
-                 {
-                     "commodity":  "onion-powder",
-                     "store":  "Fareway",
-                     "candidate":  "Badia Spices Onion Powder 9.5 oz"
-                 },
-                 {
-                     "commodity":  "chili-powder",
-                     "store":  "Fareway",
-                     "candidate":  "Badia Spices Chili Powder 2.5 oz"
-                 },
-                 {
-                     "commodity":  "ground-cumin",
-                     "store":  "Fareway",
-                     "candidate":  "Badia Spices Cumin, Ground 2 oz"
-                 },
-                 {
-                     "commodity":  "chickpeas",
-                     "store":  "Fareway",
-                     "candidate":  "Bush\u0027s Best Reduced Sodium Chick Peas 16 oz"
-                 },
-                 {
-                     "commodity":  "kidney-beans",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Dark Red Kidney Beans 15.5 oz"
-                 },
-                 {
-                     "commodity":  "crushed-tomatoes",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Crushed Tomatoes in Puree 28 oz"
-                 },
-                 {
-                     "commodity":  "tomato-paste",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Tomato Paste 6 oz"
-                 },
-                 {
-                     "commodity":  "tomato-sauce",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Tomato Sauce 28 oz"
-                 },
-                 {
-                     "commodity":  "soy-sauce",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway Soy Sauce 10 fl oz"
-                 },
-                 {
-                     "commodity":  "white-vinegar",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway White Distilled Vinegar 128 fl oz"
-                 },
-                 {
-                     "commodity":  "lemon-juice",
-                     "store":  "Fareway",
-                     "candidate":  "ReaLemon 100% Lemon Juice 32 fl oz"
-                 },
-                 {
                      "commodity":  "beef-stew",
                      "store":  "Fareway",
                      "candidate":  "DINTY MOORE Beef Stew With Potatoes \u0026 Carrots,"
-                 },
-                 {
-                     "commodity":  "canned-pasta",
-                     "store":  "Hy-Vee",
-                     "candidate":  "SpaghettiOs Canned Pasta with Meatballs, 15.6 oz Can"
                  },
                  {
                      "commodity":  "canned-pasta",
@@ -2141,11 +591,6 @@
                      "commodity":  "vegetable-soup",
                      "store":  "Fareway",
                      "candidate":  "Fareway Vegetable Beef Condensed Soup10.75 oz"
-                 },
-                 {
-                     "commodity":  "clam-chowder",
-                     "store":  "Fareway",
-                     "candidate":  "Campbell\u0027s New England Clam Chowder18.8 fl oz"
                  },
                  {
                      "commodity":  "clam-chowder",
@@ -2188,11 +633,6 @@
                      "candidate":  "Pumpkin Tree Fruit \u0026 Vegetable Puree, Apple, Sweet Potato \u0026 Corn, Organic 4.4 Oz"
                  },
                  {
-                     "commodity":  "canned-pumpkin",
-                     "store":  "Fareway",
-                     "candidate":  "Libby\u0027s Pumpkin 100% Pure Pumpkin29 oz"
-                 },
-                 {
                      "commodity":  "mandarin-oranges",
                      "store":  "Family Fare",
                      "candidate":  "Dole In 100% Fruit Juice Mandarin Oranges 4 Ea"
@@ -2203,49 +643,9 @@
                      "candidate":  "Fareway Mandarin Oranges in 100% Juice"
                  },
                  {
-                     "commodity":  "mandarin-oranges",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Kroger® Canned Mandarin Oranges in Light Syrup 15 oz"
-                 },
-                 {
-                     "commodity":  "fruit-cocktail",
-                     "store":  "Fareway",
-                     "candidate":  "Fareway In Heavy Syrup Fruit Cocktail15.25 oz"
-                 },
-                 {
-                     "commodity":  "fruit-cocktail",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Kroger® Canned Fruit Cocktail in Heavy Syrup 30 oz"
-                 },
-                 {
-                     "commodity":  "canned-pears",
-                     "store":  "Walmart",
-                     "candidate":  "Great Value Pear Halves in Pear Juice, 15 oz"
-                 },
-                 {
-                     "commodity":  "canned-potatoes",
-                     "store":  "Walmart",
-                     "candidate":  "Great Value Canned Diced Potatoes, Gluten-Free, 15 oz Can"
-                 },
-                 {
-                     "commodity":  "miracle-whip",
-                     "store":  "Fareway",
-                     "candidate":  "Low carbMiracle Whip M"
-                 },
-                 {
-                     "commodity":  "blue-cheese-dressing",
-                     "store":  "Fareway",
-                     "candidate":  "Wish-Bone Chunky Blue Cheese Dressing15 fl oz"
-                 },
-                 {
                      "commodity":  "blue-cheese-dressing",
                      "store":  "Walmart",
                      "candidate":  "Wish-Bone Chunky Blue Cheese Salad Dressing, 15 fl oz"
-                 },
-                 {
-                     "commodity":  "balsamic-vinegar",
-                     "store":  "Fareway",
-                     "candidate":  "Bertolli Balsamic Vinegar of Modena16.9 fl oz"
                  },
                  {
                      "commodity":  "rice-vinegar",
@@ -2256,16 +656,6 @@
                      "commodity":  "rice-vinegar",
                      "store":  "Fareway",
                      "candidate":  "Marukan Seasoned Gourmet Rice Vinegar12 fl oz"
-                 },
-                 {
-                     "commodity":  "horseradish",
-                     "store":  "Fareway",
-                     "candidate":  "Inglehoffer Thick-n-Creamy Horseradish3.75 oz"
-                 },
-                 {
-                     "commodity":  "sloppy-joe-sauce",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Manwich Sloppy Joe Sauce Bold Flavor Canned Sauce 16 OZ ti"
                  },
                  {
                      "commodity":  "green-olives",

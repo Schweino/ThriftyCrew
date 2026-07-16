@@ -21,18 +21,18 @@
                    {
                        "store":  "Baker\u0027s",
                        "was":  189,
-                       "now":  226,
-                       "drop":  -37,
-                       "pct":  -19.6,
+                       "now":  229,
+                       "drop":  -40,
+                       "pct":  -21.2,
                        "regression":  false,
                        "acked":  false
                    },
                    {
                        "store":  "Family Fare",
                        "was":  187,
-                       "now":  182,
-                       "drop":  5,
-                       "pct":  2.7,
+                       "now":  184,
+                       "drop":  3,
+                       "pct":  1.6,
                        "regression":  false,
                        "acked":  false
                    },
@@ -48,9 +48,9 @@
                    {
                        "store":  "Hy-Vee",
                        "was":  349,
-                       "now":  361,
-                       "drop":  -12,
-                       "pct":  -3.4,
+                       "now":  362,
+                       "drop":  -13,
+                       "pct":  -3.7,
                        "regression":  false,
                        "acked":  false
                    },
@@ -66,9 +66,9 @@
                    {
                        "store":  "Walmart",
                        "was":  322,
-                       "now":  361,
-                       "drop":  -39,
-                       "pct":  -12.1,
+                       "now":  363,
+                       "drop":  -41,
+                       "pct":  -12.7,
                        "regression":  false,
                        "acked":  false
                    }
