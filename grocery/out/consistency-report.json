@@ -1,12 +1,12 @@
 ﻿{
-    "generated":  "2026-07-15 17:29",
+    "generated":  "2026-07-16 06:30",
     "tol":  0.3,
-    "no_link_count":  165,
+    "no_link_count":  157,
     "max_no_link":  0,
     "no_link_by_store":  [
                              {
                                  "store":  "Hy-Vee",
-                                 "count":  85
+                                 "count":  82
                              },
                              {
                                  "store":  "Family Fare",
@@ -18,10 +18,6 @@
                              },
                              {
                                  "store":  "Walmart",
-                                 "count":  5
-                             },
-                             {
-                                 "store":  "Fareway",
                                  "count":  5
                              },
                              {
@@ -179,10 +175,6 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "clam-chowder",
-                        "store":  "Hy-Vee"
-                    },
-                    {
                         "id":  "chili-beans",
                         "store":  "Hy-Vee"
                     },
@@ -215,20 +207,12 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "canned-pumpkin",
-                        "store":  "Fareway"
-                    },
-                    {
                         "id":  "mandarin-oranges",
                         "store":  "Hy-Vee"
                     },
                     {
                         "id":  "fruit-cocktail",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "fruit-cocktail",
-                        "store":  "Fareway"
                     },
                     {
                         "id":  "canned-pears",
@@ -296,10 +280,6 @@
                     },
                     {
                         "id":  "white-vinegar",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "white-vinegar",
                         "store":  "Hy-Vee"
                     },
                     {
@@ -311,15 +291,7 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "miracle-whip",
-                        "store":  "Fareway"
-                    },
-                    {
                         "id":  "caesar-dressing",
-                        "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "blue-cheese-dressing",
                         "store":  "Hy-Vee"
                     },
                     {
@@ -405,10 +377,6 @@
                     {
                         "id":  "vanilla-extract",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "yeast",
-                        "store":  "Fareway"
                     },
                     {
                         "id":  "marshmallows",
@@ -513,10 +481,6 @@
                     {
                         "id":  "corn-dogs",
                         "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "garlic-bread",
-                        "store":  "Hy-Vee"
                     },
                     {
                         "id":  "paper-towels",
