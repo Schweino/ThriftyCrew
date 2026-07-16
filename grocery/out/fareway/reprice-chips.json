@@ -1,0 +1,447 @@
+﻿[
+    {
+        "id":  "eggs",
+        "q":  "Country Daybreak Large White Eggs",
+        "t":  ""
+    },
+    {
+        "id":  "chicken-breast",
+        "q":  "Boneless Skinless Chicken Breast",
+        "t":  ""
+    },
+    {
+        "id":  "chicken-thighs",
+        "q":  "Bone-In Chicken Thighs",
+        "t":  ""
+    },
+    {
+        "id":  "ground-beef-8020",
+        "q":  "80% Lean 20% Fat Ground Beef",
+        "t":  ""
+    },
+    {
+        "id":  "ground-turkey",
+        "q":  "Fareway Ground Turkey",
+        "t":  ""
+    },
+    {
+        "id":  "bacon",
+        "q":  "Farmland Thick Cut Naturally Hickory Smoked Bacon",
+        "t":  ""
+    },
+    {
+        "id":  "pork-chops",
+        "q":  "Center Cut Pork Chops",
+        "t":  ""
+    },
+    {
+        "id":  "milk",
+        "q":  "Fareway Whole Milk",
+        "t":  ""
+    },
+    {
+        "id":  "butter",
+        "q":  "Fareway Solid Butter",
+        "t":  ""
+    },
+    {
+        "id":  "cottage-cheese",
+        "q":  "Daisy Classic 4% Milkfat Small Curd Cottage Cheese",
+        "t":  ""
+    },
+    {
+        "id":  "sour-cream",
+        "q":  "Daisy Sour Cream",
+        "t":  ""
+    },
+    {
+        "id":  "cream-cheese",
+        "q":  "Fareway Cream Cheese Original",
+        "t":  ""
+    },
+    {
+        "id":  "shredded-cheese",
+        "q":  "Tillamook Farmstyle Medium Cheddar Shredded Cheese",
+        "t":  ""
+    },
+    {
+        "id":  "yogurt",
+        "q":  "Chobani Raspberry on the Bottom Nonfat Greek Yogurt",
+        "t":  ""
+    },
+    {
+        "id":  "bananas",
+        "q":  "Bananas Sold individually",
+        "t":  ""
+    },
+    {
+        "id":  "strawberries",
+        "q":  "Strawberries",
+        "t":  ""
+    },
+    {
+        "id":  "blueberries",
+        "q":  "Blueberries 1 pint container",
+        "t":  ""
+    },
+    {
+        "id":  "avocados",
+        "q":  "Hass Avocado",
+        "t":  ""
+    },
+    {
+        "id":  "russet-potatoes",
+        "q":  "Russet Potato Bag",
+        "t":  ""
+    },
+    {
+        "id":  "onions",
+        "q":  "Yellow Onions",
+        "t":  ""
+    },
+    {
+        "id":  "apples",
+        "q":  "Golden Delicious Apple",
+        "t":  ""
+    },
+    {
+        "id":  "grapes",
+        "q":  "Red Seedless Grapes",
+        "t":  ""
+    },
+    {
+        "id":  "bread",
+        "q":  "Fareway Split Top Sandwich Bread",
+        "t":  ""
+    },
+    {
+        "id":  "peanut-butter",
+        "q":  "SKIPPY Creamy Peanut Butter",
+        "t":  ""
+    },
+    {
+        "id":  "orange-juice",
+        "q":  "Fareway 100% Juice Orange",
+        "t":  ""
+    },
+    {
+        "id":  "tortillas",
+        "q":  "Guerrero Soft Taco Flour Tortillas",
+        "t":  ""
+    },
+    {
+        "id":  "coffee",
+        "q":  "Fareway Coffee Ground Medium Classic Roast",
+        "t":  ""
+    },
+    {
+        "id":  "flour",
+        "q":  "Fareway Flour All Purpose",
+        "t":  ""
+    },
+    {
+        "id":  "sugar",
+        "q":  "Fareway Sugar Pure Cane Granulated",
+        "t":  ""
+    },
+    {
+        "id":  "rice",
+        "q":  "ParExcellence Extra Long Grain Rice",
+        "t":  ""
+    },
+    {
+        "id":  "pasta",
+        "q":  "Barilla Thin Spaghetti",
+        "t":  ""
+    },
+    {
+        "id":  "vegetable-oil",
+        "q":  "Fareway Vegetable Oil",
+        "t":  ""
+    },
+    {
+        "id":  "cereal",
+        "q":  "Fareway Honey \u0026 Nut Flavored Cereal",
+        "t":  ""
+    },
+    {
+        "id":  "oatmeal",
+        "q":  "Quaker Old Fashioned Oatmeal",
+        "t":  ""
+    },
+    {
+        "id":  "salmon",
+        "q":  "Fresh Salmon Fillets",
+        "t":  ""
+    },
+    {
+        "id":  "canned-tuna",
+        "q":  "Fareway Chunk Light Tuna in Water",
+        "t":  ""
+    },
+    {
+        "id":  "shrimp",
+        "q":  "Supreme Choice Raw Shrimp 16-20ct",
+        "t":  ""
+    },
+    {
+        "id":  "sirloin-steak",
+        "q":  "USDA Choice Top Of Iowa Sirloin Steak",
+        "t":  ""
+    },
+    {
+        "id":  "whole-chicken",
+        "q":  "Whole Chicken",
+        "t":  ""
+    },
+    {
+        "id":  "breakfast-sausage",
+        "q":  "Beelers Breakfast Sausage",
+        "t":  ""
+    },
+    {
+        "id":  "deli-ham",
+        "q":  "Shaved Ham",
+        "t":  ""
+    },
+    {
+        "id":  "hot-dogs",
+        "q":  "Bar-S Classic Franks Hot Dogs",
+        "t":  ""
+    },
+    {
+        "id":  "sliced-cheese",
+        "q":  "Fareway American Cheese Slices",
+        "t":  ""
+    },
+    {
+        "id":  "oranges",
+        "q":  "Navel Orange",
+        "t":  ""
+    },
+    {
+        "id":  "lemons",
+        "q":  "Lemon",
+        "t":  ""
+    },
+    {
+        "id":  "tomatoes",
+        "q":  "Tomato on the Vine",
+        "t":  ""
+    },
+    {
+        "id":  "lettuce",
+        "q":  "Iceberg Lettuce",
+        "t":  ""
+    },
+    {
+        "id":  "carrots",
+        "q":  "Carrot",
+        "t":  ""
+    },
+    {
+        "id":  "broccoli",
+        "q":  "Broccoli Crown",
+        "t":  ""
+    },
+    {
+        "id":  "celery",
+        "q":  "Celery",
+        "t":  ""
+    },
+    {
+        "id":  "cucumbers",
+        "q":  "Cucumber",
+        "t":  ""
+    },
+    {
+        "id":  "spinach",
+        "q":  "Dole Salad Baby Spinach",
+        "t":  ""
+    },
+    {
+        "id":  "mushrooms",
+        "q":  "Highline Whole White Mushrooms",
+        "t":  ""
+    },
+    {
+        "id":  "sweet-potatoes",
+        "q":  "Sweet Potato (Yam)",
+        "t":  ""
+    },
+    {
+        "id":  "sweet-corn",
+        "q":  "Yellow Sweet Corn",
+        "t":  ""
+    },
+    {
+        "id":  "watermelon",
+        "q":  "Seedless Watermelon",
+        "t":  ""
+    },
+    {
+        "id":  "peaches",
+        "q":  "Yellow Flesh Georgia Peaches",
+        "t":  ""
+    },
+    {
+        "id":  "hamburger-buns",
+        "q":  "Fareway Burger Buns",
+        "t":  ""
+    },
+    {
+        "id":  "bagels",
+        "q":  "Fareway Pre-Sliced Original Bagels",
+        "t":  ""
+    },
+    {
+        "id":  "mac-and-cheese",
+        "q":  "Fareway Original Macaroni \u0026 Cheese Dinner",
+        "t":  ""
+    },
+    {
+        "id":  "pasta-sauce",
+        "q":  "Fareway Traditional Pasta Sauce",
+        "t":  ""
+    },
+    {
+        "id":  "canned-black-beans",
+        "q":  "Fareway Black Beans",
+        "t":  ""
+    },
+    {
+        "id":  "canned-corn",
+        "q":  "Fareway Whole Kernel Corn",
+        "t":  ""
+    },
+    {
+        "id":  "ketchup",
+        "q":  "Fareway Tomato Ketchup",
+        "t":  ""
+    },
+    {
+        "id":  "mayonnaise",
+        "q":  "Fareway Mayonnaise Homestyle",
+        "t":  ""
+    },
+    {
+        "id":  "mustard",
+        "q":  "Fareway Yellow Mustard",
+        "t":  ""
+    },
+    {
+        "id":  "jelly",
+        "q":  "Fareway Concord Grape Jelly",
+        "t":  ""
+    },
+    {
+        "id":  "honey",
+        "q":  "Fareway Pure Honey",
+        "t":  ""
+    },
+    {
+        "id":  "brown-sugar",
+        "q":  "Fareway Sugar Pure Cane Light Brown",
+        "t":  ""
+    },
+    {
+        "id":  "olive-oil",
+        "q":  "Fareway Extra Virgin Olive Oil",
+        "t":  ""
+    },
+    {
+        "id":  "93-7-ground-beef",
+        "q":  "93% Lean 7% Fat Ground Beef",
+        "t":  ""
+    },
+    {
+        "id":  "jasmine-rice",
+        "q":  "Mahatma Jasmine Long Grain Thai Fragrant Rice",
+        "t":  ""
+    },
+    {
+        "id":  "penne-pasta",
+        "q":  "Fareway Penne Rigate",
+        "t":  ""
+    },
+    {
+        "id":  "salsa",
+        "q":  "Fareway Chunky Mild Salsa",
+        "t":  ""
+    },
+    {
+        "id":  "taco-seasoning",
+        "q":  "Fareway Taco Seasoning Mix",
+        "t":  ""
+    },
+    {
+        "id":  "diced-tomatoes",
+        "q":  "Fareway Diced Tomatoes",
+        "t":  ""
+    },
+    {
+        "id":  "chicken-broth",
+        "q":  "Fareway Fat Free Chicken Broth",
+        "t":  ""
+    },
+    {
+        "id":  "limes",
+        "q":  "Fresh Limes",
+        "t":  ""
+    },
+    {
+        "id":  "garlic",
+        "q":  "Garlic",
+        "t":  ""
+    },
+    {
+        "id":  "tomato-sauce",
+        "q":  "Fareway Tomato Sauce",
+        "t":  ""
+    },
+    {
+        "id":  "reduced-fat-mozzarella",
+        "q":  "Fareway Low-Moisture Part-Skim Mozzarella Shredded Cheese",
+        "t":  ""
+    },
+    {
+        "id":  "string-cheese",
+        "q":  "Crystal Farms String Cheese Part-Skim Mozzarella",
+        "t":  ""
+    },
+    {
+        "id":  "half-and-half",
+        "q":  "Kemps Fresh Half \u0026 Half",
+        "t":  ""
+    },
+    {
+        "id":  "frozen-pizza",
+        "q":  "Bellatoria Ultra Thin Crust Ultimate Supreme Pizza",
+        "t":  ""
+    },
+    {
+        "id":  "ice-cream",
+        "q":  "Fareway Vintage Vanilla Ice Cream",
+        "t":  ""
+    },
+    {
+        "id":  "tortilla-chips",
+        "q":  "Fareway Restaurant Style White Corn Tortilla Chips",
+        "t":  ""
+    },
+    {
+        "id":  "soda",
+        "q":  "Coca-Cola Original Taste Soda Fridge Pack",
+        "t":  ""
+    },
+    {
+        "id":  "toilet-paper",
+        "q":  "Scott ComfortPlus Toilet Paper 1-Ply",
+        "t":  ""
+    },
+    {
+        "id":  "paper-towels",
+        "q":  "Scott Choose-A-Sheet Paper Towels",
+        "t":  ""
+    }
+]

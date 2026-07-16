@@ -1,47 +1,32 @@
 ﻿[
     {
-        "id":  "clam-chowder",
-        "q":  "Campbell\u0027s New England Clam Chowder18.8 fl oz",
-        "size":  "18.8 fl oz"
-    },
-    {
         "id":  "canned-pumpkin",
-        "q":  "Libby\u0027s Pumpkin 100% Pure Pumpkin29 oz",
+        "q":  "canned pumpkin",
+        "match":  "Libby\u0027s Pumpkin 100% Pure Pumpkin29 oz",
         "size":  "29 oz"
     },
     {
         "id":  "fruit-cocktail",
-        "q":  "Fareway In Heavy Syrup Fruit Cocktail15.25 oz",
+        "q":  "fruit cocktail canned",
+        "match":  "Fareway In Heavy Syrup Fruit Cocktail15.25 oz",
         "size":  "15.25 oz"
     },
     {
         "id":  "white-vinegar",
-        "q":  "Fareway White Distilled Vinegar 128 fl oz",
+        "q":  "distilled white vinegar",
+        "match":  "Fareway White Distilled Vinegar 128 fl oz",
         "size":  "128 fl oz"
     },
     {
         "id":  "miracle-whip",
-        "q":  "Low carbMiracle Whip M",
+        "q":  "miracle whip",
+        "match":  "Low carbMiracle Whip M",
         "size":  "30 fl oz"
     },
     {
-        "id":  "blue-cheese-dressing",
-        "q":  "Wish-Bone Chunky Blue Cheese Dressing15 fl oz",
-        "size":  "15 fl oz"
-    },
-    {
-        "id":  "balsamic-vinegar",
-        "q":  "Bertolli Balsamic Vinegar of Modena16.9 fl oz",
-        "size":  "16.9 fl oz"
-    },
-    {
-        "id":  "horseradish",
-        "q":  "Inglehoffer Thick-n-Creamy Horseradish3.75 oz",
-        "size":  "3.75 oz"
-    },
-    {
-        "id":  "floor-cleaner",
-        "q":  "Swiffer WetJet Liquid Floor Cleaner, Lavender 42.2 fl oz",
-        "size":  "42.2 fl oz"
+        "id":  "yeast",
+        "q":  "active dry yeast",
+        "match":  "Red Star Active Dry Yeast 4 oz",
+        "size":  "4 oz"
     }
 ]
