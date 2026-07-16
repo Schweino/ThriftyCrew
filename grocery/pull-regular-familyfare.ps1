@@ -45,12 +45,41 @@ try {
 $startTime = Get-Date
 $MAXMIN = 9    # hard wall-clock cap for the whole pull
 function Over-Cap { return (((Get-Date) - $startTime).TotalMinutes -gt $MAXMIN) }
+# ASK FOR THE PRODUCT'S IDENTITY. `fields=` is a WHITELIST, and it used to list only name/size/price - i.e. we
+# explicitly told Freshop NOT to send canonical_url or id, and then ran a SEPARATE search to guess back which
+# product each price came from. That guess is where every wrong Family Fare link came from. canonical_url is the
+# store's own URL for this exact product; taking it here makes the link a property of the price rather than a
+# second, fallible lookup.
+#
+# WITH A FALLBACK, because this runs unattended at 06:30. If Freshop ever rejects the wider whitelist (an
+# unknown field name is a 400, and 400 is also what its throttle returns - the two are indistinguishable from
+# here), the pull must NOT die: Family Fare's prices would go stale and the daily's freshness assert would fail
+# the whole job. A field we would merely LIKE must never be able to take down the price we NEED.
+$FIELDS_RICH = 'id,name,size,price,base_price,unit_price,canonical_url'
+$FIELDS_MIN = 'name,size,price,base_price,unit_price'
+$script:fieldsMode = $FIELDS_RICH
+$script:fellBack = $false
 function Get-FreshopItems($term) {
   for ($attempt = 1; $attempt -le 2; $attempt++) {
     try {
-      $r = Invoke-RestMethod -Uri ("$b/products?app_key=$ak&store_id=$sid&q=" + [uri]::EscapeDataString($term) + "&limit=25&fields=name,size,price,base_price,unit_price") -Headers $UA -TimeoutSec 20
+      $r = Invoke-RestMethod -Uri ("$b/products?app_key=$ak&store_id=$sid&q=" + [uri]::EscapeDataString($term) + "&limit=25&fields=" + $script:fieldsMode) -Headers $UA -TimeoutSec 20
       return @($r.items)   # may be empty (throttled or not-carried); caller queues empties for recovery
-    } catch { Start-Sleep -Milliseconds 400 }   # retry ONCE on a hard error only
+    }
+    catch {
+      # On the FIRST hard failure while asking for the rich field set, try the minimal one once. If that works,
+      # the wide whitelist is the problem and we stay narrow for the rest of the run (rows keep their prices but
+      # lose their identity - logged loudly, because that is a silent return to the two-pipeline bug).
+      if ($script:fieldsMode -eq $FIELDS_RICH -and -not $script:fellBack) {
+        try {
+          $r2 = Invoke-RestMethod -Uri ("$b/products?app_key=$ak&store_id=$sid&q=" + [uri]::EscapeDataString($term) + "&limit=25&fields=" + $FIELDS_MIN) -Headers $UA -TimeoutSec 20
+          $script:fieldsMode = $FIELDS_MIN; $script:fellBack = $true
+          Write-Warning 'Family Fare: Freshop rejected the canonical_url field whitelist - fell back to the minimal fields. Rows will carry NO product identity this run, so their links cannot be derived and must be searched. Check the Freshop field names.'
+          return @($r2.items)
+        }
+        catch { }   # both failed -> it is the throttle, not the whitelist; fall through to the normal retry
+      }
+      Start-Sleep -Milliseconds 400
+    }
   }
   return @()
 }
