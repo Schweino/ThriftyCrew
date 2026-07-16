@@ -1,9 +1,12 @@
 ﻿{
     "store":  "Fareway",
     "price_type":  "everyday",
-    "price_mode":  "unverified",
+    "price_mode":  "in-store",
     "source":  "shop.fareway.com (Instacart Storefront, no-markup in-store prices, Omaha); core re-pulled 07-15 + carried 07-14",
     "generated":  "2026-07-15",
+    "deal_count":  382,
+    "mode_verified":  "2026-07-16",
+    "mode_evidence":  "28/28 items matched the file to the cent against a verified In-Store + Omaha shop.fareway.com session (butter 3.48, cream cheese 1.99, tuna 0.97, OJ 7.98 all exact). Method proven by control: Aldi canned tuna returns 0.95 (in-store) not 1.05 (delivery) via the same same-origin fetch, so fetch carries the httpOnly fulfilment session. Supersedes the 2026-07-15 spot-check that claimed a 14-50% markup; that check was taken against the wrong store (a cold session defaults to Des Moines - Euclid, not Omaha).",
     "deals":  [
                   {
                       "store":  "Fareway",
@@ -4343,6 +4346,5 @@
                       "source_ad":  "Fareway Omaha In-Store shelf price (batch capture)",
                       "as_of":  "2026-07-15"
                   }
-              ],
-    "deal_count":  382
+              ]
 }
