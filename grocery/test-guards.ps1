@@ -161,6 +161,22 @@ if ($md) {
   Write-Output '  SKIP  basePrice bug: no marked-down row carrying both current_price and base_price'
 }
 
+# ---- 8b. the MULTIBUY reconciliation must not become a way to launder a wrong price ------------------
+# Guard 10 compares ad_price * price_multiple against current_price, because a "3 for $4" row legitimately
+# publishes $1.3333 while the store's headline is $4. That reconciliation is a hole if it is not checked: a
+# wrong price_multiple would make any ad_price "agree" with any current_price. So plant one and prove the guard
+# still fires. (This exists because the raw comparison hard-failed 18 rows of CORRECT multibuy data, and the
+# fix for a false positive is the easiest place in a gate to accidentally open a real one.)
+$mb = @($hd.deals | Where-Object { $_.price_multiple -and $_.current_price -and $_.ad_price }) | Select-Object -First 1
+if ($mb) {
+  $mb.price_multiple = ([double]$mb.price_multiple) + 1     # a divisor the store never quoted
+  ($hd | ConvertTo-Json -Depth 6) | Set-Content $hf -Encoding UTF8
+  Check 'multibuy: a price_multiple that does not reconcile ad_price to current_price' 2
+  Set-Content $hf $hbak -Encoding UTF8 -NoNewline
+} else {
+  Write-Output '  SKIP  multibuy: no row carries price_multiple yet (re-pull Hy-Vee to create one)'
+}
+
 # ---- 9. Baker's price not matching the store's EXACT shelf price (the milk rounding bug) -------------
 # Guard 10 only proves ad_price == current_price - both OUR numbers - so it cannot catch a current_price that
 # was COMPUTED wrong. Guard 11 brings in the raw capture's exact `cur`. Set milk to the rounded-unit

@@ -477,9 +477,22 @@ foreach ($f in (RegFiles)) {
     $ap = 0.0; [void][double]::TryParse((([string]$d.ad_price)      -replace '[^0-9.]',''), [ref]$ap)
     if ($cp -le 0 -or $ap -le 0) { continue }
     $checked++
-    if ([math]::Abs($ap - $cp) -gt 0.005) {
+    # A MULTIBUY MAKES THESE TWO LEGITIMATELY DIFFER, BY EXACTLY THE MULTIPLE. current_price is the store's
+    # headline ("3 for $4" -> 4); ad_price is the per-item price we publish (1.3333). Compared raw, this guard
+    # called 18 rows of correct data the basePrice bug (Hass Avocados, 2L Pepsi, Chips Ahoy - every ratio a
+    # clean 2x/3x/4x, which is the tell). Multiply our price back up by the divisor the puller recorded and the
+    # two must land on the same number.
+    # This does NOT weaken the check: it still proves ad_price came from storeProducts.price rather than
+    # basePrice, because basePrice * mult does not equal sp.price. A row that omits price_multiple is compared
+    # exactly as before, so no store loses coverage.
+    $mult = 1.0
+    if ($d.price_multiple) { [void][double]::TryParse(([string]$d.price_multiple), [ref]$mult) }
+    if ($mult -le 0) { $mult = 1.0 }
+    $apTotal = $ap * $mult
+    if ([math]::Abs($apTotal - $cp) -gt ([math]::Max(0.005, $cp * 0.001))) {
       $mismatch++
-      [void]$fail.Add(("HARD FAIL: publishing a price the store is NOT charging  [{0}] {1}  we publish `${2}, the store charges `${3} - the puller took the wrong price field (this is the basePrice bug)" -f $store, [string]$d.item, $ap, $cp))
+      $mtxt = if ($mult -gt 1) { (" (x" + $mult + " multibuy -> `$" + [math]::Round($apTotal,2) + ")") } else { '' }
+      [void]$fail.Add(("HARD FAIL: publishing a price the store is NOT charging  [{0}] {1}  we publish `${2}{3}, the store charges `${4} - the puller took the wrong price field (this is the basePrice bug)" -f $store, [string]$d.item, $ap, $mtxt, $cp))
     }
   }
   if (-not $any) { $noContract[$store] = $true }

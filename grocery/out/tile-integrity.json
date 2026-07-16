@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-07-16 14:17",
+    "generated":  "2026-07-16 15:30",
     "board":  "comparison-2026-07-15.json",
     "total_tiles":  2047,
-    "violations":  224,
+    "violations":  213,
     "by_store":  {
                      "Walmart":  {
                                      "violations":  27,
@@ -17,7 +17,7 @@
                                          "tiles":  196
                                      },
                      "Hy-Vee":  {
-                                    "violations":  68,
+                                    "violations":  57,
                                     "tiles":  364
                                 },
                      "Sam\u0027s Club":  {
@@ -41,14 +41,6 @@
                      "detail":  "board $5.99 vs link $7.49  (20% off)",
                      "board":  "Kroger 80/20 Ground Beef Roll 3 LB",
                      "link":  "Kroger 80/20 Ground Beef Roll 1 LB"
-                 },
-                 {
-                     "id":  "all-purpose-cleaner",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.1872 vs link $0.1247  (50.1% off)",
-                     "board":  "Lysol Lemon Breeze All Purpose Cleaner",
-                     "link":  "Lysol Lemon Breeze All Purpose Cleaner"
                  },
                  {
                      "id":  "flour",
@@ -145,6 +137,14 @@
                      "detail":  "board $1.07 vs link $1.192  (10.2% off)",
                      "board":  "Avocados",
                      "link":  "Avocados, 5 ct."
+                 },
+                 {
+                     "id":  "bacon",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $3.97 vs link $4.89  (18.8% off)",
+                     "board":  "Hickory Country Smoked Bacon",
+                     "link":  "Hy-Vee Double Smoked Thick Sliced Bacon"
                  },
                  {
                      "id":  "bacon",
@@ -315,28 +315,12 @@
                      "link":  "Rotella\u0027s Italian Vienna Bread"
                  },
                  {
-                     "id":  "bread-crumbs",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.2231 vs link $0.2978  (25.1% off)",
-                     "board":  "Gustare Vita Italian Bread Crumbs",
-                     "link":  "Gustare Vita Italian Bread Crumbs"
-                 },
-                 {
                      "id":  "cereal",
                      "store":  "Hy-Vee",
                      "fault":  "WRONG-PRODUCT",
                      "detail":  "name-drift",
                      "board":  "That\u0027s Smart! cereal, 12 to 18 oz., $1.99",
                      "link":  "Hy-Vee Whole Grain Raisin Bran"
-                 },
-                 {
-                     "id":  "broccoli",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $1.4533 vs link $1.8533  (21.6% off)",
-                     "board":  "Hy Vee Chopped Broccoli",
-                     "link":  "Hy Vee Chopped Broccoli"
                  },
                  {
                      "id":  "brown-rice",
@@ -633,14 +617,6 @@
                      "detail":  "name-drift",
                      "board":  "Maizena Corn Starch 14.1 oz",
                      "link":  "Kroger Pure Corn Starch"
-                 },
-                 {
-                     "id":  "cottage-cheese",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.1162 vs link $0.1325  (12.3% off)",
-                     "board":  "Hy Vee 4 Small Curd Cottage Cheese",
-                     "link":  "That\u0027s Smart! Small Curd Cottage Cheese"
                  },
                  {
                      "id":  "crackers",
@@ -1259,14 +1235,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "parmesan",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.4988 vs link $0.4612  (8.1% off)",
-                     "board":  "Hy Vee Grated Parmesan Cheese",
-                     "link":  "Hy Vee Grated Parmesan Cheese"
-                 },
-                 {
                      "id":  "dried-parsley",
                      "store":  "Walmart",
                      "fault":  "LINK-UNPRICEABLE",
@@ -1323,14 +1291,6 @@
                      "link":  "Pineapple"
                  },
                  {
-                     "id":  "pineapple",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $3.99 vs link $3.88  (2.8% off)",
-                     "board":  "Del Monte Whole Pineapple",
-                     "link":  "Del Monte Whole Pineapple"
-                 },
-                 {
                      "id":  "pork-chops",
                      "store":  "Hy-Vee",
                      "fault":  "WRONG-PRODUCT",
@@ -1377,14 +1337,6 @@
                      "detail":  "priced tile with no See-item link",
                      "board":  "Maruchan Beef Flavor Ramen Noodle Soup 12 Ea",
                      "link":  ""
-                 },
-                 {
-                     "id":  "ranch-dressing",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.1386 vs link $0.1247  (11.1% off)",
-                     "board":  "Hy-Vee Ranch Dressing",
-                     "link":  "Hy-Vee Ranch Dressing"
                  },
                  {
                      "id":  "red-pepper-flakes",
@@ -1473,14 +1425,6 @@
                      "detail":  "board $0.1562 vs link $0.1246  (25.4% off)",
                      "board":  "Fareway Chunky Mild Salsa",
                      "link":  "Fareway Chunky Mild Salsa"
-                 },
-                 {
-                     "id":  "sandwich-bags",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.0286 vs link $0.034  (15.9% off)",
-                     "board":  "That\u0027s Smart! Recloseable Sandwich Bags",
-                     "link":  "That\u0027s Smart! Recloseable Sandwich Bags"
                  },
                  {
                      "id":  "shampoo",
@@ -1603,14 +1547,6 @@
                      "link":  "Happy Farms String Cheese"
                  },
                  {
-                     "id":  "sweet-corn",
-                     "store":  "Hy-Vee",
-                     "fault":  "WRONG-PRODUCT",
-                     "detail":  "name-drift",
-                     "board":  "Hy-Vee Short Cuts sweet corn, 4 ct. pkg., $4.99",
-                     "link":  "Sweet Corn 4 Count"
-                 },
-                 {
                      "id":  "sweet-potatoes",
                      "store":  "Aldi",
                      "fault":  "WRONG-PRODUCT",
@@ -1638,8 +1574,8 @@
                      "id":  "teriyaki-sauce",
                      "store":  "Hy-Vee",
                      "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.2492 vs link $0.199  (25.2% off)",
-                     "board":  "Lawry\u0027s Honey Teriyaki Marinade",
+                     "detail":  "board $0.2441 vs link $0.199  (22.7% off)",
+                     "board":  "Hy-Vee Hickory House Rockin Teriyaki Marinade",
                      "link":  "Hy-Vee Teriyaki Sauce"
                  },
                  {
@@ -1715,14 +1651,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "trash-bags",
-                     "store":  "Hy-Vee",
-                     "fault":  "WRONG-PRODUCT",
-                     "detail":  "count-mismatch",
-                     "board":  "Hy-Vee tall kitchen bags, 12 to 22 ct., $3.99",
-                     "link":  "Tall Kitchen Bags With Twist Ties"
-                 },
-                 {
                      "id":  "turkey-lunchmeat",
                      "store":  "Aldi",
                      "fault":  "PRICE-MISMATCH",
@@ -1772,14 +1700,6 @@
                  },
                  {
                      "id":  "white-vinegar",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.039 vs link $0.0273  (43% off)",
-                     "board":  "Hy Vee White Distilled Vinegar",
-                     "link":  "Hy Vee White Distilled Vinegar"
-                 },
-                 {
-                     "id":  "white-vinegar",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -1801,14 +1721,6 @@
                      "detail":  "priced tile with no See-item link",
                      "board":  "Member\u0027s Mark Organic Whole Chicken",
                      "link":  ""
-                 },
-                 {
-                     "id":  "watermelon",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $6.99 vs link $4.99  (40.1% off)",
-                     "board":  "Whole Seedless Watermelon",
-                     "link":  "Whole Seedless Watermelon"
                  },
                  {
                      "id":  "yeast",

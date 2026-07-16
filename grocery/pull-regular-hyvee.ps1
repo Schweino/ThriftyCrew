@@ -270,6 +270,17 @@ foreach ($w in $work) {
           source_ad='Aisles Online current shelf price (storeId 1465, Omaha #01)'
           as_of=$todayS; product_id=[int]$w.pid
         }
+        # RECORD THE MULTIBUY DIVISOR, or the contract above compares two different bases and the guard fires on
+        # correct data. `price` is the MULTIBUY TOTAL ("3 for $4" -> sp.price=4, priceMultiple=3) and we publish
+        # the per-item $1.3333, so ad_price and current_price legitimately differ by exactly $mult. Guard 10 was
+        # reading that as "we publish $1.3333, the store charges $4 - the puller took the wrong price field" and
+        # hard-failed 18 rows of perfectly good data (Hass Avocados, 2-liter Pepsi, Chips Ahoy...). It only
+        # surfaced now because the id fix took refreshed rows from ~450 to 838, so far more multibuys got priced.
+        # Storing the divisor keeps the guard INDEPENDENT: it can still prove ad_price came from
+        # storeProducts.price and not basePrice (basePrice * mult would not equal sp.price), which is the whole
+        # reason the field exists. Dividing current_price here instead would have made both sides the same
+        # expression and the guard vacuous - the two-copies-of-the-same-math trap.
+        if ($mult -gt 1) { $row['price_multiple'] = $mult }
         if ($null -ne $base) { $row['base_price'] = $base }
         if ($isDown) { $row['marked_down'] = $true }
         [void]$deals.Add($row)

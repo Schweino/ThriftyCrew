@@ -812,10 +812,11 @@
                                                },
                                    "Hy-Vee":  {
                                                   "url":  "https://www.hy-vee.com/aisles-online/p/37190/hass-avocados",
-                                                  "price":  1.33,
-                                                  "size":  "each",
                                                   "name":  "Hass Avocados",
-                                                  "board_pu":  1.33
+                                                  "board_pu":  1.33,
+                                                  "price":  1.3333,
+                                                  "size":  "bag",
+                                                  "verified":  "2026-07-16 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                               },
                                    "Sam\u0027s Club":  {
                                                            "url":  "https://www.samsclub.com/ip/Avocados-5-ct/13586650560",
@@ -1651,10 +1652,11 @@
                                                    },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/8650/green-bell-pepper",
-                                                      "price":  1.5,
-                                                      "size":  "1 ct",
                                                       "name":  "Green Bell Pepper",
-                                                      "board_pu":  1.5
+                                                      "board_pu":  1.5,
+                                                      "price":  1.5,
+                                                      "size":  "lb",
+                                                      "verified":  "2026-07-16 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Green-Bell-Peppers-6-ct/13888070896",
@@ -3860,9 +3862,10 @@
                                              },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/8653/celery",
+                                                "name":  "Celery",
                                                 "price":  1.88,
-                                                "size":  "1 ct",
-                                                "name":  "Celery"
+                                                "size":  "each",
+                                                "verified":  "2026-07-16 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                             },
                                  "Walmart":  {
                                                  "url":  "https://www.walmart.com/ip/Fresh-Celery-Stalk-Each/51259411",
@@ -5524,10 +5527,11 @@
                                                      },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/629334/thats-smart-small-curd-cottage-cheese",
-                                                        "price":  3.18,
-                                                        "size":  "24 oz",
                                                         "name":  "That\u0027s Smart! Small Curd Cottage Cheese",
-                                                        "board_pu":  0.1162
+                                                        "board_pu":  0.1162,
+                                                        "price":  2.89,
+                                                        "size":  "24 oz",
+                                                        "verified":  "2026-07-16 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/Darigold-Cottage-Cheese-3-lbs/15337355019",
@@ -7326,10 +7330,11 @@
                                                             },
                                            "Hy-Vee":  {
                                                           "url":  "https://www.hy-vee.com/aisles-online/p/4138421/kraft-cheddar-fat-free-shredded-cheese-7-oz-bag",
-                                                          "price":  0,
-                                                          "size":  "7 oz",
                                                           "name":  "Kraft Cheddar Fat Free Shredded Cheese",
-                                                          "recipe_pu":  0.4543
+                                                          "recipe_pu":  0.4543,
+                                                          "price":  3.18,
+                                                          "size":  "7 oz",
+                                                          "verified":  "2026-07-16 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                       },
                                            "Walmart":  {
                                                            "url":  "https://www.walmart.com/ip/465384428",
@@ -9345,8 +9350,8 @@
                                                            "name":  "Green Bell Pepper",
                                                            "recipe_pu":  1.5,
                                                            "price":  1.5,
-                                                           "size":  "1 ct",
-                                                           "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
+                                                           "size":  "lb",
+                                                           "verified":  "2026-07-16 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                        },
                                             "Sam\u0027s Club":  {
                                                                     "url":  "https://www.samsclub.com/ip/Green-Bell-Peppers-6-ct/13888070896",
@@ -10788,9 +10793,9 @@
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/1910331/hy-vee-we-all-scream-vanilla-ice-cream",
                                                    "name":  "Hy-Vee We All Scream! Vanilla Ice Cream",
                                                    "board_pu":  0.0546,
-                                                   "price":  6.99,
+                                                   "price":  7.48,
                                                    "size":  "1 gal",
-                                                   "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
+                                                   "verified":  "2026-07-16 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                },
                                     "Sam\u0027s Club":  {
                                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Vanilla-Ice-Cream-Pail-5-qts/13877802816",
@@ -11212,9 +11217,9 @@
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/4253149/riceland-enriched-long-grain-jasmine-jasmine-rice-32-oz",
                                                       "name":  "Riceland Enriched Long Grain Jasmine Rice",
                                                       "recipe_pu":  0.0934,
-                                                      "price":  2.99,
+                                                      "price":  2.69,
                                                       "size":  "32 oz",
-                                                      "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
+                                                      "verified":  "2026-07-16 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-Thai-Jasmine-Rice-50-lbs/13590054318",
@@ -11820,10 +11825,10 @@
                                   "Hy-Vee":  {
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/4237222/bud-iceberg-lettuce",
                                                  "name":  "Bud Iceberg Lettuce",
+                                                 "board_pu":  1.99,
                                                  "price":  1.99,
-                                                 "size":  "1 ct",
-                                                 "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)",
-                                                 "board_pu":  1.99
+                                                 "size":  "head",
+                                                 "verified":  "2026-07-16 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                              },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/Iceberg-Lettuce-2-heads/13725751832",
@@ -12947,10 +12952,11 @@
                                              },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/46166/yellow-onions",
-                                                "price":  2.49,
-                                                "size":  "3 lb",
                                                 "name":  "Yellow Onions 3-Pound Bag",
-                                                "board_pu":  0.83
+                                                "board_pu":  0.83,
+                                                "price":  3.49,
+                                                "size":  "3 lb",
+                                                "verified":  "2026-07-16 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                             },
                                  "Sam\u0027s Club":  {
                                                          "url":  "https://www.samsclub.com/ip/Yellow-Onions-10-lbs/13599313206",
@@ -13419,9 +13425,9 @@
                                                          "url":  "https://www.hy-vee.com/aisles-online/p/2612576/hy-vee-grated-parmesan-cheese",
                                                          "name":  "Hy-Vee Grated Parmesan Cheese",
                                                          "recipe_pu":  0.3744,
-                                                         "price":  2.29,
+                                                         "price":  5.99,
                                                          "size":  "3 oz",
-                                                         "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
+                                                         "verified":  "2026-07-16 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                      },
                                           "Sam\u0027s Club":  {
                                                                   "url":  "https://www.samsclub.com/ip/Member-s-Mark-Grated-Parmesan-Cheese-24-oz/15176922436",
@@ -13930,8 +13936,8 @@
                                                    "name":  "Del Monte Whole Pineapple",
                                                    "board_pu":  3.99,
                                                    "price":  3.88,
-                                                   "size":  "1 ct",
-                                                   "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
+                                                   "size":  "each",
+                                                   "verified":  "2026-07-16 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                },
                                     "Sam\u0027s Club":  {
                                                             "url":  "https://www.samsclub.com/ip/Pineapple/13613070091",
@@ -18283,8 +18289,8 @@
                                                     "name":  "Tall Kitchen Bags With Twist Ties",
                                                     "board_pu":  0.0569,
                                                     "price":  4.49,
-                                                    "size":  "70 ct",
-                                                    "verified":  "2026-07-15 Hy-Vee GraphQL (storeId 1465, current shelf price)"
+                                                    "size":  "box",
+                                                    "verified":  "2026-07-16 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/Member-s-Mark-Power-Flex-13-Gallon-Tall-Kitchen-Trash-Bags-200-ct/7874222509",
