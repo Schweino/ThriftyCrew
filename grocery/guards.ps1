@@ -91,7 +91,13 @@ foreach ($g in @(
     # with every guard on this page green: the publish gate enforces only a FLOOR (~15/store, which 116 clears),
     # and a store missing from a row renders as a lawful "doesn't carry" tile that no audit can distinguish from
     # a real gap. Brad caught it by eye. Intentional drops are acked in out\coverage-ack.json with an expiry.
-    @{ f='audit-coverage-regression.ps1'; n='no store lost coverage vs the previous board' })) {
+    @{ f='audit-coverage-regression.ps1'; n='no store lost coverage vs the previous board' },
+    # tile integrity (2026-07-16) - BRAD'S INVARIANT: "no tile that has a price and item name and no link, and
+    # the price and item name must match the link 100%". Runs as a RATCHET, not a hard gate: 313 of 2,047 tiles
+    # violate it today and nearly all need a paced per-store browser pass, so a gate that fails from day one is
+    # a gate that gets switched off. It fails when a store gets WORSE than out\tile-integrity-baseline.json, so
+    # the number can only go down. Flip -Strict on once it reaches zero and it becomes the hard invariant.
+    @{ f='audit-tile-integrity.ps1';    n='no store regressed on price==item==link (ratchet)' })) {
   $p = Join-Path $root $g.f
   if (-not (Test-Path $p)) { [void]$fail.Add(("MISSING GUARD SCRIPT: " + $g.f)); continue }
   & powershell -NoProfile -ExecutionPolicy Bypass -File $p | Out-Null

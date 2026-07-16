@@ -52,11 +52,15 @@ function Get-LinkPerUnit {
   #    16 oz - collapsing it to a per-ounce number the 'each' switch then drops was a regression the
   #    differential test caught (fruit-cups, pudding-cups, microwave-popcorn). Those fall through to the
   #    generic match, which reads "N pk" as the count ($un='pk' -> price/N) exactly as before.
+  #    'x' is the SAME form with a different spelling ("12 x 12 fl oz"), and it was not handled: the generic
+  #    match below cannot read "12" followed by "x", so it slid to the SECOND number and returned 12 fl oz for
+  #    a 144 fl oz case - a live 12x error on soda|Hy-Vee ($0.3933/floz published against a true $0.0328).
+  #    Same bug family as the "6-pack 12 fl oz" hyphen case; only the separator differs.
   if ($unit -in @('oz','floz','lb','gallon')) {
-    $mp = [regex]::Match($s, '([0-9]+)\s*(?:pk|pack)\s+([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|floz|oz|lbs?|pound|gal|gallon|qt|quart|ml|l)\b')
+    $mp = [regex]::Match($s, '([0-9]+)\s*(?:pk|pack|x|×)\s*([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|floz|oz|lbs?|pound|gal|gallon|qt|quart|ml|ltr|liters?|litres?|l)\b')
     if ($mp.Success) {
       $n = [double]$mp.Groups[1].Value * [double]$mp.Groups[2].Value
-      $un = ($mp.Groups[3].Value -replace '\s','') -replace 'fl','' -replace '^gallon$','gal' -replace '^quart$','qt' -replace '^pound$','lb'
+      $un = ($mp.Groups[3].Value -replace '\s','') -replace 'fl','' -replace '^gallon$','gal' -replace '^quart$','qt' -replace '^pound$','lb' -replace '^(ltr|liters?|litres?)$','l'
       $mpDone = $true
     }
   }
@@ -64,10 +68,14 @@ function Get-LinkPerUnit {
   if (-not $mpDone) {
     # 2b. a quantity + unit anywhere in the size. NOTE the number pattern: (\d+(?:\.\d+)?), NOT ([\d.]+) -
     #     the latter matches a bare "." and [double]"." throws.
-    $q = [regex]::Match($s, '(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|lbs?|pound|ct|count|ea|pk|gal|gallon|qt|quart|dozen|doz|ml|l)\b')
+    # 'ltr'/'liter'/'litre' must be listed AFTER 'ml' (so "12 ml" still reads as ml) and BEFORE the bare 'l'.
+    # The converter below has always known litres - it was the SIZE pattern that did not: the bare 'l\b' cannot
+    # match "2 ltr" because a 't' follows the 'l', so soda came back unpriceable rather than wrong. A parse gap
+    # that returns $null is the safe failure mode, but it is still a gap; 2 real cells sat unverifiable on it.
+    $q = [regex]::Match($s, '(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|lbs?|pound|ct|count|ea|pk|gal|gallon|qt|quart|dozen|doz|ml|ltr|liters?|litres?|l)\b')
     if ($q.Success) {
       $n = [double]$q.Groups[1].Value
-      $un = ($q.Groups[2].Value -replace '\s','') -replace 'fl',''
+      $un = (($q.Groups[2].Value -replace '\s','') -replace 'fl','') -replace '^(ltr|liters?|litres?)$','l'
     } else {
       # 3. a BARE unit with no number ("lb", "per lb", "each", "dozen", "gal") means one of it
       $bu = [regex]::Match($s, '\b(lbs?|pound|gal|gallon|dozen|doz|each|ea)\b')

@@ -1,0 +1,2470 @@
+﻿{
+    "generated":  "2026-07-16 12:23",
+    "board":  "comparison-2026-07-15.json",
+    "total_tiles":  2047,
+    "violations":  304,
+    "by_store":  {
+                     "Walmart":  {
+                                     "violations":  27,
+                                     "tiles":  366
+                                 },
+                     "Fareway":  {
+                                     "violations":  16,
+                                     "tiles":  323
+                                 },
+                     "Family Fare":  {
+                                         "violations":  71,
+                                         "tiles":  196
+                                     },
+                     "Hy-Vee":  {
+                                    "violations":  107,
+                                    "tiles":  364
+                                },
+                     "Sam\u0027s Club":  {
+                                             "violations":  14,
+                                             "tiles":  279
+                                         },
+                     "Aldi":  {
+                                  "violations":  18,
+                                  "tiles":  288
+                              },
+                     "Baker\u0027s":  {
+                                          "violations":  51,
+                                          "tiles":  231
+                                      }
+                 },
+    "rows":  [
+                 {
+                     "id":  "ground-beef-8020",
+                     "store":  "Baker\u0027s",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $5.99 vs link $7.49  (20% off)",
+                     "board":  "Kroger 80/20 Ground Beef Roll 3 LB",
+                     "link":  "Kroger 80/20 Ground Beef Roll 1 LB"
+                 },
+                 {
+                     "id":  "all-purpose-cleaner",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Lysol Lemon Breeze All Purpose Cleaner",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "flour",
+                     "store":  "Baker\u0027s",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.479 vs link $0.518  (7.5% off)",
+                     "board":  "Kroger Bleached All Purpose Enriched Flour (10 lb)",
+                     "link":  "Kroger Bleached All Purpose Flour"
+                 },
+                 {
+                     "id":  "flour",
+                     "store":  "Fareway",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.528 vs link $0.499  (5.8% off)",
+                     "board":  "Fareway Flour All Purpose",
+                     "link":  "Fareway Flour, All Purpose"
+                 },
+                 {
+                     "id":  "flour",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "All Purpose Flour Our Family",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "almond-milk",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.0467 vs link $0.0577  (19% off)",
+                     "board":  "Hy Vee Almondmilk Original Unsweetened",
+                     "link":  "Blue Diamond Almond Breeze Unsweetened Original Almond Milk"
+                 },
+                 {
+                     "id":  "almond-milk",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Almond Breeze Almond Milk",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "apples",
+                     "store":  "Aldi",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Gala Apples, Bag",
+                     "link":  "Envy Apple, Each"
+                 },
+                 {
+                     "id":  "apples",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh Gala Apples, 3 lb Bag",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "apples",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Granny Smith Apples 3 Pound Bag",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "apples",
+                     "store":  "Fareway",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Golden Delicious Apple",
+                     "link":  "Gala Apple"
+                 },
+                 {
+                     "id":  "applesauce",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.0767 vs link $0.0821  (6.6% off)",
+                     "board":  "Hy Vee Unsweetened Applesauce",
+                     "link":  "That\u0027s Smart! Unsweetened Apple Sauce 6-4 oz Containers"
+                 },
+                 {
+                     "id":  "applesauce",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Mott\u0027s Apple Sauce 6 Ea",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "artichoke-hearts",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Quartered Artichoke Hearts",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "avocados",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $1.07 vs link $1.192  (10.2% off)",
+                     "board":  "Avocados",
+                     "link":  "Avocados, 5 ct."
+                 },
+                 {
+                     "id":  "bacon",
+                     "store":  "Walmart",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $4.18 vs link $5.2533  (20.4% off)",
+                     "board":  "Great Value Naturally Hickory Smoked Thick Cut Sliced Bacon, 16 oz",
+                     "link":  "Great Value Naturally Hickory Smoked Sliced Bacon, 12 oz"
+                 },
+                 {
+                     "id":  "baked-beans",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Van Camp\u0027s Pork and Beans",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "baking-soda",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.0806 vs link $0.0931  (13.4% off)",
+                     "board":  "Hy Vee Pure Baking Soda",
+                     "link":  "ARM \u0026 HAMMER Baking Soda, Multi-Purpose 100% Pure Sodium Bicarbonate, 1-Pound Box"
+                 },
+                 {
+                     "id":  "balsamic-vinegar",
+                     "store":  "Baker\u0027s",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Filippo Berio® Balsamic Vinegar of Modena 16.9 fl oz",
+                     "link":  "Kroger Balsamic Vinegar"
+                 },
+                 {
+                     "id":  "balsamic-vinegar",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Pompeian Balsamic Vinegar - 16 fl oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "banana-peppers",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Vlasic Hot Banana Pepper Rings, 12 fl. oz.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bar-soap",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Dove Bar Soap",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "beef-broth",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.0622 vs link $0.0683  (8.9% off)",
+                     "board":  "Hy Vee Fat Free Beef Broth",
+                     "link":  "Hy-Vee Fat Free Beef Broth"
+                 },
+                 {
+                     "id":  "black-olives",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "That\u0027s Smart! Large Pitted Ripe Olives",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "black-pepper",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Thats Smart Black Pepper",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bleach",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Bleach 81 Fl Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "blue-cheese-dressing",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Blue Cheese Dressing",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "blue-cheese-dressing",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Wish-Bone Chunky Blue Cheese Salad Dressing, 15 fl oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "blueberries",
+                     "store":  "Aldi",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "form-flip",
+                     "board":  "Blueberries",
+                     "link":  "Season\u0027s Choice Frozen Blueberries"
+                 },
+                 {
+                     "id":  "blueberries",
+                     "store":  "Hy-Vee",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Driscoll\u0027s blueberries, 18 oz. pkg., $4.99",
+                     "link":  "Fresh Blueberries, 1 Pint"
+                 },
+                 {
+                     "id":  "body-wash",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Dove Body Wash",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "body-wash",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Dove Refresh Cucumber + Green Tea Body Wash 20 Fl Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "chicken-breast",
+                     "store":  "Baker\u0027s",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Fresh Tyson Boneless Chicken Breasts",
+                     "link":  "Heritage Farm Boneless Skinless Chicken Breasts"
+                 },
+                 {
+                     "id":  "chicken-breast",
+                     "store":  "Hy-Vee",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Fresh boneless skinless chicken breast, club pack, $2.98 lb.",
+                     "link":  "Boneless Skinless Chicken Breast"
+                 },
+                 {
+                     "id":  "chicken-breast",
+                     "store":  "Fareway",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $3.99 vs link $4.99  (20% off)",
+                     "board":  "Boneless Skinless Chicken Breast",
+                     "link":  "Boneless Skinless Chicken Breast"
+                 },
+                 {
+                     "id":  "bottled-water",
+                     "store":  "Hy-Vee",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "count-mismatch",
+                     "board":  "Hy-Vee purified drinking water, 40 pk. bottles 16.9 fl. oz., $4.99",
+                     "link":  "Hy-Vee Spring Water 24Pk"
+                 },
+                 {
+                     "id":  "bottled-water",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Purified Drinking Water Our Family (24 Ct   16.9 Oz)",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bouillon",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Knorr Chicken Flavor Bouillon Granulated",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bread",
+                     "store":  "Baker\u0027s",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"16 oz\" gives no per-unit in each",
+                     "board":  "Smart Way Enriched White Bread",
+                     "link":  "Smart Way Enriched White Bread"
+                 },
+                 {
+                     "id":  "bread",
+                     "store":  "Walmart",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"loaf\" gives no per-unit in each",
+                     "board":  "Great Value White Round Top Bread Loaf, 20 oz",
+                     "link":  "Great Value White Round Top Bread Loaf, 20 oz"
+                 },
+                 {
+                     "id":  "bread",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Bimbo Soft White Bread (2 pk)",
+                     "link":  "Rotella\u0027s Italian Vienna Bread"
+                 },
+                 {
+                     "id":  "cereal",
+                     "store":  "Hy-Vee",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "That\u0027s Smart! cereal, 12 to 18 oz., $1.99",
+                     "link":  "Hy-Vee Whole Grain Raisin Bran"
+                 },
+                 {
+                     "id":  "cereal",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Apple Jacks Cereal Giant Size 23 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "broccoli",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy Vee Chopped Broccoli",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "brown-rice",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $1.895 vs link $1.99  (4.8% off)",
+                     "board":  "Hy Vee Long Grain Brown Rice",
+                     "link":  "Hy-Vee Long Grain Brown Rice"
+                 },
+                 {
+                     "id":  "butter",
+                     "store":  "Family Fare",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"4 ea\" gives no per-unit in lb",
+                     "board":  "Land O Lakes Butter, Unsalted, Half Sticks 8 Ea",
+                     "link":  "Land O Lakes Butter, Salted 4 Ea"
+                 },
+                 {
+                     "id":  "caesar-dressing",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Creamy Caesar Salad Dressing",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "beef-stew",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Dinty Moore Beef Stew",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "beef-stew",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "DINTY MOORE Beef Stew With Potatoes \u0026 Carrots,",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-beets",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Diced Beets",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-chicken",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy Vee Premium Chunk Chicken Breast With Rib Meat",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "coconut-milk-canned",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Simple Truth Organic® Unsweetened Coconut Milk 13.5 fl oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "coconut-milk-canned",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Nuoc Cot Dua Coconut Milk",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-corn",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family No Salt Added Super Sweet Whole Kernel Corn 15.25 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-green-chilies",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Green Chiles, Mild, Diced 4 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-green-chilies",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Mild Green Chiles Diced",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fruit-cocktail",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "That\u0027s Smart! Fruit Cocktail In Heavy Syrup",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fruit-cocktail",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger® Canned Fruit Cocktail in Heavy Syrup 30 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fruit-cocktail",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fareway In Heavy Syrup Fruit Cocktail15.25 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "hominy",
+                     "store":  "Walmart",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Juanitaâ€™s Foods White Hominy, 110 oz, Can",
+                     "link":  "Great Value White Hominy, 110.4 oz"
+                 },
+                 {
+                     "id":  "mandarin-oranges",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger® Canned Mandarin Oranges in Light Syrup 15 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "mandarin-oranges",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Libby\u0027s Premium Mandarin Oranges in Light Syrup",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-mixed-vegetables",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Veg-All Original Mixed Vegetables",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-pasta",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Chef Boyardee Beefaroni, 15 oz 15 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-pasta",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "(4 pack) Chef Boyardee Overstuffed Beef Ravioli in Pasta Sau",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-pasta",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "SpaghettiOs Canned Pasta with Meatballs, 22.2 oz Can",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-peaches",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Peaches, Yellow Cling, Sliced 15 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-pears",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value Canned Pear Halves in Heavy Syrup, 29 oz Can",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-pears",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "That\u0027s Smart! In Light Syrup Bartlett Bartlett Pear Halves 29 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-pears",
+                     "store":  "Baker\u0027s",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.1303 vs link $0.1479  (11.9% off)",
+                     "board":  "Kroger® Canned Pear Halves in Pear Juice 14.5 oz",
+                     "link":  "Del Monte Pear Halves 29 oz"
+                 },
+                 {
+                     "id":  "canned-potatoes",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "That\u0027s Smart Whole White Potatoes",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-potatoes",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Del Monte Whole Canned Potatoes, Canned Vegetables, 14.5 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-pumpkin",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Libby\u0027s Pumpkin 100% Pure Pumpkin29 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-tuna",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Dolores Chunk Light Yellowfin Tuna In Vegetable Oil 5 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-white-beans",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Cannellini Beans",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-yams",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Bruce\u0027s Sweet Potatoes, In Syrup, Cut, Yams 40 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-yams",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Dunbar\u0027s Nature\u0027s Pride Cut Sweet Potatoes",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cantaloupe",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Cantaloupe/Rockmelon Melon, Small",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "carrots",
+                     "store":  "Hy-Vee",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Bunny Luv Organic Whole Carrots",
+                     "link":  "Grimmway Whole Carrots"
+                 },
+                 {
+                     "id":  "carrots",
+                     "store":  "Baker\u0027s",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.998 vs link $1.145  (12.8% off)",
+                     "board":  "Kroger Whole Carrots (5 lb)",
+                     "link":  "Kroger Whole Carrots"
+                 },
+                 {
+                     "id":  "carrots",
+                     "store":  "Walmart",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Fresh Whole Carrots 2-Pound Bag",
+                     "link":  "Fresh Whole Carrots, 2 lb Bag"
+                 },
+                 {
+                     "id":  "carrots",
+                     "store":  "Family Fare",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $1.145 vs link $1.39  (17.6% off)",
+                     "board":  "Our Family Whole Carrots 32 Oz",
+                     "link":  "Fresh Baby Carrots Our Family"
+                 },
+                 {
+                     "id":  "carrots",
+                     "store":  "Fareway",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $1.245 vs link $0.998  (24.7% off)",
+                     "board":  "Carrot",
+                     "link":  "Carrot"
+                 },
+                 {
+                     "id":  "cat-food",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Iams Dry Cat Food",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cat-food",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Friskies Cat Food, Prime Filets, With Chicken \u0026 Tuna In Gravy, Scallop Flavor, Adult 5.5 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cheese-crackers",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Pepperidge Farm Goldfish",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "chicken-thighs",
+                     "store":  "Aldi",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Fresh Antibiotic Free Family Pack Chicken Drumsticks",
+                     "link":  "Kirkwood Family Pack Bone-In Chicken Thighs, per lb"
+                 },
+                 {
+                     "id":  "chili-beans",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Chili Style Beans in Chili Gravy",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "chili-powder",
+                     "store":  "Walmart",
+                     "fault":  "LINK-NO-PRICE",
+                     "detail":  "link carries no price to compare",
+                     "board":  "Great Value Chili Powder, 3 oz",
+                     "link":  "Great Value Chili Powder"
+                 },
+                 {
+                     "id":  "chili-powder",
+                     "store":  "Aldi",
+                     "fault":  "LINK-NO-PRICE",
+                     "detail":  "link carries no price to compare",
+                     "board":  "Stonemill Chili Powder 2.5 oz",
+                     "link":  "Stonemill Chili Powder"
+                 },
+                 {
+                     "id":  "chili-powder",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "LINK-NO-PRICE",
+                     "detail":  "link carries no price to compare",
+                     "board":  "Member\u0027s Mark Chili Powder, 20 oz.",
+                     "link":  "Member\u0027s Mark Chili Powder"
+                 },
+                 {
+                     "id":  "chocolate-chips",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.315 vs link $0.385  (18.2% off)",
+                     "board":  "Hy Vee Semi Sweet Chocolate Baking Chips",
+                     "link":  "Hershey\u0027s Kitchens Semi-Sweet Chocolate Chips"
+                 },
+                 {
+                     "id":  "chocolate-milk",
+                     "store":  "Walmart",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.0255 vs link $0.0309  (17.6% off)",
+                     "board":  "TruMoo Whole Chocolate Milk Half Gallon",
+                     "link":  "Great Value 1% Low-Fat Chocolate Milk"
+                 },
+                 {
+                     "id":  "chuck-roast",
+                     "store":  "Baker\u0027s",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $10.99 vs link $7.99  (37.5% off)",
+                     "board":  "Choice Beef Chuck Roast",
+                     "link":  "Choice Beef Chuck Roast"
+                 },
+                 {
+                     "id":  "clam-chowder",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Campbell\u0027s Chunky OLD BAY Seasoned Clam Chowder 18.8 oz Ca",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "clam-chowder",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Progresso Reduced Sodium, New England Clam Chowder",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "clementines",
+                     "store":  "Aldi",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $1.33 vs link $0.9967  (33.4% off)",
+                     "board":  "Mandarins, Bag",
+                     "link":  "Mandarins, Bag 3 lb"
+                 },
+                 {
+                     "id":  "cocktail-sauce",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger® Cocktail Sauce 12 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cocktail-sauce",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Cocktail Sauce",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "coffee",
+                     "store":  "Baker\u0027s",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Folgers Coffee",
+                     "link":  "Kroger Master Blend Medium Roast Ground Coffee"
+                 },
+                 {
+                     "id":  "coffee",
+                     "store":  "Hy-Vee",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Maxwell House or Yuban coffee, 23.1 to 27.9 oz., $11.98",
+                     "link":  "Folgers Classic Roast Ground Coffee"
+                 },
+                 {
+                     "id":  "coffee",
+                     "store":  "Walmart",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"oz\" gives no per-unit in oz",
+                     "board":  "Folgers Classic Roast Ground Coffee",
+                     "link":  "Folgers Classic Roast Ground Coffee"
+                 },
+                 {
+                     "id":  "coffee-creamer",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Coffee Mate French Vanilla Flavored Coffee Creamer",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "coffee-creamer",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Planet Oat Brown Sugar Cookie Oatmilk Creamer 32 Fl Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "coffee-pods",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Coffee Pods",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cooking-spray",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Cooking Spray, No Stick, Vegetable Oil 6 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "corn-dogs",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Corn Dogs Hot",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "corned-beef-hash",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hormel Mary Kitchen Homestyle Corned Beef Hash",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cornstarch",
+                     "store":  "Baker\u0027s",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Maizena Corn Starch 14.1 oz",
+                     "link":  "Kroger Pure Corn Starch"
+                 },
+                 {
+                     "id":  "cottage-cheese",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.1162 vs link $0.1325  (12.3% off)",
+                     "board":  "Hy Vee 4 Small Curd Cottage Cheese",
+                     "link":  "That\u0027s Smart! Small Curd Cottage Cheese"
+                 },
+                 {
+                     "id":  "crackers",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Nabisco Snack Crackers or Ritz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cranberry-sauce",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Whole Berry Cranberry Sauce",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cream-cheese",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value Cream Cheese Brick (2 pk)",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "croissants",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Private Selection Fresh Baked Butter Croissants",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cucumbers",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh Cucumbers",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "deodorant",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Dove Deodorant, Cucumber \u0026 Green Tea 2.6 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "tomatoes-green-chilies",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Tomatoes, With Green Chiles, Diced 14.5 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "tomatoes-green-chilies",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Diced Tomatoes with Green Chilies",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "dinner-rolls",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy Vee White Dinner Rolls 24Ct",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "dish-soap",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Ajax Triple Action Liquid Dish Soap 90 Fl Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "dish-soap",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.1121 vs link $0.1387  (19.2% off)",
+                     "board":  "Simply Done Fresh Scent Dish Soap",
+                     "link":  "Simply Done Fresh Scent Dish Soap"
+                 },
+                 {
+                     "id":  "dishwasher-detergent",
+                     "store":  "Hy-Vee",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "count-mismatch",
+                     "board":  "Hy-Vee dishwasher detergent, 60 ct., $9.99",
+                     "link":  "Cascade Platinum Action Pacs Fresh Scent, 71Ct"
+                 },
+                 {
+                     "id":  "dishwasher-detergent",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Pacs Optimum Fresh Scent Dishwasher Detergent 43 Ea",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "disinfecting-wipes",
+                     "store":  "Hy-Vee",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "count-mismatch",
+                     "board":  "Lysol wipes or disinfectant spray, 80 ct. or 12.5 oz., $5.99",
+                     "link":  "Clorox Disinfecting Bleach Free Crisp Lemon Cleaning Wipes"
+                 },
+                 {
+                     "id":  "dog-food",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Purina Dog Chow Complete Dog Food",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "dryer-sheets",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Snuggle Dryer Sheets",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "egg-noodles",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.2056 vs link $0.2492  (17.5% off)",
+                     "board":  "Hy Vee Wide Egg Noodles",
+                     "link":  "Hy-Vee Pasta Kluski Egg Noodles"
+                 },
+                 {
+                     "id":  "enchilada-sauce",
+                     "store":  "Baker\u0027s",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.0925 vs link $0.12  (22.9% off)",
+                     "board":  "Kroger® Mild Red Enchilada Sauce 28 oz",
+                     "link":  "Las Palmas Mild Green Chile Enchilada Sauce"
+                 },
+                 {
+                     "id":  "enchilada-sauce",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.1139 vs link $0.1246  (8.6% off)",
+                     "board":  "Las Palmas Mild Enchilada Sauce, 28 oz",
+                     "link":  "Hy-Vee Mild Enchilada Sauce"
+                 },
+                 {
+                     "id":  "energy-drinks",
+                     "store":  "Family Fare",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.1825 vs link $0.2056  (11.2% off)",
+                     "board":  "Zoa White Peach Energy Drink 12 Fl Oz",
+                     "link":  "Juice Monster Strawberry Lemonade Energy Drink 16 Fl Oz"
+                 },
+                 {
+                     "id":  "facial-tissues",
+                     "store":  "Hy-Vee",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "count-mismatch",
+                     "board":  "Hy-Vee facial tissue, 280 ct., $4.99",
+                     "link":  "Kleenex Everyday Facial Tissues Slim Pack 3-Ply"
+                 },
+                 {
+                     "id":  "feta",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Soiree Traditional Feta Cheese Crumble",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "storage-bags",
+                     "store":  "Hy-Vee",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "count-mismatch",
+                     "board":  "Ziploc storage bags, 105 or 108 ct., $4.49",
+                     "link":  "That\u0027s Smart! Reclosable Freezer Storage Bags 1 Gallon"
+                 },
+                 {
+                     "id":  "storage-bags",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Freezer Bags, Resealable, Gallon Size 30 Ea",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "breakfast-sandwiches",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Jimmy Dean Croissant Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen 8 Ct",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "chicken-nuggets",
+                     "store":  "Family Fare",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.2498 vs link $0.2721  (8.2% off)",
+                     "board":  "Tyson Frozen Chicken Nuggets Family Pack 4 Lb",
+                     "link":  "Tyson Frozen Chicken Nuggets 29 Oz"
+                 },
+                 {
+                     "id":  "chicken-nuggets",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.2584 vs link $0.2852  (9.4% off)",
+                     "board":  "Hy Vee Chicken Nuggets",
+                     "link":  "Hy-Vee Chicken Nuggets"
+                 },
+                 {
+                     "id":  "frozen-fries",
+                     "store":  "Family Fare",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.1158 vs link $0.1247  (7.1% off)",
+                     "board":  "Frozen Carrots, Crinkle Cut Our Family Steamable",
+                     "link":  "Our Family Fries, Crinkle Cut 32 Oz"
+                 },
+                 {
+                     "id":  "frozen-pizza",
+                     "store":  "Baker\u0027s",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"10.2 oz\" gives no per-unit in each",
+                     "board":  "Totino\u0027s Party Pizza Pepperoni Thin Crust",
+                     "link":  "Totino\u0027s Party Pizza Pepperoni Thin Crust"
+                 },
+                 {
+                     "id":  "frozen-pizza",
+                     "store":  "Hy-Vee",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "form-flip",
+                     "board":  "Jacks Pepperoni Pizza Thin Crust",
+                     "link":  "Tombstone Pepperoni Pizza, Original Crust Frozen Pizza"
+                 },
+                 {
+                     "id":  "frozen-waffles",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Blueberry Waffles 10 Ea",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fruit-cups",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Mandarin Oranges In 100% Juice 4 Ea",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fruit-snacks",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Betty Crocker Fruit Snacks",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "garlic-powder",
+                     "store":  "Aldi",
+                     "fault":  "LINK-NO-PRICE",
+                     "detail":  "link carries no price to compare",
+                     "board":  "Stonemill Garlic Powder 3.12 oz",
+                     "link":  "Stonemill Garlic Powder"
+                 },
+                 {
+                     "id":  "garlic-powder",
+                     "store":  "Walmart",
+                     "fault":  "LINK-NO-PRICE",
+                     "detail":  "link carries no price to compare",
+                     "board":  "Great Value Garlic Powder, 3.4 oz",
+                     "link":  "Great Value Garlic Powder"
+                 },
+                 {
+                     "id":  "garlic-powder",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.4167 vs link $0.5  (16.7% off)",
+                     "board":  "Thats Smart Garlic Powder",
+                     "link":  "That\u0027s Smart Garlic Powder"
+                 },
+                 {
+                     "id":  "garlic-powder",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "LINK-NO-PRICE",
+                     "detail":  "link carries no price to compare",
+                     "board":  "Member\u0027s Mark Garlic Powder, 22.5 oz.",
+                     "link":  "Member\u0027s Mark Garlic Powder"
+                 },
+                 {
+                     "id":  "gelatin",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Strawberry Gelatin Dessert 3 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "gelatin",
+                     "store":  "Family Fare",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"3 oz\" gives no per-unit in each",
+                     "board":  "Jell O Strawberry Gelatin Dessert 3 Oz",
+                     "link":  "Jell O Strawberry Gelatin Dessert 3 Oz"
+                 },
+                 {
+                     "id":  "glass-cleaner",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Sprayway Liquid Glass Cleaner",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "granola",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Blueberry Flax Granola Our Family",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "granola-bars",
+                     "store":  "Hy-Vee",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "count-mismatch",
+                     "board":  "Hy Vee Chewy Granola Bars Variety Pack 18Ct",
+                     "link":  "Quaker Chewy Chocolate Chip Granola Bars 8-0.84 oz Bars"
+                 },
+                 {
+                     "id":  "granola-bars",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Sunbelt Bakery Oats \u0026 Honey Chewy Granola Bars 10 Ea",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "sugar",
+                     "store":  "Baker\u0027s",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.6975 vs link $0.8225  (15.2% off)",
+                     "board":  "Smart Way Granulated Sugar (4 lb)",
+                     "link":  "Smart Way Granulated Sugar"
+                 },
+                 {
+                     "id":  "sugar",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Sugar, Pure Granulated 64 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "green-olives",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Pimiento Stuffed Spanish Manzanilla Olives",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "green-olives",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value Stuffed Manzanilla Olives with Minced Pimento, 1",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-cinnamon",
+                     "store":  "Family Fare",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"1 ea\" gives no per-unit in oz",
+                     "board":  "That\u0027s Smart! Ground Cinnamon 2.5 Oz",
+                     "link":  "Canela Molida Ground Cinnamon"
+                 },
+                 {
+                     "id":  "ground-cinnamon",
+                     "store":  "Walmart",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"\" gives no per-unit in oz",
+                     "board":  "Great Value Ground Cinnamon, 2.5 oz",
+                     "link":  "Great Value Ground Cinnamon, 2.5 oz"
+                 },
+                 {
+                     "id":  "ground-cumin",
+                     "store":  "Aldi",
+                     "fault":  "LINK-NO-PRICE",
+                     "detail":  "link carries no price to compare",
+                     "board":  "Stonemill Ground Cumin 2 oz",
+                     "link":  "Stonemill Ground Cumin"
+                 },
+                 {
+                     "id":  "ground-cumin",
+                     "store":  "Walmart",
+                     "fault":  "LINK-NO-PRICE",
+                     "detail":  "link carries no price to compare",
+                     "board":  "Great Value Ground Cumin, 2.5 oz",
+                     "link":  "Great Value Ground Cumin"
+                 },
+                 {
+                     "id":  "ground-cumin",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "LINK-NO-PRICE",
+                     "detail":  "link carries no price to compare",
+                     "board":  "Member\u0027s Mark Ground Cumin, 16 oz.",
+                     "link":  "Member\u0027s Mark Ground Cumin"
+                 },
+                 {
+                     "id":  "ground-turkey",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $4.55 vs link $4.3265  (5.2% off)",
+                     "board":  "Jennie-O 93/7 Ground Turkey (2.5 lb, 2 pk)",
+                     "link":  "Jennie-O Lean Ground Turkey, Case ( 20 lbs.)"
+                 },
+                 {
+                     "id":  "ground-turmeric",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Sugar \u0027N Spice Turmeric Ground 2 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-turmeric",
+                     "store":  "Walmart",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"\" gives no per-unit in oz",
+                     "board":  "Badia Ground Turmeric, 16 oz",
+                     "link":  "Badia Ground Turmeric, 16 oz"
+                 },
+                 {
+                     "id":  "conditioner",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Dove Conditioner",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "half-and-half",
+                     "store":  "Fareway",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.1047 vs link $0.1238  (15.4% off)",
+                     "board":  "Kemps Fresh Half \u0026 Half",
+                     "link":  "Kemps Fresh Half \u0026 Half"
+                 },
+                 {
+                     "id":  "half-and-half",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy Vee Half And Half",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "deli-ham",
+                     "store":  "Family Fare",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.6656 vs link $0.8119  (18% off)",
+                     "board":  "Hillshire Farm Ultra Thin Sliced Brown Sugar Ham Sandwich Meat 9 Oz",
+                     "link":  "Deli Fresh Sliced Ham"
+                 },
+                 {
+                     "id":  "hamburger-buns",
+                     "store":  "Aldi",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"11 oz\" gives no per-unit in each",
+                     "board":  "L\u0027oven Fresh Hamburger Buns",
+                     "link":  "L\u0027oven Fresh Hamburger Buns"
+                 },
+                 {
+                     "id":  "hamburger-buns",
+                     "store":  "Family Fare",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"16 oz\" gives no per-unit in each",
+                     "board":  "8 Ct Wheat Hamburger Buns",
+                     "link":  "Fresh \u0026 Finest 8 Ct Egg Hamburger Buns"
+                 },
+                 {
+                     "id":  "hand-soap",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Top Care Liquid Classic Clean Hand Soap Refill 50 Fl Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "heavy-cream",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy Vee Heavy Whipping Cream",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "honey",
+                     "store":  "Fareway",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.3744 vs link $0.3123  (19.9% off)",
+                     "board":  "Fareway Pure Honey",
+                     "link":  "Fareway Pure Honey"
+                 },
+                 {
+                     "id":  "honey-mustard",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Honey Mustard Dressing",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "hot-dog-buns",
+                     "store":  "Aldi",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"11 oz\" gives no per-unit in each",
+                     "board":  "L\u0027oven Fresh Hot Dog Buns",
+                     "link":  "L\u0027oven Fresh Hot Dog Buns"
+                 },
+                 {
+                     "id":  "hot-dog-buns",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Pepperidge Farm® Top Sliced White Hot Dog Buns 14.000 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "hot-sauce",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Valentina Hot Sauce, Mexican 12.5 Fl Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "hot-sauce",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.2492 vs link $0.2983  (16.5% off)",
+                     "board":  "Franks Redhot Original Cayenne Pepper Hot Sauce",
+                     "link":  "Chophouse Meats Jalapeno Pepper Hot Sauce"
+                 },
+                 {
+                     "id":  "ice-cream",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Vanilla Ice Cream Our Family",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "italian-sausage",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $4.88 vs link $5.48  (10.9% off)",
+                     "board":  "Hy Vee Midwest Pork Italian Pork Sausage",
+                     "link":  "Purnells Old Folks Italian Sausage 16 oz"
+                 },
+                 {
+                     "id":  "italian-seasoning",
+                     "store":  "Walmart",
+                     "fault":  "LINK-NO-PRICE",
+                     "detail":  "link carries no price to compare",
+                     "board":  "Great Value Italian Seasoning, 2 oz",
+                     "link":  "Great Value Italian Seasoning"
+                 },
+                 {
+                     "id":  "italian-seasoning",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "LINK-NO-PRICE",
+                     "detail":  "link carries no price to compare",
+                     "board":  "Member\u0027s Mark Italian Seasoning, 6 oz.",
+                     "link":  "Member\u0027s Mark Italian Seasoning"
+                 },
+                 {
+                     "id":  "italian-seasoning",
+                     "store":  "Aldi",
+                     "fault":  "LINK-NO-PRICE",
+                     "detail":  "link carries no price to compare",
+                     "board":  "Stonemill Italian Seasoning 0.75 oz",
+                     "link":  "Stonemill Italian Seasoning"
+                 },
+                 {
+                     "id":  "jarred-gravy",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Campbell’s Turkey Gravy, 10.5 oz Can",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "kidney-beans",
+                     "store":  "Aldi",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.0548 vs link $0.0639  (14.2% off)",
+                     "board":  "Dakota\u0027s Pride Dark Red Kidney Beans",
+                     "link":  "Dakota\u0027s Pride Kidney Beans"
+                 },
+                 {
+                     "id":  "eggs",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"\" gives no per-unit in dozen",
+                     "board":  "Member\u0027s Mark Cage Free Large White Eggs (2 dozen)",
+                     "link":  "Member\u0027s Mark Cage Free Grade A Large White Eggs, 2 dozen"
+                 },
+                 {
+                     "id":  "laundry-pods",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Arm \u0026 Hammer Laundry Detergent, Concentrated, 5 In 1, Fresh Burst, Power Paks 42 Ea",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "lemon-juice",
+                     "store":  "Walmart",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"\" gives no per-unit in floz",
+                     "board":  "ReaLemon 100% Lemon Juice, 32 fl oz bottle",
+                     "link":  "ReaLemon Lemon Juice (gal)"
+                 },
+                 {
+                     "id":  "lemons",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh Lemons, Large",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "lime-juice",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Reconstituted Lime Juice",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "lime-juice",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Concord Foods Lime Juice From Concentrate 4.5 Fl Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "mac-and-cheese",
+                     "store":  "Hy-Vee",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Kraft Mac \u0026 cheese, 5.5 to 7.25 oz., 3/ $3.00 with purchase of 3",
+                     "link":  "Hy-Vee Original Macaroni \u0026 Cheese Dinner"
+                 },
+                 {
+                     "id":  "mac-and-cheese",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Bob Evans Macaroni \u0026 Cheese 2 Ea",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "mangoes",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Red Mango, Small",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "mangoes",
+                     "store":  "Hy-Vee",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Jumbo Ripe \u0026 Ready mangos, each, $1.99 each",
+                     "link":  "Mangoes"
+                 },
+                 {
+                     "id":  "marshmallows",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Marshmallows 10 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bottled-marinade",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "A.1. CHICAGO STEAKHOUSE Marinades 16 fl oz.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "microwave-popcorn",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy Vee Extra Butter Microwave Popcorn 6Ct",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "microwave-popcorn",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Sweet \u0026 Salty Kettle Corn Microwave Popcorn Cousin Willies (6 Ct)",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "milk",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Thats Smart 2 Reduced Fat Milk",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "milk",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $3.72 vs link $3.62  (2.8% off)",
+                     "board":  "Member\u0027s Mark 2% Reduced Fat Milk (1 gal)",
+                     "link":  "Member\u0027s Mark 1% Low Fat Milk (1 gal.)"
+                 },
+                 {
+                     "id":  "minced-garlic",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Spice World Minced Garlic",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "minced-garlic",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Dan\u0027s Pantry Minced Garlic",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "miracle-whip",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "That\u0027s Smart! Whipped Dressing",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "miracle-whip",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Low carbMiracle Whip M",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "muffins",
+                     "store":  "Family Fare",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"16 oz\" gives no per-unit in each",
+                     "board":  "4 Ct Blueberry Muffins",
+                     "link":  "4 Ct Blueberry Muffins"
+                 },
+                 {
+                     "id":  "mushrooms",
+                     "store":  "Baker\u0027s",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.25 vs link $0.2988  (16.3% off)",
+                     "board":  "Kroger Whole White Mushrooms (24 oz)",
+                     "link":  "Kroger Whole White Mushrooms"
+                 },
+                 {
+                     "id":  "oat-milk",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Oatly Oat Milk",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "oatmeal",
+                     "store":  "Family Fare",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"8 ea\" gives no per-unit in oz",
+                     "board":  "Maple \u0026 Brown Sugar Instant Oatmeal",
+                     "link":  "Quaker Maple \u0026 Brown Sugar Instant Oatmeal 8 Ea"
+                 },
+                 {
+                     "id":  "olive-oil",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Violi Mediterranean Blend, Italian Sunflower \u0026 Extra Virgin Olive Oil 33.8 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "olive-oil",
+                     "store":  "Fareway",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.413 vs link $0.2956  (39.7% off)",
+                     "board":  "Fareway Extra Virgin Olive Oil",
+                     "link":  "Fareway Extra Virgin Olive Oil"
+                 },
+                 {
+                     "id":  "olive-oil",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.47 vs link $0.5288  (11.1% off)",
+                     "board":  "Hy Vee Extra Virgin Olive Oil",
+                     "link":  "Gustare Vita Classic Olive Oil"
+                 },
+                 {
+                     "id":  "onion-powder",
+                     "store":  "Walmart",
+                     "fault":  "LINK-NO-PRICE",
+                     "detail":  "link carries no price to compare",
+                     "board":  "Great Value Onion Powder, 3.25 oz",
+                     "link":  "Great Value Onion Powder"
+                 },
+                 {
+                     "id":  "onion-powder",
+                     "store":  "Aldi",
+                     "fault":  "LINK-NO-PRICE",
+                     "detail":  "link carries no price to compare",
+                     "board":  "Stonemill Onion Powder 2.62 oz",
+                     "link":  "Stonemill Onion Powder"
+                 },
+                 {
+                     "id":  "onion-powder",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "LINK-NO-PRICE",
+                     "detail":  "link carries no price to compare",
+                     "board":  "Member\u0027s Mark Onion Powder, 21 oz.",
+                     "link":  "Member\u0027s Mark Onion Powder"
+                 },
+                 {
+                     "id":  "onion-soup-mix",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Beefy Onion Soup Mix 2Ct",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "orange-juice",
+                     "store":  "Baker\u0027s",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.0623 vs link $0.07  (11% off)",
+                     "board":  "Kroger 100% Orange Juice Pulp Free (Half Gal)",
+                     "link":  "Kroger 100% Orange Juice Pulp Free"
+                 },
+                 {
+                     "id":  "oranges",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Orange Navel California",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "dried-oregano",
+                     "store":  "Walmart",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"\" gives no per-unit in oz",
+                     "board":  "Great Value Oregano Leaves, 0.87 oz",
+                     "link":  "Oregano Leaves"
+                 },
+                 {
+                     "id":  "paper-plates",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Dixie Paper Plates",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "paper-towels",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Sparkle Pick A Size Modern White 2 Ply Paper Towels 8 Ea",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "paprika",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Thats Smart Paprika",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "parmesan",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy Vee Grated Parmesan Cheese",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "dried-parsley",
+                     "store":  "Walmart",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"\" gives no per-unit in oz",
+                     "board":  "Great Value Parsley Flakes, 2.7 oz",
+                     "link":  "Parsley Flakes (bulk)"
+                 },
+                 {
+                     "id":  "pasta",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Dried Spaghetti Pasta, Thin Our Family",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pasta-sauce",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.0767 vs link $0.0829  (7.5% off)",
+                     "board":  "Hunt\u0027s Traditional Pasta Sauce",
+                     "link":  "Hy-Vee Traditional Pasta Sauce"
+                 },
+                 {
+                     "id":  "peaches",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Yellow Flesh Peaches",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pepperoni",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.5817 vs link $0.6633  (12.3% off)",
+                     "board":  "Hy Vee Pepperoni Original",
+                     "link":  "Hy-Vee Original Pepperoni"
+                 },
+                 {
+                     "id":  "pesto",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Filippo Berio® Classic Pesto 6.7 oz. Jar",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pickled-jalapenos",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Sliced Jalapenos Mild",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pineapple",
+                     "store":  "Baker\u0027s",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Dole Pineapple",
+                     "link":  "Private Selection Super Sweet Gold Island Pineapple"
+                 },
+                 {
+                     "id":  "pineapple",
+                     "store":  "Aldi",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $1.89 vs link $1.79  (5.6% off)",
+                     "board":  "Pineapple",
+                     "link":  "Pineapple"
+                 },
+                 {
+                     "id":  "pineapple",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $3.99 vs link $3.88  (2.8% off)",
+                     "board":  "Del Monte Whole Pineapple",
+                     "link":  "Del Monte Whole Pineapple"
+                 },
+                 {
+                     "id":  "popsicles",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Popsicle Ice Pops, Sugar Free, Orange/Cherry/Grape 18 Ea",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pork-chops",
+                     "store":  "Hy-Vee",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Hy-Vee Midwest Pork bone-in assorted chops, $3.99 lb.",
+                     "link":  "Fresh Pork Loin America\u0027s Cut Chop"
+                 },
+                 {
+                     "id":  "horseradish",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Silver Spring Horseradish 8 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pretzels",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Pretzels",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pretzels",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Snyder\u0027s Of Hanover® Seasoned Twisted Pretzel Sticks 12.000 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "protein-bars",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Aloha Protein Bars",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ramen",
+                     "store":  "Hy-Vee",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"3 oz\" gives no per-unit in each",
+                     "board":  "Maruchan Chicken Flavor Ramen Noodle Soup 12 Count",
+                     "link":  "Maruchan Chicken Flavor Ramen Noodle Soup"
+                 },
+                 {
+                     "id":  "ramen",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Maruchan Beef Flavor Ramen Noodle Soup 12 Ea",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ranch-dressing",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.1386 vs link $0.1247  (11.1% off)",
+                     "board":  "Hy-Vee Ranch Dressing",
+                     "link":  "Hy-Vee Ranch Dressing"
+                 },
+                 {
+                     "id":  "red-pepper-flakes",
+                     "store":  "Walmart",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"\" gives no per-unit in oz",
+                     "board":  "Great Value Crushed Red Pepper, 12 oz",
+                     "link":  "Great Value Crushed Red Pepper, 12 oz"
+                 },
+                 {
+                     "id":  "red-wine-vinegar",
+                     "store":  "Baker\u0027s",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Pompeian® Gourmet Red Wine Vinegar 16 fl oz",
+                     "link":  "Kroger Red Wine Vinegar"
+                 },
+                 {
+                     "id":  "red-wine-vinegar",
+                     "store":  "Hy-Vee",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Pompeian Gourmet Red Wine Vinegar",
+                     "link":  "Gustare Vita Red Wine Vinegar"
+                 },
+                 {
+                     "id":  "ribeye-steak",
+                     "store":  "Aldi",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $14.79 vs link $12.99  (13.9% off)",
+                     "board":  "Black Angus Choice Beef Ribeye Steak",
+                     "link":  "Fresh Grass-Fed Ribeye Steaks"
+                 },
+                 {
+                     "id":  "rice-vinegar",
+                     "store":  "Walmart",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.2433 vs link $0.187  (30.1% off)",
+                     "board":  "Mizkan Rice Vinegar for Cooking, 12 fl oz",
+                     "link":  "Kikkoman Rice Vinegar"
+                 },
+                 {
+                     "id":  "rice-vinegar",
+                     "store":  "Baker\u0027s",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.2492 vs link $0.2742  (9.1% off)",
+                     "board":  "Nakano® Organic Natural Rice Vinegar 12 fl oz",
+                     "link":  "NakanoÂ® Natural Rice Vinegar"
+                 },
+                 {
+                     "id":  "rotisserie-chicken",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Whole Savory Rotisserie Chicken",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "russet-potatoes",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.46 vs link $0.437  (5.3% off)",
+                     "board":  "Russet Potatoes (10 lb bag)",
+                     "link":  "Russet Potatoes, 10 lbs."
+                 },
+                 {
+                     "id":  "russet-potatoes",
+                     "store":  "Baker\u0027s",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.499 vs link $0.598  (16.6% off)",
+                     "board":  "Kroger Russet Potatoes Bag (10 lb)",
+                     "link":  "Kroger Russet Potatoes Bag"
+                 },
+                 {
+                     "id":  "salsa",
+                     "store":  "Family Fare",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.1556 vs link $0.1606  (3.1% off)",
+                     "board":  "Mild Thick \u0026 Chunky Salsa Our Family",
+                     "link":  "Mild Salsa Our Family Original"
+                 },
+                 {
+                     "id":  "salsa",
+                     "store":  "Fareway",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.1562 vs link $0.1246  (25.4% off)",
+                     "board":  "Fareway Chunky Mild Salsa",
+                     "link":  "Fareway Chunky Mild Salsa"
+                 },
+                 {
+                     "id":  "sandwich-bags",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.0286 vs link $0.034  (15.9% off)",
+                     "board":  "That\u0027s Smart! Recloseable Sandwich Bags",
+                     "link":  "That\u0027s Smart! Recloseable Sandwich Bags"
+                 },
+                 {
+                     "id":  "sauerkraut",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "That\u0027s Smart Shredded Sauerkraut",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "shampoo",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Suave Shampoo, Smoothing, Avocado + Olive Oil 28 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "shampoo",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Dove Shampoo",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "shower-cleaner",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Lysol Mango \u0026 Hibiscus Bathroom Cleaner 32 Fl Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "shredded-cheese",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.19 vs link $0.1621  (17.2% off)",
+                     "board":  "Member\u0027s Mark Colby \u0026 Monterey Jack Shredded Cheese",
+                     "link":  "Member\u0027s Mark Standard Shredded 3 Cheese Blend, 5 lbs."
+                 },
+                 {
+                     "id":  "shredded-cheese",
+                     "store":  "Baker\u0027s",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.2278 vs link $0.22  (3.5% off)",
+                     "board":  "Kroger Colby Jack Shredded Cheese Family Size",
+                     "link":  "Kroger Colby Jack Shredded Cheese Family Size"
+                 },
+                 {
+                     "id":  "shrimp",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Shrimp Raw Small",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "sliced-cheese",
+                     "store":  "Fareway",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.2067 vs link $0.155  (33.4% off)",
+                     "board":  "Fareway American Cheese Slices",
+                     "link":  "Fareway American Cheese Slices"
+                 },
+                 {
+                     "id":  "sloppy-joe-sauce",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Sloppy Joe Sauce",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "sloppy-joe-sauce",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Manwich Sloppy Joe Sauce Bold Flavor Canned Sauce 16 OZ ti",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "sparkling-water",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Liquid Death Sparkling Water",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "spinach",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.299 vs link $0.3738  (20% off)",
+                     "board":  "Dole Spinach",
+                     "link":  "Dole Spinach"
+                 },
+                 {
+                     "id":  "spinach",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh Express Salad, Baby Spinach 10 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "steak-sauce",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Heinz Original Steak Sauces \u0026 Meat Condiments 20 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "strawberries",
+                     "store":  "Aldi",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.1181 vs link $0.1494  (20.9% off)",
+                     "board":  "Strawberries",
+                     "link":  "Strawberries, 1 lb"
+                 },
+                 {
+                     "id":  "string-cheese",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "LINK-UNPRICEABLE",
+                     "detail":  "link size \"48 ct\" gives no per-unit in oz",
+                     "board":  "Frigo Cheese Heads String Cheese",
+                     "link":  "Frigo Cheese Heads String Cheese"
+                 },
+                 {
+                     "id":  "string-cheese",
+                     "store":  "Aldi",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.309 vs link $0.2575  (20% off)",
+                     "board":  "Happy Farms String Cheese",
+                     "link":  "Happy Farms String Cheese"
+                 },
+                 {
+                     "id":  "sweet-corn",
+                     "store":  "Hy-Vee",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Hy-Vee Short Cuts sweet corn, 4 ct. pkg., $4.99",
+                     "link":  "Sweet Corn 4 Count"
+                 },
+                 {
+                     "id":  "sweet-potatoes",
+                     "store":  "Aldi",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "each (estimated)each (est.)Sweet Potatoes",
+                     "link":  "Sweet Potatoes"
+                 },
+                 {
+                     "id":  "taco-sauce",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Medium Taco Sauce",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "tartar-sauce",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger® Tartar Sauce 11.5 fl oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "tartar-sauce",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Tartar Sauce",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "tea-bags",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy Vee Black Tea Bags",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "teriyaki-sauce",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.2492 vs link $0.199  (25.2% off)",
+                     "board":  "Lawry\u0027s Honey Teriyaki Marinade",
+                     "link":  "Hy-Vee Teriyaki Sauce"
+                 },
+                 {
+                     "id":  "teriyaki-sauce",
+                     "store":  "Walmart",
+                     "fault":  "LINK-NO-PRICE",
+                     "detail":  "link carries no price to compare",
+                     "board":  "Kikkoman Teriyaki BBQ Original 20.5 oz Glass Bottle",
+                     "link":  "Great Value Teriyaki Sauce"
+                 },
+                 {
+                     "id":  "toaster-pastries",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Toaster Pastries, Brown Sugar Cinnamon, Frosted 12 Ea",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "toilet-bowl-cleaner",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Clorox Clinging Bleach Gel Ocean Mist Toilet Bowl Cleaner 24 Fl Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "toilet-paper",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Angel Soft 2 Ply Mega Rolls Unscented Mega Rolls Bathroom Tissue 24 Ea",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "tomato-sauce",
+                     "store":  "Baker\u0027s",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.0617 vs link $0.07  (11.9% off)",
+                     "board":  "Kroger Tomato Sauce 29 oz",
+                     "link":  "Kroger Tomato Sauce"
+                 },
+                 {
+                     "id":  "tomato-sauce",
+                     "store":  "Fareway",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.0793 vs link $0.0889  (10.8% off)",
+                     "board":  "Fareway Tomato Sauce",
+                     "link":  "Fareway Tomato Sauce 28 oz"
+                 },
+                 {
+                     "id":  "tomato-soup",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.1133 vs link $0.1191  (4.8% off)",
+                     "board":  "Hy Vee Tomato Condensed Soup",
+                     "link":  "Campbell\u0027s Condensed Tomato Soup, 10.75 oz Can"
+                 },
+                 {
+                     "id":  "tortillas",
+                     "store":  "Hy-Vee",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "count-mismatch",
+                     "board":  "Mission fajita tortillas, 20 ct., $2.99",
+                     "link":  "Hy-Vee Flour Tortilla Great for Fajitas 10Ct"
+                 },
+                 {
+                     "id":  "tortillas",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Frescados Taqueria Style Mini Flour Tortillas 12 Ea",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "trash-bags",
+                     "store":  "Hy-Vee",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "count-mismatch",
+                     "board":  "Hy-Vee tall kitchen bags, 12 to 22 ct., $3.99",
+                     "link":  "Tall Kitchen Bags With Twist Ties"
+                 },
+                 {
+                     "id":  "turkey-lunchmeat",
+                     "store":  "Aldi",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.3681 vs link $0.2594  (41.9% off)",
+                     "board":  "Lunch Mate Oven Roasted Turkey Breast",
+                     "link":  "Lunch Mate Oven Roasted Turkey Breast"
+                 },
+                 {
+                     "id":  "turkey-bacon",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Wellshire Turkey Bacon",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "vanilla-extract",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy Vee Pure Vanilla Extract",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "vegetable-oil",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.0781 vs link $0.0933  (16.3% off)",
+                     "board":  "Thats Smart Vegetable Oil",
+                     "link":  "Hy-Vee Vegetable Oil"
+                 },
+                 {
+                     "id":  "vegetable-oil",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Vegetable Oil, 100% Pure 1 Gal",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "vegetable-soup",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Amy\u0027s Organic Low Fat Chunky Vegetable Soups 14.3 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "vegetable-broth",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Swanson Vegetable Broth, 32 oz Carton",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "rice",
+                     "store":  "Family Fare",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $1 vs link $1.19  (16% off)",
+                     "board":  "Pampa Rice, White, Long Grain 16 Oz",
+                     "link":  "Enriched Long Grain White Rice"
+                 },
+                 {
+                     "id":  "white-vinegar",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy Vee White Distilled Vinegar",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "white-vinegar",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fareway White Distilled Vinegar 128 fl oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "white-vinegar",
+                     "store":  "Baker\u0027s",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.0514 vs link $0.06  (14.3% off)",
+                     "board":  "Kroger Distilled White Vinegar 64 fl oz",
+                     "link":  "Smart Way White Distilled Vinegar"
+                 },
+                 {
+                     "id":  "whole-chicken",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Member\u0027s Mark Organic Whole Chicken",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "watermelon",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $6.99 vs link $4.99  (40.1% off)",
+                     "board":  "Whole Seedless Watermelon",
+                     "link":  "Whole Seedless Watermelon"
+                 },
+                 {
+                     "id":  "yeast",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Red Star Active Dry Yeast 4 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "yogurt",
+                     "store":  "Baker\u0027s",
+                     "fault":  "WRONG-PRODUCT",
+                     "detail":  "name-drift",
+                     "board":  "Yoplait Yogurt",
+                     "link":  "Kroger Blended Vanilla Low Fat Yogurt"
+                 }
+             ]
+}
