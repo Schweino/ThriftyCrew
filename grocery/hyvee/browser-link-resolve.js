@@ -89,7 +89,15 @@ const BLR = (() => {
             if (wantQty && p.sizeText) { const sq = qtyOf(p.sizeText); if (sq && Math.abs(sq - wantQty) > wantQty * 0.1) continue; } // size must agree within 10%
             if (hits > bestScore) { bestScore = hits; best = p; }
           }
-          out.push(best ? { id: c.id, url: best.url, name: (best.name || '').slice(0, 60), upc: best.upc, perunit: best.perunit, score: bestScore + '/' + qwords.length } : { id: c.id, miss: true });
+          // Keep the WHOLE product name. This used to .slice(0, 60), which is display trimming applied to
+          // STORED DATA - and the per-unit weight lives at the END of a grocery name ("... , 20 oz Can"), so a
+          // 60-char cap deletes exactly the token every downstream check needs. guards.ps1 #5 verifies a
+          // multipack by multiplying the name's per-unit weight by its pack count; without the weight it cannot
+          // decide and must fail closed, which is why 7 Walmart rows now need hand-written allowlist entries.
+          // (Those 7 are truncated in out\regular\, not here - a historical capture did that, and its code is
+          // not in this repo. This slice was a second, smaller instance of the same mistake, not their cause.)
+          // Truncate for DISPLAY at the point of display, never on the way into a file.
+          out.push(best ? { id: c.id, url: best.url, name: (best.name || ''), upc: best.upc, perunit: best.perunit, score: bestScore + '/' + qwords.length } : { id: c.id, miss: true });
         } catch (e) { out.push({ id: c.id, error: String(e).slice(0, 80) }); }
         await new Promise(x => setTimeout(x, 1600));         // gentle: Baker's Akamai / Walmart PerimeterX
       }

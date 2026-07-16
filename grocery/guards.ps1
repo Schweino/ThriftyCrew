@@ -259,14 +259,22 @@ foreach ($f in (RegFiles)) {
     $key = [string]$doc.store + '|' + $name
     if ($allow -contains $key) { continue }
     # NOTHING TO MULTIPLY -> STILL A HARD FAIL. This gate fails CLOSED, on purpose.
-    # I first made this case an "unknown" (count it, warn, move on), reasoning that names reach us TRUNCATED AT
-    # 60 CHARS (hyvee\browser-link-resolve.js slices to 60 to fit the tool output limit) so the per-unit weight
+    # I first made this case an "unknown" (count it, warn, move on), because 109 of Walmart's 711 board item
+    # names are TRUNCATED AT EXACTLY 60 CHARS and the per-unit weight lives at the END of a grocery name, so it
     # is simply gone - "(4 pack) Armour Star ... Beef Stew, 13g Protei" lost its "20 oz Can". test-guards.ps1
-    # immediately failed: the ORIGINAL Sam's bug this guard was built for is "ReaLemon 100% Lemon Juice (2 pk)"
-    # with size "48 fl oz" (one bottle; truth 2 x 48) - a name with a pack count and NO weight. My escape hatch
-    # swallowed it. A price guard that goes quiet when it cannot tell is worse than one that cries wolf: the
-    # wolf here publishes a 2x price. So when the arithmetic cannot decide, FAIL, and let a human clear it in
-    # multipack-allowlist.json with the reasoning written down. The 60-char truncation is the real fix.
+    # failed on the next run: the ORIGINAL Sam's bug this guard was built for is "ReaLemon 100% Lemon Juice
+    # (2 pk)" with size "48 fl oz" (one bottle; truth 2 x 48) - a name with a pack count and NO weight. My
+    # escape hatch swallowed it. A price guard that goes quiet when it cannot tell is worse than one that cries
+    # wolf: the wolf here publishes a 2x price. So when the arithmetic cannot decide, FAIL, and let a human
+    # clear it in multipack-allowlist.json with the reasoning written down.
+    # WHERE THE TRUNCATION COMES FROM - and where it does NOT: I first blamed
+    # hyvee\browser-link-resolve.js's .slice(0, 60) and wrote that into this comment and 7 allowlist entries.
+    # THE DATA SAYS OTHERWISE: that slice writes product-urls LINK names, and Walmart's link names are not
+    # truncated (458 names, only 6 at exactly 60, max 85). The truncation is in out\regular\walmart-regular
+    # (109 of 711 at exactly 60, vs 32 at 59 and 4 at 61 - a textbook cap), and no script in this repo caps at
+    # 60. It was baked in by a historical capture whose code is gone. So there is no live bleed to stop, the
+    # full names are NOT recoverable locally (0 of 109 can be prefix-matched against any name we hold), and the
+    # only real fix is a fresh Walmart capture. The slice was fixed anyway - it was the same mistake, smaller.
     $mp++
     [void]$fail.Add(("HARD FAIL: multipack size  [{0}] '{1}' size=[{2}] records ONE unit (name says a pack count and its stated weight does not reconcile with the size)" -f $doc.store, $name, $size))
   }
