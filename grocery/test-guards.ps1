@@ -16,6 +16,15 @@ function Check($name, $expect) {
   if ($rc -eq $expect) { Write-Output ("  PASS  {0}  (exit {1})" -f $name, $rc); $script:pass++ }
   else { Write-Output ("  FAIL  {0}  expected exit {1}, got {2}" -f $name, $expect, $rc); $script:failed++ }
 }
+# Some invariants live in their own gate rather than guards.ps1 (tile-integrity's ACCURACY check). Assert those
+# against the script that actually owns them - Check() always runs guards.ps1, so passing a script name to it
+# would silently test the wrong thing and "pass" for the wrong reason.
+function CheckScript($name, $expect, $script) {
+  & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $root $script) -Quiet | Out-Null
+  $rc = $LASTEXITCODE
+  if ($rc -eq $expect) { Write-Output ("  PASS  {0}  (exit {1})" -f $name, $rc); $script:pass++ }
+  else { Write-Output ("  FAIL  {0}  expected exit {1}, got {2}" -f $name, $expect, $rc); $script:failed++ }
+}
 
 # baseline
 Check 'baseline: guards pass on the current board' 0
@@ -175,6 +184,25 @@ if ($mb) {
   Set-Content $hf $hbak -Encoding UTF8 -NoNewline
 } else {
   Write-Output '  SKIP  multibuy: no row carries price_multiple yet (re-pull Hy-Vee to create one)'
+}
+
+# ---- 8c. a shipped link that disagrees with its tile -------------------------------------------------
+# Brad's bar: a shopper must never click "See item" and land on a different product or price. That is the ONE
+# thing on this board that is a lie rather than a gap, so audit-tile-integrity gates ACCURACY hard (no
+# baseline, no ratchet, no -Strict flag - there is no version of this repo where a wrong link is tolerable).
+# A gate that reports zero is worthless if it cannot fail, so plant one and prove it fires.
+$puF2 = Join-Path $root 'product-urls.json'
+$pubak = Get-Content $puF2 -Raw
+$pud = $pubak | ConvertFrom-Json
+$victim = $null
+foreach ($n in @('bananas', 'milk', 'eggs', 'butter')) { if ($pud.items.$n.'Hy-Vee'.url) { $victim = $pud.items.$n.'Hy-Vee'; break } }
+if ($victim) {
+  $victim.price = 99.99          # a real link, a price the store does not charge
+  ($pud | ConvertTo-Json -Depth 8) | Set-Content $puF2 -Encoding UTF8
+  CheckScript 'tile-integrity: a shipped link whose price disagrees with the tile' 2 'audit-tile-integrity.ps1'
+  Set-Content $puF2 $pubak -Encoding UTF8 -NoNewline
+} else {
+  Write-Output '  SKIP  tile-integrity: no Hy-Vee link on the sample commodities to mutate'
 }
 
 # ---- 9. Baker's price not matching the store's EXACT shelf price (the milk rounding bug) -------------

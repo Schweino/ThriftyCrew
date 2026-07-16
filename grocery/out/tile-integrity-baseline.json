@@ -1,33 +1,40 @@
 ﻿{
     "by_store":  {
                      "Walmart":  {
-                                     "violations":  27,
-                                     "tiles":  366
+                                     "coverage":  27,
+                                     "tiles":  366,
+                                     "violations":  27
                                  },
                      "Fareway":  {
-                                     "violations":  16,
-                                     "tiles":  323
+                                     "coverage":  16,
+                                     "tiles":  323,
+                                     "violations":  16
                                  },
                      "Family Fare":  {
-                                         "violations":  18,
-                                         "tiles":  196
+                                         "coverage":  18,
+                                         "tiles":  196,
+                                         "violations":  18
                                      },
                      "Hy-Vee":  {
-                                    "violations":  49,
-                                    "tiles":  364
+                                    "coverage":  49,
+                                    "tiles":  364,
+                                    "violations":  49
                                 },
                      "Sam\u0027s Club":  {
-                                             "violations":  14,
-                                             "tiles":  279
+                                             "coverage":  14,
+                                             "tiles":  279,
+                                             "violations":  14
                                          },
                      "Aldi":  {
-                                  "violations":  18,
-                                  "tiles":  288
+                                  "coverage":  18,
+                                  "tiles":  288,
+                                  "violations":  18
                               },
                      "Baker\u0027s":  {
-                                          "violations":  51,
-                                          "tiles":  231
+                                          "coverage":  51,
+                                          "tiles":  231,
+                                          "violations":  51
                                       }
                  },
-    "set":  "2026-07-16 15:41"
+    "set":  "2026-07-16 16:04"
 }

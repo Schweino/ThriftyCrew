@@ -97,7 +97,7 @@ foreach ($g in @(
     # violate it today and nearly all need a paced per-store browser pass, so a gate that fails from day one is
     # a gate that gets switched off. It fails when a store gets WORSE than out\tile-integrity-baseline.json, so
     # the number can only go down. Flip -Strict on once it reaches zero and it becomes the hard invariant.
-    @{ f='audit-tile-integrity.ps1';    n='no store regressed on price==item==link (ratchet)' })) {
+    @{ f='audit-tile-integrity.ps1';    n='ZERO shipped links disagree with their tile (hard), and no store regressed on coverage (ratchet)' })) {
   $p = Join-Path $root $g.f
   if (-not (Test-Path $p)) { [void]$fail.Add(("MISSING GUARD SCRIPT: " + $g.f)); continue }
   & powershell -NoProfile -ExecutionPolicy Bypass -File $p | Out-Null

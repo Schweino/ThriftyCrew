@@ -13,12 +13,24 @@
   name-drift (wrong product), guard 4 (factor). Three numbers nobody could hold to one bar. This is the single
   score, per store, with every violation named.
 
-  WHY A RATCHET AND NOT A HARD GATE ON DAY ONE: there are hundreds of violations today, almost all needing a
-  paced per-store browser pass to fix. A gate that fails from the first run is a gate somebody switches off. So
-  this writes a BASELINE (out\tile-integrity-baseline.json) and fails only when a store gets WORSE. The number
-  can only go down. Drive it to zero, then flip -Strict on and it becomes the hard invariant Brad asked for.
+  TWO DIFFERENT PROMISES, TWO DIFFERENT GATES. Lumping these into one number hid the thing that matters:
 
-  Exit: 0 = no store regressed (or -Strict and zero violations). 2 = a store got worse (or -Strict with any).
+    ACCURACY  (WRONG-PRODUCT, PRICE-MISMATCH, LINK-UNPRICEABLE, LINK-NO-PRICE)
+              A link that ships opens something other than what we advertised. This LIES to a shopper - they
+              click "See item", land on a different product or price, and conclude the board inflates deals.
+              It is never acceptable and it is fixable without anyone's browser, by REMOVING the link.
+              -> HARD GATE. Must be zero. prune-bad-links keeps it there.
+
+    COVERAGE  (NO-LINK)
+              A tile shows a price with no "See item" link. Incomplete, not dishonest: the price is still the
+              store's own, verified by guards 9/10. Closing these needs paced per-store browser passes.
+              -> RATCHET against out\tile-integrity-baseline.json. May only go down.
+
+  A wrong link is strictly worse than no link, so ACCURACY is bought by spending COVERAGE, and this split is
+  what lets that trade be made deliberately instead of accidentally. Before the split, pruning a bad link made
+  the single score look WORSE - the gate actively discouraged the honest fix.
+
+  Exit: 0 = accuracy clean and no store regressed on coverage. 2 = ANY accuracy violation, or coverage regressed.
 #>
 param(
   [string]$OutDir = "",
@@ -78,10 +90,31 @@ $bad = @{}
 foreach ($x in $rows) { if (-not $bad.ContainsKey($x.store)) { $bad[$x.store] = 0 }; $bad[$x.store]++ }
 
 $report = [ordered]@{ generated = (Get-Date -Format 'yyyy-MM-dd HH:mm'); board = $cmpF.Name; total_tiles = ($tiles.Values | Measure-Object -Sum).Sum; violations = $rows.Count; by_store = @{}; rows = $rows }
-foreach ($k in $tiles.Keys) { $report.by_store[$k] = @{ tiles = $tiles[$k]; violations = $(if ($bad.ContainsKey($k)) { $bad[$k] } else { 0 }) } }
+# record COVERAGE per store as well as total violations: the ratchet below compares coverage only, because
+# pruning a wrong link (the correct fix) RAISES a store's no-link count and a combined ratchet would fail it.
+$covPerStore = @{}
+foreach ($x in $rows) { if ($x.fault -eq 'NO-LINK') { if (-not $covPerStore.ContainsKey($x.store)) { $covPerStore[$x.store] = 0 }; $covPerStore[$x.store]++ } }
+foreach ($k in $tiles.Keys) {
+  $report.by_store[$k] = @{
+    tiles      = $tiles[$k]
+    violations = $(if ($bad.ContainsKey($k)) { $bad[$k] } else { 0 })
+    coverage   = $(if ($covPerStore.ContainsKey($k)) { $covPerStore[$k] } else { 0 })
+  }
+}
+($report | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $OutDir 'tile-integrity.json') -Encoding UTF8
+
+$ACC = @('WRONG-PRODUCT', 'PRICE-MISMATCH', 'LINK-UNPRICEABLE', 'LINK-NO-PRICE')
+$accRows = @($rows | Where-Object { $ACC -contains $_.fault })
+$covRows = @($rows | Where-Object { $_.fault -eq 'NO-LINK' })
+$report['accuracy_violations'] = $accRows.Count
+$report['coverage_violations'] = $covRows.Count
 ($report | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $OutDir 'tile-integrity.json') -Encoding UTF8
 
 if (-not $Quiet) {
+  $linked = $report.total_tiles - $covRows.Count
+  Write-Output ("ACCURACY  " + $accRows.Count + " of " + $linked + " LINKED tiles show a link that disagrees with the price/product  <- must be ZERO; a wrong link lies to a shopper")
+  Write-Output ("COVERAGE  " + $covRows.Count + " of " + $report.total_tiles + " priced tiles have no See-item link at all       <- incomplete, not dishonest; needs browser passes")
+  Write-Output ''
   Write-Output ("tile-integrity: " + $rows.Count + " violation(s) of " + $report.total_tiles + " priced tiles   (" + [math]::Round(100 - ($rows.Count / [math]::Max(1, $report.total_tiles) * 100), 1) + "% clean)")
   Write-Output ''
   Write-Output ("{0,-14}{1,8}{2,12}{3,10}   {4}" -f 'store', 'tiles', 'violations', 'clean%', 'worst fault')
@@ -102,26 +135,46 @@ if ($Baseline) {
   Write-Output ("baseline written: " + $rows.Count + " violation(s). From here the number may only go DOWN.")
   exit 0
 }
+# ---- ACCURACY: a hard gate, always. Not baselined, not ratcheted, not -Strict-gated. -----------------------
+# A shipped link that opens the wrong product/price is never acceptable and never needs a browser to fix:
+# prune-bad-links removes it and the tile falls back to an honest price-with-no-link. There is no version of
+# this repo where a wrong link is tolerable, so there is no baseline to grandfather one in.
+$fail2 = $false
+if ($accRows.Count -gt 0) {
+  Write-Output ''
+  Write-Output ("tile-integrity: FAIL - " + $accRows.Count + " LINKED tile(s) disagree with the product/price they advertise.")
+  Write-Output '  A wrong link is worse than no link: the shopper clicks, sees something else, and concludes the'
+  Write-Output '  board inflates its deals. Run prune-bad-links.ps1 to drop them - that is always available and'
+  Write-Output '  needs no browser.'
+  foreach ($x in ($accRows | Select-Object -First 10)) { Write-Output ('    ' + $x.fault.PadRight(18) + ($x.id + ' | ' + $x.store).PadRight(34) + $x.detail) }
+  $fail2 = $true
+}
+else { Write-Output ''; Write-Output 'tile-integrity: ACCURACY OK - every link that ships opens the product the board names, at the price it shows.' }
+
+# ---- COVERAGE: ratchets down. Closing these needs paced per-store browser passes. --------------------------
 if ($Strict) {
-  if ($rows.Count -gt 0) { Write-Output ''; Write-Output ("tile-integrity: STRICT - " + $rows.Count + " tile(s) violate price==item==link. Board NOT safe to publish."); exit 2 }
-  Write-Output 'tile-integrity: STRICT - every priced tile has a link, the right product, and a matching price.'
-  exit 0
+  if ($covRows.Count -gt 0) { Write-Output ("tile-integrity: STRICT - " + $covRows.Count + " priced tile(s) still have no link."); exit 2 }
+  Write-Output 'tile-integrity: STRICT - every priced tile also has a verified link.'
+  exit $(if ($fail2) { 2 } else { 0 })
 }
 if (Test-Path $blF) {
   $bl = (Get-Content $blF -Raw | ConvertFrom-Json).by_store
   $worse = @()
+  # compare COVERAGE only. Accuracy is gated above, and pruning a bad link (the right fix) RAISES a store's
+  # no-link count - the old combined ratchet would have failed the very act of removing a lie.
+  $covByStore = @{}
+  foreach ($x in $covRows) { if (-not $covByStore.ContainsKey($x.store)) { $covByStore[$x.store] = 0 }; $covByStore[$x.store]++ }
   foreach ($k in ($tiles.Keys | Sort-Object)) {
-    $now = if ($bad.ContainsKey($k)) { $bad[$k] } else { 0 }
-    $was = if ($bl.PSObject.Properties[$k]) { [int]$bl.$k.violations } else { $null }
+    $now = if ($covByStore.ContainsKey($k)) { $covByStore[$k] } else { 0 }
+    $was = if ($bl.PSObject.Properties[$k] -and $null -ne $bl.$k.coverage) { [int]$bl.$k.coverage } else { $null }
     if ($null -ne $was -and $now -gt $was) { $worse += ("  " + $k + ": " + $was + " -> " + $now + "  (+" + ($now - $was) + ")") }
   }
   if ($worse.Count) {
     Write-Output ''
-    Write-Output 'tile-integrity: FAIL - a store got WORSE than its baseline. The ratchet only turns one way.'
+    Write-Output 'tile-integrity: FAIL - a store got WORSE on COVERAGE than its baseline. The ratchet only turns one way.'
     $worse | ForEach-Object { Write-Output $_ }
     exit 2
   }
-  Write-Output ''
-  Write-Output 'tile-integrity: OK - no store regressed against the baseline.'
+  Write-Output 'tile-integrity: COVERAGE OK - no store regressed against the baseline.'
 }
-exit 0
+exit $(if ($fail2) { 2 } else { 0 })

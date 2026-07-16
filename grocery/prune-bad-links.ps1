@@ -33,7 +33,15 @@ Copy-Item $puFile (Join-Path $root 'out\product-urls.backup-preprune.json') -For
 $doc = Get-Content $puFile -Raw | ConvertFrom-Json
 $cmp = Get-Content (Get-ChildItem (Join-Path $root 'out\comparison-*.json') | Sort-Object Name -Desc | Select-Object -First 1).FullName -Raw | ConvertFrom-Json
 
-$dropped = 0; $kept = 0; $sale = 0; $uncomputable = 0
+# A LINK THAT SHIPS MUST BE POSITIVELY VERIFIED - "not proven wrong" is not "proven right".
+# name-drift is the product-identity check: it compares the board's item to the link's product and flags a
+# different brand/form/variant. Load it so the two exemptions below can be narrowed to what they are actually
+# for.
+$drift = @{}
+$ndF = Join-Path $root 'out\name-drift.json'
+if (Test-Path $ndF) { foreach ($d in (Get-Content $ndF -Raw | ConvertFrom-Json).flags) { $drift[([string]$d.id + '|' + [string]$d.store)] = [string]$d.reason } }
+
+$dropped = 0; $kept = 0; $sale = 0; $uncomputable = 0; $saleWrong = 0; $unverifiable = 0; $noPrice = 0
 foreach ($row in $cmp.comparison) {
   $id = [string]$row.id
   $link = $doc.items.$id
@@ -41,11 +49,44 @@ foreach ($row in $cmp.comparison) {
   foreach ($s in $row.stores) {
     $store = [string]$s.store
     $e = $link.$store
-    if (-not $e -or -not $e.price) { continue }
-    if (([string]$s.type) -ne 'everyday') { $sale++; continue }
+    if (-not $e -or -not $e.url) { continue }        # nothing linked here to judge
+
+    # A LINK WITH NO PRICE CANNOT BE VERIFIED, SO IT CANNOT SHIP.
+    # This condition used to read `-not $e.price`, which is TRUE when the price is 0 - so the 16 records that
+    # store a size but price=0 (the Walmart/Aldi/Sam's spice tiles) were skipped by the very filter meant to
+    # judge them. The links we know LEAST about were the ones waved through. Unknown is not a pass, and the
+    # tempting fix - copying the board's price into the link record - makes the check vacuous: the board would
+    # be agreeing with itself. A link's price has to come from the store or it proves nothing.
+    $pv = 0.0; [void][double]::TryParse((([string]$e.price) -replace '[^0-9.]', ''), [ref]$pv)
+    if ($pv -le 0) {
+      if (-not $WhatIf) { $link.PSObject.Properties.Remove($store) }
+      $dropped++; $noPrice++
+      continue
+    }
+
+    # PRODUCT IDENTITY IS CHECKED ON EVERY CELL, SALE OR NOT.
+    # The old rule skipped sale cells entirely, which is right for the PRICE (a weekly-ad price legitimately
+    # differs from the shelf price on the product page) and wrong for the PRODUCT. It let storage-bags ship as
+    # the CHEAPEST chip advertising Ziploc 105ct at $0.04/each while its link opened That's Smart 12ct at
+    # $0.099 - 138% off, and nothing to do with the ad. Same shape as the soda 12x bug: an exemption hides
+    # whatever is behind it, not just what it was written for.
+    if ($drift.ContainsKey($id + '|' + $store)) {
+      if (-not $WhatIf) { $link.PSObject.Properties.Remove($store) }
+      $dropped++
+      if (([string]$s.type) -ne 'everyday') { $saleWrong++ }
+      continue
+    }
+    if (([string]$s.type) -ne 'everyday') { $sale++; continue }   # price may differ; product is now checked above
     $sp = 0.0; [void][double]::TryParse((([string]$e.price) -replace '[^0-9.]',''), [ref]$sp)
     $lpu = Get-LinkPerUnit -size ([string]$e.size) -unit ([string]$row.unit) -price $sp -name ([string]$e.name)
-    if ($null -eq $lpu) { $uncomputable++; continue }
+    if ($null -eq $lpu) {
+      # WE CANNOT COMPUTE THIS LINK'S PER-UNIT, SO WE CANNOT PROVE IT SHOWS OUR PRICE. This used to `continue`,
+      # i.e. ship it - the audits' oldest sin, treating "cannot judge" as "fine". Unknown is not a pass. Drop it
+      # and the tile falls back to a price with no link, which is honest.
+      if (-not $WhatIf) { $link.PSObject.Properties.Remove($store) }
+      $uncomputable++; $unverifiable++
+      continue
+    }
     $bpu = [double]$s.per_unit
     if ($bpu -le 0) { continue }
     # HALF-CENT RULE (same as audit-everyday-mismatch). A link whose size field holds the store's own
@@ -59,8 +100,13 @@ foreach ($row in $cmp.comparison) {
 }
 
 if (-not $WhatIf) { ($doc | ConvertTo-Json -Depth 8) | Set-Content $puFile -Encoding UTF8 }
-Write-Output ("links that MATCH the board price : $kept")
-Write-Output ("links DROPPED (wrong product)    : $dropped")
-Write-Output ("sale cells skipped (expected)    : $sale")
-Write-Output ("uncomputable size (left alone)   : $uncomputable")
+Write-Output ("links VERIFIED against the board price : $kept")
+Write-Output ("links DROPPED (wrong product/price)    : $dropped   (of which $saleWrong were SALE cells the old rule skipped entirely)")
+Write-Output ("links DROPPED (per-unit unverifiable)  : $unverifiable   (cannot prove the link shows our price - unknown is not a pass)")
+Write-Output ("links DROPPED (link carries no price)  : $noPrice   (nothing from the store to check against)")
+Write-Output ("sale cells kept (price may differ, product verified) : $sale")
+Write-Output ''
+Write-Output 'Every surviving link has been positively verified: it opens the product the board names, at the'
+Write-Output 'price the board shows (or, on a sale cell, the same product at its shelf price). A tile that lost'
+Write-Output 'its link now shows a price with no link - incomplete, but honest.'
 if ($WhatIf) { Write-Output 'WhatIf - nothing written' }

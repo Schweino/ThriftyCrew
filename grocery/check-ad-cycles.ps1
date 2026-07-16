@@ -339,6 +339,19 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         $ffOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'fix-links-ff.ps1') -Apply
         Log ('family-fare link fill: ' + (@($ffOut | Where-Object { $_ -match 'APPLIED' })[-1]))
       } catch { Log ('fix-links-ff threw: ' + $_.Exception.Message) }
+      # ---- NEVER SHIP A LINK WE CANNOT PROVE. --------------------------------------------------------------
+      # Brad's bar is 100% ACCURATE, and accuracy and coverage are different promises. A tile with a price and
+      # no link is incomplete; a tile whose link opens a DIFFERENT product is a lie - the shopper clicks, sees
+      # $4.99 where we said $2.98, and concludes the board inflates its deals. Prices move daily, links go
+      # stale, and merge-product-urls can resurrect old ones, so this has to run EVERY day, not once.
+      # It removes any link that is not positively verified against the board (wrong product, wrong price,
+      # unverifiable per-unit, or no price to check). The tile falls back to a price with no link, which is
+      # honest. name-drift must run FIRST - it is the product-identity check the pruner reads.
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null
+        $pbOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'prune-bad-links.ps1')
+        Log ('prune-bad-links: ' + ((@($pbOut) | Where-Object { $_ -match 'DROPPED' }) -join ' | '))
+      } catch { Log ('prune-bad-links threw: ' + $_.Exception.Message) }
       $sigAfter = BoardSignature
       $sigFile  = Join-Path $OutDir 'published-board.sig'
       $prevPub  = if (Test-Path $sigFile) { (Get-Content $sigFile -Raw).Trim() } else { '' }
