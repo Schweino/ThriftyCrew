@@ -407,6 +407,14 @@ if (Test-Path $regDir) {
     ForEach-Object { $_.Group | Sort-Object Name -Descending | Select-Object -First 1 }
   foreach ($rf in $regFiles) {
     $ex = Get-Content $rf.FullName -Raw | ConvertFrom-Json
+    # PRICE-MODE GATE (2026-07-15): Aldi/Fareway are Instacart storefronts whose DELIVERY catalog is marked up
+    # ~10-50%. A file that does not MACHINE-PROVE it was captured in-store (price_mode='in-store' AND a
+    # mode_verified date) is DROPPED here so its marked-up prices can never enter the board. Fareway shipped
+    # 320 delivery-priced cells exactly this way. audit-price-mode.ps1 reports it; this is what enforces it.
+    if (@('Aldi','Fareway') -contains [string]$ex.store -and ([string]$ex.price_mode -ne 'in-store' -or -not [string]$ex.mode_verified)) {
+      Write-Warning ("price-mode: DROPPED $([string]$ex.store) everyday file (price_mode='$([string]$ex.price_mode)' mode_verified='$([string]$ex.mode_verified)') - not proven in-store; its prices are EXCLUDED from the board until re-captured In-Store and stamped")
+      continue
+    }
     $pt = if ($ex.price_type) { [string]$ex.price_type } else { 'everyday' }
     foreach ($d in $ex.deals) { Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt }
   }

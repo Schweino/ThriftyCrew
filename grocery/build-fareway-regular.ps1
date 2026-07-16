@@ -15,7 +15,7 @@
     - eggs  -> size "dozen"      (per-dozen price computed from the count)
   Last writer wins per id (pass core first, then the rest). Skips NOT FOUND / empty-price rows.
 #>
-param([string[]]$In = @(), [string]$OutDir = "", [string]$Today = "")
+param([string[]]$In = @(), [string]$OutDir = "", [string]$Today = "", [string]$ModeVerified = "")
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
@@ -100,13 +100,17 @@ foreach ($f in $In) {
   }
 }
 $deals = @($byId.Values)
-# price_mode IS MANDATORY FOR FAREWAY - do not drop it.
-# Fareway is an Instacart storefront and its DEFAULT session serves a marked-up DELIVERY price. audit-price-mode
-# hard-fails a Fareway file without price_mode='in-store' precisely so a capture taken in the wrong fulfilment
-# mode can never reach the board (that mistake once cost 50 wrong "cheapest store" verdicts). A rebuild of this
-# file that omitted the flag blocked the publish within a minute of running - which is the guard doing its job,
-# but the flag belongs here so it never comes up.
-$doc = [ordered]@{ store='Fareway'; price_type='everyday'; price_mode='in-store'; source='shop.fareway.com (Instacart Storefront, no-markup in-store prices, Omaha)'; generated=$asofS; deals=$deals }
+# price_mode/mode_verified come from the CAPTURE, not an assumption here.
+# Fareway is an Instacart storefront whose DEFAULT session serves a marked-up DELIVERY price. This script used to
+# hard-code price_mode='in-store' to satisfy audit-price-mode - which DEFEATED the guard: on 2026-07-15 the whole
+# storefront extract was found to be delivery-priced (butter +14%, cream cheese +50%, OJ +37%) yet stamped
+# in-store, putting 320 marked-up cells on the board. FIX: only claim in-store when the browser capture PROVES it
+# by passing -ModeVerified <yyyy-MM-dd> (it set the In-Store fulfilment toggle and confirmed it that day). With no
+# proof we emit price_mode='unverified' (no mode_verified) so audit-price-mode fails AND compare-deals drops the
+# file - the marked-up prices can never silently reach the board again.
+$pmode = if ($ModeVerified) { 'in-store' } else { 'unverified' }
+$doc = [ordered]@{ store='Fareway'; price_type='everyday'; price_mode=$pmode; mode_verified=$ModeVerified; source='shop.fareway.com (Instacart Storefront, Omaha); mode proven at capture only'; generated=$asofS; deals=$deals }
+if (-not $ModeVerified) { Write-Warning "build-fareway-regular: no -ModeVerified passed -> price_mode='unverified'. The capture MUST set In-Store fulfilment and pass -ModeVerified <date>, or Fareway is (correctly) excluded from the board." }
 $regDir = Join-Path $OutDir 'regular'
 New-Item -ItemType Directory -Force -Path $regDir | Out-Null
 $doc | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $regDir "fareway-regular-$asofS.json") -Encoding UTF8

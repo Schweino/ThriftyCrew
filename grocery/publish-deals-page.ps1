@@ -41,6 +41,13 @@ if ($reasons.Count -gt 0 -and -not $Force) {
   exit 2
 }
 
+# ---- price-mode visibility: compare-deals already DROPS any unverified Instacart store (Aldi/Fareway) so its
+#      marked-up delivery prices never reach the board; surface it here too so a drop is never silent ----
+try {
+  & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-price-mode.ps1') | Out-Null
+  if ($LASTEXITCODE -eq 2) { Write-Output "price-mode: an Instacart store is UNVERIFIED - compare-deals EXCLUDED it from the board. Re-capture In-Store + stamp mode_verified to restore it." }
+} catch {}
+
 # ---- refresh the link audits so the builder can suppress any wrong (form-flip) "See item" link ----
 try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-links.ps1') | Out-Null } catch {}
 try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null } catch {}
