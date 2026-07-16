@@ -1108,7 +1108,23 @@ if ($histDoc) {
 </style>
 <script>
 (function(){
-  var TCH = __TCH_JSON__;
+  // Price history is FETCHED LAZILY. It used to be a 252 KB inline blob: shipped to EVERY visitor (on
+  // mobile) just to support an occasional "history" click, and it pushed the post payload past Ghost's
+  // upsert timeout (503 = board could not publish at all). TCH_IDS is a tiny id index so the pills still
+  // render at load; the real data loads from the feed Worker on first open and is cached for the session.
+  var TCH = null;
+  var TCH_IDS = __TCH_IDS__;
+  var TCH_URL = '__TCH_URL__';
+  var _tchP = null;
+  function loadTCH(){
+    if (TCH) return Promise.resolve(TCH);
+    if (!_tchP) {
+      _tchP = fetch(TCH_URL).then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(j){ TCH = j || {}; return TCH; })
+        .catch(function(){ _tchP = null; return null; });
+    }
+    return _tchP;
+  }
   var TCB = (__TCB_JSON__).commodities || {};
   function fmt(v){ if (v === null || v === undefined) return ''; return v < 1 ? '$' + v.toFixed(3) : '$' + v.toFixed(2); }
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -1118,7 +1134,7 @@ if ($histDoc) {
     var id = rows[i].getAttribute('data-id');
     var head = rows[i].querySelector('.pg-rh-bot');
     if (!head) continue;
-    if (TCH[id]){
+    if (TCH_IDS[id]){
       var b = document.createElement('button');
       b.type = 'button'; b.className = 'pg-hist'; b.setAttribute('data-hid', id); b.textContent = 'history';
       b.title = "Every store's price for this item, week by week";
@@ -1164,6 +1180,10 @@ if ($histDoc) {
     ov.addEventListener('click', function(e){ if (e.target === ov || e.target.closest('.pg-hx-x')) close(); });
   }
   function open(id){
+    if (!TCH_IDS[id]) return;
+    loadTCH().then(function(){ if (TCH && TCH[id]) openNow(id); });
+  }
+  function openNow(id){
     var d = TCH[id]; if (!d) return;
     close();
     var h = '<div class="pg-hx"><div class="pg-hx-top"><h3>' + esc(d.l) + '</h3><button type="button" class="pg-hx-x" aria-label="Close">&times;</button></div>';
@@ -1266,7 +1286,16 @@ if ($histDoc) {
     $tcChartJs = [IO.File]::ReadAllText((Join-Path $root 'tc-chart.js'), [Text.Encoding]::UTF8)
     $tcbFile = Join-Path $root 'out\brands\brands-board.json'
     $tcbJson = if (Test-Path $tcbFile) { (Get-Content $tcbFile -Raw).Trim() } else { '{"commodities":{}}' }
-    $histBlock = $histBlock.Replace('__TCH_JSON__', $histJson).Replace('__TCB_JSON__', $tcbJson).Replace('__TCCHART__', $tcChartJs)
+    # The history data is served from the feed Worker instead of inlined. Inlining it cost ~252 KB in EVERY
+    # board post + every mobile page load, and pushed the Ghost upsert past its timeout (503 = unpublishable).
+    # We still inline a tiny id index (TCH_IDS) so the "history" pills render at load with no fetch.
+    $histOut = Join-Path (Split-Path $root -Parent) 'public\price-history.json'   # C:\Codex\income\public\
+    $histDir = Split-Path $histOut -Parent
+    if (-not (Test-Path $histDir)) { New-Item -ItemType Directory -Force -Path $histDir | Out-Null }
+    $histJson | Set-Content $histOut -Encoding UTF8
+    $idIndex = '{' + ((@($entries | ForEach-Object { ($_ -split ':\{')[0] + ':1' })) -join ',') + '}'
+    Write-Output ("history: {0} items -> public\price-history.json ({1} KB, lazily fetched); inline index {2} KB" -f $entries.Count, [math]::Round($histJson.Length/1KB,0), [math]::Round($idIndex.Length/1KB,1))
+    $histBlock = $histBlock.Replace('__TCH_IDS__', $idIndex).Replace('__TCH_URL__', 'https://smp-feed.ancient-snow-93df.workers.dev/price-history.json').Replace('__TCB_JSON__', $tcbJson).Replace('__TCCHART__', $tcChartJs)
   }
 }
 
