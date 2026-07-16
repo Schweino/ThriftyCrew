@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-07-16 16:05",
+    "generated":  "2026-07-16 16:24",
     "board":  "comparison-2026-07-15.json",
     "total_tiles":  2047,
-    "violations":  193,
+    "violations":  181,
     "by_store":  {
                      "Walmart":  {
                                      "coverage":  27,
@@ -20,9 +20,9 @@
                                          "violations":  18
                                      },
                      "Hy-Vee":  {
-                                    "coverage":  49,
+                                    "coverage":  37,
                                     "tiles":  364,
-                                    "violations":  49
+                                    "violations":  37
                                 },
                      "Sam\u0027s Club":  {
                                              "coverage":  14,
@@ -139,14 +139,6 @@
                  },
                  {
                      "id":  "bacon",
-                     "store":  "Hy-Vee",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Hickory Country Smoked Bacon",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "bacon",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -191,14 +183,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Thats Smart Black Pepper",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "blue-cheese-dressing",
-                     "store":  "Hy-Vee",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Hy-Vee Blue Cheese Dressing",
                      "link":  ""
                  },
                  {
@@ -378,14 +362,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "canned-pasta",
-                     "store":  "Hy-Vee",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "SpaghettiOs Canned Pasta with Meatballs, 22.2 oz Can",
-                     "link":  ""
-                 },
-                 {
                      "id":  "canned-pears",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -519,14 +495,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Campbell\u0027s Chunky OLD BAY Seasoned Clam Chowder 18.8 oz Ca",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "clam-chowder",
-                     "store":  "Hy-Vee",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Progresso Reduced Sodium, New England Clam Chowder",
                      "link":  ""
                  },
                  {
@@ -671,14 +639,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger® Mild Red Enchilada Sauce 28 oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "enchilada-sauce",
-                     "store":  "Hy-Vee",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Las Palmas Mild Enchilada Sauce, 28 oz",
                      "link":  ""
                  },
                  {
@@ -1122,14 +1082,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "onion-soup-mix",
-                     "store":  "Hy-Vee",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Hy-Vee Beefy Onion Soup Mix 2Ct",
-                     "link":  ""
-                 },
-                 {
                      "id":  "orange-juice",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -1178,27 +1130,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "pasta-sauce",
-                     "store":  "Hy-Vee",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Hunt\u0027s Traditional Pasta Sauce",
-                     "link":  ""
-                 },
-                 {
                      "id":  "peaches",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Yellow Flesh Peaches",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "pesto",
-                     "store":  "Hy-Vee",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Filippo Berio® Classic Pesto 6.7 oz. Jar",
                      "link":  ""
                  },
                  {
@@ -1271,14 +1207,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Pompeian® Gourmet Red Wine Vinegar 16 fl oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "red-wine-vinegar",
-                     "store":  "Hy-Vee",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Pompeian Gourmet Red Wine Vinegar",
                      "link":  ""
                  },
                  {
@@ -1402,14 +1330,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "steak-sauce",
-                     "store":  "Hy-Vee",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Heinz Original Steak Sauces \u0026 Meat Condiments 20 oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "strawberries",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
@@ -1455,14 +1375,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy Vee Black Tea Bags",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "teriyaki-sauce",
-                     "store":  "Hy-Vee",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Hy-Vee Hickory House Rockin Teriyaki Marinade",
                      "link":  ""
                  },
                  {
@@ -1538,14 +1450,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "vegetable-soup",
-                     "store":  "Hy-Vee",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Amy\u0027s Organic Low Fat Chunky Vegetable Soups 14.3 oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "white-vinegar",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -1587,5 +1491,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  193
+    "coverage_violations":  181
 }

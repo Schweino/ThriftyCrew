@@ -84,7 +84,16 @@ function Ingest-Items($items) {
     # THE CONTRACT (guards invariant 10): current_price is what the STORE CHARGES, recorded independently of
     # what we choose to publish in ad_price. A puller that reaches for the regular-price field then produces
     # two different numbers on the row, and the guard sees it. Without this field the guard cannot check us.
+    # STAMP THE PRODUCT IDENTITY WE ALREADY HAVE.
+    # We just fetched this price FROM a specific Freshop product, and Freshop hands us its canonical_url and id
+    # in the same response - then this row threw both away. A separate pass later had to SEARCH the store to
+    # re-find the product so it could be linked, and sometimes found a different one: the board published
+    # "Hy Vee Almondmilk" while its link opened "Blue Diamond Almond Breeze". Two independent pipelines for one
+    # fact can always disagree, and that disagreement is the entire wrong-link bug class.
+    # A price and its link are the same fact. Carry the id with the price and they cannot drift apart.
     $row = [ordered]@{ store='Family Fare'; item=[string]$it.name; ad_price=('$' + $val); size=[string]$it.size; regular=$val; current_price=$cur; source_ad='everyday shelf price'; as_of=$todayS }
+    if ($it.canonical_url) { $row['canonical_url'] = [string]$it.canonical_url }
+    if ($it.id) { $row['product_id'] = [string]$it.id }
     if ($base -gt 0) { $row['base_price'] = $base }
     if ($base -gt 0 -and $val -lt ($base - 0.005)) { $row['marked_down'] = $true }
     $script:deals += ,$row
@@ -169,7 +178,11 @@ function Norm-Row($r, $asOf, $isCarried) {
   # current_price / base_price / marked_down - so the contract the ingest step carefully wrote got stripped one
   # line later, and guard 10 saw ZERO Family Fare rows to police. A normalizer that silently discards the field
   # a guard depends on is how a store slips back out from under the guard without anyone noticing.
-  foreach ($k in @('current_price','base_price','marked_down')) { if ($null -ne $r.$k) { $h[$k] = $r.$k } }
+  # canonical_url/product_id are contract fields too: they are the IDENTITY of the product this price came
+  # from, and the link is derived from them. Drop them here and the row keeps its price but forgets which
+  # product it priced - which is exactly how a tile ends up with a price and no link, or worse, a link found
+  # by a separate search that landed on a different product.
+  foreach ($k in @('current_price', 'base_price', 'marked_down', 'canonical_url', 'product_id')) { if ($null -ne $r.$k) { $h[$k] = $r.$k } }
   if ($isCarried) { $h['carried_forward'] = $true }
   return $h
 }

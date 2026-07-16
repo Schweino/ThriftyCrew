@@ -333,6 +333,16 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # equals the board's. Anything less confident is refused and left exactly as it was, because a link that
       # disagrees with the price does not fix the tile - it just moves the lie somewhere a shopper will find it.
       # Non-fatal, and guards still gate the publish.
+      # ---- DERIVE LINKS FROM THE PRICE ROWS, BEFORE ANY SEARCH. -------------------------------------------
+      # A price was fetched FROM a product; that product's id/URL is on the row. Deriving the link from the same
+      # record the board priced makes price and link ONE fact that cannot drift. Searching the store to re-find
+      # the product is a SECOND pipeline for the same fact, and every wrong link we have ever shipped came from
+      # the two disagreeing ("Hy Vee Almondmilk" priced, "Blue Diamond Almond Breeze" linked).
+      # This runs FIRST so the searchers only ever work on what identity could not cover.
+      try {
+        $dlOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'derive-links-from-prices.ps1') -Apply
+        Log ('derive-links-from-prices: ' + ((@($dlOut) | Where-Object { $_ -match 'APPLIED' })[-1]))
+      } catch { Log ('derive-links-from-prices threw: ' + $_.Exception.Message) }
       try {
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-tile-integrity.ps1') -Quiet | Out-Null
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'fix-links-ff.ps1') -Fresh -MaxCalls 30 | Out-Null
