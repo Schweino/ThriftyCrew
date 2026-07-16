@@ -29,18 +29,39 @@ $units = @{}; foreach ($it in $cmp.comparison) { $units[[string]$it.id] = [strin
 $puF = Join-Path $root 'product-urls.json'
 $doc = Get-Content $puF -Raw | ConvertFrom-Json
 
-$set = 0; $healed = 0; $log = New-Object System.Collections.Generic.List[string]
+$set = 0; $healed = 0; $ambig = 0; $log = New-Object System.Collections.Generic.List[string]
 foreach ($store in @('Walmart', "Sam's Club", "Baker's")) {
   $rf = Get-ChildItem (Join-Path $root ('out\regular\' + $regGlob[$store])) -ErrorAction SilentlyContinue |
         Where-Object { $_.BaseName -match '-regular-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
   if (-not $rf) { continue }
+  # KEY BY NAME **AND SIZE**. The claim below - "the board cell was built from this same row, so link == board
+  # product by construction" - holds only while a name identifies ONE product. It does not: Baker's ships 10
+  # duplicate names and Walmart 5, together serving 9 priced board cells. A name-keyed hashtable keeps the LAST
+  # such row, so the URL stamped on the link came from whichever row happened to sit later in the file, not from
+  # the row the board actually priced. Third script with this bug (resolve-hyvee-links and refresh-hyvee-links
+  # were the others, both fixed 2026-07-16). ALWAYS SUSPECT A DICTIONARY KEYED BY A PRODUCT NAME.
   $rowByName = @{}
-  foreach ($r in (Get-Content $rf.FullName -Raw | ConvertFrom-Json).deals) { $rowByName[([string]$r.item).Trim()] = $r }
+  $rowSizes = @{}
+  foreach ($r in (Get-Content $rf.FullName -Raw | ConvertFrom-Json).deals) {
+    $rn = ([string]$r.item).Trim()
+    $rowByName[$rn + '|' + ([string]$r.size).Trim()] = $r
+    if (-not $rowSizes.ContainsKey($rn)) { $rowSizes[$rn] = @() }
+    $rowSizes[$rn] = $rowSizes[$rn] + @(([string]$r.size).Trim())
+  }
 
   foreach ($it in $cmp.comparison) {
     $cell = $it.stores | Where-Object { $_.store -eq $store } | Select-Object -First 1
     if (-not $cell -or [double]$cell.per_unit -le 0) { continue }
-    $row = $rowByName[([string]$cell.item).Trim()]
+    # take the row the BOARD priced: same name AND same size. Where the name is sold in several sizes and none
+    # matches the board's, refuse - stamping a URL from the wrong size is exactly the bug this key prevents.
+    $cn = ([string]$cell.item).Trim()
+    $row = $null
+    if ($rowSizes.ContainsKey($cn)) {
+      $csz = @($rowSizes[$cn])
+      if ($csz.Count -eq 1) { $row = $rowByName[$cn + '|' + $csz[0]] }
+      elseif ($rowByName.ContainsKey($cn + '|' + ([string]$cell.size).Trim())) { $row = $rowByName[$cn + '|' + ([string]$cell.size).Trim()] }
+      else { $ambig++ }
+    }
     if (-not $row) { continue }
     # Sync any browser row that carries a product IDENTITY (item_id/upc, stamped when we last priced it at the
     # store). The board cell was built from this same row, so link == board product by construction. We do NOT
@@ -79,6 +100,8 @@ foreach ($store in @('Walmart', "Sam's Club", "Baker's")) {
 }
 
 Write-Output ("browser links synced to their board product: $set  (of which $healed were missing/regressed and are now healed)")
+# never let a skipped cell be silent: an ambiguous name is a cell we chose NOT to link, not a cell that is fine.
+if ($ambig -gt 0) { Write-Output ("ambiguous name+size, deliberately NOT linked: $ambig  (the store sells that name in several sizes and none matches the board's)") }
 foreach ($l in ($log | Select-Object -First 20)) { Write-Output $l }
 if ($WhatIf) { Write-Output ''; Write-Output 'WhatIf: product-urls.json not written'; return }
 if ($set -gt 0) { ($doc | ConvertTo-Json -Depth 8) | Set-Content $puF -Encoding UTF8; Write-Output ''; Write-Output "wrote product-urls.json" }
