@@ -30,9 +30,15 @@
   CURRENT board and drops any row whose board name/price moved since the plan was written (free, local, and it
   stops a stale plan from overwriting a fresher board).
 
+  THE CALL BUDGET IS DOCUMENTED - RESPECT IT. README's resolver table already said Freshop "400s after ~40
+  calls". A dry run of 80 plus an apply run of 80 is ~160, so the wall was not bad luck, it was a limit this
+  repo had already written down and I ignored. -MaxCalls caps a single run at 35 and the plan ACCUMULATES
+  across runs: ids already resolved in the plan are skipped, so 3 paced batches build one complete plan that
+  -Apply then writes in a single shot.
+
   Read-only unless -Apply.
 #>
-param([switch]$Apply, [double]$MinScore = 0.75, [string]$OutDir = "")
+param([switch]$Apply, [double]$MinScore = 0.75, [string]$OutDir = "", [int]$MaxCalls = 35, [switch]$Fresh)
 $ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
@@ -86,6 +92,14 @@ if ($Apply) {
 
 # ---- RESOLVE MODE: search, then write the plan. ------------------------------------------------------------
 $fixed = @(); $refused = @(); $n = 0
+# Carry forward what earlier batches already resolved, so 3 paced runs build ONE complete plan.
+$done = @{}
+if ((Test-Path $planPath) -and -not $Fresh) {
+  $prev = Get-Content $planPath -Raw | ConvertFrom-Json
+  foreach ($p in @($prev.resolved)) { $fixed += $p; $done[[string]$p.id] = $true }
+  Write-Output ("carried forward from the existing plan: " + $fixed.Count + " resolution(s) (pass -Fresh to start over)")
+}
+$calls = 0
 # CIRCUIT BREAKER. When Freshop walls us it answers 400 to everything - "Bananas" 400s just like a 60-char
 # product title does, so a 400 is the wall, not a malformed query. Without this the run kept marching: 72 more
 # ids x 3 retries = 216 requests fired at a store that had already said stop, which only deepens the ban and
@@ -94,12 +108,15 @@ $consecFail = 0; $tripped = $false
 foreach ($v in $viol) {
   if ($tripped) { $refused += [pscustomobject]@{ id = [string]$v.id; why = 'not attempted - circuit breaker tripped' }; continue }
   $id = [string]$v.id
+  if ($done.ContainsKey($id)) { continue }                # already resolved by an earlier batch
+  if ($calls -ge $MaxCalls) { $refused += [pscustomobject]@{ id = $id; why = 'not attempted - call budget for this run spent (re-run after a cooldown)' }; continue }
   if (-not $cell.ContainsKey($id)) { continue }
   $board = $cell[$id].item; $bpu = $cell[$id].pu; $unit = $cell[$id].unit
   $q = (($board -replace '[^A-Za-z0-9 ]', ' ') -replace '\s{2,}', ' ').Trim()
   $q = ($q -split ' ' | Select-Object -First 6) -join ' '
   $api = 'https://api.freshop.ncrcloud.com/1/products?app_key=family_fare&store_id=6401&limit=25&q=' + [uri]::EscapeDataString($q)
   $best = $null; $bs = 0; $err = ''
+  $calls++
   # RETRY WITH BACKOFF, and never let a throttle masquerade as "no match". At 350ms Freshop started refusing
   # mid-run and seven consecutive ids came back "search failed" in alphabetical order - that is a rate limit,
   # not seven products Family Fare stopped selling. Recording those as "no match" would have been the exact

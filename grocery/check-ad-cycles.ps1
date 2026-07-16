@@ -197,7 +197,7 @@ if (-not $NoAlert) {
       $stale = @()
       foreach ($k in $feeds.Keys) { $m = $feeds[$k]; if (($null -eq $m) -or ($m.Date -lt $lastWed)) { $tag = if ($m) { ' (' + $m.ToString('MM-dd') + ')' } else { ' (missing)' }; $stale += ($k + $tag) } }
       if ($stale.Count -gt 0) {
-        $bd = "The weekly Wednesday grocery browser refresh did not run for the week of " + $lastWed.ToString('yyyy-MM-dd') + ". Stale/missing browser feeds: " + ($stale -join ', ') + ". The live page is holding last week's prices for those stores. Open the Claude app and run the grocery-browser-stores-refresh agent. While in the warm store tabs, ALSO close any browser-store no-link gaps: run list-browser-nolinks.ps1 for the chip list, then paste hyvee/browser-link-resolve.js and BLR.run('<store>', chips) per store (board-match, skips sponsored/wrong-size), save to out\url-inputs\store-<store>-urls.json, and merge -> stamp -> prune-bad-links -Tol 0.32 -> guards -> publish -> archive the url-inputs file. The API stores (Family Fare, Hy-Vee) already self-heal in the daily job; this covers the bot-walled ones."
+        $bd = "The weekly Wednesday grocery browser refresh did not run for the week of " + $lastWed.ToString('yyyy-MM-dd') + ". Stale/missing browser feeds: " + ($stale -join ', ') + ". The live page is holding last week's prices for those stores. Open the Claude app and run the grocery-browser-stores-refresh agent. While in the warm store tabs, ALSO close any browser-store no-link gaps: run list-browser-nolinks.ps1 for the chip list, then paste hyvee/browser-link-resolve.js and BLR.run('<store>', chips) per store (board-match, skips sponsored/wrong-size), save to out\url-inputs\store-<store>-urls.json, and merge -> stamp -> prune-bad-links -Tol 0.32 -> guards -> publish -> archive the url-inputs file. Family Fare's MISSING links now self-heal in the daily job (fix-links-ff, 30 Freshop calls/day) and Hy-Vee's link PRICES self-heal (refresh-hyvee-links) - but nothing headless can ADD a Hy-Vee/Aldi/Baker's/Walmart/Sam's link, so those no-link chips need this browser pass. Check out\tile-integrity.json for the current per-store count."
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject ("Grocery: Wednesday browser refresh MISSED - week of " + $lastWed.ToString('yyyy-MM-dd')) -Body $bd | Out-Null
         # only burn the once-per-week de-dupe marker if the email actually SENT (send-alert exits 1 on
         # failure) - otherwise a transient mail error silently ate the whole week's stale warning.
@@ -320,6 +320,25 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # price alerts: email label:alert-<id> subscribers when an item hits a tracked low (self-gates via alert-state.json)
       try { $paOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-price-alerts.ps1'); Log ('price-alerts: ' + (@($paOut)[-1])) } catch { Log ('send-price-alerts threw: ' + $_.Exception.Message) }
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'resolve-worklist.ps1') | Out-Null } catch { Log ('resolve-worklist threw: ' + $_.Exception.Message) }
+      # ---- CLOSE FAMILY FARE'S NO-LINK GAP, A LITTLE EVERY DAY. -------------------------------------------
+      # resolve-worklist above only DETECTS; it has never added a link. The note further up claiming "the API
+      # stores already self-heal in the daily job" was half true: refresh-hyvee-links re-points Hy-Vee's price
+      # SNAPSHOTS, but nothing here ever filled a MISSING link. That is why 58 priced Family Fare tiles were
+      # published with no "See item" link at all.
+      # Family Fare is the one store resolvable without a browser (Freshop REST). Its documented budget is
+      # ~40 calls before it 400s everything, so this takes 30/day and no more - the backlog grinds down over a
+      # few days and then stays at zero as new items appear. Two steps because the resolver splits plan from
+      # apply: the plan does the searching, -Apply writes it with zero network calls.
+      # Safety: it links ONLY when the found product's name matches the board's own item AND its per-unit
+      # equals the board's. Anything less confident is refused and left exactly as it was, because a link that
+      # disagrees with the price does not fix the tile - it just moves the lie somewhere a shopper will find it.
+      # Non-fatal, and guards still gate the publish.
+      try {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-tile-integrity.ps1') -Quiet | Out-Null
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'fix-links-ff.ps1') -Fresh -MaxCalls 30 | Out-Null
+        $ffOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'fix-links-ff.ps1') -Apply
+        Log ('family-fare link fill: ' + (@($ffOut | Where-Object { $_ -match 'APPLIED' })[-1]))
+      } catch { Log ('fix-links-ff threw: ' + $_.Exception.Message) }
       $sigAfter = BoardSignature
       $sigFile  = Join-Path $OutDir 'published-board.sig'
       $prevPub  = if (Test-Path $sigFile) { (Get-Content $sigFile -Raw).Trim() } else { '' }
