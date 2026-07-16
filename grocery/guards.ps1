@@ -179,8 +179,23 @@ if ($pinSkipped -gt 0) { [void]$warn.Add("$pinSkipped pin(s) could NOT be re-der
 # price like "$0.07/oz" parked in the size field. That silently excluded 185 of 2,156 linked everyday cells
 # (8.6%) from this check while the guard still reported "0 mismatches". A gate that grades the page with
 # different arithmetic than the page was built with is not grading the page.
+#
+# AND IT MUST GRADE THE NUMBER THE PAGE ACTUALLY PRINTS. build-deals-page applies board-price-overrides.json to
+# EVERYDAY cells, so a PINNED cell publishes the pin, not $s.per_unit. Reading the raw board here re-created the
+# very flaw the paragraph above condemns - right arithmetic, wrong input - and it fired on the one cell that had
+# just been FIXED: generate-board-overrides pinned all-purpose-cleaner/Hy-Vee to its verified link ($3.99/32floz
+# after Hy-Vee dropped it from $5.99), the page would have published exactly the link's number, and this guard
+# hard-failed it for disagreeing with that same link. A gate whose job is "board must equal its link" cannot
+# fail a cell BECAUSE it was set equal to its link.
+# This does not create a hole: a pinned cell is not unchecked, it is checked by invariant 3, which proves every
+# pin is derivable from its own verified link (and that the link exists and name-drift does not flag it).
+$pinF = Join-Path $root 'board-price-overrides.json'
+$pin = @{}
+if (Test-Path $pinF) {
+  foreach ($c in @((Get-Content $pinF -Raw | ConvertFrom-Json).cells)) { $pin[([string]$c.id + '|' + [string]$c.store)] = [double]$c.per_unit }
+}
 $unpriceable = 0
-$factorBugs = 0; $drift = 0
+$factorBugs = 0; $drift = 0; $pinned = 0
 foreach ($row in $cmp.comparison) {
   $link = $pu.($row.id)
   if (-not $link) { continue }
@@ -191,7 +206,9 @@ foreach ($row in $cmp.comparison) {
     $sp = 0.0; [void][double]::TryParse((([string]$e.price) -replace '[^0-9.]',''), [ref]$sp)
     $lpu = Get-LinkPerUnit -size ([string]$e.size) -unit ([string]$row.unit) -price $sp -name ([string]$e.name)
     if ($null -eq $lpu) { $unpriceable++; continue }
-    $bpu = [double]$s.per_unit
+    # the EFFECTIVE per-unit: what build-deals-page will actually publish for this cell
+    $k = [string]$row.id + '|' + [string]$s.store
+    $bpu = if ($pin.ContainsKey($k)) { $pinned++; $pin[$k] } else { [double]$s.per_unit }
     if ($bpu -le 0 -or $lpu -le 0) { continue }
     $ratio = $lpu / $bpu
     if ($ratio -ge 1.5 -or $ratio -le 0.67) {
@@ -200,7 +217,7 @@ foreach ($row in $cmp.comparison) {
     } elseif ([math]::Abs($ratio - 1) -gt 0.02) { $drift++ }
   }
 }
-if ($factorBugs -eq 0) { Say '  ok    no board cell differs from its linked product by a factor' }
+if ($factorBugs -eq 0) { Say ('  ok    no board cell differs from its linked product by a factor' + $(if ($pinned) { " ($pinned pinned cell(s) graded at the pin - the number the page prints - and cross-checked by invariant 3)" } else { '' })) }
 if ($drift -gt 0) { [void]$warn.Add("$drift cell(s) drift from their link by <50% (ordinary price movement; the daily consistency repair handles it)") }
 # SAY WHAT WAS NOT CHECKED. The previous version skipped unparseable cells in silence, so its clean result
 # covered 91% of the board while reading as though it covered all of it. Coverage a gate does not report is
