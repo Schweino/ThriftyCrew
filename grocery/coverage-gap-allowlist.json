@@ -1,4 +1,315 @@
-{
-  "readme": "Reviewed, legitimate reasons a store that appears to carry a commodity is NOT on the board. audit-coverage-gaps.ps1 skips these so it only alerts on NEW/unreviewed gaps. Remove an entry to force a re-review (e.g. once we can price it). NOTE: blueberries@Hy-Vee and blueberries@Fareway were removed 2026-07-12 - both are now priced per-ounce via the commodity's pint_oz (11.2 oz) dry-pint weight, so they belong ON the board, not here.",
-  "allow": []
+﻿{
+    "readme":  "Reviewed, legitimate coverage gaps: the store carries the item but it genuinely cannot be priced like-for-like, so audit-coverage-gaps must not keep crying about it. Every entry states WHY, quoting the price_text/size_text the ENGINE actually saw. Do not add an entry to silence a gap you have not diagnosed - the detector exists to catch a store silently vanishing from an item it sells.",
+    "allow":  [
+                  {
+                      "commodity":  "avocados",
+                      "store":  "Hy-Vee",
+                      "why":  "UNPRICEABLE (NO-COUNT-BAG, reviewed 2026-07-16): sold as a bag/package with no count, and the commodity is priced per each - the count is unknown and must not be guessed. Engine saw price_text=[$4.00] size_text=[bag] for \"Hass Avocados\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "bread",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$4.49] size_text=[14 OZ.] for \"L\u0027oven Fresh Keto Friendly Bread\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "lemons",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$3.69] size_text=[2 lb] for \"Lemons, Bag\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "lemons",
+                      "store":  "Sam\u0027s Club",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$3.76] size_text=[3 lb] for \"Lemons, 3-Pound Bag\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "limes",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$2.45] size_text=[16 oz] for \"Limes, Bag\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "limes",
+                      "store":  "Sam\u0027s Club",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$3.67] size_text=[3 lb] for \"Limes, 3-Pound Bag\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "lettuce",
+                      "store":  "Hy-Vee",
+                      "why":  "UNPRICEABLE (NO-SIZE, reviewed 2026-07-16): the source row carries no size/pack at all. Engine saw price_text=[$2.49] size_text=[head] for \"Bud Iceberg Lettuce\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "bell-peppers",
+                      "store":  "Hy-Vee",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$3.00] size_text=[lb] for \"Green Bell Pepper\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "garlic",
+                      "store":  "Sam\u0027s Club",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$5.94] size_text=[2 lb] for \"Fresh Garlic Bulbs, 2-Pound\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "tortillas",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$1.85] size_text=[23 oz.] for \"Pueblo Lindo Fajita Tortillas\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "bagels",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$1.99] size_text=[20 oz] for \"L\u0027oven Fresh Plain Bagels\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "mac-and-cheese",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (NO-COUNT-BAG, reviewed 2026-07-16): sold as a bag/package with no count, and the commodity is priced per each - the count is unknown and must not be guessed. Engine saw price_text=[$0.59] size_text=[7.25 oz box] for \"Cheese Club Macaroni and Cheese Dinner\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "mac-and-cheese",
+                      "store":  "Family Fare",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$6.99] size_text=[28 oz] for \"Bob Evans Macaroni \u0026 Cheese, Family Size 28 Oz\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "mac-and-cheese",
+                      "store":  "Baker\u0027s",
+                      "why":  "UNPRICEABLE (NO-COUNT-BAG, reviewed 2026-07-16): sold as a bag/package with no count, and the commodity is priced per each - the count is unknown and must not be guessed. Engine saw price_text=[$0.79] size_text=[7.25 oz box] for \"Kroger Original Macaroni and Cheese\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "ramen",
+                      "store":  "Family Fare",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$6.99] size_text=[8 oz] for \"Simply Asia Japanese Style Ramen Noodles 8 Oz\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "frozen-pizza",
+                      "store":  "Family Fare",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$5.49] size_text=[20.6 oz] for \"Red Baron Classic Crust Pepperoni Pizza 20.6 Oz\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "aluminum-foil",
+                      "store":  "Hy-Vee",
+                      "why":  "UNPRICEABLE (NO-SIZE, reviewed 2026-07-16): the source row carries no size/pack at all. Engine saw price_text=[Hy-Vee aluminum foil, 130 or 200 sq. ft., $11.99] size_text=[] for \"Hy-Vee aluminum foil, 130 or 200 sq. ft., $11.99\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "kiwi",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$4.19] size_text=[1 lb] for \"Kiwi, Package\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "kiwi",
+                      "store":  "Baker\u0027s",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$6.00] size_text=[2 lb] for \"Mighties Green Fresh Kiwi Fruit\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "kiwi",
+                      "store":  "Sam\u0027s Club",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$8.57] size_text=[3 lb] for \"Green Kiwi\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "kiwi",
+                      "store":  "Walmart",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$2.62] size_text=[16 oz] for \"Fresh Kiwi Package\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "pineapple",
+                      "store":  "Family Fare",
+                      "why":  "UNPRICEABLE (NO-PRICE, reviewed 2026-07-16): the source row carries no parseable price (multibuy with no regular, or an ad line with none). Engine saw price_text=[] size_text=[18 oz] for \"Fresh \u0026 Finest Pineapple Cubes\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "grapefruit",
+                      "store":  "Hy-Vee",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$1.29] size_text=[1 lb] for \"Red Grapefruit\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "cauliflower",
+                      "store":  "Hy-Vee",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$5.99] size_text=[lb] for \"Table Ready Cauliflower\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "green-onions",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$1.05] size_text=[5.5 oz] for \"Green Onions, Bag\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "fresh-green-beans",
+                      "store":  "Family Fare",
+                      "why":  "UNPRICEABLE (NO-PRICE, reviewed 2026-07-16): the source row carries no parseable price (multibuy with no regular, or an ad line with none). Engine saw price_text=[] size_text=[12 oz] for \"Fresh Green Beans Pero\" (unit lb). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "bratwurst",
+                      "store":  "Sam\u0027s Club",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$14.98] size_text=[18 ct] for \"Johnsonville Brats Original Pork Bratwurst Links\" (unit lb). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "english-muffins",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$1.59] size_text=[12 oz] for \"L\u0027oven Fresh Plain English Muffins\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "muffins",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$3.89] size_text=[14.1 oz] for \"Bake Shop Blueberry Muffins\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "french-bread",
+                      "store":  "Hy-Vee",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$2.99] size_text=[20 oz] for \"Baking Stone French Bread\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "french-bread",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$3.15] size_text=[18.5 oz] for \"Specially Selected French Bread\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "cake-mix",
+                      "store":  "Hy-Vee",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$0.99] size_text=[13.25 oz] for \"Hy-Vee Extra Moist Classic Yellow Deluxe Cake Mix\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "cake-mix",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$1.09] size_text=[15.25 oz] for \"Baker\u0027s Corner Yellow Cake Mix\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "cake-mix",
+                      "store":  "Family Fare",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$1.89] size_text=[15.25 lb] for \"Pillsbury Cake Mix, Banana 15.25 Lb\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "cake-mix",
+                      "store":  "Walmart",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$1.12] size_text=[15.25 oz] for \"Great Value Deluxe Moist Yellow Cake Mix\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "brownie-mix",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$1.59] size_text=[18.3 oz] for \"Baker\u0027s Corner Fudge Brownie Mix\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "brownie-mix",
+                      "store":  "Walmart",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$1.78] size_text=[18.3 oz] for \"Duncan Hines Chewy Fudge Brownie Mix\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "coconut-oil",
+                      "store":  "Family Fare",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$5.69] size_text=[4 ea] for \"Full Circle Market Butter Sticks With Coconut Oil, Plant Based 4 Ea\" (unit oz). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "graham-crackers",
+                      "store":  "Family Fare",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$3.29] size_text=[3 ea] for \"Crav\u0027n Flavor Graham Crackers, Honey, 3 Packs 3 Ea\" (unit oz). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "applesauce",
+                      "store":  "Baker\u0027s",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[2/$5] size_text=[6 ct] for \"Mott\u0027s Applesauce\" (unit oz). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "cookies",
+                      "store":  "Baker\u0027s",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$3.49] size_text=[4-8 ct] for \"Marinela Cookies\" (unit oz). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "fruit-snacks",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$4.95] size_text=[9.6 oz.] for \"Simply Nature Organic Fruit Snacks\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "toaster-pastries",
+                      "store":  "Family Fare",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$3.29] size_text=[13.5 oz] for \"Pop Tarts Toaster Pastries, Star Spangled Blueberry 13.5 Oz\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "rice-cakes",
+                      "store":  "Sam\u0027s Club",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$10.98] size_text=[4 pk] for \"Quaker Rice Cakes, Variety Pack\" (unit oz). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "fruit-cups",
+                      "store":  "Family Fare",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$3.49] size_text=[15 oz] for \"Dole Mandarin Oranges In Juice\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "sports-drinks",
+                      "store":  "Baker\u0027s",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$6.99] size_text=[12-pack] for \"Gatorade\" (unit floz). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "hot-cocoa",
+                      "store":  "Walmart",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$5.42] size_text=[27 oz] for \"Great Value Milk Chocolate Hot Cocoa Drink Mix\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "instant-coffee",
+                      "store":  "Hy-Vee",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$1.99] size_text=[7 ct] for \"Folgers Classic Roast Instant Coffee, Single Serve Packets\" (unit oz). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "instant-coffee",
+                      "store":  "Fareway",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$1.99] size_text=[7 ct] for \"Folgers Instant Coffee Crystals Classic Roast Single Serve Packets\" (unit oz). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "breakfast-sandwiches",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$4.99] size_text=[18 oz] for \"Breakfast Best Sausage, Egg \u0026 Cheese Biscuit Sandwiches\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "frozen-burritos",
+                      "store":  "Hy-Vee",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$1.5] size_text=[4.25 oz] for \"Jimmy Dean Bacon, Egg \u0026 Cheese Breakfast Burrito, 1 ct\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "hash-browns",
+                      "store":  "Family Fare",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$3.99] size_text=[15 ea] for \"Mr. Dee\u0027s Hash Brown Potato Patties 15 Ea\" (unit oz). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "corn-dogs",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$3.39] size_text=[16 oz] for \"Bremer Regular Corn Dogs\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "fish-sticks",
+                      "store":  "Sam\u0027s Club",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$12.86] size_text=[64 ct] for \"Gorton\u0027s Super Crunchy Fish Sticks, Frozen\" (unit oz). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "garlic-bread",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$1.95] size_text=[11.25 oz] for \"Mama Cozzi\u0027s Pizza Kitchen Garlic Texas Toast\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "garlic-bread",
+                      "store":  "Family Fare",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$5.49] size_text=[28 oz] for \"Village Hearth Sandwich Bread, Enriched, White, Texas Toast 28 Oz\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "plastic-wrap",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (NO-SIZE, reviewed 2026-07-16): the source row carries no size/pack at all. Engine saw price_text=[$1.99] size_text=[200 sq ft] for \"Boulder Plastic Wrap\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "parchment-paper",
+                      "store":  "Hy-Vee",
+                      "why":  "UNPRICEABLE (NO-SIZE, reviewed 2026-07-16): the source row carries no size/pack at all. Engine saw price_text=[Hy-Vee parchment paper, 45 or 75 sq. ft., $3.99] size_text=[] for \"Hy-Vee parchment paper, 45 or 75 sq. ft., $3.99\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "parchment-paper",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (NO-SIZE, reviewed 2026-07-16): the source row carries no size/pack at all. Engine saw price_text=[$2.79] size_text=[45 sq ft] for \"Boulder Parchment Paper\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "bar-soap",
+                      "store":  "Aldi",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$2.99] size_text=[4 oz] for \"Lacura Deep Moisturizing Beauty Bar\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "diapers",
+                      "store":  "Sam\u0027s Club",
+                      "why":  "UNPRICEABLE (NO-COUNT-BAG, reviewed 2026-07-16): sold as a bag/package with no count, and the commodity is priced per each - the count is unknown and must not be guessed. Engine saw price_text=[$42.48] size_text=[size 4 box] for \"Luvs Pro Level Leak Protection Diapers, Size 4\" (unit each). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  },
+                  {
+                      "commodity":  "mandarin-oranges",
+                      "store":  "Family Fare",
+                      "why":  "UNPRICEABLE (UNIT-MISMATCH, reviewed 2026-07-16): store sells this by weight but the commodity is priced per each (or the reverse), so there is no honest per-unit without inventing a count. Engine saw price_text=[$4.19] size_text=[4 pack] for \"Dole In 100% Fruit Juice Mandarin Oranges 4 Ea\" (unit oz). Not a rule bug - the engine correctly refused to guess. Delete this entry if the store starts publishing a usable size/count."
+                  }
+              ]
 }

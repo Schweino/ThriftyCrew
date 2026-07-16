@@ -1,0 +1,564 @@
+﻿{
+    "generated":  "2026-07-16 08:45",
+    "count":  62,
+    "rows":  [
+                 {
+                     "commodity":  "avocados",
+                     "store":  "Hy-Vee",
+                     "unit":  "each",
+                     "price_text":  "$4.00",
+                     "size_text":  "bag",
+                     "candidate":  "Hass Avocados",
+                     "sub":  "NO-COUNT-BAG"
+                 },
+                 {
+                     "commodity":  "bread",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$4.49",
+                     "size_text":  "14 OZ.",
+                     "candidate":  "L\u0027oven Fresh Keto Friendly Bread",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "lemons",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$3.69",
+                     "size_text":  "2 lb",
+                     "candidate":  "Lemons, Bag",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "lemons",
+                     "store":  "Sam\u0027s Club",
+                     "unit":  "each",
+                     "price_text":  "$3.76",
+                     "size_text":  "3 lb",
+                     "candidate":  "Lemons, 3-Pound Bag",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "limes",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$2.45",
+                     "size_text":  "16 oz",
+                     "candidate":  "Limes, Bag",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "limes",
+                     "store":  "Sam\u0027s Club",
+                     "unit":  "each",
+                     "price_text":  "$3.67",
+                     "size_text":  "3 lb",
+                     "candidate":  "Limes, 3-Pound Bag",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "lettuce",
+                     "store":  "Hy-Vee",
+                     "unit":  "each",
+                     "price_text":  "$2.49",
+                     "size_text":  "head",
+                     "candidate":  "Bud Iceberg Lettuce",
+                     "sub":  "NO-SIZE"
+                 },
+                 {
+                     "commodity":  "bell-peppers",
+                     "store":  "Hy-Vee",
+                     "unit":  "each",
+                     "price_text":  "$3.00",
+                     "size_text":  "lb",
+                     "candidate":  "Green Bell Pepper",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "garlic",
+                     "store":  "Sam\u0027s Club",
+                     "unit":  "each",
+                     "price_text":  "$5.94",
+                     "size_text":  "2 lb",
+                     "candidate":  "Fresh Garlic Bulbs, 2-Pound",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "tortillas",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$1.85",
+                     "size_text":  "23 oz.",
+                     "candidate":  "Pueblo Lindo Fajita Tortillas",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "bagels",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$1.99",
+                     "size_text":  "20 oz",
+                     "candidate":  "L\u0027oven Fresh Plain Bagels",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "mac-and-cheese",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$0.59",
+                     "size_text":  "7.25 oz box",
+                     "candidate":  "Cheese Club Macaroni and Cheese Dinner",
+                     "sub":  "NO-COUNT-BAG"
+                 },
+                 {
+                     "commodity":  "mac-and-cheese",
+                     "store":  "Family Fare",
+                     "unit":  "each",
+                     "price_text":  "$6.99",
+                     "size_text":  "28 oz",
+                     "candidate":  "Bob Evans Macaroni \u0026 Cheese, Family Size 28 Oz",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "mac-and-cheese",
+                     "store":  "Baker\u0027s",
+                     "unit":  "each",
+                     "price_text":  "$0.79",
+                     "size_text":  "7.25 oz box",
+                     "candidate":  "Kroger Original Macaroni and Cheese",
+                     "sub":  "NO-COUNT-BAG"
+                 },
+                 {
+                     "commodity":  "ramen",
+                     "store":  "Family Fare",
+                     "unit":  "each",
+                     "price_text":  "$6.99",
+                     "size_text":  "8 oz",
+                     "candidate":  "Simply Asia Japanese Style Ramen Noodles 8 Oz",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "frozen-pizza",
+                     "store":  "Family Fare",
+                     "unit":  "each",
+                     "price_text":  "$5.49",
+                     "size_text":  "20.6 oz",
+                     "candidate":  "Red Baron Classic Crust Pepperoni Pizza 20.6 Oz",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "aluminum-foil",
+                     "store":  "Hy-Vee",
+                     "unit":  "each",
+                     "price_text":  "Hy-Vee aluminum foil, 130 or 200 sq. ft., $11.99",
+                     "size_text":  "",
+                     "candidate":  "Hy-Vee aluminum foil, 130 or 200 sq. ft., $11.99",
+                     "sub":  "NO-SIZE"
+                 },
+                 {
+                     "commodity":  "kiwi",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$4.19",
+                     "size_text":  "1 lb",
+                     "candidate":  "Kiwi, Package",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "kiwi",
+                     "store":  "Baker\u0027s",
+                     "unit":  "each",
+                     "price_text":  "$6.00",
+                     "size_text":  "2 lb",
+                     "candidate":  "Mighties Green Fresh Kiwi Fruit",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "kiwi",
+                     "store":  "Sam\u0027s Club",
+                     "unit":  "each",
+                     "price_text":  "$8.57",
+                     "size_text":  "3 lb",
+                     "candidate":  "Green Kiwi",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "kiwi",
+                     "store":  "Walmart",
+                     "unit":  "each",
+                     "price_text":  "$2.62",
+                     "size_text":  "16 oz",
+                     "candidate":  "Fresh Kiwi Package",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "pineapple",
+                     "store":  "Family Fare",
+                     "unit":  "each",
+                     "price_text":  "",
+                     "size_text":  "18 oz",
+                     "candidate":  "Fresh \u0026 Finest Pineapple Cubes",
+                     "sub":  "NO-PRICE"
+                 },
+                 {
+                     "commodity":  "grapefruit",
+                     "store":  "Hy-Vee",
+                     "unit":  "each",
+                     "price_text":  "$1.29",
+                     "size_text":  "1 lb",
+                     "candidate":  "Red Grapefruit",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "cauliflower",
+                     "store":  "Hy-Vee",
+                     "unit":  "each",
+                     "price_text":  "$5.99",
+                     "size_text":  "lb",
+                     "candidate":  "Table Ready Cauliflower",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "green-onions",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$1.05",
+                     "size_text":  "5.5 oz",
+                     "candidate":  "Green Onions, Bag",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "fresh-green-beans",
+                     "store":  "Family Fare",
+                     "unit":  "lb",
+                     "price_text":  "",
+                     "size_text":  "12 oz",
+                     "candidate":  "Fresh Green Beans Pero",
+                     "sub":  "NO-PRICE"
+                 },
+                 {
+                     "commodity":  "bratwurst",
+                     "store":  "Sam\u0027s Club",
+                     "unit":  "lb",
+                     "price_text":  "$14.98",
+                     "size_text":  "18 ct",
+                     "candidate":  "Johnsonville Brats Original Pork Bratwurst Links",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "english-muffins",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$1.59",
+                     "size_text":  "12 oz",
+                     "candidate":  "L\u0027oven Fresh Plain English Muffins",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "muffins",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$3.89",
+                     "size_text":  "14.1 oz",
+                     "candidate":  "Bake Shop Blueberry Muffins",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "french-bread",
+                     "store":  "Hy-Vee",
+                     "unit":  "each",
+                     "price_text":  "$2.99",
+                     "size_text":  "20 oz",
+                     "candidate":  "Baking Stone French Bread",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "french-bread",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$3.15",
+                     "size_text":  "18.5 oz",
+                     "candidate":  "Specially Selected French Bread",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "cake-mix",
+                     "store":  "Hy-Vee",
+                     "unit":  "each",
+                     "price_text":  "$0.99",
+                     "size_text":  "13.25 oz",
+                     "candidate":  "Hy-Vee Extra Moist Classic Yellow Deluxe Cake Mix",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "cake-mix",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$1.09",
+                     "size_text":  "15.25 oz",
+                     "candidate":  "Baker\u0027s Corner Yellow Cake Mix",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "cake-mix",
+                     "store":  "Family Fare",
+                     "unit":  "each",
+                     "price_text":  "$1.89",
+                     "size_text":  "15.25 lb",
+                     "candidate":  "Pillsbury Cake Mix, Banana 15.25 Lb",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "cake-mix",
+                     "store":  "Walmart",
+                     "unit":  "each",
+                     "price_text":  "$1.12",
+                     "size_text":  "15.25 oz",
+                     "candidate":  "Great Value Deluxe Moist Yellow Cake Mix",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "brownie-mix",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$1.59",
+                     "size_text":  "18.3 oz",
+                     "candidate":  "Baker\u0027s Corner Fudge Brownie Mix",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "brownie-mix",
+                     "store":  "Walmart",
+                     "unit":  "each",
+                     "price_text":  "$1.78",
+                     "size_text":  "18.3 oz",
+                     "candidate":  "Duncan Hines Chewy Fudge Brownie Mix",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "coconut-oil",
+                     "store":  "Family Fare",
+                     "unit":  "oz",
+                     "price_text":  "$5.69",
+                     "size_text":  "4 ea",
+                     "candidate":  "Full Circle Market Butter Sticks With Coconut Oil, Plant Based 4 Ea",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "graham-crackers",
+                     "store":  "Family Fare",
+                     "unit":  "oz",
+                     "price_text":  "$3.29",
+                     "size_text":  "3 ea",
+                     "candidate":  "Crav\u0027n Flavor Graham Crackers, Honey, 3 Packs 3 Ea",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "applesauce",
+                     "store":  "Baker\u0027s",
+                     "unit":  "oz",
+                     "price_text":  "2/$5",
+                     "size_text":  "6 ct",
+                     "candidate":  "Mott\u0027s Applesauce",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "cookies",
+                     "store":  "Baker\u0027s",
+                     "unit":  "oz",
+                     "price_text":  "$3.49",
+                     "size_text":  "4-8 ct",
+                     "candidate":  "Marinela Cookies",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "fruit-snacks",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$4.95",
+                     "size_text":  "9.6 oz.",
+                     "candidate":  "Simply Nature Organic Fruit Snacks",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "toaster-pastries",
+                     "store":  "Family Fare",
+                     "unit":  "each",
+                     "price_text":  "$3.29",
+                     "size_text":  "13.5 oz",
+                     "candidate":  "Pop Tarts Toaster Pastries, Star Spangled Blueberry 13.5 Oz",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "rice-cakes",
+                     "store":  "Sam\u0027s Club",
+                     "unit":  "oz",
+                     "price_text":  "$10.98",
+                     "size_text":  "4 pk",
+                     "candidate":  "Quaker Rice Cakes, Variety Pack",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "fruit-cups",
+                     "store":  "Family Fare",
+                     "unit":  "each",
+                     "price_text":  "$3.49",
+                     "size_text":  "15 oz",
+                     "candidate":  "Dole Mandarin Oranges In Juice",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "sports-drinks",
+                     "store":  "Baker\u0027s",
+                     "unit":  "floz",
+                     "price_text":  "$6.99",
+                     "size_text":  "12-pack",
+                     "candidate":  "Gatorade",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "hot-cocoa",
+                     "store":  "Walmart",
+                     "unit":  "each",
+                     "price_text":  "$5.42",
+                     "size_text":  "27 oz",
+                     "candidate":  "Great Value Milk Chocolate Hot Cocoa Drink Mix",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "instant-coffee",
+                     "store":  "Hy-Vee",
+                     "unit":  "oz",
+                     "price_text":  "$1.99",
+                     "size_text":  "7 ct",
+                     "candidate":  "Folgers Classic Roast Instant Coffee, Single Serve Packets",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "instant-coffee",
+                     "store":  "Fareway",
+                     "unit":  "oz",
+                     "price_text":  "$1.99",
+                     "size_text":  "7 ct",
+                     "candidate":  "Folgers Instant Coffee Crystals Classic Roast Single Serve Packets",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "breakfast-sandwiches",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$4.99",
+                     "size_text":  "18 oz",
+                     "candidate":  "Breakfast Best Sausage, Egg \u0026 Cheese Biscuit Sandwiches",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "frozen-burritos",
+                     "store":  "Hy-Vee",
+                     "unit":  "each",
+                     "price_text":  "$1.5",
+                     "size_text":  "4.25 oz",
+                     "candidate":  "Jimmy Dean Bacon, Egg \u0026 Cheese Breakfast Burrito, 1 ct",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "hash-browns",
+                     "store":  "Family Fare",
+                     "unit":  "oz",
+                     "price_text":  "$3.99",
+                     "size_text":  "15 ea",
+                     "candidate":  "Mr. Dee\u0027s Hash Brown Potato Patties 15 Ea",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "corn-dogs",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$3.39",
+                     "size_text":  "16 oz",
+                     "candidate":  "Bremer Regular Corn Dogs",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "fish-sticks",
+                     "store":  "Sam\u0027s Club",
+                     "unit":  "oz",
+                     "price_text":  "$12.86",
+                     "size_text":  "64 ct",
+                     "candidate":  "Gorton\u0027s Super Crunchy Fish Sticks, Frozen",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "garlic-bread",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$1.95",
+                     "size_text":  "11.25 oz",
+                     "candidate":  "Mama Cozzi\u0027s Pizza Kitchen Garlic Texas Toast",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "garlic-bread",
+                     "store":  "Family Fare",
+                     "unit":  "each",
+                     "price_text":  "$5.49",
+                     "size_text":  "28 oz",
+                     "candidate":  "Village Hearth Sandwich Bread, Enriched, White, Texas Toast 28 Oz",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "plastic-wrap",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$1.99",
+                     "size_text":  "200 sq ft",
+                     "candidate":  "Boulder Plastic Wrap",
+                     "sub":  "NO-SIZE"
+                 },
+                 {
+                     "commodity":  "parchment-paper",
+                     "store":  "Hy-Vee",
+                     "unit":  "each",
+                     "price_text":  "Hy-Vee parchment paper, 45 or 75 sq. ft., $3.99",
+                     "size_text":  "",
+                     "candidate":  "Hy-Vee parchment paper, 45 or 75 sq. ft., $3.99",
+                     "sub":  "NO-SIZE"
+                 },
+                 {
+                     "commodity":  "parchment-paper",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$2.79",
+                     "size_text":  "45 sq ft",
+                     "candidate":  "Boulder Parchment Paper",
+                     "sub":  "NO-SIZE"
+                 },
+                 {
+                     "commodity":  "bar-soap",
+                     "store":  "Aldi",
+                     "unit":  "each",
+                     "price_text":  "$2.99",
+                     "size_text":  "4 oz",
+                     "candidate":  "Lacura Deep Moisturizing Beauty Bar",
+                     "sub":  "UNIT-MISMATCH"
+                 },
+                 {
+                     "commodity":  "diapers",
+                     "store":  "Sam\u0027s Club",
+                     "unit":  "each",
+                     "price_text":  "$42.48",
+                     "size_text":  "size 4 box",
+                     "candidate":  "Luvs Pro Level Leak Protection Diapers, Size 4",
+                     "sub":  "NO-COUNT-BAG"
+                 },
+                 {
+                     "commodity":  "mandarin-oranges",
+                     "store":  "Family Fare",
+                     "unit":  "oz",
+                     "price_text":  "$4.19",
+                     "size_text":  "4 pack",
+                     "candidate":  "Dole In 100% Fruit Juice Mandarin Oranges 4 Ea",
+                     "sub":  "UNIT-MISMATCH"
+                 }
+             ]
+}

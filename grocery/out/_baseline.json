@@ -1,5 +1,5 @@
 ﻿{
-    "built_at":  "2026-07-16T08:09:43",
+    "built_at":  "2026-07-16T08:39:56",
     "week_of":  "2026-07-15",
     "source":  "C:\\Codex\\income\\grocery\\out\\ads-2026-07-15.json",
     "commodities_compared":  378,
@@ -15,7 +15,7 @@
                                         ],
                    "store_count":  7,
                    "commodities_compared":  378,
-                   "flagged_out_of_band":  282,
+                   "flagged_out_of_band":  281,
                    "multibuy_unpriced":  12
                },
     "comparison":  [
@@ -3713,6 +3713,20 @@
                                               "basis":  "size 20 floz",
                                               "note":  "",
                                               "source_ad":  "weekly ad"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.4995,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Dove Refresh Cucumber + Green Tea Body Wash 20 Fl Oz",
+                                              "ad":  "$9.99",
+                                              "size":  "20 fl oz",
+                                              "basis":  "size 20 floz",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -6053,6 +6067,20 @@
                                               "source_ad":  "Aisles Online search current price (batch primer, storeId 1465, Omaha #01)"
                                           },
                                           {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.1097,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Kroger® Canned Fruit Cocktail in Heavy Syrup 30 oz",
+                                              "ad":  "$3.29",
+                                              "size":  "30 oz",
+                                              "basis":  "size 30 oz",
+                                              "note":  "",
+                                              "source_ad":  "Baker\u0027s Saddlecreek shelf price (batch capture)"
+                                          },
+                                          {
                                               "store":  "Fareway",
                                               "per_unit":  0.1207,
                                               "unit":  "oz",
@@ -6232,6 +6260,20 @@
                                               "source_ad":  "Walmart Bellevue 68123 shelf price (batch capture)"
                                           },
                                           {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.1327,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Kroger® Canned Mandarin Oranges in Light Syrup 15 oz",
+                                              "ad":  "$1.99",
+                                              "size":  "15 oz",
+                                              "basis":  "size 15 oz",
+                                              "note":  "",
+                                              "source_ad":  "Baker\u0027s Saddlecreek shelf price (batch capture)"
+                                          },
+                                          {
                                               "store":  "Hy-Vee",
                                               "per_unit":  0.1327,
                                               "unit":  "oz",
@@ -6409,6 +6451,20 @@
                                               "basis":  "size 15 oz",
                                               "note":  "",
                                               "source_ad":  "Baker\u0027s Saddlecreek shelf price (batch capture)"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.0941,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "SpaghettiOs Canned Pasta with Meatballs, 22.2 oz Can",
+                                              "ad":  "$2.09",
+                                              "size":  "22.2 oz",
+                                              "basis":  "size 22.2 oz",
+                                              "note":  "",
+                                              "source_ad":  "Aisles Online search current price (batch primer, storeId 1465, Omaha #01)"
                                           }
                                       ]
                        },
@@ -6513,13 +6569,27 @@
                            "commodity":  "Canned Pears",
                            "id":  "canned-pears",
                            "unit":  "oz",
-                           "cheapest_store":  "Hy-Vee",
+                           "cheapest_store":  "Walmart",
                            "cheapest_price":  0.0959,
                            "cheapest_type":  "everyday",
-                           "nomem_store":  "Hy-Vee",
+                           "nomem_store":  "Walmart",
                            "nomem_price":  0.0959,
                            "nomem_type":  "everyday",
                            "stores":  [
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.0959,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Canned Pear Halves in Heavy Syrup, 29 oz Can",
+                                              "ad":  "$2.78",
+                                              "size":  "29 oz",
+                                              "basis":  "size 29 oz",
+                                              "note":  "",
+                                              "source_ad":  "Walmart Bellevue 68123 shelf price (batch capture)"
+                                          },
                                           {
                                               "store":  "Hy-Vee",
                                               "per_unit":  0.0959,
@@ -6536,15 +6606,15 @@
                                           },
                                           {
                                               "store":  "Baker\u0027s",
-                                              "per_unit":  0.1479,
+                                              "per_unit":  0.1303,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Del Monte Pear Halves 29 oz",
-                                              "ad":  "$4.29",
-                                              "size":  "29 oz",
-                                              "basis":  "size 29 oz",
+                                              "item":  "Kroger® Canned Pear Halves in Pear Juice 14.5 oz",
+                                              "ad":  "$1.89",
+                                              "size":  "14.5 oz",
+                                              "basis":  "size 14.5 oz",
                                               "note":  "",
                                               "source_ad":  "Baker\u0027s Saddlecreek shelf price (batch capture)"
                                           }
@@ -6837,6 +6907,20 @@
                                               "basis":  "size 15 oz",
                                               "note":  "",
                                               "source_ad":  "Baker\u0027s Saddlecreek shelf price (batch capture)"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.1152,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Del Monte Whole Canned Potatoes, Canned Vegetables, 14.5 oz",
+                                              "ad":  "$1.67",
+                                              "size":  "14.5 oz",
+                                              "basis":  "size 14.5 oz",
+                                              "note":  "",
+                                              "source_ad":  "Walmart Bellevue 68123 shelf price (batch capture)"
                                           }
                                       ]
                        },
@@ -27699,6 +27783,20 @@
                                               "source_ad":  "shop.fareway.com"
                                           },
                                           {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.2354,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Suave Shampoo, Smoothing, Avocado + Olive Oil 28 Oz",
+                                              "ad":  "$6.59",
+                                              "size":  "28 oz",
+                                              "basis":  "size 28 floz",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
+                                          },
+                                          {
                                               "store":  "Sam\u0027s Club",
                                               "per_unit":  0.2613,
                                               "unit":  "floz",
@@ -28407,17 +28505,31 @@
                                           },
                                           {
                                               "store":  "Walmart",
-                                              "per_unit":  0.0949,
+                                              "per_unit":  0.0931,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Manwich Thick \u0026 Chunky Sloppy Joe Sauce, 15.5 oz Can",
+                                              "item":  "Manwich Sloppy Joe Sauce, Bold Flavor, Canned Sauce, 16 oz.",
                                               "ad":  "$1.48",
-                                              "size":  "15.6 oz",
-                                              "basis":  "size 15.6 oz",
+                                              "size":  "15.9 oz",
+                                              "basis":  "size 15.9 oz",
                                               "note":  "",
                                               "source_ad":  "Walmart Bellevue 68123 shelf price (batch capture)"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.0994,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Manwich Sloppy Joe Sauce Bold Flavor Canned Sauce 16 OZ ti",
+                                              "ad":  "$1.59",
+                                              "size":  "16 oz",
+                                              "basis":  "size 16 oz",
+                                              "note":  "",
+                                              "source_ad":  "Baker\u0027s Saddlecreek shelf price (batch capture)"
                                           }
                                       ]
                        },

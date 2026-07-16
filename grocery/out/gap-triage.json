@@ -1,101 +1,13 @@
 ﻿{
-    "generated":  "2026-07-16 08:41",
-    "count":  132,
+    "generated":  "2026-07-16 08:47",
+    "count":  70,
     "rows":  [
-                 {
-                     "commodity":  "avocados",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Hass Avocados",
-                     "cause":  "UNPRICED",
-                     "owner":  "avocados",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "bread",
-                     "store":  "Aldi",
-                     "candidate":  "L\u0027oven Fresh Keto Friendly Bread",
-                     "cause":  "UNPRICED",
-                     "owner":  "bread",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "lemons",
-                     "store":  "Aldi",
-                     "candidate":  "Lemons, Bag",
-                     "cause":  "UNPRICED",
-                     "owner":  "lemons",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "lemons",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Lemons, 3-Pound Bag",
-                     "cause":  "UNPRICED",
-                     "owner":  "lemons",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "limes",
-                     "store":  "Aldi",
-                     "candidate":  "Limes, Bag",
-                     "cause":  "UNPRICED",
-                     "owner":  "limes",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "limes",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Limes, 3-Pound Bag",
-                     "cause":  "UNPRICED",
-                     "owner":  "limes",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "lettuce",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Bud Iceberg Lettuce",
-                     "cause":  "UNPRICED",
-                     "owner":  "lettuce",
-                     "detail":  ""
-                 },
                  {
                      "commodity":  "lettuce",
                      "store":  "Family Fare",
                      "candidate":  "Fresh Iceberg Lettuce Head",
                      "cause":  "OUT-OF-BAND",
                      "owner":  "lettuce",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "bell-peppers",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Green Bell Pepper",
-                     "cause":  "UNPRICED",
-                     "owner":  "bell-peppers",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "garlic",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Fresh Garlic Bulbs, 2-Pound",
-                     "cause":  "UNPRICED",
-                     "owner":  "garlic",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "tortillas",
-                     "store":  "Aldi",
-                     "candidate":  "Pueblo Lindo Fajita Tortillas",
-                     "cause":  "UNPRICED",
-                     "owner":  "tortillas",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "bagels",
-                     "store":  "Aldi",
-                     "candidate":  "L\u0027oven Fresh Plain Bagels",
-                     "cause":  "UNPRICED",
-                     "owner":  "bagels",
                      "detail":  ""
                  },
                  {
@@ -115,38 +27,6 @@
                      "detail":  ""
                  },
                  {
-                     "commodity":  "mac-and-cheese",
-                     "store":  "Aldi",
-                     "candidate":  "Cheese Club Macaroni and Cheese Dinner",
-                     "cause":  "UNPRICED",
-                     "owner":  "mac-and-cheese",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "mac-and-cheese",
-                     "store":  "Family Fare",
-                     "candidate":  "Bob Evans Macaroni \u0026 Cheese, Family Size 28 Oz",
-                     "cause":  "UNPRICED",
-                     "owner":  "mac-and-cheese",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "mac-and-cheese",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Kroger Original Macaroni and Cheese",
-                     "cause":  "UNPRICED",
-                     "owner":  "mac-and-cheese",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "ramen",
-                     "store":  "Family Fare",
-                     "candidate":  "Simply Asia Japanese Style Ramen Noodles 8 Oz",
-                     "cause":  "UNPRICED",
-                     "owner":  "ramen",
-                     "detail":  ""
-                 },
-                 {
                      "commodity":  "brown-sugar",
                      "store":  "Family Fare",
                      "candidate":  "Starbucks Coffee, Ground, Brown Sugar Cinnamon 11 Oz",
@@ -155,27 +35,11 @@
                      "detail":  "coffee"
                  },
                  {
-                     "commodity":  "frozen-pizza",
-                     "store":  "Family Fare",
-                     "candidate":  "Red Baron Classic Crust Pepperoni Pizza 20.6 Oz",
-                     "cause":  "UNPRICED",
-                     "owner":  "frozen-pizza",
-                     "detail":  ""
-                 },
-                 {
                      "commodity":  "dishwasher-detergent",
                      "store":  "Family Fare",
                      "candidate":  "Cascade Action Pacs Lemon Scent Dishwasher Detergent 12 Ea",
                      "cause":  "OUT-OF-BAND",
                      "owner":  "dishwasher-detergent",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "aluminum-foil",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Hy-Vee aluminum foil, 130 or 200 sq. ft., $11.99",
-                     "cause":  "UNPRICED",
-                     "owner":  "aluminum-foil",
                      "detail":  ""
                  },
                  {
@@ -196,50 +60,10 @@
                  },
                  {
                      "commodity":  "kiwi",
-                     "store":  "Aldi",
-                     "candidate":  "Kiwi, Package",
-                     "cause":  "UNPRICED",
-                     "owner":  "kiwi",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "kiwi",
                      "store":  "Family Fare",
                      "candidate":  "Regular Kiwifruit",
                      "cause":  "OUT-OF-BAND",
                      "owner":  "kiwi",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "kiwi",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Mighties Green Fresh Kiwi Fruit",
-                     "cause":  "UNPRICED",
-                     "owner":  "kiwi",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "kiwi",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Green Kiwi",
-                     "cause":  "UNPRICED",
-                     "owner":  "kiwi",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "kiwi",
-                     "store":  "Walmart",
-                     "candidate":  "Fresh Kiwi Package",
-                     "cause":  "UNPRICED",
-                     "owner":  "kiwi",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "pineapple",
-                     "store":  "Family Fare",
-                     "candidate":  "Fresh \u0026 Finest Pineapple Cubes",
-                     "cause":  "UNPRICED",
-                     "owner":  "pineapple",
                      "detail":  ""
                  },
                  {
@@ -251,36 +75,12 @@
                      "detail":  "sparkling"
                  },
                  {
-                     "commodity":  "grapefruit",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Red Grapefruit",
-                     "cause":  "UNPRICED",
-                     "owner":  "grapefruit",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "cauliflower",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Table Ready Cauliflower",
-                     "cause":  "UNPRICED",
-                     "owner":  "cauliflower",
-                     "detail":  ""
-                 },
-                 {
                      "commodity":  "asparagus",
                      "store":  "Family Fare",
                      "candidate":  "Birds Eye Gold \u0026 White Corn, Carrots \u0026 Asparagus 10.8 Oz",
                      "cause":  "STOLEN",
                      "owner":  "carrots",
                      "detail":  "carrots"
-                 },
-                 {
-                     "commodity":  "green-onions",
-                     "store":  "Aldi",
-                     "candidate":  "Green Onions, Bag",
-                     "cause":  "UNPRICED",
-                     "owner":  "green-onions",
-                     "detail":  ""
                  },
                  {
                      "commodity":  "cilantro",
@@ -299,27 +99,11 @@
                      "detail":  ""
                  },
                  {
-                     "commodity":  "fresh-green-beans",
-                     "store":  "Family Fare",
-                     "candidate":  "Fresh Green Beans Pero",
-                     "cause":  "UNPRICED",
-                     "owner":  "fresh-green-beans",
-                     "detail":  ""
-                 },
-                 {
                      "commodity":  "ribeye-steak",
                      "store":  "Fareway",
                      "candidate":  "USDA Choice Thick Cut Ribeye Steak",
                      "cause":  "OUT-OF-BAND",
                      "owner":  "ribeye-steak",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "bratwurst",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Johnsonville Brats Original Pork Bratwurst Links",
-                     "cause":  "UNPRICED",
-                     "owner":  "bratwurst",
                      "detail":  ""
                  },
                  {
@@ -347,22 +131,6 @@
                      "detail":  ""
                  },
                  {
-                     "commodity":  "english-muffins",
-                     "store":  "Aldi",
-                     "candidate":  "L\u0027oven Fresh Plain English Muffins",
-                     "cause":  "UNPRICED",
-                     "owner":  "english-muffins",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "muffins",
-                     "store":  "Aldi",
-                     "candidate":  "Bake Shop Blueberry Muffins",
-                     "cause":  "UNPRICED",
-                     "owner":  "muffins",
-                     "detail":  ""
-                 },
-                 {
                      "commodity":  "donuts",
                      "store":  "Hy-Vee",
                      "candidate":  "Hostess donettes mini donuts, 9.5 to 11.25 oz., 2/ $5.00",
@@ -379,75 +147,11 @@
                      "detail":  ""
                  },
                  {
-                     "commodity":  "french-bread",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Baking Stone French Bread",
-                     "cause":  "UNPRICED",
-                     "owner":  "french-bread",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "french-bread",
-                     "store":  "Aldi",
-                     "candidate":  "Specially Selected French Bread",
-                     "cause":  "UNPRICED",
-                     "owner":  "french-bread",
-                     "detail":  ""
-                 },
-                 {
                      "commodity":  "pita-bread",
                      "store":  "Hy-Vee",
                      "candidate":  "Toufayan Bakeries Hearth Baked Classic White Pita 6 Each",
                      "cause":  "OUT-OF-BAND",
                      "owner":  "pita-bread",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "cake-mix",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Hy-Vee Extra Moist Classic Yellow Deluxe Cake Mix",
-                     "cause":  "UNPRICED",
-                     "owner":  "cake-mix",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "cake-mix",
-                     "store":  "Aldi",
-                     "candidate":  "Baker\u0027s Corner Yellow Cake Mix",
-                     "cause":  "UNPRICED",
-                     "owner":  "cake-mix",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "cake-mix",
-                     "store":  "Family Fare",
-                     "candidate":  "Pillsbury Cake Mix, Banana 15.25 Lb",
-                     "cause":  "UNPRICED",
-                     "owner":  "cake-mix",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "cake-mix",
-                     "store":  "Walmart",
-                     "candidate":  "Great Value Deluxe Moist Yellow Cake Mix",
-                     "cause":  "UNPRICED",
-                     "owner":  "cake-mix",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "brownie-mix",
-                     "store":  "Aldi",
-                     "candidate":  "Baker\u0027s Corner Fudge Brownie Mix",
-                     "cause":  "UNPRICED",
-                     "owner":  "brownie-mix",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "brownie-mix",
-                     "store":  "Walmart",
-                     "candidate":  "Duncan Hines Chewy Fudge Brownie Mix",
-                     "cause":  "UNPRICED",
-                     "owner":  "brownie-mix",
                      "detail":  ""
                  },
                  {
@@ -457,14 +161,6 @@
                      "cause":  "GLOBAL-EXCL",
                      "owner":  "",
                      "detail":  "\\bfrozen\\b"
-                 },
-                 {
-                     "commodity":  "coconut-oil",
-                     "store":  "Family Fare",
-                     "candidate":  "Full Circle Market Butter Sticks With Coconut Oil, Plant Based 4 Ea",
-                     "cause":  "UNPRICED",
-                     "owner":  "coconut-oil",
-                     "detail":  ""
                  },
                  {
                      "commodity":  "apple-cider-vinegar",
@@ -480,14 +176,6 @@
                      "candidate":  "Litehouse Chunky Blue Cheese Dressing \u0026 Dip, 20 fl oz 20 f",
                      "cause":  "NO-INCLUDE",
                      "owner":  "",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "graham-crackers",
-                     "store":  "Family Fare",
-                     "candidate":  "Crav\u0027n Flavor Graham Crackers, Honey, 3 Packs 3 Ea",
-                     "cause":  "UNPRICED",
-                     "owner":  "graham-crackers",
                      "detail":  ""
                  },
                  {
@@ -507,28 +195,12 @@
                      "detail":  ""
                  },
                  {
-                     "commodity":  "applesauce",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Mott\u0027s Applesauce",
-                     "cause":  "UNPRICED",
-                     "owner":  "applesauce",
-                     "detail":  ""
-                 },
-                 {
                      "commodity":  "pretzels",
                      "store":  "Family Fare",
                      "candidate":  "Snyder\u0027s Of Hanover® Seasoned Twisted Pretzel Sticks 12.000 Oz",
                      "cause":  "GLOBAL-EXCL",
                      "owner":  "",
                      "detail":  "seasoned"
-                 },
-                 {
-                     "commodity":  "cookies",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Marinela Cookies",
-                     "cause":  "UNPRICED",
-                     "owner":  "cookies",
-                     "detail":  ""
                  },
                  {
                      "commodity":  "granola-bars",
@@ -540,14 +212,6 @@
                  },
                  {
                      "commodity":  "fruit-snacks",
-                     "store":  "Aldi",
-                     "candidate":  "Simply Nature Organic Fruit Snacks",
-                     "cause":  "UNPRICED",
-                     "owner":  "fruit-snacks",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "fruit-snacks",
                      "store":  "Family Fare",
                      "candidate":  "Del Monte Fruit Cup Snacks Mandarin Oranges In 100% Juice Family Pack 12 Ea",
                      "cause":  "NO-INCLUDE",
@@ -555,34 +219,10 @@
                      "detail":  ""
                  },
                  {
-                     "commodity":  "toaster-pastries",
-                     "store":  "Family Fare",
-                     "candidate":  "Pop Tarts Toaster Pastries, Star Spangled Blueberry 13.5 Oz",
-                     "cause":  "UNPRICED",
-                     "owner":  "toaster-pastries",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "rice-cakes",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Quaker Rice Cakes, Variety Pack",
-                     "cause":  "UNPRICED",
-                     "owner":  "rice-cakes",
-                     "detail":  ""
-                 },
-                 {
                      "commodity":  "fruit-cups",
                      "store":  "Aldi",
                      "candidate":  "Lunch Buddies Peach Fruit Cups in Juice",
                      "cause":  "OUT-OF-BAND",
-                     "owner":  "fruit-cups",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "fruit-cups",
-                     "store":  "Family Fare",
-                     "candidate":  "Dole Mandarin Oranges In Juice",
-                     "cause":  "UNPRICED",
                      "owner":  "fruit-cups",
                      "detail":  ""
                  },
@@ -625,14 +265,6 @@
                      "cause":  "GLOBAL-EXCL",
                      "owner":  "",
                      "detail":  "cocktail"
-                 },
-                 {
-                     "commodity":  "sports-drinks",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Gatorade",
-                     "cause":  "UNPRICED",
-                     "owner":  "sports-drinks",
-                     "detail":  ""
                  },
                  {
                      "commodity":  "sparkling-water",
@@ -683,51 +315,11 @@
                      "detail":  ""
                  },
                  {
-                     "commodity":  "hot-cocoa",
-                     "store":  "Walmart",
-                     "candidate":  "Great Value Milk Chocolate Hot Cocoa Drink Mix",
-                     "cause":  "UNPRICED",
-                     "owner":  "hot-cocoa",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "instant-coffee",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Folgers Classic Roast Instant Coffee, Single Serve Packets",
-                     "cause":  "UNPRICED",
-                     "owner":  "instant-coffee",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "instant-coffee",
-                     "store":  "Fareway",
-                     "candidate":  "Folgers Instant Coffee Crystals Classic Roast Single Serve Packets",
-                     "cause":  "UNPRICED",
-                     "owner":  "instant-coffee",
-                     "detail":  ""
-                 },
-                 {
                      "commodity":  "frozen-waffles",
                      "store":  "Family Fare",
                      "candidate":  "Eggo Blueberry Waffles 10 Ea",
                      "cause":  "OUT-OF-BAND",
                      "owner":  "frozen-waffles",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "breakfast-sandwiches",
-                     "store":  "Aldi",
-                     "candidate":  "Breakfast Best Sausage, Egg \u0026 Cheese Biscuit Sandwiches",
-                     "cause":  "UNPRICED",
-                     "owner":  "breakfast-sandwiches",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "frozen-burritos",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Jimmy Dean Bacon, Egg \u0026 Cheese Breakfast Burrito, 1 ct",
-                     "cause":  "UNPRICED",
-                     "owner":  "frozen-burritos",
                      "detail":  ""
                  },
                  {
@@ -755,14 +347,6 @@
                      "detail":  "\\bcanned\\b"
                  },
                  {
-                     "commodity":  "hash-browns",
-                     "store":  "Family Fare",
-                     "candidate":  "Mr. Dee\u0027s Hash Brown Potato Patties 15 Ea",
-                     "cause":  "UNPRICED",
-                     "owner":  "hash-browns",
-                     "detail":  ""
-                 },
-                 {
                      "commodity":  "tater-tots",
                      "store":  "Family Fare",
                      "candidate":  "Alexia Sweet Potato Bite Sized Tots 20 Oz",
@@ -771,43 +355,11 @@
                      "detail":  ""
                  },
                  {
-                     "commodity":  "corn-dogs",
-                     "store":  "Aldi",
-                     "candidate":  "Bremer Regular Corn Dogs",
-                     "cause":  "UNPRICED",
-                     "owner":  "corn-dogs",
-                     "detail":  ""
-                 },
-                 {
                      "commodity":  "fish-sticks",
                      "store":  "Baker\u0027s",
                      "candidate":  "Gorton\u0027s Fish Fillets or Sticks, Frozen",
                      "cause":  "NO-INCLUDE",
                      "owner":  "",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "fish-sticks",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Gorton\u0027s Super Crunchy Fish Sticks, Frozen",
-                     "cause":  "UNPRICED",
-                     "owner":  "fish-sticks",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "garlic-bread",
-                     "store":  "Aldi",
-                     "candidate":  "Mama Cozzi\u0027s Pizza Kitchen Garlic Texas Toast",
-                     "cause":  "UNPRICED",
-                     "owner":  "garlic-bread",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "garlic-bread",
-                     "store":  "Family Fare",
-                     "candidate":  "Village Hearth Sandwich Bread, Enriched, White, Texas Toast 28 Oz",
-                     "cause":  "UNPRICED",
-                     "owner":  "garlic-bread",
                      "detail":  ""
                  },
                  {
@@ -843,30 +395,6 @@
                      "detail":  ""
                  },
                  {
-                     "commodity":  "plastic-wrap",
-                     "store":  "Aldi",
-                     "candidate":  "Boulder Plastic Wrap",
-                     "cause":  "UNPRICED",
-                     "owner":  "plastic-wrap",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "parchment-paper",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Hy-Vee parchment paper, 45 or 75 sq. ft., $3.99",
-                     "cause":  "UNPRICED",
-                     "owner":  "parchment-paper",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "parchment-paper",
-                     "store":  "Aldi",
-                     "candidate":  "Boulder Parchment Paper",
-                     "cause":  "UNPRICED",
-                     "owner":  "parchment-paper",
-                     "detail":  ""
-                 },
-                 {
                      "commodity":  "parchment-paper",
                      "store":  "Sam\u0027s Club",
                      "candidate":  "Member\u0027s Mark Unbleached Parchment Paper",
@@ -891,14 +419,6 @@
                      "detail":  ""
                  },
                  {
-                     "commodity":  "bar-soap",
-                     "store":  "Aldi",
-                     "candidate":  "Lacura Deep Moisturizing Beauty Bar",
-                     "cause":  "UNPRICED",
-                     "owner":  "bar-soap",
-                     "detail":  ""
-                 },
-                 {
                      "commodity":  "facial-tissues",
                      "store":  "Family Fare",
                      "candidate":  "Scott One Ply Unscented Bathroom Tissue 4 Ea",
@@ -912,14 +432,6 @@
                      "candidate":  "Kroger Facial Tissues",
                      "cause":  "OUT-OF-BAND",
                      "owner":  "facial-tissues",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "diapers",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Luvs Pro Level Leak Protection Diapers, Size 4",
-                     "cause":  "UNPRICED",
-                     "owner":  "diapers",
                      "detail":  ""
                  },
                  {
@@ -1008,14 +520,6 @@
                      "candidate":  "Pumpkin Tree Fruit \u0026 Vegetable Puree, Apple, Sweet Potato \u0026 Corn, Organic 4.4 Oz",
                      "cause":  "NO-INCLUDE",
                      "owner":  "apples",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "mandarin-oranges",
-                     "store":  "Family Fare",
-                     "candidate":  "Dole In 100% Fruit Juice Mandarin Oranges 4 Ea",
-                     "cause":  "UNPRICED",
-                     "owner":  "mandarin-oranges",
                      "detail":  ""
                  },
                  {
