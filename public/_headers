@@ -10,3 +10,11 @@
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=1800
   Content-Type: application/json; charset=utf-8
+
+# Per-row store-chip HTML for the board's expandable breakdown. Served here instead of inlined in the post:
+# .pg-stores is display:none until a row opens, so it was ~1.1 MB of hidden markup that pushed the Ghost upsert
+# past its processing timeout (503 = board unpublishable). The post keeps each row's cheapest-price answer.
+/board.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=1800
+  Content-Type: application/json; charset=utf-8

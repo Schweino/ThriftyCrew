@@ -97,7 +97,23 @@ foreach ($it in $all) { $id=[string]$it.id; $unit=[string]$it.unit
 # way to verify it. HARD INVARIANT (Brad: a displayed price MUST have a matching link). We record the exact
 # {id,store} of each so the automation can name them and the URL step can resolve them - not just a count.
 $noLinkList = New-Object System.Collections.Generic.List[object]
-if (Test-Path $Embed) {
+# CHIPS NOW LIVE IN THE FEED (2026-07-16). .pg-stores is filled client-side from public/board.json, so the
+# embed contains NO pg-chip markup at all. Auditing the embed would find zero chips and cheerfully report a
+# perfect score - a blind guard is worse than no guard. So read the SAME rendered chip html from the feed: it
+# is byte-identical to what the browser injects, which is why the chip regex below is unchanged.
+$boardFeed = Join-Path (Split-Path $root -Parent) 'public\board.json'
+if (Test-Path $boardFeed) {
+  $bf = Get-Content $boardFeed -Raw | ConvertFrom-Json
+  foreach ($p in $bf.PSObject.Properties) {
+    $rid = $p.Name -replace '::r$',''    # '<id>::r' is the recipe row of a shared id; report the plain id
+    foreach ($ch in [regex]::Matches([string]$p.Value, "<div class='pg-chip[^']*' data-store=`"([^`"]+)`" data-pu='[^']*'>(.*?)</div>", 'Singleline')) {
+      $cstore = $ch.Groups[1].Value -replace '&#39;',"'"
+      $body = $ch.Groups[2].Value
+      if ($body -notmatch 'pg-see' -and $body -notmatch 'pg-none') { $noLinkList.Add([pscustomobject]@{ id=$rid; store=$cstore }) }
+    }
+  }
+} elseif (Test-Path $Embed) {
+  # fallback for a pre-2026-07-16 embed that still carries inline chips
   $html = Get-Content $Embed -Raw
   foreach ($row in [regex]::Matches($html, "data-id='([^']+)'(.*?)</article>", 'Singleline')) {
     $rid = $row.Groups[1].Value

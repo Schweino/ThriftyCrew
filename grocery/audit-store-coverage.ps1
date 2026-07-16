@@ -27,6 +27,13 @@ $stores = @('Hy-Vee','Aldi','Family Fare','Fareway',"Baker's","Sam's Club",'Walm
 if (-not (Test-Path $Embed)) { Write-Output "store-coverage: SKIP (no built board at $Embed)"; exit 0 }
 $html = Get-Content $Embed -Raw
 $ids = @((Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json) | ForEach-Object { [string]$_.id })
+# CHIPS MOVED TO THE FEED (2026-07-16): the embed still carries every row (so row PRESENCE is still checked
+# against it) but .pg-stores is filled client-side from public/board.json, so the row html has no chips. Read
+# the chip html from the feed - it is byte-identical to what the browser injects. Without this the audit would
+# see zero chips per row and report every staple as missing all 7 stores.
+$boardFeed = Join-Path (Split-Path $root -Parent) 'public\board.json'
+$bf = $null
+if (Test-Path $boardFeed) { $bf = Get-Content $boardFeed -Raw | ConvertFrom-Json }
 
 $violations = New-Object System.Collections.Generic.List[object]
 $absent = New-Object System.Collections.Generic.List[string]
@@ -36,7 +43,14 @@ foreach ($id in $ids) {
   $m = [regex]::Match($html, "data-id='" + [regex]::Escape($id) + "'.*?</article>", 'Singleline')
   if (-not $m.Success) { $absent.Add($id); continue }
   # every store chip on the row - priced (has data-pu) AND muted none-cards (no data-pu). Both start pg-chip.
-  $chips = @([regex]::Matches($m.Value, "class='pg-chip[^']*' data-store=`"([^`"]+)`"") | ForEach-Object { $_.Groups[1].Value -replace '&#39;', "'" })
+  # Feed key: '<id>' is the staple row; '<id>::r' is the recipe row (a staple priced only as an ingredient).
+  $chipHtml = $m.Value
+  if ($bf) {
+    $pv = $bf.PSObject.Properties[$id]
+    if (-not $pv) { $pv = $bf.PSObject.Properties[$id + '::r'] }
+    $chipHtml = if ($pv) { [string]$pv.Value } else { '' }
+  }
+  $chips = @([regex]::Matches($chipHtml, "class='pg-chip[^']*' data-store=`"([^`"]+)`"") | ForEach-Object { $_.Groups[1].Value -replace '&#39;', "'" })
   $set = @($chips | Select-Object -Unique)
   $missing = @($stores | Where-Object { $set -notcontains $_ })
   $dupes = @($chips | Group-Object | Where-Object { $_.Count -gt 1 } | ForEach-Object { $_.Name })

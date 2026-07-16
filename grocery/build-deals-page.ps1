@@ -510,6 +510,13 @@ $stapleIdSet = @{}
 try { foreach ($sc in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) { $stapleIdSet[[string]$sc.id] = $true } } catch {}
 $stapleRendered = @{}
 $totalCommodities = 0; $totalPrices = 0
+# id -> rendered store-chip html. Written to public/board.json and injected client-side instead of shipped in
+# the post. The chips are .pg-stores{display:none} until a row is opened, so they were ~1.1 MB of HIDDEN markup
+# inside the post - and that pushed the Ghost upsert past its processing timeout (503 = the board could not
+# publish AT ALL, which is what kept the Fareway price-mode fix off the live site). The row head keeps the
+# server-rendered answer (SummaryHtml = cheapest store + price), so first paint and SEO are unchanged, and the
+# feed carries the SAME rendered html so there is no client re-render to drift and the audits reuse their regexes.
+$boardChips = [ordered]@{}
 foreach ($c in $cats) {
   [void]$sb.Append("<section class='pg-cat' data-cat='" + $c.key + "'><h2 class='pg-cath'>" + (HtmlEnc $c.label) + "</h2>")
   foreach ($cid in $c.commodities) {
@@ -533,7 +540,7 @@ foreach ($c in $cats) {
     if (-not $rb -and $vd) { $rbHtml += "<span class='pg-rec " + $vd.cls + "' title=`"" + (HtmlEnc $vd.title) + "`">" + $vd.label + "</span>" }
     $sumHtml = SummaryHtml $ranked[0] $unit
     [void]$sb.Append("<div class='pg-rowhead'><div class='pg-rh-top'><label class='pg-pickl' title='Add to my shopping list'><input type='checkbox' class='pg-pick' aria-label='Add to my shopping list'></label><span class='pg-name'>" + (HtmlEnc $r.commodity) + "</span><span class='pg-chev' aria-hidden='true'></span>" + $sumHtml + "</div><div class='pg-rh-bot'><span class='pg-unit'>" + (UnitLabel $unit) + "</span>" + $rbHtml + "</div></div>")
-    [void]$sb.Append("<div class='pg-stores'>")
+    $cb = New-Object System.Text.StringBuilder
     $i = 0
     foreach ($s in $ranked) {
       $totalPrices++
@@ -543,18 +550,23 @@ foreach ($c in $cats) {
       if ($s.membership) { $notes += 'membership' }
       if ($s.bulk) { $notes += 'bulk' }
       $typeTag = if ([string]$s.type -eq 'sale') { "<span class='pg-tag pg-tag-sale'>sale</span>" } else { "<span class='pg-tag'>everyday</span>" }
-      [void]$sb.Append("<div class='" + $cls + "' data-store=`"" + (HtmlEnc ([string]$s.store)) + "`" data-pu='" + ('{0:F4}' -f [double]$s.per_unit) + "'>")
-      if ($isBest) { [void]$sb.Append("<span class='pg-best'>Cheapest</span>") }
-      [void]$sb.Append("<span class='pg-store'>" + (HtmlEnc $shortName[[string]$s.store]) + "</span>")
-      [void]$sb.Append("<span class='pg-price'>" + (Fmt-Price ([double]$s.per_unit) $unit) + "</span>")
-      [void]$sb.Append("<span class='pg-meta'>" + $typeTag + ($(if ($notes.Count) { " <span class='pg-note2'>" + (HtmlEnc ($notes -join ', ')) + "</span>" } else { '' })) + "</span>")
-      [void]$sb.Append((SaleBadge $s ([string]$s.store)))
-      [void]$sb.Append((SeeLink ([string]$r.id) ([string]$s.store) ([string]$s.item) ([double]$s.per_unit) $unit ([string]$s.type)))
-      [void]$sb.Append("</div>")
+      [void]$cb.Append("<div class='" + $cls + "' data-store=`"" + (HtmlEnc ([string]$s.store)) + "`" data-pu='" + ('{0:F4}' -f [double]$s.per_unit) + "'>")
+      if ($isBest) { [void]$cb.Append("<span class='pg-best'>Cheapest</span>") }
+      [void]$cb.Append("<span class='pg-store'>" + (HtmlEnc $shortName[[string]$s.store]) + "</span>")
+      [void]$cb.Append("<span class='pg-price'>" + (Fmt-Price ([double]$s.per_unit) $unit) + "</span>")
+      [void]$cb.Append("<span class='pg-meta'>" + $typeTag + ($(if ($notes.Count) { " <span class='pg-note2'>" + (HtmlEnc ($notes -join ', ')) + "</span>" } else { '' })) + "</span>")
+      [void]$cb.Append((SaleBadge $s ([string]$s.store)))
+      [void]$cb.Append((SeeLink ([string]$r.id) ([string]$s.store) ([string]$s.item) ([double]$s.per_unit) $unit ([string]$s.type)))
+      [void]$cb.Append("</div>")
       $i++
     }
-    [void]$sb.Append((MissingCells ([string]$r.id) (@($ranked | ForEach-Object { [string]$_.store }))))
-    [void]$sb.Append("</div></article>")
+    [void]$cb.Append((MissingCells ([string]$r.id) (@($ranked | ForEach-Object { [string]$_.store }))))
+    # KEY BY ROW, NOT BY ID. 54 ids (milk, butter, pork-tenderloin...) render TWICE - once as a weekly staple
+    # and once as a recipe ingredient - and the two rows legitimately differ (butter is $/lb weekly vs $/oz in
+    # the recipe board). Keying the chip feed by id alone let the recipe row overwrite the staple's chips, which
+    # would have silently shown recipe-unit prices on the staple row. The staple row owns the bare id.
+    $boardChips[[string]$r.id] = $cb.ToString()
+    [void]$sb.Append("<div class='pg-stores' data-lazy='1' data-ck='" + (HtmlEnc ([string]$r.id)) + "'></div></article>")
   }
   [void]$sb.Append("</section>")
 }
@@ -579,7 +591,7 @@ if ($riDoc) {
       [void]$sb.Append("<article class='pg-row' data-cat='" + (HtmlEnc $riKey) + "' data-id='" + [string]$r.id + "'>")
       $sumHtml = SummaryHtml $ranked[0] $unit
       [void]$sb.Append("<div class='pg-rowhead'><div class='pg-rh-top'><label class='pg-pickl' title='Add to my shopping list'><input type='checkbox' class='pg-pick' aria-label='Add to my shopping list'></label><span class='pg-name'>" + (HtmlEnc $r.commodity) + "</span><span class='pg-chev' aria-hidden='true'></span>" + $sumHtml + "</div><div class='pg-rh-bot'><span class='pg-unit'>" + (UnitLabel $unit) + "</span></div></div>")
-      [void]$sb.Append("<div class='pg-stores'>")
+      $cb = New-Object System.Text.StringBuilder
       $i = 0
       foreach ($s in $ranked) {
         $totalPrices++
@@ -588,15 +600,15 @@ if ($riDoc) {
         $notes = @()
         if ([string]$s.store -eq "Sam's Club") { $notes += 'membership' }
         if ($s.bulk) { $notes += 'bulk' }
-        [void]$sb.Append("<div class='" + $cls + "' data-store=`"" + (HtmlEnc ([string]$s.store)) + "`" data-pu='" + ('{0:F4}' -f [double]$s.per_unit) + "'>")
-        if ($isBest) { [void]$sb.Append("<span class='pg-best'>Cheapest</span>") }
-        [void]$sb.Append("<span class='pg-store'>" + (HtmlEnc $shortName[[string]$s.store]) + "</span>")
-        [void]$sb.Append("<span class='pg-price'>" + (Fmt-Price ([double]$s.per_unit) $unit) + "</span>")
+        [void]$cb.Append("<div class='" + $cls + "' data-store=`"" + (HtmlEnc ([string]$s.store)) + "`" data-pu='" + ('{0:F4}' -f [double]$s.per_unit) + "'>")
+        if ($isBest) { [void]$cb.Append("<span class='pg-best'>Cheapest</span>") }
+        [void]$cb.Append("<span class='pg-store'>" + (HtmlEnc $shortName[[string]$s.store]) + "</span>")
+        [void]$cb.Append("<span class='pg-price'>" + (Fmt-Price ([double]$s.per_unit) $unit) + "</span>")
         $riTag = if ([string]$s.type -eq 'sale') { "<span class='pg-tag pg-tag-sale'>sale</span>" } else { "<span class='pg-tag'>everyday</span>" }
-        [void]$sb.Append("<span class='pg-meta'>" + $riTag + ($(if ($notes.Count) { " <span class='pg-note2'>" + (HtmlEnc ($notes -join ', ')) + "</span>" } else { '' })) + "</span>")
-        [void]$sb.Append((SaleBadge $s ([string]$s.store)))
-        [void]$sb.Append((SeeLink ([string]$r.id) ([string]$s.store) ([string]$s.item) ([double]$s.per_unit) $unit ([string]$s.type)))
-        [void]$sb.Append("</div>")
+        [void]$cb.Append("<span class='pg-meta'>" + $riTag + ($(if ($notes.Count) { " <span class='pg-note2'>" + (HtmlEnc ($notes -join ', ')) + "</span>" } else { '' })) + "</span>")
+        [void]$cb.Append((SaleBadge $s ([string]$s.store)))
+        [void]$cb.Append((SeeLink ([string]$r.id) ([string]$s.store) ([string]$s.item) ([double]$s.per_unit) $unit ([string]$s.type)))
+        [void]$cb.Append("</div>")
         $i++
       }
       # A commodities.json STAPLE priced only as a recipe ingredient (no staple row above) still owes shoppers
@@ -604,11 +616,14 @@ if ($riDoc) {
       # rule. Emit the full MissingCells set so every missing store shows an honest "No price yet"/"Doesn't carry"
       # tile. Pure recipe-only ingredients stay exempt (NoneCells) - 7 mostly-empty cards on a niche item is noise.
       if ($stapleIdSet.ContainsKey([string]$r.id) -and -not $stapleRendered.ContainsKey([string]$r.id)) {
-        [void]$sb.Append((MissingCells ([string]$r.id) (@($ranked | ForEach-Object { [string]$_.store }))))
+        [void]$cb.Append((MissingCells ([string]$r.id) (@($ranked | ForEach-Object { [string]$_.store }))))
       } else {
-        [void]$sb.Append((NoneCells ([string]$r.id)))
+        [void]$cb.Append((NoneCells ([string]$r.id)))
       }
-    [void]$sb.Append("</div></article>")
+      # recipe rows get their own key (see the staple note): the same id can also exist as a weekly staple row
+      # with a DIFFERENT unit and price set, so the two must not share one chip-feed entry.
+      $boardChips[([string]$r.id + '::r')] = $cb.ToString()
+    [void]$sb.Append("<div class='pg-stores' data-lazy='1' data-ck='" + (HtmlEnc ([string]$r.id)) + "::r'></div></article>")
     }
     [void]$sb.Append("</section>")
   }
@@ -860,14 +875,52 @@ $js = @'
   function pgSummaries(){
     document.querySelectorAll('.pg-row').forEach(function(row){
       var sum=row.querySelector('.pg-sum'); if(!sum) return;
-      var c=pgFirstChip(row); if(!c){ sum.innerHTML=''; return; }
+      // Chips are lazy now (fetched from board.json). When they are not in the DOM yet there is nothing to
+      // re-derive from, so LEAVE the server-rendered summary alone. This used to blank it (sum.innerHTML=''),
+      // which with lazy chips would wipe the cheapest price off EVERY row on load. Only rebuild from real chips.
+      var c=pgFirstChip(row); if(!c){ return; }
       var p=c.querySelector('.pg-price'), s=c.querySelector('.pg-store');
       var sale=c.querySelector('.pg-tag-sale')?" <span class='pg-tag pg-tag-sale'>sale</span>":"";
       sum.innerHTML="<span class='pg-sum-p'>"+(p?p.textContent:'')+"</span><span class='pg-sum-s'>"+(s?s.textContent:'')+"</span>"+sale;
     });
   }
   document.querySelectorAll('.pg-rowhead').forEach(function(h){ h.setAttribute('tabindex','0'); });
-  function pgToggle(head){ var row=head.closest('.pg-row'); if(row){ row.classList.toggle('pg-open'); } }
+  // ---- LAZY STORE CHIPS ----
+  // The per-store breakdown lives in board.json (served by the feed Worker) instead of inside the post: it is
+  // display:none until a row opens, so shipping it inline was ~1.1 MB of hidden markup that pushed the Ghost
+  // upsert past its processing timeout (503 = the board could not publish). A row fills the instant it is
+  // opened; a background pass fills the rest after first paint so everything that reads chips (the hide-Sam's
+  // recompute, the trip planner, expand-all) keeps working exactly as before, just a moment later.
+  var BOARD=null,_bp=null;
+  var BOARD_URL='__BOARD_URL__';
+  function loadBoard(){
+    if(BOARD) return Promise.resolve(BOARD);
+    if(!_bp){ _bp=fetch(BOARD_URL).then(function(r){ return r.ok?r.json():null; }).then(function(j){ BOARD=j||{}; return BOARD; }).catch(function(){ _bp=null; return null; }); }
+    return _bp;
+  }
+  function pgFillRow(row){
+    var box=row.querySelector('.pg-stores[data-lazy]'); if(!box) return false;
+    // data-ck, not data-id: 54 ids render on BOTH a weekly-staple row and a recipe row with different units,
+    // so each row carries its own feed key ('<id>' for the staple, '<id>::r' for the recipe row).
+    var ck=box.getAttribute('data-ck')||row.getAttribute('data-id');
+    if(BOARD&&BOARD[ck]){ box.innerHTML=BOARD[ck]; box.removeAttribute('data-lazy'); return true; }
+    return false;
+  }
+  var _filledAll=false;
+  function pgFillAll(){
+    if(_filledAll) return Promise.resolve(true);
+    return loadBoard().then(function(b){
+      if(!b) return false;
+      document.querySelectorAll('.pg-row').forEach(function(r){ pgFillRow(r); });
+      _filledAll=true;
+      return true;
+    });
+  }
+  function pgToggle(head){
+    var row=head.closest('.pg-row'); if(!row) return;
+    row.classList.toggle('pg-open');
+    if(row.classList.contains('pg-open')&&row.querySelector('.pg-stores[data-lazy]')){ loadBoard().then(function(){ pgFillRow(row); }); }
+  }
   document.addEventListener('click',function(e){
     if(e.target.closest('.pg-pickl,.pg-pick,.pg-alertp,.pg-histp,.pg-see,.pg-hx,a,button,input,label')) return;
     var head=e.target.closest('.pg-rowhead'); if(head){ pgToggle(head); }
@@ -876,7 +929,9 @@ $js = @'
     if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('pg-rowhead')){ e.preventDefault(); pgToggle(e.target); }
   });
   var pgWrap=document.querySelector('.pg-wrap'), pgEA=document.getElementById('pg-expandall');
-  if(pgEA&&pgWrap){ pgEA.addEventListener('change',function(){ pgWrap.classList.toggle('pg-allopen',pgEA.checked); }); }
+  if(pgEA&&pgWrap){ pgEA.addEventListener('change',function(){ if(pgEA.checked){ pgFillAll(); } pgWrap.classList.toggle('pg-allopen',pgEA.checked); }); }
+  // fill everything once the page is idle, so chip-dependent features are ready before a human can reach them
+  if(window.requestIdleCallback){ requestIdleCallback(function(){ pgFillAll(); },{timeout:3000}); } else { setTimeout(function(){ pgFillAll(); },1200); }
   pgSummaries();
   // hide Sam's Club: drop its chips, then re-flag the cheapest per row + recount the scoreboard
   var SAMS="Sam's Club";
@@ -1298,6 +1353,21 @@ if ($histDoc) {
     $histBlock = $histBlock.Replace('__TCH_IDS__', $idIndex).Replace('__TCH_URL__', 'https://smp-feed.ancient-snow-93df.workers.dev/price-history.json').Replace('__TCB_JSON__', $tcbJson).Replace('__TCCHART__', $tcChartJs)
   }
 }
+
+# ---- store chips -> public/board.json (served by the feed Worker), NOT inside the post ----
+# See the lazy-chip note where $boardChips is filled. The post keeps every row's server-rendered answer; the
+# per-store breakdown is fetched and injected client-side. This is what takes the post back under Ghost's
+# upsert-processing ceiling so the board can publish at all.
+$boardOut = Join-Path (Split-Path $root -Parent) 'public\board.json'
+$boardDir = Split-Path $boardOut -Parent
+if (-not (Test-Path $boardDir)) { New-Item -ItemType Directory -Force -Path $boardDir | Out-Null }
+# ConvertTo-Json (not hand-rolled escaping): the chip html is full of quotes/apostrophes/entities and one
+# mis-escaped row would break the whole feed parse and silently empty every store breakdown.
+$boardJson = ($boardChips | ConvertTo-Json -Depth 3 -Compress)
+$boardJson | Set-Content $boardOut -Encoding UTF8
+$boardUrl = 'https://smp-feed.ancient-snow-93df.workers.dev/board.json'
+$js = $js.Replace('__BOARD_URL__', $boardUrl)
+Write-Output ("chips: {0} rows -> public\board.json ({1} KB, lazily injected); post keeps the per-row answer" -f $boardChips.Count, [math]::Round($boardJson.Length/1KB,0))
 
 ($css + $body + $js + $histBlock) | Set-Content $Out -Encoding UTF8
 Write-Output ("deals page -> " + $Out + "  (" + $totalCommodities + " commodities, " + $totalPrices + " prices, history popup on " + $(if ($entries) { $entries.Count } else { 0 }) + " items)")

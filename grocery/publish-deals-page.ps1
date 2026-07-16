@@ -76,9 +76,21 @@ if (-not (Test-Path $embed) -or ((Get-Item $embed).Length -lt 2000)) { Write-Out
 # means links are being wrongly suppressed (a stale audit, an over-tight price guard, or wrong-product data).
 # Surfaced, never fatal - the board still publishes; this is an early-warning so it can't silently regress again.
 try {
-  $eh = Get-Content $embed -Raw
-  $nl = 0; foreach ($rw in [regex]::Matches($eh, "data-id='[^']+'(.*?)</article>", 'Singleline')) {
-    foreach ($cp in [regex]::Matches($rw.Groups[1].Value, "<div class='pg-chip[^']*' data-store=`"[^`"]+`" data-pu='[^']*'>(.*?)</div>", 'Singleline')) { if ($cp.Groups[1].Value -notmatch 'pg-see') { $nl++ } }
+  # Chips live in public/board.json now (they are display:none until a row opens, and inlining them pushed the
+  # Ghost upsert past its timeout). Counting them in the embed would find ZERO and report perfect coverage -
+  # a blind check. Read the same rendered chip html from the feed the browser injects.
+  $nl = 0
+  $bfeed = Join-Path (Split-Path $root -Parent) 'public\board.json'
+  if (Test-Path $bfeed) {
+    $bj = Get-Content $bfeed -Raw | ConvertFrom-Json
+    foreach ($bp in $bj.PSObject.Properties) {
+      foreach ($cp in [regex]::Matches([string]$bp.Value, "<div class='pg-chip[^']*' data-store=`"[^`"]+`" data-pu='[^']*'>(.*?)</div>", 'Singleline')) { if ($cp.Groups[1].Value -notmatch 'pg-see') { $nl++ } }
+    }
+  } else {
+    $eh = Get-Content $embed -Raw
+    foreach ($rw in [regex]::Matches($eh, "data-id='[^']+'(.*?)</article>", 'Singleline')) {
+      foreach ($cp in [regex]::Matches($rw.Groups[1].Value, "<div class='pg-chip[^']*' data-store=`"[^`"]+`" data-pu='[^']*'>(.*?)</div>", 'Singleline')) { if ($cp.Groups[1].Value -notmatch 'pg-see') { $nl++ } }
+    }
   }
   Write-Output ("link-coverage: $nl priced chip(s) with no See-item link")
   if ($nl -gt 0) { Write-Output ("WARN: $nl chips missing links (target 0 - Brad's invariant: every price has a link) - check consistency-report.json no_link / product-urls / the identity gate in build-deals-page.ps1") }
