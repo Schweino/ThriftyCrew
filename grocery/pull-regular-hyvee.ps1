@@ -131,8 +131,11 @@ foreach ($p in $pd.PSObject.Properties) {
   if (([string]$e.url) -notmatch '/p/(\d+)/') { continue }
   # NOT $pid - that is a read-only automatic variable in PowerShell and assigning to it throws.
   $prodId = [int]$Matches[1]
-  $k = ([string]$e.name).ToLower().Trim()
-  if (-not $idByName.ContainsKey($k)) { $idByName[$k] = [pscustomobject]@{ pid = $prodId; cid = [string]$p.Name } }
+  # KEY BY NAME **AND SIZE**. Hy-Vee sells one name in several sizes (Spice World Minced Garlic is both
+  # 32 oz/$8.99 and 4.5 oz/$3.49), and two commodities can legitimately link to those two different products.
+  # Keyed by name alone, the first one won and the other product became invisible to this pull.
+  $k = ([string]$e.name).ToLower().Trim() + '|' + ([string]$e.size).Trim()
+  if (-not $idByName.ContainsKey($k)) { $idByName[$k] = [pscustomobject]@{ pid = $prodId; cid = [string]$p.Name; nm = ([string]$e.name).ToLower().Trim() } }
 }
 
 $prevF = Get-ChildItem (Join-Path $regDir 'hyvee-regular-*.json') -EA SilentlyContinue |
@@ -143,19 +146,40 @@ if ($prevF) { $prevRows = @((Get-Content $prevF.FullName -Raw | ConvertFrom-Json
 # every product we want a price for: existing rows first (they carry the verified size), then link-only products
 $work = New-Object System.Collections.ArrayList
 $seen = @{}
+# DEDUPE ON NAME **AND SIZE**, NOT NAME. $seen used to hold the bare name, so when Hy-Vee sells one name in two
+# sizes the SECOND row was `continue`d straight out of the work list and never re-priced - it simply vanished
+# from the next file. That is what collapsed 14 multi-size variants on the 2026-07-16 run (Dinty Moore Beef
+# Stew 38oz -> only 15oz survived; Hy-Vee Mild Green Chiles 7oz -> only 4oz). A product the board prices
+# silently disappearing from the catalogue is the "partial pull is an overwrite" failure wearing a new hat.
+# Sixth instance of the name-keyed collapse family - see memory board-data-integrity.
+$seenName = @{}
 foreach ($r in $prevRows) {
   $nm = [string]$r.item
-  $k = $nm.ToLower().Trim()
+  $kn = $nm.ToLower().Trim()
+  $k = $kn + '|' + ([string]$r.size).Trim()
   if ($seen.ContainsKey($k)) { continue }
-  $seen[$k] = $true
+  $seen[$k] = $true; $seenName[$kn] = $true
   # PowerShell 5.1 has no `if` EXPRESSION - "pid=(if(...){..}else{..})" is a parse error, not a ternary.
   $wpid = 0; $wcid = ''
+  # THE ROW ALREADY KNOWS ITS OWN PRODUCT - USE IT. This only ever read the id back out of $idByName, i.e. out
+  # of product-urls, so a row whose commodity has no stored link was re-priced as if we had never identified it:
+  # 808 rows carried a product_id on 2026-07-15 but only 440 were refreshable today, and the other 368 were
+  # written out not_reverified - carrying yesterday's price with no way to check it. The link is not the only
+  # place a product identity lives; the row stamped one when it was last priced. Absence of a link is not
+  # absence of knowledge (same lesson as the Family Fare carry-forward).
+  if ($r.product_id) { $wpid = [int]$r.product_id }
+  # a stored link still WINS: it is the product we publish a "See item" chip for, so it is what the price must
+  # describe. Only the exact name+size link, or an unambiguous name, may override the row's own id.
   if ($idByName.ContainsKey($k)) { $wpid = [int]$idByName[$k].pid; $wcid = [string]$idByName[$k].cid }
+  else {
+    $byNm = @($idByName.Values | Where-Object { $_.nm -eq $kn })
+    if ($byNm.Count -eq 1) { $wpid = [int]$byNm[0].pid; $wcid = [string]$byNm[0].cid }
+  }
   [void]$work.Add([pscustomobject]@{ name=$nm; size=[string]$r.size; prow=$r; pid=$wpid; cid=$wcid })
 }
 foreach ($k in $idByName.Keys) {
-  if ($seen.ContainsKey($k)) { continue }
-  $seen[$k] = $true
+  if ($seenName.ContainsKey($idByName[$k].nm)) { continue }
+  $seenName[$idByName[$k].nm] = $true
   $e = $pd.($idByName[$k].cid).'Hy-Vee'
   [void]$work.Add([pscustomobject]@{ name=[string]$e.name; size=''; prow=$null; pid=$idByName[$k].pid; cid=$idByName[$k].cid })
 }

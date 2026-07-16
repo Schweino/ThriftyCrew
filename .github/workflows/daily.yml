@@ -36,19 +36,16 @@ jobs:
           Write-Host "--- ad-cycle log tail ---"
           if (Test-Path grocery/ad-cycle-log.txt) { Get-Content grocery/ad-cycle-log.txt -Tail 25 }
 
-      - name: Assert the feed refreshed today (fails -> GitHub emails you)
-        shell: powershell
-        run: |
-          $today = (Get-Date).ToString('yyyy-MM-dd')
-          $feed  = Get-Content public/smp-feed.json -Raw | ConvertFrom-Json
-          $gen   = ([datetime]$feed.generated).ToString('yyyy-MM-dd')
-          if ($gen -ne $today) {
-            Write-Error "Pipeline did NOT refresh the feed today (feed generated $gen, expected $today). A store pull likely failed from the cloud IP; nothing bad was published."
-            exit 1
-          }
-          Write-Host "OK: feed fresh - week $($feed.week_of), $($feed.recipe_count) recipes, $($feed.ingredient_count) ingredients."
-
+      # COMMIT BEFORE ASSERTING, AND ALWAYS.
+      # This used to run AFTER the freshness assert, with no `if: always()`. So a failed assert exited the job
+      # and committed NOTHING - not the refreshed data, not even the ad-cycle log. A failed run left ZERO trace
+      # in the repo and its only signal was an email. On 2026-07-16 the pipeline did not commit at all and there
+      # was nothing to diagnose from: no log, no partial data, no clue whether it ran and failed or never ran.
+      # Committing first costs nothing (guards.ps1 already decides what may be PUBLISHED; this only records what
+      # happened) and leaves the evidence a post-mortem needs. The assert still fails the job afterwards, so
+      # GitHub still emails - it just no longer destroys the evidence on its way out.
       - name: Commit refreshed prices + feed
+        if: always()
         shell: powershell
         run: |
           git config user.name  "smp-pipeline-bot"
@@ -59,3 +56,16 @@ jobs:
           git commit -m "Daily pipeline: refresh prices + feed ($(Get-Date -Format 'yyyy-MM-dd'))"
           git pull --rebase --autostash origin main
           git push
+
+      - name: Assert the feed refreshed today (fails -> GitHub emails you)
+        if: always()
+        shell: powershell
+        run: |
+          $today = (Get-Date).ToString('yyyy-MM-dd')
+          $feed  = Get-Content public/smp-feed.json -Raw | ConvertFrom-Json
+          $gen   = ([datetime]$feed.generated).ToString('yyyy-MM-dd')
+          if ($gen -ne $today) {
+            Write-Error "Pipeline did NOT refresh the feed today (feed generated $gen, expected $today). A store pull likely failed from the cloud IP; nothing bad was published. The run's data + log ARE committed - check grocery/ad-cycle-log.txt for how far it got."
+            exit 1
+          }
+          Write-Host "OK: feed fresh - week $($feed.week_of), $($feed.recipe_count) recipes, $($feed.ingredient_count) ingredients."

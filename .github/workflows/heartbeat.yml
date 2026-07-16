@@ -1,0 +1,49 @@
+name: Pipeline heartbeat
+
+# WHY THIS EXISTS. On 2026-07-16 the daily pipeline simply did not run. It had committed every day from 07-08
+# to 07-15, then nothing - and because a failure inside daily.yml exited before its commit step, a dead run and
+# a never-scheduled run looked identical from the repo: no log, no data, no clue. Nobody noticed until it was
+# asked about directly.
+#
+# A job that fails loudly is fine. A job that silently STOPS is the dangerous one, because the site keeps
+# serving yesterday's prices as though they were today's and nothing anywhere says otherwise.
+#
+# So: an independent workflow whose only job is to notice that the pipeline's last commit is too old. It does
+# NOT depend on the pipeline, so it still fires when the pipeline is the thing that is broken. Deliberately a
+# SEPARATE workflow - a heartbeat living inside the job it watches cannot report that job's absence.
+
+on:
+  schedule:
+    - cron: '0 15 * * *'      # 15:00 UTC = 10:00 Central - 3.5h after the daily's 11:30 UTC slot, so a merely
+                              # late GitHub cron (they routinely drift ~1h under load) does not cry wolf.
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 50     # enough history to find the bot's last commit
+
+      - name: Has the pipeline committed recently?
+        shell: bash
+        run: |
+          set -euo pipefail
+          LAST=$(git log --author="smp-pipeline-bot" -1 --format=%ct || true)
+          if [ -z "$LAST" ]; then
+            echo "::error::No smp-pipeline-bot commit found in the last 50 commits. The daily pipeline may be dead."
+            exit 1
+          fi
+          NOW=$(date +%s)
+          AGE_H=$(( (NOW - LAST) / 3600 ))
+          echo "Last pipeline commit was ${AGE_H}h ago ($(git log --author='smp-pipeline-bot' -1 --format=%cd))."
+          # 36h = a full missed day plus slack for cron drift. Two clean days in a row can never trip this.
+          if [ "$AGE_H" -gt 36 ]; then
+            echo "::error::The daily grocery pipeline has not committed for ${AGE_H}h (>36h). It is not running, or it is failing before its commit step. The live board and smp-feed.json are serving stale prices. Check the Actions tab for 'Daily grocery pipeline'."
+            exit 1
+          fi
+          echo "OK: pipeline is alive."
