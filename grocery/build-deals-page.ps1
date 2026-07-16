@@ -1350,7 +1350,11 @@ if ($histDoc) {
     $histJson | Set-Content $histOut -Encoding UTF8
     $idIndex = '{' + ((@($entries | ForEach-Object { ($_ -split ':\{')[0] + ':1' })) -join ',') + '}'
     Write-Output ("history: {0} items -> public\price-history.json ({1} KB, lazily fetched); inline index {2} KB" -f $entries.Count, [math]::Round($histJson.Length/1KB,0), [math]::Round($idIndex.Length/1KB,1))
-    $histBlock = $histBlock.Replace('__TCH_IDS__', $idIndex).Replace('__TCH_URL__', 'https://smp-feed.ancient-snow-93df.workers.dev/price-history.json').Replace('__TCB_JSON__', $tcbJson).Replace('__TCCHART__', $tcChartJs)
+    # content-hash cache-bust (same reason as board.json: the feed is cached 30 min, the post can be newer)
+    $hsha = New-Object System.Security.Cryptography.SHA1Managed
+    $hhash = ([BitConverter]::ToString($hsha.ComputeHash([Text.Encoding]::UTF8.GetBytes($histJson))) -replace '-','').Substring(0,10).ToLower()
+    $histUrl = 'https://smp-feed.ancient-snow-93df.workers.dev/price-history.json?v=' + $hhash
+    $histBlock = $histBlock.Replace('__TCH_IDS__', $idIndex).Replace('__TCH_URL__', $histUrl).Replace('__TCB_JSON__', $tcbJson).Replace('__TCCHART__', $tcChartJs)
   }
 }
 
@@ -1365,7 +1369,13 @@ if (-not (Test-Path $boardDir)) { New-Item -ItemType Directory -Force -Path $boa
 # mis-escaped row would break the whole feed parse and silently empty every store breakdown.
 $boardJson = ($boardChips | ConvertTo-Json -Depth 3 -Compress)
 $boardJson | Set-Content $boardOut -Encoding UTF8
-$boardUrl = 'https://smp-feed.ancient-snow-93df.workers.dev/board.json'
+# CACHE-BUST WITH A CONTENT HASH. The feed is served with max-age=1800, so a freshly published post can fetch a
+# 30-minute-old board.json - rows added since would find no key and never fill (seen live: 15 empty rows, and a
+# store still showing its pre-fix chip count). The post and the feed MUST move together, so the URL changes
+# whenever the content does.
+$sha = New-Object System.Security.Cryptography.SHA1Managed
+$bhash = ([BitConverter]::ToString($sha.ComputeHash([Text.Encoding]::UTF8.GetBytes($boardJson))) -replace '-','').Substring(0,10).ToLower()
+$boardUrl = 'https://smp-feed.ancient-snow-93df.workers.dev/board.json?v=' + $bhash
 $js = $js.Replace('__BOARD_URL__', $boardUrl)
 Write-Output ("chips: {0} rows -> public\board.json ({1} KB, lazily injected); post keeps the per-row answer" -f $boardChips.Count, [math]::Round($boardJson.Length/1KB,0))
 
