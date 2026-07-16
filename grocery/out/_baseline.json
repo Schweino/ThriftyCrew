@@ -1,5 +1,5 @@
 ﻿{
-    "built_at":  "2026-07-16T08:39:56",
+    "built_at":  "2026-07-16T08:58:23",
     "week_of":  "2026-07-15",
     "source":  "C:\\Codex\\income\\grocery\\out\\ads-2026-07-15.json",
     "commodities_compared":  378,
@@ -15,7 +15,7 @@
                                         ],
                    "store_count":  7,
                    "commodities_compared":  378,
-                   "flagged_out_of_band":  281,
+                   "flagged_out_of_band":  183,
                    "multibuy_unpriced":  12
                },
     "comparison":  [
@@ -733,7 +733,7 @@
                                               "item":  "Our Family Aluminum Foil, 25 Square Feet 1 Ea",
                                               "ad":  "$1.99",
                                               "size":  "1 ea",
-                                              "basis":  "per-each marker",
+                                              "basis":  "per-each",
                                               "note":  "",
                                               "source_ad":  "everyday shelf price"
                                           },
@@ -1955,6 +1955,20 @@
                                               "basis":  "per-12-pack",
                                               "note":  "",
                                               "source_ad":  "samsclub.com (Omaha, staples100)"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.5983,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Lender\u0027s Pre Sliced Cinnamon Raisin Swirl Bagels 6 Ea",
+                                              "ad":  "$3.59",
+                                              "size":  "6 ea",
+                                              "basis":  "per-6-pack",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price (recovered 2026-07-13)"
                                           }
                                       ]
                        },
@@ -12087,6 +12101,20 @@
                                               "source_ad":  "bakersplus.com search card price/unit price (Saddlecreek, Omaha) - the price the store charges today"
                                           },
                                           {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.2788,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Pacs Optimum Fresh Scent Dishwasher Detergent 43 Ea",
+                                              "ad":  "$11.99",
+                                              "size":  "43 ea",
+                                              "basis":  "per-43-pack",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
+                                          },
+                                          {
                                               "store":  "Walmart",
                                               "per_unit":  0.4025,
                                               "unit":  "each",
@@ -12237,6 +12265,20 @@
                                               "basis":  "per-80-pack",
                                               "note":  "",
                                               "source_ad":  ""
+                                          },
+                                          {
+                                              "store":  "Fareway",
+                                              "per_unit":  0.104,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  true,
+                                              "membership":  false,
+                                              "item":  "Clorox Disinfecting Wipes, Bleach Free Cleaning Wipes, Fresh Scent",
+                                              "ad":  "$3.64",
+                                              "size":  "35 ct",
+                                              "basis":  "per-35-pack",
+                                              "note":  "",
+                                              "source_ad":  "shop.fareway.com"
                                           }
                                       ]
                        },
@@ -13580,6 +13622,20 @@
                                               "source_ad":  "samsclub.com (Omaha, staples100)"
                                           },
                                           {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.113,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Freezer Bags, Resealable, Gallon Size 30 Ea",
+                                              "ad":  "$3.39",
+                                              "size":  "30 ea",
+                                              "basis":  "per-30-pack",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
+                                          },
+                                          {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  0.1175,
                                               "unit":  "each",
@@ -13606,20 +13662,6 @@
                                               "basis":  "per-15-pack",
                                               "note":  "",
                                               "source_ad":  "shop.fareway.com"
-                                          },
-                                          {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.2806,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Ziploc Suso Freezer Bags Gallon",
-                                              "ad":  "$4.49",
-                                              "size":  "16 ct",
-                                              "basis":  "per-16-pack",
-                                              "note":  "",
-                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -14964,6 +15006,20 @@
                                               "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)"
                                           },
                                           {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.259,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Blueberry Waffles 10 Ea",
+                                              "ad":  "$2.59",
+                                              "size":  "10 ea",
+                                              "basis":  "per-10-pack",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
+                                          },
+                                          {
                                               "store":  "Fareway",
                                               "per_unit":  0.277,
                                               "unit":  "each",
@@ -14997,13 +15053,41 @@
                            "commodity":  "Fruit Cups",
                            "id":  "fruit-cups",
                            "unit":  "each",
-                           "cheapest_store":  "Walmart",
-                           "cheapest_price":  0.6642,
+                           "cheapest_store":  "Sam\u0027s Club",
+                           "cheapest_price":  0.4575,
                            "cheapest_type":  "everyday",
-                           "nomem_store":  "Walmart",
-                           "nomem_price":  0.6642,
+                           "nomem_store":  "Aldi",
+                           "nomem_price":  0.5475,
                            "nomem_type":  "everyday",
                            "stores":  [
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.4575,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  true,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Diced Peach Cups",
+                                              "ad":  "$10.98",
+                                              "size":  "24 pk 4 oz",
+                                              "basis":  "per-24-pack",
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com (Omaha, staples300)"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.5475,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Lunch Buddies Peach Fruit Cups in Juice",
+                                              "ad":  "$2.19",
+                                              "size":  "4 pk 4 oz",
+                                              "basis":  "per-4-pack",
+                                              "note":  "",
+                                              "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)"
+                                          },
                                           {
                                               "store":  "Walmart",
                                               "per_unit":  0.6642,
@@ -15031,6 +15115,20 @@
                                               "basis":  "per-4-pack",
                                               "note":  "",
                                               "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.7475,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Mandarin Oranges In 100% Juice 4 Ea",
+                                              "ad":  "$2.99",
+                                              "size":  "4 ea",
+                                              "basis":  "per-4-pack",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -16013,6 +16111,20 @@
                                               "basis":  "per-18-pack",
                                               "note":  "",
                                               "source_ad":  "everyday shelf price"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.359,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Sunbelt Bakery Oats \u0026 Honey Chewy Granola Bars 10 Ea",
+                                              "ad":  "$3.59",
+                                              "size":  "10 ea",
+                                              "basis":  "per-10-pack",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price (recovered 2026-07-13)"
                                           },
                                           {
                                               "store":  "Fareway",
@@ -20238,6 +20350,20 @@
                                               "source_ad":  "aldi.us OLA 42 Omaha, fulfillment=IN-STORE (shelf price)"
                                           },
                                           {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.2974,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Arm \u0026 Hammer Laundry Detergent, Concentrated, 5 In 1, Fresh Burst, Power Paks 42 Ea",
+                                              "ad":  "$12.49",
+                                              "size":  "42 ea",
+                                              "basis":  "per-42-pack",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
+                                          },
+                                          {
                                               "store":  "Hy-Vee",
                                               "per_unit":  0.3206,
                                               "unit":  "each",
@@ -21011,6 +21137,20 @@
                                               "basis":  "per-each",
                                               "note":  "3 for $3",
                                               "source_ad":  "Weekly Ad"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  2.995,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Bob Evans Macaroni \u0026 Cheese 2 Ea",
+                                              "ad":  "$5.99",
+                                              "size":  "2 ct",
+                                              "basis":  "per-2-pack",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -23256,6 +23396,20 @@
                                               "source_ad":  "shop.fareway.com"
                                           },
                                           {
+                                              "store":  "Family Fare",
+                                              "per_unit":  1.3738,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Sparkle Pick A Size Modern White 2 Ply Paper Towels 8 Ea",
+                                              "ad":  "$10.99",
+                                              "size":  "1 rl",
+                                              "basis":  "per-8-pack",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
+                                          },
+                                          {
                                               "store":  "Sam\u0027s Club",
                                               "per_unit":  1.3953,
                                               "unit":  "each",
@@ -23282,20 +23436,6 @@
                                               "basis":  "per-2-pack",
                                               "note":  "",
                                               "source_ad":  "bakersplus.com everyday (Saddlecreek, staples300)"
-                                          },
-                                          {
-                                              "store":  "Family Fare",
-                                              "per_unit":  2.8317,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Bounty Paper Towel Sas Print Dbl Rll",
-                                              "ad":  "$16.99",
-                                              "size":  "6 ct",
-                                              "basis":  "per-6-pack",
-                                              "note":  "",
-                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -23431,7 +23571,7 @@
                                               "item":  "Great Value Unbleached Parchment Paper 50 Sq Ft",
                                               "ad":  "$2.96",
                                               "size":  "each",
-                                              "basis":  "per-each marker",
+                                              "basis":  "per-each",
                                               "note":  "",
                                               "source_ad":  "walmart.com (Omaha, staples300)"
                                           },
@@ -23448,6 +23588,20 @@
                                               "basis":  "per-each",
                                               "note":  "",
                                               "source_ad":  "shop.fareway.com"
+                                          },
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  7.76,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark Unbleached Parchment Paper",
+                                              "ad":  "$15.52",
+                                              "size":  "2 pk 205 sq ft",
+                                              "basis":  "per-2-pack",
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com (Omaha, staples300)"
                                           }
                                       ]
                        },
@@ -24682,6 +24836,20 @@
                                               "source_ad":  "walmart.com (Omaha, staples300)"
                                           },
                                           {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.615,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Toufayan Bakeries Hearth Baked Classic White Pita 6 Each",
+                                              "ad":  "$3.69",
+                                              "size":  "6 ct",
+                                              "basis":  "per-6-pack",
+                                              "note":  "",
+                                              "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)"
+                                          },
+                                          {
                                               "store":  "Fareway",
                                               "per_unit":  0.798,
                                               "unit":  "each",
@@ -24998,6 +25166,20 @@
                                               "basis":  "per-12-pack",
                                               "note":  "",
                                               "source_ad":  "shop.fareway.com"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.405,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Popsicle Ice Pops, Sugar Free, Orange/Cherry/Grape 18 Ea",
+                                              "ad":  "$7.29",
+                                              "size":  "18 ea",
+                                              "basis":  "per-18-pack",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Sam\u0027s Club",
@@ -26203,6 +26385,20 @@
                                               "basis":  "per-each",
                                               "note":  "",
                                               "source_ad":  "shop.fareway.com"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.3742,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Maruchan Beef Flavor Ramen Noodle Soup 12 Ea",
+                                              "ad":  "$4.49",
+                                              "size":  "12 ea",
+                                              "basis":  "per-12-pack",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -30566,6 +30762,20 @@
                                               "source_ad":  "samsclub.com (Omaha, staples300)"
                                           },
                                           {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.2325,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Toaster Pastries, Brown Sugar Cinnamon, Frosted 12 Ea",
+                                              "ad":  "$2.79",
+                                              "size":  "12 ea",
+                                              "basis":  "per-12-pack",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
+                                          },
+                                          {
                                               "store":  "Fareway",
                                               "per_unit":  0.25,
                                               "unit":  "each",
@@ -30789,15 +30999,15 @@
                                           },
                                           {
                                               "store":  "Family Fare",
-                                              "per_unit":  1.0483,
+                                              "per_unit":  0.8121,
                                               "unit":  "each",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Charmin Essentials Strong Toilet Paper 6 Mega Rolls 6 Ct",
-                                              "ad":  "$6.29",
-                                              "size":  "6 ct",
-                                              "basis":  "per-6-pack",
+                                              "item":  "Angel Soft 2 Ply Mega Rolls Unscented Mega Rolls Bathroom Tissue 24 Ea",
+                                              "ad":  "$19.49",
+                                              "size":  "24 ea",
+                                              "basis":  "per-24-pack",
                                               "note":  "",
                                               "source_ad":  "everyday shelf price"
                                           }
@@ -31564,6 +31774,20 @@
                                               "source_ad":  "shop.fareway.com"
                                           },
                                           {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.1825,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Frescados Taqueria Style Mini Flour Tortillas 12 Ea",
+                                              "ad":  "$2.19",
+                                              "size":  "12 ea",
+                                              "basis":  "per-12-pack",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
+                                          },
+                                          {
                                               "store":  "Walmart",
                                               "per_unit":  0.198,
                                               "unit":  "each",
@@ -31576,20 +31800,6 @@
                                               "basis":  "per-10-pack",
                                               "note":  "",
                                               "source_ad":  "walmart.com (Omaha, staples100 2026-07-12)"
-                                          },
-                                          {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.349,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Mi Mama\u0027s Tortillas 8 Inch Flour Tortilla 10 Ct",
-                                              "ad":  "$3.49",
-                                              "size":  "20 oz",
-                                              "basis":  "per-10-pack",
-                                              "note":  "",
-                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },

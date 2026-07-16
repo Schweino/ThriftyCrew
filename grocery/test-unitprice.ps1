@@ -31,6 +31,15 @@ $cases = @(
   @{ n = 'Hy-Vee wipes (does NOT divide)'; price = '$3.99'; size = '35 ct'; name = 'Clorox Disinfecting Bleach Free Crisp Lemon Cleaning Wipes'; unit = 'each' }
   @{ n = 'laundry pods "42 ea"'; price = '$12.49'; size = '42 ea'; name = 'Arm & Hammer Laundry Detergent, Concentrated, 5 In 1, Fresh Burst, Power Paks 42 Ea'; unit = 'each' }
   @{ n = 'dishwasher pacs "12 ea"'; price = '$6.99'; size = '12 ea'; name = 'Cascade Action Pacs Lemon Scent Dishwasher Detergent 12 Ea'; unit = 'each' }
+  # pack-first multipack + slash-pack sizes: is the TOTAL read, or one unit / a fraction?
+  @{ n = 'PACK-FIRST "6-pack 12 fl oz" (want 72 floz -> 0.0971)'; price = '$6.99'; size = '6-pack 12 fl oz'; name = 'Liquid Death Sparkling Water'; unit = 'floz' }
+  @{ n = 'SLASH-PACK "6/4 oz" (want 24 oz -> 0.1454)'; price = '$3.49'; size = '6/4 oz'; name = "Mott's Apple Sauce 6 Ea"; unit = 'oz' }
+  @{ n = 'control "6 pk 4 oz" (want 24 oz)'; price = '$3.49'; size = '6 pk 4 oz'; name = 'x'; unit = 'oz' }
+  @{ n = 'control "12 fl oz" single (want 12)'; price = '$1.00'; size = '12 fl oz'; name = 'x'; unit = 'floz' }
+  # REAL FRACTIONS must still divide - this is what the numerator<denominator guard protects
+  @{ n = 'FRACTION "1/2 gal" milk (want 0.5 gal -> 7.98)'; price = '$3.99'; size = '1/2 gal'; name = 'Milk'; unit = 'gallon' }
+  @{ n = 'FRACTION "3/4 lb" (want 0.75 lb -> 5.32)'; price = '$3.99'; size = '3/4 lb'; name = 'x'; unit = 'lb' }
+  @{ n = 'FRACTION "1/2 gal" as floz (want 64 floz)'; price = '$3.20'; size = '1/2 gal'; name = 'x'; unit = 'floz' }
 )
 Write-Output ''
 foreach ($c in $cases) {

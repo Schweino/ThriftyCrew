@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-16 08:52",
-    "count":  31,
+    "generated":  "2026-07-16 09:00",
+    "count":  20,
     "rows":  [
                  {
                      "commodity":  "lettuce",
@@ -15,17 +15,6 @@
                  },
                  {
                      "commodity":  "bagels",
-                     "store":  "Family Fare",
-                     "unit":  "each",
-                     "pu":  3.99,
-                     "band":  "0.25-1.8",
-                     "ratio":  2.22,
-                     "price_text":  "$3.99",
-                     "size_text":  "6 ea",
-                     "name":  "Bubba\u0027s Sliced Blueberry Flavored Bagels 6 Ea"
-                 },
-                 {
-                     "commodity":  "bagels",
                      "store":  "Fareway",
                      "unit":  "each",
                      "pu":  2,
@@ -34,17 +23,6 @@
                      "price_text":  "$2.00",
                      "size_text":  "each",
                      "name":  "Fareway Pre-Sliced Original Bagels"
-                 },
-                 {
-                     "commodity":  "dishwasher-detergent",
-                     "store":  "Family Fare",
-                     "unit":  "each",
-                     "pu":  6.99,
-                     "band":  "0.08-1",
-                     "ratio":  6.99,
-                     "price_text":  "$6.99",
-                     "size_text":  "12 ea",
-                     "name":  "Cascade Action Pacs Lemon Scent Dishwasher Detergent 12 Ea"
                  },
                  {
                      "commodity":  "pears",
@@ -124,17 +102,6 @@
                      "name":  "Hostess Donettes Frosted Mini Donuts"
                  },
                  {
-                     "commodity":  "pita-bread",
-                     "store":  "Hy-Vee",
-                     "unit":  "each",
-                     "pu":  3.69,
-                     "band":  "0.25-1.5",
-                     "ratio":  2.46,
-                     "price_text":  "$3.69",
-                     "size_text":  "6 ct",
-                     "name":  "Toufayan Bakeries Hearth Baked Classic White Pita 6 Each"
-                 },
-                 {
                      "commodity":  "applesauce",
                      "store":  "Family Fare",
                      "unit":  "oz",
@@ -157,28 +124,6 @@
                      "name":  "Fareway Unsweetened Applesauce"
                  },
                  {
-                     "commodity":  "granola-bars",
-                     "store":  "Family Fare",
-                     "unit":  "each",
-                     "pu":  3.59,
-                     "band":  "0.15-1.2",
-                     "ratio":  2.99,
-                     "price_text":  "$3.59",
-                     "size_text":  "10 ea",
-                     "name":  "Sunbelt Bakery Oats \u0026 Honey Chewy Granola Bars 10 Ea"
-                 },
-                 {
-                     "commodity":  "fruit-cups",
-                     "store":  "Aldi",
-                     "unit":  "each",
-                     "pu":  2.19,
-                     "band":  "0.3-1.5",
-                     "ratio":  1.46,
-                     "price_text":  "$2.19",
-                     "size_text":  "4 pk 4 oz",
-                     "name":  "Lunch Buddies Peach Fruit Cups in Juice"
-                 },
-                 {
                      "commodity":  "fruit-cups",
                      "store":  "Fareway",
                      "unit":  "each",
@@ -188,17 +133,6 @@
                      "price_text":  "$2.78",
                      "size_text":  "each",
                      "name":  "Fareway Mandarin Oranges in 100% Juice"
-                 },
-                 {
-                     "commodity":  "fruit-cups",
-                     "store":  "Sam\u0027s Club",
-                     "unit":  "each",
-                     "pu":  10.98,
-                     "band":  "0.3-1.5",
-                     "ratio":  7.32,
-                     "price_text":  "$10.98",
-                     "size_text":  "24 pk 4 oz",
-                     "name":  "Member\u0027s Mark Diced Peach Cups"
                  },
                  {
                      "commodity":  "pudding-cups",
@@ -234,17 +168,6 @@
                      "name":  "Nestle Hot Cocoa Rich Milk Chocolate Flavored Mix Powder"
                  },
                  {
-                     "commodity":  "frozen-waffles",
-                     "store":  "Family Fare",
-                     "unit":  "each",
-                     "pu":  3.59,
-                     "band":  "0.15-0.8",
-                     "ratio":  4.49,
-                     "price_text":  "$3.59",
-                     "size_text":  "12.3 oz",
-                     "name":  "Eggo Blueberry Waffles 10 Ea"
-                 },
-                 {
                      "commodity":  "tater-tots",
                      "store":  "Family Fare",
                      "unit":  "oz",
@@ -276,50 +199,6 @@
                      "price_text":  "$1.97",
                      "size_text":  "8 ct",
                      "name":  "Great Value Garlic Texas Toast"
-                 },
-                 {
-                     "commodity":  "popsicles",
-                     "store":  "Family Fare",
-                     "unit":  "each",
-                     "pu":  4.99,
-                     "band":  "0.04-1.5",
-                     "ratio":  3.33,
-                     "price_text":  "$4.99",
-                     "size_text":  "12 ea",
-                     "name":  "Bomb Pop Pops, Strawberry, Watermelon \u0026 Grape, Nerds Candy 12 Ea"
-                 },
-                 {
-                     "commodity":  "laundry-pods",
-                     "store":  "Family Fare",
-                     "unit":  "each",
-                     "pu":  12.49,
-                     "band":  "0.1-0.8",
-                     "ratio":  15.61,
-                     "price_text":  "$12.49",
-                     "size_text":  "42 ea",
-                     "name":  "Arm \u0026 Hammer Laundry Detergent, Concentrated, 5 In 1, Fresh Burst, Power Paks 42 Ea"
-                 },
-                 {
-                     "commodity":  "parchment-paper",
-                     "store":  "Sam\u0027s Club",
-                     "unit":  "each",
-                     "pu":  15.52,
-                     "band":  "1.5-8",
-                     "ratio":  1.94,
-                     "price_text":  "$15.52",
-                     "size_text":  "2 pk 205 sq ft",
-                     "name":  "Member\u0027s Mark Unbleached Parchment Paper"
-                 },
-                 {
-                     "commodity":  "disinfecting-wipes",
-                     "store":  "Fareway",
-                     "unit":  "each",
-                     "pu":  3.64,
-                     "band":  "0.03-0.25",
-                     "ratio":  14.56,
-                     "price_text":  "$3.64",
-                     "size_text":  "35 ct",
-                     "name":  "Clorox Disinfecting Wipes, Bleach Free Cleaning Wipes, Fresh Scent"
                  },
                  {
                      "commodity":  "air-freshener",

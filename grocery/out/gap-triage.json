@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-16 08:47",
-    "count":  70,
+    "generated":  "2026-07-16 09:00",
+    "count":  59,
     "rows":  [
                  {
                      "commodity":  "lettuce",
@@ -8,14 +8,6 @@
                      "candidate":  "Fresh Iceberg Lettuce Head",
                      "cause":  "OUT-OF-BAND",
                      "owner":  "lettuce",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "bagels",
-                     "store":  "Family Fare",
-                     "candidate":  "Bubba\u0027s Sliced Blueberry Flavored Bagels 6 Ea",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "bagels",
                      "detail":  ""
                  },
                  {
@@ -33,14 +25,6 @@
                      "cause":  "STOLEN",
                      "owner":  "coffee",
                      "detail":  "coffee"
-                 },
-                 {
-                     "commodity":  "dishwasher-detergent",
-                     "store":  "Family Fare",
-                     "candidate":  "Cascade Action Pacs Lemon Scent Dishwasher Detergent 12 Ea",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "dishwasher-detergent",
-                     "detail":  ""
                  },
                  {
                      "commodity":  "hand-soap",
@@ -147,14 +131,6 @@
                      "detail":  ""
                  },
                  {
-                     "commodity":  "pita-bread",
-                     "store":  "Hy-Vee",
-                     "candidate":  "Toufayan Bakeries Hearth Baked Classic White Pita 6 Each",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "pita-bread",
-                     "detail":  ""
-                 },
-                 {
                      "commodity":  "frosting",
                      "store":  "Sam\u0027s Club",
                      "candidate":  "Sam\u0027s Vanilla Whipped Icing, Frozen Bucket",
@@ -203,26 +179,10 @@
                      "detail":  "seasoned"
                  },
                  {
-                     "commodity":  "granola-bars",
-                     "store":  "Family Fare",
-                     "candidate":  "Sunbelt Bakery Oats \u0026 Honey Chewy Granola Bars 10 Ea",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "granola-bars",
-                     "detail":  ""
-                 },
-                 {
                      "commodity":  "fruit-snacks",
                      "store":  "Family Fare",
                      "candidate":  "Del Monte Fruit Cup Snacks Mandarin Oranges In 100% Juice Family Pack 12 Ea",
                      "cause":  "NO-INCLUDE",
-                     "owner":  "fruit-cups",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "fruit-cups",
-                     "store":  "Aldi",
-                     "candidate":  "Lunch Buddies Peach Fruit Cups in Juice",
-                     "cause":  "OUT-OF-BAND",
                      "owner":  "fruit-cups",
                      "detail":  ""
                  },
@@ -241,14 +201,6 @@
                      "cause":  "GLOBAL-EXCL",
                      "owner":  "mandarin-oranges",
                      "detail":  "\\bcanned\\b"
-                 },
-                 {
-                     "commodity":  "fruit-cups",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Member\u0027s Mark Diced Peach Cups",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "fruit-cups",
-                     "detail":  ""
                  },
                  {
                      "commodity":  "pudding-cups",
@@ -315,14 +267,6 @@
                      "detail":  ""
                  },
                  {
-                     "commodity":  "frozen-waffles",
-                     "store":  "Family Fare",
-                     "candidate":  "Eggo Blueberry Waffles 10 Ea",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "frozen-waffles",
-                     "detail":  ""
-                 },
-                 {
                      "commodity":  "frozen-burritos",
                      "store":  "Family Fare",
                      "candidate":  "Mission Super Soft Burrito Flour Tortilla Wraps 6 Ea",
@@ -376,38 +320,6 @@
                      "candidate":  "Great Value Garlic Texas Toast",
                      "cause":  "OUT-OF-BAND",
                      "owner":  "garlic-bread",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "popsicles",
-                     "store":  "Family Fare",
-                     "candidate":  "Bomb Pop Pops, Strawberry, Watermelon \u0026 Grape, Nerds Candy 12 Ea",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "popsicles",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "laundry-pods",
-                     "store":  "Family Fare",
-                     "candidate":  "Arm \u0026 Hammer Laundry Detergent, Concentrated, 5 In 1, Fresh Burst, Power Paks 42 Ea",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "laundry-pods",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "parchment-paper",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Member\u0027s Mark Unbleached Parchment Paper",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "parchment-paper",
-                     "detail":  ""
-                 },
-                 {
-                     "commodity":  "disinfecting-wipes",
-                     "store":  "Fareway",
-                     "candidate":  "Clorox Disinfecting Wipes, Bleach Free Cleaning Wipes, Fresh Scent",
-                     "cause":  "OUT-OF-BAND",
-                     "owner":  "disinfecting-wipes",
                      "detail":  ""
                  },
                  {

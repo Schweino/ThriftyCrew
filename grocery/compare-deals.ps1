@@ -118,17 +118,31 @@ function Get-SizeAmount([string]$sizeText, [string]$unit) {
     if ($one -ne $null) { return $one }
   }
   # fractional size like "1/2 gal" or "3/4 lb" -> 0.5 / 0.75 of that unit (must run before the plain-number match)
-  $mf = [regex]::Match($s, '(\d+)\s*/\s*(\d+)\s*(fl\s*oz|floz|oz|ounce|ounces|lb|lbs|pound|pounds|gal|gallon|qt|quart|pt|pint|liter|litre|ml)\b')
+  # A FRACTION HAS THE SMALLER NUMBER ON TOP. "6/4 oz" is not six-quarters of an ounce, it is the count/size
+  # pack idiom stores print for cup multipacks: 6 cups of 4 oz = 24 oz. Dividing it gave 1.5 oz, so Mott's Apple
+  # Sauce priced at $2.33/oz - 9x its band, dropped, and Family Fare vanished from the applesauce row.
+  # So: numerator < denominator is a real fraction; otherwise it is <count>/<each-size> and the total is a
+  # product, not a quotient.
+  $mf = [regex]::Match($s, '(\d+)\s*/\s*(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|ounce|ounces|lb|lbs|pound|pounds|gal|gallon|qt|quart|pt|pint|liter|litre|ml)\b')
   if ($mf.Success -and ([double]$mf.Groups[2].Value -ne 0)) {
-    $q = [double]$mf.Groups[1].Value / [double]$mf.Groups[2].Value
-    $conv = Convert-ToUnit $q $mf.Groups[3].Value $unit
-    if ($conv -ne $null) { return $conv }
+    $fa = [double]$mf.Groups[1].Value; $fb = [double]$mf.Groups[2].Value
+    if ($fa -lt $fb) {
+      $conv = Convert-ToUnit ($fa / $fb) $mf.Groups[3].Value $unit
+      if ($conv -ne $null) { return $conv }
+    } else {
+      $per = Convert-ToUnit $fb $mf.Groups[3].Value $unit
+      if ($per -ne $null) { return $fa * $per }
+    }
   }
   # "24 ct 16.9 oz" style multipack -> total = count * each-size.
   # The each-size token must include GAL/QT/PT/LB, not just oz: Sam's "Member's Mark Distilled White
   # Vinegar, 1 gal., 2 pk." is TWO gallons, and with gal missing here it fell through and was priced
   # as ONE, making Sam's look 2x more expensive than it is.
-  $mm = [regex]::Match($s, '(\d+(?:\.\d+)?)\s*(?:ct|count|pk|pack)\D+(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|ml|l\b|gal|gallon|qt|quart|pt|pint|lbs?|pound)\b')
+  # The count and its token may be HYPHENATED. "6-pack 12 fl oz" failed here (\s* cannot cross the "-"), fell
+  # through to the plain first-number scan, and became 12 fl oz - so Liquid Death sparkling water priced at
+  # $0.58/fl oz instead of $0.097, 5x its band, and Baker's dropped off the row. "6 pk 4 oz" matched fine, which
+  # is exactly why it went unnoticed: the bug only bites the spelled-out, hyphenated form.
+  $mm = [regex]::Match($s, '(\d+(?:\.\d+)?)\s*[- ]?\s*(?:ct|count|pk|packs?)\D+(\d+(?:\.\d+)?)\s*(fl\s*oz|floz|oz|ml|l\b|gal|gallon|qt|quart|pt|pint|lbs?|pound)\b')
   if ($mm.Success -and ($unit -eq 'oz' -or $unit -eq 'floz' -or $unit -eq 'gallon' -or $unit -eq 'lb')) {
     $cnt = [double]$mm.Groups[1].Value; $each = [double]$mm.Groups[2].Value; $tok = $mm.Groups[3].Value
     $per = Convert-ToUnit $each $tok $unit
