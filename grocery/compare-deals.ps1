@@ -340,6 +340,16 @@ foreach ($d in $ads.deals) {                                                    
 # ad-based extra files (Baker's ad, Sam's, Fareway weekly-ad sales). Each file may declare price_type (Sam's
 # warehouse price = everyday); default sale. Fareway's EVERYDAY storefront prices load from out\regular\ above;
 # -FarewayFile is only its weekly-ad SALE supplement (vision-read promos the storefront may not show online).
+#
+# AUTO-DISCOVER when not passed (2026-07-16). These used to be caller-supplied ONLY, while out\regular\ was
+# auto-discovered - so running `compare-deals.ps1` bare silently built a board with NO Sam's ad prices (Sam's
+# has no out\regular\ file at all: its prices come only from out\sams\sams-deals-*.json). That is exactly what
+# happened today: a bare re-run cut Sam's from 201 priced chips to 112 and quietly dropped 125 chips across
+# Sam's/Baker's/Hy-Vee/Walmart, and the publish coverage gate did not catch it because 112 > its MinPerStore.
+# A store must never disappear because of how the engine was invoked. Explicit args still win.
+if (-not $BakersFile)  { $f = Get-ChildItem (Join-Path $OutDir 'bakers\bakers-deals-*.json')   -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1; if ($f) { $BakersFile  = $f.FullName; Write-Warning ("compare-deals: -BakersFile not passed; auto-using "  + $f.Name) } }
+if (-not $SamsFile)    { $f = Get-ChildItem (Join-Path $OutDir 'sams\sams-deals-*.json')       -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1; if ($f) { $SamsFile    = $f.FullName; Write-Warning ("compare-deals: -SamsFile not passed; auto-using "    + $f.Name) } }
+if (-not $FarewayFile) { $f = Get-ChildItem (Join-Path $OutDir 'fareway\fareway-deals-*.json') -EA SilentlyContinue | Sort-Object Name -Descending | Select-Object -First 1; if ($f) { $FarewayFile = $f.FullName; Write-Warning ("compare-deals: -FarewayFile not passed; auto-using " + $f.Name) } }
 foreach ($extra in @($BakersFile,$SamsFile,$FarewayFile)) {
   if ($extra -and (Test-Path $extra)) {
     $ex = Get-Content $extra -Raw | ConvertFrom-Json
