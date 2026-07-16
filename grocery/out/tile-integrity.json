@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-07-16 16:54",
+    "generated":  "2026-07-16 17:18",
     "board":  "comparison-2026-07-15.json",
     "total_tiles":  2047,
-    "violations":  175,
+    "violations":  160,
     "by_store":  {
                      "Walmart":  {
                                      "coverage":  27,
@@ -35,9 +35,9 @@
                                   "violations":  12
                               },
                      "Baker\u0027s":  {
-                                          "coverage":  51,
+                                          "coverage":  36,
                                           "tiles":  231,
-                                          "violations":  51
+                                          "violations":  36
                                       }
                  },
     "rows":  [
@@ -143,14 +143,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Van Camp\u0027s Pork and Beans",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "balsamic-vinegar",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Filippo Berio® Balsamic Vinegar of Modena 16.9 fl oz",
                      "link":  ""
                  },
                  {
@@ -298,14 +290,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "coconut-milk-canned",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Simple Truth Organic® Unsweetened Coconut Milk 13.5 fl oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "fruit-cocktail",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -330,22 +314,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "mandarin-oranges",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger® Canned Mandarin Oranges in Light Syrup 15 oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "canned-pasta",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Chef Boyardee Beefaroni, 15 oz 15 oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "canned-pasta",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -359,14 +327,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Great Value Canned Pear Halves in Heavy Syrup, 29 oz Can",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "canned-pears",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger® Canned Pear Halves in Pear Juice 14.5 oz",
                      "link":  ""
                  },
                  {
@@ -474,30 +434,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "chuck-roast",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Choice Beef Chuck Roast",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "clam-chowder",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Campbell\u0027s Chunky OLD BAY Seasoned Clam Chowder 18.8 oz Ca",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "cocktail-sauce",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger® Cocktail Sauce 12 oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "coffee",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -527,14 +463,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger Coffee Pods",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "cornstarch",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Maizena Corn Starch 14.1 oz",
                      "link":  ""
                  },
                  {
@@ -615,14 +543,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy Vee Wide Egg Noodles",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "enchilada-sauce",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger® Mild Red Enchilada Sauce 28 oz",
                      "link":  ""
                  },
                  {
@@ -1058,14 +978,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "orange-juice",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger 100% Orange Juice Pulp Free (Half Gal)",
-                     "link":  ""
-                 },
-                 {
                      "id":  "dried-oregano",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -1178,14 +1090,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "red-wine-vinegar",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Pompeian® Gourmet Red Wine Vinegar 16 fl oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "ribeye-steak",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
@@ -1199,14 +1103,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Mizkan Rice Vinegar for Cooking, 12 fl oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "rice-vinegar",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Nakano® Organic Natural Rice Vinegar 12 fl oz",
                      "link":  ""
                  },
                  {
@@ -1266,14 +1162,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "shredded-cheese",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Colby Jack Shredded Cheese Family Size",
-                     "link":  ""
-                 },
-                 {
                      "id":  "sliced-cheese",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -1319,14 +1207,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "each (estimated)each (est.)Sweet Potatoes",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "tartar-sauce",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger® Tartar Sauce 11.5 fl oz",
                      "link":  ""
                  },
                  {
@@ -1443,5 +1323,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  175
+    "coverage_violations":  160
 }
