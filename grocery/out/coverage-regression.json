@@ -1,8 +1,8 @@
 ﻿{
     "checked":  "2026-07-15",
     "new_board":  "comparison-2026-07-15.json",
-    "prev_board":  "comparison-2026-07-12.json",
-    "rows_was":  301,
+    "prev_board":  "comparison-2026-07-14.json",
+    "rows_was":  364,
     "rows_now":  378,
     "thresholds":  {
                        "max_drop_cells":  15,
@@ -11,64 +11,64 @@
     "stores":  [
                    {
                        "store":  "Aldi",
-                       "was":  262,
+                       "was":  283,
                        "now":  287,
-                       "drop":  -25,
-                       "pct":  -9.5,
+                       "drop":  -4,
+                       "pct":  -1.4,
                        "regression":  false,
                        "acked":  false
                    },
                    {
                        "store":  "Baker\u0027s",
-                       "was":  136,
+                       "was":  189,
                        "now":  226,
-                       "drop":  -90,
-                       "pct":  -66.2,
+                       "drop":  -37,
+                       "pct":  -19.6,
                        "regression":  false,
                        "acked":  false
                    },
                    {
                        "store":  "Family Fare",
-                       "was":  114,
+                       "was":  187,
                        "now":  182,
-                       "drop":  -68,
-                       "pct":  -59.6,
+                       "drop":  5,
+                       "pct":  2.7,
                        "regression":  false,
                        "acked":  false
                    },
                    {
                        "store":  "Fareway",
-                       "was":  289,
+                       "was":  314,
                        "now":  321,
-                       "drop":  -32,
-                       "pct":  -11.1,
+                       "drop":  -7,
+                       "pct":  -2.2,
                        "regression":  false,
                        "acked":  false
                    },
                    {
                        "store":  "Hy-Vee",
-                       "was":  283,
+                       "was":  349,
                        "now":  361,
-                       "drop":  -78,
-                       "pct":  -27.6,
+                       "drop":  -12,
+                       "pct":  -3.4,
                        "regression":  false,
                        "acked":  false
                    },
                    {
                        "store":  "Sam\u0027s Club",
-                       "was":  251,
+                       "was":  116,
                        "now":  276,
-                       "drop":  -25,
-                       "pct":  -10,
+                       "drop":  -160,
+                       "pct":  -137.9,
                        "regression":  false,
                        "acked":  false
                    },
                    {
                        "store":  "Walmart",
-                       "was":  295,
+                       "was":  322,
                        "now":  361,
-                       "drop":  -66,
-                       "pct":  -22.4,
+                       "drop":  -39,
+                       "pct":  -12.1,
                        "regression":  false,
                        "acked":  false
                    }
