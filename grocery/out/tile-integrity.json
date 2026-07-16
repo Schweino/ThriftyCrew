@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-07-16 16:24",
+    "generated":  "2026-07-16 16:54",
     "board":  "comparison-2026-07-15.json",
     "total_tiles":  2047,
-    "violations":  181,
+    "violations":  175,
     "by_store":  {
                      "Walmart":  {
                                      "coverage":  27,
@@ -30,9 +30,9 @@
                                              "violations":  14
                                          },
                      "Aldi":  {
-                                  "coverage":  18,
+                                  "coverage":  12,
                                   "tiles":  288,
-                                  "violations":  18
+                                  "violations":  12
                               },
                      "Baker\u0027s":  {
                                           "coverage":  51,
@@ -79,14 +79,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Almond Breeze Almond Milk",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "apples",
-                     "store":  "Aldi",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Gala Apples, Bag",
                      "link":  ""
                  },
                  {
@@ -498,14 +490,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "clementines",
-                     "store":  "Aldi",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Mandarins, Bag",
-                     "link":  ""
-                 },
-                 {
                      "id":  "cocktail-sauce",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -799,14 +783,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Great Value Ground Cinnamon, 2.5 oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "ground-cumin",
-                     "store":  "Aldi",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Stonemill Ground Cumin 2 oz",
                      "link":  ""
                  },
                  {
@@ -1330,27 +1306,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "strawberries",
-                     "store":  "Aldi",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Strawberries",
-                     "link":  ""
-                 },
-                 {
                      "id":  "string-cheese",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Frigo Cheese Heads String Cheese",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "string-cheese",
-                     "store":  "Aldi",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Happy Farms String Cheese",
                      "link":  ""
                  },
                  {
@@ -1426,14 +1386,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "turkey-lunchmeat",
-                     "store":  "Aldi",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Lunch Mate Oven Roasted Turkey Breast",
-                     "link":  ""
-                 },
-                 {
                      "id":  "turkey-bacon",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -1491,5 +1443,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  181
+    "coverage_violations":  175
 }

@@ -1,0 +1,114 @@
+﻿[
+    {
+        "id":  "avocados",
+        "q":  "avocado",
+        "match":  "Avocados",
+        "size":  "each",
+        "pu":  1.07,
+        "unit":  "each"
+    },
+    {
+        "id":  "bread",
+        "q":  "white bread",
+        "match":  "Bimbo Soft White Bread (2 pk)",
+        "size":  "2 ct",
+        "pu":  1.76,
+        "unit":  "each"
+    },
+    {
+        "id":  "chili-powder",
+        "q":  "chili powder",
+        "match":  "Member\u0027s Mark Chili Powder, 20 oz.",
+        "size":  "20 oz",
+        "pu":  0.499,
+        "unit":  "oz"
+    },
+    {
+        "id":  "garlic-powder",
+        "q":  "garlic powder",
+        "match":  "Member\u0027s Mark Garlic Powder, 22.5 oz.",
+        "size":  "22.5 oz",
+        "pu":  0.4436,
+        "unit":  "oz"
+    },
+    {
+        "id":  "ground-cumin",
+        "q":  "ground cumin",
+        "match":  "Member\u0027s Mark Ground Cumin, 16 oz.",
+        "size":  "16 oz",
+        "pu":  0.5612,
+        "unit":  "oz"
+    },
+    {
+        "id":  "ground-turkey",
+        "q":  "ground turkey",
+        "match":  "Jennie-O 93/7 Ground Turkey (2.5 lb, 2 pk)",
+        "size":  "lb",
+        "pu":  4.55,
+        "unit":  "lb"
+    },
+    {
+        "id":  "italian-seasoning",
+        "q":  "italian seasoning",
+        "match":  "Member\u0027s Mark Italian Seasoning, 6 oz.",
+        "size":  "6 oz",
+        "pu":  1.1467,
+        "unit":  "oz"
+    },
+    {
+        "id":  "eggs",
+        "q":  "large eggs",
+        "match":  "Member\u0027s Mark Cage Free Large White Eggs (2 dozen)",
+        "size":  "dozen",
+        "pu":  2.31,
+        "unit":  "dozen"
+    },
+    {
+        "id":  "milk",
+        "q":  "milk gallon",
+        "match":  "Member\u0027s Mark 2% Reduced Fat Milk (1 gal)",
+        "size":  "gal",
+        "pu":  3.72,
+        "unit":  "gallon"
+    },
+    {
+        "id":  "onion-powder",
+        "q":  "onion powder",
+        "match":  "Member\u0027s Mark Onion Powder, 21 oz.",
+        "size":  "21 oz",
+        "pu":  0.4276,
+        "unit":  "oz"
+    },
+    {
+        "id":  "russet-potatoes",
+        "q":  "russet potatoes",
+        "match":  "Russet Potatoes (10 lb bag)",
+        "size":  "lb",
+        "pu":  0.46,
+        "unit":  "lb"
+    },
+    {
+        "id":  "shredded-cheese",
+        "q":  "shredded cheese",
+        "match":  "Member\u0027s Mark Colby \u0026 Monterey Jack Shredded Cheese",
+        "size":  "oz",
+        "pu":  0.19,
+        "unit":  "oz"
+    },
+    {
+        "id":  "string-cheese",
+        "q":  "mozzarella string cheese",
+        "match":  "Frigo Cheese Heads String Cheese",
+        "size":  "48 oz",
+        "pu":  0.1973,
+        "unit":  "oz"
+    },
+    {
+        "id":  "whole-chicken",
+        "q":  "whole chicken",
+        "match":  "Member\u0027s Mark Organic Whole Chicken",
+        "size":  "lb",
+        "pu":  2.47,
+        "unit":  "lb"
+    }
+]

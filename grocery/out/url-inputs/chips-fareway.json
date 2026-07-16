@@ -1,32 +1,130 @@
 ﻿[
     {
-        "id":  "canned-pumpkin",
-        "q":  "canned pumpkin",
-        "match":  "Libby\u0027s Pumpkin 100% Pure Pumpkin29 oz",
-        "size":  "29 oz"
+        "id":  "flour",
+        "q":  "all purpose flour",
+        "match":  "Fareway Flour All Purpose",
+        "size":  "5 lb",
+        "pu":  0.528,
+        "unit":  "lb"
+    },
+    {
+        "id":  "apples",
+        "q":  "apples",
+        "match":  "Golden Delicious Apple",
+        "size":  "lb",
+        "pu":  1.68,
+        "unit":  "lb"
+    },
+    {
+        "id":  "chicken-breast",
+        "q":  "boneless skinless chicken breast",
+        "match":  "Boneless Skinless Chicken Breast",
+        "size":  "lb",
+        "pu":  3.99,
+        "unit":  "lb"
+    },
+    {
+        "id":  "beef-stew",
+        "q":  "canned beef stew",
+        "match":  "DINTY MOORE Beef Stew With Potatoes \u0026 Carrots,",
+        "size":  "15 Oz",
+        "pu":  0.198,
+        "unit":  "oz"
     },
     {
         "id":  "fruit-cocktail",
         "q":  "fruit cocktail canned",
         "match":  "Fareway In Heavy Syrup Fruit Cocktail15.25 oz",
-        "size":  "15.25 oz"
+        "size":  "15.25 oz",
+        "pu":  0.1207,
+        "unit":  "oz"
     },
     {
-        "id":  "white-vinegar",
-        "q":  "distilled white vinegar",
-        "match":  "Fareway White Distilled Vinegar 128 fl oz",
-        "size":  "128 fl oz"
+        "id":  "canned-pumpkin",
+        "q":  "canned pumpkin",
+        "match":  "Libby\u0027s Pumpkin 100% Pure Pumpkin29 oz",
+        "size":  "29 oz",
+        "pu":  0.1372,
+        "unit":  "oz"
+    },
+    {
+        "id":  "carrots",
+        "q":  "carrots",
+        "match":  "Carrot",
+        "size":  "2 lb",
+        "pu":  1.245,
+        "unit":  "lb"
+    },
+    {
+        "id":  "half-and-half",
+        "q":  "half and half",
+        "match":  "Kemps Fresh Half \u0026 Half",
+        "size":  "32 fl oz",
+        "pu":  0.1047,
+        "unit":  "floz"
+    },
+    {
+        "id":  "honey",
+        "q":  "honey",
+        "match":  "Fareway Pure Honey",
+        "size":  "16 oz",
+        "pu":  0.3744,
+        "unit":  "oz"
     },
     {
         "id":  "miracle-whip",
         "q":  "miracle whip",
         "match":  "Low carbMiracle Whip M",
-        "size":  "30 fl oz"
+        "size":  "30 fl oz",
+        "pu":  0.1993,
+        "unit":  "oz"
+    },
+    {
+        "id":  "olive-oil",
+        "q":  "olive oil",
+        "match":  "Fareway Extra Virgin Olive Oil",
+        "size":  "16.9 fl oz",
+        "pu":  0.413,
+        "unit":  "floz"
+    },
+    {
+        "id":  "salsa",
+        "q":  "salsa mild",
+        "match":  "Fareway Chunky Mild Salsa",
+        "size":  "16 oz",
+        "pu":  0.1562,
+        "unit":  "oz"
+    },
+    {
+        "id":  "sliced-cheese",
+        "q":  "american cheese slices",
+        "match":  "Fareway American Cheese Slices",
+        "size":  "12 oz",
+        "pu":  0.2067,
+        "unit":  "oz"
+    },
+    {
+        "id":  "tomato-sauce",
+        "q":  "tomato sauce",
+        "match":  "Fareway Tomato Sauce",
+        "size":  "15 oz",
+        "pu":  0.0793,
+        "unit":  "oz"
+    },
+    {
+        "id":  "white-vinegar",
+        "q":  "distilled white vinegar",
+        "match":  "Fareway White Distilled Vinegar 128 fl oz",
+        "size":  "128 fl oz",
+        "pu":  0.039,
+        "unit":  "floz"
     },
     {
         "id":  "yeast",
         "q":  "active dry yeast",
         "match":  "Red Star Active Dry Yeast 4 oz",
-        "size":  "4 oz"
+        "size":  "4 oz",
+        "pu":  1.7975,
+        "unit":  "oz"
     }
 ]

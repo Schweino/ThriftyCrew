@@ -1,38 +1,410 @@
 ﻿[
     {
+        "id":  "ground-beef-8020",
+        "q":  "80/20 ground beef",
+        "match":  "Kroger 80/20 Ground Beef Roll 3 LB",
+        "size":  "lb",
+        "pu":  5.99,
+        "unit":  "lb"
+    },
+    {
+        "id":  "flour",
+        "q":  "all purpose flour",
+        "match":  "Kroger Bleached All Purpose Enriched Flour (10 lb)",
+        "size":  "10 lb",
+        "pu":  0.479,
+        "unit":  "lb"
+    },
+    {
+        "id":  "almond-milk",
+        "q":  "unsweetened almond milk",
+        "match":  "Almond Breeze Almond Milk",
+        "size":  "96 fl oz",
+        "pu":  0.052,
+        "unit":  "floz"
+    },
+    {
         "id":  "apples",
         "q":  "apples",
         "match":  "Kroger Granny Smith Apples 3 Pound Bag",
-        "size":  "3 lb"
+        "size":  "3 lb",
+        "pu":  1.33,
+        "unit":  "lb"
     },
     {
-        "id":  "coconut-milk-canned",
-        "q":  "coconut milk canned",
-        "match":  "Simple Truth Organic® Unsweetened Coconut Milk 13.5 fl oz",
-        "size":  "13.5 fl oz"
+        "id":  "baked-beans",
+        "q":  "baked beans",
+        "match":  "Van Camp\u0027s Pork and Beans",
+        "size":  "15 oz",
+        "pu":  0.0667,
+        "unit":  "oz"
     },
     {
         "id":  "balsamic-vinegar",
         "q":  "balsamic vinegar",
         "match":  "Filippo Berio® Balsamic Vinegar of Modena 16.9 fl oz",
-        "size":  "16.9 fl oz"
+        "size":  "16.9 fl oz",
+        "pu":  0.2361,
+        "unit":  "floz"
+    },
+    {
+        "id":  "bar-soap",
+        "q":  "bar soap",
+        "match":  "Dove Bar Soap",
+        "size":  "4 ct",
+        "pu":  1.7475,
+        "unit":  "each"
+    },
+    {
+        "id":  "body-wash",
+        "q":  "body wash",
+        "match":  "Dove Body Wash",
+        "size":  "20 fl oz",
+        "pu":  0.3495,
+        "unit":  "floz"
+    },
+    {
+        "id":  "chicken-breast",
+        "q":  "boneless skinless chicken breast",
+        "match":  "Fresh Tyson Boneless Chicken Breasts",
+        "size":  "lb",
+        "pu":  2.495,
+        "unit":  "lb"
+    },
+    {
+        "id":  "bread",
+        "q":  "white bread",
+        "match":  "Smart Way Enriched White Bread",
+        "size":  "each",
+        "pu":  1.19,
+        "unit":  "each"
+    },
+    {
+        "id":  "coconut-milk-canned",
+        "q":  "coconut milk canned",
+        "match":  "Simple Truth Organic® Unsweetened Coconut Milk 13.5 fl oz",
+        "size":  "13.5 fl oz",
+        "pu":  0.1474,
+        "unit":  "floz"
+    },
+    {
+        "id":  "fruit-cocktail",
+        "q":  "fruit cocktail canned",
+        "match":  "Kroger® Canned Fruit Cocktail in Heavy Syrup 30 oz",
+        "size":  "30 oz",
+        "pu":  0.1097,
+        "unit":  "oz"
+    },
+    {
+        "id":  "mandarin-oranges",
+        "q":  "canned mandarin oranges",
+        "match":  "Kroger® Canned Mandarin Oranges in Light Syrup 15 oz",
+        "size":  "15 oz",
+        "pu":  0.1327,
+        "unit":  "oz"
+    },
+    {
+        "id":  "canned-pasta",
+        "q":  "canned ravioli",
+        "match":  "Chef Boyardee Beefaroni, 15 oz 15 oz",
+        "size":  "15 oz",
+        "pu":  0.0667,
+        "unit":  "oz"
+    },
+    {
+        "id":  "canned-pears",
+        "q":  "canned pears",
+        "match":  "Kroger® Canned Pear Halves in Pear Juice 14.5 oz",
+        "size":  "14.5 oz",
+        "pu":  0.1303,
+        "unit":  "oz"
+    },
+    {
+        "id":  "carrots",
+        "q":  "carrots",
+        "match":  "Kroger Whole Carrots (5 lb)",
+        "size":  "5 lb",
+        "pu":  0.998,
+        "unit":  "lb"
+    },
+    {
+        "id":  "cat-food",
+        "q":  "dry cat food",
+        "match":  "Iams Dry Cat Food",
+        "size":  "6-7 lb",
+        "pu":  2.4271,
+        "unit":  "lb"
+    },
+    {
+        "id":  "cheese-crackers",
+        "q":  "cheese crackers",
+        "match":  "Pepperidge Farm Goldfish",
+        "size":  "26.7-27.3 oz",
+        "pu":  0.2194,
+        "unit":  "oz"
+    },
+    {
+        "id":  "chuck-roast",
+        "q":  "beef chuck roast",
+        "match":  "Choice Beef Chuck Roast",
+        "size":  "lb",
+        "pu":  10.99,
+        "unit":  "lb"
+    },
+    {
+        "id":  "clam-chowder",
+        "q":  "clam chowder canned",
+        "match":  "Campbell\u0027s Chunky OLD BAY Seasoned Clam Chowder 18.8 oz Ca",
+        "size":  "18.8 oz",
+        "pu":  0.159,
+        "unit":  "oz"
     },
     {
         "id":  "cocktail-sauce",
         "q":  "cocktail sauce",
         "match":  "Kroger® Cocktail Sauce 12 oz",
-        "size":  "12 oz"
+        "size":  "12 oz",
+        "pu":  0.1658,
+        "unit":  "oz"
+    },
+    {
+        "id":  "coffee",
+        "q":  "ground coffee",
+        "match":  "Folgers Coffee",
+        "size":  "22.6-25.9 oz",
+        "pu":  0.3857,
+        "unit":  "oz"
+    },
+    {
+        "id":  "coffee-pods",
+        "q":  "coffee k cups",
+        "match":  "Kroger Coffee Pods",
+        "size":  "120 ct",
+        "pu":  0.2666,
+        "unit":  "each"
+    },
+    {
+        "id":  "cornstarch",
+        "q":  "corn starch",
+        "match":  "Maizena Corn Starch 14.1 oz",
+        "size":  "14.1 oz",
+        "pu":  0.1411,
+        "unit":  "oz"
+    },
+    {
+        "id":  "crackers",
+        "q":  "saltine crackers",
+        "match":  "Nabisco Snack Crackers or Ritz",
+        "size":  "11.5-14 oz",
+        "pu":  0.3207,
+        "unit":  "oz"
+    },
+    {
+        "id":  "croissants",
+        "q":  "croissants",
+        "match":  "Private Selection Fresh Baked Butter Croissants",
+        "size":  "4 ct",
+        "pu":  1.25,
+        "unit":  "each"
+    },
+    {
+        "id":  "dryer-sheets",
+        "q":  "dryer sheets",
+        "match":  "Snuggle Dryer Sheets",
+        "size":  "105-120 ct",
+        "pu":  0.0291,
+        "unit":  "each"
+    },
+    {
+        "id":  "enchilada-sauce",
+        "q":  "red enchilada sauce",
+        "match":  "Kroger® Mild Red Enchilada Sauce 28 oz",
+        "size":  "28 oz",
+        "pu":  0.0925,
+        "unit":  "oz"
+    },
+    {
+        "id":  "frozen-pizza",
+        "q":  "frozen pizza",
+        "match":  "Totino\u0027s Party Pizza Pepperoni Thin Crust",
+        "size":  "1 ct",
+        "pu":  2,
+        "unit":  "each"
+    },
+    {
+        "id":  "fruit-snacks",
+        "q":  "fruit snacks",
+        "match":  "Betty Crocker Fruit Snacks",
+        "size":  "22 ct",
+        "pu":  0.2268,
+        "unit":  "each"
+    },
+    {
+        "id":  "sugar",
+        "q":  "granulated sugar",
+        "match":  "Smart Way Granulated Sugar (4 lb)",
+        "size":  "4 lb",
+        "pu":  0.6975,
+        "unit":  "lb"
+    },
+    {
+        "id":  "conditioner",
+        "q":  "hair conditioner",
+        "match":  "Dove Conditioner",
+        "size":  "12 fl oz",
+        "pu":  0.2908,
+        "unit":  "floz"
+    },
+    {
+        "id":  "mushrooms",
+        "q":  "white mushrooms",
+        "match":  "Kroger Whole White Mushrooms (24 oz)",
+        "size":  "24 oz",
+        "pu":  0.25,
+        "unit":  "oz"
+    },
+    {
+        "id":  "oat-milk",
+        "q":  "oat milk",
+        "match":  "Oatly Oat Milk",
+        "size":  "64 fl oz",
+        "pu":  0.0702,
+        "unit":  "floz"
+    },
+    {
+        "id":  "orange-juice",
+        "q":  "orange juice",
+        "match":  "Kroger 100% Orange Juice Pulp Free (Half Gal)",
+        "size":  "64 fl oz",
+        "pu":  0.0623,
+        "unit":  "floz"
+    },
+    {
+        "id":  "paper-plates",
+        "q":  "paper plates",
+        "match":  "Dixie Paper Plates",
+        "size":  "86-154 ct",
+        "pu":  0.0584,
+        "unit":  "each"
+    },
+    {
+        "id":  "pineapple",
+        "q":  "whole pineapple",
+        "match":  "Dole Pineapple",
+        "size":  "8 oz",
+        "pu":  1,
+        "unit":  "each"
+    },
+    {
+        "id":  "pretzels",
+        "q":  "pretzel twists",
+        "match":  "Kroger Pretzels",
+        "size":  "8-15 oz",
+        "pu":  0.1667,
+        "unit":  "oz"
+    },
+    {
+        "id":  "protein-bars",
+        "q":  "protein bars",
+        "match":  "Aloha Protein Bars",
+        "size":  "5 ct",
+        "pu":  1.998,
+        "unit":  "each"
+    },
+    {
+        "id":  "red-wine-vinegar",
+        "q":  "red wine vinegar",
+        "match":  "Pompeian® Gourmet Red Wine Vinegar 16 fl oz",
+        "size":  "16 fl oz",
+        "pu":  0.1681,
+        "unit":  "floz"
+    },
+    {
+        "id":  "rice-vinegar",
+        "q":  "rice vinegar",
+        "match":  "Nakano® Organic Natural Rice Vinegar 12 fl oz",
+        "size":  "12 fl oz",
+        "pu":  0.2492,
+        "unit":  "floz"
+    },
+    {
+        "id":  "russet-potatoes",
+        "q":  "russet potatoes",
+        "match":  "Kroger Russet Potatoes Bag (10 lb)",
+        "size":  "10 lb",
+        "pu":  0.499,
+        "unit":  "lb"
+    },
+    {
+        "id":  "shampoo",
+        "q":  "shampoo",
+        "match":  "Dove Shampoo",
+        "size":  "12 fl oz",
+        "pu":  0.2908,
+        "unit":  "floz"
+    },
+    {
+        "id":  "shredded-cheese",
+        "q":  "shredded cheese",
+        "match":  "Kroger Colby Jack Shredded Cheese Family Size",
+        "size":  "32 oz",
+        "pu":  0.2278,
+        "unit":  "oz"
+    },
+    {
+        "id":  "sloppy-joe-sauce",
+        "q":  "sloppy joe sauce manwich",
+        "match":  "Manwich Sloppy Joe Sauce Bold Flavor Canned Sauce 16 OZ ti",
+        "size":  "16 oz",
+        "pu":  0.0994,
+        "unit":  "oz"
+    },
+    {
+        "id":  "sparkling-water",
+        "q":  "sparkling water",
+        "match":  "Liquid Death Sparkling Water",
+        "size":  "6-pack 12 fl oz",
+        "pu":  0.0971,
+        "unit":  "floz"
     },
     {
         "id":  "tartar-sauce",
         "q":  "tartar sauce",
         "match":  "Kroger® Tartar Sauce 11.5 fl oz",
-        "size":  "11.5 fl oz"
+        "size":  "11.5 fl oz",
+        "pu":  0.2078,
+        "unit":  "floz"
     },
     {
-        "id":  "bread-crumbs",
-        "q":  "bread crumbs",
-        "match":  "Kikkoman® Panko Japanese Style Bread Crumbs",
-        "size":  "8 oz"
+        "id":  "tomato-sauce",
+        "q":  "tomato sauce",
+        "match":  "Kroger Tomato Sauce 29 oz",
+        "size":  "29 oz",
+        "pu":  0.0617,
+        "unit":  "oz"
+    },
+    {
+        "id":  "turkey-bacon",
+        "q":  "turkey bacon",
+        "match":  "Wellshire Turkey Bacon",
+        "size":  "12 oz",
+        "pu":  0.3329,
+        "unit":  "oz"
+    },
+    {
+        "id":  "white-vinegar",
+        "q":  "distilled white vinegar",
+        "match":  "Kroger Distilled White Vinegar 64 fl oz",
+        "size":  "64 fl oz",
+        "pu":  0.0514,
+        "unit":  "floz"
+    },
+    {
+        "id":  "yogurt",
+        "q":  "yogurt",
+        "match":  "Yoplait Yogurt",
+        "size":  "6 oz",
+        "pu":  0.0833,
+        "unit":  "oz"
     }
 ]

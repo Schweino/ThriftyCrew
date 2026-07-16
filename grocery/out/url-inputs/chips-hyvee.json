@@ -1,0 +1,298 @@
+﻿[
+    {
+        "id":  "applesauce",
+        "q":  "applesauce",
+        "match":  "Hy Vee Unsweetened Applesauce",
+        "size":  "48 oz",
+        "pu":  0.0767,
+        "unit":  "oz"
+    },
+    {
+        "id":  "black-pepper",
+        "q":  "ground black pepper",
+        "match":  "Thats Smart Black Pepper",
+        "size":  "3 oz",
+        "pu":  0.4167,
+        "unit":  "oz"
+    },
+    {
+        "id":  "blueberries",
+        "q":  "blueberries",
+        "match":  "Driscoll\u0027s blueberries, 18 oz. pkg., $4.99",
+        "size":  "",
+        "pu":  0.2772,
+        "unit":  "oz"
+    },
+    {
+        "id":  "chicken-breast",
+        "q":  "boneless skinless chicken breast",
+        "match":  "Fresh boneless skinless chicken breast, club pack, $2.98 lb.",
+        "size":  "",
+        "pu":  2.98,
+        "unit":  "lb"
+    },
+    {
+        "id":  "bottled-water",
+        "q":  "purified water 24 pack",
+        "match":  "Hy-Vee purified drinking water, 40 pk. bottles 16.9 fl. oz., $4.99",
+        "size":  "",
+        "pu":  0.1248,
+        "unit":  "each"
+    },
+    {
+        "id":  "cereal",
+        "q":  "cereal",
+        "match":  "That\u0027s Smart! cereal, 12 to 18 oz., $1.99",
+        "size":  "",
+        "pu":  0.1106,
+        "unit":  "oz"
+    },
+    {
+        "id":  "canned-chicken",
+        "q":  "canned chunk chicken breast",
+        "match":  "Hy Vee Premium Chunk Chicken Breast With Rib Meat",
+        "size":  "12.5 oz",
+        "pu":  0.1992,
+        "unit":  "oz"
+    },
+    {
+        "id":  "carrots",
+        "q":  "carrots",
+        "match":  "Bunny Luv Organic Whole Carrots",
+        "size":  "2 lb",
+        "pu":  0.995,
+        "unit":  "lb"
+    },
+    {
+        "id":  "coffee",
+        "q":  "ground coffee",
+        "match":  "Maxwell House or Yuban coffee, 23.1 to 27.9 oz., $11.98",
+        "size":  "",
+        "pu":  0.4294,
+        "unit":  "oz"
+    },
+    {
+        "id":  "dinner-rolls",
+        "q":  "dinner rolls",
+        "match":  "Hy Vee White Dinner Rolls 24Ct",
+        "size":  "24 ct",
+        "pu":  0.1871,
+        "unit":  "each"
+    },
+    {
+        "id":  "dish-soap",
+        "q":  "dish soap",
+        "match":  "Simply Done Fresh Scent Dish Soap",
+        "size":  "24 oz",
+        "pu":  0.1121,
+        "unit":  "floz"
+    },
+    {
+        "id":  "dishwasher-detergent",
+        "q":  "dishwasher detergent pacs",
+        "match":  "Hy-Vee dishwasher detergent, 60 ct., $9.99",
+        "size":  "",
+        "pu":  0.1665,
+        "unit":  "each"
+    },
+    {
+        "id":  "disinfecting-wipes",
+        "q":  "disinfecting wipes",
+        "match":  "Lysol wipes or disinfectant spray, 80 ct. or 12.5 oz., $5.99",
+        "size":  "",
+        "pu":  0.0749,
+        "unit":  "each"
+    },
+    {
+        "id":  "egg-noodles",
+        "q":  "egg noodles",
+        "match":  "Hy Vee Wide Egg Noodles",
+        "size":  "16 oz",
+        "pu":  0.2056,
+        "unit":  "oz"
+    },
+    {
+        "id":  "facial-tissues",
+        "q":  "facial tissues",
+        "match":  "Hy-Vee facial tissue, 280 ct., $4.99",
+        "size":  "",
+        "pu":  0.0178,
+        "unit":  "each"
+    },
+    {
+        "id":  "feta",
+        "q":  "feta cheese crumbled",
+        "match":  "Soiree Traditional Feta Cheese Crumble",
+        "size":  "6 oz",
+        "pu":  0.615,
+        "unit":  "oz"
+    },
+    {
+        "id":  "storage-bags",
+        "q":  "gallon freezer bags",
+        "match":  "Ziploc storage bags, 105 or 108 ct., $4.49",
+        "size":  "",
+        "pu":  0.0416,
+        "unit":  "each"
+    },
+    {
+        "id":  "chicken-nuggets",
+        "q":  "frozen chicken nuggets",
+        "match":  "Hy Vee Chicken Nuggets",
+        "size":  "32 oz",
+        "pu":  0.2584,
+        "unit":  "oz"
+    },
+    {
+        "id":  "frozen-pizza",
+        "q":  "frozen pizza",
+        "match":  "Jacks Pepperoni Pizza Thin Crust",
+        "size":  "each",
+        "pu":  3,
+        "unit":  "each"
+    },
+    {
+        "id":  "garlic-powder",
+        "q":  "garlic powder",
+        "match":  "Thats Smart Garlic Powder",
+        "size":  "3 oz",
+        "pu":  0.4167,
+        "unit":  "oz"
+    },
+    {
+        "id":  "gelatin",
+        "q":  "gelatin cups",
+        "match":  "Hy-Vee Strawberry Gelatin Dessert 3 oz",
+        "size":  "1 ct",
+        "pu":  0.99,
+        "unit":  "each"
+    },
+    {
+        "id":  "granola-bars",
+        "q":  "chewy granola bars",
+        "match":  "Hy Vee Chewy Granola Bars Variety Pack 18Ct",
+        "size":  "18 ct",
+        "pu":  0.3328,
+        "unit":  "each"
+    },
+    {
+        "id":  "hot-sauce",
+        "q":  "hot sauce",
+        "match":  "Franks Redhot Original Cayenne Pepper Hot Sauce",
+        "size":  "12 oz",
+        "pu":  0.2492,
+        "unit":  "floz"
+    },
+    {
+        "id":  "italian-sausage",
+        "q":  "italian sausage",
+        "match":  "Hy Vee Midwest Pork Italian Pork Sausage",
+        "size":  "16 oz",
+        "pu":  4.88,
+        "unit":  "lb"
+    },
+    {
+        "id":  "mac-and-cheese",
+        "q":  "macaroni and cheese",
+        "match":  "Kraft Mac \u0026 cheese, 5.5 to 7.25 oz., 3/ $3.00 with purchase of 3",
+        "size":  "",
+        "pu":  1,
+        "unit":  "each"
+    },
+    {
+        "id":  "mangoes",
+        "q":  "mango",
+        "match":  "Jumbo Ripe \u0026 Ready mangos, each, $1.99 each",
+        "size":  "",
+        "pu":  1.99,
+        "unit":  "each"
+    },
+    {
+        "id":  "microwave-popcorn",
+        "q":  "microwave popcorn",
+        "match":  "Hy Vee Extra Butter Microwave Popcorn 6Ct",
+        "size":  "6 ct",
+        "pu":  0.615,
+        "unit":  "each"
+    },
+    {
+        "id":  "milk",
+        "q":  "milk gallon",
+        "match":  "Thats Smart 2 Reduced Fat Milk",
+        "size":  "gallon",
+        "pu":  3.06,
+        "unit":  "gallon"
+    },
+    {
+        "id":  "paprika",
+        "q":  "paprika",
+        "match":  "Thats Smart Paprika",
+        "size":  "2 oz",
+        "pu":  0.625,
+        "unit":  "oz"
+    },
+    {
+        "id":  "peaches",
+        "q":  "peaches",
+        "match":  "Yellow Flesh Peaches",
+        "size":  "lb",
+        "pu":  2.99,
+        "unit":  "lb"
+    },
+    {
+        "id":  "pork-chops",
+        "q":  "pork chops",
+        "match":  "Hy-Vee Midwest Pork bone-in assorted chops, $3.99 lb.",
+        "size":  "",
+        "pu":  3.99,
+        "unit":  "lb"
+    },
+    {
+        "id":  "ramen",
+        "q":  "ramen noodles",
+        "match":  "Maruchan Chicken Flavor Ramen Noodle Soup 12 Count",
+        "size":  "12 ct",
+        "pu":  0.3325,
+        "unit":  "each"
+    },
+    {
+        "id":  "rotisserie-chicken",
+        "q":  "rotisserie chicken",
+        "match":  "Whole Savory Rotisserie Chicken",
+        "size":  "each",
+        "pu":  5.99,
+        "unit":  "each"
+    },
+    {
+        "id":  "spinach",
+        "q":  "fresh spinach",
+        "match":  "Dole Spinach",
+        "size":  "10 oz",
+        "pu":  0.299,
+        "unit":  "oz"
+    },
+    {
+        "id":  "tea-bags",
+        "q":  "black tea bags",
+        "match":  "Hy Vee Black Tea Bags",
+        "size":  "100 ct",
+        "pu":  0.0449,
+        "unit":  "each"
+    },
+    {
+        "id":  "tortillas",
+        "q":  "flour tortillas",
+        "match":  "Mission fajita tortillas, 20 ct., $2.99",
+        "size":  "",
+        "pu":  0.1495,
+        "unit":  "each"
+    },
+    {
+        "id":  "vegetable-oil",
+        "q":  "vegetable oil",
+        "match":  "Thats Smart Vegetable Oil",
+        "size":  "48 oz",
+        "pu":  0.0781,
+        "unit":  "floz"
+    }
+]

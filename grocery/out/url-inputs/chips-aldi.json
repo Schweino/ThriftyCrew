@@ -1,14 +1,146 @@
 ﻿[
     {
+        "id":  "apples",
+        "q":  "apples",
+        "match":  "Gala Apples, Bag",
+        "size":  "3 lb",
+        "pu":  0.9967,
+        "unit":  "lb"
+    },
+    {
+        "id":  "blueberries",
+        "q":  "blueberries",
+        "match":  "Blueberries",
+        "size":  "1 pt",
+        "pu":  0.2312,
+        "unit":  "oz"
+    },
+    {
         "id":  "chicken-thighs",
         "q":  "chicken thighs",
         "match":  "Fresh Antibiotic Free Family Pack Chicken Drumsticks",
-        "size":  "Available while quantities last."
+        "size":  "Available while quantities last.",
+        "pu":  0.89,
+        "unit":  "lb"
     },
     {
-        "id":  "coffee-creamer",
-        "q":  "coffee creamer",
-        "match":  "Barissimo Italian Sweet Cream Creamer",
-        "size":  "32 oz."
+        "id":  "chili-powder",
+        "q":  "chili powder",
+        "match":  "Stonemill Chili Powder 2.5 oz",
+        "size":  "2.5 oz",
+        "pu":  0.396,
+        "unit":  "oz"
+    },
+    {
+        "id":  "clementines",
+        "q":  "mandarins clementines",
+        "match":  "Mandarins, Bag",
+        "size":  "3 lb",
+        "pu":  1.33,
+        "unit":  "lb"
+    },
+    {
+        "id":  "garlic-powder",
+        "q":  "garlic powder",
+        "match":  "Stonemill Garlic Powder 3.12 oz",
+        "size":  "3.12 oz",
+        "pu":  0.3173,
+        "unit":  "oz"
+    },
+    {
+        "id":  "ground-cumin",
+        "q":  "ground cumin",
+        "match":  "Stonemill Ground Cumin 2 oz",
+        "size":  "2 oz",
+        "pu":  0.495,
+        "unit":  "oz"
+    },
+    {
+        "id":  "hamburger-buns",
+        "q":  "hamburger buns",
+        "match":  "L\u0027oven Fresh Hamburger Buns",
+        "size":  "8 ct",
+        "pu":  0.1737,
+        "unit":  "each"
+    },
+    {
+        "id":  "hot-dog-buns",
+        "q":  "hot dog buns",
+        "match":  "L\u0027oven Fresh Hot Dog Buns",
+        "size":  "8 ct",
+        "pu":  0.1737,
+        "unit":  "each"
+    },
+    {
+        "id":  "italian-seasoning",
+        "q":  "italian seasoning",
+        "match":  "Stonemill Italian Seasoning 0.75 oz",
+        "size":  "0.75 oz",
+        "pu":  1.32,
+        "unit":  "oz"
+    },
+    {
+        "id":  "kidney-beans",
+        "q":  "kidney beans",
+        "match":  "Dakota\u0027s Pride Dark Red Kidney Beans",
+        "size":  "15.5 oz",
+        "pu":  0.0548,
+        "unit":  "oz"
+    },
+    {
+        "id":  "onion-powder",
+        "q":  "onion powder",
+        "match":  "Stonemill Onion Powder 2.62 oz",
+        "size":  "2.62 oz",
+        "pu":  0.3779,
+        "unit":  "oz"
+    },
+    {
+        "id":  "pineapple",
+        "q":  "whole pineapple",
+        "match":  "Pineapple",
+        "size":  "each",
+        "pu":  1.89,
+        "unit":  "each"
+    },
+    {
+        "id":  "ribeye-steak",
+        "q":  "ribeye steak",
+        "match":  "Black Angus Choice Beef Ribeye Steak",
+        "size":  "lb",
+        "pu":  14.79,
+        "unit":  "lb"
+    },
+    {
+        "id":  "strawberries",
+        "q":  "strawberries",
+        "match":  "Strawberries",
+        "size":  "1 lb",
+        "pu":  0.1181,
+        "unit":  "oz"
+    },
+    {
+        "id":  "string-cheese",
+        "q":  "mozzarella string cheese",
+        "match":  "Happy Farms String Cheese",
+        "size":  "10 oz",
+        "pu":  0.309,
+        "unit":  "oz"
+    },
+    {
+        "id":  "sweet-potatoes",
+        "q":  "sweet potatoes",
+        "match":  "each (estimated)each (est.)Sweet Potatoes",
+        "size":  "1.07 lb",
+        "pu":  1.0467,
+        "unit":  "lb"
+    },
+    {
+        "id":  "turkey-lunchmeat",
+        "q":  "sliced deli turkey breast",
+        "match":  "Lunch Mate Oven Roasted Turkey Breast",
+        "size":  "16 oz",
+        "pu":  0.3681,
+        "unit":  "oz"
     }
 ]

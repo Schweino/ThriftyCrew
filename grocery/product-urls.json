@@ -631,7 +631,14 @@
                                                      "name":  "Lady Apples",
                                                      "price":  "$2.19",
                                                      "size":  "lb"
-                                                 }
+                                                 },
+                                 "Aldi":  {
+                                              "url":  "https://www.aldi.us/store/aldi/products/3253915-gala-apple-bag-3-lbs",
+                                              "name":  "Gala Apples, Bag",
+                                              "price":  "$2.99",
+                                              "size":  "3 lb",
+                                              "verified":  "2026-07-16 Aldi warm-browser board-match, per-unit verified against the board"
+                                          }
                              },
                   "applesauce":  {
                                      "commodity":  "applesauce",
@@ -4641,7 +4648,14 @@
                                                       "size":  "lb",
                                                       "name":  "Fresh Mandarin Oranges",
                                                       "board_pu":  1.59
-                                                  }
+                                                  },
+                                      "Aldi":  {
+                                                   "url":  "https://www.aldi.us/store/aldi/products/26274163-mandarins-bag-3-lb",
+                                                   "name":  "Mandarins, Bag",
+                                                   "price":  "$3.99",
+                                                   "size":  "3 lb",
+                                                   "verified":  "2026-07-16 Aldi warm-browser board-match, per-unit verified against the board"
+                                               }
                                   },
                   "cocktail-sauce":  {
                                          "commodity":  "Cocktail Sauce",
@@ -9269,7 +9283,14 @@
                                                       "price":  "$2.49",
                                                       "size":  "2 oz",
                                                       "verified":  "2026-07-16 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                       "Aldi":  {
+                                                    "url":  "https://www.aldi.us/store/aldi/products/19688303-stonemill-ground-cumin-2-oz",
+                                                    "name":  "Stonemill Ground Cumin 2 oz",
+                                                    "price":  "$0.99",
+                                                    "size":  "2 oz",
+                                                    "verified":  "2026-07-16 Aldi warm-browser board-match, per-unit verified against the board"
+                                                }
                                    },
                   "ground-ginger":  {
                                         "commodity":  "Ground Ginger",
@@ -16203,7 +16224,14 @@
                                                        "size":  "1 lb",
                                                        "name":  "Fresh Strawberries, 1 lb Container",
                                                        "board_pu":  0.1475
-                                                   }
+                                                   },
+                                       "Aldi":  {
+                                                    "url":  "https://www.aldi.us/store/aldi/products/26266957-strawberries-package-1-lb",
+                                                    "name":  "Strawberries",
+                                                    "price":  "$1.89",
+                                                    "size":  "1 lb",
+                                                    "verified":  "2026-07-16 Aldi warm-browser board-match, per-unit verified against the board"
+                                                }
                                    },
                   "string-cheese":  {
                                         "commodity":  "string-cheese",
@@ -16234,7 +16262,14 @@
                                                         "size":  "12 oz",
                                                         "name":  "Great Value Part-Skim Mozzarella String Cheese",
                                                         "board_pu":  0.2733
-                                                    }
+                                                    },
+                                        "Aldi":  {
+                                                     "url":  "https://www.aldi.us/store/aldi/products/113903-happy-farms-string-cheese-10-oz",
+                                                     "name":  "Happy Farms String Cheese",
+                                                     "price":  "$3.09",
+                                                     "size":  "10 oz",
+                                                     "verified":  "2026-07-16 Aldi warm-browser board-match, per-unit verified against the board"
+                                                 }
                                     },
                   "stuffing-mix":  {
                                        "commodity":  "stuffing-mix",
@@ -17611,7 +17646,14 @@
                                                            "size":  "16 oz",
                                                            "name":  "Great Value Oven Roasted Turkey Breast Lunchmeat",
                                                            "board_pu":  0.3731
-                                                       }
+                                                       },
+                                           "Aldi":  {
+                                                        "url":  "https://www.aldi.us/store/aldi/products/18649640-lunch-mate-deli-style-oven-roasted-turkey-breast-16-oz",
+                                                        "name":  "Lunch Mate Oven Roasted Turkey Breast",
+                                                        "price":  "$5.89",
+                                                        "size":  "16 oz",
+                                                        "verified":  "2026-07-16 Aldi warm-browser board-match, per-unit verified against the board"
+                                                    }
                                        },
                   "turkey-pepperoni":  {
                                            "commodity":  "Turkey Pepperoni",
