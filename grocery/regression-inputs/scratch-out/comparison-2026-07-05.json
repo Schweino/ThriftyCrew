@@ -1,8 +1,8 @@
 ﻿{
-    "built_at":  "2026-07-09T08:51:55",
+    "built_at":  "2026-07-17T07:03:00",
     "week_of":  "2026-07-05",
     "source":  "C:\\Codex\\income\\grocery\\regression-inputs\\ads-2026-07-05.json",
-    "commodities_compared":  29,
+    "commodities_compared":  38,
     "health":  {
                    "stores_with_data":  [
                                             "Aldi",
@@ -13,22 +13,36 @@
                                             "Walmart"
                                         ],
                    "store_count":  6,
-                   "commodities_compared":  29,
-                   "flagged_out_of_band":  28,
-                   "multibuy_unpriced":  2
+                   "commodities_compared":  38,
+                   "flagged_out_of_band":  32,
+                   "multibuy_unpriced":  24
                },
     "comparison":  [
                        {
                            "commodity":  "80/20 Ground Beef",
                            "id":  "ground-beef-8020",
                            "unit":  "lb",
-                           "cheapest_store":  "Sam\u0027s Club",
-                           "cheapest_price":  5.56,
-                           "cheapest_type":  "everyday",
+                           "cheapest_store":  "Baker\u0027s",
+                           "cheapest_price":  4.99,
+                           "cheapest_type":  "sale",
                            "nomem_store":  "Baker\u0027s",
-                           "nomem_price":  5.99,
-                           "nomem_type":  "everyday",
+                           "nomem_price":  4.99,
+                           "nomem_type":  "sale",
                            "stores":  [
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  4.99,
+                                              "unit":  "lb",
+                                              "type":  "sale",
+                                              "bulk":  true,
+                                              "membership":  false,
+                                              "item":  "Kroger 80% Lean Ground Beef (3 lb roll)",
+                                              "ad":  "$4.99",
+                                              "size":  "lb",
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad p1"
+                                          },
                                           {
                                               "store":  "Sam\u0027s Club",
                                               "per_unit":  5.56,
@@ -40,46 +54,22 @@
                                               "ad":  "$5.56",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com"
                                           },
                                           {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  5.99,
+                                              "store":  "Family Fare",
+                                              "per_unit":  6.6632999999999996,
                                               "unit":  "lb",
                                               "type":  "everyday",
                                               "bulk":  true,
                                               "membership":  false,
-                                              "item":  "Kroger 80/20 Ground Beef Roll",
-                                              "ad":  "$5.99",
-                                              "size":  "lb",
-                                              "basis":  "size 1 lb",
-                                              "note":  ""
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  5.99,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Ground Beef, 80/20 (80% lean)",
-                                              "ad":  "$5.99",
-                                              "size":  "lb",
-                                              "basis":  "size 1 lb",
-                                              "note":  ""
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  6.99,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  true,
-                                              "membership":  false,
-                                              "item":  "Ground Beef Roll 80/20",
-                                              "ad":  "$6.99",
-                                              "size":  "lb",
-                                              "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "item":  "Standard Pride 80%/20% 100% Pure Ground Beef 48 Oz Discount Limit 2",
+                                              "ad":  "$19.99",
+                                              "size":  "48 oz",
+                                              "basis":  "size 3 lb",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -92,20 +82,22 @@
                                               "ad":  "$6.99",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  7.49,
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  6.99,
                                               "unit":  "lb",
                                               "type":  "everyday",
                                               "bulk":  true,
                                               "membership":  false,
-                                              "item":  "Our Certified 80% Lean / 20% Fat, Ground Chuck Beef Roll, 1 Lb. 16 Oz",
-                                              "ad":  "$7.49",
-                                              "size":  "16 oz",
-                                              "basis":  "per-lb marker",
-                                              "note":  ""
+                                              "item":  "Ground Beef Roll 80/20",
+                                              "ad":  "$6.99",
+                                              "size":  "lb",
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -130,21 +122,9 @@
                                               "item":  "Fresh Gala Apples, 3 lb",
                                               "ad":  "$1.08",
                                               "size":  "lb",
-                                              "basis":  "per-lb marker",
-                                              "note":  ""
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  1.0967,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Gala Apples, Bag",
-                                              "ad":  "$3.29",
-                                              "size":  "3 lb",
-                                              "basis":  "size 3 lb",
-                                              "note":  ""
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Sam\u0027s Club",
@@ -156,8 +136,9 @@
                                               "item":  "Envy Apples (4 lb)",
                                               "ad":  "$1.49",
                                               "size":  "lb",
-                                              "basis":  "per-lb marker",
-                                              "note":  ""
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -170,7 +151,8 @@
                                               "ad":  "$1.50",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -183,7 +165,8 @@
                                               "ad":  "$1.79",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -196,7 +179,8 @@
                                               "ad":  "$1.98",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -222,7 +206,8 @@
                                               "ad":  "PRICE DROPS $2.89 Per 6-Pack",
                                               "size":  "",
                                               "basis":  "per-6-pack",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -235,7 +220,8 @@
                                               "ad":  "$0.73",
                                               "size":  "each",
                                               "basis":  "per-each",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -248,7 +234,8 @@
                                               "ad":  "$1.00",
                                               "size":  "each",
                                               "basis":  "per-each",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -261,7 +248,8 @@
                                               "ad":  "$1.33",
                                               "size":  "each",
                                               "basis":  "per-each",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -274,7 +262,8 @@
                                               "ad":  "$1.39",
                                               "size":  "1 ct",
                                               "basis":  "per-each",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -299,8 +288,9 @@
                                               "item":  "Member\u0027s Mark Naturally Hickory Smoked Bacon (3 lb)",
                                               "ad":  "$3.94",
                                               "size":  "lb",
-                                              "basis":  "per-lb marker",
-                                              "note":  ""
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -313,7 +303,8 @@
                                               "ad":  "$3.99",
                                               "size":  "16 oz",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad p14"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -326,20 +317,8 @@
                                               "ad":  "$4.18",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  4.39,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Appleton Farms Premium Sliced Bacon",
-                                              "ad":  "$4.39",
-                                              "size":  "16 oz",
-                                              "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -352,7 +331,8 @@
                                               "ad":  "$4.49",
                                               "size":  "12 oz",
                                               "basis":  "size 0.75 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -360,26 +340,13 @@
                            "commodity":  "Bananas",
                            "id":  "bananas",
                            "unit":  "lb",
-                           "cheapest_store":  "Aldi",
-                           "cheapest_price":  0.48,
+                           "cheapest_store":  "Hy-Vee",
+                           "cheapest_price":  0.49,
                            "cheapest_type":  "everyday",
-                           "nomem_store":  "Aldi",
-                           "nomem_price":  0.48,
+                           "nomem_store":  "Hy-Vee",
+                           "nomem_price":  0.49,
                            "nomem_type":  "everyday",
                            "stores":  [
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.48,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Bananas",
-                                              "ad":  "$0.48",
-                                              "size":  "lb",
-                                              "basis":  "size 1 lb",
-                                              "note":  ""
-                                          },
                                           {
                                               "store":  "Hy-Vee",
                                               "per_unit":  0.49,
@@ -391,7 +358,8 @@
                                               "ad":  "$0.49",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Sam\u0027s Club",
@@ -403,8 +371,9 @@
                                               "item":  "Bananas (3 lb)",
                                               "ad":  "$0.49",
                                               "size":  "lb",
-                                              "basis":  "per-lb marker",
-                                              "note":  ""
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -417,7 +386,8 @@
                                               "ad":  "$0.50",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -430,7 +400,8 @@
                                               "ad":  "$0.55",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -443,7 +414,8 @@
                                               "ad":  "$0.65",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -469,20 +441,8 @@
                                               "ad":  "$2.87",
                                               "size":  "11 oz",
                                               "basis":  "size 11 oz",
-                                              "note":  ""
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.2718,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Blueberries, Package",
-                                              "ad":  "$2.99",
-                                              "size":  "11 oz",
-                                              "basis":  "size 11 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -495,20 +455,22 @@
                                               "ad":  "$4.99",
                                               "size":  "18 oz",
                                               "basis":  "size 18 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad p1"
                                           },
                                           {
                                               "store":  "Family Fare",
-                                              "per_unit":  0.3883,
+                                              "per_unit":  0.2897,
                                               "unit":  "oz",
-                                              "type":  "everyday",
+                                              "type":  "sale",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Flavor Ripe Blueberries 18 Oz",
-                                              "ad":  "$6.99",
-                                              "size":  "18 oz",
-                                              "basis":  "size 18 oz",
-                                              "note":  ""
+                                              "item":  "Fresh Blueberries",
+                                              "ad":  "Buy 1 get 1 for $1.00",
+                                              "size":  "1 pt",
+                                              "basis":  "size 11.2 oz",
+                                              "note":  "buy 1 get 1 for $1 (reg 5.49)",
+                                              "source_ad":  "Weekly Ad"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -521,7 +483,8 @@
                                               "ad":  "$5.99",
                                               "size":  "11 oz",
                                               "basis":  "size 11 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -529,13 +492,27 @@
                            "commodity":  "Boneless Skinless Chicken Breast",
                            "id":  "chicken-breast",
                            "unit":  "lb",
-                           "cheapest_store":  "Walmart",
-                           "cheapest_price":  2.48,
-                           "cheapest_type":  "everyday",
-                           "nomem_store":  "Walmart",
-                           "nomem_price":  2.48,
-                           "nomem_type":  "everyday",
+                           "cheapest_store":  "Aldi",
+                           "cheapest_price":  2.19,
+                           "cheapest_type":  "sale",
+                           "nomem_store":  "Aldi",
+                           "nomem_price":  2.19,
+                           "nomem_type":  "sale",
                            "stores":  [
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  2.19,
+                                              "unit":  "lb",
+                                              "type":  "sale",
+                                              "bulk":  true,
+                                              "membership":  false,
+                                              "item":  "Fresh Family Pack Chicken Breasts",
+                                              "ad":  "$2.19 Per Lb.",
+                                              "size":  "",
+                                              "basis":  "per-lb marker",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
+                                          },
                                           {
                                               "store":  "Walmart",
                                               "per_unit":  2.48,
@@ -547,7 +524,8 @@
                                               "ad":  "$2.48",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Sam\u0027s Club",
@@ -560,7 +538,8 @@
                                               "ad":  "$2.88",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -573,7 +552,8 @@
                                               "ad":  "$2.89",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -586,7 +566,8 @@
                                               "ad":  "$2.99",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -599,20 +580,8 @@
                                               "ad":  "$3.99",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  3.99,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  true,
-                                              "membership":  false,
-                                              "item":  "Never Any! Family Pack Boneless Skinless Chicken Breasts",
-                                              "ad":  "$3.99",
-                                              "size":  "lb",
-                                              "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -620,26 +589,13 @@
                            "commodity":  "Bread (loaf)",
                            "id":  "bread",
                            "unit":  "each",
-                           "cheapest_store":  "Hy-Vee",
-                           "cheapest_price":  0.998,
-                           "cheapest_type":  "sale",
-                           "nomem_store":  "Hy-Vee",
-                           "nomem_price":  0.998,
-                           "nomem_type":  "sale",
+                           "cheapest_store":  "Baker\u0027s",
+                           "cheapest_price":  1.19,
+                           "cheapest_type":  "everyday",
+                           "nomem_store":  "Baker\u0027s",
+                           "nomem_price":  1.19,
+                           "nomem_type":  "everyday",
                            "stores":  [
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.998,
-                                              "unit":  "each",
-                                              "type":  "sale",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Dave\u0027s Killer bagels 5 ct. or bread thins 20.5 oz., $4.99",
-                                              "ad":  "Dave\u0027s Killer bagels 5 ct. or bread thins 20.5 oz., $4.99",
-                                              "size":  "",
-                                              "basis":  "per-5-pack",
-                                              "note":  ""
-                                          },
                                           {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  1.19,
@@ -651,7 +607,8 @@
                                               "ad":  "$1.19",
                                               "size":  "each",
                                               "basis":  "per-each",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -664,20 +621,22 @@
                                               "ad":  "$1.48",
                                               "size":  "each",
                                               "basis":  "per-each",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
-                                              "store":  "Aldi",
-                                              "per_unit":  1.65,
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  1.99,
                                               "unit":  "each",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "L\u0027oven Fresh White Bread",
-                                              "ad":  "$1.65",
+                                              "item":  "Hy-Vee White Bread (20 oz loaf)",
+                                              "ad":  "$1.99",
                                               "size":  "each",
                                               "basis":  "per-each",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -690,7 +649,8 @@
                                               "ad":  "$2.19",
                                               "size":  "each",
                                               "basis":  "per-each",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -716,7 +676,8 @@
                                               "ad":  "$2.74",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -729,7 +690,8 @@
                                               "ad":  "$2.99",
                                               "size":  "16 oz",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad p1"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -742,20 +704,8 @@
                                               "ad":  "$3.06",
                                               "size":  "16 oz",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  3.19,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Countryside Creamery Salted Butter Quarters",
-                                              "ad":  "$3.19",
-                                              "size":  "16 oz",
-                                              "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -768,7 +718,8 @@
                                               "ad":  "$3.29",
                                               "size":  "16 oz",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -781,7 +732,49 @@
                                               "ad":  "$5.39",
                                               "size":  "1 lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
+                                          }
+                                      ]
+                       },
+                       {
+                           "commodity":  "Cherries (fresh)",
+                           "id":  "cherries",
+                           "unit":  "lb",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  2.77,
+                           "cheapest_type":  "sale",
+                           "nomem_store":  "Family Fare",
+                           "nomem_price":  2.77,
+                           "nomem_type":  "sale",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  2.77,
+                                              "unit":  "lb",
+                                              "type":  "sale",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Regular/Red/Black Cherries",
+                                              "ad":  "$2.77",
+                                              "size":  "lb",
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  2.79,
+                                              "unit":  "lb",
+                                              "type":  "sale",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Washington Red Cherries",
+                                              "ad":  "PRICE DROPS $2.79 Per Lb.",
+                                              "size":  "",
+                                              "basis":  "per-lb marker",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
                                           }
                                       ]
                        },
@@ -792,9 +785,9 @@
                            "cheapest_store":  "Sam\u0027s Club",
                            "cheapest_price":  1.28,
                            "cheapest_type":  "everyday",
-                           "nomem_store":  "Aldi",
-                           "nomem_price":  1.55,
-                           "nomem_type":  "everyday",
+                           "nomem_store":  "Hy-Vee",
+                           "nomem_price":  1.77,
+                           "nomem_type":  "sale",
                            "stores":  [
                                           {
                                               "store":  "Sam\u0027s Club",
@@ -807,20 +800,8 @@
                                               "ad":  "$1.28",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  1.55,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  true,
-                                              "membership":  false,
-                                              "item":  "Kirkwood Family Pack Bone-In Chicken Thighs",
-                                              "ad":  "$1.55",
-                                              "size":  "lb",
-                                              "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -833,7 +814,8 @@
                                               "ad":  "Fresh chicken drumsticks or thighs, $1.77 lb.",
                                               "size":  "",
                                               "basis":  "per-lb marker",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -846,7 +828,8 @@
                                               "ad":  "$1.99",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -859,7 +842,8 @@
                                               "ad":  "$1.99",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -872,7 +856,8 @@
                                               "ad":  "$2.58",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           }
                                       ]
                        },
@@ -880,26 +865,13 @@
                            "commodity":  "Coffee (ground/beans)",
                            "id":  "coffee",
                            "unit":  "oz",
-                           "cheapest_store":  "Aldi",
-                           "cheapest_price":  0.4443,
+                           "cheapest_store":  "Baker\u0027s",
+                           "cheapest_price":  0.4824,
                            "cheapest_type":  "everyday",
-                           "nomem_store":  "Aldi",
-                           "nomem_price":  0.4443,
+                           "nomem_store":  "Baker\u0027s",
+                           "nomem_price":  0.4824,
                            "nomem_type":  "everyday",
                            "stores":  [
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.4443,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Beaumont Classic Roast Ground Coffee",
-                                              "ad":  "$13.55",
-                                              "size":  "30.5 oz",
-                                              "basis":  "size 30.5 oz",
-                                              "note":  ""
-                                          },
                                           {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  0.4824,
@@ -911,7 +883,8 @@
                                               "ad":  "$13.99",
                                               "size":  "29 oz",
                                               "basis":  "size 29 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price (from $14.49)"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -924,7 +897,8 @@
                                               "ad":  "$19.77",
                                               "size":  "40 oz",
                                               "basis":  "size 40 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -937,7 +911,8 @@
                                               "ad":  "$17.99",
                                               "size":  "30.5 oz",
                                               "basis":  "size 30.5 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -963,7 +938,8 @@
                                               "ad":  "3/$5",
                                               "size":  "16 oz",
                                               "basis":  "size 16 oz",
-                                              "note":  "3 for $5"
+                                              "note":  "3 for $5",
+                                              "source_ad":  "Weekly Ad p1"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -976,20 +952,8 @@
                                               "ad":  "$2.87",
                                               "size":  "24 oz",
                                               "basis":  "size 24 oz",
-                                              "note":  ""
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.1312,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Friendly Farms Regular Cottage Cheese",
-                                              "ad":  "$3.15",
-                                              "size":  "24 oz",
-                                              "basis":  "size 24 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Sam\u0027s Club",
@@ -1002,7 +966,8 @@
                                               "ad":  "$2.19",
                                               "size":  "lb",
                                               "basis":  "size 16 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -1015,7 +980,8 @@
                                               "ad":  "$3.69",
                                               "size":  "24 oz",
                                               "basis":  "size 24 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -1028,7 +994,49 @@
                                               "ad":  "$2.99",
                                               "size":  "16 oz",
                                               "basis":  "size 16 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
+                                          }
+                                      ]
+                       },
+                       {
+                           "commodity":  "Crackers (saltine/buttery)",
+                           "id":  "crackers",
+                           "unit":  "oz",
+                           "cheapest_store":  "Aldi",
+                           "cheapest_price":  0.279,
+                           "cheapest_type":  "sale",
+                           "nomem_store":  "Aldi",
+                           "nomem_price":  0.279,
+                           "nomem_type":  "sale",
+                           "stores":  [
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.279,
+                                              "unit":  "oz",
+                                              "type":  "sale",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Happy Farms Extra Sharp Cheddar or Gouda Cracker Cuts",
+                                              "ad":  "$2.79",
+                                              "size":  "10 oz.",
+                                              "basis":  "size 10 oz",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.3423,
+                                              "unit":  "oz",
+                                              "type":  "sale",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Ritz The Original Crackers 13.7 Oz",
+                                              "ad":  "$4.69",
+                                              "size":  "13.7 oz",
+                                              "basis":  "size 13.7 oz",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
                                           }
                                       ]
                        },
@@ -1054,7 +1062,8 @@
                                               "ad":  "$0.13",
                                               "size":  "oz",
                                               "basis":  "size 1 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -1067,7 +1076,8 @@
                                               "ad":  "$1.56",
                                               "size":  "8 oz",
                                               "basis":  "size 8 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -1080,20 +1090,8 @@
                                               "ad":  "$3.29",
                                               "size":  "16 oz",
                                               "basis":  "size 16 oz",
-                                              "note":  ""
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.2062,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Happy Farms Cream Cheese",
-                                              "ad":  "$1.65",
-                                              "size":  "8 oz",
-                                              "basis":  "size 8 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -1106,7 +1104,8 @@
                                               "ad":  "$3.49",
                                               "size":  "12 oz",
                                               "basis":  "size 12 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -1119,7 +1118,8 @@
                                               "ad":  "$2.49",
                                               "size":  "8 oz",
                                               "basis":  "size 8 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -1127,26 +1127,13 @@
                            "commodity":  "Grapes",
                            "id":  "grapes",
                            "unit":  "lb",
-                           "cheapest_store":  "Aldi",
-                           "cheapest_price":  1.69,
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  1.97,
                            "cheapest_type":  "everyday",
-                           "nomem_store":  "Aldi",
-                           "nomem_price":  1.69,
+                           "nomem_store":  "Walmart",
+                           "nomem_price":  1.97,
                            "nomem_type":  "everyday",
                            "stores":  [
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  1.69,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Red Grapes",
-                                              "ad":  "$1.69",
-                                              "size":  "lb",
-                                              "basis":  "size 1 lb",
-                                              "note":  ""
-                                          },
                                           {
                                               "store":  "Walmart",
                                               "per_unit":  1.97,
@@ -1158,7 +1145,8 @@
                                               "ad":  "$1.97",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -1171,7 +1159,8 @@
                                               "ad":  "$1.99",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price (sale)"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -1184,7 +1173,8 @@
                                               "ad":  "Green seedless grapes, $2.99 lb.",
                                               "size":  "",
                                               "basis":  "per-lb marker",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -1197,7 +1187,8 @@
                                               "ad":  "$3.49",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -1223,20 +1214,8 @@
                                               "ad":  "$3.99",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  3.9923,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Kirkwood Fresh 93% Lean Ground Turkey",
-                                              "ad":  "$5.19",
-                                              "size":  "20.8 oz",
-                                              "basis":  "size 1.3 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Sam\u0027s Club",
@@ -1248,8 +1227,9 @@
                                               "item":  "Jennie-O 93/7 Ground Turkey (2.5 lb, 2 pk)",
                                               "ad":  "$4.55",
                                               "size":  "lb",
-                                              "basis":  "per-lb marker",
-                                              "note":  ""
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -1262,7 +1242,8 @@
                                               "ad":  "$4.99",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -1275,7 +1256,8 @@
                                               "ad":  "$5.46",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -1287,8 +1269,9 @@
                                               "item":  "Jennie O Ground Turkey 85% Lean / 15% Fat   1 Lb. Tray",
                                               "ad":  "$5.99",
                                               "size":  "16 oz",
-                                              "basis":  "per-lb marker",
-                                              "note":  ""
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -1314,7 +1297,8 @@
                                               "ad":  "$1.45",
                                               "size":  "dozen",
                                               "basis":  "size 1 dozen",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -1327,7 +1311,8 @@
                                               "ad":  "$1.47",
                                               "size":  "dozen",
                                               "basis":  "size 1 dozen",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -1340,20 +1325,8 @@
                                               "ad":  "$1.59",
                                               "size":  "12 ct",
                                               "basis":  "size 1 dozen",
-                                              "note":  ""
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  1.65,
-                                              "unit":  "dozen",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Goldhen Grade A Large Eggs",
-                                              "ad":  "$1.65",
-                                              "size":  "dozen",
-                                              "basis":  "size 1 dozen",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -1366,7 +1339,8 @@
                                               "ad":  "$5.39",
                                               "size":  "60 oz",
                                               "basis":  "size 2.5 dozen",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Sam\u0027s Club",
@@ -1379,7 +1353,8 @@
                                               "ad":  "$2.31",
                                               "size":  "dozen",
                                               "basis":  "size 1 dozen",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com"
                                           }
                                       ]
                        },
@@ -1405,7 +1380,8 @@
                                               "ad":  "$3.00",
                                               "size":  "gallon",
                                               "basis":  "size 1 gallon",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -1418,7 +1394,8 @@
                                               "ad":  "$3.06",
                                               "size":  "1 gal",
                                               "basis":  "size 1 gallon",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -1431,20 +1408,8 @@
                                               "ad":  "$3.19",
                                               "size":  "1 gal",
                                               "basis":  "size 1 gallon",
-                                              "note":  ""
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  3.39,
-                                              "unit":  "gallon",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Friendly Farms 2% Milk",
-                                              "ad":  "$3.39",
-                                              "size":  "1 gal",
-                                              "basis":  "size 1 gallon",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -1457,7 +1422,8 @@
                                               "ad":  "$3.69",
                                               "size":  "1 gal",
                                               "basis":  "size 1 gallon",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Sam\u0027s Club",
@@ -1470,7 +1436,8 @@
                                               "ad":  "$3.72",
                                               "size":  "gal",
                                               "basis":  "size 1 gallon",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com"
                                           }
                                       ]
                        },
@@ -1496,7 +1463,8 @@
                                               "ad":  "$8.79",
                                               "size":  "128 fl oz",
                                               "basis":  "size 128 floz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -1509,7 +1477,8 @@
                                               "ad":  "$8.99",
                                               "size":  "128 fl oz",
                                               "basis":  "size 128 floz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -1522,7 +1491,8 @@
                                               "ad":  "$4.49",
                                               "size":  "64 fl oz",
                                               "basis":  "size 64 floz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -1535,20 +1505,49 @@
                                               "ad":  "$3.96",
                                               "size":  "52 fl oz",
                                               "basis":  "size 52 floz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
+                                          }
+                                      ]
+                       },
+                       {
+                           "commodity":  "Oranges",
+                           "id":  "oranges",
+                           "unit":  "lb",
+                           "cheapest_store":  "Family Fare",
+                           "cheapest_price":  1.2475,
+                           "cheapest_type":  "sale",
+                           "nomem_store":  "Family Fare",
+                           "nomem_price":  1.2475,
+                           "nomem_type":  "sale",
+                           "stores":  [
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  1.2475,
+                                              "unit":  "lb",
+                                              "type":  "sale",
+                                              "bulk":  true,
+                                              "membership":  false,
+                                              "item":  "Our Family Orange Navel California",
+                                              "ad":  "$4.99",
+                                              "size":  "4 lb",
+                                              "basis":  "size 4 lb",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
                                           },
                                           {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.0798,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  2.49,
+                                              "unit":  "lb",
+                                              "type":  "sale",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Nature\u0027s Nectar Premium Orange Juice",
-                                              "ad":  "$4.15",
-                                              "size":  "52 fl oz",
-                                              "basis":  "size 52 floz",
-                                              "note":  ""
+                                              "item":  "Hy-Vee Short Cuts yellow or orange watermelon, $2.49 lb.",
+                                              "ad":  "Hy-Vee Short Cuts yellow or orange watermelon, $2.49 lb.",
+                                              "size":  "",
+                                              "basis":  "per-lb marker",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
                                           }
                                       ]
                        },
@@ -1558,23 +1557,24 @@
                            "unit":  "lb",
                            "cheapest_store":  "Aldi",
                            "cheapest_price":  1.49,
-                           "cheapest_type":  "everyday",
+                           "cheapest_type":  "sale",
                            "nomem_store":  "Aldi",
                            "nomem_price":  1.49,
-                           "nomem_type":  "everyday",
+                           "nomem_type":  "sale",
                            "stores":  [
                                           {
                                               "store":  "Aldi",
                                               "per_unit":  1.49,
                                               "unit":  "lb",
-                                              "type":  "everyday",
+                                              "type":  "sale",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Peaches, Bag",
-                                              "ad":  "$2.98",
-                                              "size":  "2 lb",
-                                              "basis":  "size 2 lb",
-                                              "note":  ""
+                                              "item":  "California Peaches",
+                                              "ad":  "PRICE DROPS $1.49 Per Lb.",
+                                              "size":  "$2.98 per 2-lb. bag",
+                                              "basis":  "per-lb marker",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -1587,7 +1587,8 @@
                                               "ad":  "$1.79",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -1599,8 +1600,9 @@
                                               "item":  "Fresh Yellow Peaches (2 lb bag)",
                                               "ad":  "$1.84",
                                               "size":  "lb",
-                                              "basis":  "per-lb marker",
-                                              "note":  ""
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -1613,7 +1615,8 @@
                                               "ad":  "Georgia peaches, $1.99 lb.",
                                               "size":  "",
                                               "basis":  "per-lb marker",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -1626,7 +1629,8 @@
                                               "ad":  "$2.99",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
                                           }
                                       ]
                        },
@@ -1652,7 +1656,8 @@
                                               "ad":  "$3.98",
                                               "size":  "40 oz",
                                               "basis":  "size 40 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Sam\u0027s Club",
@@ -1665,20 +1670,8 @@
                                               "ad":  "$0.10",
                                               "size":  "oz",
                                               "basis":  "size 1 oz",
-                                              "note":  ""
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.1087,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  true,
-                                              "membership":  false,
-                                              "item":  "Peanut Delight Creamy Peanut Butter",
-                                              "ad":  "$4.35",
-                                              "size":  "40 oz",
-                                              "basis":  "size 40 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -1691,7 +1684,8 @@
                                               "ad":  "$4.49",
                                               "size":  "40 oz",
                                               "basis":  "size 40 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -1704,7 +1698,8 @@
                                               "ad":  "$1.98",
                                               "size":  "16 oz",
                                               "basis":  "size 16 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -1717,7 +1712,22 @@
                                               "ad":  "$2.29",
                                               "size":  "16 oz",
                                               "basis":  "size 16 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.2744,
+                                              "unit":  "oz",
+                                              "type":  "sale",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Simply Nature Organic Creamy Peanut Butter",
+                                              "ad":  "$4.39",
+                                              "size":  "16 oz.",
+                                              "basis":  "size 16 oz",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
                                           }
                                       ]
                        },
@@ -1743,7 +1753,8 @@
                                               "ad":  "$2.52",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com"
                                           },
                                           {
                                               "store":  "Aldi",
@@ -1756,7 +1767,8 @@
                                               "ad":  "$3.49 Per Lb.",
                                               "size":  "",
                                               "basis":  "per-lb marker",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -1769,7 +1781,8 @@
                                               "ad":  "$4.00",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -1782,7 +1795,8 @@
                                               "ad":  "$4.17",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -1795,7 +1809,8 @@
                                               "ad":  "Buy 1 get 1 50% off",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  "buy 1 get 1 50% off (reg 5.99)"
+                                              "note":  "buy 1 get 1 50% off (reg 5.99)",
+                                              "source_ad":  "Weekly Ad"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -1808,7 +1823,49 @@
                                               "ad":  "$5.29",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
+                                          }
+                                      ]
+                       },
+                       {
+                           "commodity":  "Ribeye Steak",
+                           "id":  "ribeye-steak",
+                           "unit":  "lb",
+                           "cheapest_store":  "Aldi",
+                           "cheapest_price":  12.99,
+                           "cheapest_type":  "sale",
+                           "nomem_store":  "Aldi",
+                           "nomem_price":  12.99,
+                           "nomem_type":  "sale",
+                           "stores":  [
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  12.99,
+                                              "unit":  "lb",
+                                              "type":  "sale",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Grass-Fed Ribeye Steaks",
+                                              "ad":  "PRICE DROPS $12.99 Per Lb.",
+                                              "size":  "Fresh",
+                                              "basis":  "per-lb marker",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  19.99,
+                                              "unit":  "lb",
+                                              "type":  "sale",
+                                              "bulk":  true,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Angus Reserve boneless beef ribeye steak, $19.99 lb.",
+                                              "ad":  "Hy-Vee Angus Reserve boneless beef ribeye steak, $19.99 lb.",
+                                              "size":  "",
+                                              "basis":  "per-lb marker",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
                                           }
                                       ]
                        },
@@ -1816,26 +1873,13 @@
                            "commodity":  "Russet Potatoes",
                            "id":  "russet-potatoes",
                            "unit":  "lb",
-                           "cheapest_store":  "Aldi",
-                           "cheapest_price":  0.439,
+                           "cheapest_store":  "Hy-Vee",
+                           "cheapest_price":  0.49,
                            "cheapest_type":  "everyday",
-                           "nomem_store":  "Aldi",
-                           "nomem_price":  0.439,
+                           "nomem_store":  "Hy-Vee",
+                           "nomem_price":  0.49,
                            "nomem_type":  "everyday",
                            "stores":  [
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.439,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  true,
-                                              "membership":  false,
-                                              "item":  "Russet Potatoes, Bag",
-                                              "ad":  "$4.39",
-                                              "size":  "10 lb",
-                                              "basis":  "size 10 lb",
-                                              "note":  ""
-                                          },
                                           {
                                               "store":  "Hy-Vee",
                                               "per_unit":  0.49,
@@ -1846,8 +1890,9 @@
                                               "item":  "Hy-Vee One Step Russet Potatoes (5 lb)",
                                               "ad":  "$0.49",
                                               "size":  "lb",
-                                              "basis":  "per-lb marker",
-                                              "note":  ""
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -1860,7 +1905,8 @@
                                               "ad":  "$5.49",
                                               "size":  "10 lb",
                                               "basis":  "size 10 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -1872,8 +1918,9 @@
                                               "item":  "Fresh Whole Russet Potatoes, 5 lb",
                                               "ad":  "$0.55",
                                               "size":  "lb",
-                                              "basis":  "per-lb marker",
-                                              "note":  ""
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -1886,7 +1933,49 @@
                                               "ad":  "$0.60",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
+                                          }
+                                      ]
+                       },
+                       {
+                           "commodity":  "Salsa",
+                           "id":  "salsa",
+                           "unit":  "oz",
+                           "cheapest_store":  "Aldi",
+                           "cheapest_price":  0.2369,
+                           "cheapest_type":  "sale",
+                           "nomem_store":  "Aldi",
+                           "nomem_price":  0.2369,
+                           "nomem_type":  "sale",
+                           "stores":  [
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.2369,
+                                              "unit":  "oz",
+                                              "type":  "sale",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Specially Selected Summer Salsa",
+                                              "ad":  "$3.79",
+                                              "size":  "Assorted Varieties 16 oz.",
+                                              "basis":  "size 16 oz",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.4393,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh \u0026 Finest By Our Family Salsa Avocado",
+                                              "ad":  "$6.59",
+                                              "size":  "15 oz",
+                                              "basis":  "size 15 oz",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -1912,7 +2001,8 @@
                                               "ad":  "$4.99",
                                               "size":  "32 oz",
                                               "basis":  "size 32 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad p14"
                                           },
                                           {
                                               "store":  "Sam\u0027s Club",
@@ -1925,20 +2015,8 @@
                                               "ad":  "$0.19",
                                               "size":  "oz",
                                               "basis":  "size 1 oz",
-                                              "note":  ""
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.2281,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Happy Farms Shredded Mild Cheddar Cheese",
-                                              "ad":  "$3.65",
-                                              "size":  "16 oz",
-                                              "basis":  "size 16 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -1951,7 +2029,8 @@
                                               "ad":  "$1.97",
                                               "size":  "8 oz",
                                               "basis":  "size 8 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -1964,7 +2043,8 @@
                                               "ad":  "$2.48",
                                               "size":  "8 oz",
                                               "basis":  "size 8 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -1973,11 +2053,94 @@
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Our Family Natural Finely Cut Mozzarella Shredded Cheese 8 Oz",
+                                              "item":  "Our Family Sharp Cheddar Shredded Cheese 8 Oz",
                                               "ad":  "$2.59",
                                               "size":  "8 oz",
                                               "basis":  "size 8 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
+                                          }
+                                      ]
+                       },
+                       {
+                           "commodity":  "Shrimp (frozen, raw)",
+                           "id":  "shrimp",
+                           "unit":  "lb",
+                           "cheapest_store":  "Aldi",
+                           "cheapest_price":  9.49,
+                           "cheapest_type":  "sale",
+                           "nomem_store":  "Aldi",
+                           "nomem_price":  9.49,
+                           "nomem_type":  "sale",
+                           "stores":  [
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  9.49,
+                                              "unit":  "lb",
+                                              "type":  "sale",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Jumbo Raw Peeled \u0026 Deveined Tail-Off Shrimp",
+                                              "ad":  "$9.49 Per Lb.",
+                                              "size":  "",
+                                              "basis":  "per-lb marker",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  10.99,
+                                              "unit":  "lb",
+                                              "type":  "sale",
+                                              "bulk":  true,
+                                              "membership":  false,
+                                              "item":  "Cooked shrimp, $10.99 lb.",
+                                              "ad":  "Cooked shrimp, $10.99 lb.",
+                                              "size":  "",
+                                              "basis":  "per-lb marker",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
+                                          }
+                                      ]
+                       },
+                       {
+                           "commodity":  "Sirloin Steak",
+                           "id":  "sirloin-steak",
+                           "unit":  "lb",
+                           "cheapest_store":  "Aldi",
+                           "cheapest_price":  9.99,
+                           "cheapest_type":  "sale",
+                           "nomem_store":  "Aldi",
+                           "nomem_price":  9.99,
+                           "nomem_type":  "sale",
+                           "stores":  [
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  9.99,
+                                              "unit":  "lb",
+                                              "type":  "sale",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Top Sirloin Steak",
+                                              "ad":  "PRICE DROPS $9.99 Per Lb.",
+                                              "size":  "Fresh Black Angus USDA Choice",
+                                              "basis":  "per-lb marker",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  12.99,
+                                              "unit":  "lb",
+                                              "type":  "sale",
+                                              "bulk":  true,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Angus Reserve boneless beef sirloin steak, $12.99 lb.",
+                                              "ad":  "Hy-Vee Angus Reserve boneless beef sirloin steak, $12.99 lb.",
+                                              "size":  "",
+                                              "basis":  "per-lb marker",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
                                           }
                                       ]
                        },
@@ -2003,7 +2166,8 @@
                                               "ad":  "3/$5",
                                               "size":  "16 oz",
                                               "basis":  "size 16 oz",
-                                              "note":  "3 for $5"
+                                              "note":  "3 for $5",
+                                              "source_ad":  "Weekly Ad p1 (Sour Cream, Cottage Cheese or Dip, 3/$5)"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -2016,7 +2180,8 @@
                                               "ad":  "$1.84",
                                               "size":  "16 oz",
                                               "basis":  "size 16 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Sam\u0027s Club",
@@ -2029,20 +2194,8 @@
                                               "ad":  "$0.12",
                                               "size":  "oz",
                                               "basis":  "size 1 oz",
-                                              "note":  ""
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.1219,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Friendly Farms Sour Cream",
-                                              "ad":  "$1.95",
-                                              "size":  "16 oz",
-                                              "basis":  "size 16 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -2055,7 +2208,8 @@
                                               "ad":  "$2.99",
                                               "size":  "24 oz",
                                               "basis":  "size 24 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -2068,7 +2222,8 @@
                                               "ad":  "$2.68",
                                               "size":  "16 oz",
                                               "basis":  "size 16 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -2094,7 +2249,8 @@
                                               "ad":  "$2.38",
                                               "size":  "16 oz",
                                               "basis":  "size 16 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -2107,20 +2263,8 @@
                                               "ad":  "Buy 1 get 1 for $1.00",
                                               "size":  "16 oz",
                                               "basis":  "size 16 oz",
-                                              "note":  "buy 1 get 1 for $1 (reg 3.99)"
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.1656,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Strawberries, Package",
-                                              "ad":  "$2.65",
-                                              "size":  "16 oz",
-                                              "basis":  "size 16 oz",
-                                              "note":  ""
+                                              "note":  "buy 1 get 1 for $1 (reg 3.99)",
+                                              "source_ad":  "Weekly Ad"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -2133,7 +2277,8 @@
                                               "ad":  "$2.99",
                                               "size":  "1 lb",
                                               "basis":  "size 16 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -2159,20 +2304,22 @@
                                               "ad":  "$0.40",
                                               "size":  "each",
                                               "basis":  "per-each",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price (5 for $2.00, from $0.60)"
                                           },
                                           {
                                               "store":  "Aldi",
                                               "per_unit":  0.5975,
                                               "unit":  "each",
-                                              "type":  "everyday",
+                                              "type":  "sale",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Sweet Corn, Package",
-                                              "ad":  "$2.39",
-                                              "size":  "4 ct",
+                                              "item":  "Sweet Corn",
+                                              "ad":  "PRICE DROPS $2.39 Per 4-Pack",
+                                              "size":  "",
                                               "basis":  "per-4-pack",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
                                           },
                                           {
                                               "store":  "Sam\u0027s Club",
@@ -2185,7 +2332,8 @@
                                               "ad":  "$0.62",
                                               "size":  "each",
                                               "basis":  "per-each",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -2198,7 +2346,8 @@
                                               "ad":  "Fresh sweet corn, 3/ $2",
                                               "size":  "",
                                               "basis":  "per-each",
-                                              "note":  "3 for $2"
+                                              "note":  "3 for $2",
+                                              "source_ad":  "Weekly Ad"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -2211,7 +2360,8 @@
                                               "ad":  "$0.74",
                                               "size":  "each",
                                               "basis":  "per-each",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -2224,7 +2374,90 @@
                                               "ad":  "$5.99",
                                               "size":  "1 pk",
                                               "basis":  "per-4-pack",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
+                                          }
+                                      ]
+                       },
+                       {
+                           "commodity":  "Tortilla Chips",
+                           "id":  "tortilla-chips",
+                           "unit":  "oz",
+                           "cheapest_store":  "Aldi",
+                           "cheapest_price":  0.2776,
+                           "cheapest_type":  "sale",
+                           "nomem_store":  "Aldi",
+                           "nomem_price":  0.2776,
+                           "nomem_type":  "sale",
+                           "stores":  [
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.2776,
+                                              "unit":  "oz",
+                                              "type":  "sale",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Simply Nature Organic Blue Corn or Multigrain Tortilla Chips",
+                                              "ad":  "$2.29",
+                                              "size":  "8.25 oz.",
+                                              "basis":  "size 8.25 oz",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.3786,
+                                              "unit":  "oz",
+                                              "type":  "sale",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Tostitos Original Tortilla Chips Party Size! 14.5 Oz",
+                                              "ad":  "$5.49",
+                                              "size":  "14.5 oz",
+                                              "basis":  "size 14.5 oz",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
+                                          }
+                                      ]
+                       },
+                       {
+                           "commodity":  "Whole Chicken",
+                           "id":  "whole-chicken",
+                           "unit":  "lb",
+                           "cheapest_store":  "Walmart",
+                           "cheapest_price":  1.32,
+                           "cheapest_type":  "everyday",
+                           "nomem_store":  "Walmart",
+                           "nomem_price":  1.32,
+                           "nomem_type":  "everyday",
+                           "stores":  [
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  1.32,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Tyson Whole Chicken, Young",
+                                              "ad":  "$1.32",
+                                              "size":  "lb",
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  1.79,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Fresh Whole Chicken",
+                                              "ad":  "$1.79",
+                                              "size":  "lb",
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -2250,7 +2483,8 @@
                                               "ad":  "Whole seedless watermelon, $4.48 each",
                                               "size":  "",
                                               "basis":  "per-each marker",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  ""
                                           },
                                           {
                                               "store":  "Walmart",
@@ -2263,20 +2497,22 @@
                                               "ad":  "$4.65",
                                               "size":  "each",
                                               "basis":  "per-each",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Aldi",
                                               "per_unit":  4.65,
                                               "unit":  "each",
-                                              "type":  "everyday",
+                                              "type":  "sale",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Large Seedless Watermelon",
-                                              "ad":  "$4.65",
-                                              "size":  "each",
-                                              "basis":  "per-each",
-                                              "note":  ""
+                                              "item":  "Whole Seedless Watermelon",
+                                              "ad":  "PRICE DROPS $4.65 Each",
+                                              "size":  "",
+                                              "basis":  "per-each marker",
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad"
                                           },
                                           {
                                               "store":  "Sam\u0027s Club",
@@ -2289,7 +2525,8 @@
                                               "ad":  "$4.97",
                                               "size":  "each",
                                               "basis":  "per-each",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -2302,7 +2539,8 @@
                                               "ad":  "$4.99",
                                               "size":  "each",
                                               "basis":  "per-each",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "Weekly Ad p1"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -2315,7 +2553,8 @@
                                               "ad":  "$5.99",
                                               "size":  "1 ct",
                                               "basis":  "per-each",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -2326,8 +2565,8 @@
                            "cheapest_store":  "Sam\u0027s Club",
                            "cheapest_price":  0.74,
                            "cheapest_type":  "everyday",
-                           "nomem_store":  "Aldi",
-                           "nomem_price":  0.8833,
+                           "nomem_store":  "Family Fare",
+                           "nomem_price":  0.998,
                            "nomem_type":  "everyday",
                            "stores":  [
                                           {
@@ -2340,21 +2579,9 @@
                                               "item":  "Yellow Onions (10 lb)",
                                               "ad":  "$0.74",
                                               "size":  "lb",
-                                              "basis":  "per-lb marker",
-                                              "note":  ""
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.8833,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Yellow Onions, Bag",
-                                              "ad":  "$2.65",
-                                              "size":  "3 lb",
-                                              "basis":  "size 3 lb",
-                                              "note":  ""
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "samsclub.com"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -2367,7 +2594,8 @@
                                               "ad":  "$4.99",
                                               "size":  "5 lb",
                                               "basis":  "size 5 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -2379,8 +2607,9 @@
                                               "item":  "Yellow Onions (3 lb bag)",
                                               "ad":  "$1.00",
                                               "size":  "lb",
-                                              "basis":  "per-lb marker",
-                                              "note":  ""
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -2392,8 +2621,9 @@
                                               "item":  "Fresh Yellow Onions (3 lb bag)",
                                               "ad":  "$1.15",
                                               "size":  "lb",
-                                              "basis":  "per-lb marker",
-                                              "note":  ""
+                                              "basis":  "size 1 lb",
+                                              "note":  "",
+                                              "source_ad":  "walmart.com"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -2406,7 +2636,8 @@
                                               "ad":  "$1.16",
                                               "size":  "lb",
                                               "basis":  "size 1 lb",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        },
@@ -2414,26 +2645,13 @@
                            "commodity":  "Yogurt",
                            "id":  "yogurt",
                            "unit":  "oz",
-                           "cheapest_store":  "Aldi",
-                           "cheapest_price":  0.0872,
+                           "cheapest_store":  "Baker\u0027s",
+                           "cheapest_price":  0.0934,
                            "cheapest_type":  "everyday",
-                           "nomem_store":  "Aldi",
-                           "nomem_price":  0.0872,
+                           "nomem_store":  "Baker\u0027s",
+                           "nomem_price":  0.0934,
                            "nomem_type":  "everyday",
                            "stores":  [
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.0872,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  true,
-                                              "membership":  false,
-                                              "item":  "Friendly Farms Nonfat Plain Greek Yogurt",
-                                              "ad":  "$2.79",
-                                              "size":  "32 oz",
-                                              "basis":  "size 32 oz",
-                                              "note":  ""
-                                          },
                                           {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  0.0934,
@@ -2445,7 +2663,8 @@
                                               "ad":  "$2.99",
                                               "size":  "32 oz",
                                               "basis":  "size 32 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -2458,7 +2677,8 @@
                                               "ad":  "$3.28",
                                               "size":  "32 oz",
                                               "basis":  "size 32 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           },
                                           {
                                               "store":  "Family Fare",
@@ -2471,7 +2691,8 @@
                                               "ad":  "$0.89",
                                               "size":  "6 oz",
                                               "basis":  "size 6 oz",
-                                              "note":  ""
+                                              "note":  "",
+                                              "source_ad":  "everyday shelf price"
                                           }
                                       ]
                        }

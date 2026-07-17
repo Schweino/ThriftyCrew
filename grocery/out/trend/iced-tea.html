@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17"],"s":{"Walmart":[0.0255,0.0255,0.026,0.026],"Fareway":[0.0303,0.0303,0.0303,0.0303],"Aldi":[0.0335,0.0304,0.0304,0.0304],"Hy-Vee":[0.0507,0.0507,0.0507,0.0507],"Sam's Club":[0.0558,0.0558,null,0.0558]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17"],"s":{"Walmart":[0.0255,0.0255,0.026,0.026],"Fareway":[0.0303,0.0303,0.0303,0.0303],"Aldi":[0.0335,0.0304,0.0304,0.0304],"Hy-Vee":[0.0507,0.0507,0.0507,0.0507],"Sam's Club":[0.0558,0.0558,null,0.0287]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -142,10 +142,10 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Walmart</td><td>$0.026 per fl oz</td><td><span class="tp-item">Great Value Sweet Brewed Iced Tea</span></td></tr>
+<tr><td>Sam&#39;s Club</td><td>$0.0287 per fl oz</td><td><span class="tp-item">Milo&#39;s Famous Sweet Tea,1 gal.</span></td></tr>
 <tr><td>Fareway</td><td>$0.0303 per fl oz</td><td><span class="tp-item">AriZona Sun Brewed Style with Raspberry Flavor Iced Tea</span></td></tr>
 <tr><td>Aldi</td><td>$0.0304 per fl oz</td><td><span class="tp-item">Milo&#39;s Famous Sweet Tea</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.0507 per fl oz</td><td><span class="tp-item">Gold Peak Black Sweet Tea Bottle, 59 fl oz</span></td></tr>
-<tr><td>Sam&#39;s Club</td><td>$0.0558 per fl oz</td><td><span class="tp-item">Pure Leaf Real Brewed Unsweetened Black Tea</span></td></tr>
 </tbody></table>
 <p class="tp-links"><a href="/omaha-grocery-prices/?ref=trend">See the full live Omaha price board</a> &middot; <a href="/omaha-price-tracker/?ref=trend">All tracked staples</a></p>
 <p class="tp-foot">Tracked weekly across Hy-Vee, Baker&#39;s, Family Fare, Aldi, Sam&#39;s Club and Walmart in Omaha since June 2026. This page updates every week.</p>

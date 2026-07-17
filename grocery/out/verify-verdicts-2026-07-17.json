@@ -1,0 +1,2360 @@
+﻿{
+    "week_of":  "2026-07-17",
+    "verdicts":  [
+                     {
+                         "id":  "ground-beef-8020",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "case pack (chub)",
+                                             "reason":  "Correct 80/20 ground chuck but sold as a bulk case chub, not a retail tray."
+                                         },
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "value pack",
+                                             "reason":  "Correct commodity, larger value-pack format."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "alfredo-sauce",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "3-pack",
+                                             "reason":  "Correct product sold as a 3 x 15 oz multipack."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "all-purpose-cleaner",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "2X concentrate, 210 fl oz jug",
+                                             "reason":  "Real all-purpose cleaner but a concentrate in a jug; per-fl-oz is not like-for-like with ready-to-use sprays."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "flour",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "25 lb bulk bag",
+                                             "reason":  "Correct all-purpose flour, bulk size."
+                                         },
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "25 lb bulk bag",
+                                             "reason":  "Correct all-purpose flour, bulk size."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "almonds",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "48 oz bulk bag",
+                                             "reason":  "Plain whole natural almonds, bulk size."
+                                         },
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "lightly salted",
+                                             "reason":  "Almonds but salted, not plain raw."
+                                         },
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "hot honey flavored",
+                                             "reason":  "Almonds but a seasoned/flavored snack, not plain."
+                                         },
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "smokehouse flavored",
+                                             "reason":  "Almonds but a seasoned/flavored snack, not plain."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "aluminum-foil",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "small 25 sq ft roll",
+                                             "reason":  "Priced per roll, but a much smaller roll than the others."
+                                         },
+                                         {
+                                             "store":  "Baker\u0027s",
+                                             "keep":  true,
+                                             "annotation":  "small 30 sq ft roll",
+                                             "reason":  "Priced per roll, but a smaller roll than the 75 ft options."
+                                         },
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "2-pack, heavy duty 18 in",
+                                             "reason":  "Priced per unit but it is a 2-roll heavy-duty pack."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "apple-cider-vinegar",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "organic, raw unfiltered",
+                                             "reason":  "ACV but premium organic raw style."
+                                         },
+                                         {
+                                             "store":  "Aldi",
+                                             "keep":  true,
+                                             "annotation":  "organic",
+                                             "reason":  "ACV but organic."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "apple-juice",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "\u0027Snapple Juice Drink Variety Pack\u0027 is an assorted juice-drink beverage multipack, not apple juice."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "apples",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "\u0027Lady Apples\u0027 are a tiny ornamental/specialty crabapple-type variety, not the eating apples a shopper means."
+                                         },
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "Envy premium variety, 4 lb bag",
+                                             "reason":  "Real apples but a premium named club variety in a bulk bag."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "applesauce",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "3 x 46 oz bulk",
+                                             "reason":  "Correct product, bulk multipack."
+                                         },
+                                         {
+                                             "store":  "Aldi",
+                                             "keep":  true,
+                                             "annotation":  "single-serve cups",
+                                             "reason":  "Applesauce in 4 oz cups rather than a jar."
+                                         },
+                                         {
+                                             "store":  "Walmart",
+                                             "keep":  true,
+                                             "annotation":  "single-serve cups",
+                                             "reason":  "Applesauce in 4 oz cups rather than a jar."
+                                         },
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "single-serve cups",
+                                             "reason":  "Applesauce in 4 oz cups rather than a jar."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "artichoke-hearts",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "33.5 oz bulk jar, whole hearts",
+                                             "reason":  "Correct product, bulk size and whole rather than quartered."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "avocados",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "\u0027Cucumber Avocado Roll, 15 pcs\u0027 is prepared sushi, not avocados."
+                                         },
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "small size",
+                                             "reason":  "Hass avocado but explicitly the small size."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "baby-back-ribs",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "case pack",
+                                             "reason":  "Correct cut, sold as a bulk case."
+                                         },
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "previously frozen",
+                                             "reason":  "Correct cut but previously frozen, not fresh."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "baby-food",
+                         "entries":  [
+                                         {
+                                             "store":  "Walmart",
+                                             "keep":  true,
+                                             "annotation":  "12-pouch variety pack",
+                                             "reason":  "Correct product, bulk multipack."
+                                         },
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "18-count variety pack",
+                                             "reason":  "Correct product, bulk multipack."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "baby-formula",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "48 oz bulk can",
+                                             "reason":  "Correct product, bulk size vs standard 12.5 oz cans."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "baby-wipes",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "17-pack / 1088 wipes bulk case",
+                                             "reason":  "Correct product, bulk case."
+                                         },
+                                         {
+                                             "store":  "Walmart",
+                                             "keep":  true,
+                                             "annotation":  "3-pack",
+                                             "reason":  "Correct product, multipack."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "bacon",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "\u0027Smithfield Applewood Smoked Bacon Fresh Pork Loin Filet\u0027 is a seasoned pork loin filet, not sliced bacon."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "bagels",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "cinnamon raisin swirl",
+                                             "reason":  "Bagels but a flavored variety, not plain."
+                                         },
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "12-pack",
+                                             "reason":  "Plain bagels, bulk pack."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "baked-beans",
+                         "entries":  [
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "pork \u0026 beans in tomato sauce",
+                                             "reason":  "Adjacent but not sweet baked beans; keeping as the store-brand stand-in, flagged."
+                                         },
+                                         {
+                                             "store":  "Baker\u0027s",
+                                             "keep":  true,
+                                             "annotation":  "pork \u0026 beans",
+                                             "reason":  "Van Camp\u0027s Pork and Beans is the tomato-sauce style, not sweet baked beans."
+                                         },
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "117 oz bulk can",
+                                             "reason":  "Correct product, foodservice-size can."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "baking-soda",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "13.5 lb bulk bag",
+                                             "reason":  "Correct product, bulk size."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "balsamic-vinegar",
+                         "entries":  [
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "organic",
+                                             "reason":  "Balsamic vinegar but organic."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "bar-soap",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "20-bar bulk pack",
+                                             "reason":  "Correct product, bulk pack."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "batteries",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "66-pack bulk",
+                                             "reason":  "Correct product, bulk pack."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "bbq-sauce",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "1 gallon bulk jug",
+                                             "reason":  "Correct product, bulk size."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "black-olives",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "6-pack",
+                                             "reason":  "Correct product, multipack."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "lotion",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "baby lotion",
+                                             "reason":  "Is a body lotion but formulated/marketed as baby lotion."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "chicken-breast",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "case pack",
+                                             "reason":  "Correct cut, bulk case."
+                                         },
+                                         {
+                                             "store":  "Aldi",
+                                             "keep":  true,
+                                             "annotation":  "family pack",
+                                             "reason":  "Correct cut, larger family pack."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "bottled-water",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "40-pack",
+                                             "reason":  "Priced per bottle but a 40-pack, not the 24-pack the label names."
+                                         },
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "40-pack",
+                                             "reason":  "Priced per bottle but a 40-pack, not the 24-pack the label names."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "bouillon",
+                         "entries":  [
+                                         {
+                                             "store":  "Baker\u0027s",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "Size math is wrong: a Knorr 8-ct chicken cube box IS 3.1 oz total, not 8 x 3.1 oz, so the per-oz price is understated ~8x."
+                                         },
+                                         {
+                                             "store":  "Walmart",
+                                             "keep":  true,
+                                             "annotation":  "10.9 lb foodservice tub, vegetable base",
+                                             "reason":  "Correct commodity but a foodservice-size base tub."
+                                         },
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "70.4 oz bulk",
+                                             "reason":  "Correct commodity, bulk size."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "bratwurst",
+                         "entries":  [
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "ad line: brats or grillers, 16 or 19 oz",
+                                             "reason":  "Combined ad line spanning two sausage products and two sizes; unit price is approximate."
+                                         },
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "fully cooked",
+                                             "reason":  "Bratwurst but pre-cooked stadium brats, not raw."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "bread",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "2-loaf pack",
+                                             "reason":  "Priced per loaf but sold only as a 2-pack."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "bread-crumbs",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "5 lb bulk",
+                                             "reason":  "Correct product, bulk size."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "broccoli",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "\u0027Broccoli Normandy\u0027 is a mixed vegetable blend (broccoli, cauliflower, carrots), not fresh broccoli."
+                                         },
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "cut florets, 52 oz bag",
+                                             "reason":  "Broccoli but pre-cut florets in a large bag rather than whole crowns."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "brown-rice",
+                         "entries":  [
+                                         {
+                                             "store":  "Aldi",
+                                             "keep":  true,
+                                             "annotation":  "basmati variety",
+                                             "reason":  "Brown rice but a premium basmati variety, not plain long grain."
+                                         },
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "5 lb bulk",
+                                             "reason":  "Correct product, bulk size."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "brown-sugar",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "7 lb bulk",
+                                             "reason":  "Correct product, bulk size."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "brownie-mix",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "4-pack",
+                                             "reason":  "Priced per box but sold as a 4-pack."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "cake-mix",
+                         "entries":  [
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "small Jiffy box (~9 oz)",
+                                             "reason":  "Real cake mix but a small Jiffy box, roughly half a standard mix box; per-box price is not like-for-like."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "butter",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "4 lb bulk, unsalted",
+                                             "reason":  "Correct product, bulk pack and unsalted."
+                                         },
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "unsalted half sticks",
+                                             "reason":  "Correct product, unsalted half-stick format."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "beef-stew",
+                         "entries":  [
+                                         {
+                                             "store":  "Walmart",
+                                             "keep":  true,
+                                             "annotation":  "4-pack",
+                                             "reason":  "Correct product, multipack."
+                                         },
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "6-pack",
+                                             "reason":  "Correct product, multipack."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "canned-black-beans",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "12 lb foodservice bulk",
+                                             "reason":  "Correct product, bulk size."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "canned-chicken",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "6-pack",
+                                             "reason":  "Correct product, multipack."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "beef-broth",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "3-pack",
+                                             "reason":  "Correct product, multipack."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "canned-pinto-beans",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "\u0027Member\u0027s Mark Pinto Beans 12 lbs.\u0027 is a 12-lb bag of DRY pinto beans, not canned beans. No 192 oz can exists. Dry beans are not per-oz comparable to canned and it is currently the cheapest entry."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "cat-food",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "\u0027Friskies Prime Filets with Chicken \u0026 Tuna in Gravy 5.5 Oz\u0027 is WET canned cat food; commodity is Cat Food (dry)."
+                                         },
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "32 lb bulk bag",
+                                             "reason":  "Correct product but a warehouse-size bag; cheapest entry."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "cheese-crackers",
+                         "entries":  [
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "Combined multi-product ad line: \u0027Cheez-It, Club, Toasted or Town House crackers, 12 to 21 oz.\u0027 Club/Town House/Toasted are plain buttery crackers, not cheese crackers, and the size range makes the unit price arbitrary."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "cocktail-sauce",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "\u0027Member\u0027s Mark Shrimp Tray with Cocktail Sauce, priced per pound\u0027 is a shrimp platter, not a bottle of cocktail sauce; price is per lb of shrimp."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "corn-dogs",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "\u0027Corn Dogs Hot\u0027 1 ea is a hot deli/prepared corn dog, not the frozen packaged product the commodity means."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "crackers",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "\u0027Lance Variety Pack Sandwich Crackers\u0027 are filled cracker sandwiches (peanut butter/cheese), a different snack product than saltine/buttery crackers."
+                                         },
+                                         {
+                                             "store":  "Baker\u0027s",
+                                             "keep":  true,
+                                             "annotation":  "ad line, 11.5-14 oz size range",
+                                             "reason":  "\u0027Nabisco Snack Crackers or Ritz\u0027 - Ritz is the buttery cracker the label means, but it is an or-line with a size range."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "chocolate-milk",
+                         "entries":  [
+                                         {
+                                             "store":  "Walmart",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "Internal contradiction: item is \u0027TruMoo Whole Chocolate Milk Half Gallon\u0027 but size recorded as \u0027gallon\u0027, so the per-floz price is halved (0.0255/floz = $1.63 a half gallon, well below market). Bad size parse makes it the false cheapest."
+                                         },
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "shelf-stable single-serve 15-pack",
+                                             "reason":  "Nesquik 8 fl oz bottles, not refrigerated jug chocolate milk."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "canned-chili",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "12-can case pack",
+                                             "reason":  "Correct product but sold as a 12 x 15 oz case, not a single can; cheapest entry."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "coconut-milk-canned",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "6-can case pack",
+                                             "reason":  "Correct product, sold as a 6-pack."
+                                         },
+                                         {
+                                             "store":  "Baker\u0027s",
+                                             "keep":  true,
+                                             "annotation":  "organic",
+                                             "reason":  "Simple Truth Organic; not like-for-like with conventional cans."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "diced-tomatoes",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "12-can case pack",
+                                             "reason":  "Correct product but a 12 x 14.5 oz case; cheapest entry."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "hominy",
+                         "entries":  [
+                                         {
+                                             "store":  "Baker\u0027s",
+                                             "keep":  true,
+                                             "annotation":  "110 oz #10 institutional can",
+                                             "reason":  "Correct product but a food-service size can, not the shelf 15.5 oz can; cheapest entry."
+                                         },
+                                         {
+                                             "store":  "Walmart",
+                                             "keep":  true,
+                                             "annotation":  "110 oz #10 institutional can",
+                                             "reason":  "Correct product but a food-service size can."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "canned-peaches",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "104 oz bulk can",
+                                             "reason":  "Correct product in a food-service size can; cheapest entry."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "canned-salmon",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "4-can pack",
+                                             "reason":  "Correct product, sold as a 4-pack; cheapest entry."
+                                         },
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "skinless \u0026 boneless (premium pack)",
+                                             "reason":  "Correct product but the skinless/boneless 5 oz form, which prices well above standard cans with skin/bone."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "canned-tuna",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "12-can pack, packed in oil",
+                                             "reason":  "Correct product but a 12-pack and oil-packed while most comparators are water-packed; cheapest entry."
+                                         },
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "yellowfin, packed in oil",
+                                             "reason":  "Correct product but premium yellowfin in oil vs chunk light in water."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "cantaloupe",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "small melon",
+                                             "reason":  "Listing explicitly says Small; not size-comparable with standard whole cantaloupe."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "carrots",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "organic, 5 lb bag",
+                                             "reason":  "Correct product but organic and bulk; cheapest entry."
+                                         },
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "organic",
+                                             "reason":  "Bunny Luv Organic; not like-for-like with conventional carrots."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "cat-litter",
+                         "entries":  [
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "non-clumping",
+                                             "reason":  "Correct commodity but non-clumping while every other entry is clumping/scoopable, which prices lower per lb."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "celery",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "celery hearts",
+                                             "reason":  "Trimmed hearts, not a whole celery stalk."
+                                         },
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "Perks member price; non-member $1.99",
+                                             "reason":  "Cheapest entry but requires Hy-Vee Perks membership; non-member price is 1.99."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "chicken-noodle-soup",
+                         "entries":  [
+                                         {
+                                             "store":  "Aldi",
+                                             "keep":  true,
+                                             "annotation":  "ready-to-serve (not condensed)",
+                                             "reason":  "Chunky ready-to-eat soup vs condensed cans elsewhere; condensed makes ~2x volume per oz, so it is not per-oz like-for-like. Currently cheapest."
+                                         },
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "ready-to-serve (not condensed), 6-pack",
+                                             "reason":  "Progresso ready-to-eat vs condensed comparators."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "chicken-thighs",
+                         "entries":  [
+                                         {
+                                             "store":  "Aldi",
+                                             "keep":  true,
+                                             "annotation":  "drumsticks, family pack sale",
+                                             "reason":  "Drumsticks rather than thighs (label allows both) and a limited-quantity sale; cheapest entry."
+                                         },
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "case pack",
+                                             "reason":  "Correct cut but sold as a case, priced per pound."
+                                         },
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "leg quarters (thigh + drumstick + back)",
+                                             "reason":  "Leg quarters include the back portion, so per-lb edible yield is lower than trimmed thighs."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "chicken-wings",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "frozen, 10 lb bulk bag",
+                                             "reason":  "Frozen bulk vs fresh wings elsewhere."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "chuck-roast",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "whole chuck roll case (untrimmed)",
+                                             "reason":  "Correct cut family but a whole primal chuck roll sold by the case, not a retail roast; cheapest entry."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "coconut-oil",
+                         "entries":  [
+                                         {
+                                             "store":  "Aldi",
+                                             "keep":  true,
+                                             "annotation":  "organic, virgin",
+                                             "reason":  "Simply Nature Organic vs refined comparators."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "cod",
+                         "entries":  [
+                                         {
+                                             "store":  "Aldi",
+                                             "keep":  true,
+                                             "annotation":  "frozen value pack",
+                                             "reason":  "Frozen 2 lb pack vs fresh/thawed counter fillets elsewhere; cheapest entry."
+                                         },
+                                         {
+                                             "store":  "Baker\u0027s",
+                                             "keep":  true,
+                                             "annotation":  "frozen value pack",
+                                             "reason":  "Frozen 2 lb pack, not counter fillets."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "coffee",
+                         "entries":  [
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "ad line: two brands, 23.1-27.9 oz size range",
+                                             "reason":  "Both options are ground coffee so the commodity is right, but the unit price depends on which size in the range is bought."
+                                         },
+                                         {
+                                             "store":  "Baker\u0027s",
+                                             "keep":  true,
+                                             "annotation":  "sale, 22.6-25.9 oz size range",
+                                             "reason":  "Correct product; unit price depends on which size in the range."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "coffee-creamer",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "oatmilk (non-dairy) creamer",
+                                             "reason":  "Correct commodity but plant-based, which prices above dairy creamer."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "cranberry-juice",
+                         "entries":  [
+                                         {
+                                             "store":  "Aldi",
+                                             "keep":  true,
+                                             "annotation":  "100% juice (others are cocktail)",
+                                             "reason":  "Correct commodity but 100% juice vs juice cocktail elsewhere, which is not like-for-like."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "cotton-swabs",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "count mismatch: listing says 1750 ct x 3 pk, size recorded 934 ct",
+                                             "reason":  "Correct product, but the recorded count disagrees with the item name so the per-swab price is uncertain. Not currently the winner."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "cream-cheese",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "48 oz bulk brick",
+                                             "reason":  "Correct product in a warehouse-size brick; cheapest entry."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "frozen-fries",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "Item is \u0027Frozen Carrots, Crinkle Cut Our Family Steamable\u0027 - crinkle-cut CARROTS, not French fries. Wrong product matched on \u0027crinkle cut\u0027."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "garlic",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "\u0027Seeds of Change Certified Organic Quinoa and Brown Rice with Garlic\u0027 is a heat-and-eat rice pouch multipack, not fresh garlic bulbs."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "garlic-bread",
+                         "entries":  [
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "\u0027Bellatoria ultra thin pizza or garlic bread, 11.81 to 19.41 oz., 2/$10\u0027 is a combined multi-product ad line (pizza OR garlic bread) with an ambiguous size; not a clean garlic-bread price."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "disinfecting-wipes",
+                         "entries":  [
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "\u0027Lysol wipes or disinfectant spray, 80 ct. or 12.5 oz., $5.99\u0027 is a combined multi-product ad line (wipes OR spray); per-wipe price is an assumption, not a stated wipes price."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "croissants",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "chocolate-filled croissants",
+                                             "reason":  "Chocolate croissants, not plain butter croissants like the other entries."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "cucumbers",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "seedless English cucumbers, 3-ct pack",
+                                             "reason":  "English/hothouse cucumber, a premium variety sold in a 3-pack vs single field cucumbers elsewhere."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "deodorant",
+                         "entries":  [
+                                         {
+                                             "store":  "Walmart",
+                                             "keep":  true,
+                                             "annotation":  "1.2 oz travel/mini size",
+                                             "reason":  "Correct product but a small trial size; per-oz price is inflated relative to standard 2.6-3 oz sticks."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "diapers",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "size-range box (Sizes 1-8); count varies by size",
+                                             "reason":  "Listing spans multiple diaper sizes, so per-diaper price is not size-matched to the Size 4 entries."
+                                         },
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "Size 5 (others are Size 4)",
+                                             "reason":  "Larger diaper size than the comparison set; per-diaper price is not strictly like-for-like."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "dinner-rolls",
+                         "entries":  [
+                                         {
+                                             "store":  "Aldi",
+                                             "keep":  true,
+                                             "annotation":  "Hawaiian sweet rolls",
+                                             "reason":  "Sweet Hawaiian rolls rather than plain white dinner rolls; commonly used as dinner rolls but not the same product."
+                                         },
+                                         {
+                                             "store":  "Walmart",
+                                             "keep":  true,
+                                             "annotation":  "Hawaiian sweet rolls",
+                                             "reason":  "Sweet Hawaiian rolls rather than plain white dinner rolls."
+                                         },
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "name-brand King\u0027s Hawaiian sweet rolls",
+                                             "reason":  "Sweet Hawaiian rolls, name brand; not plain dinner rolls."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "donuts",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "mini frosted donuts, 12 x 3 oz packs (price is per pack, not per donut)",
+                                             "reason":  "Mini donuts sold in single-serve packs; \u0027each\u0027 here is a pack, not a full-size glazed donut."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "evaporated-milk",
+                         "entries":  [
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "small 5 oz can",
+                                             "reason":  "Correct product but the small can; per-oz price is inflated vs the standard 12 oz can everywhere else."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "frosting",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "13 lb frozen whipped icing bucket (bulk/foodservice)",
+                                             "reason":  "Correct category but a frozen bulk bucket of whipped icing, not a 16 oz retail tub of frosting."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "storage-bags",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "mixed gallon + quart pack, not all gallon",
+                                             "reason":  "204-ct pack combines gallon and quart bags, so the per-bag price is not a pure gallon-bag price."
+                                         },
+                                         {
+                                             "store":  "Walmart",
+                                             "keep":  true,
+                                             "annotation":  "freezer bags (heavier than storage bags)",
+                                             "reason":  "Freezer-grade bag rather than a standard storage bag; typically prices higher per bag."
+                                         },
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "freezer bags (heavier than storage bags)",
+                                             "reason":  "Freezer-grade bag rather than a standard storage bag."
+                                         },
+                                         {
+                                             "store":  "Baker\u0027s",
+                                             "keep":  true,
+                                             "annotation":  "freezer bags (heavier than storage bags)",
+                                             "reason":  "Freezer-grade bag rather than a standard storage bag."
+                                         },
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "freezer bags (heavier than storage bags)",
+                                             "reason":  "Freezer-grade bag rather than a standard storage bag."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "frozen-lasagna",
+                         "entries":  [
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "single-serve 10 oz diet bowl (turkey sausage)",
+                                             "reason":  "Correct dish but a single-serve Healthy Choice steamer bowl, not a family-size frozen lasagna."
+                                         },
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "single-serve 9.35 oz frozen meal",
+                                             "reason":  "Michelina\u0027s single-serve tray, not a family-size frozen lasagna."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "fresh-ginger",
+                         "entries":  [
+                                         {
+                                             "store":  "Baker\u0027s",
+                                             "keep":  true,
+                                             "annotation":  "organic",
+                                             "reason":  "Organic ginger root vs conventional at the other stores."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "granola",
+                         "entries":  [
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "combined ad line (Simply or Protein granola, 18 or 24.1 oz); per-oz assumes larger size",
+                                             "reason":  "Both options are granola so the commodity is right, but the size/variety is ambiguous in the ad line."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "dryer-sheets",
+                         "entries":  [
+                                         {
+                                             "store":  "Baker\u0027s",
+                                             "keep":  true,
+                                             "annotation":  "ad size range 105-120 ct; per-sheet price depends on which count",
+                                             "reason":  "Correct product, but the count is a range so the per-sheet price is approximate."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "grapes",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "Grape Nuts Original is a breakfast cereal, not fresh grapes."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "fresh-green-beans",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "organic",
+                                             "reason":  "Organic 2 lb pack, not conventional like the others."
+                                         },
+                                         {
+                                             "store":  "Aldi",
+                                             "keep":  true,
+                                             "annotation":  "French/thin haricot-vert variety",
+                                             "reason":  "Specialty thin-bean variety rather than plain green beans."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "green-olives",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "bulk 2-pack (42.8 oz total)",
+                                             "reason":  "Club 2-pack, not a single retail jar."
+                                         },
+                                         {
+                                             "store":  "Aldi",
+                                             "keep":  true,
+                                             "annotation":  "Manzanilla olives; stuffed not stated on label",
+                                             "reason":  "Commodity is stuffed green olives; this listing does not confirm pimento-stuffed."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "ground-cinnamon",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "Pillsbury Cinnamon Rolls with icing is refrigerated dough, not ground cinnamon spice."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "ground-turkey",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "20 lb foodservice case",
+                                             "reason":  "Case pack, not a normal retail tray."
+                                         },
+                                         {
+                                             "store":  "Walmart",
+                                             "keep":  true,
+                                             "annotation":  "93% lean (others 85/15)",
+                                             "reason":  "Leaner blend, priced higher than the like-for-like 85/15."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "ground-turmeric",
+                         "entries":  [
+                                         {
+                                             "store":  "Aldi",
+                                             "keep":  true,
+                                             "annotation":  "organic",
+                                             "reason":  "Organic vs conventional spice."
+                                         },
+                                         {
+                                             "store":  "Baker\u0027s",
+                                             "keep":  true,
+                                             "annotation":  "organic",
+                                             "reason":  "Simple Truth Organic vs conventional spice."
+                                         },
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "organic",
+                                             "reason":  "Simply Organic vs conventional spice."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "conditioner",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "3-in-1 shampoo/conditioner combo",
+                                             "reason":  "Combination product, not a standalone conditioner."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "deli-ham",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "bulk 2-pack (40 oz)",
+                                             "reason":  "Club 2-pack, not a single retail package."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "hamburger-buns",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "wheat buns (others white)",
+                                             "reason":  "Wheat variant vs the white buns everywhere else."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "hand-soap",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "bulk refill multipack (159.6 fl oz)",
+                                             "reason":  "Listed as 80 fl oz but sized 159.6 fl oz; club multipack."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "honey",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "48 oz bulk jug",
+                                             "reason":  "Club-size container."
+                                         },
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "raw \u0026 unfiltered specialty blend",
+                                             "reason":  "Premium local raw honey, not plain filtered honey."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "honey-mustard",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "128 oz foodservice jug",
+                                             "reason":  "Foodservice bulk container."
+                                         },
+                                         {
+                                             "store":  "Walmart",
+                                             "keep":  true,
+                                             "annotation":  "honey Dijon variant",
+                                             "reason":  "Honey Dijon rather than plain honey mustard."
+                                         },
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "salad-dressing version, not condiment mustard",
+                                             "reason":  "Honey mustard dressing from the dressing aisle; thinner product than the condiment."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "hot-cocoa",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "50 ct bulk box",
+                                             "reason":  "Club-size count vs 10 ct retail box."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "hot-dogs",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "24 ct bulk pack",
+                                             "reason":  "Club pack, not a retail 8 ct."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "hot-sauce",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "1 gallon bulk jug",
+                                             "reason":  "Foodservice gallon vs 12 oz retail bottles."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "hummus",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "single-serve cups, 16 ct",
+                                             "reason":  "Snack-cup multipack, not a tub."
+                                         },
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "red pepper flavor (others classic)",
+                                             "reason":  "Flavored variety vs classic hummus."
+                                         },
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "garlic flavor (others classic)",
+                                             "reason":  "Flavored variety vs classic hummus."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "ice-cream",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "5 qt bulk pail",
+                                             "reason":  "Club pail vs 48 fl oz retail tubs."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "iced-tea",
+                         "entries":  [
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "raspberry-flavored tea",
+                                             "reason":  "Flavored iced tea vs plain sweet tea."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "instant-mashed-potatoes",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "52 oz bulk box",
+                                             "reason":  "Club-size box vs 4 oz retail pouches."
+                                         },
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "four cheese flavor",
+                                             "reason":  "Flavored variety vs plain/homestyle."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "italian-dressing",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "128 oz foodservice jug",
+                                             "reason":  "Foodservice bulk container."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "jarred-gravy",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "country sausage gravy, 105 oz foodservice can",
+                                             "reason":  "Bulk can and a sausage gravy rather than the turkey gravy others list."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "ketchup",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "3-pack (132 oz total)",
+                                             "reason":  "Club multipack."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "kidney-beans",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "6-pack of cans",
+                                             "reason":  "Club multipack vs single can."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "kielbasa",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "Lit\u0027l Smokies cocktail links, 3 lb",
+                                             "reason":  "Cocktail-size smoked sausage, not a kielbasa rope/link."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "eggs",
+                         "entries":  [
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "sold as 18-ct pack",
+                                             "reason":  "18-count carton normalized to a dozen."
+                                         },
+                                         {
+                                             "store":  "Baker\u0027s",
+                                             "keep":  true,
+                                             "annotation":  "sold as 18-ct pack",
+                                             "reason":  "18-count carton normalized to a dozen."
+                                         },
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "15-dozen club case",
+                                             "reason":  "Case pack, not a retail carton."
+                                         },
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "MEDIUM eggs, not large",
+                                             "reason":  "Commodity is large eggs; this is the medium size, so not like-for-like."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "stain-remover",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "trigger + refill bulk combo",
+                                             "reason":  "22 oz trigger plus 60 oz refill bundle."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "lemon-juice",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "2-pack",
+                                             "reason":  "Club multipack vs single bottle."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "lemonade",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "sugar-free bottled variety 24-pack",
+                                             "reason":  "Sugar-free single-serve multipack, not a jug of lemonade."
+                                         },
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "strawberry lemonade",
+                                             "reason":  "Flavored variant vs plain lemonade."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "lettuce",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "romaine hearts, 6 ct (smaller than a head)",
+                                             "reason":  "Trimmed romaine hearts, not a full head of lettuce like the iceberg entries."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "lime-juice",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "McCormick Mayonesa is mayonnaise made with lime juice, not bottled lime juice."
+                                         },
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "McCormick Mayonesa is mayonnaise with lime juice, not bottled lime juice."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "egg-whites",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "6-pack of 16 oz cartons",
+                                             "reason":  "Club multipack."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "mac-and-cheese",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "18-pack bulk",
+                                             "reason":  "Club multipack of boxes."
+                                         },
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "Bob Evans Macaroni \u0026 Cheese is a refrigerated prepared side dish, not boxed mac \u0026 cheese."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "mangoes",
+                         "entries":  [
+                                         {
+                                             "store":  "Baker\u0027s",
+                                             "keep":  true,
+                                             "annotation":  "honey/Ataulfo variety",
+                                             "reason":  "Different, smaller mango variety than the red mangoes others list."
+                                         },
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "small size",
+                                             "reason":  "Explicitly small mango, not comparable to standard/jumbo."
+                                         },
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "jumbo ripe-and-ready",
+                                             "reason":  "Jumbo premium size vs standard mango."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "marshmallows",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "Lucky Charms with Marshmallows is breakfast cereal, not a bag of marshmallows."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "mayonnaise",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "128 oz extra-heavy foodservice jug",
+                                             "reason":  "Foodservice bulk container and formulation."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "microwave-popcorn",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "mini 1.5 oz bags, 36 ct",
+                                             "reason":  "Mini bags vs standard-size bags; per-bag price not like-for-like."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "miracle-whip",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "Light version",
+                                             "reason":  "Light formulation vs regular whipped dressing."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "olive-oil",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "Violi Mediterranean Blend is a sunflower-oil + olive-oil BLEND, not olive oil. Different product than the label means, and it was ranking #2 cheapest."
+                                         },
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "\u0027Pure\u0027 (refined) olive oil, not extra virgin",
+                                             "reason":  "Still olive oil but a lower grade than the extra-virgin entries it is beating."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "pineapple",
+                         "entries":  [
+                                         {
+                                             "store":  "Baker\u0027s",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "\u0027Dole Pineapple, 8 oz\u0027 at $1 is a packaged/canned pineapple cup, not a whole fresh pineapple (commodity unit is each, whole). It was winning the cell at $1 vs ~$1.89-$4.99 for real whole pineapples."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "pita-bread",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "Stacy\u0027s Pita Thins are a baked snack chip/cracker in a 30x1oz variety pack, not pita bread rounds. Priced per oz-bag, not per pita."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "queso",
+                         "entries":  [
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "Combined multi-product ad line: \u0027Frito-Lay snacks, salsa or queso dip, 8.25 to 24 oz., $3.99 ea. with purchase of 3\u0027 - not a single queso product, size is a range, and price requires buying 3."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "mouthwash",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "3-pack (101.4 fl oz total)",
+                                             "reason":  "Correct product but a multipack, not a single bottle."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "muffins",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "15-pack variety bulk case",
+                                             "reason":  "Correct product, bulk club pack."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "mushrooms",
+                         "entries":  [
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "sliced, not whole",
+                                             "reason":  "Others are whole white mushrooms; sliced carries a small premium."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "oatmeal",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "flavored instant packets (maple \u0026 brown sugar), not plain oats",
+                                             "reason":  "Sweetened flavored instant oatmeal vs plain old-fashioned/quick oats elsewhere."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "orange-juice",
+                         "entries":  [
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "from concentrate",
+                                             "reason":  "Others are 100% not-from-concentrate style; minor like-for-like gap."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "oven-cleaner",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "6-pack of 20 oz cans",
+                                             "reason":  "Correct product, multipack rather than a single can."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "pancake-mix",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "single-batch \u0027Fast Shake\u0027 blueberry shaker bottle",
+                                             "reason":  "Correct commodity but a tiny flavored single-use format vs 32 oz bags."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "paper-plates",
+                         "entries":  [
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "7-inch plates (others 8.5-9 inch)",
+                                             "reason":  "Smaller plate size, so per-plate price is not like-for-like."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "parchment-paper",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "2-pack, 205 sq ft total (vs ~50 sq ft rolls)",
+                                             "reason":  "Much larger roll/pack, so the per-\u0027each\u0027 price is not comparable."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "peaches",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "white-flesh peaches",
+                                             "reason":  "Different (premium) variety than the yellow peaches elsewhere."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "peanut-butter",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "natural (no hydrogenated oil), 2 x 40 oz",
+                                             "reason":  "Natural-style PB and a multipack vs standard creamy jars."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "pepperoni",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "turkey pepperoni",
+                                             "reason":  "Turkey pepperoni rather than standard pork/beef pepperoni; kept since it is still sliced pepperoni and is not winning."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "pizza-sauce",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "refrigerated foodservice case (4 ct, ~42 lb)",
+                                             "reason":  "Correct product but a restaurant-size case, not a retail jar."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "popsicles",
+                         "entries":  [
+                                         {
+                                             "store":  "Walmart",
+                                             "keep":  true,
+                                             "annotation":  "freezer-pop tubes, much smaller than stick pops",
+                                             "reason":  "Cheapest cell; FunPops tubes are far smaller per unit than the Bomb Pop stick pops it beats."
+                                         },
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "organic freezer pops, 52 ct",
+                                             "reason":  "Organic and freezer-pop format rather than stick pops."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "pork-chops",
+                         "entries":  [
+                                         {
+                                             "store":  "Walmart",
+                                             "keep":  true,
+                                             "annotation":  "boneless loin chops (others bone-in)",
+                                             "reason":  "Boneless vs bone-in changes the per-pound comparison."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "pork-shoulder",
+                         "entries":  [
+                                         {
+                                             "store":  "Aldi",
+                                             "keep":  true,
+                                             "annotation":  "boneless half butt",
+                                             "reason":  "Boneless vs the bone-in Boston butts elsewhere."
+                                         },
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "boneless whole butt",
+                                             "reason":  "Boneless vs bone-in comparisons."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "potato-chips",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "sour cream \u0026 onion flavored, not plain",
+                                             "reason":  "Flavored chips vs plain/original elsewhere."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "pretzels",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "seasoned pretzel sticks",
+                                             "reason":  "Flavored/seasoned rather than plain twists."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "red-potatoes",
+                         "entries":  [
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "baby red potatoes",
+                                             "reason":  "Small/baby grade carries a premium vs standard red potatoes."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "ribeye-steak",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "bone-in cowboy ribeye",
+                                             "reason":  "Cheapest cell but bone-in, so per-pound edible yield is lower than the boneless ribeyes it beats."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "rice-cakes",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "organic, 3-pack",
+                                             "reason":  "Organic premium and a multipack."
+                                         },
+                                         {
+                                             "store":  "Walmart",
+                                             "keep":  true,
+                                             "annotation":  "chocolate flavored",
+                                             "reason":  "Flavored vs the lightly-salted plain cakes elsewhere."
+                                         },
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "caramel flavored",
+                                             "reason":  "Flavored vs plain lightly-salted."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "rice-vinegar",
+                         "entries":  [
+                                         {
+                                             "store":  "Baker\u0027s",
+                                             "keep":  true,
+                                             "annotation":  "organic",
+                                             "reason":  "Organic premium vs plain rice vinegar."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "salmon",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "pre-seasoned garlic pesto salmon side, not a plain fillet",
+                                             "reason":  "Value-added seasoned product; kept since it is still a salmon fillet side and is the most expensive entry."
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "sandwich-bags",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "Ziploc SNACK bags, not sandwich bags - smaller bag, per-each price not comparable to sandwich-size zipper bags"
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "shampoo",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "Garnier Fructis Shampoo \u0026 CONDITIONER 2-pk; the 80 fl oz counts a conditioner bottle as shampoo, so it is a combined multi-product line with an understated per-oz shampoo price"
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "shrimp",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "Nissin Hot and Spicy Shrimp Bowl is instant ramen noodles, not frozen raw shrimp"
+                                         },
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "shell-on (not peeled/deveined)",
+                                             "reason":  "Shell-on weight includes shell, so per-lb is not like-for-like with peeled entries"
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "strawberries",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "Monster Energy Zero Sugar Strawberry Shot is an energy drink, not fresh strawberries"
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "tomatoes",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "Knorr Granulated Tomato Chicken Bouillon is a seasoning powder, not fresh tomatoes"
+                                         },
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  false,
+                                             "annotation":  "",
+                                             "reason":  "\u0027Hy-Vee tomatoes, 28 or 29 oz.\u0027 is the standard CANNED tomato size - canned product under a fresh-tomato (per lb) commodity"
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "shaving-cream",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "shave gel, 3-pk",
+                                             "reason":  "Skintimate Shave Gel is a gel, not a foam/cream, and is a 3-pack"
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "sirloin-steak",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "whole sirloin tip (uncut roast, not steaks)",
+                                             "reason":  "Whole sirloin tip primal rather than cut steaks - cheaper per lb for that reason"
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "soda",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "2-liter bottle, not a 12-pack",
+                                             "reason":  "Correct commodity but different package format than the 12-pack label"
+                                         },
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "2-liter, must buy 2; flavor choice ad line",
+                                             "reason":  "Soda but 2-liter bottles with a buy-2 requirement, not a 12-pack"
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "sour-cream",
+                         "entries":  [
+                                         {
+                                             "store":  "Aldi",
+                                             "keep":  true,
+                                             "annotation":  "light sour cream",
+                                             "reason":  "Light variant vs regular elsewhere"
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "soy-sauce",
+                         "entries":  [
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "premium dark soy sauce",
+                                             "reason":  "Dark soy sauce is a thicker specialty style, not the everyday all-purpose soy sauce"
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "sparkling-water",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "sweetened flavored sparkling beverage",
+                                             "reason":  "Sparkling Ice is sweetened, not plain sparkling water"
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "spinach",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "organic",
+                                             "reason":  "Organic baby spinach vs conventional elsewhere"
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "tilapia",
+                         "entries":  [
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "fresh (not frozen)",
+                                             "reason":  "Fresh fillets at the counter vs frozen packs at other stores"
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "tortillas",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "mini/taqueria size",
+                                             "reason":  "Mini tortillas make per-each cheaper than fajita/taco size"
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "turkey-bacon",
+                         "entries":  [
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "fully cooked, reduced fat/sodium",
+                                             "reason":  "Fully cooked premium variant, not like-for-like with standard turkey bacon"
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "vegetable-soup",
+                         "entries":  [
+                                         {
+                                             "store":  "Hy-Vee",
+                                             "keep":  true,
+                                             "annotation":  "organic premium brand",
+                                             "reason":  "Amy\u0027s Organic is a premium organic soup, only entry for this commodity"
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "whole-chicken",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "organic",
+                                             "reason":  "Organic whole chicken vs conventional elsewhere"
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "watermelon",
+                         "entries":  [
+                                         {
+                                             "store":  "Family Fare",
+                                             "keep":  true,
+                                             "annotation":  "mini watermelon",
+                                             "reason":  "Mini seedless is much smaller than a standard whole watermelon priced per each"
+                                         }
+                                     ]
+                     },
+                     {
+                         "id":  "yogurt",
+                         "entries":  [
+                                         {
+                                             "store":  "Sam\u0027s Club",
+                                             "keep":  true,
+                                             "annotation":  "squeeze pouches (kids\u0027 snack format)",
+                                             "reason":  "GoGo squeeZ pouches, not cup/tub yogurt"
+                                         },
+                                         {
+                                             "store":  "Aldi",
+                                             "keep":  true,
+                                             "annotation":  "Greek nonfat",
+                                             "reason":  "Greek yogurt is a thicker, strained premium form vs regular yogurt"
+                                         },
+                                         {
+                                             "store":  "Fareway",
+                                             "keep":  true,
+                                             "annotation":  "Greek nonfat plain",
+                                             "reason":  "Greek yogurt is a thicker, strained premium form vs regular yogurt"
+                                         }
+                                     ]
+                     }
+                 ]
+}
