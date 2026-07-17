@@ -24,6 +24,14 @@
         "unit":  "each"
     },
     {
+        "id":  "cooking-spray",
+        "q":  "cooking spray",
+        "match":  "Our Family Cooking Spray, No Stick, Vegetable Oil 6 Oz",
+        "size":  "6 oz",
+        "pu":  0.4983,
+        "unit":  "oz"
+    },
+    {
         "id":  "tomatoes-green-chilies",
         "q":  "rotel diced tomatoes green chilies",
         "match":  "Our Family Tomatoes, With Green Chiles, Diced 14.5 Oz",
@@ -88,6 +96,46 @@
         "unit":  "each"
     },
     {
+        "id":  "ice-cream",
+        "q":  "vanilla ice cream",
+        "match":  "Vanilla Ice Cream Our Family",
+        "size":  "1 gal",
+        "pu":  0.0663,
+        "unit":  "floz"
+    },
+    {
+        "id":  "lime-juice",
+        "q":  "lime juice bottle",
+        "match":  "Mc Cormick Mayonesa (Mayonnaise) With Lime Juice 28 Fl Oz",
+        "size":  "28 fl oz",
+        "pu":  0.2961,
+        "unit":  "floz"
+    },
+    {
+        "id":  "mayonnaise",
+        "q":  "mayonnaise",
+        "match":  "Our Family Mayo, Real 30 Fl Oz",
+        "size":  "30 fl oz",
+        "pu":  0.133,
+        "unit":  "oz"
+    },
+    {
+        "id":  "milk",
+        "q":  "milk gallon",
+        "match":  "Whole Milk Vitamin D Our Family",
+        "size":  "1 gal",
+        "pu":  3.59,
+        "unit":  "gallon"
+    },
+    {
+        "id":  "miracle-whip",
+        "q":  "miracle whip",
+        "match":  "Miracle Whip Light Dressing 30 Fl Oz",
+        "size":  "30 oz",
+        "pu":  0.233,
+        "unit":  "oz"
+    },
+    {
         "id":  "muffins",
         "q":  "blueberry muffins",
         "match":  "4 Ct Blueberry Muffins",
@@ -102,6 +150,14 @@
         "size":  "15.1 oz",
         "pu":  0.1517,
         "unit":  "oz"
+    },
+    {
+        "id":  "orange-juice",
+        "q":  "orange juice",
+        "match":  "100% Orange Juice With Calcium \u0026 Vitamin D",
+        "size":  "52 fl oz",
+        "pu":  0.0921,
+        "unit":  "floz"
     },
     {
         "id":  "paper-towels",
@@ -120,12 +176,36 @@
         "unit":  "each"
     },
     {
+        "id":  "ranch-dressing",
+        "q":  "ranch dressing",
+        "match":  "Our Family Buttermilk Ranch Dressing 16 Fl Oz",
+        "size":  "16 fl oz",
+        "pu":  0.1744,
+        "unit":  "floz"
+    },
+    {
+        "id":  "salsa",
+        "q":  "salsa mild",
+        "match":  "Mild Thick \u0026 Chunky Salsa Our Family",
+        "size":  "16 oz",
+        "pu":  0.1556,
+        "unit":  "oz"
+    },
+    {
         "id":  "shower-cleaner",
         "q":  "bathroom cleaner",
         "match":  "Lysol Mango \u0026 Hibiscus Bathroom Cleaner 32 Fl Oz",
         "size":  "32 fl oz",
         "pu":  0.1059,
         "unit":  "floz"
+    },
+    {
+        "id":  "salt",
+        "q":  "iodized salt",
+        "match":  "Iodized Salt Our Family",
+        "size":  "26 oz",
+        "pu":  0.0381,
+        "unit":  "oz"
     },
     {
         "id":  "toilet-bowl-cleaner",
@@ -142,5 +222,21 @@
         "size":  "24 ea",
         "pu":  0.8121,
         "unit":  "each"
+    },
+    {
+        "id":  "tortilla-chips",
+        "q":  "tortilla chips",
+        "match":  "Our Family Hint Of Lime Tortilla Chips 13 Oz",
+        "size":  "13 oz",
+        "pu":  0.1915,
+        "unit":  "oz"
+    },
+    {
+        "id":  "mustard",
+        "q":  "yellow mustard",
+        "match":  "Our Family Mustard, Yellow 20 Oz",
+        "size":  "20 oz",
+        "pu":  0.0995,
+        "unit":  "oz"
     }
 ]

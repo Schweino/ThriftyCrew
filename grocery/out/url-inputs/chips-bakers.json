@@ -40,14 +40,6 @@
         "unit":  "oz"
     },
     {
-        "id":  "balsamic-vinegar",
-        "q":  "balsamic vinegar",
-        "match":  "Filippo Berio® Balsamic Vinegar of Modena 16.9 fl oz",
-        "size":  "16.9 fl oz",
-        "pu":  0.2361,
-        "unit":  "floz"
-    },
-    {
         "id":  "bar-soap",
         "q":  "bar soap",
         "match":  "Dove Bar Soap",
@@ -80,43 +72,11 @@
         "unit":  "each"
     },
     {
-        "id":  "coconut-milk-canned",
-        "q":  "coconut milk canned",
-        "match":  "Simple Truth Organic® Unsweetened Coconut Milk 13.5 fl oz",
-        "size":  "13.5 fl oz",
-        "pu":  0.1474,
-        "unit":  "floz"
-    },
-    {
         "id":  "fruit-cocktail",
         "q":  "fruit cocktail canned",
         "match":  "Kroger® Canned Fruit Cocktail in Heavy Syrup 30 oz",
         "size":  "30 oz",
         "pu":  0.1097,
-        "unit":  "oz"
-    },
-    {
-        "id":  "mandarin-oranges",
-        "q":  "canned mandarin oranges",
-        "match":  "Kroger® Canned Mandarin Oranges in Light Syrup 15 oz",
-        "size":  "15 oz",
-        "pu":  0.1327,
-        "unit":  "oz"
-    },
-    {
-        "id":  "canned-pasta",
-        "q":  "canned ravioli",
-        "match":  "Chef Boyardee Beefaroni, 15 oz 15 oz",
-        "size":  "15 oz",
-        "pu":  0.0667,
-        "unit":  "oz"
-    },
-    {
-        "id":  "canned-pears",
-        "q":  "canned pears",
-        "match":  "Kroger® Canned Pear Halves in Pear Juice 14.5 oz",
-        "size":  "14.5 oz",
-        "pu":  0.1303,
         "unit":  "oz"
     },
     {
@@ -144,30 +104,6 @@
         "unit":  "oz"
     },
     {
-        "id":  "chuck-roast",
-        "q":  "beef chuck roast",
-        "match":  "Choice Beef Chuck Roast",
-        "size":  "lb",
-        "pu":  10.99,
-        "unit":  "lb"
-    },
-    {
-        "id":  "clam-chowder",
-        "q":  "clam chowder canned",
-        "match":  "Campbell\u0027s Chunky OLD BAY Seasoned Clam Chowder 18.8 oz Ca",
-        "size":  "18.8 oz",
-        "pu":  0.159,
-        "unit":  "oz"
-    },
-    {
-        "id":  "cocktail-sauce",
-        "q":  "cocktail sauce",
-        "match":  "Kroger® Cocktail Sauce 12 oz",
-        "size":  "12 oz",
-        "pu":  0.1658,
-        "unit":  "oz"
-    },
-    {
         "id":  "coffee",
         "q":  "ground coffee",
         "match":  "Folgers Coffee",
@@ -182,14 +118,6 @@
         "size":  "120 ct",
         "pu":  0.2666,
         "unit":  "each"
-    },
-    {
-        "id":  "cornstarch",
-        "q":  "corn starch",
-        "match":  "Maizena Corn Starch 14.1 oz",
-        "size":  "14.1 oz",
-        "pu":  0.1411,
-        "unit":  "oz"
     },
     {
         "id":  "crackers",
@@ -214,14 +142,6 @@
         "size":  "105-120 ct",
         "pu":  0.0291,
         "unit":  "each"
-    },
-    {
-        "id":  "enchilada-sauce",
-        "q":  "red enchilada sauce",
-        "match":  "Kroger® Mild Red Enchilada Sauce 28 oz",
-        "size":  "28 oz",
-        "pu":  0.0925,
-        "unit":  "oz"
     },
     {
         "id":  "frozen-pizza",
@@ -272,14 +192,6 @@
         "unit":  "floz"
     },
     {
-        "id":  "orange-juice",
-        "q":  "orange juice",
-        "match":  "Kroger 100% Orange Juice Pulp Free (Half Gal)",
-        "size":  "64 fl oz",
-        "pu":  0.0623,
-        "unit":  "floz"
-    },
-    {
         "id":  "paper-plates",
         "q":  "paper plates",
         "match":  "Dixie Paper Plates",
@@ -312,22 +224,6 @@
         "unit":  "each"
     },
     {
-        "id":  "red-wine-vinegar",
-        "q":  "red wine vinegar",
-        "match":  "Pompeian® Gourmet Red Wine Vinegar 16 fl oz",
-        "size":  "16 fl oz",
-        "pu":  0.1681,
-        "unit":  "floz"
-    },
-    {
-        "id":  "rice-vinegar",
-        "q":  "rice vinegar",
-        "match":  "Nakano® Organic Natural Rice Vinegar 12 fl oz",
-        "size":  "12 fl oz",
-        "pu":  0.2492,
-        "unit":  "floz"
-    },
-    {
         "id":  "russet-potatoes",
         "q":  "russet potatoes",
         "match":  "Kroger Russet Potatoes Bag (10 lb)",
@@ -344,14 +240,6 @@
         "unit":  "floz"
     },
     {
-        "id":  "shredded-cheese",
-        "q":  "shredded cheese",
-        "match":  "Kroger Colby Jack Shredded Cheese Family Size",
-        "size":  "32 oz",
-        "pu":  0.2278,
-        "unit":  "oz"
-    },
-    {
         "id":  "sloppy-joe-sauce",
         "q":  "sloppy joe sauce manwich",
         "match":  "Manwich Sloppy Joe Sauce Bold Flavor Canned Sauce 16 OZ ti",
@@ -365,14 +253,6 @@
         "match":  "Liquid Death Sparkling Water",
         "size":  "6-pack 12 fl oz",
         "pu":  0.0971,
-        "unit":  "floz"
-    },
-    {
-        "id":  "tartar-sauce",
-        "q":  "tartar sauce",
-        "match":  "Kroger® Tartar Sauce 11.5 fl oz",
-        "size":  "11.5 fl oz",
-        "pu":  0.2078,
         "unit":  "floz"
     },
     {
