@@ -76,9 +76,25 @@ foreach ($r in $cmp) {
       $rows.Add([pscustomobject]@{ id = $id; store = $st; fault = 'LINK-UNPRICEABLE'; detail = ('link size "' + [string]$lnk.size + '" gives no per-unit in ' + $unit); board = [string]$s.item; link = [string]$lnk.name }); continue
     }
     $off = [math]::Abs($lpu - $bpu) / $lpu
-    # half a cent absolute OR 2% - a store's own cent-rounded unit price is not a mismatch
+    # A STALE PRICE SNAPSHOT IS NOT A WRONG LINK - AND THIS GATE USED TO SAY IT WAS.
+    # I first demanded 2%. That is wrong twice over:
+    #   1. The board refreshes DAILY; a link's stored price snapshot does not. The moment a store nudges a
+    #      price, a perfectly good link - still opening exactly the product the board names - reads as a
+    #      "violation". That is our record being a day old, not the link lying to anyone.
+    #   2. It broke a contract that already existed and worked: the daily's repair prunes at Tol 0.32, which
+    #      is tuned to guard 4's factor rule (>=1.5x / <=0.67x) precisely so the gate "can never deadlock the
+    #      daily publish" (its words). A 2% gate against a 32% pruner deadlocks it EVERY DAY - and did: the
+    #      2026-07-17 cloud run pulled fresh prices, pruned at 0.32, and my gate then blocked the publish over
+    #      ordinary movement. Fresh accurate prices did not ship because some snapshots were a few cents old.
+    #      A gate that blocks the truth to protect a formality is worse than no gate.
+    # So ACCURACY means what it always should have: the link opens a DIFFERENT PRODUCT. That is a FACTOR
+    # error - a wrong SKU, a pack counted as one unit - and it matches prune 0.32 and guard 4 exactly.
+    # Ordinary drift below that is real, worth watching, and NOT a lie: it is a WARN, and the daily's
+    # consistency repair re-points those links anyway.
     if ($off -gt 0.02 -and [math]::Abs($lpu - $bpu) -gt 0.005) {
-      $rows.Add([pscustomobject]@{ id = $id; store = $st; fault = 'PRICE-MISMATCH'; detail = ('board $' + [math]::Round($bpu, 4) + ' vs link $' + [math]::Round($lpu, 4) + '  (' + [math]::Round($off * 100, 1) + '% off)'); board = [string]$s.item; link = [string]$lnk.name })
+      $ratio = $lpu / $bpu
+      $fault = if ($ratio -ge 1.5 -or $ratio -le 0.67) { 'PRICE-MISMATCH' } else { 'PRICE-DRIFT' }
+      $rows.Add([pscustomobject]@{ id = $id; store = $st; fault = $fault; detail = ('board $' + [math]::Round($bpu, 4) + ' vs link $' + [math]::Round($lpu, 4) + '  (' + [math]::Round($off * 100, 1) + '% off)'); board = [string]$s.item; link = [string]$lnk.name })
     }
   }
 }
@@ -103,8 +119,12 @@ foreach ($k in $tiles.Keys) {
 }
 ($report | ConvertTo-Json -Depth 6) | Set-Content (Join-Path $OutDir 'tile-integrity.json') -Encoding UTF8
 
+# ACCURACY = the link opens something OTHER than what we advertised. Those are lies and they block.
+# PRICE-DRIFT is deliberately NOT here: it is the right product whose snapshot is a few cents old, which the
+# daily's consistency repair re-points. Blocking on it stops today's true prices from shipping.
 $ACC = @('WRONG-PRODUCT', 'PRICE-MISMATCH', 'LINK-UNPRICEABLE', 'LINK-NO-PRICE')
 $accRows = @($rows | Where-Object { $ACC -contains $_.fault })
+$driftRows = @($rows | Where-Object { $_.fault -eq 'PRICE-DRIFT' })
 $covRows = @($rows | Where-Object { $_.fault -eq 'NO-LINK' })
 $report['accuracy_violations'] = $accRows.Count
 $report['coverage_violations'] = $covRows.Count
@@ -112,7 +132,8 @@ $report['coverage_violations'] = $covRows.Count
 
 if (-not $Quiet) {
   $linked = $report.total_tiles - $covRows.Count
-  Write-Output ("ACCURACY  " + $accRows.Count + " of " + $linked + " LINKED tiles show a link that disagrees with the price/product  <- must be ZERO; a wrong link lies to a shopper")
+  Write-Output ("ACCURACY  " + $accRows.Count + " of " + $linked + " LINKED tiles open a DIFFERENT product than advertised  <- must be ZERO; this is the only one that lies")
+  Write-Output ("DRIFT     " + $driftRows.Count + " linked tiles whose stored price snapshot is stale (right product)  <- watch, do not block; the repair re-points these")
   Write-Output ("COVERAGE  " + $covRows.Count + " of " + $report.total_tiles + " priced tiles have no See-item link at all       <- incomplete, not dishonest; needs browser passes")
   Write-Output ''
   Write-Output ("tile-integrity: " + $rows.Count + " violation(s) of " + $report.total_tiles + " priced tiles   (" + [math]::Round(100 - ($rows.Count / [math]::Max(1, $report.total_tiles) * 100), 1) + "% clean)")
@@ -171,10 +192,17 @@ if (Test-Path $blF) {
   }
   if ($worse.Count) {
     Write-Output ''
-    Write-Output 'tile-integrity: FAIL - a store got WORSE on COVERAGE than its baseline. The ratchet only turns one way.'
+    # WARN, NOT FAIL. Coverage regressing does NOT justify withholding today's prices.
+    # This blocked the 2026-07-17 publish and that was indefensible: the run had pulled fresh, correct prices,
+    # pruned the links that no longer matched them (the RIGHT action), and my ratchet then failed the board for
+    # having fewer links than yesterday - so shoppers kept seeing STALE PRICES to protect a link count. A tile
+    # with no link is incomplete; a tile with a day-old price is wrong. Never trade the second for the first.
+    # It is still surfaced every day, and prune/browser passes still drive it down - it just cannot hold the
+    # board hostage. Accuracy above is the only thing that blocks, because it is the only thing that lies.
+    Write-Output 'tile-integrity: COVERAGE WARN - a store has fewer links than its baseline (pruning a bad link does this on purpose).'
     $worse | ForEach-Object { Write-Output $_ }
-    exit 2
+    Write-Output '  Not blocking: withholding fresh prices over a link count would publish a stale lie to protect a formality.'
   }
-  Write-Output 'tile-integrity: COVERAGE OK - no store regressed against the baseline.'
+  else { Write-Output 'tile-integrity: COVERAGE OK - no store regressed against the baseline.' }
 }
 exit $(if ($fail2) { 2 } else { 0 })

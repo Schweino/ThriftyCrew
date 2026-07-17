@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-07-17 11:06",
+    "generated":  "2026-07-17 06:29",
     "board":  "comparison-2026-07-17.json",
     "total_tiles":  2048,
     "violations":  172,
@@ -10,17 +10,17 @@
                                      "violations":  27
                                  },
                      "Fareway":  {
-                                     "coverage":  7,
+                                     "coverage":  16,
                                      "tiles":  323,
                                      "violations":  16
                                  },
                      "Family Fare":  {
-                                         "coverage":  28,
+                                         "coverage":  30,
                                          "tiles":  197,
                                          "violations":  30
                                      },
                      "Hy-Vee":  {
-                                    "coverage":  36,
+                                    "coverage":  37,
                                     "tiles":  364,
                                     "violations":  37
                                 },
@@ -60,10 +60,10 @@
                  {
                      "id":  "flour",
                      "store":  "Fareway",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.528 vs link $0.499  (5.8% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Fareway Flour All Purpose",
-                     "link":  "Fareway Flour, All Purpose"
+                     "link":  ""
                  },
                  {
                      "id":  "flour",
@@ -100,10 +100,10 @@
                  {
                      "id":  "apples",
                      "store":  "Fareway",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $1.68 vs link $1.99  (15.6% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Golden Delicious Apple",
-                     "link":  "Gala Apple"
+                     "link":  ""
                  },
                  {
                      "id":  "applesauce",
@@ -220,10 +220,10 @@
                  {
                      "id":  "chicken-breast",
                      "store":  "Fareway",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $3.99 vs link $4.99  (20% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Boneless Skinless Chicken Breast",
-                     "link":  "Boneless Skinless Chicken Breast"
+                     "link":  ""
                  },
                  {
                      "id":  "bottled-water",
@@ -372,10 +372,10 @@
                  {
                      "id":  "carrots",
                      "store":  "Fareway",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $1.245 vs link $0.998  (24.7% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Carrot",
-                     "link":  "Carrot"
+                     "link":  ""
                  },
                  {
                      "id":  "cat-food",
@@ -764,10 +764,10 @@
                  {
                      "id":  "half-and-half",
                      "store":  "Fareway",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.1047 vs link $0.1238  (15.4% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Kemps Fresh Half \u0026 Half",
-                     "link":  "Kemps Fresh Half \u0026 Half"
+                     "link":  ""
                  },
                  {
                      "id":  "deli-ham",
@@ -796,10 +796,10 @@
                  {
                      "id":  "honey",
                      "store":  "Fareway",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.3744 vs link $0.3123  (19.9% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Fareway Pure Honey",
-                     "link":  "Fareway Pure Honey"
+                     "link":  ""
                  },
                  {
                      "id":  "hot-dog-buns",
@@ -828,10 +828,10 @@
                  {
                      "id":  "italian-sausage",
                      "store":  "Hy-Vee",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $4.88 vs link $4.49  (8.7% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Hy Vee Midwest Pork Italian Pork Sausage",
-                     "link":  "Hy Vee Midwest Pork Italian Pork Sausage"
+                     "link":  ""
                  },
                  {
                      "id":  "italian-seasoning",
@@ -996,10 +996,10 @@
                  {
                      "id":  "olive-oil",
                      "store":  "Fareway",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.413 vs link $0.2956  (39.7% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Fareway Extra Virgin Olive Oil",
-                     "link":  "Fareway Extra Virgin Olive Oil"
+                     "link":  ""
                  },
                  {
                      "id":  "onion-powder",
@@ -1028,10 +1028,10 @@
                  {
                      "id":  "orange-juice",
                      "store":  "Family Fare",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.0921 vs link $0.1066  (13.6% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "100% Orange Juice With Calcium \u0026 Vitamin D",
-                     "link":  "Tropicana Pure Premium No Pulp Orange Juice 89 Fl Oz"
+                     "link":  ""
                  },
                  {
                      "id":  "dried-oregano",
@@ -1196,18 +1196,18 @@
                  {
                      "id":  "salsa",
                      "store":  "Family Fare",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.1556 vs link $0.1606  (3.1% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Mild Thick \u0026 Chunky Salsa Our Family",
-                     "link":  "Mild Salsa Our Family Original"
+                     "link":  ""
                  },
                  {
                      "id":  "salsa",
                      "store":  "Fareway",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.1562 vs link $0.1246  (25.4% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Fareway Chunky Mild Salsa",
-                     "link":  "Fareway Chunky Mild Salsa"
+                     "link":  ""
                  },
                  {
                      "id":  "shampoo",
@@ -1236,10 +1236,10 @@
                  {
                      "id":  "sliced-cheese",
                      "store":  "Fareway",
-                     "fault":  "PRICE-MISMATCH",
-                     "detail":  "board $0.2067 vs link $0.155  (33.4% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Fareway American Cheese Slices",
-                     "link":  "Fareway American Cheese Slices"
+                     "link":  ""
                  },
                  {
                      "id":  "sloppy-joe-sauce",
@@ -1418,6 +1418,6 @@
                      "link":  ""
                  }
              ],
-    "accuracy_violations":  12,
-    "coverage_violations":  160
+    "accuracy_violations":  0,
+    "coverage_violations":  172
 }

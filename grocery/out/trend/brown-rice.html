@@ -29,7 +29,7 @@
 <div class="tp-hero">
   <p class="tp-kicker">This week in Omaha</p>
   <div class="tp-price">$0.88<span class="tp-unit">/lb</span></div>
-  <div class="tp-where">Cheapest at Walmart, week of Jul 15</div>
+  <div class="tp-where">Cheapest at Walmart, week of Jul 17</div>
 </div>
 <p class="tp-record"><strong>Record low we have tracked:</strong> $0.88 per lb at Walmart (week of Jul 13). This week ties that low.</p>
 <p class="tp-read">At $0.88 per lb, this is the best price we have tracked for brown rice. If it is on your list, this is a good week to stock up.</p>
@@ -125,13 +125,14 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15"],"s":{"Walmart":[0.88,0.88,0.88],"Sam's Club":[0.996,0.996,null],"Hy-Vee":[1.99,1.99,1.99],"Fareway":[3.5818,null,null],"Aldi":[null,1.775,1.775],"Family Fare":[null,null,1.19]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17"],"s":{"Walmart":[0.88,0.88,0.88,0.88],"Sam's Club":[0.996,0.996,null,0.996],"Hy-Vee":[1.99,1.99,1.99,1.895],"Fareway":[3.5818,null,null,null],"Aldi":[null,1.775,1.775,1.775],"Family Fare":[null,null,1.19,1.19]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
 <table class="tp-table">
 <thead><tr><th>Week of</th><th>Cheapest price</th><th>Store</th></tr></thead>
 <tbody>
+<tr class="tp-low"><td>Jul 17</td><td>$0.88 per lb</td><td>Walmart</td></tr>
 <tr class="tp-low"><td>Jul 15</td><td>$0.88 per lb</td><td>Walmart</td></tr>
 <tr class="tp-low"><td>Jul 14</td><td>$0.88 per lb</td><td>Walmart</td></tr>
 <tr class="tp-low"><td>Jul 13</td><td>$0.88 per lb</td><td>Walmart</td></tr>
@@ -141,9 +142,10 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Walmart</td><td>$0.88 per lb</td><td><span class="tp-item">Great Value Brown Rice Whole Grain</span></td></tr>
+<tr><td>Sam&#39;s Club</td><td>$0.996 per lb</td><td><span class="tp-item">Mahatma Brown Rice</span></td></tr>
 <tr><td>Family Fare</td><td>$1.19 per lb</td><td><span class="tp-item">Long Grain Brown Rice Our Family</span></td></tr>
 <tr><td>Aldi</td><td>$1.78 per lb</td><td><span class="tp-item">Earthly Grains Brown Basmati Rice</span></td></tr>
-<tr><td>Hy-Vee</td><td>$1.99 per lb</td><td><span class="tp-item">Hy Vee Long Grain Brown Rice</span></td></tr>
+<tr><td>Hy-Vee</td><td>$1.90 per lb</td><td><span class="tp-item">Hy Vee Long Grain Brown Rice</span></td></tr>
 </tbody></table>
 <p class="tp-links"><a href="/omaha-grocery-prices/?ref=trend">See the full live Omaha price board</a> &middot; <a href="/omaha-price-tracker/?ref=trend">All tracked staples</a></p>
 <p class="tp-foot">Tracked weekly across Hy-Vee, Baker&#39;s, Family Fare, Aldi, Sam&#39;s Club and Walmart in Omaha since June 2026. This page updates every week.</p>

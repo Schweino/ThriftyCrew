@@ -28,11 +28,11 @@
 </style>
 <div class="tp-hero">
   <p class="tp-kicker">This week in Omaha</p>
-  <div class="tp-price">$0.8067<span class="tp-unit"> each</span></div>
-  <div class="tp-where">Cheapest at Walmart, week of Jul 15</div>
+  <div class="tp-price">$0.449<span class="tp-unit"> each</span></div>
+  <div class="tp-where">Cheapest at Sam&#39;s Club, week of Jul 17</div>
 </div>
-<p class="tp-record"><strong>Record low we have tracked:</strong> $0.449 each at Sam&#39;s Club (week of Jul 13). This week is about 80 percent above that low.</p>
-<p class="tp-read">This one is usually cheaper. The tracked low is $0.449 each at Sam&#39;s Club, so unless you need it right now, it may pay to wait a week or two.</p>
+<p class="tp-record"><strong>Record low we have tracked:</strong> $0.449 each at Sam&#39;s Club (week of Jul 13). This week ties that low.</p>
+<p class="tp-read">At $0.449 each, this is the best price we have tracked for corn dogs (frozen). If it is on your list, this is a good week to stock up.</p>
 <h2>Price history</h2>
 <div class="tp-chartwrap" id="tp-chart"></div>
 <script>
@@ -125,13 +125,14 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15"],"s":{"Sam's Club":[0.449,0.449,null],"Walmart":[0.8067,0.8067,0.8067],"Fareway":[0.8317,0.8317,0.8317],"Hy-Vee":[0.8317,0.8317,0.8317],"Family Fare":[null,null,1.49]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17"],"s":{"Sam's Club":[0.449,0.449,null,0.449],"Walmart":[0.8067,0.8067,0.8067,0.8067],"Fareway":[0.8317,0.8317,0.8317,0.8317],"Hy-Vee":[0.8317,0.8317,0.8317,0.8317],"Family Fare":[null,null,1.49,1.49]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
 <table class="tp-table">
 <thead><tr><th>Week of</th><th>Cheapest price</th><th>Store</th></tr></thead>
 <tbody>
+<tr class="tp-low"><td>Jul 17</td><td>$0.449 each</td><td>Sam&#39;s Club</td></tr>
 <tr><td>Jul 15</td><td>$0.8067 each</td><td>Walmart</td></tr>
 <tr class="tp-low"><td>Jul 14</td><td>$0.449 each</td><td>Sam&#39;s Club</td></tr>
 <tr class="tp-low"><td>Jul 13</td><td>$0.449 each</td><td>Sam&#39;s Club</td></tr>
@@ -140,7 +141,8 @@ function tcChart(root, d){
 <table class="tp-table">
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
-<tr class="tp-low"><td>Walmart</td><td>$0.8067 each</td><td><span class="tp-item">State Fair Classic Corn Dogs</span></td></tr>
+<tr class="tp-low"><td>Sam&#39;s Club</td><td>$0.449 each</td><td><span class="tp-item">State Fair Classic Corn Dogs, Frozen</span></td></tr>
+<tr><td>Walmart</td><td>$0.8067 each</td><td><span class="tp-item">State Fair Classic Corn Dogs</span></td></tr>
 <tr><td>Fareway</td><td>$0.8317 each</td><td><span class="tp-item">State Fair Fully Cooked Classic Corn Dogs, Frozen, 6 Count</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.8317 each</td><td><span class="tp-item">State Fair Classic Corn Dogs 6 Ct</span></td></tr>
 <tr><td>Family Fare</td><td>$1.49 each</td><td><span class="tp-item">Corn Dogs Hot</span></td></tr>

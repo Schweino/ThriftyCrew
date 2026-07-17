@@ -29,7 +29,7 @@
 <div class="tp-hero">
   <p class="tp-kicker">This week in Omaha</p>
   <div class="tp-price">$0.3654<span class="tp-unit">/oz</span></div>
-  <div class="tp-where">Cheapest at Aldi, week of Jul 15</div>
+  <div class="tp-where">Cheapest at Aldi, week of Jul 17</div>
 </div>
 <p class="tp-record"><strong>Record low we have tracked:</strong> $0.3654 per oz at Aldi (week of Jul 14). This week ties that low.</p>
 <p class="tp-read">At $0.3654 per oz, this is the best price we have tracked for mixed nuts. If it is on your list, this is a good week to stock up.</p>
@@ -125,13 +125,14 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15"],"s":{"Walmart":[0.3675,0.3675,0.3668],"Aldi":[0.4034,0.3654,0.3654],"Sam's Club":[0.4406,0.4406,null],"Fareway":[0.4989,0.4989,0.4989],"Hy-Vee":[0.5703,0.5703,0.5703],"Family Fare":[null,null,0.75]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17"],"s":{"Walmart":[0.3675,0.3675,0.3668,0.3668],"Aldi":[0.4034,0.3654,0.3654,0.3654],"Sam's Club":[0.4406,0.4406,null,0.4406],"Fareway":[0.4989,0.4989,0.4989,0.4989],"Hy-Vee":[0.5703,0.5703,0.5703,0.5703],"Family Fare":[null,null,0.75,0.75]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
 <table class="tp-table">
 <thead><tr><th>Week of</th><th>Cheapest price</th><th>Store</th></tr></thead>
 <tbody>
+<tr class="tp-low"><td>Jul 17</td><td>$0.3654 per oz</td><td>Aldi</td></tr>
 <tr class="tp-low"><td>Jul 15</td><td>$0.3654 per oz</td><td>Aldi</td></tr>
 <tr class="tp-low"><td>Jul 14</td><td>$0.3654 per oz</td><td>Aldi</td></tr>
 <tr><td>Jul 13</td><td>$0.3675 per oz</td><td>Walmart</td></tr>
@@ -142,6 +143,7 @@ function tcChart(root, d){
 <tbody>
 <tr class="tp-low"><td>Aldi</td><td>$0.3654 per oz</td><td><span class="tp-item">Southern Grove Mixed Nuts</span></td></tr>
 <tr><td>Walmart</td><td>$0.3668 per oz</td><td><span class="tp-item">Great Value Roasted &amp; Lightly Salted Mixed Nuts</span></td></tr>
+<tr><td>Sam&#39;s Club</td><td>$0.4406 per oz</td><td><span class="tp-item">Member&#39;s Mark Deluxe Mixed Nuts with Sea Salt</span></td></tr>
 <tr><td>Fareway</td><td>$0.4989 per oz</td><td><span class="tp-item">Fareway Mixed Nuts, Roasted and Salted</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.5703 per oz</td><td><span class="tp-item">Hy-Vee Deluxe Lightly Salted Mixed Nuts</span></td></tr>
 <tr><td>Family Fare</td><td>$0.75 per oz</td><td><span class="tp-item">Regal Health Foods Deluxe Mixed Nuts</span></td></tr>

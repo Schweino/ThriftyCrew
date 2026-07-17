@@ -575,6 +575,37 @@ try {
   [void]$warn.Add("guard 11 (Baker's raw-capture cross-check) errored and was skipped: " + $_.Exception.Message)
 }
 
+# ---------------------------------------------------------------- 12: the board must be built from TODAY'S ads
+# I published a TWO-DAY-OLD BOARD to the live site on 2026-07-17 and only caught it afterwards.
+# WHY IT IS SO EASY: out\comparison-*.json is gitignored ON PURPOSE (it is regenerable, and not tracking it is
+# what keeps the local browser agents from fighting the cloud over derived files). So the cloud's fresh board
+# NEVER arrives on this machine - `git pull` brings down today's ADS but leaves comparison-* at whatever this
+# machine last built. Every downstream step then happily uses the newest board it can SEE, which is not the
+# newest board that EXISTS. Nothing was broken; everything was consistent; the answer was two days stale.
+# So: if an ads file is newer than the board, the board was not built from it. Refuse.
+try {
+  $newestAds = Get-ChildItem (Join-Path $root 'out\ads-*.json') -EA SilentlyContinue |
+    Where-Object { $_.BaseName -match '^ads-(\d{4}-\d{2}-\d{2})$' } | Sort-Object Name -Desc | Select-Object -First 1
+  $newestCmp = Get-ChildItem (Join-Path $root 'out\comparison-*.json') -EA SilentlyContinue |
+    Where-Object { $_.BaseName -match '^comparison-(\d{4}-\d{2}-\d{2})$' } | Sort-Object Name -Desc | Select-Object -First 1
+  if ($newestAds -and $newestCmp) {
+    $adsDate = ($newestAds.BaseName -replace '^ads-', '')
+    $cmpDate = ($newestCmp.BaseName -replace '^comparison-', '')
+    if ($adsDate -gt $cmpDate) {
+      [void]$fail.Add("HARD FAIL: the board is STALE - ads-$adsDate exists but the newest board is comparison-$cmpDate. Run compare-deals.ps1 before publishing; comparison-*.json is gitignored, so a `git pull` gives you today's ads and LEAVES YESTERDAY'S BOARD.")
+    }
+    else { Say ("  ok    the board is built from the newest ads file (ads-$adsDate -> comparison-$cmpDate)") }
+  }
+  else { [void]$fail.Add('HARD FAIL: guard 12 could not find an ads-<date>.json or comparison-<date>.json to compare. It cannot prove the board is fresh, and unknown is not a pass.') }
+}
+catch {
+  # FAIL, DO NOT WARN. I wrote this guard against a variable ($OutDir) that does not exist in this file; it
+  # threw on every run, the catch quietly filed it as a warn, and guards still said "OK: every hard invariant
+  # holds". A guard that cannot run is not a passing guard - it is no guard, and it reported itself healthy.
+  # That is the exact sin this file exists to catch, committed inside the file itself.
+  [void]$fail.Add('HARD FAIL: guard 12 (board freshness vs ads) ERRORED and therefore proved nothing: ' + $_.Exception.Message)
+}
+
 # ---------------------------------------------------------------- report
 Say ''
 foreach ($w in $warn) { Say ("  warn  " + $w) }

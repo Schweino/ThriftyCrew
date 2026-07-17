@@ -29,7 +29,7 @@
 <div class="tp-hero">
   <p class="tp-kicker">This week in Omaha</p>
   <div class="tp-price">$0.99<span class="tp-unit"> each</span></div>
-  <div class="tp-where">Cheapest at Fareway, week of Jul 15</div>
+  <div class="tp-where">Cheapest at Fareway, week of Jul 17</div>
 </div>
 <p class="tp-record"><strong>Record low we have tracked:</strong> $0.99 each at Fareway (week of Jul 13). This week ties that low.</p>
 <p class="tp-read">At $0.99 each, this is the best price we have tracked for muffins (bakery). If it is on your list, this is a good week to stock up.</p>
@@ -125,13 +125,14 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15"],"s":{"Fareway":[0.99,0.99,0.99],"Walmart":[0.995,0.995,0.995],"Aldi":[1.0725,null,null],"Sam's Club":[1.1233,1.1233,null],"Hy-Vee":[1.2475,1.2475,1.2475],"Family Fare":[1.4975,null,1.4975]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17"],"s":{"Fareway":[0.99,0.99,0.99,0.99],"Walmart":[0.995,0.995,0.995,0.995],"Aldi":[1.0725,null,null,null],"Sam's Club":[1.1233,1.1233,null,1.1233],"Hy-Vee":[1.2475,1.2475,1.2475,1.2475],"Family Fare":[1.4975,null,1.4975,1.4975]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
 <table class="tp-table">
 <thead><tr><th>Week of</th><th>Cheapest price</th><th>Store</th></tr></thead>
 <tbody>
+<tr class="tp-low"><td>Jul 17</td><td>$0.99 each</td><td>Fareway</td></tr>
 <tr class="tp-low"><td>Jul 15</td><td>$0.99 each</td><td>Fareway</td></tr>
 <tr class="tp-low"><td>Jul 14</td><td>$0.99 each</td><td>Fareway</td></tr>
 <tr class="tp-low"><td>Jul 13</td><td>$0.99 each</td><td>Fareway</td></tr>
@@ -142,6 +143,7 @@ function tcChart(root, d){
 <tbody>
 <tr class="tp-low"><td>Fareway</td><td>$0.99 each</td><td><span class="tp-item">Otis Spunkmeyer Muffin, Wild Blueberry</span></td></tr>
 <tr><td>Walmart</td><td>$0.995 each</td><td><span class="tp-item">Marketside Baked Blueberry Muffins</span></td></tr>
+<tr><td>Sam&#39;s Club</td><td>$1.12 each</td><td><span class="tp-item">Member&#39;s Mark Blueberry Muffins</span></td></tr>
 <tr><td>Hy-Vee</td><td>$1.25 each</td><td><span class="tp-item">Blueberry Muffins 4 Ct</span></td></tr>
 <tr><td>Family Fare</td><td>$1.50 each</td><td><span class="tp-item">4 Ct Blueberry Muffins</span></td></tr>
 </tbody></table>

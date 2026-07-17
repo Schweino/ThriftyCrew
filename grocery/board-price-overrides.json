@@ -1,6 +1,6 @@
 ﻿{
     "readme":  "DERIVED by generate-board-overrides.ps1 - do not hand-edit. Per-cell EVERYDAY per-unit corrections: when a board price disagrees \u003e30% with the verified product its See-item link opens (and name-drift confirms the link is the right product), the board number is stale and is pinned here to the link\u0027s per-unit so price==link==shelf. build-deals-page applies these to EVERYDAY cells only (a live sale always wins) and survives daily regeneration. Sales, wrong-product links (name-drift), and ids present in both the staple+recipe board are intentionally excluded.",
-    "updated":  "2026-07-16",
+    "updated":  "2026-07-17",
     "tol":  0.3,
     "count":  20,
     "cells":  [
@@ -11,7 +11,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  1.99,
                       "link_name":  "Tyson Boneless Skinless Chicken Thighs",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   },
                   {
                       "id":  "boneless-skinless-chicken-thigh",
@@ -20,7 +20,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  7.19,
                       "link_name":  "Chicken Thighs, Boneless Gold N Plump",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   },
                   {
                       "id":  "apple",
@@ -29,7 +29,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.79,
                       "link_name":  "Gala Apples",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   },
                   {
                       "id":  "fries",
@@ -38,7 +38,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.0334,
                       "link_name":  "Ore-Ida Crispy Crinkles French Fries, Frozen 8 lbs.",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   },
                   {
                       "id":  "frozen-chopped-spinach",
@@ -47,7 +47,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.149,
                       "link_name":  "Birds Eye Chopped Spinach",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   },
                   {
                       "id":  "ginger",
@@ -56,7 +56,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  4.49,
                       "link_name":  "Melissa Ginger Root",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   },
                   {
                       "id":  "honey-dijon-mustard",
@@ -65,7 +65,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.2075,
                       "link_name":  "Hy-Vee Stone Ground Honey Dijon Mustard",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   },
                   {
                       "id":  "light-sour-cream",
@@ -74,7 +74,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.18,
                       "link_name":  "Daisy Sour Cream, 48 oz",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   },
                   {
                       "id":  "provolone-cheese",
@@ -83,7 +83,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.3125,
                       "link_name":  "Hy-Vee Sliced Provolone Cheese 10Ct",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   },
                   {
                       "id":  "red-bell-pepper",
@@ -92,7 +92,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.83,
                       "link_name":  "Multi Bell Sweet Peppers",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   },
                   {
                       "id":  "red-bell-pepper",
@@ -101,7 +101,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  2.5,
                       "link_name":  "Fresh Sweet Bell Pepper, Red Organic",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   },
                   {
                       "id":  "parmesan-cheese",
@@ -110,7 +110,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.3744,
                       "link_name":  "Hy-Vee Grated Parmesan Cheese",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   },
                   {
                       "id":  "smoked-paprika",
@@ -119,7 +119,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.9986,
                       "link_name":  "Sugar N Spice Paprika Smoked Pp",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   },
                   {
                       "id":  "feta-cheese",
@@ -128,7 +128,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.8113,
                       "link_name":  "Athenos Feta Traditional Cheese Crumbles 4 Oz",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   },
                   {
                       "id":  "ground-coriander",
@@ -137,7 +137,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  3.98,
                       "link_name":  "Hy-Vee Ground Coriander",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   },
                   {
                       "id":  "celery-salt",
@@ -146,7 +146,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  1.6583,
                       "link_name":  "Hy-Vee Celery Salt",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   },
                   {
                       "id":  "swiss-cheese",
@@ -155,7 +155,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.3125,
                       "link_name":  "Hy-Vee Sliced Swiss Cheese 10Ct",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   },
                   {
                       "id":  "white-wine-vinegar",
@@ -164,7 +164,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.1473,
                       "link_name":  "Gustare Vita White Wine Vinegar",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   },
                   {
                       "id":  "ground-nutmeg",
@@ -173,7 +173,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  1.1745,
                       "link_name":  "Hy-Vee Ground Nutmeg",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   },
                   {
                       "id":  "dried-thyme",
@@ -182,7 +182,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  3.3333,
                       "link_name":  "Spice Supreme Thyme Leaves 1.5 Oz",
-                      "set":  "2026-07-16"
+                      "set":  "2026-07-17"
                   }
               ]
 }

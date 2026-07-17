@@ -28,11 +28,11 @@
 </style>
 <div class="tp-hero">
   <p class="tp-kicker">This week in Omaha</p>
-  <div class="tp-price">$0.2594<span class="tp-unit">/oz</span></div>
-  <div class="tp-where">Cheapest at Aldi, week of Jul 15</div>
+  <div class="tp-price">$0.3681<span class="tp-unit">/oz</span></div>
+  <div class="tp-where">Cheapest at Aldi, week of Jul 17</div>
 </div>
-<p class="tp-record"><strong>Record low we have tracked:</strong> $0.2594 per oz at Aldi (week of Jul 14). This week ties that low.</p>
-<p class="tp-read">At $0.2594 per oz, this is the best price we have tracked for turkey (deli / sliced). If it is on your list, this is a good week to stock up.</p>
+<p class="tp-record"><strong>Record low we have tracked:</strong> $0.2594 per oz at Aldi (week of Jul 14). This week is about 42 percent above that low.</p>
+<p class="tp-read">This one is usually cheaper. The tracked low is $0.2594 per oz at Aldi, so unless you need it right now, it may pay to wait a week or two.</p>
 <h2>Price history</h2>
 <div class="tp-chartwrap" id="tp-chart"></div>
 <script>
@@ -125,13 +125,14 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15"],"s":{"Aldi":[0.2869,0.2594,0.2594],"Walmart":[0.3731,0.3731,0.3731],"Sam's Club":[0.4055,0.4055,null],"Fareway":[0.4178,0.4178,0.4178],"Hy-Vee":[0.4311,0.4311,0.4311]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17"],"s":{"Aldi":[0.2869,0.2594,0.2594,0.3681],"Walmart":[0.3731,0.3731,0.3731,0.3731],"Sam's Club":[0.4055,0.4055,null,0.4055],"Fareway":[0.4178,0.4178,0.4178,0.4178],"Hy-Vee":[0.4311,0.4311,0.4311,0.4311]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
 <table class="tp-table">
 <thead><tr><th>Week of</th><th>Cheapest price</th><th>Store</th></tr></thead>
 <tbody>
+<tr><td>Jul 17</td><td>$0.3681 per oz</td><td>Aldi</td></tr>
 <tr class="tp-low"><td>Jul 15</td><td>$0.2594 per oz</td><td>Aldi</td></tr>
 <tr class="tp-low"><td>Jul 14</td><td>$0.2594 per oz</td><td>Aldi</td></tr>
 <tr><td>Jul 13</td><td>$0.2869 per oz</td><td>Aldi</td></tr>
@@ -140,8 +141,9 @@ function tcChart(root, d){
 <table class="tp-table">
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
-<tr class="tp-low"><td>Aldi</td><td>$0.2594 per oz</td><td><span class="tp-item">Lunch Mate Oven Roasted Turkey Breast</span></td></tr>
+<tr class="tp-low"><td>Aldi</td><td>$0.3681 per oz</td><td><span class="tp-item">Lunch Mate Oven Roasted Turkey Breast</span></td></tr>
 <tr><td>Walmart</td><td>$0.3731 per oz</td><td><span class="tp-item">Great Value Oven Roasted Turkey Breast Lunchmeat</span></td></tr>
+<tr><td>Sam&#39;s Club</td><td>$0.4055 per oz</td><td><span class="tp-item">Member&#39;s Mark Oven Roasted Turkey Breast, Sliced</span></td></tr>
 <tr><td>Fareway</td><td>$0.4178 per oz</td><td><span class="tp-item">Oscar Mayer Deli Fresh Oven Roasted Turkey Breast</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.4311 per oz</td><td><span class="tp-item">Hillshire Farm Ultra Thin Sliced Oven Roasted Turkey Breast Sandwich Meat, 9 oz</span></td></tr>
 </tbody></table>
