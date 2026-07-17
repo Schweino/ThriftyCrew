@@ -418,6 +418,9 @@ if (-not $Embed) { [void]$sb.Append("<h1>Omaha's Cheapest Groceries This Week</h
 # THE RETURN RHYTHM: ads flip Wednesdays, so today's sale prices have a real deadline. Saying so gives every
 # visit urgency and every visitor a reason to come back on a schedule - the habit is the product.
 [void]$sb.Append("<p class='pg-cycle'>Sale prices end when the new ads drop <strong>Wednesday morning</strong>. This board is re-checked every morning by 7am.</p>")
+# THE TRUST LINE (Brad's voice, approved 2026-07-17). Reddit's first instinct on a polished price site is
+# "who profits from this?" - this answers it before the ask below. Do not edit without Brad.
+[void]$sb.Append("<p class='pg-trust'>I'm Brad. I live here in Omaha, and I check these prices every morning before most people are awake. No store pays to be on this board, there are no affiliate links, and no one can buy the word 'cheapest.' If a store wins, it's because their shelf price won.</p>")
 # THE ASK, where the value is. 1,182 visitors in 30 days reached this page and the first signup control sat
 # 70% down, below 378 rows - one converted. This is the product-shaped ask: the thing they are already using,
 # delivered to them. Ghost Portal handles the signup (data-portal opens the free-tier modal).
@@ -688,6 +691,7 @@ $css = @'
 .pg-wrap *{box-sizing:border-box}
 .pg-suggest{font-size:.98em;margin:.6em 0 0;color:var(--ink)}
 .pg-cycle{font-size:.88em;color:var(--ink);margin:.45em 0 0}
+.pg-trust{font-size:.88em;line-height:1.5;color:var(--ink);margin:.8em 0 0;padding:8px 14px;border-left:3px solid var(--gold,#c9a227);background:rgba(201,162,39,.05);max-width:66ch}
 .pg-cycle strong{color:#b23b2e}
 .pg-capture{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:.8em 0 .2em;padding:12px 16px;border:1.5px solid var(--gold,#c9a227);border-radius:12px;background:rgba(201,162,39,.06)}
 .pg-capture-txt{flex:1 1 260px;font-size:.92em;line-height:1.35;color:var(--ink)}
