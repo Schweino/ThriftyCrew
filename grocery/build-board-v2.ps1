@@ -79,7 +79,7 @@ $T = @'
     --gold:#b8901f;--gold-ink:#7d5f12;--gold-soft:#f4ecd4;--green:#1b763d;--green-soft:#e6f2ea;--sale:#b23b2e;--sale-soft:#fbeae7;
     --shadow:0 1px 2px rgba(21,39,67,.06),0 8px 24px rgba(21,39,67,.07);--r:14px;
     color:var(--ink);background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    -webkit-font-smoothing:antialiased;line-height:1.4;max-width:560px;margin:0 auto;position:relative}
+    -webkit-font-smoothing:antialiased;line-height:1.4;max-width:700px;margin:0 auto;position:relative}
   @media (prefers-color-scheme:dark){.v2{--bg:#0d1421;--surface:#151f33;--surface2:#111a2b;--ink:#eef2f8;--ink-soft:#c3cddd;--mut:#8b98af;--line:#26324a;--gold:#dcb453;--gold-ink:#e6c874;--gold-soft:rgba(220,180,83,.12);--green:#54b47c;--green-soft:rgba(84,180,124,.15);--sale:#e8756a;--sale-soft:rgba(232,117,106,.14);--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35)}}
   .v2 *{box-sizing:border-box}
   .v2 button{font-family:inherit}
@@ -161,7 +161,7 @@ $T = @'
   .v2 .listpill .go{opacity:.7;font-size:13px}
   .v2 .backdrop{position:fixed;inset:0;background:rgba(10,16,26,.5);z-index:50;opacity:0;pointer-events:none;transition:opacity .25s}
   .v2 .backdrop.show{opacity:1;pointer-events:auto}
-  .v2 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:60;max-width:560px;margin:0 auto;background:var(--surface);border-radius:20px 20px 0 0;transform:translateY(100%);transition:transform .32s cubic-bezier(.2,.8,.3,1);max-height:86vh;display:flex;flex-direction:column}
+  .v2 .sheet{position:fixed;left:0;right:0;bottom:0;z-index:60;max-width:700px;margin:0 auto;background:var(--surface);border-radius:20px 20px 0 0;transform:translateY(100%);transition:transform .32s cubic-bezier(.2,.8,.3,1);max-height:86vh;display:flex;flex-direction:column}
   .v2 .sheet.show{transform:translateY(0)}
   .v2 .sheet-grab{width:40px;height:4px;border-radius:2px;background:var(--line);margin:10px auto 4px}
   .v2 .sheet-h{display:flex;align-items:center;justify-content:space-between;padding:8px 18px 12px;border-bottom:1px solid var(--line)}
