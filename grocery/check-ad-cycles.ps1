@@ -359,7 +359,12 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # honest. name-drift must run FIRST - it is the product-identity check the pruner reads.
       try {
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-name-drift.ps1') | Out-Null
-        $pbOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'prune-bad-links.ps1')
+        # -Tol 0.32, SAME as the repair path below and as guard 4's factor rule (>=1.5x / <=0.67x). I first
+        # wired this with the default 2%, which deletes a RIGHT-product link the moment the store nudges its
+        # price - eroding coverage a little every day to enforce a threshold the accuracy gate itself does not
+        # use. One tolerance, everywhere: a link is removed for being a different PRODUCT (any drift counts as
+        # a factor error), never for its snapshot being a few cents old.
+        $pbOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'prune-bad-links.ps1') -Tol 0.32
         Log ('prune-bad-links: ' + ((@($pbOut) | Where-Object { $_ -match 'DROPPED' }) -join ' | '))
       } catch { Log ('prune-bad-links threw: ' + $_.Exception.Message) }
       $sigAfter = BoardSignature
