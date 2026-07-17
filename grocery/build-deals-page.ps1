@@ -306,7 +306,9 @@ function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$board
     $pill = if ($adU) {
       "<a class='pg-adonly' href='" + (HtmlEnc $adU) + "' target='_blank' rel='nofollow noopener' title='Flyer-only price from this week&#39;s " + (HtmlEnc $store) + " ad. Opens the ad; find the item inside.'>weekly ad &#8599;</a>"
     } else { "<span class='pg-adonly'>weekly ad</span>" }
-    return "<span class='pg-itemname' title='" + $nm + " - priced from the weekly ad'>" + $nm + " " + $pill + "</span>"
+    # pill is a SIBLING of the name, not inside it: the name clamps at 2 lines, and a clamped container
+    # would clip the pill exactly when the name is long.
+    return "<span class='pg-itemname' title='" + $nm + " - priced from the weekly ad'>" + $nm + "</span>" + $pill
   }
   if ($nm) { return "<span class='pg-itemname' title='" + $nm + "'>" + $nm + "</span>" }
   return ''
@@ -757,7 +759,7 @@ $css = @'
 .pg-row.pg-open .pg-chev{transform:rotate(-135deg)}
 .pg-stores{display:none;flex-wrap:wrap;gap:8px}
 .pg-row.pg-open .pg-stores,.pg-wrap.pg-allopen .pg-stores{display:flex}
-.pg-chip{position:relative;display:flex;flex-direction:column;gap:3px;min-width:118px;padding:10px 13px 9px;border:1px solid var(--bd);border-radius:11px;background:#fcfdfc}
+.pg-chip{position:relative;display:flex;flex-direction:column;gap:3px;min-width:118px;max-width:232px;padding:10px 13px 9px;border:1px solid var(--bd);border-radius:11px;background:#fcfdfc}
 .pg-chip-none{background:repeating-linear-gradient(135deg,#f7f7f5,#f7f7f5 7px,#f2f2ef 7px,#f2f2ef 14px);border-style:dashed;justify-content:center}
 .pg-chip-none .pg-store{opacity:.7}
 .pg-none{font-size:.92em;font-weight:600;color:#8a8a80}
@@ -771,10 +773,10 @@ $css = @'
 .pg-tag{font-size:.64em;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}
 .pg-tag-sale{color:#b23b2e;font-weight:700}
 .pg-note2{font-size:.62em;color:var(--amber);background:var(--amber-t);padding:1px 6px;border-radius:5px;font-weight:600}
-.pg-sale{display:inline-block;margin-top:4px;font-size:.62em;font-weight:700;color:#b23b2e;background:rgba(178,59,46,.09);border:1px solid rgba(178,59,46,.22);padding:1px 6px;border-radius:5px;white-space:nowrap}
+.pg-sale{display:inline-block;align-self:flex-start;margin-top:4px;font-size:.62em;font-weight:700;color:#b23b2e;background:rgba(178,59,46,.09);border:1px solid rgba(178,59,46,.22);padding:1px 6px;border-radius:5px;white-space:nowrap}
 .pg-see{margin-top:5px;font-size:.68em;font-weight:700;color:var(--green-d);text-decoration:none;border-top:1px dotted var(--bd);padding-top:5px}
-.pg-itemname{display:block;margin-top:5px;font-size:.66em;font-weight:500;color:var(--mut);border-top:1px dotted var(--bd);padding-top:5px;line-height:1.3}
-.pg-adonly{display:inline-block;font-size:.88em;font-weight:600;color:var(--mut);border:1px solid var(--bd);border-radius:3px;padding:0 4px;margin-left:4px;white-space:nowrap;opacity:.85}
+.pg-itemname{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:break-word;margin-top:5px;font-size:.66em;font-weight:500;color:var(--mut);border-top:1px dotted var(--bd);padding-top:5px;line-height:1.3}
+.pg-adonly{display:inline-block;align-self:flex-start;font-size:.6em;font-weight:600;color:var(--mut);border:1px solid var(--bd);border-radius:3px;padding:1px 5px;margin-top:4px;white-space:nowrap;opacity:.85}
 a.pg-adonly{text-decoration:none;cursor:pointer}
 a.pg-adonly:hover,a.pg-adonly:focus{opacity:1;border-color:var(--mut)}
 .pg-see:hover{text-decoration:underline}
