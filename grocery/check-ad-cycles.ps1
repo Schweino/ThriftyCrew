@@ -1,4 +1,4 @@
-<#
+﻿<#
   check-ad-cycles.ps1 - Runs DAILY (Windows Task Scheduler). Pulls a store's ad only the day AFTER its
   current ad expires, tracks each store's cycle in ad-schedule.json, and keeps the comparison + price
   history fresh when a new ad drops.
@@ -197,7 +197,7 @@ if (-not $NoAlert) {
       $stale = @()
       foreach ($k in $feeds.Keys) { $m = $feeds[$k]; if (($null -eq $m) -or ($m.Date -lt $lastWed)) { $tag = if ($m) { ' (' + $m.ToString('MM-dd') + ')' } else { ' (missing)' }; $stale += ($k + $tag) } }
       if ($stale.Count -gt 0) {
-        $bd = "The weekly Wednesday grocery browser refresh did not run for the week of " + $lastWed.ToString('yyyy-MM-dd') + ". Stale/missing browser feeds: " + ($stale -join ', ') + ". The live page is holding last week's prices for those stores. Open the Claude app and run the grocery-browser-stores-refresh agent. While in the warm store tabs, ALSO close any browser-store no-link gaps: run list-browser-nolinks.ps1 for the chip list, then paste hyvee/browser-link-resolve.js and BLR.run('<store>', chips) per store (board-match, skips sponsored/wrong-size), save to out\url-inputs\store-<store>-urls.json, and merge -> stamp -> prune-bad-links -Tol 0.32 -> guards -> publish -> archive the url-inputs file. Family Fare's MISSING links now self-heal in the daily job (fix-links-ff, 30 Freshop calls/day) and Hy-Vee's link PRICES self-heal (refresh-hyvee-links) - but nothing headless can ADD a Hy-Vee/Aldi/Baker's/Walmart/Sam's link, so those no-link chips need this browser pass. Check out\tile-integrity.json for the current per-store count."
+        $bd = "The weekly Wednesday grocery browser refresh did not run for the week of " + $lastWed.ToString('yyyy-MM-dd') + ". Stale/missing browser feeds: " + ($stale -join ', ') + ". The live page is holding last week's prices for those stores. Open the Claude app and run the grocery-browser-stores-refresh agent. While in the warm store tabs, ALSO close any browser-store no-link gaps: run build-chips-from-tileintegrity.ps1 for the chip list (reads out\tile-integrity.json, all stores), then paste hyvee/browser-link-resolve.js and BLR.run('<store>', chips) per store (board-match, skips sponsored/wrong-size), save to out\url-inputs\store-<store>-urls.json, and merge -> stamp -> prune-bad-links -Tol 0.32 -> guards -> publish -> archive the url-inputs file. Family Fare's MISSING links now self-heal in the daily job (fix-links-ff, 30 Freshop calls/day) and Hy-Vee's link PRICES self-heal (refresh-hyvee-links) - but nothing headless can ADD a Hy-Vee/Aldi/Baker's/Walmart/Sam's link, so those no-link chips need this browser pass. Check out\tile-integrity.json for the current per-store count."
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject ("Grocery: Wednesday browser refresh MISSED - week of " + $lastWed.ToString('yyyy-MM-dd')) -Body $bd | Out-Null
         # only burn the once-per-week de-dupe marker if the email actually SENT (send-alert exits 1 on
         # failure) - otherwise a transient mail error silently ate the whole week's stale warning.
@@ -560,3 +560,4 @@ Write-Output ('-'*74)
 foreach ($line in $summary) { Write-Output $line }
 if (@($flips).Count -gt 0) { Write-Output ""; Write-Output ("Flipped this run: " + ($flips -join ', ') + "  -> comparison + price history refreshed") }
 Log ("run complete; flips=" + (@($flips).Count))
+

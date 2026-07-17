@@ -1,37 +1,5 @@
 ﻿[
     {
-        "id":  "apples",
-        "q":  "apples",
-        "match":  "Fresh Gala Apples, 3 lb Bag",
-        "size":  "lb",
-        "pu":  1.08,
-        "unit":  "lb"
-    },
-    {
-        "id":  "bacon",
-        "q":  "bacon",
-        "match":  "Great Value Naturally Hickory Smoked Thick Cut Sliced Bacon, 16 oz",
-        "size":  "lb",
-        "pu":  4.18,
-        "unit":  "lb"
-    },
-    {
-        "id":  "balsamic-vinegar",
-        "q":  "balsamic vinegar",
-        "match":  "Pompeian Balsamic Vinegar - 16 fl oz",
-        "size":  "16 fl oz",
-        "pu":  0.24,
-        "unit":  "floz"
-    },
-    {
-        "id":  "blue-cheese-dressing",
-        "q":  "blue cheese dressing",
-        "match":  "Wish-Bone Chunky Blue Cheese Salad Dressing, 15 fl oz",
-        "size":  "15 fl oz",
-        "pu":  0.1627,
-        "unit":  "floz"
-    },
-    {
         "id":  "bread",
         "q":  "white bread",
         "match":  "Great Value White Round Top Bread Loaf, 20 oz",
@@ -40,35 +8,11 @@
         "unit":  "each"
     },
     {
-        "id":  "hominy",
-        "q":  "canned hominy",
-        "match":  "Juanitaâ€™s Foods White Hominy, 110 oz, Can",
-        "size":  "108.8 oz",
-        "pu":  0.043,
-        "unit":  "oz"
-    },
-    {
         "id":  "canned-pasta",
         "q":  "canned ravioli",
         "match":  "(4 pack) Chef Boyardee Overstuffed Beef Ravioli in Pasta Sau",
         "size":  "59.8 oz",
         "pu":  0.0829,
-        "unit":  "oz"
-    },
-    {
-        "id":  "canned-pears",
-        "q":  "canned pears",
-        "match":  "Great Value Canned Pear Halves in Heavy Syrup, 29 oz Can",
-        "size":  "29 oz",
-        "pu":  0.0959,
-        "unit":  "oz"
-    },
-    {
-        "id":  "canned-potatoes",
-        "q":  "canned potatoes",
-        "match":  "Del Monte Whole Canned Potatoes, Canned Vegetables, 14.5 oz",
-        "size":  "14.5 oz",
-        "pu":  0.1152,
         "unit":  "oz"
     },
     {
@@ -80,14 +24,6 @@
         "unit":  "lb"
     },
     {
-        "id":  "chili-powder",
-        "q":  "chili powder",
-        "match":  "Great Value Chili Powder, 3 oz",
-        "size":  "3 oz",
-        "pu":  0.36,
-        "unit":  "oz"
-    },
-    {
         "id":  "chocolate-milk",
         "q":  "chocolate milk",
         "match":  "TruMoo Whole Chocolate Milk Half Gallon",
@@ -96,51 +32,11 @@
         "unit":  "floz"
     },
     {
-        "id":  "coffee",
-        "q":  "ground coffee",
-        "match":  "Folgers Classic Roast Ground Coffee",
-        "size":  "oz",
-        "pu":  0.44,
-        "unit":  "oz"
-    },
-    {
         "id":  "cream-cheese",
         "q":  "cream cheese",
         "match":  "Great Value Cream Cheese Brick (2 pk)",
         "size":  "16 oz",
         "pu":  0.1856,
-        "unit":  "oz"
-    },
-    {
-        "id":  "garlic-powder",
-        "q":  "garlic powder",
-        "match":  "Great Value Garlic Powder, 3.4 oz",
-        "size":  "3.4 oz",
-        "pu":  0.3176,
-        "unit":  "oz"
-    },
-    {
-        "id":  "green-olives",
-        "q":  "green olives stuffed",
-        "match":  "Great Value Stuffed Manzanilla Olives with Minced Pimento, 1",
-        "size":  "10 oz",
-        "pu":  0.312,
-        "unit":  "oz"
-    },
-    {
-        "id":  "ground-cinnamon",
-        "q":  "ground cinnamon",
-        "match":  "Great Value Ground Cinnamon, 2.5 oz",
-        "size":  "",
-        "pu":  0.508,
-        "unit":  "oz"
-    },
-    {
-        "id":  "ground-cumin",
-        "q":  "ground cumin",
-        "match":  "Great Value Ground Cumin, 2.5 oz",
-        "size":  "2.5 oz",
-        "pu":  0.548,
         "unit":  "oz"
     },
     {
@@ -160,30 +56,6 @@
         "unit":  "oz"
     },
     {
-        "id":  "lemon-juice",
-        "q":  "lemon juice",
-        "match":  "ReaLemon 100% Lemon Juice, 32 fl oz bottle",
-        "size":  "32 fl oz",
-        "pu":  0.1116,
-        "unit":  "floz"
-    },
-    {
-        "id":  "onion-powder",
-        "q":  "onion powder",
-        "match":  "Great Value Onion Powder, 3.25 oz",
-        "size":  "3.25 oz",
-        "pu":  0.3323,
-        "unit":  "oz"
-    },
-    {
-        "id":  "dried-oregano",
-        "q":  "oregano leaves",
-        "match":  "Great Value Oregano Leaves, 0.87 oz",
-        "size":  "0.87 oz",
-        "pu":  1.2414,
-        "unit":  "oz"
-    },
-    {
         "id":  "dried-parsley",
         "q":  "parsley flakes",
         "match":  "Great Value Parsley Flakes, 2.7 oz",
@@ -198,21 +70,5 @@
         "size":  "",
         "pu":  0.595,
         "unit":  "oz"
-    },
-    {
-        "id":  "rice-vinegar",
-        "q":  "rice vinegar",
-        "match":  "Mizkan Rice Vinegar for Cooking, 12 fl oz",
-        "size":  "12 fl oz",
-        "pu":  0.2433,
-        "unit":  "floz"
-    },
-    {
-        "id":  "teriyaki-sauce",
-        "q":  "teriyaki sauce",
-        "match":  "Kikkoman Teriyaki BBQ Original 20.5 oz Glass Bottle",
-        "size":  "20.5 oz",
-        "pu":  0.2649,
-        "unit":  "floz"
     }
 ]

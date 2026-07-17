@@ -1,51 +1,203 @@
 ﻿[
     {
-        "id":  "avocados",
-        "q":  "avocado",
-        "match":  "Avocados",
-        "size":  "each",
-        "pu":  1.07,
+        "id":  "bagels",
+        "q":  "plain bagels",
+        "match":  "Thomas\u0027 Plain Bagels, 12 pk.",
+        "size":  "36.737 oz",
+        "pu":  0.5817,
+        "unit":  "each"
+    },
+    {
+        "id":  "bar-soap",
+        "q":  "bar soap",
+        "match":  "Irish Spring Bar Soap, Original  Clean, 4 oz., 20 ct.",
+        "size":  "80 oz",
+        "pu":  0.549,
         "unit":  "each"
     },
     {
         "id":  "bread",
         "q":  "white bread",
-        "match":  "Bimbo Soft White Bread (2 pk)",
-        "size":  "2 ct",
+        "match":  "Bimbo Soft White Bread Family Pack 20 oz., 2 pk.",
+        "size":  "40 oz",
         "pu":  1.76,
         "unit":  "each"
     },
     {
-        "id":  "chili-powder",
-        "q":  "chili powder",
-        "match":  "Member\u0027s Mark Chili Powder, 20 oz.",
-        "size":  "20 oz",
-        "pu":  0.499,
+        "id":  "beef-stew",
+        "q":  "canned beef stew",
+        "match":  "Dinty Moore Beef Stew, 15 oz., 6 pk.",
+        "size":  "6 ct 15 oz",
+        "pu":  0.1538,
         "unit":  "oz"
     },
     {
-        "id":  "garlic-powder",
-        "q":  "garlic powder",
-        "match":  "Member\u0027s Mark Garlic Powder, 22.5 oz.",
-        "size":  "22.5 oz",
-        "pu":  0.4436,
+        "id":  "canned-chili",
+        "q":  "chili with beans can",
+        "match":  "Nalley Original Chili with Beans, 15 oz., 12 pk.",
+        "size":  "12 ct 15 oz",
+        "pu":  0.0988,
         "unit":  "oz"
     },
     {
-        "id":  "ground-cumin",
-        "q":  "ground cumin",
-        "match":  "Member\u0027s Mark Ground Cumin, 16 oz.",
-        "size":  "16 oz",
-        "pu":  0.5612,
+        "id":  "coconut-milk-canned",
+        "q":  "coconut milk canned",
+        "match":  "Thai Kitchen Unsweetened Coconut Milk 13.66 fl. oz. cans, 6 pk.",
+        "size":  "6 ct 13.66 fl oz",
+        "pu":  0.1371,
+        "unit":  "floz"
+    },
+    {
+        "id":  "canned-corn",
+        "q":  "whole kernel corn",
+        "match":  "Del Monte Golden Sweet Whole Kernel Corn, 15.25 oz., 8 pk.",
+        "size":  "8 ct 15.25 oz",
+        "pu":  0.069,
         "unit":  "oz"
     },
     {
-        "id":  "ground-turkey",
-        "q":  "ground turkey",
-        "match":  "Jennie-O 93/7 Ground Turkey (2.5 lb, 2 pk)",
-        "size":  "lb",
-        "pu":  4.55,
-        "unit":  "lb"
+        "id":  "diced-tomatoes",
+        "q":  "diced tomatoes canned",
+        "match":  "Member\u0027s Mark Diced Tomatoes in Tomato Juice, 14.5 oz., 12 pk.",
+        "size":  "12 ct 14.5 oz",
+        "pu":  0.0556,
+        "unit":  "oz"
+    },
+    {
+        "id":  "canned-mushrooms",
+        "q":  "mushroom pieces and stems",
+        "match":  "Giorgio Mushroom Pieces and Stems, 4 oz., 12 ct.",
+        "size":  "12 ct 4 oz",
+        "pu":  0.2704,
+        "unit":  "oz"
+    },
+    {
+        "id":  "canned-pasta",
+        "q":  "canned ravioli",
+        "match":  "Chef Boyardee Beef Ravioli 15 oz., 12 pk.",
+        "size":  "12 ct 15 oz",
+        "pu":  0.0708,
+        "unit":  "oz"
+    },
+    {
+        "id":  "canned-pears",
+        "q":  "canned pears",
+        "match":  "Del Monte Lite Pear Halves, 15 oz., 8 pk.",
+        "size":  "8 ct 15 oz",
+        "pu":  0.1248,
+        "unit":  "oz"
+    },
+    {
+        "id":  "canned-peas",
+        "q":  "sweet peas can",
+        "match":  "Le Sueur Very Young Small Sweet Peas, 15 oz., 8 ct.",
+        "size":  "8 ct 15 oz",
+        "pu":  0.1082,
+        "unit":  "oz"
+    },
+    {
+        "id":  "canned-salmon",
+        "q":  "canned pink salmon",
+        "match":  "Black Top Premium Wild Alaska Pink Salmon 14.75 oz., 4 pk.",
+        "size":  "4 ct 14.75 oz",
+        "pu":  0.2176,
+        "unit":  "oz"
+    },
+    {
+        "id":  "chicken-noodle-soup",
+        "q":  "chicken noodle soup",
+        "match":  "Progresso Traditional Chicken Noodle Soup, 19 oz., 6 pk.",
+        "size":  "6 ct 19 oz",
+        "pu":  0.0919,
+        "unit":  "oz"
+    },
+    {
+        "id":  "cranberry-sauce",
+        "q":  "cranberry sauce",
+        "match":  "Ocean Spray Jellied Cranberry Sauce, 14 oz., 6 pk.",
+        "size":  "6 ct 14 oz",
+        "pu":  0.1426,
+        "unit":  "oz"
+    },
+    {
+        "id":  "cream-of-chicken-soup",
+        "q":  "cream of chicken soup",
+        "match":  "Campbell\u0027s Condensed Cream of Chicken Soup 10.5 oz., 8 pk.",
+        "size":  "8 ct 10.5 oz",
+        "pu":  0.1069,
+        "unit":  "oz"
+    },
+    {
+        "id":  "cream-of-mushroom-soup",
+        "q":  "cream of mushroom soup",
+        "match":  "Campbell\u0027s Cream of Mushroom Soup 10.5 oz., 8 pk.",
+        "size":  "8 ct 10.5 oz",
+        "pu":  0.1069,
+        "unit":  "oz"
+    },
+    {
+        "id":  "tomatoes-green-chilies",
+        "q":  "rotel diced tomatoes green chilies",
+        "match":  "Ro-Tel Diced Tomatoes \u0026 Green Chilies 10 oz., 8 ct.",
+        "size":  "8 ct 10 oz",
+        "pu":  0.0998,
+        "unit":  "oz"
+    },
+    {
+        "id":  "disinfectant-spray",
+        "q":  "disinfectant spray",
+        "match":  "Clorox Anywhere Daily Disinfectant \u0026 Sanitizing Spray 32 fl. oz., 12 ct.",
+        "size":  "12 ct 32 fl oz",
+        "pu":  0.156,
+        "unit":  "oz"
+    },
+    {
+        "id":  "donuts",
+        "q":  "glazed donuts",
+        "match":  "Duchess Mini Frosted Donuts, 3 oz, 12 pk.",
+        "size":  "36 oz",
+        "pu":  0.6933,
+        "unit":  "each"
+    },
+    {
+        "id":  "fruit-snacks",
+        "q":  "fruit snacks",
+        "match":  "Mott\u0027s Assorted Fruit Flavored Snacks, 0.8 oz., 90 pk.",
+        "size":  "72 oz",
+        "pu":  0.1331,
+        "unit":  "each"
+    },
+    {
+        "id":  "furniture-polish",
+        "q":  "furniture polish",
+        "match":  "Pledge Furniture Enhancing Polish Spray, Lemon, 3ct., 29 oz.",
+        "size":  "3 ct 29 oz",
+        "pu":  0.1439,
+        "unit":  "oz"
+    },
+    {
+        "id":  "hamburger-buns",
+        "q":  "hamburger buns",
+        "match":  "Sara Lee Restaurant Style White Hamburger Buns, 16 ct.",
+        "size":  "27.714 oz",
+        "pu":  0.2425,
+        "unit":  "each"
+    },
+    {
+        "id":  "hot-dog-buns",
+        "q":  "hot dog buns",
+        "match":  "Sara Lee Restaurant Style White Hot Dog Buns, 16 ct.",
+        "size":  "24.25 oz",
+        "pu":  0.2425,
+        "unit":  "each"
+    },
+    {
+        "id":  "hummus",
+        "q":  "hummus",
+        "match":  "Member\u0027s Mark Classic Hummus Singles 2.5 oz., 16 ct.",
+        "size":  "16 ct 2.5 oz",
+        "pu":  0.1395,
+        "unit":  "oz"
     },
     {
         "id":  "italian-seasoning",
@@ -58,49 +210,81 @@
     {
         "id":  "eggs",
         "q":  "large eggs",
-        "match":  "Member\u0027s Mark Cage Free Large White Eggs (2 dozen)",
-        "size":  "dozen",
-        "pu":  2.31,
+        "match":  "Large Eggs 15 dozen",
+        "size":  "15 dozen",
+        "pu":  1.8447,
         "unit":  "dozen"
     },
     {
-        "id":  "milk",
-        "q":  "milk gallon",
-        "match":  "Member\u0027s Mark 2% Reduced Fat Milk (1 gal)",
-        "size":  "gal",
-        "pu":  3.72,
-        "unit":  "gallon"
+        "id":  "egg-whites",
+        "q":  "liquid egg whites",
+        "match":  "Member\u0027s Mark Liquid Egg Whites 16 oz., 6 pk.",
+        "size":  "6 ct 16 oz",
+        "pu":  0.1585,
+        "unit":  "floz"
     },
     {
-        "id":  "onion-powder",
-        "q":  "onion powder",
-        "match":  "Member\u0027s Mark Onion Powder, 21 oz.",
-        "size":  "21 oz",
-        "pu":  0.4276,
+        "id":  "muffins",
+        "q":  "blueberry muffins",
+        "match":  "Otis Spunkmeyer Variety Pack Muffins, 4 oz., 15 pk.",
+        "size":  "60 oz",
+        "pu":  1.0293,
+        "unit":  "each"
+    },
+    {
+        "id":  "pasta",
+        "q":  "spaghetti",
+        "match":  "Barilla Penne Pasta 16 oz., 6 pk.",
+        "size":  "6 ct 16 oz",
+        "pu":  0.0888,
         "unit":  "oz"
     },
     {
-        "id":  "russet-potatoes",
-        "q":  "russet potatoes",
-        "match":  "Russet Potatoes (10 lb bag)",
-        "size":  "lb",
-        "pu":  0.46,
-        "unit":  "lb"
+        "id":  "pita-bread",
+        "q":  "pita bread",
+        "match":  "Stacy\u0027s Pita Thins, Variety Pack, 1 oz., 30 pk.",
+        "size":  "30 oz",
+        "pu":  0.4927,
+        "unit":  "each"
     },
     {
-        "id":  "shredded-cheese",
-        "q":  "shredded cheese",
-        "match":  "Member\u0027s Mark Colby \u0026 Monterey Jack Shredded Cheese",
-        "size":  "oz",
-        "pu":  0.19,
+        "id":  "refried-beans",
+        "q":  "refried beans",
+        "match":  "Old El Paso Traditional Refried Beans 16 oz., 6 pk.",
+        "size":  "6 ct 16 oz",
+        "pu":  0.0806,
         "unit":  "oz"
     },
     {
         "id":  "string-cheese",
         "q":  "mozzarella string cheese",
-        "match":  "Frigo Cheese Heads String Cheese",
-        "size":  "48 oz",
+        "match":  "Frigo Cheese Heads String Cheese 1 oz. pkg., 48 ct.",
+        "size":  "48 ct 1 oz",
         "pu":  0.1973,
+        "unit":  "oz"
+    },
+    {
+        "id":  "tomatoes",
+        "q":  "tomatoes on the vine",
+        "match":  "Tomatoes on the Vine, 3-Pound",
+        "size":  "3 lb",
+        "pu":  1.6567,
+        "unit":  "lb"
+    },
+    {
+        "id":  "tortillas",
+        "q":  "flour tortillas",
+        "match":  "Mission 6\" Fajita Flour Tortillas, 40 ct.",
+        "size":  "54.667 oz",
+        "pu":  0.123,
+        "unit":  "each"
+    },
+    {
+        "id":  "whipped-cream",
+        "q":  "whipped topping",
+        "match":  "Member\u0027s Mark Original Dairy Whipped Topping 15 oz., 3 pk.",
+        "size":  "3 ct 15 oz",
+        "pu":  0.1771,
         "unit":  "oz"
     },
     {
@@ -110,5 +294,13 @@
         "size":  "lb",
         "pu":  2.47,
         "unit":  "lb"
+    },
+    {
+        "id":  "yogurt",
+        "q":  "yogurt",
+        "match":  "GoGo Squeez Yogurtz Strawberry and Strawberry Banana, 3 oz., 20 ct.",
+        "size":  "20 ct 3 oz",
+        "pu":  0.2163,
+        "unit":  "oz"
     }
 ]

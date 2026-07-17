@@ -44,16 +44,42 @@ const BLR = (() => {
   // per-store: fetch the search HTML/JSON same-origin and return [{url,name,upc,perunit,sizeText,sponsored}]
   async function candidates(store, q) {
     if (store === 'bakers') {
-      const r = await fetch('/search?query=' + encodeURIComponent(q) + '&searchType=default_search', { credentials: 'include' });
-      const doc = new DOMParser().parseFromString(await r.text(), 'text/html');
-      return [...doc.querySelectorAll('.ProductCard')].map(card => {
-        const t = card.innerText, a = card.querySelector('a[href*="/p/"]');
-        let path = null; try { path = new URL(a.href, location.origin).pathname; } catch (e) {}
-        const m = path && path.match(/\/p\/[^/]+\/(\d+)/);
-        const pum = t.match(/\$(\d+(?:\.\d+)?)\s*\/\s*(fl\s*oz|oz|lb|ea|ct)/i);
-        const szm = t.match(/(\d+(?:\.\d+)?)\s*(fl\s*oz|oz|lb|ct|ea)\b/i);
-        return m ? { url: 'https://www.bakersplus.com' + path, upc: m[1], name: t.split('\n').filter(x => /[a-z]{4}/i.test(x)).pop() || '', perunit: pum ? parseFloat(pum[1]) : null, sizeText: szm ? szm[0] : '', sponsored: /^\s*sponsored/i.test(t) } : null;
-      }).filter(Boolean);
+      // fetch()+DOMParser is DEAD here (2026-07-17): bakersplus.com is client-rendered, so the fetched HTML
+      // shell contains zero product cards. Render the search for real in a hidden same-origin iframe, scroll
+      // to trigger the lazy grid, and poll until the tile count is stable. Cards print their own unit price
+      // ("$0.22/oz"). Parse via anchor-climb, not a card class - .ProductCard is the selector that died.
+      const f = document.createElement('iframe');
+      f.style.cssText = 'position:fixed;left:-9999px;top:0;width:1200px;height:900px';
+      document.body.appendChild(f);
+      try {
+        f.src = '/search?query=' + encodeURIComponent(q) + '&searchType=default_search';
+        await new Promise(res => { f.onload = res; setTimeout(res, 15000); });
+        let last = -1, stable = 0;
+        for (let i = 0; i < 25 && stable < 3; i++) {
+          const d = f.contentDocument;
+          if (d && d.scrollingElement) d.scrollingElement.scrollTop = d.scrollingElement.scrollHeight;
+          const n = d ? d.querySelectorAll('a[href*="/p/"]').length : 0;
+          stable = (n > 0 && n === last) ? stable + 1 : 0; last = n;
+          await new Promise(x => setTimeout(x, 700));
+        }
+        const doc = f.contentDocument;
+        if (!doc) return [];
+        const seen = new Set(), out = [];
+        for (const a of doc.querySelectorAll('a[href*="/p/"]')) {
+          let path = null; try { path = new URL(a.getAttribute('href'), 'https://www.bakersplus.com').pathname; } catch (e) {}
+          const m = path && path.match(/\/p\/[^/]+\/(\d+)/);
+          if (!m || seen.has(path)) continue;
+          let el = a, card = null;
+          for (let i = 0; i < 7 && el; i++) { el = el.parentElement; if (el && /\$\d/.test(el.innerText || '') && (el.innerText || '').length < 700) { card = el; break; } }
+          if (!card) continue;
+          seen.add(path);
+          const t = card.innerText;
+          const pum = t.match(/\$(\d+(?:\.\d+)?)\s*\/\s*(fl\s*oz|oz|lb|ea|ct)/i);
+          const szm = t.match(/(\d+(?:\.\d+)?)\s*(fl\s*oz|oz|lb|ct|ea)\b/i);
+          out.push({ url: 'https://www.bakersplus.com' + path, upc: m[1], name: t.split('\n').filter(x => /[a-z]{4}/i.test(x)).pop() || '', perunit: pum ? parseFloat(pum[1]) : null, sizeText: szm ? szm[0] : '', sponsored: /^\s*sponsored/i.test(t) });
+        }
+        return out;
+      } finally { f.remove(); }
     }
     if (store === 'walmart' || store === 'sams') {
       const base = store === 'sams' ? '' : '';
@@ -64,10 +90,25 @@ const BLR = (() => {
       let items = [];
       try { const j = JSON.parse(nm[1]); for (const s of (j?.props?.pageProps?.initialData?.searchResult?.itemStacks || [])) if (s.items) items = items.concat(s.items); } catch (e) {}
       const host = store === 'sams' ? 'https://www.samsclub.com' : 'https://www.walmart.com';
-      return items.filter(it => it.canonicalUrl && it.name).map(it => ({
-        url: host + it.canonicalUrl.split('?')[0], name: it.name, upc: String(it.usItemId || it.productId || ''),
-        perunit: it.priceInfo?.unitPrice?.price ?? null, sizeText: '', sponsored: !!it.isSponsoredFlag
-      }));
+      return items.filter(it => it.canonicalUrl && it.name).map(it => {
+        // Walmart changed priceInfo (2026-07): currentPrice.price is gone; unitPrice may be an object
+        // ({price}) OR a display string ("$2.48/lb", "5.4 ¢/fl oz"). Parse every shape we have seen.
+        const up = it.priceInfo && it.priceInfo.unitPrice;
+        let perunit = null;
+        if (up != null) {
+          if (typeof up === 'object' && up.price != null) perunit = up.price;
+          else {
+            const s = String((up && up.priceString) || up);
+            let mm = s.match(/\$\s*(\d+(?:\.\d+)?)/);
+            if (mm) perunit = parseFloat(mm[1]);
+            else { mm = s.match(/(\d+(?:\.\d+)?)\s*[¢c]/i); if (mm) perunit = parseFloat(mm[1]) / 100; }
+          }
+        }
+        return {
+          url: host + it.canonicalUrl.split('?')[0], name: it.name, upc: String(it.usItemId || it.productId || ''),
+          perunit: perunit, sizeText: '', sponsored: !!it.isSponsoredFlag
+        };
+      });
     }
     return [];
   }

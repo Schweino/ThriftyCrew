@@ -15,7 +15,7 @@
     - eggs  -> size "dozen"      (per-dozen price computed from the count)
   Last writer wins per id (pass core first, then the rest). Skips NOT FOUND / empty-price rows.
 #>
-param([string[]]$In = @(), [string]$OutDir = "", [string]$Today = "", [string]$ModeVerified = "")
+param([string[]]$In = @(), [string]$OutDir = "", [string]$Today = "", [string]$ModeVerified = "", [switch]$Force)
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
@@ -83,6 +83,9 @@ foreach ($f in $In) {
     $curNum = 0.0
     [void][double]::TryParse(($adp -replace '[^0-9.]',''), [ref]$curNum)
     $row = [ordered]@{ store='Fareway'; item=$name; ad_price=$adp; size=$sz; regular=$reg; source_ad='shop.fareway.com'; as_of=$asofS }
+    # identity rule: the link belongs ON the price row (derive-links reads link_url verbatim), not only in
+    # the url-inputs side file - two homes for one fact is how they drift.
+    if ($r.url -and "$($r.url)" -ne '') { $row['link_url'] = [string]$r.url }
     if ($curNum -gt 0) { $row['current_price'] = $curNum }
 
     # base_price (the was-price) ONLY when it is in the same basis as what we publish. For a weighted good we
@@ -113,7 +116,18 @@ $doc = [ordered]@{ store='Fareway'; price_type='everyday'; price_mode=$pmode; mo
 if (-not $ModeVerified) { Write-Warning "build-fareway-regular: no -ModeVerified passed -> price_mode='unverified'. The capture MUST set In-Store fulfilment and pass -ModeVerified <date>, or Fareway is (correctly) excluded from the board." }
 $regDir = Join-Path $OutDir 'regular'
 New-Item -ItemType Directory -Force -Path $regDir | Out-Null
-$doc | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $regDir "fareway-regular-$asofS.json") -Encoding UTF8
+# NEVER-SHRINK GUARD (2026-07-17, same rule as the Family Fare throttle-wipeout guard). The regular file can
+# hold MORE rows than any one shop capture: walled-store passes accumulate verified rows into it that a rebuild
+# from shop files alone cannot reproduce (382 verified rows vs 89 in the newest shop file, the day this nearly
+# overwrote them). Replacing a bigger file with a smaller one is a partial-pull-as-overwrite bug, not a refresh.
+$regPath = Join-Path $regDir "fareway-regular-$asofS.json"
+if (Test-Path $regPath) {
+  $old = $null; try { $old = Get-Content $regPath -Raw | ConvertFrom-Json } catch {}
+  if ($old -and (@($old.deals).Count -gt ($deals.Count * 1.2)) -and -not $Force) {
+    throw ("REFUSING to overwrite " + (Split-Path $regPath -Leaf) + ": it holds " + @($old.deals).Count + " rows, this rebuild produced only " + $deals.Count + ". That file accumulated verified rows a shop-file rebuild cannot reproduce. Pass -Force only if the shrink is intended.")
+  }
+}
+$doc | ConvertTo-Json -Depth 5 | Set-Content $regPath -Encoding UTF8
 # product-URL input for merge-product-urls.ps1 (store key 'fareway'): every priced Fareway cell that has a
 # storefront product page gets a link whose price+size match the board exactly.
 $urlRows = @($byUrl.Values)

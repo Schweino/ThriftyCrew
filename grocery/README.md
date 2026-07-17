@@ -85,16 +85,27 @@ chip that has one.
 4. **Stamp** `stamp-board-pu.ps1` (records the current board per-unit onto every link so step 1 stays quiet).
 5. **Build + publish** `build-deals-page.ps1` then `publish-deals-page.ps1`.
 
+### SINGLE-WRITER RULE for product-urls.json
+
+Up to six things run concurrently against this repo (cloud daily, heartbeat, 3 daily local agents, interactive
+sessions). `product-urls.json` has ONE direct writer: **the daily pipeline** (derive-links-from-prices ->
+fix-links-ff -> prune-bad-links inside check-ad-cycles). Everything else - browser passes, resolver batches,
+one-off sessions - writes candidate rows to **`out\url-inputs\store-*-urls.json`** and lets
+`merge-product-urls.ps1` fold them in. Never hand-edit product-urls.json in a session while the daily could be
+running; if you must run the merge yourself, check `git status`/mtimes first and re-verify after (a file that
+changes under you means another writer is active - stand down and check its result instead of overwriting).
+The archive of consumed inputs lives in `out\url-inputs-archive\`.
+
 ### Per-store resolver methods (all proven)
 
 | Store | Data source | eval? | Notes |
 |---|---|---|---|
-| Walmart | `__NEXT_DATA__` `...searchResult.itemStacks[].items[]` | no (CSP) | `priceInfo.currentPrice.price` is a `$`-string; fresh produce often has no price. |
-| Sam's Club | same `__NEXT_DATA__` shape | yes | `priceInfo.linePrice`/`itemPrice` are `$`-strings; `canonicalUrl` -> `/ip/`; warehouse packs, judge by `unitPrice`. |
-| Family Fare | Freshop API `api.freshop.ncrcloud.com/1/products?app_key=family_fare&store_id=6401&q=` | n/a | `base_price` + `canonical_url`; ~350ms pacing, 400s after ~40 calls. |
-| Hy-Vee | client-rendered DOM `a[href*="/aisles-online/p/"]` | yes | price/size in card text; fresh produce priced by weight = no fixed price. |
-| Aldi | client-rendered DOM `a[href*="/store/aldi/products/"]` | yes | store-brand names; resolver body stored in `localStorage.AL_RESOLVE`. |
-| Baker's | client-rendered DOM `[data-testid^="product-card"]` | yes | Kroger banner, Akamai-gated; store = Saddlecreek; poll ~10s for render; `localStorage.BK_RESOLVE`. |
+| Walmart | `__NEXT_DATA__` `...searchResult.itemStacks[].items[]` | no (CSP) | 2026-07: `priceInfo.currentPrice.price` is GONE - read `priceInfo.itemPrice`/`linePrice`/`unitPrice`; `unitPrice` may be an object (`.price`) or a display string ("$2.48/lb", "5.4 c/fl oz") - parse both. Fresh produce often has no price. A 200 with no `__NEXT_DATA__` = PerimeterX challenge, not data. |
+| Sam's Club | same `__NEXT_DATA__` shape | yes | `priceInfo.linePrice`/`itemPrice` are `$`-strings; `canonicalUrl` -> `/ip/`; bare `/ip/<id>` 301s to the canonical slug (proven 2026-07-17; bogus id renders an "Uh-oh" h1, so verify the RENDERED page, not the status). Warehouse packs, judge by `unitPrice`. |
+| Family Fare | Freshop API `api.freshop.ncrcloud.com/1/products?app_key=family_fare&store_id=6401&q=` | n/a | `base_price` + `canonical_url`; ~350ms pacing, 400s after ~40 calls (400 = throttle AND unknown-field - indistinguishable; fall back to minimal `fields=`). |
+| Hy-Vee | headless REST `POST /aisles-online/api/search/products` (storeId 1465 in body) or client-rendered DOM `a[href*="/aisles-online/p/"]` | REST: no | bogus product page = 200 with `pageProps.notFound===true` - check it. Fresh produce priced by weight = no fixed price. |
+| Aldi | client-rendered DOM `a[href*="/store/aldi/products/"]`; search is `/store/aldi/s?k=<term>` (NOT `?q=` - that redirects to an unrelated carousel) | yes | store-brand names; resolver body stored in `localStorage.AL_RESOLVE`; dead item renders h1 "Item Unavailable" on a 200. |
+| Baker's | hidden same-origin IFRAME render of `/search?query=` + scroll + stable-count poll, then anchor-climb from `a[href*="/p/"]` | yes | plain `fetch()`+DOMParser is DEAD (client-rendered shell, zero cards) and so is the `.ProductCard`/`[data-testid^="product-card"]` class - climb from anchors to the nearest container with a `$`. Kroger banner, Akamai-gated; store = Saddlecreek; cards print their own "$X.XX/oz". `localStorage.BK_RESOLVE`. |
 
 Common pattern for the three eval stores: store the resolver body once in `localStorage`, then per item
 `navigate(search) -> poll until cards render -> set A={id,c,u,s} -> eval(resolver)`; it writes the best
