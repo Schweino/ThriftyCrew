@@ -1,4 +1,4 @@
-// smp-feed Worker
+﻿// smp-feed Worker
 // - GET /smp-feed.json and all other paths: served from static ./public assets (ASSETS binding)
 // - POST /submit: item-request form handler -> emails contact@thriftycrew.com via Gmail API
 //   Reuses the Work Google OAuth (same refresh-token flow as send-alert.ps1).
@@ -15,8 +15,6 @@
 const ALLOWED_ORIGINS = [
   "https://www.thriftycrew.com",
   "https://thriftycrew.com",
-  "https://www.simplemoneyplaybook.com",
-  "https://simplemoneyplaybook.com",
   "https://map-to-success.ghost.io",
 ];
 const STORES = ["Walmart", "Baker's", "Family Fare", "Hy-Vee", "Aldi", "Sam's Club", "Fareway"];
@@ -323,3 +321,4 @@ export default {
     return env.ASSETS.fetch(request);
   },
 };
+
