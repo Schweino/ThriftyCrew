@@ -795,7 +795,7 @@ a.pg-adonly:hover,a.pg-adonly:focus{opacity:1;border-color:var(--mut)}
 .pg-ri-intro{margin:36px 0 2px;padding:0}
 .pg-ri-h2{font-size:1.5em;margin:0 0 3px;color:var(--ink);border:none;padding:0;letter-spacing:-.01em}
 .pg-ri-sub2{font-size:.9em;color:var(--mut);margin:0;max-width:66ch;line-height:1.4}
-@media(max-width:560px){.pg-wrap{font-size:1.4rem}.pg-head h1{font-size:1.55em}.pg-chip{min-width:calc(50% - 4px);flex:1 1 calc(50% - 4px)}.pg-score{min-width:calc(33% - 7px)}
+@media(max-width:560px){.pg-wrap{font-size:1.4rem}.pg-head h1{font-size:1.55em}.pg-chip{min-width:calc(50% - 4px);flex:1 1 calc(50% - 4px);max-width:none}.pg-score{min-width:calc(33% - 7px)}
 /* phone: pills become one horizontally-scrollable row instead of a 3-row wall.
    contain:inline-size is LOAD-BEARING: without it the row's intrinsic width (~526px of pills) propagates
    up through the flex/grid chain and inflates the whole board past the phone viewport (min-width:0 alone
