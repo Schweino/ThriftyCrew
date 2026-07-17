@@ -409,6 +409,22 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # quantity bugs - ordinary price drift is ignored), or a multipack priced as a single unit.
       # These are exactly the classes that shipped wrong prices on 2026-07-14 while every existing gate
       # stayed green, so a failure here must stop the board going live, not just log.
+      # WARN-ONLY: are the weekly-ad landing pages (the flyer-only pills' link targets, ad-urls.json) still
+      # alive? Never blocks - a store site outage must not stop OUR publish - but a dead ad link is the same
+      # lie class as a dead product link, so it gets said out loud the day it breaks. Baker's is skipped
+      # headless (Akamai walls non-browser fetches; the Wednesday browser agent exercises that URL for real).
+      try {
+        $adDoc = Get-Content (Join-Path $root 'ad-urls.json') -Raw | ConvertFrom-Json
+        $skip = @($adDoc.headless_check_skip)
+        foreach ($p in $adDoc.urls.PSObject.Properties) {
+          if ($skip -contains [string]$p.Name) { continue }
+          try {
+            $ar = Invoke-WebRequest -UseBasicParsing -Uri ([string]$p.Value) -TimeoutSec 20 -Headers @{ 'User-Agent' = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
+            if ([int]$ar.StatusCode -ne 200) { Log ('WARN ad-url ' + $p.Name + ' returned HTTP ' + $ar.StatusCode + ' - the flyer-only pill links there: ' + $p.Value) }
+          } catch { Log ('WARN ad-url ' + $p.Name + ' unreachable (' + $_.Exception.Message + ') - the flyer-only pill links there: ' + $p.Value) }
+        }
+      } catch { Log ('WARN ad-url check skipped: ' + $_.Exception.Message) }
+
       $guardsRc = 0
       try {
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') | ForEach-Object { Log ('guards: ' + $_) }

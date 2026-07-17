@@ -240,6 +240,11 @@ function CleanItemName([string]$item) {
 # Chip footer: a "See item" LINK when we have a price-consistent product URL; otherwise the ITEM NAME as
 # plain text (so a shopper still knows exactly WHAT the price is for - by-weight produce/meat and flyer-only
 # sales that have no clickable product page). Empty only when we have neither a link nor a name.
+# store weekly-ad landing pages (flyer-only pills link to them). Single source: ad-urls.json - the daily
+# reachability warn reads the same file, so the pill and the check can never disagree about the URL.
+$ADURLS = @{}
+try { $adDoc = Get-Content (Join-Path $root 'ad-urls.json') -Raw | ConvertFrom-Json; foreach ($p in $adDoc.urls.PSObject.Properties) { $ADURLS[[string]$p.Name] = [string]$p.Value } } catch {}
+
 function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$boardPU, [string]$unit, [string]$cellType) {
   $url = $null
   if (($purls.ContainsKey($id)) -and ($purls[$id].ContainsKey($store)) -and (-not $formFlip.ContainsKey($id + '|' + $store))) {
@@ -292,9 +297,17 @@ function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$board
   if ($url) { return "<a class='pg-see' href='" + (HtmlEnc $url) + "' target='_blank' rel='nofollow noopener'>See item &rarr;</a>" }
   $nm = CleanItemName $boardItem
   # A SALE cell with no link is usually a flyer-only item: the weekly ad IS the source and there is no product
-  # page to open. Say so, so an honest gap doesn't read as a missing link. (Everyday no-link cells stay plain -
-  # those ARE gaps we intend to close.)
-  if ($nm -and $cellType -eq 'sale') { return "<span class='pg-itemname' title='" + $nm + " - priced from the weekly ad'>" + $nm + " <span class='pg-adonly'>weekly ad</span></span>" }
+  # page to open. Say so, AND hand the shopper the source: the pill links to the store's current weekly ad
+  # (evergreen URL - it always opens this week's flyer, so it cannot go stale mid-week). It opens the AD, not
+  # the item - flyer viewers have no reliable per-item anchors - so the copy promises only "the ad".
+  # (Everyday no-link cells stay plain - those ARE gaps we intend to close.)
+  if ($nm -and $cellType -eq 'sale') {
+    $adU = $ADURLS[$store]
+    $pill = if ($adU) {
+      "<a class='pg-adonly' href='" + (HtmlEnc $adU) + "' target='_blank' rel='nofollow noopener' title='Flyer-only price from this week&#39;s " + (HtmlEnc $store) + " ad. Opens the ad; find the item inside.'>weekly ad &#8599;</a>"
+    } else { "<span class='pg-adonly'>weekly ad</span>" }
+    return "<span class='pg-itemname' title='" + $nm + " - priced from the weekly ad'>" + $nm + " " + $pill + "</span>"
+  }
   if ($nm) { return "<span class='pg-itemname' title='" + $nm + "'>" + $nm + "</span>" }
   return ''
 }
@@ -762,6 +775,8 @@ $css = @'
 .pg-see{margin-top:5px;font-size:.68em;font-weight:700;color:var(--green-d);text-decoration:none;border-top:1px dotted var(--bd);padding-top:5px}
 .pg-itemname{display:block;margin-top:5px;font-size:.66em;font-weight:500;color:var(--mut);border-top:1px dotted var(--bd);padding-top:5px;line-height:1.3}
 .pg-adonly{display:inline-block;font-size:.88em;font-weight:600;color:var(--mut);border:1px solid var(--bd);border-radius:3px;padding:0 4px;margin-left:4px;white-space:nowrap;opacity:.85}
+a.pg-adonly{text-decoration:none;cursor:pointer}
+a.pg-adonly:hover,a.pg-adonly:focus{opacity:1;border-color:var(--mut)}
 .pg-see:hover{text-decoration:underline}
 .pg-chip.is-best .pg-see{color:var(--green-d)}
 .pg-cta{margin:34px 0 8px;padding:22px 24px;border-radius:14px;background:var(--green-t);border:1px solid var(--bd);text-align:center}

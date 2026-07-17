@@ -1,0 +1,11 @@
+{
+  "comment": "Store weekly-ad landing pages for flyer-only board tiles ('weekly ad' pill links). Evergreen URLs: each always opens the CURRENT ad. Verified 2026-07-17. Fareway is pinned to the Omaha store (043, 17070 Audrey St). Baker's renders only in real browsers (Akamai walls headless fetches) - the daily reachability warn skips it; the weekly browser agent opens it every Wednesday and fails loudly if it breaks. Walmart/Sam's have no ad cycle, so no entry.",
+  "urls": {
+    "Baker's": "https://www.bakersplus.com/weeklyad",
+    "Hy-Vee": "https://www.hy-vee.com/deals/weekly-ad",
+    "Family Fare": "https://www.shopfamilyfare.com/weekly-ad",
+    "Fareway": "https://www.fareway.com/stores/043/ad/weekly",
+    "Aldi": "https://www.aldi.us/weekly-specials/our-weekly-ads/"
+  },
+  "headless_check_skip": ["Baker's"]
+}
