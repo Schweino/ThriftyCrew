@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-07-17 13:01",
+    "generated":  "2026-07-17 13:02",
     "board":  "comparison-2026-07-17.json",
     "total_tiles":  2083,
     "violations":  156,
@@ -20,7 +20,7 @@
                                          "violations":  30
                                      },
                      "Hy-Vee":  {
-                                    "coverage":  24,
+                                    "coverage":  27,
                                     "tiles":  364,
                                     "violations":  29
                                 },
@@ -172,10 +172,10 @@
                  {
                      "id":  "bottled-water",
                      "store":  "Hy-Vee",
-                     "fault":  "WRONG-PRODUCT",
-                     "detail":  "count-mismatch",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Hy-Vee purified drinking water, 40 pk. bottles 16.9 fl. oz., $4.99",
-                     "link":  "Hy-Vee One Step Purified Drinking Water 24Pk"
+                     "link":  ""
                  },
                  {
                      "id":  "bottled-water",
@@ -548,10 +548,10 @@
                  {
                      "id":  "facial-tissues",
                      "store":  "Hy-Vee",
-                     "fault":  "WRONG-PRODUCT",
-                     "detail":  "count-mismatch",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Hy-Vee facial tissue, 280 ct., $4.99",
-                     "link":  "Hy-Vee Soft Facial Tissue"
+                     "link":  ""
                  },
                  {
                      "id":  "feta",
@@ -564,10 +564,10 @@
                  {
                      "id":  "storage-bags",
                      "store":  "Hy-Vee",
-                     "fault":  "WRONG-PRODUCT",
-                     "detail":  "count-mismatch",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Ziploc storage bags, 105 or 108 ct., $4.49",
-                     "link":  "Ziploc® Brand Gallon Freezer Storage Bags, Stay Open Design, Easy to Fill, 28 count"
+                     "link":  ""
                  },
                  {
                      "id":  "storage-bags",
@@ -1290,6 +1290,6 @@
                      "link":  ""
                  }
              ],
-    "accuracy_violations":  3,
-    "coverage_violations":  144
+    "accuracy_violations":  0,
+    "coverage_violations":  147
 }

@@ -1,4 +1,4 @@
-﻿<#
+<#
   resolve-chips-hyvee.ps1 - close Hy-Vee NO-LINK board chips headlessly.
 
   Input : out\url-inputs\chips-hyvee.json (from build-chips-from-tileintegrity.ps1:
@@ -73,7 +73,8 @@ foreach ($c in $chips) {
     $cQty = 0.0; $pQty = 0.0
     $cpu = Get-LinkPerUnit -size ([string]$c.size) -unit ([string]$c.unit) -price 1 -name ([string]$c.match)
     $ppu = Get-LinkPerUnit -size $sz -unit ([string]$c.unit) -price 1 -name $nm
-    if ($cpu -and $ppu -and [double]$cpu -gt 0 -and [double]$ppu -gt 0) {
+    if ($null -eq $cpu -or $null -eq $ppu -or [double]$cpu -le 0 -or [double]$ppu -le 0) { continue }   # UNKNOWN IS NOT A PASS: an uncomputable size cannot prove identity; the 144ct-vs-280ct tissues bug shipped through this exact gap
+if ($true) {
       $cQty = 1.0 / [double]$cpu; $pQty = 1.0 / [double]$ppu
       if ([math]::Abs($cQty - $pQty) / [math]::Max($cQty, 0.0001) -gt 0.06) { continue }
     }
