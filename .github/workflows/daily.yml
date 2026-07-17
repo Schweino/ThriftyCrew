@@ -26,8 +26,44 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # 0 = FULL history, on purpose. checkout's default is a depth-1 shallow clone, which is fine until the
+          # commit step has to `git rebase` onto a main that has moved - a shallow clone can be missing the merge
+          # base, and that rebase is the exact step that killed 2026-07-16. It also lets the gate below actually
+          # find the bot's last commit. Do not shallow this to save a few seconds on a job that runs for 25 min.
+          fetch-depth: 0
+
+      # ALREADY DONE TODAY? THEN A SCHEDULED RUN IS A DOUBLE-RUN.
+      # The day's work is once-daily by definition, so if smp-pipeline-bot has already committed today the
+      # schedule has nothing to add - it would just re-pull every store (Freshop throttles HARD on a second
+      # pass; its wipeout guard then refuses the partial and the run achieves exactly nothing) and burn another
+      # ~25 windows-runner minutes at 2x billing.
+      # This is what makes MANUAL TESTING SAFE: trigger a run whenever you like, and the schedule stands down
+      # for the rest of that day on its own. No "disable the workflow and remember to re-enable it" - a
+      # disabled workflow nobody switches back on is a worse outage than the bug it was hiding.
+      # It only ever stands down for a SUCCESS: if the manual run failed to commit, there is no commit to find,
+      # and the schedule runs normally. workflow_dispatch always runs - that is the override.
+      - name: Skip if the pipeline already committed today
+        id: gate
+        shell: powershell
+        run: |
+          if ($env:GITHUB_EVENT_NAME -ne 'schedule') {
+            Write-Host "Manual run (workflow_dispatch) - always proceeds."
+            "skip=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+            exit 0
+          }
+          $today = (Get-Date -Format 'yyyy-MM-dd')
+          $last  = (git log --author="smp-pipeline-bot" -1 --format=%cd --date=format:'%Y-%m-%d' 2>$null)
+          Write-Host "today=$today  last smp-pipeline-bot commit=$last"
+          if ($last -eq $today) {
+            Write-Host "::notice::The pipeline already committed today ($last). Scheduled run standing down - a second pass would only re-throttle the stores and burn runner minutes."
+            "skip=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          } else {
+            "skip=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          }
 
       - name: Run the daily pipeline
+        if: steps.gate.outputs.skip != 'true'
         env:
           GHOST_ADMIN_KEY: ${{ secrets.GHOST_ADMIN_KEY }}
         shell: powershell
@@ -63,7 +99,7 @@ jobs:
       #  * Retry: main can move again between fetch and push (that is the race that caused this).
       #  * `HEAD:main` pushes correctly even if we somehow end up detached.
       - name: Commit refreshed prices + feed
-        if: always()
+        if: always() && steps.gate.outputs.skip != 'true'
         shell: powershell
         run: |
           git config user.name  "smp-pipeline-bot"
@@ -95,8 +131,10 @@ jobs:
             exit 1
           }
 
+      # Skipped by the gate too: a stood-down run committed nothing, so asserting "the feed changed today" would
+      # fail a run that did exactly what it was told. The gate only stands down when the feed is ALREADY fresh.
       - name: Assert the feed refreshed today (fails -> GitHub emails you)
-        if: always()
+        if: always() && steps.gate.outputs.skip != 'true'
         shell: powershell
         run: |
           $today = (Get-Date).ToString('yyyy-MM-dd')
