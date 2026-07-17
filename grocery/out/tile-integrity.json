@@ -1,13 +1,13 @@
 ﻿{
-    "generated":  "2026-07-17 07:41",
+    "generated":  "2026-07-17 07:56",
     "board":  "comparison-2026-07-17.json",
     "total_tiles":  2083,
-    "violations":  265,
+    "violations":  262,
     "by_store":  {
                      "Walmart":  {
-                                     "coverage":  12,
+                                     "coverage":  9,
                                      "tiles":  366,
-                                     "violations":  12
+                                     "violations":  9
                                  },
                      "Fareway":  {
                                      "coverage":  16,
@@ -107,14 +107,6 @@
                  },
                  {
                      "id":  "apples",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Fresh Gala Apples, 3 lb Bag",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "apples",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -184,14 +176,6 @@
                      "detail":  "board $3.607 vs link $3.9433  (8.5% off)",
                      "board":  "Smithfield Applewood Smoked Bacon Fresh Pork Loin Filet, 23 oz, 2 Pk.",
                      "link":  "Member\u0027s Mark Naturally Hickory Smoked Bacon 3 lbs."
-                 },
-                 {
-                     "id":  "bacon",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Great Value Naturally Hickory Smoked Thick Cut Sliced Bacon, 16 oz",
-                     "link":  ""
                  },
                  {
                      "id":  "baked-beans",
@@ -1570,14 +1554,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "dried-oregano",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Great Value Oregano Leaves, 0.87 oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "paper-plates",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -2163,5 +2139,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  242
+    "coverage_violations":  239
 }
