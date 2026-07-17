@@ -291,6 +291,10 @@ function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$board
   }
   if ($url) { return "<a class='pg-see' href='" + (HtmlEnc $url) + "' target='_blank' rel='nofollow noopener'>See item &rarr;</a>" }
   $nm = CleanItemName $boardItem
+  # A SALE cell with no link is usually a flyer-only item: the weekly ad IS the source and there is no product
+  # page to open. Say so, so an honest gap doesn't read as a missing link. (Everyday no-link cells stay plain -
+  # those ARE gaps we intend to close.)
+  if ($nm -and $cellType -eq 'sale') { return "<span class='pg-itemname' title='" + $nm + " - priced from the weekly ad'>" + $nm + " <span class='pg-adonly'>weekly ad</span></span>" }
   if ($nm) { return "<span class='pg-itemname' title='" + $nm + "'>" + $nm + "</span>" }
   return ''
 }
@@ -757,6 +761,7 @@ $css = @'
 .pg-sale{display:inline-block;margin-top:4px;font-size:.62em;font-weight:700;color:#b23b2e;background:rgba(178,59,46,.09);border:1px solid rgba(178,59,46,.22);padding:1px 6px;border-radius:5px;white-space:nowrap}
 .pg-see{margin-top:5px;font-size:.68em;font-weight:700;color:var(--green-d);text-decoration:none;border-top:1px dotted var(--bd);padding-top:5px}
 .pg-itemname{display:block;margin-top:5px;font-size:.66em;font-weight:500;color:var(--mut);border-top:1px dotted var(--bd);padding-top:5px;line-height:1.3}
+.pg-adonly{display:inline-block;font-size:.88em;font-weight:600;color:var(--mut);border:1px solid var(--bd);border-radius:3px;padding:0 4px;margin-left:4px;white-space:nowrap;opacity:.85}
 .pg-see:hover{text-decoration:underline}
 .pg-chip.is-best .pg-see{color:var(--green-d)}
 .pg-cta{margin:34px 0 8px;padding:22px 24px;border-radius:14px;background:var(--green-t);border:1px solid var(--bd);text-align:center}

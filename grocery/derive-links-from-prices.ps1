@@ -38,6 +38,7 @@ param([switch]$Apply, [string]$OutDir = "")
 $ErrorActionPreference = 'Stop'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 if (-not $OutDir) { $OutDir = Join-Path $root 'out' }
+. (Join-Path $root 'pu-lib.ps1')   # store what you audit: every entry re-prices through the same lib prune uses
 
 $STORES = @(
   @{ store = 'Hy-Vee'; glob = 'hyvee-regular-*.json' }
@@ -48,6 +49,43 @@ $STORES = @(
   @{ store = 'Aldi'; glob = 'aldi-regular-*.json' }
   @{ store = 'Fareway'; glob = 'fareway-regular-*.json' }
 )
+
+# The board is NOT priced from out\regular\ alone: compare-deals also ingests out\bakers\bakers-deals-*.json,
+# out\fareway\fareway-deals-*.json, and EVERY out\sams\sams-deals-*.json inside a 14-day window (Sam's is
+# captured in CAPTCHA-walled partial slices, so one file never covers the catalog). When this script indexed
+# only out\regular\, every cell priced from those files read as "no matching row" and its identity was thrown
+# away - 1,296 fresh Sam's rows carrying sams_item_id produced zero links. That is the two-pipeline bug this
+# script exists to kill, one level down. Index the SAME files the engine priced from.
+#   Order = price authority: for Sam's the deals captures ARE the primary source (its regular file is a
+#   29-row vestige), newest capture first; elsewhere regular leads and deal files fill gaps.
+#   First writer wins per name|size key, so a fresher capture's row beats an older one.
+function Get-StoreFiles([string]$store) {
+  $reg = Get-ChildItem (Join-Path $OutDir ('regular\' + (($STORES | Where-Object { $_.store -eq $store }).glob))) -EA SilentlyContinue |
+    Where-Object { $_.BaseName -match '-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1
+  $files = @()
+  switch ($store) {
+    "Sam's Club" {
+      foreach ($f in (Get-ChildItem (Join-Path $OutDir 'sams\sams-deals-*.json') -EA SilentlyContinue | Sort-Object Name -Descending)) {
+        if ($f.BaseName -notmatch '(\d{4}-\d{2}-\d{2})$') { continue }
+        if ([math]::Abs(([datetime]$Matches[1] - (Get-Date)).TotalDays) -gt 14) { continue }
+        $files += $f.FullName
+      }
+      if ($reg) { $files += $reg.FullName }
+    }
+    "Baker's" {
+      if ($reg) { $files += $reg.FullName }
+      $f = Get-ChildItem (Join-Path $OutDir 'bakers\bakers-deals-*.json') -EA SilentlyContinue | Sort-Object Name -Desc | Select-Object -First 1
+      if ($f) { $files += $f.FullName }
+    }
+    'Fareway' {
+      if ($reg) { $files += $reg.FullName }
+      $f = Get-ChildItem (Join-Path $OutDir 'fareway\fareway-deals-*.json') -EA SilentlyContinue | Sort-Object Name -Desc | Select-Object -First 1
+      if ($f) { $files += $f.FullName }
+    }
+    default { if ($reg) { $files += $reg.FullName } }
+  }
+  return $files
+}
 
 function Get-RowUrl($store, $r) {
   # A URL the row already holds always wins - it was observed, not built.
@@ -63,7 +101,13 @@ function Get-RowUrl($store, $r) {
       }
     }
     'Walmart' { if ($r.item_id -and ([string]$r.item_id) -match '^\d+$') { return ('https://www.walmart.com/ip/' + [string]$r.item_id) } }
-    "Sam's Club" { if ($r.item_id -and ([string]$r.item_id) -match '^\d+$') { return ('https://www.samsclub.com/ip/' + [string]$r.item_id) } }
+    "Sam's Club" {
+      # the quarantine-recovery rows stamp the id as sams_item_id; older rows used item_id. Accept both.
+      # Bare /ip/<id> is PROVEN (2026-07-17, Brad's browser): Sam's 301s it to the canonical /ip/<slug>/<id>
+      # and renders the exact product; a bogus id renders an "Uh-oh" page, so the shape cannot silently lie.
+      $sid = if ($r.sams_item_id) { [string]$r.sams_item_id } elseif ($r.item_id) { [string]$r.item_id } else { '' }
+      if ($sid -match '^\d+$') { return ('https://www.samsclub.com/ip/' + $sid) }
+    }
   }
   return $null
 }
@@ -77,17 +121,21 @@ $puDoc = Get-Content $puPath -Raw | ConvertFrom-Json
 # name-keyed map silently keeps the last - the bug family this repo has now hit six times.
 $rowsByStore = @{}
 foreach ($sp in $STORES) {
-  $f = Get-ChildItem (Join-Path $OutDir ('regular\' + $sp.glob)) -EA SilentlyContinue |
-    Where-Object { $_.BaseName -match '-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Desc | Select-Object -First 1
-  if (-not $f) { continue }
   $ix = @{}
-  foreach ($r in @((Get-Content $f.FullName -Raw | ConvertFrom-Json).deals)) {
-    $ix[(([string]$r.item).Trim() + '|' + ([string]$r.size).Trim())] = $r
+  foreach ($file in (Get-StoreFiles $sp.store)) {
+    foreach ($r in @((Get-Content $file -Raw | ConvertFrom-Json).deals)) {
+      $key = (([string]$r.item).Trim() + '|' + ([string]$r.size).Trim())
+      # duplicate name+size = same product; keep the copy that can actually be linked. A row carrying
+      # identity beats one that doesn't; among carriers the freshest file (listed first) wins.
+      $have = $ix[$key]
+      if (-not $have) { $ix[$key] = $r }
+      elseif (-not (Get-RowUrl $sp.store $have)) { if (Get-RowUrl $sp.store $r) { $ix[$key] = $r } }
+    }
   }
-  $rowsByStore[$sp.store] = $ix
+  if ($ix.Count) { $rowsByStore[$sp.store] = $ix }
 }
 
-$derived = 0; $already = 0; $noIdentity = @{}; $rowMissing = 0
+$derived = 0; $already = 0; $noIdentity = @{}; $rowMissing = 0; $unwritable = 0
 $changes = New-Object System.Collections.Generic.List[string]
 foreach ($row in $cmp) {
   $id = [string]$row.id
@@ -106,6 +154,18 @@ foreach ($row in $cmp) {
     }
     $cur = $puDoc.items.$id.$store
     if ($cur -and ([string]$cur.url) -eq $url) { $already++; continue }
+    # STORE WHAT YOU AUDIT. Before writing, re-price the entry exactly as tomorrow's pruner will. An entry the
+    # pruner cannot compute a per-unit for would be written today and deleted tomorrow - churn that reads as
+    # link flapping. Refuse it here and count it, so the gap is visible instead of laundered through prune.
+    if (([string]$s.type) -eq 'everyday') {
+      $sp = 0.0; [void][double]::TryParse((([string]$r.ad_price) -replace '[^0-9.]',''), [ref]$sp)
+      $lpu = Get-LinkPerUnit -size ([string]$r.size) -unit ([string]$row.unit) -price $sp -name ([string]$r.item)
+      $bpu = [double]$s.per_unit
+      if ($null -eq $lpu -or ($bpu -gt 0 -and ([math]::Abs($lpu - $bpu) / $bpu -gt 0.32) -and ([math]::Abs($lpu - $bpu) -gt 0.005))) {
+        $unwritable++
+        continue
+      }
+    }
     $changes.Add(('  {0,-13}{1,-24}{2}' -f $store, $id, ([string]$s.item)))
     $derived++
     if ($Apply) {
@@ -126,6 +186,7 @@ Write-Output ("links DERIVED from the price row : " + $derived)
 foreach ($c in ($changes | Select-Object -First 15)) { Write-Output $c }
 if ($changes.Count -gt 15) { Write-Output ('  ... and ' + ($changes.Count - 15) + ' more') }
 Write-Output ("already correct                  : " + $already)
+Write-Output ("refused at write time            : " + $unwritable + "  (the pruner could not verify these; writing them would be churn)")
 Write-Output ("board cell has no matching row   : " + $rowMissing + "  (ad-only cells - the ad is the source; there is no product page)")
 Write-Output ''
 Write-Output 'priced rows carrying NO product identity (these CANNOT be linked - the puller/capture dropped it):'

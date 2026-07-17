@@ -116,6 +116,7 @@
                         "(thigh|drumstick)s?[^,]*chicken"
                     ],
         "exclude":  [
+                        "\\bdrumsticks?\\b",
                         "boneless skinless.*breast",
                         "breaded",
                         "cooked",
@@ -740,6 +741,7 @@
                         "\\bbutter\\b"
                     ],
         "exclude":  [
+                        "garlic butter",
                         "peanut",
                         "almond\\s+butter",
                         "cashew",
@@ -1620,6 +1622,8 @@
                         "avocado"
                     ],
         "exclude":  [
+                        "\\broll\\b",
+                        "\\bsushi\\b",
                         "\\boil\\b",
                         "guacamole",
                         "\\brice\\b",
@@ -4298,6 +4302,7 @@
                         "\\btomato(?:es)?\\b"
                     ],
         "exclude":  [
+                        "\\bbouillon\\b",
                         "\\bcanned\\b",
                         "\\bsauce\\b",
                         "paste",
@@ -5223,6 +5228,8 @@
                         "\\bgarlic\\b"
                     ],
         "exclude":  [
+                        "\\bquinoa\\b",
+                        "\\brice\\b",
                         "powder",
                         "\\bsalt\\b",
                         "minced",
@@ -6556,6 +6563,7 @@
                         "sugar,\\s*brown"
                     ],
         "exclude":  [
+                        "\\bseasoning\\b",
                         "oatmeal",
                         "\\btart\\b",
                         "syrup",
@@ -7609,6 +7617,7 @@
                         "\\bmayo\\b"
                     ],
         "exclude":  [
+                        "\\bsriracha\\b",
                         "miracle\\s+whip",
                         "\\bdip\\b",
                         "aioli",
@@ -7827,6 +7836,7 @@
                         "\\bsalt\\b"
                     ],
         "exclude":  [
+                        "garlic salt",
                         "salted",
                         "chips",
                         "vinegar",
@@ -12166,7 +12176,7 @@
         "label":  "Ribeye Steak",
         "unit":  "lb",
         "band_min":  6,
-        "band_max":  22,
+        "band_max":  26,
         "include":  [
                         "rib\\s*-?\\s*eye",
                         "ribeye"
@@ -20482,6 +20492,8 @@
                         "(?:100%\\s+)?juice,?\\s+(?:natural,?\\s+)?apple\\b"
                     ],
         "exclude":  [
+                        "\\bvariety\\b",
+                        "juice drink",
                         "cider\\s+vinegar",
                         "\\bboxes\\b.{0,10}organic",
                         "sparkling",

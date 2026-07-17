@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-07-17 07:56",
+    "generated":  "2026-07-17 09:11",
     "board":  "comparison-2026-07-17.json",
     "total_tiles":  2083,
-    "violations":  262,
+    "violations":  178,
     "by_store":  {
                      "Walmart":  {
                                      "coverage":  9,
@@ -11,7 +11,7 @@
                                  },
                      "Fareway":  {
                                      "coverage":  16,
-                                     "tiles":  323,
+                                     "tiles":  324,
                                      "violations":  16
                                  },
                      "Family Fare":  {
@@ -25,9 +25,9 @@
                                     "violations":  37
                                 },
                      "Sam\u0027s Club":  {
-                                             "coverage":  99,
-                                             "tiles":  314,
-                                             "violations":  122
+                                             "coverage":  38,
+                                             "tiles":  313,
+                                             "violations":  38
                                          },
                      "Aldi":  {
                                   "coverage":  12,
@@ -41,14 +41,6 @@
                                       }
                  },
     "rows":  [
-                 {
-                     "id":  "ground-beef-8020",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $4.77 vs link $5.56  (14.2% off)",
-                     "board":  "80%/20% Ground Chuck Chub, Case, priced per pound",
-                     "link":  "Member\u0027s Mark 80/20 Ground Beef Roll, priced per pound"
-                 },
                  {
                      "id":  "ground-beef-8020",
                      "store":  "Baker\u0027s",
@@ -90,22 +82,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "almond-milk",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Silk Unsweetened Almond Milk, 32 fl. oz., 6 pk.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "apple-juice",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Snapple Juice Drink Variety Pack, 16 fl. oz., 24 pk.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "apples",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -138,44 +114,12 @@
                      "link":  ""
                  },
                  {
-                     "id":  "artichoke-hearts",
+                     "id":  "bagels",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Whole Artichoke Hearts, 33.5 oz.",
+                     "board":  "Thomas\u0027 Plain Bagels, 12 pk.",
                      "link":  ""
-                 },
-                 {
-                     "id":  "avocados",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark by FujiSan Cucumber Avocado Roll, 15 pcs.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "baby-food",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Beech-Nut Veggies and Fruities Stage 2 Baby Food Pouch, Variety Pack, 3.5 oz., 18 ct.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "baby-wipes",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Huggies Natural Care Baby Wipes, Cucumber and Green Tea, 17 pk., 1088 Wipes",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "bacon",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $3.607 vs link $3.9433  (8.5% off)",
-                     "board":  "Smithfield Applewood Smoked Bacon Fresh Pork Loin Filet, 23 oz, 2 Pk.",
-                     "link":  "Member\u0027s Mark Naturally Hickory Smoked Bacon 3 lbs."
                  },
                  {
                      "id":  "baked-beans",
@@ -187,26 +131,18 @@
                  },
                  {
                      "id":  "bar-soap",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Irish Spring Bar Soap, Original  Clean, 4 oz., 20 ct.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bar-soap",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Dove Bar Soap",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "bbq-sauce",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Sweet Baby Ray\u0027s Original Barbecue Sauce, 1 gal.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "black-olives",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Lindsay Sliced Black Ripe Olives, 6.5 oz., 6 pk.",
                      "link":  ""
                  },
                  {
@@ -215,30 +151,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Thats Smart Black Pepper",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "black-pepper",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.4433 vs link $0.481  (7.8% off)",
-                     "board":  "Member\u0027s Mark Fine Ground Black Pepper, 18 oz.",
-                     "link":  "Member\u0027s Mark Coarse Black Pepper, 5-Pound"
-                 },
-                 {
-                     "id":  "blackberries",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Blackberries 18 oz.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "bleach",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Clorox Performance Bleach, 3 ct., 363 fl. oz.",
                      "link":  ""
                  },
                  {
@@ -258,43 +170,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "blueberries",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Naturipe\u0027s Berry Peachy Blueberries, Dry Pint",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "lotion",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Johnson\u0027s Moisturizing Pink Baby Lotion with Coconut Oil, 33.8 fl. oz.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "body-wash",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Irish Spring Body Wash for Men, Original Clean, 30 fl. oz., 2 pk.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "body-wash",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Dove Body Wash",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "chicken-breast",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Boneless Skinless Chicken Breast, Case, priced per pound",
                      "link":  ""
                  },
                  {
@@ -338,14 +218,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "bouillon",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Knorr Chicken Flavor Bouillon 70.4 oz.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "bread",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -378,14 +250,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "broccoli",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Broccoli Normandy 4 lbs.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "beef-stew",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -399,14 +263,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "DINTY MOORE Beef Stew With Potatoes \u0026 Carrots,",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "canned-black-beans",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Black Beans 12 lbs.",
                      "link":  ""
                  },
                  {
@@ -434,6 +290,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "canned-corn",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Del Monte Golden Sweet Whole Kernel Corn, 15.25 oz., 8 pk.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "diced-tomatoes",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Member\u0027s Mark Diced Tomatoes in Tomato Juice, 14.5 oz., 12 pk.",
+                     "link":  ""
+                 },
+                 {
                      "id":  "fruit-cocktail",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -447,6 +319,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Fareway In Heavy Syrup Fruit Cocktail15.25 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-mushrooms",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Giorgio Mushroom Pieces and Stems, 4 oz., 12 ct.",
                      "link":  ""
                  },
                  {
@@ -482,30 +362,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "canned-pineapple",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.12 vs link $0.1255  (4.4% off)",
-                     "board":  "Dole Tropical Gold Pineapple Chunks, 15.25 oz., 6 pk.",
-                     "link":  "Dole Tropical Gold Pineapple Chunks"
-                 },
-                 {
-                     "id":  "canned-pinto-beans",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Pinto Beans 12 lbs.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "canned-pumpkin",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Libby\u0027s 100% Pure Pumpkin, 29 oz., 3 pk.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "canned-pumpkin",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -514,11 +370,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "canned-yams",
+                     "id":  "canned-salmon",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Bruce\u0027s Cut Yams, 29 oz., 4 pk.",
+                     "board":  "Black Top Premium Wild Alaska Pink Salmon 14.75 oz., 4 pk.",
                      "link":  ""
                  },
                  {
@@ -555,26 +411,10 @@
                  },
                  {
                      "id":  "cat-food",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.8194 vs link $0.7494  (9.3% off)",
-                     "board":  "Meow Mix, Original Choice Flavor Adult Dry Cat Food, Heart Healthy \u0026 Oral Care Formula, 32 lbs.",
-                     "link":  "Friskies Land \u0026 Sea Adventures Adult Dry Cat Food"
-                 },
-                 {
-                     "id":  "cat-food",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Iams Dry Cat Food",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "cheese-crackers",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Cheez-It Original Baked Snack Crackers, 24 oz., 2 pk.",
                      "link":  ""
                  },
                  {
@@ -584,14 +424,6 @@
                      "detail":  "priced tile with no See-item link",
                      "board":  "Pepperidge Farm Goldfish",
                      "link":  ""
-                 },
-                 {
-                     "id":  "cherries",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $2.94 vs link $2.8233  (4.1% off)",
-                     "board":  "Sweet Red Cherries, 3 lbs.",
-                     "link":  "Sweet Red Cherries"
                  },
                  {
                      "id":  "chicken-noodle-soup",
@@ -606,7 +438,7 @@
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Fresh Antibiotic Free Family Pack Chicken Drumsticks",
+                     "board":  "Kirkwood Family Pack Bone-In Chicken Thighs, per lb",
                      "link":  ""
                  },
                  {
@@ -618,35 +450,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "chili-powder",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Chili Powder, 20 oz.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "chocolate-milk",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "TruMoo Whole Chocolate Milk Half Gallon",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "chuck-roast",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $6.64 vs link $7.47  (11.1% off)",
-                     "board":  "Whole Beef Chuck Roll, Case, priced per pound",
-                     "link":  "Member\u0027s Mark USDA Choice Angus Beef Boneless Chuck Roast"
-                 },
-                 {
-                     "id":  "cocktail-sauce",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Shrimp Tray with Cocktail Sauce, priced per pound",
                      "link":  ""
                  },
                  {
@@ -682,22 +490,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "corned-beef-hash",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Hormel Mary Kitchen Corned Beef Hash, 14 oz., 6 pk.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "crackers",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Lance Variety Pack Sandwich Crackers, 40 pk.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "crackers",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -722,12 +514,20 @@
                      "link":  ""
                  },
                  {
-                     "id":  "croissants",
+                     "id":  "cream-of-chicken-soup",
                      "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.455 vs link $0.4967  (8.4% off)",
-                     "board":  "Member\u0027s Mark Chocolate Croissants, 12 ct.",
-                     "link":  "Member\u0027s Mark All Butter Sandwich Croissants"
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Campbell\u0027s Condensed Cream of Chicken Soup 10.5 oz., 8 pk.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cream-of-mushroom-soup",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Campbell\u0027s Cream of Mushroom Soup 10.5 oz., 8 pk.",
+                     "link":  ""
                  },
                  {
                      "id":  "croissants",
@@ -735,14 +535,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Private Selection Fresh Baked Butter Croissants",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "diapers",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Luvs Pro Level Leak Protection Diapers, Sizes 1-8",
                      "link":  ""
                  },
                  {
@@ -778,14 +570,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "sponges",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.895 vs link $0.6238  (43.5% off)",
-                     "board":  "O-Cedar Multi-Use No-Scratch Scrunge Sponge, 24 ct.",
-                     "link":  "Scotch-Brite Heavy Duty Scrub Sponges"
-                 },
-                 {
                      "id":  "dishwasher-detergent",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -803,26 +587,10 @@
                  },
                  {
                      "id":  "disinfecting-wipes",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Disinfecting Wipes, Variety Pack, 4 pk., 312 ct.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "disinfecting-wipes",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Lysol wipes or disinfectant spray, 80 ct. or 12.5 oz., $5.99",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "dog-food",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Purina Dog Chow Complete, Chicken Flavor, Adult Dry Dog Food, 48 lbs.",
                      "link":  ""
                  },
                  {
@@ -831,14 +599,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Duchess Mini Frosted Donuts, 3 oz, 12 pk.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "drain-cleaner",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Drano Max Ultra Gel Drain Opener, 2 pk., 160 fl. oz.",
                      "link":  ""
                  },
                  {
@@ -858,27 +618,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "energy-drinks",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "NOS High Performance Energy Drink, 16 fl. oz., 24 pk.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "facial-tissues",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy-Vee facial tissue, 280 ct., $4.99",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "feminine-pads",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Always Ultra Thin Overnight Pads with Wings, Size 5, 80 ct.",
                      "link":  ""
                  },
                  {
@@ -890,35 +634,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "fish-sticks",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Gorton’s Super Crunchy Fish Sticks, Frozen, 64 ct.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "floor-cleaner",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark No Rinse Floor Cleaner, 1 gal., Choose Pack Size",
-                     "link":  ""
-                 },
-                 {
                      "id":  "storage-bags",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Ziploc storage bags, 105 or 108 ct., $4.49",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "storage-bags",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Ziploc Brand Gallon \u0026 Quart  Storage Bags, Stay Open Design, Easy to Fill, 204 ct.",
                      "link":  ""
                  },
                  {
@@ -936,14 +656,6 @@
                      "detail":  "priced tile with no See-item link",
                      "board":  "Jimmy Dean Croissant Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen 8 Ct",
                      "link":  ""
-                 },
-                 {
-                     "id":  "chicken-nuggets",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.1496 vs link $0.1709  (12.5% off)",
-                     "board":  "Tyson Breaded Chicken Nuggets, Frozen, 5 lbs.",
-                     "link":  "Country Pride Tempura Chicken Nuggets, Frozen, 5-Pound"
                  },
                  {
                      "id":  "chicken-nuggets",
@@ -967,14 +679,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Jacks Pepperoni Pizza Thin Crust",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "frozen-pizza",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Red Baron Pepperoni Classic Crust Frozen Pizza, 61.81 oz., 3 pk.",
                      "link":  ""
                  },
                  {
@@ -1002,14 +706,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "garlic",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Seeds of Change Certified Organic Quinoa and Brown Rice with Garlic 8.5 oz., 6 pk.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "garlic-powder",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
@@ -1023,14 +719,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Thats Smart Garlic Powder",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "garlic-powder",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Garlic Powder, 22.5 oz.",
                      "link":  ""
                  },
                  {
@@ -1050,36 +738,12 @@
                      "link":  ""
                  },
                  {
-                     "id":  "glass-cleaner",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Windex Original Glass Cleaner, 1 spray bottle + 128 fl. oz. Refill",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "granola",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Quaker Simply Granola, 34.5 oz., 2 pk.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "granola-bars",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy Vee Chewy Granola Bars Variety Pack 18Ct",
                      "link":  ""
-                 },
-                 {
-                     "id":  "sugar",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.5992 vs link $0.658  (8.9% off)",
-                     "board":  "Member\u0027s Mark Premium Cane Sugar, 25 lbs.",
-                     "link":  "Member\u0027s Mark Granulated Sugar, 10-Pound"
                  },
                  {
                      "id":  "sugar",
@@ -1090,59 +754,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "grapes",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $1.995 vs link $2.29  (12.9% off)",
-                     "board":  "Grape Nuts Original, 64 oz.",
-                     "link":  "Red Seedless Grapes, 3 lbs."
-                 },
-                 {
-                     "id":  "green-olives",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Pimento Stuffed Manzanilla Olives, 2 pk.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "ground-cinnamon",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Pillsbury Cinnamon Rolls with Cinnabon Icing 13 oz., 4 pk.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "ground-cinnamon",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "That\u0027s Smart! Ground Cinnamon 2.5 Oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "ground-cumin",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Ground Cumin, 16 oz.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "ground-pork",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark 80/20 Ground Pork, priced per pound",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "ground-turkey",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Jennie-O Lean Ground Turkey, Case ( 20 lbs.)",
                      "link":  ""
                  },
                  {
@@ -1195,18 +811,18 @@
                  },
                  {
                      "id":  "hamburger-buns",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Sara Lee Restaurant Style White Hamburger Buns, 16 ct.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "hamburger-buns",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "8 Ct Wheat Hamburger Buns",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "hand-soap",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Aloe Vera Moisturizing Hand Soap, 80 fl. oz.",
                      "link":  ""
                  },
                  {
@@ -1218,14 +834,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "honey-mustard",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Foodservice Honey Mustard, 128 oz.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "hot-dog-buns",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
@@ -1234,11 +842,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "hot-dogs",
+                     "id":  "hot-dog-buns",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Ball Park Classic Original Length Hot Dogs, 24 ct.",
+                     "board":  "Sara Lee Restaurant Style White Hot Dog Buns, 16 ct.",
                      "link":  ""
                  },
                  {
@@ -1250,19 +858,19 @@
                      "link":  ""
                  },
                  {
+                     "id":  "hummus",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Member\u0027s Mark Classic Hummus Singles 2.5 oz., 16 ct.",
+                     "link":  ""
+                 },
+                 {
                      "id":  "ice-cream",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Vanilla Ice Cream Our Family",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "iced-tea",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Milo\u0027s Famous Sweet Tea,1 gal.",
                      "link":  ""
                  },
                  {
@@ -1298,28 +906,12 @@
                      "link":  ""
                  },
                  {
-                     "id":  "jarred-gravy",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Chef-mate Country Sausage Gravy, 105 oz.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "kidney-beans",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Dakota\u0027s Pride Dark Red Kidney Beans",
                      "link":  ""
-                 },
-                 {
-                     "id":  "kielbasa",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $3.3233 vs link $3.76  (11.6% off)",
-                     "board":  "Hillshire Farm Lit\u0027l Smokies Smoked Sausage, 3 lbs.",
-                     "link":  "Hillshire Farm Beef Smoked Sausage Bundle Pack"
                  },
                  {
                      "id":  "eggs",
@@ -1330,43 +922,19 @@
                      "link":  ""
                  },
                  {
-                     "id":  "stain-remover",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.14 vs link $0.1716  (18.4% off)",
-                     "board":  "Shout Advanced Action Gel Laundry Stain Remover, 22 oz. Trigger \u0026 60 oz. refill",
-                     "link":  "OxiClean Max Force Laundry Stain Remover Spray + Refill"
-                 },
-                 {
-                     "id":  "lemonade",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Nature\u0027s Twist Sugar Free Lemonade Variety Pack, 16.9 fl. oz., 24 pk.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "lettuce",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Romaine Hearts, 6 ct.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "lime-juice",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "McCormick Mayonesa Mayonnaise with Lime Juice, 28 fl. oz., 2 pk.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "lime-juice",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Mc Cormick Mayonesa (Mayonnaise) With Lime Juice 28 Fl Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "egg-whites",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Member\u0027s Mark Liquid Egg Whites 16 oz., 6 pk.",
                      "link":  ""
                  },
                  {
@@ -1386,27 +954,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "marshmallows",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Lucky Charms with Marshmallows, 46 oz.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "mayonnaise",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Our Family Mayo, Real 30 Fl Oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "microwave-popcorn",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Orville Redenbacher\u0027s Movie Butter Microwave Popcorn, Mini Bags, 1.5 oz., 36 pk.",
                      "link":  ""
                  },
                  {
@@ -1434,22 +986,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "milk",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark 2% Reduced Fat Milk 1 gal.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "minced-garlic",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Minced Garlic, 48 oz.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "miracle-whip",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -1464,14 +1000,6 @@
                      "detail":  "priced tile with no See-item link",
                      "board":  "Miracle Whip Light Dressing 30 Fl Oz",
                      "link":  ""
-                 },
-                 {
-                     "id":  "mouthwash",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.0984 vs link $0.1082  (9% off)",
-                     "board":  "Crest Scope Outlast Mouthwash, Fresh Mint, 33.8 fl. oz., 3 pk.",
-                     "link":  "Crest Pro-Health Advantage Mouthwash, Smooth Mint"
                  },
                  {
                      "id":  "muffins",
@@ -1530,27 +1058,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "onion-powder",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Onion Powder, 21 oz.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "orange-juice",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "100% Orange Juice With Calcium \u0026 Vitamin D",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "oranges",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Navel Oranges, 6 lbs.",
                      "link":  ""
                  },
                  {
@@ -1568,14 +1080,6 @@
                      "detail":  "priced tile with no See-item link",
                      "board":  "Sparkle Pick A Size Modern White 2 Ply Paper Towels 8 Ea",
                      "link":  ""
-                 },
-                 {
-                     "id":  "paprika",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.446 vs link $0.47  (5.1% off)",
-                     "board":  "Member\u0027s Mark Spanish Paprika, 5 lbs.",
-                     "link":  "Member\u0027s Mark Spanish Style Paprika, 18 oz."
                  },
                  {
                      "id":  "paprika",
@@ -1610,30 +1114,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "pears",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $1.7325 vs link $1.324  (30.9% off)",
-                     "board":  "Bartlett Pears, 4 lbs.",
-                     "link":  "D\u0027Anjou Pears"
-                 },
-                 {
-                     "id":  "pesto",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Italian Basil Pesto, 22 oz.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "pickled-jalapenos",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "La Costena® Jalapeno Nacho Slices, 100 oz.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "pineapple",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -1658,44 +1138,12 @@
                      "link":  ""
                  },
                  {
-                     "id":  "pizza-sauce",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Cafe Pizza Sauce, Refrigerated, Case, 4 ct.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "popsicles",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Organic Freezer Pops, 52 ct.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "pork-chops",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy-Vee Midwest Pork bone-in assorted chops, $3.99 lb.",
                      "link":  ""
-                 },
-                 {
-                     "id":  "pork-shoulder",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $1.94 vs link $1.98  (2% off)",
-                     "board":  "Bone-In Pork Boston Butt, Case, priced per pound",
-                     "link":  "Member\u0027s Mark Bone In Pork Boston Butt, Vacuum Pack"
-                 },
-                 {
-                     "id":  "pretzels",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.1413 vs link $0.133  (6.2% off)",
-                     "board":  "Utz Mini Twist Pretzels, 60 oz.",
-                     "link":  "Utz Mini Twist Pretzels"
                  },
                  {
                      "id":  "pretzels",
@@ -1707,26 +1155,10 @@
                  },
                  {
                      "id":  "protein-bars",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Nature Valley Peanut Butter Dark Chocolate Protein Chewy Bars, 30 ct.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "protein-bars",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Aloha Protein Bars",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "queso",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Bay Valley White Queso Cheese Sauce, 106 oz.",
                      "link":  ""
                  },
                  {
@@ -1762,12 +1194,12 @@
                      "link":  ""
                  },
                  {
-                     "id":  "ribeye-steak",
+                     "id":  "refried-beans",
                      "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $13.97 vs link $14.97  (6.7% off)",
-                     "board":  "Member’s Mark USDA Choice Angus Beef Bone In Cowboy Ribeye Steak, priced per pound",
-                     "link":  "Member\u0027s Mark USDA Choice Angus Beef Boneless Ribeye Steak"
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Old El Paso Traditional Refried Beans 16 oz., 6 pk.",
+                     "link":  ""
                  },
                  {
                      "id":  "ribeye-steak",
@@ -1775,14 +1207,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Black Angus Choice Beef Ribeye Steak",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "rice-cakes",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Lundberg Family Farms® Organic Lightly Salted Rice Cakes, 7.1 oz., 3 pk.",
                      "link":  ""
                  },
                  {
@@ -1795,26 +1219,10 @@
                  },
                  {
                      "id":  "russet-potatoes",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Russet Potatoes, 10 lbs.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "russet-potatoes",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger Russet Potatoes Bag (10 lb)",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "salmon",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Garlic Pesto Salmon Side, priced per pound",
                      "link":  ""
                  },
                  {
@@ -1835,14 +1243,6 @@
                  },
                  {
                      "id":  "shampoo",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.2222 vs link $0.2613  (14.9% off)",
-                     "board":  "Garnier Fructis Sleek \u0026 Shine Shampoo \u0026 Conditioner, 40 fl. oz., 2 pk.",
-                     "link":  "Pantene Pro-V Ultimate Care 3-in-1 Shampoo"
-                 },
-                 {
-                     "id":  "shampoo",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -1855,22 +1255,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Lysol Mango \u0026 Hibiscus Bathroom Cleaner 32 Fl Oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "shredded-cheese",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Part-Skim Shredded Mozzarella Cheese 5 lbs.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "shrimp",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Nissin Hot and Spicy Shrimp Bowl, 3.27 oz., 12 pk.",
                      "link":  ""
                  },
                  {
@@ -1890,35 +1274,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "soda",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Coca-Cola Cherry Soda Variety Pack 12 fl. oz., 36 pk.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "sparkling-water",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.0269 vs link $0.0329  (18.3% off)",
-                     "board":  "Member\u0027s Mark Sparkling Water Variety Pack, 17 fl. oz., 24 pk.",
-                     "link":  "bubly Sparkling Water Variety Pack"
-                 },
-                 {
                      "id":  "sparkling-water",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Liquid Death Sparkling Water",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "spinach",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Organic Baby Spinach, 16 oz.",
                      "link":  ""
                  },
                  {
@@ -1930,14 +1290,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "strawberries",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Monster Energy Zero Sugar, Strawberry Shot, 16 fl. oz., 24 pk.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "string-cheese",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -1946,35 +1298,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "stuffing-mix",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kinder\u0027s Brown Butter \u0026 Herbs Homestyle Stuffing Mix, 24 oz.",
-                     "link":  ""
-                 },
-                 {
                      "id":  "sweet-potatoes",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "each (estimated)each (est.)Sweet Potatoes",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "condensed-milk",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Magnolia Sweetened Condensed Milk, 14 oz., 6 pk.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "maple-syrup",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Mrs. Butterworths Original Syrup, 36 oz., 2 pk.",
+                     "board":  "Sweet Potatoes",
                      "link":  ""
                  },
                  {
@@ -1991,14 +1319,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy Vee Black Tea Bags",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "toilet-bowl-cleaner",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Clorox Toilet Bowl Cleaner with Bleach, Rain Clean, 6pk., 144 fl. oz.",
                      "link":  ""
                  },
                  {
@@ -2038,7 +1358,7 @@
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Knorr Granulated Tomato Chicken Bouillon, 40.5 oz.",
+                     "board":  "Tomatoes on the Vine, 3-Pound",
                      "link":  ""
                  },
                  {
@@ -2047,6 +1367,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Our Family Hint Of Lime Tortilla Chips 13 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "tortillas",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Mission 6\" Fajita Flour Tortillas, 40 ct.",
                      "link":  ""
                  },
                  {
@@ -2074,12 +1402,12 @@
                      "link":  ""
                  },
                  {
-                     "id":  "rice",
+                     "id":  "whipped-cream",
                      "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.4396 vs link $0.4592  (4.3% off)",
-                     "board":  "Member\u0027s Mark Long Grain White Rice, 50 lbs.",
-                     "link":  "Member\u0027s Mark Long Grain White Rice, 25-Pound"
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Member\u0027s Mark Original Dairy Whipped Topping 15 oz., 3 pk.",
+                     "link":  ""
                  },
                  {
                      "id":  "white-vinegar",
@@ -2139,5 +1467,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  239
+    "coverage_violations":  178
 }
