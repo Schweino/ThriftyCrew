@@ -1245,8 +1245,7 @@ if ($histDoc) {
 .pg-gate-ic{font-size:2.1em;line-height:1;margin:0 0 6px}
 .pg-gate h3{font-size:1.28em;color:#16263F;margin:0 0 8px}
 .pg-gate-body{font-size:.92em;color:#3a4658;line-height:1.55;margin:0 auto 14px;max-width:34em}
-.pg-gate-price{font-size:1.05em;font-weight:800;color:#1E3A5F;margin:0 0 14px}
-.pg-gate-price span{font-weight:600;color:#8a94a6;font-size:.86em}
+.pg-gate-price{font-size:.86em;font-weight:600;color:#5a6577;margin:9px 0 0}
 .pg-gate-join{display:block;width:100%;background:#E2A43C;color:#16263F;border:none;border-radius:10px;padding:.85em 1.6em;font-size:1.02em;font-weight:800;cursor:pointer;font-family:inherit;text-decoration:none;text-align:center;box-sizing:border-box}
 .pg-gate-join:hover{background:#d9992f}
 .pg-gate-year{margin-top:11px;font-size:.9em;font-weight:700;color:#1E3A5F;background:none;border:none;cursor:pointer;font-family:inherit;text-decoration:underline;text-underline-offset:2px;padding:2px}
@@ -1374,10 +1373,10 @@ if ($histDoc) {
     h += '<div class="pg-gate">';
     h += '<div class="pg-gate-ic" aria-hidden="true">&#128276;</div>';
     h += '<h3>Price alerts are a member perk</h3>';
-    h += '<p class="pg-gate-body">Get one short email the moment ' + esc(name.toLowerCase()) + ' hits the lowest price we have tracked in Omaha. Low-price alerts come with a Thrifty Crew membership, along with every tool, all our recipes, and the full price history.</p>';
-    h += '<p class="pg-gate-price">Just $1/month <span>or $10/year</span></p>';
-    h += '<a href="' + PAID_MO + '" class="pg-gate-join" id="pg-gate-mo">Join the Crew for $1/month</a>';
-    h += '<div><button type="button" class="pg-gate-year" id="pg-gate-yr">or join yearly for $10</button></div>';
+    h += '<p class="pg-gate-body">Get one short email the moment ' + esc(name.toLowerCase()) + ' hits the lowest price we have tracked in Omaha. Alerts come with your Thrifty Crew membership, along with every tool, all the recipes, and the full price history.</p>';
+    h += '<a href="' + PAID_MO + '" class="pg-gate-join" id="pg-gate-mo">Join the Crew &rarr;</a>';
+    h += '<p class="pg-gate-price">$1 a month, or $10 for the whole year.</p>';
+    h += '<div><button type="button" class="pg-gate-year" id="pg-gate-yr">Pay for the year instead</button></div>';
     h += '<p class="pg-gate-fine">Not a trial, not an intro rate. Cancel anytime in two clicks.</p>';
     h += '<div><button type="button" class="pg-gate-later">Maybe later</button></div>';
     h += '</div></div>';
