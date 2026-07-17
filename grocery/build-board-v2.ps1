@@ -139,6 +139,8 @@ $T = @'
   .v2 .row-best .p{font-size:15.5px;font-weight:800;letter-spacing:-.01em}
   .v2 .row-best .s{font-size:11px;color:var(--mut);white-space:nowrap}
   .v2 .row-best .s.sale{color:var(--sale);font-weight:700}
+  .v2 .row-chev{flex:0 0 auto;color:var(--mut);font-size:12px;margin-left:3px;transition:transform .2s}
+  .v2 .row.exp .row-chev{transform:rotate(180deg);color:var(--gold)}
   .v2 .row-add{flex:0 0 auto;width:48px;border:none;border-left:1px solid var(--line);background:none;color:var(--gold);font-size:22px;font-weight:600;cursor:pointer;display:grid;place-items:center}
   .v2 .row-add.on{color:var(--green)}
   .v2 .row-add:active{background:var(--surface2)}
@@ -243,7 +245,7 @@ $T = @'
   function rowHTML(it){ var b=best(it),inl=!!LIST[it.id];
     return '<div class="row" data-id="'+it.id+'" data-nm="'+esc(it.n.toLowerCase())+'">'+
       '<button class="row-main" data-act="exp"><div class="row-name"><div class="n">'+esc(it.n)+'</div><div class="u">per '+esc(it.u)+'</div></div>'+
-      '<div class="row-best"><div class="p">'+fmt(b.p,it.u)+'</div><div class="s'+(b.t==="sale"?' sale':'')+'">'+sh(b.s)+(b.t==="sale"?' · sale':'')+'</div></div></button>'+
+      '<div class="row-best"><div class="p">'+fmt(b.p,it.u)+'</div><div class="s'+(b.t==="sale"?' sale':'')+'">'+sh(b.s)+(b.t==="sale"?' · sale':'')+'</div></div><span class="row-chev">&#9662;</span></button>'+
       '<button class="row-add'+(inl?' on':'')+'" data-act="add" aria-label="Add to list">'+(inl?'✓':'+')+'</button>'+
       '<div class="stores">'+chipHTML(it)+'</div></div>'; }
   (function(){var html="";CATS.forEach(function(c,ci){
