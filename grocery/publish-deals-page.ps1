@@ -156,6 +156,22 @@ if ($prc -ne 0) {
 }
 Write-Output ("PUBLISHED omaha-grocery-prices  (visibility=$vis, $commCount commodities, week " + [string]$doc.week_of + ")")
 
+# ---- dynamic og:image: shared links preview THIS WEEK'S real drops, not a static logo. The week param
+# makes scrapers (Reddit/FB cache per-URL) re-fetch when the week changes. Non-fatal on failure. ----
+try {
+  $ogPng = Join-Path (Split-Path $root -Parent) 'public\share\omaha-drops.png'
+  if (Test-Path $ogPng) {
+    $ogUrl = 'https://smp-feed.ancient-snow-93df.workers.dev/share/omaha-drops.png?w=' + [string]$doc.week_of
+    $jwt2 = New-GhostJWT $adminKey
+    $cur = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/?fields=id,updated_at,og_image" -Headers @{Authorization="Ghost $jwt2";'Accept-Version'='v5.0'} -TimeoutSec 30).posts[0]
+    if ($cur -and ([string]$cur.og_image) -ne $ogUrl) {
+      $body = @{ posts = @(@{ og_image = $ogUrl; updated_at = [string]$cur.updated_at }) } | ConvertTo-Json -Depth 4
+      Invoke-RestMethod -Method PUT -Uri "$apiUrl/ghost/api/admin/posts/$($cur.id)/" -Headers @{Authorization="Ghost $jwt2";'Accept-Version'='v5.0';'Content-Type'='application/json'} -Body $body -TimeoutSec 30 | Out-Null
+      Write-Output ("og:image set to this week's drops graphic (?w=" + [string]$doc.week_of + ")")
+    }
+  }
+} catch { Write-Output ("og:image update skipped: " + $_.Exception.Message) }
+
 # ---- companion page: the per-store guide rides every board publish (non-fatal; its own coverage gate applies) ----
 try {
   & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-store-guide.ps1') | Out-Null

@@ -441,6 +441,10 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         }
       }
 
+      # weekly shareable drops graphic (also the board post's og:image). Refresh BEFORE publish so the
+      # og:image step sees today's png. Non-fatal: a share graphic must never block prices.
+      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'build-share-image.ps1') | ForEach-Object { Log ('share: ' + $_) } } catch { Log ('share-image threw: ' + $_.Exception.Message) }
+
       if ($guardsBlocked) {
         # already logged + alerted above; fall through without publishing
       } elseif (-not $boardChanged) {
@@ -456,6 +460,12 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           if (-not $NoAlert) { try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery page HELD (coverage) - $asofS" -Body "A refreshed board failed the coverage gate on $asofS (a store's pull produced too few commodities), so the live page was NOT updated - nothing bad was published. Check the store pulls." | Out-Null } catch { Log ('held-alert threw: ' + $_.Exception.Message) } }
         }
         else { Log "AUTO-PUBLISH ERROR (rc=$pubrc) - Ghost upsert or build failed; live page NOT updated"; $summary += 'ERROR     auto-publish failed (page NOT updated) - see ad-cycle-log.txt'; if (-not $NoAlert) { try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery publish FAILED (rc=$pubrc) - $asofS" -Body "publish-deals-page.ps1 returned $pubrc on $asofS (Ghost upsert or page build failed). The live page was NOT updated with today's price change. Check ad-cycle-log.txt." | Out-Null } catch {} } }
+      }
+
+      # ---- Friday digest: the weekly board email the capture CTAs promise. Only when guards passed (never
+      # email prices the gates would not publish), Fridays only, idempotent inside the script. Non-fatal.
+      if (-not $guardsBlocked) {
+        try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-friday-digest.ps1') | ForEach-Object { Log ('digest: ' + $_) } } catch { Log ('digest threw: ' + $_.Exception.Message) }
       }
 
       # ---- CONSISTENCY GUARD: enforce "the price shown == the product the 'See item' link opens", every day.

@@ -415,6 +415,13 @@ $sb = New-Object System.Text.StringBuilder
 if (-not $Embed) { [void]$sb.Append("<h1>Omaha's Cheapest Groceries This Week</h1>") }   # Embed: Ghost post title is the H1
 [void]$sb.Append("<p class='pg-sub'>The cheapest place to buy every grocery staple in Omaha this week. Seven stores, checked every morning, ranked cheapest first.</p>")
 [void]$sb.Append("<p class='pg-note'>Lowest verified price at each store, sale or everyday, checked against the store's own ad or site. Sam's Club prices need a membership.</p>")
+# THE RETURN RHYTHM: ads flip Wednesdays, so today's sale prices have a real deadline. Saying so gives every
+# visit urgency and every visitor a reason to come back on a schedule - the habit is the product.
+[void]$sb.Append("<p class='pg-cycle'>Sale prices end when the new ads drop <strong>Wednesday morning</strong>. This board is re-checked every morning by 7am.</p>")
+# THE ASK, where the value is. 1,182 visitors in 30 days reached this page and the first signup control sat
+# 70% down, below 378 rows - one converted. This is the product-shaped ask: the thing they are already using,
+# delivered to them. Ghost Portal handles the signup (data-portal opens the free-tier modal).
+[void]$sb.Append("<div class='pg-capture'><div class='pg-capture-txt'><strong>Get this board every Friday, free.</strong> The updated prices and biggest drops, in your inbox before you shop the weekend.</div><a class='pg-capture-btn' href='#/portal/signup/free' data-portal='signup/free'>Email me the board &rarr;</a></div>")
 [void]$sb.Append("<p class='pg-suggest'><a href='/suggest-an-item/'>Suggest an item for us to start tracking! &rarr;</a></p></header>")
 
 # store-status strip is built here but rendered at the BOTTOM of the page (it is transparency fine print;
@@ -680,6 +687,23 @@ $css = @'
   font-family:inherit,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;font-size:1.6rem}
 .pg-wrap *{box-sizing:border-box}
 .pg-suggest{font-size:.98em;margin:.6em 0 0;color:var(--ink)}
+.pg-cycle{font-size:.88em;color:var(--ink);margin:.45em 0 0}
+.pg-cycle strong{color:#b23b2e}
+.pg-capture{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:.8em 0 .2em;padding:12px 16px;border:1.5px solid var(--gold,#c9a227);border-radius:12px;background:rgba(201,162,39,.06)}
+.pg-capture-txt{flex:1 1 260px;font-size:.92em;line-height:1.35;color:var(--ink)}
+.pg-capture-btn{flex:0 0 auto;display:inline-block;padding:9px 16px;border-radius:9px;background:var(--ink);color:#fff !important;font-weight:700;font-size:.9em;text-decoration:none;white-space:nowrap}
+.pg-capture-btn:hover{opacity:.88}
+.pg-bar{position:fixed;left:0;right:0;bottom:-120px;z-index:9999;display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--ink);color:#fff;box-shadow:0 -4px 18px rgba(0,0,0,.18);transition:bottom .35s ease}
+.pg-bar.pg-bar-on{bottom:0}
+.pg-bar-txt{flex:1 1 auto;font-size:.86em;line-height:1.3}
+.pg-bar-btn{flex:0 0 auto;padding:8px 14px;border-radius:8px;background:var(--gold,#c9a227);color:var(--ink) !important;font-weight:700;font-size:.86em;text-decoration:none;white-space:nowrap}
+.pg-bar-x{flex:0 0 auto;background:none;border:none;color:#fff;opacity:.7;font-size:1.25em;line-height:1;padding:4px 8px;cursor:pointer}
+.pg-bar-x:hover{opacity:1}
+.pg-plan-send{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px dotted var(--bd)}
+.pg-plan-mailto,.pg-plan-copy{display:inline-block;padding:7px 13px;border-radius:8px;font-weight:700;font-size:.86em;text-decoration:none;border:1.5px solid var(--ink);color:var(--ink);background:#fff;cursor:pointer}
+.pg-plan-mailto:hover,.pg-plan-copy:hover{background:var(--ink);color:#fff}
+.pg-plan-weekly{font-size:.82em;color:var(--mut)}
+.pg-plan-weekly a{font-weight:700}
 .pg-suggest a{color:var(--green-d);font-weight:700;text-decoration:none;border-bottom:2px solid var(--green-t)}
 .pg-suggest a:hover{border-bottom-color:var(--green)}
 .pg-head h1{font-size:2em;line-height:1.12;margin:.1em 0 .12em;color:var(--ink);text-wrap:balance;letter-spacing:-.01em}
@@ -842,6 +866,35 @@ a.pg-adonly:hover,a.pg-adonly:focus{opacity:1;border-color:var(--mut)}
 $js = @'
 <script>
 (function(){
+  // ---- free-email bar: slides in AFTER real scrolling (they are getting value), never for members,
+  // dismiss sticks for 30 days. A bottom bar under thumb reach, not a popup - Reddit closes popups. ----
+  try {
+    var isMember = document.cookie.indexOf('ghost-members-ssr') > -1;
+    var snooze = 0; try { snooze = parseInt(localStorage.getItem('tcBarSnooze') || '0', 10); } catch(e){}
+    if (!isMember && (Date.now() - snooze) > 30*24*3600*1000) {
+      var bar = document.createElement('div');
+      bar.className = 'pg-bar';
+      bar.innerHTML = "<span class='pg-bar-txt'><strong>Like this board?</strong> Get the updated prices every Friday, free.</span>" +
+        "<a class='pg-bar-btn' href='#/portal/signup/free' data-portal='signup/free'>Email it to me</a>" +
+        "<button class='pg-bar-x' aria-label='Dismiss'>&times;</button>";
+      document.body.appendChild(bar);
+      var shown = false;
+      function maybeShow(){
+        if (shown) return;
+        var y = window.scrollY || document.documentElement.scrollTop;
+        if (y > 2200) { shown = true; bar.classList.add('pg-bar-on'); window.removeEventListener('scroll', maybeShow); }
+      }
+      window.addEventListener('scroll', maybeShow, {passive:true});
+      bar.querySelector('.pg-bar-x').addEventListener('click', function(){
+        bar.classList.remove('pg-bar-on');
+        try { localStorage.setItem('tcBarSnooze', String(Date.now())); } catch(e){}
+      });
+      bar.querySelector('.pg-bar-btn').addEventListener('click', function(){
+        bar.classList.remove('pg-bar-on');
+      });
+    }
+  } catch(e){}
+
   // ---- unified filtering: one state (active pill + search query), one apply pass ----
   var state={pill:'all',cats:null,q:''};
   function applyFilters(){
@@ -1078,7 +1131,25 @@ $js = @'
       html+='<div class="pg-plan-store"><b>'+esc(st)+'</b> <span>('+byStore[st].length+(byStore[st].length===1?' item':' items')+')</span><p>'+byStore[st].map(esc).join(', ')+'</p></div>';
     });
     if(uncovered.length){ html+='<p class="pg-plan-un">Not sold at these stores: '+uncovered.map(esc).join(', ')+'</p>'; }
+    // END-OF-JOB CAPTURE. The list lives in this tab and dies with it - "send it to my phone" is a receipt
+    // the shopper WANTS, not a marketing ask. mailto/copy need no backend and cannot be abused as a mail
+    // relay; the weekly line beside them is the habit hook.
+    var listTxt='My Thrifty Crew shopping trip ('+new Date().toLocaleDateString()+')\n';
+    best.combo.slice().sort(function(a,b){return byStore[b].length-byStore[a].length;}).forEach(function(st){
+      if(byStore[st].length===0) return;
+      listTxt+='\n'+st.toUpperCase()+'\n'; byStore[st].forEach(function(n){ listTxt+='  - '+n+'\n'; });
+    });
+    listTxt+='\nPrices checked this morning: https://www.thriftycrew.com/omaha-grocery-prices/';
+    html+='<div class="pg-plan-send">'+
+      '<a class="pg-plan-mailto" href="mailto:?subject='+encodeURIComponent('My shopping trip - Thrifty Crew')+'&body='+encodeURIComponent(listTxt)+'">Email me this list</a>'+
+      '<button class="pg-plan-copy" id="pg-plan-copy">Copy list</button>'+
+      '<span class="pg-plan-weekly">Want the whole board every Friday? <a href="#/portal/signup/free" data-portal="signup/free">Free email &rarr;</a></span></div>';
     document.getElementById('pg-plan-out').innerHTML=html;
+    var cpBtn=document.getElementById('pg-plan-copy');
+    if(cpBtn){ cpBtn.addEventListener('click',function(){
+      try { navigator.clipboard.writeText(listTxt).then(function(){ cpBtn.textContent='Copied!'; setTimeout(function(){cpBtn.textContent='Copy list';},2000); }); }
+      catch(e){ cpBtn.textContent='Press Ctrl+C'; }
+    }); }
     lastK=k;
   }
 })();
