@@ -1,13 +1,13 @@
 ﻿{
-    "generated":  "2026-07-17 07:32",
+    "generated":  "2026-07-17 07:41",
     "board":  "comparison-2026-07-17.json",
     "total_tiles":  2083,
-    "violations":  279,
+    "violations":  265,
     "by_store":  {
                      "Walmart":  {
-                                     "coverage":  27,
+                                     "coverage":  12,
                                      "tiles":  366,
-                                     "violations":  27
+                                     "violations":  12
                                  },
                      "Fareway":  {
                                      "coverage":  16,
@@ -25,9 +25,9 @@
                                     "violations":  37
                                 },
                      "Sam\u0027s Club":  {
-                                             "coverage":  98,
+                                             "coverage":  99,
                                              "tiles":  314,
-                                             "violations":  121
+                                             "violations":  122
                                          },
                      "Aldi":  {
                                   "coverage":  12,
@@ -202,14 +202,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "balsamic-vinegar",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Pompeian Balsamic Vinegar - 16 fl oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "bar-soap",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -263,14 +255,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Clorox Performance Bleach, 3 ct., 363 fl. oz.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "blue-cheese-dressing",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Wish-Bone Chunky Blue Cheese Salad Dressing, 15 fl oz",
                      "link":  ""
                  },
                  {
@@ -482,14 +466,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "hominy",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Juanitaâ€™s Foods White Hominy, 110 oz, Can",
-                     "link":  ""
-                 },
-                 {
                      "id":  "canned-pasta",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -503,14 +479,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "(4 pack) Chef Boyardee Overstuffed Beef Ravioli in Pasta Sau",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "canned-pears",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Great Value Canned Pear Halves in Heavy Syrup, 29 oz Can",
                      "link":  ""
                  },
                  {
@@ -543,14 +511,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Member\u0027s Mark Pinto Beans 12 lbs.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "canned-potatoes",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Del Monte Whole Canned Potatoes, Canned Vegetables, 14.5 oz",
                      "link":  ""
                  },
                  {
@@ -667,14 +627,6 @@
                  },
                  {
                      "id":  "chili-powder",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Great Value Chili Powder, 3 oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "chili-powder",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -727,14 +679,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Maxwell House or Yuban coffee, 23.1 to 27.9 oz., $11.98",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "coffee",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Folgers Classic Roast Ground Coffee",
                      "link":  ""
                  },
                  {
@@ -1091,14 +1035,6 @@
                  },
                  {
                      "id":  "garlic-powder",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Great Value Garlic Powder, 3.4 oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "garlic-powder",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -1186,14 +1122,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "green-olives",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Great Value Stuffed Manzanilla Olives with Minced Pimento, 1",
-                     "link":  ""
-                 },
-                 {
                      "id":  "ground-cinnamon",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -1207,22 +1135,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "That\u0027s Smart! Ground Cinnamon 2.5 Oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "ground-cinnamon",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Great Value Ground Cinnamon, 2.5 oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "ground-cumin",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Great Value Ground Cumin, 2.5 oz",
                      "link":  ""
                  },
                  {
@@ -1442,14 +1354,6 @@
                      "link":  "OxiClean Max Force Laundry Stain Remover Spray + Refill"
                  },
                  {
-                     "id":  "lemon-juice",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "ReaLemon 100% Lemon Juice, 32 fl oz bottle",
-                     "link":  ""
-                 },
-                 {
                      "id":  "lemonade",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -1631,14 +1535,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Fareway Extra Virgin Olive Oil",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "onion-powder",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Great Value Onion Powder, 3.25 oz",
                      "link":  ""
                  },
                  {
@@ -1914,14 +1810,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "rice-vinegar",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Mizkan Rice Vinegar for Cooking, 12 fl oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "rotisserie-chicken",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -2130,11 +2018,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "teriyaki-sauce",
-                     "store":  "Walmart",
+                     "id":  "toilet-bowl-cleaner",
+                     "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Kikkoman Teriyaki BBQ Original 20.5 oz Glass Bottle",
+                     "board":  "Clorox Toilet Bowl Cleaner with Bleach, Rain Clean, 6pk., 144 fl. oz.",
                      "link":  ""
                  },
                  {
@@ -2275,5 +2163,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  256
+    "coverage_violations":  242
 }

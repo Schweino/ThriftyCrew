@@ -1168,7 +1168,14 @@
                                                           "size":  "16.9 fl oz",
                                                           "name":  "Nothing But The Truth Organic Balsamic Vinegar",
                                                           "verified":  "2026-07-17 Hy-Vee search API (storeId 1465)"
-                                                      }
+                                                      },
+                                           "Walmart":  {
+                                                           "url":  "https://www.walmart.com/ip/10320860",
+                                                           "name":  "Pompeian Balsamic Vinegar - 16 fl oz",
+                                                           "price":  "$3.84",
+                                                           "size":  "16 fl oz",
+                                                           "verified":  "2026-07-17 Walmart warm-browser board-match; per-unit reconciles to the board"
+                                                       }
                                        },
                   "banana-peppers":  {
                                          "commodity":  "Banana Peppers / Pepperoncini",
@@ -1779,7 +1786,14 @@
                                                               "price":  "$2.58",
                                                               "size":  "16 fl oz",
                                                               "verified":  "2026-07-16 DERIVED from the price row (same record the board priced)"
-                                                          }
+                                                          },
+                                               "Walmart":  {
+                                                               "url":  "https://www.walmart.com/ip/55500592",
+                                                               "name":  "Wish-Bone Chunky Blue Cheese Salad Dressing, 15 fl oz",
+                                                               "price":  "$2.44",
+                                                               "size":  "15 fl oz",
+                                                               "verified":  "2026-07-17 Walmart warm-browser board-match; per-unit reconciles to the board"
+                                                           }
                                            },
                   "body-wash":  {
                                     "commodity":  "body-wash",
@@ -2994,7 +3008,14 @@
                                                       "size":  "29 oz",
                                                       "name":  "That\u0027s Smart! In Light Syrup Bartlett Bartlett Pear Halves 29 oz",
                                                       "verified":  "2026-07-16 Hy-Vee search API (storeId 1465)"
-                                                  }
+                                                  },
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/10451005",
+                                                       "name":  "Great Value Canned Pear Halves in Heavy Syrup, 29 oz Can",
+                                                       "price":  "$2.78",
+                                                       "size":  "29 oz",
+                                                       "verified":  "2026-07-17 Walmart warm-browser board-match; per-unit reconciles to the board"
+                                                   }
                                    },
                   "canned-peas":  {
                                       "commodity":  "canned-peas",
@@ -3108,7 +3129,14 @@
                                                          "size":  "15 oz",
                                                          "name":  "That\u0027s Smart Whole White Potatoes",
                                                          "verified":  "2026-07-16 Hy-Vee search API (storeId 1465)"
-                                                     }
+                                                     },
+                                          "Walmart":  {
+                                                          "url":  "https://www.walmart.com/ip/10318792",
+                                                          "name":  "Del Monte Whole Canned Potatoes, Canned Vegetables, 14.5 oz Can",
+                                                          "price":  "$1.67",
+                                                          "size":  "14.5 oz",
+                                                          "verified":  "2026-07-17 Walmart warm-browser board-match; per-unit reconciles to the board"
+                                                      }
                                       },
                   "canned-pumpkin":  {
                                          "commodity":  "Canned Pumpkin (100% puree)",
@@ -4291,7 +4319,14 @@
                                                       "price":  "$1.25",
                                                       "size":  "2.75 oz",
                                                       "verified":  "2026-07-16 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/157643393",
+                                                       "name":  "Great Value Chili Powder, 3 oz",
+                                                       "price":  "$1.08",
+                                                       "size":  "3 oz",
+                                                       "verified":  "2026-07-17 Walmart warm-browser board-match; per-unit reconciles to the board"
+                                                   }
                                    },
                   "chipotle-in-adobo":  {
                                             "commodity":  "Chipotle Peppers in Adobo",
@@ -4758,7 +4793,14 @@
                                                          "price":  17.88,
                                                          "size":  "43.5 oz",
                                                          "name":  "Folgers Classic Medium Roast Ground Coffee, 43.5 oz."
-                                                     }
+                                                     },
+                                 "Walmart":  {
+                                                 "url":  "https://www.walmart.com/ip/971362035",
+                                                 "name":  "Folgers Classic Roast Medium Roast Ground Coffee, Limited Edition Canister for Americas 250th Anniversary, 40.3 oz",
+                                                 "price":  "$17.76",
+                                                 "size":  "40.3 oz",
+                                                 "verified":  "2026-07-17 Walmart warm-browser board-match; per-unit reconciles to the board"
+                                             }
                              },
                   "coffee-creamer":  {
                                          "commodity":  "coffee-creamer",
@@ -8226,6 +8268,13 @@
                                                         "size":  "10.5 oz",
                                                         "name":  "Badia Spices Garlic Powder 10.5 oz",
                                                         "board_pu":  0.38
+                                                    },
+                                        "Walmart":  {
+                                                        "url":  "https://www.walmart.com/ip/676979470",
+                                                        "name":  "Great Value Garlic Powder, 3.4 oz",
+                                                        "price":  "$1.08",
+                                                        "size":  "3.4 oz",
+                                                        "verified":  "2026-07-17 Walmart warm-browser board-match; per-unit reconciles to the board"
                                                     }
                                     },
                   "gelatin":  {
@@ -8798,7 +8847,14 @@
                                                       "size":  "15 oz",
                                                       "name":  "Pimiento Stuffed Spanish Manzanilla Olives",
                                                       "verified":  "2026-07-16 Hy-Vee search API (storeId 1465)"
-                                                  }
+                                                  },
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/10315439",
+                                                       "name":  "Great Value Stuffed Manzanilla Olives with Minced Pimento, 10 oz",
+                                                       "price":  "$3.12",
+                                                       "size":  "10 oz",
+                                                       "verified":  "2026-07-17 Walmart warm-browser board-match; per-unit reconciles to the board"
+                                                   }
                                    },
                   "green-onions":  {
                                        "commodity":  "Green Onions",
@@ -8951,7 +9007,14 @@
                                                          "size":  "2.5 oz",
                                                          "name":  "That\u0027s Smart Ground Cinnamon",
                                                          "verified":  "2026-07-17 Hy-Vee search API (storeId 1465)"
-                                                     }
+                                                     },
+                                          "Walmart":  {
+                                                          "url":  "https://www.walmart.com/ip/533272737",
+                                                          "name":  "Great Value Kosher Ground Cinnamon, 2.5 oz",
+                                                          "price":  "$1.27",
+                                                          "size":  "2.5 oz",
+                                                          "verified":  "2026-07-17 Walmart warm-browser board-match; per-unit reconciles to the board"
+                                                      }
                                       },
                   "ground-coriander":  {
                                            "commodity":  "Ground Coriander",
@@ -9021,7 +9084,14 @@
                                                       "price":  "$2.49",
                                                       "size":  "2 oz",
                                                       "verified":  "2026-07-16 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/985501095",
+                                                       "name":  "Great Value Ground Cumin, 2.5 oz",
+                                                       "price":  "$1.37",
+                                                       "size":  "2.5 oz",
+                                                       "verified":  "2026-07-17 Walmart warm-browser board-match; per-unit reconciles to the board"
+                                                   }
                                    },
                   "ground-ginger":  {
                                         "commodity":  "Ground Ginger",
@@ -9555,7 +9625,14 @@
                                                 "price":  "$1.89",
                                                 "size":  "15.5 oz",
                                                 "verified":  "2026-07-16 DERIVED from the price row (same record the board priced)"
-                                            }
+                                            },
+                                 "Walmart":  {
+                                                 "url":  "https://www.walmart.com/ip/26599478",
+                                                 "name":  "Juanita’s Foods White Hominy, 110 oz, Can",
+                                                 "price":  "$4.68",
+                                                 "size":  "110 oz",
+                                                 "verified":  "2026-07-17 Walmart warm-browser board-match; per-unit reconciles to the board"
+                                             }
                              },
                   "honey":  {
                                 "commodity":  "Honey",
@@ -10900,7 +10977,14 @@
                                                               "name":  "ReaLemon 100% Lemon Juice (2 pk)",
                                                               "board_pu":  0.0675,
                                                               "recipe_pu":  0.135
-                                                          }
+                                                          },
+                                      "Walmart":  {
+                                                      "url":  "https://www.walmart.com/ip/10294762",
+                                                      "name":  "ReaLemon 100% Lemon Juice, 32 fl oz bottle",
+                                                      "price":  "$3.57",
+                                                      "size":  "32 fl oz",
+                                                      "verified":  "2026-07-17 Walmart warm-browser board-match; per-unit reconciles to the board"
+                                                  }
                                   },
                   "lemons":  {
                                  "commodity":  "lemons",
@@ -11943,7 +12027,14 @@
                                                       "price":  "$1.25",
                                                       "size":  "2.75 oz",
                                                       "verified":  "2026-07-16 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/705601418",
+                                                       "name":  "Great Value Onion Powder, 3.25 oz",
+                                                       "price":  "$1.08",
+                                                       "size":  "3.25 oz",
+                                                       "verified":  "2026-07-17 Walmart warm-browser board-match; per-unit reconciles to the board"
+                                                   }
                                    },
                   "onions":  {
                                  "commodity":  "Yellow / Sweet Onions",
@@ -14419,7 +14510,14 @@
                                                       "size":  "12 floz",
                                                       "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)",
                                                       "board_pu":  0.3908
-                                                  }
+                                                  },
+                                       "Walmart":  {
+                                                       "url":  "https://www.walmart.com/ip/220935703",
+                                                       "name":  "Mizkan Rice Vinegar for Cooking, 12 fl oz",
+                                                       "price":  "$2.92",
+                                                       "size":  "12 fl oz",
+                                                       "verified":  "2026-07-17 Walmart warm-browser board-match; per-unit reconciles to the board"
+                                                   }
                                    },
                   "roasted-red-peppers":  {
                                               "commodity":  "Roasted Red Peppers",
@@ -16366,7 +16464,14 @@
                                                                  "size":  "27.5 oz.",
                                                                  "name":  "Kinder\u0027s Teriyaki Marinade Sauce",
                                                                  "recipe_pu":  0.21
-                                                             }
+                                                             },
+                                         "Walmart":  {
+                                                         "url":  "https://www.walmart.com/ip/10307461",
+                                                         "name":  "Kikkoman Teriyaki BBQ Original 20.5 oz Glass Bottle",
+                                                         "price":  "$5.43",
+                                                         "size":  "20.5 oz",
+                                                         "verified":  "2026-07-17 Walmart warm-browser board-match; per-unit reconciles to the board"
+                                                     }
                                      },
                   "tilapia":  {
                                   "commodity":  "tilapia",
@@ -16511,12 +16616,6 @@
                                                              "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)",
                                                              "board_pu":  0.1246
                                                          },
-                                              "Sam\u0027s Club":  {
-                                                                      "url":  "https://www.samsclub.com/ip/Lysol-Advanced-Toilet-Bowl-Gel-Cleaner-32-fl-oz-4-pk/1920083566",
-                                                                      "price":  11.48,
-                                                                      "size":  "4 pk 32 fl oz",
-                                                                      "name":  "Lysol Advanced Toilet Bowl Gel Cleaner"
-                                                                  },
                                               "Walmart":  {
                                                               "url":  "https://www.walmart.com/ip/Great-Value-Toilet-Bowl-Cleaners-Fresh-Scent-24-Fluid-Ounce/154650870",
                                                               "price":  1.92,
