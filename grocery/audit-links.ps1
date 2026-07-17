@@ -88,7 +88,12 @@ foreach ($p in $pd.items.PSObject.Properties) {
     $best = $null; $bestBpu = $null; $bestUnit = $null; $bestLpu = $null; $anyComputable = $false
     foreach ($o in $occ) {
       $bpu = [double]$o.pu; if ($bpu -le 0) { continue }
-      $lpu = LinkPerUnit ([string]$lnk.size) ([string]$o.unit) ([double]$lnk.price)
+      # link prices are stored as display strings ("$7.54") by some resolvers - strip before casting,
+      # exactly as prune-bad-links does. A hard [double] cast here crashed the whole audit on the first
+      # $-prefixed price, which silently un-audited every link after it.
+      $lp = 0.0; [void][double]::TryParse((([string]$lnk.price) -replace '[^0-9.]',''), [ref]$lp)
+      if ($lp -le 0) { continue }
+      $lpu = LinkPerUnit ([string]$lnk.size) ([string]$o.unit) ($lp)
       if ($null -eq $lpu) { continue }
       $anyComputable = $true
       $d = [math]::Abs($lpu - $bpu) / $bpu
