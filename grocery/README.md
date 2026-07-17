@@ -85,6 +85,16 @@ chip that has one.
 4. **Stamp** `stamp-board-pu.ps1` (records the current board per-unit onto every link so step 1 stays quiet).
 5. **Build + publish** `build-deals-page.ps1` then `publish-deals-page.ps1`.
 
+### PUBLISH ORDER vs THE FEED CACHE (why new chips can lag ~30 min)
+
+`board.json` is a Workers static asset deployed by the git-triggered Cloudflare build, cached per-colo for
+max-age=1800 keyed by full URL (including `?v=`). The Ghost post ships the new `?v=` the moment
+publish-deals-page runs, but the asset only updates when the PUSH finishes deploying (~1-3 min). Any visitor
+who hits the new `?v=` in that gap pins the PREVIOUS build's bytes at their colo for up to 30 minutes. That
+window only ever shows the last fully-gated board (never unverified data), but it delays new features/chips.
+RULE for interactive sessions: **push first, curl the exact versioned URL until it serves the new content,
+THEN publish the post.** The daily cloud pipeline publishes before its end-of-run commit and accepts the lag.
+
 ### SINGLE-WRITER RULE for product-urls.json
 
 Up to six things run concurrently against this repo (cloud daily, heartbeat, 3 daily local agents, interactive
