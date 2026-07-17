@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-07-15 13:04",
+    "generated":  "2026-07-17 10:59",
     "gap_count":  20,
     "gaps":  [
                  {
@@ -48,11 +48,6 @@
                      "sale_per_unit":  1.25
                  },
                  {
-                     "commodity":  "dishwasher-detergent",
-                     "store":  "Hy-Vee",
-                     "sale_per_unit":  0.1665
-                 },
-                 {
                      "commodity":  "dryer-sheets",
                      "store":  "Baker\u0027s",
                      "sale_per_unit":  0.0291
@@ -96,6 +91,11 @@
                      "commodity":  "shampoo",
                      "store":  "Baker\u0027s",
                      "sale_per_unit":  0.2908
+                 },
+                 {
+                     "commodity":  "sparkling-water",
+                     "store":  "Baker\u0027s",
+                     "sale_per_unit":  0.0971
                  },
                  {
                      "commodity":  "turkey-bacon",

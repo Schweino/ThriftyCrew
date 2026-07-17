@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-07-16 17:18",
-    "board":  "comparison-2026-07-15.json",
-    "total_tiles":  2047,
-    "violations":  160,
+    "generated":  "2026-07-17 11:06",
+    "board":  "comparison-2026-07-17.json",
+    "total_tiles":  2048,
+    "violations":  172,
     "by_store":  {
                      "Walmart":  {
                                      "coverage":  27,
@@ -10,17 +10,17 @@
                                      "violations":  27
                                  },
                      "Fareway":  {
-                                     "coverage":  16,
+                                     "coverage":  7,
                                      "tiles":  323,
                                      "violations":  16
                                  },
                      "Family Fare":  {
-                                         "coverage":  18,
-                                         "tiles":  196,
-                                         "violations":  18
+                                         "coverage":  28,
+                                         "tiles":  197,
+                                         "violations":  30
                                      },
                      "Hy-Vee":  {
-                                    "coverage":  37,
+                                    "coverage":  36,
                                     "tiles":  364,
                                     "violations":  37
                                 },
@@ -60,10 +60,10 @@
                  {
                      "id":  "flour",
                      "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.528 vs link $0.499  (5.8% off)",
                      "board":  "Fareway Flour All Purpose",
-                     "link":  ""
+                     "link":  "Fareway Flour, All Purpose"
                  },
                  {
                      "id":  "flour",
@@ -100,10 +100,10 @@
                  {
                      "id":  "apples",
                      "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $1.68 vs link $1.99  (15.6% off)",
                      "board":  "Golden Delicious Apple",
-                     "link":  ""
+                     "link":  "Gala Apple"
                  },
                  {
                      "id":  "applesauce",
@@ -214,16 +214,16 @@
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Fresh boneless skinless chicken breast, club pack, $2.98 lb.",
+                     "board":  "Hy-Vee boneless skinless chicken breasts, sold in 2.5 lb. bag for $6.99 23g per 4 oz., $6.99",
                      "link":  ""
                  },
                  {
                      "id":  "chicken-breast",
                      "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $3.99 vs link $4.99  (20% off)",
                      "board":  "Boneless Skinless Chicken Breast",
-                     "link":  ""
+                     "link":  "Boneless Skinless Chicken Breast"
                  },
                  {
                      "id":  "bottled-water",
@@ -372,10 +372,10 @@
                  {
                      "id":  "carrots",
                      "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $1.245 vs link $0.998  (24.7% off)",
                      "board":  "Carrot",
-                     "link":  ""
+                     "link":  "Carrot"
                  },
                  {
                      "id":  "cat-food",
@@ -463,6 +463,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger Coffee Pods",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cooking-spray",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Cooking Spray, No Stick, Vegetable Oil 6 Oz",
                      "link":  ""
                  },
                  {
@@ -756,10 +764,10 @@
                  {
                      "id":  "half-and-half",
                      "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.1047 vs link $0.1238  (15.4% off)",
                      "board":  "Kemps Fresh Half \u0026 Half",
-                     "link":  ""
+                     "link":  "Kemps Fresh Half \u0026 Half"
                  },
                  {
                      "id":  "deli-ham",
@@ -788,10 +796,10 @@
                  {
                      "id":  "honey",
                      "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.3744 vs link $0.3123  (19.9% off)",
                      "board":  "Fareway Pure Honey",
-                     "link":  ""
+                     "link":  "Fareway Pure Honey"
                  },
                  {
                      "id":  "hot-dog-buns",
@@ -810,12 +818,20 @@
                      "link":  ""
                  },
                  {
-                     "id":  "italian-sausage",
-                     "store":  "Hy-Vee",
+                     "id":  "ice-cream",
+                     "store":  "Family Fare",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Hy Vee Midwest Pork Italian Pork Sausage",
+                     "board":  "Vanilla Ice Cream Our Family",
                      "link":  ""
+                 },
+                 {
+                     "id":  "italian-sausage",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $4.88 vs link $4.49  (8.7% off)",
+                     "board":  "Hy Vee Midwest Pork Italian Pork Sausage",
+                     "link":  "Hy Vee Midwest Pork Italian Pork Sausage"
                  },
                  {
                      "id":  "italian-seasoning",
@@ -866,6 +882,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "lime-juice",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Mc Cormick Mayonesa (Mayonnaise) With Lime Juice 28 Fl Oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "mac-and-cheese",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -879,6 +903,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Jumbo Ripe \u0026 Ready mangos, each, $1.99 each",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "mayonnaise",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Mayo, Real 30 Fl Oz",
                      "link":  ""
                  },
                  {
@@ -899,6 +931,14 @@
                  },
                  {
                      "id":  "milk",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Whole Milk Vitamin D Our Family",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "milk",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -911,6 +951,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Low carbMiracle Whip M",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "miracle-whip",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Miracle Whip Light Dressing 30 Fl Oz",
                      "link":  ""
                  },
                  {
@@ -948,10 +996,10 @@
                  {
                      "id":  "olive-oil",
                      "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.413 vs link $0.2956  (39.7% off)",
                      "board":  "Fareway Extra Virgin Olive Oil",
-                     "link":  ""
+                     "link":  "Fareway Extra Virgin Olive Oil"
                  },
                  {
                      "id":  "onion-powder",
@@ -976,6 +1024,14 @@
                      "detail":  "priced tile with no See-item link",
                      "board":  "Member\u0027s Mark Onion Powder, 21 oz.",
                      "link":  ""
+                 },
+                 {
+                     "id":  "orange-juice",
+                     "store":  "Family Fare",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.0921 vs link $0.1066  (13.6% off)",
+                     "board":  "100% Orange Juice With Calcium \u0026 Vitamin D",
+                     "link":  "Tropicana Pure Premium No Pulp Orange Juice 89 Fl Oz"
                  },
                  {
                      "id":  "dried-oregano",
@@ -1082,6 +1138,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "ranch-dressing",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Buttermilk Ranch Dressing 16 Fl Oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "red-pepper-flakes",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -1131,11 +1195,19 @@
                  },
                  {
                      "id":  "salsa",
+                     "store":  "Family Fare",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.1556 vs link $0.1606  (3.1% off)",
+                     "board":  "Mild Thick \u0026 Chunky Salsa Our Family",
+                     "link":  "Mild Salsa Our Family Original"
+                 },
+                 {
+                     "id":  "salsa",
                      "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.1562 vs link $0.1246  (25.4% off)",
                      "board":  "Fareway Chunky Mild Salsa",
-                     "link":  ""
+                     "link":  "Fareway Chunky Mild Salsa"
                  },
                  {
                      "id":  "shampoo",
@@ -1164,10 +1236,10 @@
                  {
                      "id":  "sliced-cheese",
                      "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
+                     "fault":  "PRICE-MISMATCH",
+                     "detail":  "board $0.2067 vs link $0.155  (33.4% off)",
                      "board":  "Fareway American Cheese Slices",
-                     "link":  ""
+                     "link":  "Fareway American Cheese Slices"
                  },
                  {
                      "id":  "sloppy-joe-sauce",
@@ -1207,6 +1279,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "each (estimated)each (est.)Sweet Potatoes",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "salt",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Iodized Salt Our Family",
                      "link":  ""
                  },
                  {
@@ -1255,6 +1335,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Fareway Tomato Sauce",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "tortilla-chips",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Hint Of Lime Tortilla Chips 13 Oz",
                      "link":  ""
                  },
                  {
@@ -1314,6 +1402,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "mustard",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Mustard, Yellow 20 Oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "yogurt",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -1322,6 +1418,6 @@
                      "link":  ""
                  }
              ],
-    "accuracy_violations":  0,
+    "accuracy_violations":  12,
     "coverage_violations":  160
 }
