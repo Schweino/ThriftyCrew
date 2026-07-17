@@ -1,13 +1,13 @@
-# Omaha Grocery Weekly-Ad Puller
+﻿# Omaha Grocery Weekly-Ad Puller
 
 Pulls the **current week's** weekly-ad deals for four Omaha grocery stores, straight from **each store's own published weekly ad** (no Instacart, no third-party markups, no online-catalog everyday prices). Every store passes two hard gates before a single deal is accepted.
 
 ## The two hard gates (both must pass, or the store returns ZERO deals)
 
-1. **OMAHA** — the ad's store must resolve to the Omaha store: city Omaha + a `68xxx` zip (Hy-Vee / Aldi / Family Fare), or the "Saddlecreek" store label (Baker's, 888 S Saddle Creek Rd, Omaha 68106).
-2. **CURRENT** — today's date must fall inside the ad's `valid_from … valid_to`. A stale or next-week-only ad is rejected.
+1. **OMAHA** â€” the ad's store must resolve to the Omaha store: city Omaha + a `68xxx` zip (Hy-Vee / Aldi / Family Fare), or the "Saddlecreek" store label (Baker's, 888 S Saddle Creek Rd, Omaha 68106).
+2. **CURRENT** â€” today's date must fall inside the ad's `valid_from â€¦ valid_to`. A stale or next-week-only ad is rejected.
 
-Fail either gate → that store is flagged `BLOCKED` and contributes nothing. Nothing wrong-city or out-of-date can leak into the results.
+Fail either gate â†’ that store is flagged `BLOCKED` and contributes nothing. Nothing wrong-city or out-of-date can leak into the results.
 
 ## Store coverage
 
@@ -33,7 +33,7 @@ Prints a verification table (store, zip, ad dates, OMAHA, CURRENT, deals, status
 Kroger is Akamai bot-protected, so the discovery step runs in Chrome (the agent does this):
 
 1. Open `https://www.bakersplus.com/weeklyad`. Confirm the store selector reads **"Pickup at Saddlecreek"** (the Omaha store). Read the date range shown ("July 1 - 7").
-2. Capture the flyer page image URLs: `read_network_requests` with `urlPattern=przone` → the `/anonymous/{uuid}.jpg` list. Write them (one per line, `imwidth=2400`) to `out\bakers\urls.txt`.
+2. Capture the flyer page image URLs: `read_network_requests` with `urlPattern=przone` â†’ the `/anonymous/{uuid}.jpg` list. Write them (one per line, `imwidth=2400`) to `out\bakers\urls.txt`.
 3. Verify + download:
 
 ```powershell
@@ -47,9 +47,9 @@ It re-checks both gates, then downloads the pages to `out\bakers\page-NN.jpg`. T
 ## Notes / gotchas
 
 - Flipp + SFML responses must be fetched with `Invoke-WebRequest -UseBasicParsing` then UTF-8-decoded + `ConvertFrom-Json` (or `[xml]`). `Invoke-RestMethod` returns empty objects for these.
-- Aldi's store field is `merchant_store_code` (not `store_code`); the Omaha 72nd St store is `446-048` at zip `68132`. Its weekly publication id changes every week — the script always fetches the current one.
+- Aldi's store field is `merchant_store_code` (not `store_code`); the Omaha 72nd St store is `446-048` at zip `68132`. Its weekly publication id changes every week â€” the script always fetches the current one.
 - Family Fare's Freshop API caps ~100 items/page; the script pages by the reported `total` (~1,200 items).
-- `$PSScriptRoot` is empty inside a `param()` default under `-File` — output dirs are resolved in the script body.
+- `$PSScriptRoot` is empty inside a `param()` default under `-File` â€” output dirs are resolved in the script body.
 
 ## Direct product-URL layer (the "See item" links + price verification)
 
@@ -92,7 +92,7 @@ max-age=1800 keyed by full URL (including `?v=`). The Ghost post ships the new `
 publish-deals-page runs, but the asset only updates when the PUSH finishes deploying (~1-3 min). Any visitor
 who hits the new `?v=` in that gap pins the PREVIOUS build's bytes at their colo for up to 30 minutes. That
 window only ever shows the last fully-gated board (never unverified data), but it delays new features/chips.
-RULE for interactive sessions: **push first, curl the exact versioned URL until it serves the new content,
+RULE for interactive sessions: **push first, probe with a throwaway cache-buster param until the content converges (compare NORMALIZED content or byte length, never raw sha - git's CRLF-to-LF normalization makes the served file one byte smaller than the working copy, so a raw-byte hash never matches),
 THEN publish the post.** The daily cloud pipeline publishes before its end-of-run commit and accepts the lag.
 
 ### SINGLE-WRITER RULE for product-urls.json
@@ -180,3 +180,4 @@ Once registered, EVERY automation picks the item up with no further wiring (all 
 and ranks the cheapest per store; `build-deals-page.ps1` renders the board (every staple shows ALL 7 stores:
 a price, or a "Doesn't carry / No price yet" card); `publish-deals-page.ps1` gates (coverage, store-coverage,
 consistency) and upserts to Ghost. `check-ad-cycles.ps1` orchestrates it daily.
+
