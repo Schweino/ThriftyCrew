@@ -37,13 +37,31 @@ jobs:
           if (Test-Path grocery/ad-cycle-log.txt) { Get-Content grocery/ad-cycle-log.txt -Tail 25 }
 
       # COMMIT BEFORE ASSERTING, AND ALWAYS.
-      # This used to run AFTER the freshness assert, with no `if: always()`. So a failed assert exited the job
-      # and committed NOTHING - not the refreshed data, not even the ad-cycle log. A failed run left ZERO trace
-      # in the repo and its only signal was an email. On 2026-07-16 the pipeline did not commit at all and there
-      # was nothing to diagnose from: no log, no partial data, no clue whether it ran and failed or never ran.
+      # This used to run AFTER the freshness assert with no `if: always()`, so a failed assert exited the job and
+      # committed NOTHING - not the data, not even the ad-cycle log, leaving no evidence to diagnose from.
+      # (2026-07-17 correction: I first assumed that ordering was what ate 2026-07-16. The run log says
+      # otherwise - the real killer was the rebase conflict handled below. The ordering was a second, real hole
+      # that would have hidden the next failure just as well; both are fixed. Record what the log says, not what
+      # the theory says.)
       # Committing first costs nothing (guards.ps1 already decides what may be PUBLISHED; this only records what
-      # happened) and leaves the evidence a post-mortem needs. The assert still fails the job afterwards, so
-      # GitHub still emails - it just no longer destroys the evidence on its way out.
+      # happened). The assert still fails the job afterwards, so GitHub still emails - it just no longer
+      # destroys the evidence on its way out.
+      # THE COMMIT MUST SURVIVE A BUSY main. THIS IS WHAT KILLED 2026-07-16.
+      # The run did all 28 minutes of work, published, and committed - then `git pull --rebase` hit an add/add
+      # conflict (Brad pushes to main during the day; the pipeline rewrites the same derived files), the rebase
+      # stopped mid-flight leaving DETACHED HEAD, `git push` said "You are not currently on a branch", exit 1,
+      # and the entire run's output was thrown away. The pipeline never failed. The COMMIT failed, and it took
+      # a day of prices with it. A bot that cannot survive a conflict on a repo a human works in is not
+      # automated, it is a coin flip.
+      #
+      #  * -X theirs during a rebase = prefer the commit being REPLAYED (the pipeline's fresh output) over
+      #    upstream. Correct for these files by construction: every one is DERIVED and the pipeline just
+      #    regenerated it from today's sources, so its copy is strictly newer than whatever main holds. It only
+      #    ever touches its own outputs, so it cannot clobber hand-written code.
+      #  * `git rebase --abort` on failure so we NEVER exit in detached HEAD. That state is what turned a
+      #    recoverable conflict into a dead job.
+      #  * Retry: main can move again between fetch and push (that is the race that caused this).
+      #  * `HEAD:main` pushes correctly even if we somehow end up detached.
       - name: Commit refreshed prices + feed
         if: always()
         shell: powershell
@@ -54,8 +72,28 @@ jobs:
           git diff --cached --quiet
           if ($LASTEXITCODE -eq 0) { Write-Host "No changes to commit."; exit 0 }
           git commit -m "Daily pipeline: refresh prices + feed ($(Get-Date -Format 'yyyy-MM-dd'))"
-          git pull --rebase --autostash origin main
-          git push
+          $pushed = $false
+          foreach ($attempt in 1..4) {
+            Write-Host "--- commit/push attempt $attempt ---"
+            git fetch origin main
+            git rebase -X theirs origin/main
+            if ($LASTEXITCODE -ne 0) {
+              Write-Warning "rebase attempt $attempt hit a conflict -X theirs could not settle; aborting so we do not end up detached"
+              git rebase --abort
+              Start-Sleep -Seconds 10
+              continue
+            }
+            git push origin HEAD:main
+            if ($LASTEXITCODE -eq 0) { $pushed = $true; Write-Host "pushed on attempt $attempt"; break }
+            Write-Warning "push rejected (main moved under us); retrying"
+            Start-Sleep -Seconds 10
+          }
+          if (-not $pushed) {
+            git rebase --abort 2>$null
+            git status --short | Select-Object -First 20
+            Write-Error "Could not commit the pipeline's output to main after 4 attempts. The run's data is NOT saved - the feed will be stale. This is the failure that silently ate 2026-07-16."
+            exit 1
+          }
 
       - name: Assert the feed refreshed today (fails -> GitHub emails you)
         if: always()
