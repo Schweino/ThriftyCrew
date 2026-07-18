@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-07-17 13:27",
-    "board":  "comparison-2026-07-17.json",
+    "generated":  "2026-07-18 12:47",
+    "board":  "comparison-2026-07-18.json",
     "total_tiles":  2083,
-    "violations":  156,
+    "violations":  147,
     "by_store":  {
                      "Walmart":  {
                                      "coverage":  9,
@@ -15,14 +15,14 @@
                                      "violations":  8
                                  },
                      "Family Fare":  {
-                                         "coverage":  29,
+                                         "coverage":  22,
                                          "tiles":  197,
-                                         "violations":  30
+                                         "violations":  22
                                      },
                      "Hy-Vee":  {
                                     "coverage":  27,
                                     "tiles":  364,
-                                    "violations":  29
+                                    "violations":  28
                                 },
                      "Sam\u0027s Club":  {
                                              "coverage":  38,
@@ -55,14 +55,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger Bleached All Purpose Enriched Flour (10 lb)",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "flour",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "All Purpose Flour Our Family",
                      "link":  ""
                  },
                  {
@@ -418,14 +410,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "cooking-spray",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Our Family Cooking Spray, No Stick, Vegetable Oil 6 Oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "crackers",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -575,14 +559,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Our Family Freezer Bags, Resealable, Gallon Size 30 Ea",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "breakfast-sandwiches",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Jimmy Dean Croissant Breakfast Sandwiches With Sausage, Egg, And Cheese, Frozen 8 Ct",
                      "link":  ""
                  },
                  {
@@ -786,14 +762,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "italian-sausage",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $4.88 vs link $4.49  (8.7% off)",
-                     "board":  "Hy Vee Midwest Pork Italian Pork Sausage",
-                     "link":  "Hy-Vee Midwest Pork Italian Pork Sausage"
-                 },
-                 {
                      "id":  "italian-seasoning",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -858,14 +826,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "milk",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Whole Milk Vitamin D Our Family",
-                     "link":  ""
-                 },
-                 {
                      "id":  "miracle-whip",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -911,22 +871,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Oatly Oat Milk",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "oatmeal",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Maple \u0026 Brown Sugar Instant Oatmeal",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "orange-juice",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "100% Orange Juice With Calcium \u0026 Vitamin D",
                      "link":  ""
                  },
                  {
@@ -1018,14 +962,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "ramen",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Maruchan Beef Flavor Ramen Noodle Soup 12 Ea",
-                     "link":  ""
-                 },
-                 {
                      "id":  "ranch-dressing",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
@@ -1072,14 +1008,6 @@
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger Russet Potatoes Bag (10 lb)",
                      "link":  ""
-                 },
-                 {
-                     "id":  "salsa",
-                     "store":  "Family Fare",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.1556 vs link $0.1606  (3.1% off)",
-                     "board":  "Mild Thick \u0026 Chunky Salsa Our Family",
-                     "link":  "Mild Salsa Our Family Original"
                  },
                  {
                      "id":  "shampoo",
@@ -1291,5 +1219,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  147
+    "coverage_violations":  140
 }

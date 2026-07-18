@@ -1,36 +1,36 @@
 ﻿{
-    "generated":  "2026-07-17 11:06",
+    "generated":  "2026-07-18 12:52",
     "tol":  0.3,
-    "no_link_count":  218,
+    "no_link_count":  182,
     "max_no_link":  0,
     "no_link_by_store":  [
                              {
                                  "store":  "Hy-Vee",
-                                 "count":  55
-                             },
-                             {
-                                 "store":  "Walmart",
-                                 "count":  44
+                                 "count":  45
                              },
                              {
                                  "store":  "Baker\u0027s",
                                  "count":  42
                              },
                              {
-                                 "store":  "Family Fare",
-                                 "count":  24
-                             },
-                             {
                                  "store":  "Sam\u0027s Club",
-                                 "count":  19
+                                 "count":  41
                              },
                              {
-                                 "store":  "Aldi",
+                                 "store":  "Family Fare",
+                                 "count":  28
+                             },
+                             {
+                                 "store":  "Walmart",
                                  "count":  18
                              },
                              {
+                                 "store":  "Aldi",
+                                 "count":  6
+                             },
+                             {
                                  "store":  "Fareway",
-                                 "count":  16
+                                 "count":  2
                              }
                          ],
     "no_link":  [
@@ -43,10 +43,6 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "chicken-breast",
-                        "store":  "Fareway"
-                    },
-                    {
                         "id":  "chicken-thighs",
                         "store":  "Aldi"
                     },
@@ -55,28 +51,16 @@
                         "store":  "Baker\u0027s"
                     },
                     {
-                        "id":  "ground-turkey",
-                        "store":  "Sam\u0027s Club"
-                    },
-                    {
-                        "id":  "bacon",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "pork-chops",
-                        "store":  "Hy-Vee"
-                    },
-                    {
                         "id":  "deli-ham",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "ribeye-steak",
-                        "store":  "Aldi"
+                        "id":  "salmon",
+                        "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "italian-sausage",
-                        "store":  "Hy-Vee"
+                        "id":  "ribeye-steak",
+                        "store":  "Aldi"
                     },
                     {
                         "id":  "rotisserie-chicken",
@@ -87,6 +71,10 @@
                         "store":  "Hy-Vee"
                     },
                     {
+                        "id":  "canned-salmon",
+                        "store":  "Sam\u0027s Club"
+                    },
+                    {
                         "id":  "turkey-bacon",
                         "store":  "Baker\u0027s"
                     },
@@ -95,32 +83,20 @@
                         "store":  "Sam\u0027s Club"
                     },
                     {
-                        "id":  "milk",
-                        "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "milk",
-                        "store":  "Sam\u0027s Club"
-                    },
-                    {
                         "id":  "cream-cheese",
                         "store":  "Walmart"
-                    },
-                    {
-                        "id":  "shredded-cheese",
-                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "yogurt",
                         "store":  "Baker\u0027s"
                     },
                     {
-                        "id":  "sliced-cheese",
-                        "store":  "Fareway"
+                        "id":  "yogurt",
+                        "store":  "Sam\u0027s Club"
                     },
                     {
-                        "id":  "half-and-half",
-                        "store":  "Fareway"
+                        "id":  "whipped-cream",
+                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "almond-milk",
@@ -139,8 +115,8 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "coffee-creamer",
-                        "store":  "Aldi"
+                        "id":  "egg-whites",
+                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "chocolate-milk",
@@ -151,28 +127,8 @@
                         "store":  "Aldi"
                     },
                     {
-                        "id":  "blueberries",
-                        "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "apples",
-                        "store":  "Walmart"
-                    },
-                    {
                         "id":  "apples",
                         "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "apples",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "peaches",
-                        "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "avocados",
-                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "mangoes",
@@ -183,20 +139,16 @@
                         "store":  "Baker\u0027s"
                     },
                     {
-                        "id":  "pineapple",
-                        "store":  "Aldi"
-                    },
-                    {
                         "id":  "clementines",
                         "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "russet-potatoes",
-                        "store":  "Sam\u0027s Club"
+                        "store":  "Baker\u0027s"
                     },
                     {
-                        "id":  "russet-potatoes",
-                        "store":  "Baker\u0027s"
+                        "id":  "tomatoes",
+                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "carrots",
@@ -209,10 +161,6 @@
                     {
                         "id":  "carrots",
                         "store":  "Walmart"
-                    },
-                    {
-                        "id":  "carrots",
-                        "store":  "Fareway"
                     },
                     {
                         "id":  "spinach",
@@ -240,19 +188,31 @@
                     },
                     {
                         "id":  "tortillas",
-                        "store":  "Hy-Vee"
+                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "hamburger-buns",
                         "store":  "Aldi"
+                    },
+                    {
+                        "id":  "hamburger-buns",
+                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "hamburger-buns",
                         "store":  "Family Fare"
                     },
                     {
+                        "id":  "bagels",
+                        "store":  "Sam\u0027s Club"
+                    },
+                    {
                         "id":  "hot-dog-buns",
                         "store":  "Aldi"
+                    },
+                    {
+                        "id":  "hot-dog-buns",
+                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "dinner-rolls",
@@ -264,131 +224,151 @@
                     },
                     {
                         "id":  "muffins",
+                        "store":  "Sam\u0027s Club"
+                    },
+                    {
+                        "id":  "muffins",
                         "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "donuts",
+                        "store":  "Sam\u0027s Club"
+                    },
+                    {
+                        "id":  "pita-bread",
+                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "baked-beans",
                         "store":  "Baker\u0027s"
                     },
                     {
-                        "id":  "applesauce",
-                        "store":  "Hy-Vee"
+                        "id":  "canned-chili",
+                        "store":  "Sam\u0027s Club"
+                    },
+                    {
+                        "id":  "canned-corn",
+                        "store":  "Sam\u0027s Club"
+                    },
+                    {
+                        "id":  "canned-mushrooms",
+                        "store":  "Sam\u0027s Club"
+                    },
+                    {
+                        "id":  "canned-peas",
+                        "store":  "Sam\u0027s Club"
+                    },
+                    {
+                        "id":  "refried-beans",
+                        "store":  "Sam\u0027s Club"
+                    },
+                    {
+                        "id":  "diced-tomatoes",
+                        "store":  "Sam\u0027s Club"
+                    },
+                    {
+                        "id":  "chicken-noodle-soup",
+                        "store":  "Sam\u0027s Club"
+                    },
+                    {
+                        "id":  "cream-of-chicken-soup",
+                        "store":  "Sam\u0027s Club"
+                    },
+                    {
+                        "id":  "cream-of-mushroom-soup",
+                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "applesauce",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "kidney-beans",
-                        "store":  "Aldi"
-                    },
-                    {
                         "id":  "tomato-sauce",
                         "store":  "Baker\u0027s"
                     },
                     {
-                        "id":  "tomato-sauce",
-                        "store":  "Fareway"
+                        "id":  "beef-stew",
+                        "store":  "Sam\u0027s Club"
                     },
                     {
-                        "id":  "beef-stew",
-                        "store":  "Fareway"
+                        "id":  "canned-pasta",
+                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "canned-pasta",
                         "store":  "Walmart"
                     },
                     {
-                        "id":  "canned-pumpkin",
-                        "store":  "Fareway"
+                        "id":  "cranberry-sauce",
+                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "fruit-cocktail",
                         "store":  "Baker\u0027s"
                     },
                     {
-                        "id":  "fruit-cocktail",
-                        "store":  "Fareway"
-                    },
-                    {
                         "id":  "canned-pears",
-                        "store":  "Walmart"
+                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "tomatoes-green-chilies",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "canned-potatoes",
-                        "store":  "Walmart"
+                        "id":  "tomatoes-green-chilies",
+                        "store":  "Sam\u0027s Club"
                     },
                     {
-                        "id":  "hominy",
-                        "store":  "Walmart"
+                        "id":  "coconut-milk-canned",
+                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "hot-sauce",
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "salsa",
-                        "store":  "Fareway"
+                        "id":  "mustard",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "mayonnaise",
+                        "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "ranch-dressing",
+                        "store":  "Family Fare"
                     },
                     {
                         "id":  "queso",
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "white-vinegar",
-                        "store":  "Fareway"
+                        "id":  "hummus",
+                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "white-vinegar",
                         "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "lemon-juice",
-                        "store":  "Walmart"
                     },
                     {
                         "id":  "miracle-whip",
                         "store":  "Fareway"
                     },
                     {
-                        "id":  "blue-cheese-dressing",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "balsamic-vinegar",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "rice-vinegar",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "teriyaki-sauce",
-                        "store":  "Walmart"
+                        "id":  "miracle-whip",
+                        "store":  "Family Fare"
                     },
                     {
                         "id":  "sloppy-joe-sauce",
                         "store":  "Baker\u0027s"
                     },
                     {
-                        "id":  "green-olives",
-                        "store":  "Walmart"
+                        "id":  "lime-juice",
+                        "store":  "Family Fare"
                     },
                     {
                         "id":  "flour",
                         "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "flour",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "flour",
-                        "store":  "Family Fare"
                     },
                     {
                         "id":  "sugar",
@@ -403,12 +383,12 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "paprika",
-                        "store":  "Hy-Vee"
+                        "id":  "salt",
+                        "store":  "Family Fare"
                     },
                     {
-                        "id":  "dried-oregano",
-                        "store":  "Walmart"
+                        "id":  "paprika",
+                        "store":  "Hy-Vee"
                     },
                     {
                         "id":  "dried-parsley",
@@ -417,10 +397,6 @@
                     {
                         "id":  "ground-cinnamon",
                         "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "ground-cinnamon",
-                        "store":  "Walmart"
                     },
                     {
                         "id":  "ground-turmeric",
@@ -436,53 +412,9 @@
                     },
                     {
                         "id":  "garlic-powder",
-                        "store":  "Aldi"
-                    },
-                    {
-                        "id":  "garlic-powder",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "garlic-powder",
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "garlic-powder",
-                        "store":  "Sam\u0027s Club"
-                    },
-                    {
-                        "id":  "onion-powder",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "onion-powder",
-                        "store":  "Aldi"
-                    },
-                    {
-                        "id":  "onion-powder",
-                        "store":  "Sam\u0027s Club"
-                    },
-                    {
-                        "id":  "chili-powder",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "chili-powder",
-                        "store":  "Aldi"
-                    },
-                    {
-                        "id":  "chili-powder",
-                        "store":  "Sam\u0027s Club"
-                    },
-                    {
-                        "id":  "ground-cumin",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "ground-cumin",
-                        "store":  "Sam\u0027s Club"
-                    },
-                    {
                         "id":  "italian-seasoning",
                         "store":  "Walmart"
                     },
@@ -491,8 +423,8 @@
                         "store":  "Sam\u0027s Club"
                     },
                     {
-                        "id":  "italian-seasoning",
-                        "store":  "Aldi"
+                        "id":  "pasta",
+                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "egg-noodles",
@@ -503,24 +435,8 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "ramen",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "mac-and-cheese",
-                        "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "oatmeal",
-                        "store":  "Family Fare"
-                    },
-                    {
                         "id":  "cereal",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "olive-oil",
-                        "store":  "Fareway"
                     },
                     {
                         "id":  "vegetable-oil",
@@ -531,16 +447,8 @@
                         "store":  "Baker\u0027s"
                     },
                     {
-                        "id":  "coffee",
-                        "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "coffee",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "honey",
-                        "store":  "Fareway"
+                        "id":  "tortilla-chips",
+                        "store":  "Family Fare"
                     },
                     {
                         "id":  "soda",
@@ -580,6 +488,10 @@
                     },
                     {
                         "id":  "fruit-snacks",
+                        "store":  "Sam\u0027s Club"
+                    },
+                    {
+                        "id":  "fruit-snacks",
                         "store":  "Baker\u0027s"
                     },
                     {
@@ -615,12 +527,12 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "chicken-nuggets",
-                        "store":  "Hy-Vee"
+                        "id":  "ice-cream",
+                        "store":  "Family Fare"
                     },
                     {
-                        "id":  "breakfast-sandwiches",
-                        "store":  "Family Fare"
+                        "id":  "chicken-nuggets",
+                        "store":  "Hy-Vee"
                     },
                     {
                         "id":  "garlic-bread",
@@ -667,8 +579,16 @@
                         "store":  "Hy-Vee"
                     },
                     {
+                        "id":  "disinfectant-spray",
+                        "store":  "Sam\u0027s Club"
+                    },
+                    {
                         "id":  "shower-cleaner",
                         "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "furniture-polish",
+                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "shampoo",
@@ -681,6 +601,10 @@
                     {
                         "id":  "body-wash",
                         "store":  "Baker\u0027s"
+                    },
+                    {
+                        "id":  "bar-soap",
+                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "bar-soap",
@@ -699,10 +623,6 @@
                         "store":  "Baker\u0027s"
                     },
                     {
-                        "id":  "milk",
-                        "store":  "Hy-Vee"
-                    },
-                    {
                         "id":  "carrots",
                         "store":  "Walmart"
                     },
@@ -715,16 +635,8 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "fries",
-                        "store":  "Hy-Vee"
-                    },
-                    {
                         "id":  "balsamic-vinegar",
                         "store":  "Hy-Vee"
-                    },
-                    {
-                        "id":  "balsamic-vinegar",
-                        "store":  "Walmart"
                     },
                     {
                         "id":  "white-vinegar",
@@ -775,68 +687,16 @@
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "chili-powder",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "chili-powder",
-                        "store":  "Aldi"
-                    },
-                    {
-                        "id":  "chili-powder",
-                        "store":  "Sam\u0027s Club"
-                    },
-                    {
-                        "id":  "garlic-powder",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "garlic-powder",
-                        "store":  "Aldi"
-                    },
-                    {
-                        "id":  "garlic-powder",
-                        "store":  "Sam\u0027s Club"
-                    },
-                    {
                         "id":  "garlic-powder",
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "ground-cumin",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "ground-cumin",
-                        "store":  "Sam\u0027s Club"
-                    },
-                    {
                         "id":  "italian-seasoning",
                         "store":  "Walmart"
                     },
                     {
                         "id":  "italian-seasoning",
                         "store":  "Sam\u0027s Club"
-                    },
-                    {
-                        "id":  "italian-seasoning",
-                        "store":  "Aldi"
-                    },
-                    {
-                        "id":  "onion-powder",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "onion-powder",
-                        "store":  "Aldi"
-                    },
-                    {
-                        "id":  "onion-powder",
-                        "store":  "Sam\u0027s Club"
-                    },
-                    {
-                        "id":  "dried-oregano",
-                        "store":  "Walmart"
                     },
                     {
                         "id":  "salt",
@@ -872,19 +732,11 @@
                     },
                     {
                         "id":  "ground-cinnamon",
-                        "store":  "Walmart"
+                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "ground-cinnamon",
                         "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "hominy",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "kidney-beans",
-                        "store":  "Aldi"
                     },
                     {
                         "id":  "kidney-beans",
@@ -893,6 +745,10 @@
                     {
                         "id":  "tomato-sauce",
                         "store":  "Baker\u0027s"
+                    },
+                    {
+                        "id":  "diced-tomatoes",
+                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "vegetable-oil",
@@ -907,7 +763,7 @@
                         "store":  "Hy-Vee"
                     }
                 ],
-    "mismatch_count":  25,
+    "mismatch_count":  30,
     "mismatch":  [
                      {
                          "id":  "balsamic-vinegar",
@@ -918,6 +774,16 @@
                          "off_pct":  34,
                          "product":  "Nothing But The Truth Organic Balsamic Vinegar",
                          "size":  "16.9 fl oz"
+                     },
+                     {
+                         "id":  "balsamic-vinegar",
+                         "store":  "Walmart",
+                         "unit":  "oz",
+                         "board":  0.4639,
+                         "link":  0.24,
+                         "off_pct":  48,
+                         "product":  "Pompeian Balsamic Vinegar - 16 fl oz",
+                         "size":  "16 fl oz"
                      },
                      {
                          "id":  "bread-crumbs",
@@ -947,7 +813,7 @@
                          "link":  0.0623,
                          "off_pct":  108,
                          "product":  "Member\u0027s Mark Light Brown Sugar, 7 lbs.",
-                         "size":  "7 lb"
+                         "size":  "112 oz"
                      },
                      {
                          "id":  "brown-sugar",
@@ -1020,6 +886,16 @@
                          "size":  "15 oz"
                      },
                      {
+                         "id":  "milk",
+                         "store":  "Hy-Vee",
+                         "unit":  "each",
+                         "board":  4.99,
+                         "link":  3.06,
+                         "off_pct":  39,
+                         "product":  "That\u0027s Smart! 2% Reduced Fat Milk",
+                         "size":  "1 gal"
+                     },
+                     {
                          "id":  "paprika",
                          "store":  "Baker\u0027s",
                          "unit":  "oz",
@@ -1046,18 +922,8 @@
                          "board":  0.25,
                          "link":  0.1431,
                          "off_pct":  43,
-                         "product":  "Creamy Reduced Salt \u0026 Sugar Peanut Butter",
+                         "product":  "Creamy Peanut Butter Our Family",
                          "size":  "16 oz"
-                     },
-                     {
-                         "id":  "white-mushrooms",
-                         "store":  "Hy-Vee",
-                         "unit":  "oz",
-                         "board":  0.54,
-                         "link":  0.3738,
-                         "off_pct":  31,
-                         "product":  "Highline Whole White Mushrooms",
-                         "size":  "8 oz"
                      },
                      {
                          "id":  "white-vinegar",
@@ -1100,6 +966,26 @@
                          "size":  "33.8 oz"
                      },
                      {
+                         "id":  "teriyaki-sauce",
+                         "store":  "Walmart",
+                         "unit":  "floz",
+                         "board":  0.165,
+                         "link":  0.2649,
+                         "off_pct":  61,
+                         "product":  "Kikkoman Teriyaki BBQ Original 20.5 oz Glass Bottle",
+                         "size":  "20.5 oz"
+                     },
+                     {
+                         "id":  "rice-vinegar",
+                         "store":  "Walmart",
+                         "unit":  "floz",
+                         "board":  0.187,
+                         "link":  0.2433,
+                         "off_pct":  30,
+                         "product":  "Mizkan Rice Vinegar for Cooking, 12 fl oz",
+                         "size":  "12 fl oz"
+                     },
+                     {
                          "id":  "dried-oregano",
                          "store":  "Family Fare",
                          "unit":  "oz",
@@ -1118,6 +1004,16 @@
                          "off_pct":  76,
                          "product":  "Hy-Vee Iodized Salt",
                          "size":  "26 oz"
+                     },
+                     {
+                         "id":  "lemon-juice",
+                         "store":  "Walmart",
+                         "unit":  "floz",
+                         "board":  0.035,
+                         "link":  0.1116,
+                         "off_pct":  219,
+                         "product":  "ReaLemon 100% Lemon Juice, 32 fl oz bottle",
+                         "size":  "32 fl oz"
                      },
                      {
                          "id":  "sugar",
@@ -1158,6 +1054,16 @@
                          "off_pct":  36,
                          "product":  "That\u0027s Smart! Sweet Peas (Frozen)",
                          "size":  "12 oz"
+                     },
+                     {
+                         "id":  "ground-cinnamon",
+                         "store":  "Sam\u0027s Club",
+                         "unit":  "oz",
+                         "board":  0.4433,
+                         "link":  0.1698,
+                         "off_pct":  62,
+                         "product":  "Pillsbury Cinnamon Rolls with Cinnabon Icing 13 oz., 4 pk.",
+                         "size":  "52 oz"
                      }
                  ]
 }

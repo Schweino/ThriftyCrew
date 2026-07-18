@@ -4,10 +4,6 @@
                  ],
     "refused":  [
                     {
-                        "id":  "flour",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
-                    },
-                    {
                         "id":  "applesauce",
                         "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
@@ -24,12 +20,8 @@
                         "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
-                        "id":  "breakfast-sandwiches",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
                         "id":  "gelatin",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "ground-cinnamon",
@@ -45,6 +37,10 @@
                     },
                     {
                         "id":  "hamburger-buns",
+                        "why":  "not attempted - circuit breaker tripped"
+                    },
+                    {
+                        "id":  "ice-cream",
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
@@ -64,15 +60,7 @@
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
-                        "id":  "oatmeal",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
                         "id":  "paper-towels",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "ramen",
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
@@ -104,7 +92,7 @@
                         "why":  "not attempted - circuit breaker tripped"
                     }
                 ],
-    "worked":  25,
-    "generated":  "2026-07-17 11:01",
-    "board":  "comparison-2026-07-17.json"
+    "worked":  22,
+    "generated":  "2026-07-18 12:37",
+    "board":  "comparison-2026-07-18.json"
 }

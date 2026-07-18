@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-07-17 07:16",
+    "generated":  "2026-07-18 12:34",
     "gap_count":  11,
     "gaps":  [
                  {
@@ -21,6 +21,11 @@
                      "commodity":  "italian-sausage",
                      "store":  "Sam\u0027s Club",
                      "candidate":  "Member\u0027s Mark Cafe Spicy Italian Sausage, Frozen, Case, 20 lbs."
+                 },
+                 {
+                     "commodity":  "egg-whites",
+                     "store":  "Family Fare",
+                     "candidate":  "Jimmy Dean Delights Croissant Breakfast Sandwiches With Turkey Sausage, Egg White, And Cheese, Frozen 4 Ct"
                  },
                  {
                      "commodity":  "cake-mix",
@@ -51,11 +56,6 @@
                      "commodity":  "fruit-cocktail",
                      "store":  "Sam\u0027s Club",
                      "candidate":  "Dole Fruit Bowls Cherry Mixed Fruit in 100% Juice 4 oz., 20 pk."
-                 },
-                 {
-                     "commodity":  "coconut-milk-canned",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Thai Kitchen Unsweetened Coconut Milk 13.66 fl. oz. cans, 6 pk."
                  }
              ]
 }
