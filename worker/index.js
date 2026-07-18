@@ -118,10 +118,19 @@ async function ghostFetch(env, path, opts) {
   return r;
 }
 
-// find-or-create the member and attach the alert label + Price Alerts newsletter.
+// find the member by email; returns the member (with labels,newsletters) or null. NEVER creates.
+async function findMemberByEmail(env, email) {
+  const filter = encodeURIComponent("email:'" + email.replace(/'/g, "") + "'");
+  const findR = await ghostFetch(env, "/ghost/api/admin/members/?filter=" + filter + "&limit=1&include=labels,newsletters");
+  if (!findR.ok) throw new Error("member lookup failed " + findR.status);
+  return ((await findR.json()).members || [])[0] || null;
+}
+
+// attach the alert label + Price Alerts newsletter to an ALREADY-VERIFIED paid member.
+// The /alert handler does the paid check and passes the member in; this NEVER creates a member, because a
+// free signup must not be able to buy into a paid feature just by reaching this endpoint.
 // Labels/newsletters are REPLACED on PUT in Ghost, so we always merge with what exists.
-async function subscribeAlert(env, email, item, weekly) {
-  // newsletters: find "Price Alerts" (required) + the default (for weekly opt-in)
+async function subscribeAlert(env, member, item, weekly) {
   const nlR = await ghostFetch(env, "/ghost/api/admin/newsletters/?limit=all");
   if (!nlR.ok) throw new Error("newsletters fetch failed " + nlR.status);
   const newsletters = (await nlR.json()).newsletters || [];
@@ -130,23 +139,7 @@ async function subscribeAlert(env, email, item, weekly) {
   const defaultNl = newsletters.find((n) => n.status === "active" && n.id !== alertsNl.id);
 
   const label = "alert-" + item;
-  const filter = encodeURIComponent("email:'" + email.replace(/'/g, "") + "'");
-  const findR = await ghostFetch(env, "/ghost/api/admin/members/?filter=" + filter + "&limit=1&include=labels,newsletters");
-  if (!findR.ok) throw new Error("member lookup failed " + findR.status);
-  const found = (await findR.json()).members || [];
-
-  if (found.length === 0) {
-    const nls = [{ id: alertsNl.id }];
-    if (weekly && defaultNl) nls.push({ id: defaultNl.id });
-    const createR = await ghostFetch(env, "/ghost/api/admin/members/", {
-      method: "POST",
-      body: JSON.stringify({ members: [{ email: email, labels: [{ name: label }], newsletters: nls, note: "Signed up via price alerts (" + item + ")" }] }),
-    });
-    if (!createR.ok) throw new Error("member create failed " + createR.status + " " + (await createR.text()).slice(0, 200));
-    return "created";
-  }
-
-  const m = found[0];
+  const m = member;
   const labels = (m.labels || []).map((l) => ({ name: l.name }));
   if (!labels.some((l) => l.name === label)) labels.push({ name: label });
   const nlIds = (m.newsletters || []).map((n) => ({ id: n.id }));
@@ -238,8 +231,18 @@ export default {
       } catch (e) {
         return json({ ok: false, error: "Could not verify the item right now." }, 502, origin);
       }
+      // PAID-ONLY GATE (server-side; the board's client-side check is UX, not security). Price alerts are a
+      // paid perk, so the email must belong to an existing PAID or comped member. A free member, or an email
+      // that is not a member at all, is refused - hitting this endpoint directly must not grant the feature.
+      let member = null;
+      try { member = await findMemberByEmail(env, email); } catch (e) {
+        return json({ ok: false, error: "Could not verify your membership right now. Please try again later." }, 502, origin);
+      }
+      if (!member || (member.status !== "paid" && member.status !== "comped")) {
+        return json({ ok: false, error: "Price alerts are a members-only perk. Join for $1/month to switch them on.", needsUpgrade: true }, 403, origin);
+      }
       try {
-        await subscribeAlert(env, email, item, weekly);
+        await subscribeAlert(env, member, item, weekly);
         return json({ ok: true }, 200, origin);
       } catch (e) {
         return json({ ok: false, error: "Could not sign you up right now. Please try again later." }, 502, origin);
