@@ -1,11 +1,11 @@
 ﻿{
-    "generated":  "2026-07-18 21:32",
+    "generated":  "2026-07-18 21:51",
     "board":  "comparison-2026-07-18.json",
-    "total_tiles":  2202,
-    "violations":  223,
+    "total_tiles":  2215,
+    "violations":  224,
     "by_store":  {
                      "Walmart":  {
-                                     "coverage":  53,
+                                     "coverage":  54,
                                      "tiles":  410,
                                      "violations":  56
                                  },
@@ -25,9 +25,9 @@
                                     "violations":  28
                                 },
                      "Sam\u0027s Club":  {
-                                             "coverage":  38,
-                                             "tiles":  316,
-                                             "violations":  38
+                                             "coverage":  39,
+                                             "tiles":  329,
+                                             "violations":  39
                                          },
                      "Aldi":  {
                                   "coverage":  6,
@@ -284,10 +284,10 @@
                  {
                      "id":  "butter",
                      "store":  "Walmart",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $2.9153 vs link $3.06  (4.7% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Pillsbury Grands! Flaky Layers Butter Tastin\u0027 Refrigerated B",
-                     "link":  "Great Value Sweet Cream Salted Butter, 16 oz, 4 Sticks"
+                     "link":  ""
                  },
                  {
                      "id":  "cajun-seasoning",
@@ -951,6 +951,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Smart Way Granulated Sugar (4 lb)",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "grits",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Quaker Instant Grits, Variety Pack, .98 oz., 46 pk.",
                      "link":  ""
                  },
                  {
@@ -1827,5 +1835,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  213
+    "coverage_violations":  215
 }

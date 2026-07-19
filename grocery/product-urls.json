@@ -2743,15 +2743,7 @@
                                                          "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                          "board_pu":  2.74,
                                                          "recipe_pu":  0.16
-                                                     },
-                                 "Walmart":  {
-                                                 "url":  "https://www.walmart.com/ip/132893363",
-                                                 "price":  3.06,
-                                                 "size":  "16 oz",
-                                                 "name":  "Great Value Sweet Cream Salted Butter, 16 oz, 4 Sticks",
-                                                 "board_pu":  3.06,
-                                                 "recipe_pu":  0.186
-                                             }
+                                                     }
                              },
                   "buttermilk":  {
                                      "commodity":  "buttermilk",
@@ -18716,7 +18708,14 @@
                                                      "price":  "$1.25",
                                                      "size":  "1 oz",
                                                      "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                 }
+                                                 },
+                                      "Sam\u0027s Club":  {
+                                                              "url":  "https://www.samsclub.com/ip/13591373938",
+                                                              "name":  "Member\u0027s Mark Dried Basil Leaf, 6.25 oz.",
+                                                              "price":  "$6.64",
+                                                              "size":  "6.25 oz",
+                                                              "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                          }
                                   },
                   "fresh-basil":  {
                                       "Hy-Vee":  {
@@ -18734,7 +18733,14 @@
                                                     "price":  "$9.99",
                                                     "size":  "0.18 oz",
                                                     "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                }
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "url":  "https://www.samsclub.com/ip/13613464913",
+                                                             "name":  "Member\u0027s Mark Whole Bay Leaves, 2 oz.",
+                                                             "price":  "$8.54",
+                                                             "size":  "2 oz",
+                                                             "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                         }
                                  },
                   "cajun-seasoning":  {
                                           "Hy-Vee":  {
@@ -18743,7 +18749,14 @@
                                                          "price":  "$2.99",
                                                          "size":  "8 oz",
                                                          "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                     }
+                                                     },
+                                          "Sam\u0027s Club":  {
+                                                                  "url":  "https://www.samsclub.com/ip/13758664381",
+                                                                  "name":  "Tony Chachere\u0027s Original Creole Seasoning 32 oz.",
+                                                                  "price":  "$5.33",
+                                                                  "size":  "32 oz",
+                                                                  "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                              }
                                       },
                   "cayenne-pepper":  {
                                          "Hy-Vee":  {
@@ -18752,7 +18765,14 @@
                                                         "price":  "$1.25",
                                                         "size":  "3 oz",
                                                         "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                    }
+                                                    },
+                                         "Sam\u0027s Club":  {
+                                                                 "url":  "https://www.samsclub.com/ip/13891214885",
+                                                                 "name":  "Member\u0027s Mark Cayenne Pepper, 16 oz.",
+                                                                 "price":  "$7.58",
+                                                                 "size":  "16 oz",
+                                                                 "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                             }
                                      },
                   "cheese-tortellini":  {
                                             "Hy-Vee":  {
@@ -18761,7 +18781,14 @@
                                                            "price":  "$7.99",
                                                            "size":  "42 oz",
                                                            "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                       }
+                                                       },
+                                            "Sam\u0027s Club":  {
+                                                                    "url":  "https://www.samsclub.com/ip/13862021192",
+                                                                    "name":  "Member\u0027s Mark Five Cheese Tortellini (24 oz., 2 pk.)",
+                                                                    "price":  "$10.53",
+                                                                    "size":  "48 oz",
+                                                                    "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                                }
                                         },
                   "chili-crisp":  {
                                       "Hy-Vee":  {
@@ -18822,7 +18849,14 @@
                                                          "price":  "$0.54",
                                                          "size":  "7.5 oz",
                                                          "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                     }
+                                                     },
+                                          "Sam\u0027s Club":  {
+                                                                  "url":  "https://www.samsclub.com/ip/13875408667",
+                                                                  "name":  "JIFFY Corn Muffin Mix, 40 oz.",
+                                                                  "price":  "$2.82",
+                                                                  "size":  "40 oz",
+                                                                  "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                              }
                                       },
                   "curry-powder":  {
                                        "Hy-Vee":  {
@@ -18831,7 +18865,14 @@
                                                       "price":  "$6.99",
                                                       "size":  "1.75 oz",
                                                       "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                  },
+                                       "Sam\u0027s Club":  {
+                                                               "url":  "https://www.samsclub.com/ip/13629410820",
+                                                               "name":  "Member\u0027s Mark Salt-Free Curry Powder, 18 oz.",
+                                                               "price":  "$8.98",
+                                                               "size":  "18 oz",
+                                                               "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                           }
                                    },
                   "dried-dill":  {
                                      "Hy-Vee":  {
@@ -18867,7 +18908,14 @@
                                                        "price":  "$2.99",
                                                        "size":  "2 oz",
                                                        "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                   }
+                                                   },
+                                        "Sam\u0027s Club":  {
+                                                                "url":  "https://www.samsclub.com/ip/13591373069",
+                                                                "name":  "Member\u0027s Mark Organic Ground Ginger, 7 oz.",
+                                                                "price":  "$5.58",
+                                                                "size":  "7 oz",
+                                                                "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                            }
                                     },
                   "gochujang":  {
                                     "Hy-Vee":  {
@@ -19018,7 +19066,14 @@
                                                               "price":  "$3.79",
                                                               "size":  "16 oz",
                                                               "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                          }
+                                                          },
+                                               "Sam\u0027s Club":  {
+                                                                       "url":  "https://www.samsclub.com/ip/17787764079",
+                                                                       "name":  "Member\u0027s Mark Black Sesame Seed, 22 oz.",
+                                                                       "price":  "$7.98",
+                                                                       "size":  "22 oz",
+                                                                       "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                                   }
                                            },
                   "sun-dried-tomatoes":  {
                                              "Hy-Vee":  {
@@ -19034,7 +19089,14 @@
                                                                  "price":  "$6.99",
                                                                  "size":  "10 oz",
                                                                  "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                             }
+                                                             },
+                                             "Sam\u0027s Club":  {
+                                                                     "url":  "https://www.samsclub.com/ip/17242460680",
+                                                                     "name":  "Terra Verde Italian Sundried Tomatoes in Oil, 24 oz.",
+                                                                     "price":  "$9.98",
+                                                                     "size":  "24 oz",
+                                                                     "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                                 }
                                          },
                   "taco-seasoning":  {
                                          "Sam\u0027s Club":  {
@@ -19077,7 +19139,14 @@
                                                      "price":  "$2.99",
                                                      "size":  "0.75 oz",
                                                      "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                 }
+                                                 },
+                                      "Sam\u0027s Club":  {
+                                                              "url":  "https://www.samsclub.com/ip/13908405858",
+                                                              "name":  "Member\u0027s Mark Thyme Leaves, 8.25 oz.",
+                                                              "price":  "$7.24",
+                                                              "size":  "8.25 oz",
+                                                              "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                          }
                                   },
                   "tomatillos":  {
                                      "Hy-Vee":  {
@@ -19086,23 +19155,30 @@
                                                     "price":  "$3.99",
                                                     "size":  "lb",
                                                     "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                }
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "url":  "https://www.samsclub.com/ip/19644657661",
+                                                             "name":  "Southern Valley Farm Fresh Peeled Tomatillos, 16 oz.",
+                                                             "price":  "$2.96",
+                                                             "size":  "16 oz",
+                                                             "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                         }
                                  },
                   "walnuts":  {
-                                  "Sam\u0027s Club":  {
-                                                          "url":  "https://www.samsclub.com/ip/13758664374",
-                                                          "name":  "Member\u0027s Mark Natural Shelled Walnuts, 48 oz.",
-                                                          "price":  "$12.72",
-                                                          "size":  "48 oz",
-                                                          "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                      },
                                   "Hy-Vee":  {
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/56914/hy-vee-english-walnuts",
                                                  "name":  "Hy-Vee English Walnuts",
                                                  "price":  "$7.99",
                                                  "size":  "16 oz",
                                                  "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                             }
+                                             },
+                                  "Sam\u0027s Club":  {
+                                                          "url":  "https://www.samsclub.com/ip/16938718244",
+                                                          "name":  "Members Mark Halves \u0026 Pieces Walnuts, 32 oz.",
+                                                          "price":  "$8.48",
+                                                          "size":  "32 oz",
+                                                          "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                      }
                               }
               }
 }
