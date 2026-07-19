@@ -115,6 +115,31 @@ everything. Retrofit visible credit onto the existing 113 AFTER the new 100 ship
   custom_excerpt, head incl paywall schema), verify PUBLIC page live per post, update recipes-db.json
   (+source_url/source_site), push repo, memory.
 
+## Task #125: every recipe ingredient on the 7-store board (Brad: no exceptions)
+- Tier-1 remaps DONE: 42 recipe items re-pointed to existing board rows (r100-board-map.json) ->
+  118/165 ingredients board-priced. 'Diced Green Chiles' -> existing canned-green-chilies (my
+  diced-green-chiles registration was a semantic dupe - DEREGISTERED; alternate-spelling sweep found
+  no others).
+- 46 genuine-new commodities REGISTERED (board 424) via register-batch (rules in grocery\out\r100\rules\,
+  candidates + ids list in out\r100\). Hijack audit: clean (all board churn traced to daily data refresh).
+- ENGINE LESSONS (compare-deals):
+  * daily runs '-MinStores 1' (check-ad-cycles line 219); the DEFAULT is 2 - a manual run silently drops
+    single-store commodities. Always pass -MinStores 1 to reproduce the daily.
+  * $GLOBAL_EXCLUDE drops products NAMED sauce/mix/muffin/wine/canned/frozen/etc; commodities that ARE
+    those forms need relax_global (added to 14 r100 ids incl fish/oyster/hoisin/gochujang sauce,
+    mirin=wine, corn-muffin-mix, curry-roux, ranch/taco mix, tortellini=frozen, chipotle-adobo).
+  * REAL collision fixed: 'Kikkoman Aji Mirin ... Rice Wine' was claimed by the rice commodity ->
+    rice now excludes mirin/cooking wine/rice wine/vinegar/noodle/stick/cake/krispies/paper.
+- FF + Hy-Vee primed (prime-batch-headless, 47 terms) -> 41/46 have live cells, all spot-checked clean.
+  5 empty are genuinely not at FF/HV: oyster-sauce, achiote-paste, pomegranate-molasses,
+  japanese-curry-roux, berbere-seasoning (Walmart carries all 5).
+- IN FLIGHT: Walmart capture agent (Brad's Chrome, NEXT_DATA, 47 terms -> out\r100\walmart-r100-raw.txt,
+  import via import-walmart-batch -Raw). THEN: Sam's capture (q|n|lp|up|id pipe CSV -> build-sams-deals),
+  Fareway (shop.fareway DOM extract -> build-fareway-regular; MUST be stamped in-store/mode_verified or
+  the price-mode gate drops it), Aldi + Baker's browser captures (must emit link_url/ids per #116).
+  THEN: guards -> vet-sheet 46 -> publish board -> re-cost 100 recipes -> rebuild+republish cards ->
+  push repo (commodity/category/search/band files feed the CLOUD daily - push or the 06:30 run reverts).
+
 ## Remaining phases (tasks #119-#123)
 1. #119 merge labels -> food-macros-db.json (backup first; never-shrink; Atwater guard).
 2. #120 qty-parse + density table -> grams per ingredient per recipe, scale x(14/source_servings),

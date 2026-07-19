@@ -1,46 +1,425 @@
-{
-  "readme": "R100 new canonical items -> grocery board commodity id (bid) + grams per board pricing unit (gpu), for the live-price scaler widget. Items NOT listed here are not board-tracked: they get no bid and the widget shows 'not price-tracked'. Verified against comparison-2026-07-17.json row ids on 2026-07-18.",
-  "map": {
-    "Salt":                {"bid":"salt","unit":"oz","gpu":28.3495},
-    "Black Pepper":        {"bid":"black-pepper","unit":"oz","gpu":28.3495},
-    "Vegetable Oil":       {"bid":"vegetable-oil","unit":"floz","gpu":28.0},
-    "Eggs":                {"bid":"eggs","unit":"dozen","gpu":600.0},
-    "All-Purpose Flour":   {"bid":"flour","unit":"lb","gpu":453.592},
-    "Green Onions":        {"bid":"green-onions","unit":"each","gpu":90.0},
-    "Sugar":               {"bid":"sugar","unit":"lb","gpu":453.592},
-    "Jalapeno":            {"bid":"jalapenos","unit":"lb","gpu":453.592},
-    "Dried Oregano":       {"bid":"dried-oregano","unit":"oz","gpu":28.3495},
-    "Lemon Juice":         {"bid":"lemon-juice","unit":"floz","gpu":29.57},
-    "Cucumber":            {"bid":"cucumbers","unit":"each","gpu":300.0},
-    "Ground Turmeric":     {"bid":"ground-turmeric","unit":"oz","gpu":28.3495},
-    "Pork Chops":          {"bid":"pork-chops","unit":"lb","gpu":453.592},
-    "Heavy Cream":         {"bid":"heavy-cream","unit":"floz","gpu":29.8},
-    "Ground Cinnamon":     {"bid":"ground-cinnamon","unit":"oz","gpu":28.3495},
-    "Worcestershire Sauce":{"bid":"worcestershire","unit":"floz","gpu":29.57},
-    "Red Pepper Flakes":   {"bid":"red-pepper-flakes","unit":"oz","gpu":28.3495},
-    "Ground Pork":         {"bid":"ground-pork","unit":"lb","gpu":453.592},
-    "Feta Cheese":         {"bid":"feta","unit":"oz","gpu":28.3495},
-    "Spaghetti":           {"bid":"pasta","unit":"oz","gpu":28.3495},
-    "Ziti Pasta":          {"bid":"pasta","unit":"oz","gpu":28.3495},
-    "Pasta Shells":        {"bid":"pasta","unit":"oz","gpu":28.3495},
-    "Fettuccine":          {"bid":"pasta","unit":"oz","gpu":28.3495},
-    "Orzo Pasta":          {"bid":"pasta","unit":"oz","gpu":28.3495},
-    "Egg Noodles":         {"bid":"egg-noodles","unit":"oz","gpu":28.3495},
-    "Apple Cider Vinegar": {"bid":"apple-cider-vinegar","unit":"floz","gpu":29.57},
-    "Peanuts":             {"bid":"peanuts","unit":"oz","gpu":28.3495},
-    "Rice Vinegar":        {"bid":"rice-vinegar","unit":"floz","gpu":29.57},
-    "Mayonnaise":          {"bid":"mayonnaise","unit":"oz","gpu":28.3495},
-    "Celery":              {"bid":"celery","unit":"each","gpu":450.0},
-    "Diced Tomatoes & Green Chilies": {"bid":"tomatoes-green-chilies","unit":"oz","gpu":28.3495},
-    "Hummus":              {"bid":"hummus","unit":"oz","gpu":28.3495},
-    "Dried Parsley":       {"bid":"dried-parsley","unit":"oz","gpu":28.3495},
-    "Frozen Hash Browns":  {"bid":"hash-browns","unit":"oz","gpu":28.3495},
-    "Dill Pickles":        {"bid":"pickles","unit":"oz","gpu":28.3495},
-    "Sweet Potatoes":      {"bid":"sweet-potatoes","unit":"lb","gpu":453.592},
-    "Fresh Cilantro":      {"bid":"cilantro","unit":"each","gpu":57.0},
-    "Mexican Cheese Blend":{"bid":"shredded-cheese","unit":"oz","gpu":28.3495},
-    "Butter Crackers":     {"bid":"crackers","unit":"oz","gpu":28.3495},
-    "Red Onion":           {"bid":"onions","unit":"lb","gpu":453.592},
-    "BBQ Sauce":           {"bid":"bbq-sauce","unit":"oz","gpu":28.3495}
-  }
+﻿{
+    "readme":  "R100 new canonical items -\u003e grocery board commodity id (bid) + grams per board pricing unit (gpu), for the live-price scaler widget. Items NOT listed here are not board-tracked: they get no bid and the widget shows \u0027not price-tracked\u0027. Verified against comparison-2026-07-17.json row ids on 2026-07-18.",
+    "map":  {
+                "Diced Green Chiles":  {
+                             "bid":  "canned-green-chilies",
+                             "unit":  "oz",
+                             "gpu":  28.3495
+                         },
+                "Red Bell Pepper":  {
+                             "bid":  "bell-peppers",
+                             "unit":  "each",
+                             "gpu":  120
+                         },
+                "Salt":  {
+                             "bid":  "salt",
+                             "unit":  "oz",
+                             "gpu":  28.3495
+                         },
+                "Black Pepper":  {
+                                     "bid":  "black-pepper",
+                                     "unit":  "oz",
+                                     "gpu":  28.3495
+                                 },
+                "Vegetable Oil":  {
+                                      "bid":  "vegetable-oil",
+                                      "unit":  "floz",
+                                      "gpu":  28.0
+                                  },
+                "Eggs":  {
+                             "bid":  "eggs",
+                             "unit":  "dozen",
+                             "gpu":  600.0
+                         },
+                "All-Purpose Flour":  {
+                                          "bid":  "flour",
+                                          "unit":  "lb",
+                                          "gpu":  453.592
+                                      },
+                "Green Onions":  {
+                                     "bid":  "green-onions",
+                                     "unit":  "each",
+                                     "gpu":  90.0
+                                 },
+                "Sugar":  {
+                              "bid":  "sugar",
+                              "unit":  "lb",
+                              "gpu":  453.592
+                          },
+                "Jalapeno":  {
+                                 "bid":  "jalapenos",
+                                 "unit":  "lb",
+                                 "gpu":  453.592
+                             },
+                "Dried Oregano":  {
+                                      "bid":  "dried-oregano",
+                                      "unit":  "oz",
+                                      "gpu":  28.3495
+                                  },
+                "Lemon Juice":  {
+                                    "bid":  "lemon-juice",
+                                    "unit":  "floz",
+                                    "gpu":  29.57
+                                },
+                "Cucumber":  {
+                                 "bid":  "cucumbers",
+                                 "unit":  "each",
+                                 "gpu":  300.0
+                             },
+                "Ground Turmeric":  {
+                                        "bid":  "ground-turmeric",
+                                        "unit":  "oz",
+                                        "gpu":  28.3495
+                                    },
+                "Pork Chops":  {
+                                   "bid":  "pork-chops",
+                                   "unit":  "lb",
+                                   "gpu":  453.592
+                               },
+                "Heavy Cream":  {
+                                    "bid":  "heavy-cream",
+                                    "unit":  "floz",
+                                    "gpu":  29.8
+                                },
+                "Ground Cinnamon":  {
+                                        "bid":  "ground-cinnamon",
+                                        "unit":  "oz",
+                                        "gpu":  28.3495
+                                    },
+                "Worcestershire Sauce":  {
+                                             "bid":  "worcestershire",
+                                             "unit":  "floz",
+                                             "gpu":  29.57
+                                         },
+                "Red Pepper Flakes":  {
+                                          "bid":  "red-pepper-flakes",
+                                          "unit":  "oz",
+                                          "gpu":  28.3495
+                                      },
+                "Ground Pork":  {
+                                    "bid":  "ground-pork",
+                                    "unit":  "lb",
+                                    "gpu":  453.592
+                                },
+                "Feta Cheese":  {
+                                    "bid":  "feta",
+                                    "unit":  "oz",
+                                    "gpu":  28.3495
+                                },
+                "Spaghetti":  {
+                                  "bid":  "pasta",
+                                  "unit":  "oz",
+                                  "gpu":  28.3495
+                              },
+                "Ziti Pasta":  {
+                                   "bid":  "pasta",
+                                   "unit":  "oz",
+                                   "gpu":  28.3495
+                               },
+                "Pasta Shells":  {
+                                     "bid":  "pasta",
+                                     "unit":  "oz",
+                                     "gpu":  28.3495
+                                 },
+                "Fettuccine":  {
+                                   "bid":  "pasta",
+                                   "unit":  "oz",
+                                   "gpu":  28.3495
+                               },
+                "Orzo Pasta":  {
+                                   "bid":  "pasta",
+                                   "unit":  "oz",
+                                   "gpu":  28.3495
+                               },
+                "Egg Noodles":  {
+                                    "bid":  "egg-noodles",
+                                    "unit":  "oz",
+                                    "gpu":  28.3495
+                                },
+                "Apple Cider Vinegar":  {
+                                            "bid":  "apple-cider-vinegar",
+                                            "unit":  "floz",
+                                            "gpu":  29.57
+                                        },
+                "Peanuts":  {
+                                "bid":  "peanuts",
+                                "unit":  "oz",
+                                "gpu":  28.3495
+                            },
+                "Rice Vinegar":  {
+                                     "bid":  "rice-vinegar",
+                                     "unit":  "floz",
+                                     "gpu":  29.57
+                                 },
+                "Mayonnaise":  {
+                                   "bid":  "mayonnaise",
+                                   "unit":  "oz",
+                                   "gpu":  28.3495
+                               },
+                "Celery":  {
+                               "bid":  "celery",
+                               "unit":  "each",
+                               "gpu":  450.0
+                           },
+                "Diced Tomatoes \u0026 Green Chilies":  {
+                                                            "bid":  "tomatoes-green-chilies",
+                                                            "unit":  "oz",
+                                                            "gpu":  28.3495
+                                                        },
+                "Hummus":  {
+                               "bid":  "hummus",
+                               "unit":  "oz",
+                               "gpu":  28.3495
+                           },
+                "Dried Parsley":  {
+                                      "bid":  "dried-parsley",
+                                      "unit":  "oz",
+                                      "gpu":  28.3495
+                                  },
+                "Frozen Hash Browns":  {
+                                           "bid":  "hash-browns",
+                                           "unit":  "oz",
+                                           "gpu":  28.3495
+                                       },
+                "Dill Pickles":  {
+                                     "bid":  "pickles",
+                                     "unit":  "oz",
+                                     "gpu":  28.3495
+                                 },
+                "Sweet Potatoes":  {
+                                       "bid":  "sweet-potatoes",
+                                       "unit":  "lb",
+                                       "gpu":  453.592
+                                   },
+                "Fresh Cilantro":  {
+                                       "bid":  "cilantro",
+                                       "unit":  "each",
+                                       "gpu":  57.0
+                                   },
+                "Mexican Cheese Blend":  {
+                                             "bid":  "shredded-cheese",
+                                             "unit":  "oz",
+                                             "gpu":  28.3495
+                                         },
+                "Butter Crackers":  {
+                                        "bid":  "crackers",
+                                        "unit":  "oz",
+                                        "gpu":  28.3495
+                                    },
+                "Red Onion":  {
+                                  "bid":  "onions",
+                                  "unit":  "lb",
+                                  "gpu":  453.592
+                              },
+                "BBQ Sauce":  {
+                                  "bid":  "bbq-sauce",
+                                  "unit":  "oz",
+                                  "gpu":  28.3495
+                              },
+                "1/3 Fat Cream Cheese":  {
+                                             "bid":  "cream-cheese",
+                                             "unit":  "oz",
+                                             "gpu":  28.3495
+                                         },
+                "93/7 Ground Beef":  {
+                                         "bid":  "ground-beef-8020",
+                                         "unit":  "lb",
+                                         "gpu":  453.592
+                                     },
+                "93/7 Ground Turkey":  {
+                                           "bid":  "ground-turkey",
+                                           "unit":  "lb",
+                                           "gpu":  453.592
+                                       },
+                "Boneless Skinless Chicken Thigh":  {
+                                                        "bid":  "chicken-thighs",
+                                                        "unit":  "lb",
+                                                        "gpu":  453.592
+                                                    },
+                "Broccoli Florets":  {
+                                         "bid":  "broccoli",
+                                         "unit":  "lb",
+                                         "gpu":  453.592
+                                     },
+                "Carrots":  {
+                                "bid":  "carrots",
+                                "unit":  "lb",
+                                "gpu":  453.592
+                            },
+                "Cheddar Cheese, Shredded":  {
+                                                 "bid":  "shredded-cheese",
+                                                 "unit":  "oz",
+                                                 "gpu":  28.3495
+                                             },
+                "Coconut Milk":  {
+                                     "bid":  "coconut-milk-canned",
+                                     "unit":  "floz",
+                                     "gpu":  29.57
+                                 },
+                "Frozen Chopped Spinach":  {
+                                               "bid":  "spinach",
+                                               "unit":  "oz",
+                                               "gpu":  28.3495
+                                           },
+                "Frozen Green Peas":  {
+                                          "bid":  "frozen-peas",
+                                          "unit":  "oz",
+                                          "gpu":  28.3495
+                                      },
+                "Ginger":  {
+                               "bid":  "fresh-ginger",
+                               "unit":  "lb",
+                               "gpu":  453.592
+                           },
+                "Golden Raisins":  {
+                                       "bid":  "raisins",
+                                       "unit":  "oz",
+                                       "gpu":  28.3495
+                                   },
+                "Greek Yogurt":  {
+                                     "bid":  "yogurt",
+                                     "unit":  "oz",
+                                     "gpu":  28.3495
+                                 },
+                "Green Bell Peppers":  {
+                                           "bid":  "bell-peppers",
+                                           "unit":  "each",
+                                           "gpu":  120
+                                       },
+                "Green Cabbage":  {
+                                      "bid":  "cabbage",
+                                      "unit":  "lb",
+                                      "gpu":  453.592
+                                  },
+                "Hickory Smoked Bacon":  {
+                                             "bid":  "bacon",
+                                             "unit":  "lb",
+                                             "gpu":  453.592
+                                         },
+                "Hot Italian Sausage":  {
+                                            "bid":  "italian-sausage",
+                                            "unit":  "lb",
+                                            "gpu":  453.592
+                                        },
+                "Light Sour Cream":  {
+                                         "bid":  "sour-cream",
+                                         "unit":  "oz",
+                                         "gpu":  28.3495
+                                     },
+                "Marinara Sauce":  {
+                                       "bid":  "pasta-sauce",
+                                       "unit":  "oz",
+                                       "gpu":  28.3495
+                                   },
+                "Olives":  {
+                               "bid":  "green-olives",
+                               "unit":  "oz",
+                               "gpu":  28.3495
+                           },
+                "Parmesan Cheese":  {
+                                        "bid":  "parmesan",
+                                        "unit":  "oz",
+                                        "gpu":  28.3495
+                                    },
+                "Penne Pasta":  {
+                                    "bid":  "pasta",
+                                    "unit":  "oz",
+                                    "gpu":  28.3495
+                                },
+                "Pineapple Chunks":  {
+                                         "bid":  "canned-pineapple",
+                                         "unit":  "oz",
+                                         "gpu":  28.3495
+                                     },
+                "Pork Chorizo":  {
+                                     "bid":  "ground-pork",
+                                     "unit":  "lb",
+                                     "gpu":  453.592
+                                 },
+                "Potato":  {
+                               "bid":  "russet-potatoes",
+                               "unit":  "lb",
+                               "gpu":  453.592
+                           },
+                "Reduced Fat Mozzarella":  {
+                                               "bid":  "shredded-cheese",
+                                               "unit":  "oz",
+                                               "gpu":  28.3495
+                                           },
+                "Ricotta Cheese":  {
+                                       "bid":  "cottage-cheese",
+                                       "unit":  "oz",
+                                       "gpu":  28.3495
+                                   },
+                "Rice":  {
+                             "bid":  "rice",
+                             "unit":  "lb",
+                             "gpu":  453.592
+                         },
+                "Salsa Verde":  {
+                                    "bid":  "salsa",
+                                    "unit":  "oz",
+                                    "gpu":  28.3495
+                                },
+                "Seasoned Black Beans":  {
+                                             "bid":  "canned-black-beans",
+                                             "unit":  "oz",
+                                             "gpu":  28.3495
+                                         },
+                "Smoked Paprika":  {
+                                       "bid":  "paprika",
+                                       "unit":  "oz",
+                                       "gpu":  28.3495
+                                   },
+                "Smoked Turkey Sausage":  {
+                                              "bid":  "kielbasa",
+                                              "unit":  "lb",
+                                              "gpu":  453.592
+                                          },
+                "Sriracha":  {
+                                 "bid":  "hot-sauce",
+                                 "unit":  "floz",
+                                 "gpu":  29.57
+                             },
+                "Buffalo Wing Sauce":  {
+                                           "bid":  "hot-sauce",
+                                           "unit":  "floz",
+                                           "gpu":  29.57
+                                       },
+                "Sugar-Free Maple Syrup":  {
+                                               "bid":  "maple-syrup",
+                                               "unit":  "floz",
+                                               "gpu":  29.57
+                                           },
+                "Sweet Whole Kernel Corn":  {
+                                                "bid":  "canned-corn",
+                                                "unit":  "oz",
+                                                "gpu":  28.3495
+                                            },
+                "White Mushrooms":  {
+                                        "bid":  "mushrooms",
+                                        "unit":  "oz",
+                                        "gpu":  28.3495
+                                    },
+                "Cherry Tomatoes":  {
+                                        "bid":  "tomatoes",
+                                        "unit":  "lb",
+                                        "gpu":  453.592
+                                    },
+                "Lo Mein Noodles":  {
+                                        "bid":  "egg-noodles",
+                                        "unit":  "oz",
+                                        "gpu":  28.3495
+                                    },
+                "Corn Chips":  {
+                                   "bid":  "potato-chips",
+                                   "unit":  "oz",
+                                   "gpu":  28.3495
+                               },
+                "Pork Loin":  {
+                                  "bid":  "pork-shoulder",
+                                  "unit":  "lb",
+                                  "gpu":  453.592
+                              }
+            }
 }
