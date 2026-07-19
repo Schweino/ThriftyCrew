@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-07-18 21:51",
+    "generated":  "2026-07-18 22:10",
     "board":  "comparison-2026-07-18.json",
-    "total_tiles":  2215,
-    "violations":  224,
+    "total_tiles":  2243,
+    "violations":  252,
     "by_store":  {
                      "Walmart":  {
                                      "coverage":  54,
@@ -10,9 +10,9 @@
                                      "violations":  56
                                  },
                      "Fareway":  {
-                                     "coverage":  2,
-                                     "tiles":  324,
-                                     "violations":  8
+                                     "coverage":  30,
+                                     "tiles":  352,
+                                     "violations":  36
                                  },
                      "Family Fare":  {
                                          "coverage":  51,
@@ -71,6 +71,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Great Value Ground Allspice, 2 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-allspice",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Simply Organic Allspice",
                      "link":  ""
                  },
                  {
@@ -159,6 +167,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Local Roots Organic Basil",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fresh-basil",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Simply Organic Basil",
                      "link":  ""
                  },
                  {
@@ -362,6 +378,14 @@
                      "link":  "Ortega Fire Roasted Mild Diced Green Chiles, Kosher, 4 oz"
                  },
                  {
+                     "id":  "canned-green-chilies",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "La Preferida Organic Mild Diced Green Chiles",
+                     "link":  ""
+                 },
+                 {
                      "id":  "diced-tomatoes",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -482,6 +506,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "cayenne-pepper",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Simply Organic Cayenne",
+                     "link":  ""
+                 },
+                 {
                      "id":  "cheese-crackers",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -503,6 +535,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Our Family Tortellini, Cheese, Classic Curls 19 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cheese-tortellini",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Rana 5 Cheese Tortellini",
                      "link":  ""
                  },
                  {
@@ -538,6 +578,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "chili-crisp",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "WUJU Chili Crisp Sweet Heat",
+                     "link":  ""
+                 },
+                 {
                      "id":  "five-spice-powder",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -554,6 +602,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "chipotle-adobo",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "San Marcos Chipotle Peppers in Adobo Sauce",
+                     "link":  ""
+                 },
+                 {
                      "id":  "chocolate-milk",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -567,6 +623,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Great Value Ground Cloves, 2 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-cloves",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "McCormick Ground Cloves",
                      "link":  ""
                  },
                  {
@@ -607,6 +671,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Sugar \u0027N Spice Coriander Ground Pp",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-coriander",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Simply Organic Coriander",
                      "link":  ""
                  },
                  {
@@ -690,6 +762,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "curry-powder",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "McCormick Curry Powder",
+                     "link":  ""
+                 },
+                 {
                      "id":  "tomatoes-green-chilies",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
@@ -719,6 +799,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Sugar \u0027N Spice Dill Weed Pp",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "dried-dill",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Simply Organic Dill Weed",
                      "link":  ""
                  },
                  {
@@ -799,6 +887,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kikkoman Glutenâ€‘Free Fish Sauce, 6.8 fl oz Glass Bottle",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fish-sauce",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Thai Kitchen Gluten Free Premium Fish Sauce",
                      "link":  ""
                  },
                  {
@@ -971,6 +1067,14 @@
                  },
                  {
                      "id":  "grits",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Bob\u0027s Red Mill Corn Grits, Polenta",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "grits",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -1071,6 +1175,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Lee Kum Kee Hoisin Sauce 20 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "hoisin-sauce",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "House of Tsang Hoisin Sauce",
                      "link":  ""
                  },
                  {
@@ -1226,6 +1338,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "mirin",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kikkoman Sweet Cooking Rice Seasoning (Aji-Mirin)",
+                     "link":  ""
+                 },
+                 {
                      "id":  "muffins",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -1263,6 +1383,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Our Family Nutmeg, Ground 2.12 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-nutmeg",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "McCormick Ground Nutmeg",
                      "link":  ""
                  },
                  {
@@ -1354,6 +1482,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "poblano-peppers",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Poblano Pepper",
+                     "link":  ""
+                 },
+                 {
                      "id":  "pomegranate-molasses",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -1378,11 +1514,27 @@
                      "link":  ""
                  },
                  {
+                     "id":  "poppy-seeds",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "McCormick Poppy Seed",
+                     "link":  ""
+                 },
+                 {
                      "id":  "potato-gnocchi",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Giovanni Rana Skillet Gnocchi 12 oz. Bag, Refrigerated",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "potato-gnocchi",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "DeLallo Mini Gnocchi",
                      "link":  ""
                  },
                  {
@@ -1442,6 +1594,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "ranch-seasoning-mix",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hidden Valley Original Ranch Salad Dressing \u0026 Seasoning Mix",
+                     "link":  ""
+                 },
+                 {
                      "id":  "red-pepper-flakes",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -1487,6 +1647,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Thai Kitchen Gluten Free Gluten Free Stir Fry Rice Noodles,",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "rice-noodles",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Thai Kitchen Gluten Free Stir Fry Rice Noodles",
                      "link":  ""
                  },
                  {
@@ -1543,6 +1711,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Terrasoul Superfoods Organic Black Sesame Seeds, 2 Lbs - Raw",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "toasted-sesame-seeds",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "McCormick Sesame Seed",
                      "link":  ""
                  },
                  {
@@ -1642,11 +1818,27 @@
                      "link":  ""
                  },
                  {
+                     "id":  "taco-seasoning",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Taco Bell Original Taco Seasoning Mix",
+                     "link":  ""
+                 },
+                 {
                      "id":  "tahini",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Krinos Tahini Spread with Velvety Texture 16oz Jar - Premium",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "tahini",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Krinos Tahini Ground Sesame Seeds",
                      "link":  ""
                  },
                  {
@@ -1666,11 +1858,27 @@
                      "link":  ""
                  },
                  {
+                     "id":  "red-curry-paste",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Thai Kitchen Gluten Free Red Curry Paste",
+                     "link":  ""
+                 },
+                 {
                      "id":  "dried-thyme",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Great Value Ground Thyme, 1.4 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "dried-thyme",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Simply Organic Thyme",
                      "link":  ""
                  },
                  {
@@ -1695,6 +1903,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Tomatillos",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "tomatillos",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Tomatillo",
                      "link":  ""
                  },
                  {
@@ -1759,6 +1975,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "FISHER Chef\u0027s Naturals Chopped Walnuts, 16 oz, Naturally Glu",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "walnuts",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fareway Walnut Halves",
                      "link":  ""
                  },
                  {
@@ -1835,5 +2059,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  215
+    "coverage_violations":  243
 }
