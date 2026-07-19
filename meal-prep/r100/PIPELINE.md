@@ -175,3 +175,27 @@ everything. Retrofit visible credit onto the existing 113 AFTER the new 100 ship
   RULE: any republish must run AFTER the last card rebuild, then byte-sweep to confirm.
 - All state pushed through da62dac (incl. final public/board.json). 06:30 daily runs over this state.
 - Still open elsewhere: #124 credit retrofit on the original 113 + their SMP-branded JSON-LD heads.
+
+## 2026-07-19: 3-PART COST MODEL (Brad option 3) + two accuracy fixes
+- Every recipe now shows THREE labeled cost views: Batch total (food the batch uses, "not a
+  register receipt"), True shopping cost (register trip with a STOCKED pantry; whole packages
+  for meat/produce/packaged, utilization for pantry staples), and NEW "Starting with an empty
+  pantry? Add about $X one time" (full containers of every pantry staple; first trip near
+  $true+$X exactly). Fields cost_pantry_add + cost_first_run flow engine -> spec -> db.
+  pantry-packages.json = whole-container grams for all 89 BULK staples (hard-flag on miss).
+- FIX 1 (pork): Pork Loin was priced off pork-shoulder (weekly board $2.24/lb Walmart). Real
+  pork-loin row lives on the RECIPE board ($2.14/lb Walmart, 5 stores). Engine now loads
+  recipe-board rows for ids the weekly board lacks; map remapped; scaler bids fixed. 4 R100
+  recipes moved down ~2-5%.
+- FIX 2 (THE BIG ONE, unit reconciliation): a map's gpu is calibrated to ITS ERA's board unit.
+  Old map had Brown Sugar gpu per-OZ; the weekly board re-registered brown-sugar per-LB ->
+  16x OVERPRICE on every R100 card using brown sugar (caramelized beef batch was $57.27,
+  really $47.96). Soy sauce + 3 vinegars were 4% off (oz vs floz). Engine + retrofit now
+  rescale gpu across standard units (lb/oz/floz/kg/g) and HARD-FLAG non-standard mismatches.
+  AUDIT RULE: whenever a map feeds a board, diff map.unit vs row.unit for every used item.
+- 28 corrected cards republished; sweep 100/100 byte-identical; recipes-db resynced
+  (new fields incl.). costed-prev baseline advanced.
+- retrofit-cost-113.ps1: splices the same 3 labeled lines into the 113 OLD posts (add computed
+  from CURRENT board; first run anchored to each card's PRINTED true cost so eras never mix
+  inside a number; Ranch map-unit override each->oz; fajita pilot-variant handled; add=0 cards
+  get copy-only). Dry 113/113.
