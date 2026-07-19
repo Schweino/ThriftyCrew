@@ -180,6 +180,33 @@ async function notifyAuthOk(env, request) {
   return given.toLowerCase() === want;
 }
 
+async function sendRecipeEmail(env, { recipe, url, memberEmail, notifyEmail }) {
+  const to = env.NOTIFY_TO || "contact@thriftycrew.com";
+  const token = await getAccessToken(env);
+  const replyTo = notifyEmail || memberEmail;
+  const text =
+    "A paid member suggested a recipe for the meal-prep library:\r\n\r\n" +
+    "Recipe: " + recipe + "\r\n" +
+    "URL:    " + url + "\r\n" +
+    "Member: " + memberEmail + "\r\n" +
+    (notifyEmail ? "Notify when added: " + notifyEmail + " (reply to this email when it goes live)\r\n" : "") +
+    "\r\n(Submitted via the members' recipe-idea form on the Meal Prep page." +
+    (replyTo ? " Reply to this email to reach them." : "") + ")";
+  const raw =
+    "To: " + to + "\r\n" +
+    (replyTo ? "Reply-To: " + replyTo + "\r\n" : "") +
+    "Subject: New Recipe Idea" + (notifyEmail ? " (wants notification)" : "") + "\r\n" +
+    "Content-Type: text/plain; charset=UTF-8\r\n\r\n" +
+    text;
+  const r = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", {
+    method: "POST",
+    headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" },
+    body: JSON.stringify({ raw: b64url(raw) }),
+  });
+  if (!r.ok) throw new Error("gmail send failed: " + r.status + " " + (await r.text()).slice(0, 200));
+  return (await r.json()).id;
+}
+
 async function sendRequesterEmail(env, { email, item, commodity, cheapest }) {
   const token = await getAccessToken(env);
   const text =
@@ -267,6 +294,48 @@ export default {
         return json({ ok: true, id: id }, 200, origin);
       } catch (e) {
         return json({ ok: false, error: "send failed" }, 502, origin);
+      }
+    }
+
+    // members-only recipe-idea form on the Meal Prep page. Same email path as /submit, but the
+    // requester must be a PAID (or comped) member: the form sends their account email as memberEmail
+    // and we verify it server-side (the page's client gate is UX; this is the real check).
+    if (url.pathname === "/submit-recipe") {
+      if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders(origin) });
+      if (request.method !== "POST") return json({ ok: false, error: "method not allowed" }, 405, origin);
+
+      let data;
+      try { data = await request.json(); } catch { return json({ ok: false, error: "invalid JSON" }, 400, origin); }
+      // honeypot: silently accept bots without emailing
+      if (data && typeof data.website === "string" && data.website.trim() !== "") return json({ ok: true }, 200, origin);
+
+      const recipe = (data.recipe || "").toString().trim();
+      const recipeUrl = (data.url || "").toString().trim();
+      const memberEmail = (data.memberEmail || "").toString().trim().toLowerCase();
+      const notifyEmail = (data.email || "").toString().trim().toLowerCase();
+
+      if (!recipe) return json({ ok: false, error: "Recipe name is required." }, 400, origin);
+      if (!recipeUrl || !/^https?:\/\/.+/i.test(recipeUrl)) return json({ ok: false, error: "A valid recipe URL (starting with http) is required." }, 400, origin);
+      if (recipe.length > 300 || recipeUrl.length > 2000) return json({ ok: false, error: "One of the fields is too long." }, 400, origin);
+      if (notifyEmail && (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(notifyEmail) || notifyEmail.length > 200)) {
+        return json({ ok: false, error: "That notification email doesn't look valid. Fix it or leave it blank." }, 400, origin);
+      }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(memberEmail) || memberEmail.length > 200) {
+        return json({ ok: false, error: "We couldn't confirm your membership. Please refresh the page and try again." }, 400, origin);
+      }
+      // PAID-ONLY GATE (server-side): the account email must belong to a paid/comped member.
+      let member = null;
+      try { member = await findMemberByEmail(env, memberEmail); } catch (e) {
+        return json({ ok: false, error: "Could not verify your membership right now. Please try again later." }, 502, origin);
+      }
+      if (!member || (member.status !== "paid" && member.status !== "comped")) {
+        return json({ ok: false, error: "Recipe suggestions are a members-only perk. Join for $1/month to send one in.", needsUpgrade: true }, 403, origin);
+      }
+      try {
+        await sendRecipeEmail(env, { recipe, url: recipeUrl, memberEmail, notifyEmail });
+        return json({ ok: true }, 200, origin);
+      } catch (e) {
+        return json({ ok: false, error: "Could not send right now. Please try again later." }, 502, origin);
       }
     }
 
