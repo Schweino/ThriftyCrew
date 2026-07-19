@@ -822,7 +822,15 @@
                         "\\bmouthwash\\b",
                         "hand\\s+soap",
                         "body\\s+spray",
-                        "\\bsunscreen\\b"
+                        "\\bsunscreen\\b",
+                        "\\bbiscuits?\\b",
+                        "butter\\s+flav",
+                        "flavou?red",
+                        "\\bcroissants?\\b",
+                        "\\brolls?\\b",
+                        "\\bcookie",
+                        "\\bpopcorn\\b",
+                        "\\bspray\\b"
                     ]
     },
     {
