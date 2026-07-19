@@ -9,6 +9,8 @@
 !/public/
 !/worker/
 !/wrangler.jsonc
+!/meal-plan-builder-template.html
+!/build-meal-planner.ps1
 
 # --- regenerable pipeline OUTPUTS: recomputed every run from the raw inputs, so never tracked. This lets
 #     the local browser agents commit their raw store data without derived-file rebase conflicts vs the

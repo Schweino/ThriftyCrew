@@ -112,7 +112,8 @@ $html=$html.Replace('113 high-protein dinners, macros from real', "$total high-p
 # 4) members-only recipe-suggestion form (idempotent; inserted UP TOP, just above the filter
 #    bar / grid so members see it without scrolling past all 213 cards)
 $formSrc=[IO.File]::ReadAllText((Join-Path $root 'recipe-request-form.html'),[Text.Encoding]::UTF8).Trim()
-$formBlock='<!--RECIPE-SUGGEST-START--><div class="mpr-suggest" style="margin:2.8rem 0">'+$formSrc+'</div><!--RECIPE-SUGGEST-END-->'
+$plannerCta='<div style="margin:2.8rem 0 0;padding:20px 22px;background:#16263f;border-radius:16px;color:#fff"><span style="display:inline-block;background:#e2a43c;color:#16263f;font-weight:800;font-size:1.1rem;letter-spacing:.08em;border-radius:999px;padding:3px 12px;margin-bottom:8px">NEW &middot; MEMBER TOOL</span><h3 style="color:#fff;font-size:2rem;margin:.2rem 0 .5rem">Build your meal plan</h3><p style="margin:0 0 1.2rem;font-size:1.45rem;line-height:1.5;color:#c9d2de">Pick your dates, your household size, and your recipes. Get a cook night calendar, one combined grocery list, and live cheapest prices at Omaha stores.</p><a href="/meal-plan-builder/" style="display:inline-block;background:#e2a43c;color:#16263f;font-weight:800;padding:10px 22px;border-radius:999px;text-decoration:none;font-size:1.4rem">Open the Meal Plan Builder &rarr;</a></div>'
+$formBlock='<!--RECIPE-SUGGEST-START-->'+$plannerCta+'<div class="mpr-suggest" style="margin:2.8rem 0">'+$formSrc+'</div><!--RECIPE-SUGGEST-END-->'
 $rs='<!--RECIPE-SUGGEST-START-->'; $re='<!--RECIPE-SUGGEST-END-->'
 # remove any existing block first (it may be at the old bottom position), then insert at the top anchor
 $rsi=$html.IndexOf($rs)
