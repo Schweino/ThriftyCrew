@@ -109,19 +109,17 @@ $html=$html.Replace('113 high-protein meal prep dinners.', "$total high-protein 
 $html=$html.Replace('All 113 recipes with full instructions', "All $total recipes with full instructions")
 $html=$html.Replace('113 high-protein dinners, macros from real', "$total high-protein dinners, macros from real")
 
-# 4) members-only recipe-suggestion form (idempotent; inserted before the final CTA)
+# 4) members-only recipe-suggestion form (idempotent; inserted UP TOP, just above the filter
+#    bar / grid so members see it without scrolling past all 213 cards)
 $formSrc=[IO.File]::ReadAllText((Join-Path $root 'recipe-request-form.html'),[Text.Encoding]::UTF8).Trim()
-$formBlock='<!--RECIPE-SUGGEST-START--><div class="mpr-suggest" style="margin:3.4rem 0 0">'+$formSrc+'</div><!--RECIPE-SUGGEST-END-->'
+$formBlock='<!--RECIPE-SUGGEST-START--><div class="mpr-suggest" style="margin:2.8rem 0">'+$formSrc+'</div><!--RECIPE-SUGGEST-END-->'
 $rs='<!--RECIPE-SUGGEST-START-->'; $re='<!--RECIPE-SUGGEST-END-->'
+# remove any existing block first (it may be at the old bottom position), then insert at the top anchor
 $rsi=$html.IndexOf($rs)
-if($rsi -ge 0){
-  $ree=$html.IndexOf($re,$rsi)+$re.Length
-  $html=$html.Substring(0,$rsi)+$formBlock+$html.Substring($ree)
-} else {
-  $ctaTok='<div class="mpr-cta">'
-  $ci=$html.IndexOf($ctaTok); if($ci -lt 0){ throw 'mpr-cta not found for form insert' }
-  $html=$html.Substring(0,$ci)+$formBlock+$html.Substring($ci)
-}
+if($rsi -ge 0){ $ree=$html.IndexOf($re,$rsi)+$re.Length; $html=$html.Substring(0,$rsi)+$html.Substring($ree) }
+$anchor='<div class="mpr-filters">'
+$ai=$html.IndexOf($anchor); if($ai -lt 0){ throw 'mpr-filters anchor not found for form insert' }
+$html=$html.Substring(0,$ai)+$formBlock+$html.Substring($ai)
 
 # --- guards ---
 if($html -notmatch [regex]::Escape('id="smprrf-form"')){ throw 'recipe-suggest form missing after splice' }
