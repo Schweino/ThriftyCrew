@@ -43,14 +43,15 @@
                        "Eggs, 7 large eggs: ~$0.86. \u003cstrong\u003eBuy 1 dozen: $1.47.\u003c/strong\u003e",
                        "Green Cabbage, 1: ~$1.84. \u003cstrong\u003eBuy 2 heads: $3.37.\u003c/strong\u003e",
                        "Carrots, 7: ~$1.06. \u003cstrong\u003eBuy 1 lb: $1.13.\u003c/strong\u003e",
-                       "Soy Sauce, 1 cups: ~$0.88. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 1 cups: ~$0.85. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Oyster Sauce, 6.75 oz: ~$1.65. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Chicken Broth, 0.25 lb: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Sugar, 3.5 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "All-Purpose Flour, 3.5 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (black pepper, salt): ~$0.11. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $36.60 across 14 servings, so roughly $2.61 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $45.95 across 14 servings, roughly $3.28 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $36.57 across 14 servings, so roughly $2.61 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $45.92 across 14 servings, roughly $3.28 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.32 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $61.24. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.61 a bowl\u003c/strong\u003e for beef chow mein that a takeout menu prices at three times that, and you get fourteen of them.",
     "shop_smart":  [
@@ -70,12 +71,14 @@
     "portion_html":  "Weigh the full pot of noodles, subtract the empty-pot number you wrote down, and divide by 14. Tong each portion into a container by weight; noodles love to sneak extra into early boxes. Every bowl comes out to \u003cstrong\u003e706 calories and 38 grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/beef-chow-mein-noodles/\" target=\"_blank\" rel=\"noopener\"\u003eRecipeTin Eats\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about $2.61 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  36.6,
-    "cost_batch_true":  45.95,
+    "cost_batch":  36.57,
+    "cost_batch_true":  45.92,
     "cost_per_serving":  2.61,
     "cost_per_serving_true":  3.28,
+    "cost_pantry_add":  15.32,
+    "cost_first_run":  61.24,
     "scaler":  {
-                   "cost":  "45.95",
+                   "cost":  "45.92",
                    "ing":  [
                                {
                                    "item":  "Lo Mein Noodles",

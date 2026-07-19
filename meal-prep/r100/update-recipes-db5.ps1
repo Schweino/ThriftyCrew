@@ -56,6 +56,7 @@ foreach($slug in $ready){
     '"batch":{"calories":' + ([int]$stat['cal']*14) + ',"protein_g":' + ([int]$stat['protein']*14) + ',"carbs_g":' + ([int]$stat['carbs']*14) + ',"fat_g":' + ([int]$stat['fat']*14) + '},' +
     '"cost_per_serving":' + (N $s['cost_per_serving']) + ',"cost_batch":' + (N $s['cost_batch']) + ',' +
     '"cost_batch_true":' + (N $s['cost_batch_true']) + ',"cost_per_serving_true":' + (N $s['cost_per_serving_true']) + ',' +
+    '"cost_pantry_add":' + (N $s['cost_pantry_add']) + ',"cost_first_run":' + (N $s['cost_first_run']) + ',' +
     '"published":' + (J $today) + ',"source_url":' + (J $s['source_url']) + ',"source_site":' + (J $s['source_site']) + ',' +
     '"notes":' + (J ('R100 build ' + $today + '; adapted from ' + $s['source_site'] + '; macros computed from food-macros-db')) +
   '}'

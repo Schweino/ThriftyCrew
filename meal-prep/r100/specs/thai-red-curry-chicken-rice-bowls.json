@@ -15,9 +15,9 @@
                  "protein":  45,
                  "carbs":  54,
                  "fat":  26,
-                 "cost_ps":  "2.10"
+                 "cost_ps":  "1.82"
              },
-    "intro_html":  "Lean chicken breast simmered in a coconut red curry with a sweet-salty backbone of fish sauce and brown sugar, all over rice. Each bowl brings \u003cstrong\u003e45 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.10\u003c/strong\u003e. Lean has never tasted less like a punishment.",
+    "intro_html":  "Lean chicken breast simmered in a coconut red curry with a sweet-salty backbone of fish sauce and brown sugar, all over rice. Each bowl brings \u003cstrong\u003e45 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$1.82\u003c/strong\u003e. Lean has never tasted less like a punishment.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 3.5 tbsp (49 g)",
                                 "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 8.75 tbsp (52 g)",
@@ -41,16 +41,17 @@
                        "Coconut Milk, 3.5 cans: ~$6.89. \u003cstrong\u003eBuy 4 13.5oz cans: $7.94.\u003c/strong\u003e",
                        "Red Curry Paste, 7 tbsp: ~$1.67. \u003cstrong\u003eBuy 1 4oz jar: $1.80.\u003c/strong\u003e",
                        "Fish Sauce, 0.5 cups: ~$1.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Brown Sugar, 8.75 tbsp: ~$4.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Sugar, 8.75 tbsp: ~$0.26. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Boneless Skinless Chicken Breast, 5.25 lb: ~$11.71. \u003cstrong\u003eBuy 6 lbs: $13.38.\u003c/strong\u003e",
                        "Lime Juice, 3.5 tbsp: ~$0.43. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Fresh Cilantro, 14 tbsp: ~$0.44. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Rice, 3.75 cups dry: ~$1.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper): ~$0.20. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $29.39 across 14 servings, so roughly $2.10 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $36.00 across 14 servings, roughly $2.57 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $25.53 across 14 servings, so roughly $1.82 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.14 across 14 servings, roughly $2.30 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.54 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $49.68. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.10 a bowl\u003c/strong\u003e for coconut red curry chicken over rice. The restaurant version is $15 a plate, which means this batch pays for itself before you finish the second container.",
+    "cost_closing_html":  "About \u003cstrong\u003e$1.82 a bowl\u003c/strong\u003e for coconut red curry chicken over rice. The restaurant version is $15 a plate, which means this batch pays for itself before you finish the second container.",
     "shop_smart":  [
                        "Boneless skinless chicken breast is the whole protein bill at about $12.86 for 5.25 pounds. Club-pack pricing under $2.50 a pound is the target, and this recipe is why you keep some in the freezer.",
                        "Red curry paste and fish sauce are the two flavor bottles, and both keep for months. Their true cost per batch is a couple of dollars against jars that season many dinners.",
@@ -68,13 +69,15 @@
                 ],
     "portion_html":  "Weigh the full pot with rice and chicken, subtract the empty pot weight you wrote down, and divide by 14. Portion to that number and each bowl lands at about 637 calories with 45 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.onceuponachef.com/recipes/thai-red-curry-chicken.html\" target=\"_blank\" rel=\"noopener\"\u003eOnce Upon a Chef\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $2.10 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  29.39,
-    "cost_batch_true":  36,
-    "cost_per_serving":  2.1,
-    "cost_per_serving_true":  2.57,
+    "upsell_html":  "Hearty dinners for about $1.82 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  25.53,
+    "cost_batch_true":  32.14,
+    "cost_per_serving":  1.82,
+    "cost_per_serving_true":  2.3,
+    "cost_pantry_add":  17.54,
+    "cost_first_run":  49.68,
     "scaler":  {
-                   "cost":  "36.00",
+                   "cost":  "32.14",
                    "ing":  [
                                {
                                    "item":  "Vegetable Oil",
@@ -177,13 +180,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Thai red curry chicken meal prep: 14 bowls, 637 calories and 45g protein each, about $2.10 a serving. Chicken breast simmered in coconut red curry over rice.",
+                 "description":  "Thai red curry chicken meal prep: 14 bowls, 637 calories and 45g protein each, about $1.82 a serving. Chicken breast simmered in coconut red curry over rice.",
                  "keywords":  "thai red curry chicken, chicken rice bowls, coconut curry chicken, chicken meal prep, budget thai recipe, red curry paste",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",
                  "cookTime":  "PT30M",
                  "totalTime":  "PT45M",
-                 "costPerServing":  2.1,
+                 "costPerServing":  1.82,
                  "recipeIngredient":  [
                                           "5.25 lb boneless skinless chicken breast",
                                           "5.75 cups dry rice",

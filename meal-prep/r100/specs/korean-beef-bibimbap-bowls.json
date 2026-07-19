@@ -36,7 +36,7 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Gochujang, 0.5 cups: ~$1.29. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Soy Sauce, 3.5 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 3.5 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Rice Vinegar, 3.5 tbsp: ~$0.43. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Honey, 3.5 tbsp: ~$0.65. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Sesame Oil, 1.25 tbsp: ~$0.34. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -49,8 +49,9 @@
                        "Green Onions, 13.25 tbsp: ~$0.94. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
                        "Eggs, 14 large eggs: ~$1.72. \u003cstrong\u003eBuy 2 dozens: $2.94.\u003c/strong\u003e",
                        "Pantry seasonings (garlic powder, salt, black pepper): ~$0.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $33.29 across 14 servings, so roughly $2.38 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $38.48 across 14 servings, roughly $2.75 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $33.28 across 14 servings, so roughly $2.38 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $38.47 across 14 servings, roughly $2.75 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $21.29 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.76. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.38 a bowl\u003c/strong\u003e for bibimbap that runs $14 to $16 at a Korean restaurant. Fourteen bowls for the price of two nights out is the kind of math we like around here.",
     "shop_smart":  [
@@ -70,12 +71,14 @@
     "portion_html":  "Weigh the pot of finished beef, subtract the empty pot number from step 1, and divide by 14 so every bowl gets the same share. Do the same quick math on the rice. Each assembled bowl lands at 567 calories and 38 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://wellnessmama.com/recipes/korean-rice-bowls/\" target=\"_blank\" rel=\"noopener\"\u003eWellness Mama\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about $2.38 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  33.29,
-    "cost_batch_true":  38.48,
+    "cost_batch":  33.28,
+    "cost_batch_true":  38.47,
     "cost_per_serving":  2.38,
     "cost_per_serving_true":  2.75,
+    "cost_pantry_add":  21.29,
+    "cost_first_run":  59.76,
     "scaler":  {
-                   "cost":  "38.48",
+                   "cost":  "38.47",
                    "ing":  [
                                {
                                    "item":  "Gochujang",

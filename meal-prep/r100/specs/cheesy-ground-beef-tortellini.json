@@ -33,8 +33,9 @@
                        "Marinara Sauce, 6.25 cups: ~$4.08. \u003cstrong\u003eBuy 3 24oz jars: $5.25.\u003c/strong\u003e",
                        "Reduced Fat Mozzarella, 28 oz: ~$6.87. \u003cstrong\u003eBuy 4 8oz bags: $7.89.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper, garlic powder, onion powder, dried oregano): ~$0.58. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $37.42 across 14 servings, so roughly $2.67 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $47.75 across 14 servings, roughly $3.41 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $37.42 across 14 servings, so roughly $2.67 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $47.75 across 14 servings, roughly $3.41 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.81 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $54.56. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.67 a bowl\u003c/strong\u003e for cheesy beef tortellini that an Italian chain would put on the menu at five times the price with a breadstick as an apology.",
     "shop_smart":  [
@@ -58,6 +59,8 @@
     "cost_batch_true":  47.75,
     "cost_per_serving":  2.67,
     "cost_per_serving_true":  3.41,
+    "cost_pantry_add":  6.81,
+    "cost_first_run":  54.56,
     "scaler":  {
                    "cost":  "47.75",
                    "ing":  [

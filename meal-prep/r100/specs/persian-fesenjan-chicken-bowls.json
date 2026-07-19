@@ -38,8 +38,9 @@
                        "Sugar, 3.5 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Rice, 3.75 cups dry: ~$1.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (ground turmeric, ground cinnamon, salt, black pepper): ~$0.43. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $25.97 across 14 servings, so roughly $1.86 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $32.29 across 14 servings, roughly $2.31 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $25.97 across 14 servings, so roughly $1.86 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.29 across 14 servings, roughly $2.31 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $21.47 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $53.76. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$1.86 a bowl\u003c/strong\u003e for fesenjan that a Persian restaurant would serve for $17, assuming your town even has one. This is the rare dish where cooking it yourself is both cheaper and your only option.",
     "shop_smart":  [
@@ -64,6 +65,8 @@
     "cost_batch_true":  32.29,
     "cost_per_serving":  1.86,
     "cost_per_serving_true":  2.31,
+    "cost_pantry_add":  21.47,
+    "cost_first_run":  53.76,
     "scaler":  {
                    "cost":  "32.29",
                    "ing":  [

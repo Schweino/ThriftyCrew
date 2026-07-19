@@ -33,8 +33,9 @@
                        "Butter, 0.75 cups: ~$0.94. \u003cstrong\u003eBuy 1 lb box: $2.92.\u003c/strong\u003e",
                        "Rice, 3.75 cups dry: ~$1.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (paprika, salt, black pepper, ground turmeric): ~$0.59. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $48.00 across 14 servings, so roughly $3.43 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $50.23 across 14 servings, roughly $3.59 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $48.00 across 14 servings, so roughly $3.43 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $50.23 across 14 servings, roughly $3.59 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $6.94 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $57.17. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.43 a bowl\u003c/strong\u003e for a koobideh plate that kabob restaurants charge $16 to $18 for. This bowl is nearly all beef, which is why it costs more than our rice-heavy dishes and still embarrasses the restaurant price.",
     "shop_smart":  [
@@ -58,6 +59,8 @@
     "cost_batch_true":  50.23,
     "cost_per_serving":  3.43,
     "cost_per_serving_true":  3.59,
+    "cost_pantry_add":  6.94,
+    "cost_first_run":  57.17,
     "scaler":  {
                    "cost":  "50.23",
                    "ing":  [

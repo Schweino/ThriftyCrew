@@ -39,8 +39,9 @@
                        "Light Sour Cream, 0.75 cups: ~$0.65. \u003cstrong\u003eBuy 1 16oz tub: $1.84.\u003c/strong\u003e",
                        "Reduced Fat Mozzarella, 11.25 oz: ~$2.74. \u003cstrong\u003eBuy 2 8oz bags: $3.94.\u003c/strong\u003e",
                        "Pantry seasonings (italian seasoning, salt, black pepper): ~$0.41. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $24.42 across 14 servings, so roughly $1.74 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $34.23 across 14 servings, roughly $2.44 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $24.42 across 14 servings, so roughly $1.74 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $34.23 across 14 servings, roughly $2.44 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $4.83 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $39.06. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$1.74 a bowl\u003c/strong\u003e for a three-cheese baked spaghetti that an Italian restaurant would price at $14 a plate. The entire 14-serving batch costs less than two of those plates.",
     "shop_smart":  [
@@ -64,6 +65,8 @@
     "cost_batch_true":  34.23,
     "cost_per_serving":  1.74,
     "cost_per_serving_true":  2.44,
+    "cost_pantry_add":  4.83,
+    "cost_first_run":  39.06,
     "scaler":  {
                    "cost":  "34.23",
                    "ing":  [

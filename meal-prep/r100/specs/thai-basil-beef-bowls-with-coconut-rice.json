@@ -15,9 +15,9 @@
                  "protein":  31,
                  "carbs":  50,
                  "fat":  29,
-                 "cost_ps":  "3.63"
+                 "cost_ps":  "3.52"
              },
-    "intro_html":  "Savory-sweet basil beef over rice that simmered in coconut milk, this is the Thai restaurant order you stop paying $15 for. Each bowl carries \u003cstrong\u003e31 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.63\u003c/strong\u003e, with jalapeno and lime keeping every bite awake.",
+    "intro_html":  "Savory-sweet basil beef over rice that simmered in coconut milk, this is the Thai restaurant order you stop paying $15 for. Each bowl carries \u003cstrong\u003e31 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.52\u003c/strong\u003e, with jalapeno and lime keeping every bite awake.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.5 cups dry (648 g)",
                                 "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 3.5 cans (1389 g)",
@@ -38,17 +38,18 @@
                        "93/7 Ground Beef, 3.5 lb: ~$21.99. \u003cstrong\u003eBuy 4 lbs: $25.12.\u003c/strong\u003e",
                        "Olive Oil, 3.5 tbsp: ~$0.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Garlic, 7 tbsp: ~$0.86. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
-                       "Soy Sauce, 0.75 cups: ~$0.88. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 0.75 cups: ~$0.84. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Lime Juice, 1 cups: ~$1.77. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Brown Sugar, 3.5 tbsp: ~$1.64. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Sugar, 3.5 tbsp: ~$0.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Jalapeno, 4 tbsp: ~$0.14. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
                        "Carrots, 3.5: ~$0.53. \u003cstrong\u003eBuy 1 lb: $1.13.\u003c/strong\u003e",
                        "Green Onions, 10 tbsp: ~$0.71. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
                        "Pantry seasonings (red bell pepper, cayenne pepper, fresh basil, salt, black pepper): ~$13.94. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $50.86 across 14 servings, so roughly $3.63 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $58.34 across 14 servings, roughly $4.17 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $49.28 across 14 servings, so roughly $3.52 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $56.76 across 14 servings, roughly $4.05 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $22.77 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $79.53. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.63 a bowl\u003c/strong\u003e for basil beef with coconut rice. The Thai spot down the street charges $15 for a smaller portion, and they keep the leftovers.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.52 a bowl\u003c/strong\u003e for basil beef with coconut rice. The Thai spot down the street charges $15 for a smaller portion, and they keep the leftovers.",
     "shop_smart":  [
                        "The 93/7 ground beef is the big line at about $13.63 for 3.5 pounds. Leaner beef costs more per pound but you are not paying to drain fat down the sink, which matters when the sauce needs to cling.",
                        "Canned coconut milk is one of the most price-volatile items in the store. Stock up when it drops near $2 a can, it keeps for ages in the pantry.",
@@ -65,13 +66,15 @@
                 ],
     "portion_html":  "Weigh your rice and beef together in the pot, subtract the empty pot weight you wrote down, and divide by 14. Portion to that number and each bowl lands at about 593 calories with 31 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.sugarandsoul.co/thai-basil-beef-bowls/\" target=\"_blank\" rel=\"noopener\"\u003eSugar and Soul\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $3.63 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  50.86,
-    "cost_batch_true":  58.34,
-    "cost_per_serving":  3.63,
-    "cost_per_serving_true":  4.17,
+    "upsell_html":  "Hearty dinners for about $3.52 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  49.28,
+    "cost_batch_true":  56.76,
+    "cost_per_serving":  3.52,
+    "cost_per_serving_true":  4.05,
+    "cost_pantry_add":  22.77,
+    "cost_first_run":  79.53,
     "scaler":  {
-                   "cost":  "58.34",
+                   "cost":  "56.76",
                    "ing":  [
                                {
                                    "item":  "Rice",
@@ -188,13 +191,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Thai basil beef meal prep: 14 bowls, 593 calories and 31g protein each, about $3.63 a serving. Savory-sweet ground beef over rich coconut rice.",
+                 "description":  "Thai basil beef meal prep: 14 bowls, 593 calories and 31g protein each, about $3.52 a serving. Savory-sweet ground beef over rich coconut rice.",
                  "keywords":  "thai basil beef, coconut rice, ground beef bowls, thai meal prep, budget thai food, basil beef recipe",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",
                  "cookTime":  "PT30M",
                  "totalTime":  "PT45M",
-                 "costPerServing":  3.63,
+                 "costPerServing":  3.52,
                  "recipeIngredient":  [
                                           "3.5 lb 93/7 ground beef",
                                           "3.5 cups dry rice",

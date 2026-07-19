@@ -51,8 +51,9 @@
                        "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Mayonnaise, 1.75 cups: ~$1.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (fresh basil, salt, black pepper): ~$5.47. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $48.46 across 14 servings, so roughly $3.46 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $51.84 across 14 servings, roughly $3.70 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $48.46 across 14 servings, so roughly $3.46 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $51.84 across 14 servings, roughly $3.70 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $26.61 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $78.45. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.46 a bowl\u003c/strong\u003e for banh mi bowls with pickled veg and sriracha mayo. Sandwich shops charge $13 for a banh mi-inspired bowl half this size. The mayo alone is doing premium work here.",
     "shop_smart":  [
@@ -77,6 +78,8 @@
     "cost_batch_true":  51.84,
     "cost_per_serving":  3.46,
     "cost_per_serving_true":  3.7,
+    "cost_pantry_add":  26.61,
+    "cost_first_run":  78.45,
     "scaler":  {
                    "cost":  "51.84",
                    "ing":  [

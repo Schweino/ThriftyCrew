@@ -44,13 +44,14 @@
                        "Garlic, 2.75 tbsp: ~$0.35. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Ginger, 2.75 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 piece: $0.88.\u003c/strong\u003e",
                        "Beef Broth, 6 lb: ~$3.61. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Soy Sauce, 5.5 tbsp: ~$0.36. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 5.5 tbsp: ~$0.34. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Worcestershire Sauce, 2.75 tbsp: ~$0.16. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Frozen Green Peas, 4.75 cups: ~$1.37. \u003cstrong\u003eBuy 2 12oz bags: $1.47.\u003c/strong\u003e",
                        "Rice, 3.25 cups dry: ~$0.89. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (curry powder, garam masala, salt, black pepper): ~$4.11. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $49.12 across 14 servings, so roughly $3.51 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $53.26 across 14 servings, roughly $3.80 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $49.10 across 14 servings, so roughly $3.51 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $53.24 across 14 servings, roughly $3.80 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $14.04 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $67.28. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.51 a bowl\u003c/strong\u003e for what a Japanese curry house charges $13 a plate. Making the roux from flour and curry powder instead of the boxed blocks is worth several dollars a batch on its own.",
     "shop_smart":  [
@@ -71,12 +72,14 @@
     "portion_html":  "Weigh the rice pot and the curry pot, subtract the empty pot number, and divide each by 14 so every box gets an even ladle. Each bowl comes out to about 590 calories and 49 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://mealprepmanual.com/japanese-ground-beef-curry/\" target=\"_blank\" rel=\"noopener\"\u003eThe Meal Prep Manual\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about $3.51 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  49.12,
-    "cost_batch_true":  53.26,
+    "cost_batch":  49.1,
+    "cost_batch_true":  53.24,
     "cost_per_serving":  3.51,
     "cost_per_serving_true":  3.8,
+    "cost_pantry_add":  14.04,
+    "cost_first_run":  67.28,
     "scaler":  {
-                   "cost":  "53.26",
+                   "cost":  "53.24",
                    "ing":  [
                                {
                                    "item":  "93/7 Ground Beef",

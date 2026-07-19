@@ -37,12 +37,13 @@
                        "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Chili Crisp, 7 tbsp: ~$2.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Hoisin Sauce, 1 cups: ~$2.57. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Soy Sauce, 0.75 cups: ~$0.66. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 0.75 cups: ~$0.64. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Lime Juice, 7 tbsp: ~$0.88. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Toasted Sesame Seeds, 2.75 tbsp: ~$0.48. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (ginger, black pepper, salt): ~$0.28. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $30.77 across 14 servings, so roughly $2.20 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $33.57 across 14 servings, roughly $2.40 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $30.75 across 14 servings, so roughly $2.20 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $33.55 across 14 servings, roughly $2.40 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.42 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.97. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.20 a bowl\u003c/strong\u003e for spicy pork noodles that beat the $13 takeout version on flavor and portion size. Fourteen bowls for the price of three delivered.",
     "shop_smart":  [
@@ -62,12 +63,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty pot weight you wrote down, and divide by 14. Portion to that number and each bowl lands at about 874 calories with 39 grams of protein. A big bowl, built to actually fill you up.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.dontgobaconmyheart.co.uk/spicy-pork-noodles/\" target=\"_blank\" rel=\"noopener\"\u003eDon\u0027t Go Bacon My Heart\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about $2.20 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  30.77,
-    "cost_batch_true":  33.57,
+    "cost_batch":  30.75,
+    "cost_batch_true":  33.55,
     "cost_per_serving":  2.2,
     "cost_per_serving_true":  2.4,
+    "cost_pantry_add":  17.42,
+    "cost_first_run":  50.97,
     "scaler":  {
-                   "cost":  "33.57",
+                   "cost":  "33.55",
                    "ing":  [
                                {
                                    "item":  "Lo Mein Noodles",

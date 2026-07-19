@@ -16,14 +16,39 @@ $mapOld = (Get-Content (Join-Path $here '..\ingredient-map.json') -Raw | Convert
 
 $LB=453.592; $OZ=28.3495
 
-# board rows by id -> walmart (preferred) or cheapest nomem price per unit
+# board rows by id -> walmart (preferred) or cheapest nomem price per unit (row UNIT kept for reconciliation)
 $board=@{}
 foreach($row in $cmp){
   $wm = $row.stores | Where-Object { $_.store -eq 'Walmart' } | Select-Object -First 1
   $p = $null; $src=''
   if($wm -and $wm.per_unit -gt 0){ $p=[double]$wm.per_unit; $src='walmart' }
   elseif($row.nomem_price -gt 0){ $p=[double]$row.nomem_price; $src=('nomem:'+$row.nomem_store) }
-  if($p){ $board[$row.id] = @{ per_unit=$p; unit=$row.unit; src=$src } }
+  if($p){ $board[$row.id] = @{ per_unit=$p; unit=[string]$row.unit; src=$src } }
+}
+
+# UNIT RECONCILIATION (2026-07-19, the brown-sugar 16x lesson): a map's gpu was calibrated against the
+# board unit of ITS era; boards re-register commodities with new units (recipe-board oz -> weekly lb).
+# For standard weight/volume units, rescale gpu to the CURRENT row unit; anything else must match exactly.
+$UNIT_G=@{ lb=453.592; oz=28.3495; floz=29.57; kg=1000.0; g=1.0 }
+function Resolve-Gpu([double]$gpu,[string]$mapUnit,[string]$rowUnit){
+  if(-not $mapUnit -or -not $rowUnit -or $mapUnit -eq $rowUnit){ return $gpu }
+  if($UNIT_G.ContainsKey($mapUnit) -and $UNIT_G.ContainsKey($rowUnit)){ return $gpu * ($UNIT_G[$rowUnit]/$UNIT_G[$mapUnit]) }
+  return -1.0   # non-standard mismatch: caller must hard-flag
+}
+
+# recipe board (the 90-run's own verified per-store data; ids like pork-loin live ONLY here).
+# Same walmart-preferred rule as the weekly board; never overrides a weekly-board id.
+$rbFile = Join-Path $here '..\..\grocery\out\recipe-board.json'
+if(Test-Path $rbFile){
+  $rb = (Get-Content $rbFile -Raw | ConvertFrom-Json).comparison
+  foreach($row in $rb){
+    if($board.ContainsKey($row.id)){ continue }
+    $wm = $row.stores | Where-Object { $_.store -eq 'Walmart' } | Select-Object -First 1
+    $p=$null; $src=''
+    if($wm -and $wm.per_unit -gt 0){ $p=[double]$wm.per_unit; $src='recipeboard-walmart' }
+    elseif($row.cheapest_price -gt 0){ $p=[double]$row.cheapest_price; $src=('recipeboard-cheapest:'+$row.cheapest_store) }
+    if($p){ $board[$row.id] = @{ per_unit=$p; unit=$row.unit; src=$src } }
+  }
 }
 
 # smp-feed (recipe-board ingredient prices, our own verified data - what the live widgets use)
@@ -31,10 +56,16 @@ $feed = (Get-Content (Join-Path $here '..\..\grocery\out\smp-feed.json') -Raw | 
 $feedMap=@{}
 if($feed){ foreach($p in $feed.PSObject.Properties){ if($p.Value.cheapest -gt 0){ $feedMap[$p.Name] = @{ per_unit=[double]$p.Value.cheapest; unit=$p.Value.unit } } } }
 
-# canonical item -> board id + gpu (new map first, then the 90-run map)
+# pantry starter packages: whole-container size per BULK item (empty-pantry one-time stock-up)
+$pantryPkg=@{}
+foreach($p in ((Get-Content (Join-Path $here 'pantry-packages.json') -Raw | ConvertFrom-Json).packages).PSObject.Properties){
+  $pantryPkg[$p.Name] = @{ g=[double]$p.Value.g; label=[string]$p.Value.label }
+}
+
+# canonical item -> board id + gpu + the unit that gpu was calibrated against (new map first, then the 90-run map)
 $itemBoard=@{}
-foreach($p in $mapNew.PSObject.Properties){ $itemBoard[$p.Name] = @{ bid=$p.Value.bid; gpu=[double]$p.Value.gpu } }
-foreach($m in $mapOld){ if(-not $itemBoard.ContainsKey($m.item)){ $itemBoard[$m.item] = @{ bid=$m.board_id; gpu=[double]$m.grams_per_unit } } }
+foreach($p in $mapNew.PSObject.Properties){ $itemBoard[$p.Name] = @{ bid=$p.Value.bid; gpu=[double]$p.Value.gpu; unit=[string]$p.Value.unit } }
+foreach($m in $mapOld){ if(-not $itemBoard.ContainsKey($m.item)){ $itemBoard[$m.item] = @{ bid=$m.board_id; gpu=[double]$m.grams_per_unit; unit=[string]$m.unit } } }
 
 # label package prices (P1/P2/P3): item -> pkg grams + price
 function SizeToGrams([string]$s){
@@ -119,19 +150,28 @@ $PKG = @{
   'Japanese Curry Roux'=@{g=92;label='3.2oz box'}; 'Red Curry Paste'=@{g=113;label='4oz jar'}
   'Mole Paste'=@{g=234;label='8.25oz jar'}; 'Golden Raisins '=@{g=340;label='bag'}
   'Sugar-Free Maple Syrup '=@{g=340;label='bottle'}; 'Swiss Cheese'=@{g=227;label='8oz'}
+  'Orange Juice'=@{g=1560;label='52floz carton'}
 }
 
 $out=@(); $costFlags=New-Object System.Collections.Generic.List[string]
 foreach($r in $computed){
-  $lines=@(); $batch=0.0; $trueCost=0.0
+  $lines=@(); $batch=0.0; $trueCost=0.0; $bulkUtil=0.0; $starterOutlay=0.0
   foreach($ing in $r.ingredients){
     $g=[double]$ing.grams
     if($g -le 0){ continue }
     $ppg=$null; $basis=''
     if($itemBoard.ContainsKey($ing.item)){
       $b=$itemBoard[$ing.item]
-      if($board.ContainsKey($b.bid)){ $ppg = $board[$b.bid].per_unit / $b.gpu; $basis=('board:'+$b.bid+':'+$board[$b.bid].src) }
-      elseif($feedMap.ContainsKey($b.bid)){ $ppg = $feedMap[$b.bid].per_unit / $b.gpu; $basis=('feed:'+$b.bid) }
+      if($board.ContainsKey($b.bid)){
+        $eg = Resolve-Gpu $b.gpu $b.unit $board[$b.bid].unit
+        if($eg -le 0){ $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: UNIT MISMATCH ' + $b.unit + ' vs ' + $board[$b.bid].unit)); continue }
+        $ppg = $board[$b.bid].per_unit / $eg; $basis=('board:'+$b.bid+':'+$board[$b.bid].src)
+      }
+      elseif($feedMap.ContainsKey($b.bid)){
+        $eg = Resolve-Gpu $b.gpu $b.unit $feedMap[$b.bid].unit
+        if($eg -le 0){ $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: UNIT MISMATCH ' + $b.unit + ' vs feed ' + $feedMap[$b.bid].unit)); continue }
+        $ppg = $feedMap[$b.bid].per_unit / $eg; $basis=('feed:'+$b.bid)
+      }
     }
     if($null -eq $ppg -and $labels.ContainsKey($ing.item)){
       $L=$labels[$ing.item]; $ppg = $L.pkg_price/$L.pkg_g; $basis=('label:'+$L.desc)
@@ -142,9 +182,22 @@ foreach($r in $computed){
     $util = [Math]::Round($g*$ppg,2)
     $batch += $util
     $isBulk = $BULK -contains $ing.item
-    $buyN=$null; $buyCost=$null; $pkgLabel=$null
+    $buyN=$null; $buyCost=$null; $pkgLabel=$null; $stN=$null; $stCost=$null; $stPkg=$null
     if($isBulk){
       $trueCost += $util
+      # empty-pantry starter: whole container(s) of this staple at the same price basis
+      if($pantryPkg.ContainsKey($ing.item)){
+        $pp=$pantryPkg[$ing.item]
+        $stN=[Math]::Ceiling(($g/$pp.g) - 0.02); if($stN -lt 1){ $stN=1 }
+        $stCost=[Math]::Round($stN*$pp.g*$ppg,2)
+        if($stCost -lt $util){ $stCost=$util }
+        $stPkg=$pp.label
+        $bulkUtil += $util; $starterOutlay += $stCost
+      } else {
+        # never guess: a bulk item without a pantry package is a hard flag, counted at util
+        $bulkUtil += $util; $starterOutlay += $util
+        $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: BULK ITEM WITHOUT PANTRY PACKAGE DEF'))
+      }
     } else {
       # package rounding
       $pg=$null
@@ -163,13 +216,19 @@ foreach($r in $computed){
         $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: no package def, counted at util in true cost'))
       }
     }
-    $lines += [pscustomobject]@{ item=$ing.item; grams=$g; util_cost=$util; basis=$basis; bulk=$isBulk; buy_n=$buyN; buy_cost=$buyCost; pkg=$pkgLabel }
+    $lines += [pscustomobject]@{ item=$ing.item; grams=$g; util_cost=$util; basis=$basis; bulk=$isBulk; buy_n=$buyN; buy_cost=$buyCost; pkg=$pkgLabel; starter_n=$stN; starter_cost=$stCost; starter_pkg=$stPkg }
   }
   $batch=[Math]::Round($batch,2); $trueCost=[Math]::Round($trueCost,2)
+  # empty-pantry math (exact): first run = true cost with each pantry staple upgraded from
+  # utilization to whole container(s); pantry_add is the one-time extra over the true cost.
+  $pantryAdd=[Math]::Round($starterOutlay-$bulkUtil,2)
+  if($pantryAdd -lt 0){ $pantryAdd=0.0 }
+  $firstRun=[Math]::Round($trueCost+$pantryAdd,2)
   $out += [pscustomobject]@{
     proposed_name=$r.proposed_name
     cost_batch=$batch; cost_per_serving=[Math]::Round($batch/14,2)
     cost_batch_true=$trueCost; cost_per_serving_true=[Math]::Round($trueCost/14,2)
+    cost_pantry_add=$pantryAdd; cost_first_run=$firstRun
     lines=@($lines)
   }
 }
@@ -179,3 +238,5 @@ $cps = $out | ForEach-Object { $_.cost_per_serving }
 Write-Output ("costed {0} recipes; flags {1}; per-serving range \${2}-\${3} avg \${4}" -f $out.Count, $costFlags.Count, (($cps|Measure-Object -Minimum).Minimum), (($cps|Measure-Object -Maximum).Maximum), ([Math]::Round(($cps|Measure-Object -Average).Average,2)))
 $bad = @($out | Where-Object { $_.cost_batch_true -lt $_.cost_batch })
 Write-Output ("true<batch violations: " + $bad.Count)
+$bad2 = @($out | Where-Object { $_.cost_first_run -lt $_.cost_batch_true })
+Write-Output ("firstrun<true violations: " + $bad2.Count)

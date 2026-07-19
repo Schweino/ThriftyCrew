@@ -46,8 +46,9 @@
                        "Cherry Tomatoes, 7 cups: ~$2.23. \u003cstrong\u003eBuy 4 10oz clamshells: $2.42.\u003c/strong\u003e",
                        "Rice, 4.5 cups dry: ~$1.26. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (salt, dried oregano, black pepper, ground cumin, red pepper flakes, ground cinnamon, ground allspice): ~$0.78. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $46.16 across 14 servings, so roughly $3.30 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $52.62 across 14 servings, roughly $3.76 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $46.16 across 14 servings, so roughly $3.30 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $52.62 across 14 servings, roughly $3.76 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $20.98 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $73.60. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.30 a bowl\u003c/strong\u003e for a kofta plate that runs $15 or more at a Mediterranean grill. This is one of our pricier bowls, and it still beats eating out by more than $11 a plate.",
     "shop_smart":  [
@@ -72,6 +73,8 @@
     "cost_batch_true":  52.62,
     "cost_per_serving":  3.3,
     "cost_per_serving_true":  3.76,
+    "cost_pantry_add":  20.98,
+    "cost_first_run":  73.6,
     "scaler":  {
                    "cost":  "52.62",
                    "ing":  [

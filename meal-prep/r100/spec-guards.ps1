@@ -81,12 +81,22 @@ foreach($sf in $specs){
   if([Math]::Abs($pPS - $spec.stat.protein) -gt 2){ Fail $slug ("stat protein $($spec.stat.protein) != recompute $pPS") }
   if($spec.stat.cal -lt 550){ Fail $slug '550 GATE FAIL' }
 
-  # cost-line invariants: printed batch/true lines match stored totals
+  # cost-line invariants: printed batch/true/starter lines match stored totals
   $bl = $spec.cost_lines | Where-Object { $_ -match '^<strong>Batch total' } | Select-Object -First 1
   $tl = $spec.cost_lines | Where-Object { $_ -match '^<strong>True shopping cost' } | Select-Object -First 1
   if(-not $bl -or $bl -notmatch [regex]::Escape(('$'+([double]$spec.cost_batch).ToString('0.00')))){ Fail $slug 'batch line mismatch' }
   if(-not $tl -or $tl -notmatch [regex]::Escape(('$'+([double]$spec.cost_batch_true).ToString('0.00')))){ Fail $slug 'true line mismatch' }
   if([double]$spec.cost_batch_true -lt [double]$spec.cost_batch){ Fail $slug 'true < batch' }
+  # empty-pantry starter line: present when pantry_add>0; both printed numbers must match the
+  # stored fields and satisfy first_run = true + add exactly
+  $sl = $spec.cost_lines | Where-Object { $_ -match '^<strong>Starting with an empty pantry' } | Select-Object -First 1
+  $pa=[double]$spec.cost_pantry_add; $fr=[double]$spec.cost_first_run
+  if($pa -gt 0){
+    if(-not $sl){ Fail $slug 'starter line missing' }
+    elseif($sl -notmatch [regex]::Escape(('$'+$pa.ToString('0.00'))) -or $sl -notmatch [regex]::Escape(('$'+$fr.ToString('0.00')))){ Fail $slug 'starter line numbers mismatch' }
+    if([Math]::Abs(($fr) - ([double]$spec.cost_batch_true + $pa)) -gt 0.005){ Fail $slug ('first_run != true+add (' + $fr + ' vs ' + ([double]$spec.cost_batch_true+$pa) + ')') }
+    if($fr -lt [double]$spec.cost_batch_true){ Fail $slug 'first_run < true' }
+  } elseif($sl){ Fail $slug 'starter line present but pantry_add=0' }
   if(-not $spec.source_url -or $spec.source_url -notmatch '^https?://'){ Fail $slug 'missing source_url' }
   if($spec.credit_html -notmatch 'Recipe adapted from'){ Fail $slug 'missing credit line' }
 

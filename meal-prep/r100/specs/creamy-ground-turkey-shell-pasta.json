@@ -45,8 +45,9 @@
                        "Heavy Cream, 2.25 cups: ~$3.45. \u003cstrong\u003eBuy 2 pints: $5.87.\u003c/strong\u003e",
                        "Parmesan Cheese, 3.75 oz: ~$1.38. \u003cstrong\u003eBuy 1 8oz tub: $2.98.\u003c/strong\u003e",
                        "Pantry seasonings (red bell pepper, salt, black pepper, italian seasoning): ~$1.25. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $28.27 across 14 servings, so roughly $2.02 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $40.41 across 14 servings, roughly $2.89 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $28.27 across 14 servings, so roughly $2.02 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.41 across 14 servings, roughly $2.89 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.44 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.85. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.02 a bowl\u003c/strong\u003e for creamy turkey and shells. Compare that to $12 to $14 for any creamy pasta at a sit-down restaurant, or even $4 a serving for the boxed stuff once you add the meat yourself.",
     "shop_smart":  [
@@ -71,6 +72,8 @@
     "cost_batch_true":  40.41,
     "cost_per_serving":  2.02,
     "cost_per_serving_true":  2.89,
+    "cost_pantry_add":  15.44,
+    "cost_first_run":  55.85,
     "scaler":  {
                    "cost":  "40.41",
                    "ing":  [

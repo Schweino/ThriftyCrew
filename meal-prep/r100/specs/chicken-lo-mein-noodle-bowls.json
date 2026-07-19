@@ -42,13 +42,14 @@
                        "Egg Noodles, 31.5 oz dry: ~$3.42. \u003cstrong\u003eBuy 3 12oz bags: $3.91.\u003c/strong\u003e",
                        "Hoisin Sauce, 2.25 cups: ~$5.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Chicken Broth, 1 lb: ~$0.56. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Soy Sauce, 1 cups: ~$0.88. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 1 cups: ~$0.85. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Oyster Sauce, 4.5 oz: ~$1.10. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Sesame Oil, 2.25 tbsp: ~$0.67. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Cornstarch, 4.75 tbsp: ~$0.16. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (red bell pepper, salt, black pepper): ~$1.70. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $31.20 across 14 servings, so roughly $2.23 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $35.30 across 14 servings, roughly $2.52 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $31.17 across 14 servings, so roughly $2.23 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.27 across 14 servings, roughly $2.52 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.59 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $51.86. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.23 a bowl\u003c/strong\u003e for a full plate of chicken lo mein. The same order at a Chinese takeout spot runs $11 to $14 before tip and delivery fees, so this batch pays for itself by the second container.",
     "shop_smart":  [
@@ -69,12 +70,14 @@
     "portion_html":  "Set the full pot on the scale, subtract the empty pot weight you wrote down, and divide by 14. Weigh that amount into each container. Every bowl comes out to about 660 calories with 57 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spendwithpennies.com/chicken-lo-mein-take-out/\" target=\"_blank\" rel=\"noopener\"\u003eSpend With Pennies\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about $2.23 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  31.2,
-    "cost_batch_true":  35.3,
+    "cost_batch":  31.17,
+    "cost_batch_true":  35.27,
     "cost_per_serving":  2.23,
     "cost_per_serving_true":  2.52,
+    "cost_pantry_add":  16.59,
+    "cost_first_run":  51.86,
     "scaler":  {
-                   "cost":  "35.30",
+                   "cost":  "35.27",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",

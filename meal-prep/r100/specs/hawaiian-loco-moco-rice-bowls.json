@@ -36,13 +36,14 @@
                        "Olive Oil, 3.5 tbsp: ~$0.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "All-Purpose Flour, 3.5 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Beef Broth, 2.75 lb: ~$1.69. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Soy Sauce, 3.5 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 3.5 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Butter, 3.5 tbsp: ~$0.31. \u003cstrong\u003eBuy 1 lb box: $2.92.\u003c/strong\u003e",
                        "Eggs, 14 large eggs: ~$1.72. \u003cstrong\u003eBuy 2 dozens: $2.94.\u003c/strong\u003e",
                        "Green Onions, 17.5 tbsp: ~$1.25. \u003cstrong\u003eBuy 2 bunchs: $2.14.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper): ~$0.72. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $30.40 across 14 servings, so roughly $2.17 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $38.25 across 14 servings, roughly $2.73 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $30.39 across 14 servings, so roughly $2.17 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $38.24 across 14 servings, roughly $2.73 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.85 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.09. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.17 a bowl\u003c/strong\u003e for a plate lunch that runs $15 at any Hawaiian barbecue spot on the mainland. The gravy is flour, drippings, and broth, which is to say nearly free.",
     "shop_smart":  [
@@ -62,12 +63,14 @@
     "portion_html":  "Weigh the rice pot, subtract the empty pot number, and divide by 14 for the base, then give each container one patty, one egg, and an even ladle of gravy. Each bowl lands at about 647 calories and 39 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://girlscangrill.com/recipe/loco-moco/\" target=\"_blank\" rel=\"noopener\"\u003eGirls Can Grill\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about $2.17 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  30.4,
-    "cost_batch_true":  38.25,
+    "cost_batch":  30.39,
+    "cost_batch_true":  38.24,
     "cost_per_serving":  2.17,
     "cost_per_serving_true":  2.73,
+    "cost_pantry_add":  16.85,
+    "cost_first_run":  55.09,
     "scaler":  {
-                   "cost":  "38.25",
+                   "cost":  "38.24",
                    "ing":  [
                                {
                                    "item":  "Rice",

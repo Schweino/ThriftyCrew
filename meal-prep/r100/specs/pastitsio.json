@@ -51,8 +51,9 @@
                        "Spaghetti, 24.75 oz dry: ~$1.50. \u003cstrong\u003eBuy 2 16oz boxs: $1.95.\u003c/strong\u003e",
                        "Feta Cheese, 7.5 oz: ~$4.86. \u003cstrong\u003eBuy 2 6oz tubs: $7.87.\u003c/strong\u003e",
                        "Pantry seasonings (sugar, bay leaves, ground cinnamon, ground cloves, salt, black pepper, ground nutmeg): ~$0.52. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $45.26 across 14 servings, so roughly $3.23 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $57.11 across 14 servings, roughly $4.08 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $45.26 across 14 servings, so roughly $3.23 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $57.11 across 14 servings, roughly $4.08 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $24.16 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $81.27. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.23 a bowl\u003c/strong\u003e for pastitsio that Greek restaurants proudly charge $16 a slab for. One afternoon of layering buys you fourteen of those slabs.",
     "shop_smart":  [
@@ -76,6 +77,8 @@
     "cost_batch_true":  57.11,
     "cost_per_serving":  3.23,
     "cost_per_serving_true":  4.08,
+    "cost_pantry_add":  24.16,
+    "cost_first_run":  81.27,
     "scaler":  {
                    "cost":  "57.11",
                    "ing":  [

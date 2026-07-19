@@ -38,8 +38,9 @@
                        "Sugar, 4.75 tbsp: ~$0.11. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Rice, 4.25 cups dry: ~$1.14. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (black pepper, ground coriander, italian seasoning, ground cumin, ground turmeric, chili powder, salt): ~$4.75. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $24.56 across 14 servings, so roughly $1.75 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $27.23 across 14 servings, roughly $1.94 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $24.56 across 14 servings, so roughly $1.75 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $27.23 across 14 servings, roughly $1.94 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.99 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $37.22. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$1.75 a bowl\u003c/strong\u003e for restaurant-grade pepper chicken over rice. An Indian restaurant charges $16 for one plate of this, and you just made 14.",
     "shop_smart":  [
@@ -64,6 +65,8 @@
     "cost_batch_true":  27.23,
     "cost_per_serving":  1.75,
     "cost_per_serving_true":  1.94,
+    "cost_pantry_add":  9.99,
+    "cost_first_run":  37.22,
     "scaler":  {
                    "cost":  "27.23",
                    "ing":  [

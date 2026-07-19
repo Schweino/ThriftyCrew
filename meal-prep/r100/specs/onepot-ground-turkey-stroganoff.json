@@ -47,8 +47,9 @@
                        "1/3 Fat Cream Cheese, 3.5 oz: ~$0.65. \u003cstrong\u003eBuy 1 8oz brick: $1.49.\u003c/strong\u003e",
                        "Frozen Chopped Spinach, 5.25 cups: ~$3.15. \u003cstrong\u003eBuy 2 10oz boxs: $4.01.\u003c/strong\u003e",
                        "Pantry seasonings (dried thyme, black pepper, salt): ~$0.32. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $47.05 across 14 servings, so roughly $3.36 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $56.08 across 14 servings, roughly $4.01 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $47.05 across 14 servings, so roughly $3.36 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $56.08 across 14 servings, roughly $4.01 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $8.54 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $64.62. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.36 a bowl\u003c/strong\u003e for creamy stroganoff comfort that a diner would ring up at $13 a plate. Fourteen dinners for the price of three, and the diner does not sneak in spinach for free.",
     "shop_smart":  [
@@ -72,6 +73,8 @@
     "cost_batch_true":  56.08,
     "cost_per_serving":  3.36,
     "cost_per_serving_true":  4.01,
+    "cost_pantry_add":  8.54,
+    "cost_first_run":  64.62,
     "scaler":  {
                    "cost":  "56.08",
                    "ing":  [

@@ -41,8 +41,9 @@
                        "Frozen Green Peas, 3.5 cups: ~$1.01. \u003cstrong\u003eBuy 2 12oz bags: $1.47.\u003c/strong\u003e",
                        "Rice, 6.5 cups dry: ~$1.77. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (curry powder, salt, ground cumin, ground turmeric, black pepper): ~$0.99. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $29.37 across 14 servings, so roughly $2.10 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $35.71 across 14 servings, roughly $2.55 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $29.37 across 14 servings, so roughly $2.10 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $35.71 across 14 servings, roughly $2.55 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $17.08 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $52.79. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.10 a bowl\u003c/strong\u003e for a curry that Indian takeout would charge you six or seven times as much for, rice extra.",
     "shop_smart":  [
@@ -67,6 +68,8 @@
     "cost_batch_true":  35.71,
     "cost_per_serving":  2.1,
     "cost_per_serving_true":  2.55,
+    "cost_pantry_add":  17.08,
+    "cost_first_run":  52.79,
     "scaler":  {
                    "cost":  "35.71",
                    "ing":  [

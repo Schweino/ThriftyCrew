@@ -15,11 +15,10 @@
                  "protein":  38,
                  "carbs":  78,
                  "fat":  26,
-                 "cost_ps":  "2.73"
+                 "cost_ps":  "2.71"
              },
-    "intro_html":  "A thick beef and bean chili baked under a sweet cornbread lid, so every serving comes with its own built-in side. Each portion delivers \u003cstrong\u003e38 grams of protein\u003c/strong\u003e at 696 calories for about \u003cstrong\u003e$2.73\u003c/strong\u003e. Chili is already one of the best dollars-to-dinner ratios in cooking, and the JIFFY topping barely moves the bill.",
+    "intro_html":  "A thick beef and bean chili baked under a sweet cornbread lid, so every serving comes with its own built-in side. Each portion delivers \u003cstrong\u003e38 grams of protein\u003c/strong\u003e at 696 calories for about \u003cstrong\u003e$2.71\u003c/strong\u003e. Chili is already one of the best dollars-to-dinner ratios in cooking, and the JIFFY topping barely moves the bill.",
     "ingredients_display":  [
-                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 0.5 tbsp (8 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1.7 (192 g)",
                                 "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)",
@@ -41,7 +40,6 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Brown Sugar, 0.5 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Olive Oil, 3.5 tbsp: ~$0.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Yellow Onion, 1.7: ~$0.48. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "93/7 Ground Beef, 3.5 lb: ~$21.99. \u003cstrong\u003eBuy 4 lbs: $25.12.\u003c/strong\u003e",
@@ -60,11 +58,12 @@
                        "Light Sour Cream, 0.5 cups: ~$0.54. \u003cstrong\u003eBuy 1 16oz tub: $1.84.\u003c/strong\u003e",
                        "Butter, 5.25 tbsp: ~$0.48. \u003cstrong\u003eBuy 1 lb box: $2.92.\u003c/strong\u003e",
                        "Eggs, 4 large eggs: ~$0.43. \u003cstrong\u003eBuy 1 dozen: $1.47.\u003c/strong\u003e",
-                       "Pantry seasonings (chili powder, cayenne pepper, salt, black pepper): ~$0.59. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $38.20 across 14 servings, so roughly $2.73 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $51.82 across 14 servings, roughly $3.70 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "Pantry seasonings (chili powder, brown sugar, cayenne pepper, salt, black pepper): ~$0.61. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $37.94 across 14 servings, so roughly $2.71 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $51.56 across 14 servings, roughly $3.68 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $19.28 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $70.84. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.73 a bowl\u003c/strong\u003e for chili and cornbread together. Order a bowl of chili plus a cornbread side at a casual restaurant and you are at $11 to $13 easy, so this casserole runs about a quarter of the going rate.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.71 a bowl\u003c/strong\u003e for chili and cornbread together. Order a bowl of chili plus a cornbread side at a casual restaurant and you are at $11 to $13 easy, so this casserole runs about a quarter of the going rate.",
     "shop_smart":  [
                        "The 93/7 ground beef is the big spend at $21.60 for 3.5 pounds. Beans, tomatoes, and corn stretch it across 14 servings, which is the oldest chili trick in the book because it works.",
                        "Three boxes of JIFFY corn muffin mix cost $2.16 total. There is no cheaper from-scratch cornbread once you price out cornmeal, flour, and leavening separately.",
@@ -82,13 +81,15 @@
                 ],
     "portion_html":  "Weigh the chili pot before it goes in the baking dish, subtract the empty pot weight you wrote down, and divide by 14 so each container gets an even base under its square of cornbread. Each serving lands at about 696 calories with 38 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thecozycook.com/chili-cornbread-casserole/\" target=\"_blank\" rel=\"noopener\"\u003eThe Cozy Cook\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $2.73 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  38.2,
-    "cost_batch_true":  51.82,
-    "cost_per_serving":  2.73,
-    "cost_per_serving_true":  3.7,
+    "upsell_html":  "Hearty dinners for about $2.71 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  37.94,
+    "cost_batch_true":  51.56,
+    "cost_per_serving":  2.71,
+    "cost_per_serving_true":  3.68,
+    "cost_pantry_add":  19.28,
+    "cost_first_run":  70.84,
     "scaler":  {
-                   "cost":  "51.82",
+                   "cost":  "51.56",
                    "ing":  [
                                {
                                    "item":  "Chili Powder",
@@ -254,13 +255,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Beef chili baked under a JIFFY cornbread crust. 14 meal prep servings at 696 calories and 38g protein each, about $2.73 a bowl with the side built in.",
+                 "description":  "Beef chili baked under a JIFFY cornbread crust. 14 meal prep servings at 696 calories and 38g protein each, about $2.71 a bowl with the side built in.",
                  "keywords":  "chili cornbread casserole, cornbread chili bake, ground beef casserole, budget meal prep, cheap family dinner, meal prep chili",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",
                  "cookTime":  "PT55M",
                  "totalTime":  "PT80M",
-                 "costPerServing":  2.73,
+                 "costPerServing":  2.71,
                  "recipeIngredient":  [
                                           "3.5 lb 93/7 ground beef",
                                           "3 cans kidney beans",

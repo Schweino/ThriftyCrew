@@ -41,7 +41,7 @@
                        "Garlic, 8.75 tbsp: ~$1.07. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Crushed Tomatoes, 1.5 cans: ~$2.25. \u003cstrong\u003eBuy 2 28oz cans: $3.02.\u003c/strong\u003e",
                        "Tomato Paste, 7.5 tbsp: ~$0.60. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
-                       "Soy Sauce, 0.5 cups: ~$0.54. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 0.5 cups: ~$0.52. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Fish Sauce, 1.5 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Potato, 4.4: ~$1.14. \u003cstrong\u003eBuy 3 lbs: $1.65.\u003c/strong\u003e",
                        "Carrots, 2.4: ~$0.37. \u003cstrong\u003eBuy 1 lb: $1.13.\u003c/strong\u003e",
@@ -50,8 +50,9 @@
                        "Eggs, 12 large eggs: ~$1.50. \u003cstrong\u003eBuy 1 dozen: $1.50.\u003c/strong\u003e",
                        "Vegetable Oil, 6.25 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (red bell pepper, salt, black pepper): ~$3.36. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $26.11 across 14 servings, so roughly $1.86 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $30.48 across 14 servings, roughly $2.18 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $26.09 across 14 servings, so roughly $1.86 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $30.46 across 14 servings, roughly $2.18 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $11.94 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.40. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$1.86 a bowl\u003c/strong\u003e for a plate a Filipino restaurant would happily charge you $12 for. The fish sauce bottle looks like a splurge at checkout, but it seasons this whole batch for 28 cents.",
     "shop_smart":  [
@@ -71,12 +72,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty pot number you wrote down, and divide the difference by 14. That is one serving in grams. Scoop it out on the scale and each bowl lands at about 571 calories and 32 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://gypsyplate.com/giniling/\" target=\"_blank\" rel=\"noopener\"\u003eGypsyPlate\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about $1.86 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  26.11,
-    "cost_batch_true":  30.48,
+    "cost_batch":  26.09,
+    "cost_batch_true":  30.46,
     "cost_per_serving":  1.86,
     "cost_per_serving_true":  2.18,
+    "cost_pantry_add":  11.94,
+    "cost_first_run":  42.4,
     "scaler":  {
-                   "cost":  "30.48",
+                   "cost":  "30.46",
                    "ing":  [
                                {
                                    "item":  "Ground Pork",

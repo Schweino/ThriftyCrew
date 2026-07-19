@@ -126,8 +126,18 @@ foreach($r in $computed){
   }
   $batch=[Math]::Round($sumUtil,2); $trueC=[Math]::Round($sumTrue,2)
   $cps = [Math]::Round($batch/14,2); $cpsTrue=[Math]::Round($trueC/14,2)
-  $costHtml += ('<strong>Batch total: about $' + $batch.ToString('0.00') + ' across 14 servings, so roughly $' + $cps.ToString('0.00') + ' per bowl.</strong>')
-  $costHtml += ('<strong>True shopping cost: about $' + $trueC.ToString('0.00') + ' across 14 servings, roughly $' + $cpsTrue.ToString('0.00') + ' per bowl.</strong> This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches.')
+  # three cost views, each labeled with exactly what it assumes (Brad 2026-07-19):
+  #   batch = ingredient value used; true = register trip with a stocked pantry; first run = empty pantry
+  $pantryAdd=[double]$cost.cost_pantry_add; $firstRun=[double]$cost.cost_first_run
+  # the printed first-run line references the printed true cost; both must come from the SAME sums
+  if([Math]::Abs($batch-[double]$cost.cost_batch) -gt 0.005){ throw ($r.proposed_name + ': spec batch ' + $batch + ' != engine ' + $cost.cost_batch) }
+  if([Math]::Abs($trueC-[double]$cost.cost_batch_true) -gt 0.005){ throw ($r.proposed_name + ': spec true ' + $trueC + ' != engine ' + $cost.cost_batch_true) }
+  if([Math]::Abs(($trueC+$pantryAdd)-$firstRun) -gt 0.005){ throw ($r.proposed_name + ': first_run ' + $firstRun + ' != true+add ' + ($trueC+$pantryAdd)) }
+  $costHtml += ('<strong>Batch total: about $' + $batch.ToString('0.00') + ' across 14 servings, so roughly $' + $cps.ToString('0.00') + ' per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.')
+  $costHtml += ('<strong>True shopping cost: about $' + $trueC.ToString('0.00') + ' across 14 servings, roughly $' + $cpsTrue.ToString('0.00') + ' per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.')
+  if($pantryAdd -gt 0){
+    $costHtml += ('<strong>Starting with an empty pantry? Add about $' + $pantryAdd.ToString('0.00') + ' one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $' + $firstRun.ToString('0.00') + '. Those containers then feed this batch and many more after it.')
+  }
 
   $dispName = $r.proposed_name
   if($NAME_OVERRIDES.ContainsKey($dispName)){ $dispName = $NAME_OVERRIDES[$dispName] }
@@ -156,6 +166,8 @@ foreach($r in $computed){
     cost_batch_true = $trueC
     cost_per_serving = $cps
     cost_per_serving_true = $cpsTrue
+    cost_pantry_add = [Math]::Round($pantryAdd,2)
+    cost_first_run = [Math]::Round($firstRun,2)
     scaler = [ordered]@{ cost=$trueC.ToString('0.00'); ing=@($scalerIng) }
     head = [ordered]@{ description=''; keywords=''; image=''; prepTime=''; cookTime=''; totalTime=''; costPerServing=$cps; recipeIngredient=@(); steps=@() }
     ingredients_grams = @($r.ingredients | ForEach-Object { [pscustomobject]@{ item=$_.item; grams=[int]$_.grams } })

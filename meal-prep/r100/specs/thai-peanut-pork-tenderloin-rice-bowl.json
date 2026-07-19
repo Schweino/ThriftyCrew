@@ -16,9 +16,9 @@
                  "protein":  29,
                  "carbs":  63,
                  "fat":  24,
-                 "cost_ps":  "1.58"
+                 "cost_ps":  "1.34"
              },
-    "intro_html":  "Seared pork tenderloin over lime-cilantro rice with a sweet, creamy peanut sauce spooned over the top. Peanut butter whisked into coconut milk with lime and brown sugar is the whole trick. Each bowl brings \u003cstrong\u003e29 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$1.58\u003c/strong\u003e, which is less than the fancy coffee you had this morning.",
+    "intro_html":  "Seared pork tenderloin over lime-cilantro rice with a sweet, creamy peanut sauce spooned over the top. Peanut butter whisked into coconut milk with lime and brown sugar is the whole trick. Each bowl brings \u003cstrong\u003e29 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$1.34\u003c/strong\u003e, which is less than the fancy coffee you had this morning.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 2.5 lb (1164 g)",
                                 "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 1.4 cans (580 g)",
@@ -37,17 +37,18 @@
                        "Coconut Milk, 1.4 cans: ~$2.88. \u003cstrong\u003eBuy 2 13.5oz cans: $3.97.\u003c/strong\u003e",
                        "Peanut Butter, 1.25 cups: ~$1.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Lime Juice, 0.75 cups: ~$1.44. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Brown Sugar, 7.75 tbsp: ~$3.63. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Sugar, 7.75 tbsp: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Garlic, 3 tbsp: ~$0.37. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "Rice, 4.5 cups dry: ~$1.26. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Fresh Cilantro, 6 tbsp: ~$0.19. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Frozen Chopped Spinach, 0.25 cups: ~$0.18. \u003cstrong\u003eBuy 1 10oz box: $2.00.\u003c/strong\u003e",
                        "Olive Oil, 1.75 tbsp: ~$0.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (ground coriander, salt, black pepper): ~$0.52. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $22.10 across 14 servings, so roughly $1.58 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $28.53 across 14 servings, roughly $2.04 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $18.70 across 14 servings, so roughly $1.34 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $25.13 across 14 servings, roughly $1.80 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $22.12 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $47.25. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$1.58 a bowl\u003c/strong\u003e for pork tenderloin in peanut sauce over lime rice. The same bowl at a Thai-inspired fast casual place runs $14. That is an 8x markup for someone else doing the searing.",
+    "cost_closing_html":  "About \u003cstrong\u003e$1.34 a bowl\u003c/strong\u003e for pork tenderloin in peanut sauce over lime rice. The same bowl at a Thai-inspired fast casual place runs $14. That is an 8x markup for someone else doing the searing.",
     "shop_smart":  [
                        "Pork tenderloin does the protein work at about $11.91 for 3 pounds. It is one of the leanest cuts in the case and goes on sale constantly, buy at the dip and freeze.",
                        "The coconut milk sauce only needs 1.4 cans. Buy two, use what the recipe calls for, and the leftover can starts your next curry.",
@@ -64,13 +65,15 @@
                 ],
     "portion_html":  "Weigh the full pot of rice, pork, and sauce, subtract the empty pot weight you wrote down, and divide by 14. Portion to that number and each bowl lands at about 583 calories with 29 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.seasonsandsuppers.ca/thai-pork-peanut-sauce-lime-rice/\" target=\"_blank\" rel=\"noopener\"\u003eSeasons and Suppers\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $1.58 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  22.1,
-    "cost_batch_true":  28.53,
-    "cost_per_serving":  1.58,
-    "cost_per_serving_true":  2.04,
+    "upsell_html":  "Hearty dinners for about $1.34 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  18.7,
+    "cost_batch_true":  25.13,
+    "cost_per_serving":  1.34,
+    "cost_per_serving_true":  1.8,
+    "cost_pantry_add":  22.12,
+    "cost_first_run":  47.25,
     "scaler":  {
-                   "cost":  "28.53",
+                   "cost":  "25.13",
                    "ing":  [
                                {
                                    "item":  "Pork Tenderloin",
@@ -166,13 +169,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Thai peanut pork tenderloin meal prep: 14 bowls, 583 calories and 29g protein each, about $1.58 a serving. Seared pork in peanut coconut sauce over lime rice.",
+                 "description":  "Thai peanut pork tenderloin meal prep: 14 bowls, 583 calories and 29g protein each, about $1.34 a serving. Seared pork in peanut coconut sauce over lime rice.",
                  "keywords":  "thai peanut pork bowl, pork tenderloin recipe, peanut sauce pork, lime rice, budget meal prep, pork rice bowl",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT15M",
                  "cookTime":  "PT35M",
                  "totalTime":  "PT50M",
-                 "costPerServing":  1.58,
+                 "costPerServing":  1.34,
                  "recipeIngredient":  [
                                           "3 lb pork tenderloin",
                                           "4.5 cups dry rice",

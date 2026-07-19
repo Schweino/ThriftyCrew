@@ -16,9 +16,9 @@
                  "protein":  44,
                  "carbs":  68,
                  "fat":  10,
-                 "cost_ps":  "1.17"
+                 "cost_ps":  "1.13"
              },
-    "intro_html":  "Brazilian churrasco flavor on a Nebraska budget: pork marinated in garlic, mustard, Worcestershire, vinegar, and honey, roasted until the edges caramelize, then served over rice. Each bowl brings \u003cstrong\u003e44 grams of protein\u003c/strong\u003e and 565 calories for about \u003cstrong\u003e$1.17\u003c/strong\u003e. That is the cheapest serving of any recipe in its weight class.",
+    "intro_html":  "Brazilian churrasco flavor on a Nebraska budget: pork marinated in garlic, mustard, Worcestershire, vinegar, and honey, roasted until the edges caramelize, then served over rice. Each bowl brings \u003cstrong\u003e44 grams of protein\u003c/strong\u003e and 565 calories for about \u003cstrong\u003e$1.13\u003c/strong\u003e. That is the cheapest serving of any recipe in its weight class.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 5.5 lb (2540 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6.5 tbsp (56 g)",
@@ -31,7 +31,7 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Pork Loin, 5.5 lb: ~$12.54. \u003cstrong\u003eBuy 6 lbs: $13.44.\u003c/strong\u003e",
+                       "Pork Loin, 5.5 lb: ~$11.98. \u003cstrong\u003eBuy 6 lbs: $12.84.\u003c/strong\u003e",
                        "Garlic, 6.5 tbsp: ~$0.81. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Yellow Onion, 1: ~$0.25. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Dijon Mustard, 1.5 tbsp: ~$0.11. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
@@ -40,10 +40,11 @@
                        "Honey, 2 tbsp: ~$0.35. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Rice, 6.25 cups dry: ~$1.69. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper, dried oregano, ground cumin, cayenne pepper): ~$0.32. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $16.43 across 14 servings, so roughly $1.17 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $18.56 across 14 servings, roughly $1.33 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $15.87 across 14 servings, so roughly $1.13 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $17.96 across 14 servings, roughly $1.28 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.62 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $34.58. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$1.17 a bowl\u003c/strong\u003e for churrasco-style pork that a Brazilian steakhouse charges more than that just to hand you the little green card.",
+    "cost_closing_html":  "About \u003cstrong\u003e$1.13 a bowl\u003c/strong\u003e for churrasco-style pork that a Brazilian steakhouse charges more than that just to hand you the little green card.",
     "shop_smart":  [
                        "We swap pork loin in for ribs, and that one substitution is the whole budget story: loin runs about a third the per-pound price of ribs with far more meat and no bones to pay for.",
                        "Mustard, Worcestershire, vinegar, and honey are all pantry bottles that last several batches, so the recurring cost of this recipe is basically pork and rice.",
@@ -61,19 +62,21 @@
                 ],
     "portion_html":  "Put the full pot on the scale, subtract the empty-pot number, and divide by 14. Scoop each portion into a container, making sure the pan juices get shared out evenly. Every bowl carries \u003cstrong\u003e565 calories and 44 grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.easyanddelish.com/from-brazil-to-you-brazilian-style-pork-ribs-costela-de-porco-assada/\" target=\"_blank\" rel=\"noopener\"\u003eEasy and Delish\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $1.17 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  16.43,
-    "cost_batch_true":  18.56,
-    "cost_per_serving":  1.17,
-    "cost_per_serving_true":  1.33,
+    "upsell_html":  "Hearty dinners for about $1.13 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  15.87,
+    "cost_batch_true":  17.96,
+    "cost_per_serving":  1.13,
+    "cost_per_serving_true":  1.28,
+    "cost_pantry_add":  16.62,
+    "cost_first_run":  34.58,
     "scaler":  {
-                   "cost":  "18.56",
+                   "cost":  "17.96",
                    "ing":  [
                                {
                                    "item":  "Pork Loin",
                                    "grams":  2540,
                                    "buy":  "5.5 lb",
-                                   "bid":  "pork-shoulder",
+                                   "bid":  "pork-loin",
                                    "gpu":  "453.592"
                                },
                                {
@@ -163,13 +166,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Brazilian-style marinated pork meal prep bowls over rice, roasted until caramelized. 565 calories and 44g protein for about $1.17 a serving.",
+                 "description":  "Brazilian-style marinated pork meal prep bowls over rice, roasted until caramelized. 565 calories and 44g protein for about $1.13 a serving.",
                  "keywords":  "brazilian pork bowls, pork rice bowls, marinated pork loin, budget meal prep, cheap high protein meals, churrasco at home",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",
                  "cookTime":  "PT1H",
                  "totalTime":  "PT1H20M",
-                 "costPerServing":  1.17,
+                 "costPerServing":  1.13,
                  "recipeIngredient":  [
                                           "5.5 lb pork loin",
                                           "6.25 cups dry rice",

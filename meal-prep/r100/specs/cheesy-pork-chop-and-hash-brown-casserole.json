@@ -39,8 +39,9 @@
                        "Chicken Broth, 0.25 lb: ~$0.19. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Cheddar Cheese, Shredded, 14 oz: ~$3.45. \u003cstrong\u003eBuy 2 8oz bags: $3.94.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper): ~$0.20. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $46.86 across 14 servings, so roughly $3.35 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $54.19 across 14 servings, roughly $3.87 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $46.86 across 14 servings, so roughly $3.35 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $54.19 across 14 servings, roughly $3.87 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $5.34 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $59.53. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$3.35 a bowl\u003c/strong\u003e for a chop-and-potatoes plate a diner would ring up at four times that before you even order coffee.",
     "shop_smart":  [
@@ -64,6 +65,8 @@
     "cost_batch_true":  54.19,
     "cost_per_serving":  3.35,
     "cost_per_serving_true":  3.87,
+    "cost_pantry_add":  5.34,
+    "cost_first_run":  59.53,
     "scaler":  {
                    "cost":  "54.19",
                    "ing":  [

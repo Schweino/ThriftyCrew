@@ -38,14 +38,15 @@
                        "Eggs, 7 large eggs: ~$0.86. \u003cstrong\u003eBuy 1 dozen: $1.47.\u003c/strong\u003e",
                        "Sugar, 1.75 cups: ~$0.60. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Ketchup, 0.5 cups: ~$0.29. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "White Vinegar, 0.5 cups: ~$0.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "White Vinegar, 0.5 cups: ~$0.26. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Apple Cider Vinegar, 0.5 cups: ~$0.35. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Soy Sauce, 2.25 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 2.25 tbsp: ~$0.14. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Vegetable Oil, 0.5 cups: ~$0.31. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Rice, 3.75 cups dry: ~$1.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (black pepper, garlic powder, salt): ~$0.49. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $15.44 across 14 servings, so roughly $1.10 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $18.02 across 14 servings, roughly $1.29 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $15.42 across 14 servings, so roughly $1.10 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $18.00 across 14 servings, roughly $1.29 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.70 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $34.70. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$1.10 a bowl\u003c/strong\u003e for sweet and sour chicken that costs ten times that as a takeout combo, and theirs gets soggy in the car.",
     "shop_smart":  [
@@ -66,12 +67,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty-pot weight you wrote down, and divide by 14. Portion into 14 containers so every lunch is the same size. Each bowl checks in at \u003cstrong\u003e678 calories and 37 grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://therecipecritic.com/baked-sweet-and-sour-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eThe Recipe Critic\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about $1.10 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  15.44,
-    "cost_batch_true":  18.02,
+    "cost_batch":  15.42,
+    "cost_batch_true":  18,
     "cost_per_serving":  1.1,
     "cost_per_serving_true":  1.29,
+    "cost_pantry_add":  16.7,
+    "cost_first_run":  34.7,
     "scaler":  {
-                   "cost":  "18.02",
+                   "cost":  "18.00",
                    "ing":  [
                                {
                                    "item":  "Boneless Skinless Chicken Breast",

@@ -15,9 +15,9 @@
                  "protein":  37,
                  "carbs":  80,
                  "fat":  12,
-                 "cost_ps":  "1.27"
+                 "cost_ps":  "1.24"
              },
-    "intro_html":  "Pork braised low and slow in tomatoes and mirepoix until it shreds with a look, then piled over ribbons of pasta. Sounds like a $30 trattoria plate; it is actually \u003cstrong\u003eabout $1.27 a bowl\u003c/strong\u003e with \u003cstrong\u003e37 grams of protein\u003c/strong\u003e and 578 calories. Time does the work, and time is free.",
+    "intro_html":  "Pork braised low and slow in tomatoes and mirepoix until it shreds with a look, then piled over ribbons of pasta. Sounds like a $30 trattoria plate; it is actually \u003cstrong\u003eabout $1.24 a bowl\u003c/strong\u003e with \u003cstrong\u003e37 grams of protein\u003c/strong\u003e and 578 calories. Time does the work, and time is free.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 4.25 tbsp (61 g)",
                                 "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 3.5 lb (1588 g)",
@@ -33,7 +33,7 @@
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Vegetable Oil, 4.25 tbsp: ~$0.15. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pork Loin, 3.5 lb: ~$7.84. \u003cstrong\u003eBuy 4 lbs: $8.96.\u003c/strong\u003e",
+                       "Pork Loin, 3.5 lb: ~$7.49. \u003cstrong\u003eBuy 4 lbs: $8.56.\u003c/strong\u003e",
                        "Yellow Onion, 1: ~$0.24. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Carrots, 3.5: ~$0.53. \u003cstrong\u003eBuy 1 lb: $1.13.\u003c/strong\u003e",
                        "Celery, 3.5: ~$1.01. \u003cstrong\u003eBuy 1 bunch: $2.37.\u003c/strong\u003e",
@@ -43,10 +43,11 @@
                        "Diced Tomatoes, 3.4 cans: ~$3.24. \u003cstrong\u003eBuy 4 cans: $3.84.\u003c/strong\u003e",
                        "Fettuccine, 47.25 oz dry: ~$2.88. \u003cstrong\u003eBuy 3 16oz boxs: $2.93.\u003c/strong\u003e",
                        "Pantry seasonings (dried thyme, italian seasoning, salt, black pepper): ~$0.79. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $17.78 across 14 servings, so roughly $1.27 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $23.31 across 14 servings, roughly $1.66 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $17.43 across 14 servings, so roughly $1.24 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $22.91 across 14 servings, roughly $1.64 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $9.11 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $32.02. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$1.27 a bowl\u003c/strong\u003e for a slow-braised pork ragu that restaurants price like a car payment appetizer.",
+    "cost_closing_html":  "About \u003cstrong\u003e$1.24 a bowl\u003c/strong\u003e for a slow-braised pork ragu that restaurants price like a car payment appetizer.",
     "shop_smart":  [
                        "Pork loin at around $2 a pound is the whole reason this batch is so cheap. Whole loins go on deep sale often; buy one, cube half for this, freeze the rest.",
                        "Carrots, celery, and onion are the cheapest flavor base in cooking. Buy whole carrots and a full celery bunch, not the pre-cut cups, and you pay a third the price.",
@@ -63,13 +64,15 @@
                 ],
     "portion_html":  "Set the loaded pot on the scale, subtract the empty-pot weight, and divide by 14. Twirl even portions into 14 containers; the sauce keeps the pasta from drying out all week. Each bowl lands at \u003cstrong\u003e578 calories and 37 grams of protein\u003c/strong\u003e.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.spoonforkbacon.com/braised-pork-ragu-over-pappardelle/\" target=\"_blank\" rel=\"noopener\"\u003eSpoon Fork Bacon\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $1.27 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  17.78,
-    "cost_batch_true":  23.31,
-    "cost_per_serving":  1.27,
-    "cost_per_serving_true":  1.66,
+    "upsell_html":  "Hearty dinners for about $1.24 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  17.43,
+    "cost_batch_true":  22.91,
+    "cost_per_serving":  1.24,
+    "cost_per_serving_true":  1.64,
+    "cost_pantry_add":  9.11,
+    "cost_first_run":  32.02,
     "scaler":  {
-                   "cost":  "23.31",
+                   "cost":  "22.91",
                    "ing":  [
                                {
                                    "item":  "Vegetable Oil",
@@ -82,7 +85,7 @@
                                    "item":  "Pork Loin",
                                    "grams":  1588,
                                    "buy":  "3.5 lb",
-                                   "bid":  "pork-shoulder",
+                                   "bid":  "pork-loin",
                                    "gpu":  "453.592"
                                },
                                {
@@ -172,13 +175,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Slow-braised pork ragu meal prep over pasta ribbons, built on cheap pork loin and mirepoix. 578 calories, 37g protein, about $1.27 per serving.",
+                 "description":  "Slow-braised pork ragu meal prep over pasta ribbons, built on cheap pork loin and mirepoix. 578 calories, 37g protein, about $1.24 per serving.",
                  "keywords":  "pork ragu, braised pork pasta, pappardelle ragu, budget meal prep, slow braised pork, cheap high protein dinners",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",
                  "cookTime":  "PT2H45M",
                  "totalTime":  "PT3H10M",
-                 "costPerServing":  1.27,
+                 "costPerServing":  1.24,
                  "recipeIngredient":  [
                                           "3.5 lb pork loin",
                                           "47.25 oz dry fettuccine",

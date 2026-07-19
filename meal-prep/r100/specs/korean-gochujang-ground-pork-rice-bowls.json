@@ -42,14 +42,15 @@
                        "Gochujang, 1 cups: ~$2.70. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Mirin, 4.75 oz: ~$1.16. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Sugar, 7.25 tbsp: ~$0.17. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Soy Sauce, 3.75 tbsp: ~$0.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 3.75 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Sesame Oil, 3.75 tbsp: ~$1.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Green Onions, 18.25 tbsp: ~$1.31. \u003cstrong\u003eBuy 2 bunchs: $2.14.\u003c/strong\u003e",
                        "Toasted Sesame Seeds, 3 tbsp: ~$0.50. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Rice, 2 cups dry: ~$0.56. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper): ~$0.20. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $23.09 across 14 servings, so roughly $1.65 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $26.39 across 14 servings, roughly $1.88 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $23.08 across 14 servings, so roughly $1.65 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $26.38 across 14 servings, roughly $1.88 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.30 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $42.68. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$1.65 a bowl\u003c/strong\u003e for a Korean-style pork bowl that would run $12 or more from a takeout counter. That is nearly two weeks of dinners for the cost of two delivery orders.",
     "shop_smart":  [
@@ -69,12 +70,14 @@
     "portion_html":  "Weigh the full pot, subtract the empty pot number from step 1, and divide by 14. Portion that weight of glazed pork over even scoops of rice in 14 containers. Every bowl checks in at 560 calories and 26 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thesubversivetable.com/gochujang-pork-bowls/\" target=\"_blank\" rel=\"noopener\"\u003eThe Subversive Table\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about $1.65 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  23.09,
-    "cost_batch_true":  26.39,
+    "cost_batch":  23.08,
+    "cost_batch_true":  26.38,
     "cost_per_serving":  1.65,
     "cost_per_serving_true":  1.88,
+    "cost_pantry_add":  16.3,
+    "cost_first_run":  42.68,
     "scaler":  {
-                   "cost":  "26.39",
+                   "cost":  "26.38",
                    "ing":  [
                                {
                                    "item":  "Ground Pork",

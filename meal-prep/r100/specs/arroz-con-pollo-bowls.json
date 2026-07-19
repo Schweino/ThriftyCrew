@@ -45,8 +45,9 @@
                        "Frozen Green Peas, 2.25 cups: ~$0.68. \u003cstrong\u003eBuy 1 12oz bag: $0.73.\u003c/strong\u003e",
                        "Fresh Cilantro, 9 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper, ground cumin, dried oregano, ground turmeric, sugar, bay leaves): ~$0.81. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $25.27 across 14 servings, so roughly $1.80 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $29.25 across 14 servings, roughly $2.09 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $25.27 across 14 servings, so roughly $1.80 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $29.25 across 14 servings, roughly $2.09 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $15.83 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $45.08. Those containers then feed this batch and many more after it."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$1.80 a bowl\u003c/strong\u003e for chicken and rice that a sit-down restaurant would plate for five or six times that, garnish and all.",
     "shop_smart":  [
@@ -71,6 +72,8 @@
     "cost_batch_true":  29.25,
     "cost_per_serving":  1.8,
     "cost_per_serving_true":  2.09,
+    "cost_pantry_add":  15.83,
+    "cost_first_run":  45.08,
     "scaler":  {
                    "cost":  "29.25",
                    "ing":  [
