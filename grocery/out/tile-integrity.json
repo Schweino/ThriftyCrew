@@ -1,13 +1,13 @@
 ﻿{
-    "generated":  "2026-07-18 12:47",
+    "generated":  "2026-07-18 21:32",
     "board":  "comparison-2026-07-18.json",
-    "total_tiles":  2083,
-    "violations":  147,
+    "total_tiles":  2202,
+    "violations":  223,
     "by_store":  {
                      "Walmart":  {
-                                     "coverage":  9,
-                                     "tiles":  366,
-                                     "violations":  9
+                                     "coverage":  53,
+                                     "tiles":  410,
+                                     "violations":  56
                                  },
                      "Fareway":  {
                                      "coverage":  2,
@@ -15,18 +15,18 @@
                                      "violations":  8
                                  },
                      "Family Fare":  {
-                                         "coverage":  22,
-                                         "tiles":  197,
-                                         "violations":  22
+                                         "coverage":  51,
+                                         "tiles":  228,
+                                         "violations":  51
                                      },
                      "Hy-Vee":  {
                                     "coverage":  27,
-                                    "tiles":  364,
+                                    "tiles":  405,
                                     "violations":  28
                                 },
                      "Sam\u0027s Club":  {
                                              "coverage":  38,
-                                             "tiles":  313,
+                                             "tiles":  316,
                                              "violations":  38
                                          },
                      "Aldi":  {
@@ -50,11 +50,35 @@
                      "link":  ""
                  },
                  {
+                     "id":  "achiote-paste",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Chef Merito Achiote Seasoning Paste, 3.5 Oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "flour",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger Bleached All Purpose Enriched Flour (10 lb)",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-allspice",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value Ground Allspice, 2 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-allspice",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Tone\u0027s Allspice, Ground 0.6 Oz",
                      "link":  ""
                  },
                  {
@@ -111,6 +135,54 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Dove Bar Soap",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "dried-basil",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Soeos Dried Basil Leaves 5 oz (142g) Each, Pack of 2, Cut \u0026",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fresh-basil",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh Basil, 0.5 oz Clamshell",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fresh-basil",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Local Roots Organic Basil",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bay-leaves",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Soeos Whole Bay Leaves 2oz, Dried Laurel, Non-GMO Verified,",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bay-leaves",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Sugar \u0027N Spice Bay Leaves",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "berbere-seasoning",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "NY SPICE SHOP Ethiopian Berbere Spice Seasoning - 1 Pound",
                      "link":  ""
                  },
                  {
@@ -210,12 +282,44 @@
                      "link":  ""
                  },
                  {
+                     "id":  "butter",
+                     "store":  "Walmart",
+                     "fault":  "PRICE-DRIFT",
+                     "detail":  "board $2.9153 vs link $3.06  (4.7% off)",
+                     "board":  "Pillsbury Grands! Flaky Layers Butter Tastin\u0027 Refrigerated B",
+                     "link":  "Great Value Sweet Cream Salted Butter, 16 oz, 4 Sticks"
+                 },
+                 {
+                     "id":  "cajun-seasoning",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Tony Chachere\u0027s, Seasoning, Cajun, 8 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cajun-seasoning",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Louisiana Fish Fry Products Original Cajun Seasoning 8 Oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "beef-stew",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Dinty Moore Beef Stew, 15 oz., 6 pk.",
                      "link":  ""
+                 },
+                 {
+                     "id":  "beef-stew",
+                     "store":  "Walmart",
+                     "fault":  "PRICE-DRIFT",
+                     "detail":  "board $0.165 vs link $0.134  (23.1% off)",
+                     "board":  "DINTY MOORE Beef Stew, Shelf-Stable, Steel Can 38 oz",
+                     "link":  "(4 pack) Armour Star Classic Homestyle Beef Stew, 13g Protei"
                  },
                  {
                      "id":  "canned-chicken",
@@ -250,6 +354,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "canned-green-chilies",
+                     "store":  "Walmart",
+                     "fault":  "PRICE-DRIFT",
+                     "detail":  "board $0.3671 vs link $0.4175  (12.1% off)",
+                     "board":  "Ortega Mild Fire Roasted Diced Green Chiles, Kosher, 7 oz Ca",
+                     "link":  "Ortega Fire Roasted Mild Diced Green Chiles, Kosher, 4 oz"
+                 },
+                 {
                      "id":  "diced-tomatoes",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -279,14 +391,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Chef Boyardee Beef Ravioli 15 oz., 12 pk.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "canned-pasta",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "(4 pack) Chef Boyardee Overstuffed Beef Ravioli in Pasta Sau",
                      "link":  ""
                  },
                  {
@@ -362,11 +466,43 @@
                      "link":  ""
                  },
                  {
+                     "id":  "cayenne-pepper",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value Ground Cayenne Red Pepper, 5.2 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cayenne-pepper",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Lawry\u0027s Ground Cayenne Pepper 1.87 Oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "cheese-crackers",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Pepperidge Farm Goldfish",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cheese-tortellini",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value Family Size Cheese Tortellini, Pasta, 36 oz Bag",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cheese-tortellini",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Tortellini, Cheese, Classic Curls 19 Oz",
                      "link":  ""
                  },
                  {
@@ -386,11 +522,59 @@
                      "link":  ""
                  },
                  {
+                     "id":  "chili-crisp",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Laoganma Spicy Chili Crisp Sauce, 7.41 Fl Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "chili-crisp",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Cholula Chiles \u0026 Pepitas Chili Crisp Sauce 8 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "five-spice-powder",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "McCormick Gourmet Kosher Chinese Five Spice Blend, 1.75 oz B",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "chipotle-adobo",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "EMBASA Chipotle Peppers in Adobo Sauce, Shelf Stable, 7 oz S",
+                     "link":  ""
+                 },
+                 {
                      "id":  "chocolate-milk",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "TruMoo Whole Chocolate Milk Half Gallon",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-cloves",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value Ground Cloves, 2 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-cloves",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Spice Supreme Spice Ground Cloves",
                      "link":  ""
                  },
                  {
@@ -407,6 +591,38 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger Coffee Pods",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-coriander",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Badia Coriander Ground",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-coriander",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Sugar \u0027N Spice Coriander Ground Pp",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "corn-muffin-mix",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "\"JIFFY\" Corn Muffin Mix, 8.5 oz Box",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "corn-muffin-mix",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Jiffy Corn Muffin Mix 8.5 Oz",
                      "link":  ""
                  },
                  {
@@ -458,6 +674,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "curry-powder",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value Curry Powder, 2 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "curry-powder",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Sugar N Spice Curry Powder Pp",
+                     "link":  ""
+                 },
+                 {
                      "id":  "tomatoes-green-chilies",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
@@ -471,6 +703,22 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Ro-Tel Diced Tomatoes \u0026 Green Chilies 10 oz., 8 ct.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "dried-dill",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Frontier Co-op Certified Organic Dill Weed, 16 oz. Bag",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "dried-dill",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Sugar \u0027N Spice Dill Weed Pp",
                      "link":  ""
                  },
                  {
@@ -546,6 +794,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "fish-sauce",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kikkoman Glutenâ€‘Free Fish Sauce, 6.8 fl oz Glass Bottle",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fish-sauce",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Thai Gluten Free Premium Fish Sauce 6.76 Fl Oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "storage-bags",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -610,6 +874,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "garam-masala",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "24 Mantra Organic Garam Masala",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "garam-masala",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Finest Reserve Garam Masala 1.8 Oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "garlic-powder",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -634,6 +914,30 @@
                      "link":  ""
                  },
                  {
+                     "id":  "ground-ginger",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Full Circle Market Ground Ginger 1.6 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-ginger",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "McCormick Ground Ginger, 1.5 oz Bottle",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "gochujang",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "bettergoods Gochujang Sauce, 12.5 oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "granola-bars",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -647,6 +951,22 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Smart Way Granulated Sugar (4 lb)",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "grits",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Quaker Old Fashioned Grits, 24 oz Canister",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "grits",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Quaker Quick 5 Minute Grits 24 Oz",
                      "link":  ""
                  },
                  {
@@ -722,6 +1042,30 @@
                      "link":  ""
                  },
                  {
+                     "id":  "harissa-paste",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Mina, Harissa Spicy Moroccan Red Pepper Sauce , 10 Fl oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "hoisin-sauce",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Lee Kum Kee Hoisin Sauce 20 oz.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "hoisin-sauce",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Lee Kum Kee Hoisin Sauce 20 Oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "hot-dog-buns",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
@@ -778,6 +1122,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "japanese-curry-roux",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "S\u0026B Golden Curry Mild Japanese Curry Mix, 3.2 oz, 1 count Bo",
+                     "link":  ""
+                 },
+                 {
                      "id":  "eggs",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -826,6 +1178,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "fresh-mint",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Thera Breath Deep Clean Fresh Mint Oral Rinse 16 Fl Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fresh-mint",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh Mint, 0.5 oz Clamshell",
+                     "link":  ""
+                 },
+                 {
                      "id":  "miracle-whip",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -839,6 +1207,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Miracle Whip Light Dressing 30 Fl Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "mirin",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Mizkan Mirin Sweet Cooking Seasoning, 12 fl oz",
                      "link":  ""
                  },
                  {
@@ -866,11 +1242,35 @@
                      "link":  ""
                  },
                  {
+                     "id":  "ground-nutmeg",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value Ground Nutmeg, 1.5 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-nutmeg",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Nutmeg, Ground 2.12 Oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "oat-milk",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Oatly Oat Milk",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "oyster-sauce",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Heinz Golden Mark Oyster Sauce 9.2oz",
                      "link":  ""
                  },
                  {
@@ -938,6 +1338,54 @@
                      "link":  ""
                  },
                  {
+                     "id":  "poblano-peppers",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh Poblano Peppers, 16 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pomegranate-molasses",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Sadaf brand Pomegranate Molasses, 10 Fl oz. in a bottle",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "poppy-seeds",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Poppy Seeds Sugar \u0027N Spice",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "poppy-seeds",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "McCormick Culinary Whole Dutch Poppy Seed, 20.0 oz Bottle",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "potato-gnocchi",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Giovanni Rana Skillet Gnocchi 12 oz. Bag, Refrigerated",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "potato-gnocchi",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "De Lallo Potato Gnocchi 16 Oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "pretzels",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -970,6 +1418,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "ranch-seasoning-mix",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value Classic Ranch Salad Dressing \u0026 Recipe Mix, 8 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ranch-seasoning-mix",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Ranch Dressing \u0026 Dip Mix 1.12 Oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "red-pepper-flakes",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -986,11 +1450,43 @@
                      "link":  ""
                  },
                  {
+                     "id":  "refrigerated-biscuits",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value Butter Flavor Flaky Jumbo Biscuits, 16 oz, 8 Cou",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "refrigerated-biscuits",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Pillsbury Southern Homestyle Buttermilk Biscuits 8 Ea",
+                     "link":  ""
+                 },
+                 {
                      "id":  "ribeye-steak",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Black Angus Choice Beef Ribeye Steak",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "rice-noodles",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Thai Kitchen Gluten Free Gluten Free Stir Fry Rice Noodles,",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "rice-noodles",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Thai Kitchen Med Pad Thai Rice Noodle Cart 9.77 Oz",
                      "link":  ""
                  },
                  {
@@ -1007,6 +1503,38 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger Russet Potatoes Bag (10 lb)",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "sesame-oil",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Oi! Toasted Pure Sesame Oil 250 ml",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "sesame-oil",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kikkoman Sesame Oil 5 Fl Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "toasted-sesame-seeds",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Pepperidge Farm® Soft White With Sesame Seeds Hoagie Rolls 14.500 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "toasted-sesame-seeds",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Terrasoul Superfoods Organic Black Sesame Seeds, 2 Lbs - Raw",
                      "link":  ""
                  },
                  {
@@ -1066,6 +1594,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "sun-dried-tomatoes",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Bella Sun Luci Sun Dried Tomatoes in Olive Oil with Italian",
+                     "link":  ""
+                 },
+                 {
                      "id":  "sweet-potatoes",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
@@ -1082,11 +1618,51 @@
                      "link":  ""
                  },
                  {
+                     "id":  "taco-seasoning",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value Taco Seasoning Mix, Original, 1 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "taco-seasoning",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Mc Cormick Mild Taco Seasoning Mix 8.5 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "tahini",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Krinos Tahini Spread with Velvety Texture 16oz Jar - Premium",
+                     "link":  ""
+                 },
+                 {
                      "id":  "tea-bags",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy Vee Black Tea Bags",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "red-curry-paste",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Mae Ploy Red Curry Paste, 14 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "dried-thyme",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value Ground Thyme, 1.4 oz",
                      "link":  ""
                  },
                  {
@@ -1103,6 +1679,22 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Angel Soft 2 Ply Mega Rolls Unscented Mega Rolls Bathroom Tissue 24 Ea",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "tomatillos",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Tomatillos",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "tomatillos",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh Tomatillos Milpero, 16 oz",
                      "link":  ""
                  },
                  {
@@ -1151,6 +1743,22 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Thats Smart Vegetable Oil",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "walnuts",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "FISHER Chef\u0027s Naturals Chopped Walnuts, 16 oz, Naturally Glu",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "walnuts",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Chopped Walnuts 8 Oz",
                      "link":  ""
                  },
                  {
@@ -1219,5 +1827,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  140
+    "coverage_violations":  213
 }

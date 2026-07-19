@@ -15,9 +15,9 @@
                  "protein":  36,
                  "carbs":  90,
                  "fat":  34,
-                 "cost_ps":  "3.13"
+                 "cost_ps":  "2.88"
              },
-    "intro_html":  "Sweet, tangy, salty pad thai with chicken, scrambled egg, and a peanut crunch on top. Each bowl brings \u003cstrong\u003e36 grams of protein\u003c/strong\u003e at 791 calories for about \u003cstrong\u003e$3.13\u003c/strong\u003e. That is the most expensive recipe in this stretch of the library, and it is still a quarter of what the Thai place charges.",
+    "intro_html":  "Sweet, tangy, salty pad thai with chicken, scrambled egg, and a peanut crunch on top. Each bowl brings \u003cstrong\u003e36 grams of protein\u003c/strong\u003e at 791 calories for about \u003cstrong\u003e$2.88\u003c/strong\u003e. That is the most expensive recipe in this stretch of the library, and it is still a quarter of what the Thai place charges.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eRice Noodles (Thai Kitchen):\u003c/strong\u003e 30.75 oz dry (875 g)",
                                 "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 0.75 cups (158 g)",
@@ -37,7 +37,7 @@
                        "Lime Juice, 0.75 cups: ~$1.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Brown Sugar, 1.25 cups: ~$9.92. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Fish Sauce, 1 cups: ~$2.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Oyster Sauce, 6.75 oz: ~$5.14. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Oyster Sauce, 6.75 oz: ~$1.65. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Vegetable Oil, 1 cups: ~$0.60. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 2.25 cups: ~$4.44. \u003cstrong\u003eBuy 8 heads: $4.61.\u003c/strong\u003e",
@@ -45,10 +45,10 @@
                        "Eggs, 14 large eggs: ~$1.72. \u003cstrong\u003eBuy 2 dozens: $2.94.\u003c/strong\u003e",
                        "Peanuts, 1.75 cups: ~$1.46. \u003cstrong\u003eBuy 1 16oz jar: $2.58.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper): ~$0.20. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $43.84 across 14 servings, so roughly $3.13 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $51.84 across 14 servings, roughly $3.70 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $40.35 across 14 servings, so roughly $2.88 per bowl.\u003c/strong\u003e",
+                       "\u003cstrong\u003eTrue shopping cost: about $48.35 across 14 servings, roughly $3.45 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.13 a bowl\u003c/strong\u003e for chicken pad thai with all the fixings. Restaurant pad thai runs $13 to $16 a plate, so even our priciest noodle bowl saves you around $10 every single serving.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.88 a bowl\u003c/strong\u003e for chicken pad thai with all the fixings. Restaurant pad thai runs $13 to $16 a plate, so even our priciest noodle bowl saves you around $10 every single serving.",
     "shop_smart":  [
                        "Rice noodles are the big line item at $10.49. If your store has an international aisle or you can hit an Asian market, the same noodles often drop to half the mainstream-brand price.",
                        "Fourteen eggs do heavy lifting for protein at only $1.72. Eggs are still one of the cheapest proteins per gram in the store.",
@@ -65,18 +65,20 @@
                 ],
     "portion_html":  "Put the whole pot on the scale, subtract the empty pot weight you wrote down, and divide by 14. Weigh that into each container and split the peanuts on top. Each bowl works out to about 791 calories with 36 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.recipetineats.com/chicken-pad-thai/\" target=\"_blank\" rel=\"noopener\"\u003eRecipeTin Eats\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $3.13 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  43.84,
-    "cost_batch_true":  51.84,
-    "cost_per_serving":  3.13,
-    "cost_per_serving_true":  3.7,
+    "upsell_html":  "Hearty dinners for about $2.88 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  40.35,
+    "cost_batch_true":  48.35,
+    "cost_per_serving":  2.88,
+    "cost_per_serving_true":  3.45,
     "scaler":  {
-                   "cost":  "51.84",
+                   "cost":  "48.35",
                    "ing":  [
                                {
                                    "item":  "Rice Noodles",
                                    "grams":  875,
-                                   "buy":  "30.75 oz dry"
+                                   "buy":  "30.75 oz dry",
+                                   "bid":  "rice-noodles",
+                                   "gpu":  "28.350"
                                },
                                {
                                    "item":  "Lime Juice",
@@ -102,7 +104,9 @@
                                {
                                    "item":  "Oyster Sauce",
                                    "grams":  189,
-                                   "buy":  "6.75 oz"
+                                   "buy":  "6.75 oz",
+                                   "bid":  "oyster-sauce",
+                                   "gpu":  "29.570"
                                },
                                {
                                    "item":  "Vegetable Oil",
@@ -163,13 +167,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Chicken pad thai meal prep with egg and peanuts. 14 noodle bowls at 791 calories and 36g protein each, about $3.13 a serving vs $15 takeout.",
+                 "description":  "Chicken pad thai meal prep with egg and peanuts. 14 noodle bowls at 791 calories and 36g protein each, about $2.88 a serving vs $15 takeout.",
                  "keywords":  "chicken pad thai, pad thai meal prep, thai noodles, budget meal prep, homemade takeout, cheap dinner recipes",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT30M",
                  "cookTime":  "PT30M",
                  "totalTime":  "PT60M",
-                 "costPerServing":  3.13,
+                 "costPerServing":  2.88,
                  "recipeIngredient":  [
                                           "30.75 oz dry rice noodles",
                                           "2.25 lb boneless skinless chicken breast",

@@ -9,7 +9,8 @@
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $computed = Get-Content (Join-Path $here 'recipes-computed.json') -Raw | ConvertFrom-Json
-$cmp = (Get-Content (Join-Path $here '..\..\grocery\out\comparison-2026-07-17.json') -Raw | ConvertFrom-Json).comparison
+$cmpFile = Get-ChildItem (Join-Path $here '..\..\grocery\out\comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1
+$cmp = (Get-Content $cmpFile.FullName -Raw | ConvertFrom-Json).comparison
 $mapNew = (Get-Content (Join-Path $here 'r100-board-map.json') -Raw | ConvertFrom-Json).map
 $mapOld = (Get-Content (Join-Path $here '..\ingredient-map.json') -Raw | ConvertFrom-Json).mappings
 

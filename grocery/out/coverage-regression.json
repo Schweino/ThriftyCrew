@@ -1,9 +1,9 @@
 ﻿{
-    "checked":  "2026-07-17",
-    "new_board":  "comparison-2026-07-17.json",
-    "prev_board":  "comparison-2026-07-15.json",
+    "checked":  "2026-07-18",
+    "new_board":  "comparison-2026-07-18.json",
+    "prev_board":  "comparison-2026-07-17.json",
     "rows_was":  378,
-    "rows_now":  378,
+    "rows_now":  424,
     "thresholds":  {
                        "max_drop_cells":  15,
                        "max_drop_pct":  10
@@ -29,46 +29,46 @@
                    },
                    {
                        "store":  "Family Fare",
-                       "was":  196,
-                       "now":  197,
-                       "drop":  -1,
-                       "pct":  -0.5,
+                       "was":  197,
+                       "now":  228,
+                       "drop":  -31,
+                       "pct":  -15.7,
                        "regression":  false,
                        "acked":  false
                    },
                    {
                        "store":  "Fareway",
-                       "was":  323,
+                       "was":  324,
                        "now":  324,
-                       "drop":  -1,
-                       "pct":  -0.3,
+                       "drop":  0,
+                       "pct":  0,
                        "regression":  false,
                        "acked":  false
                    },
                    {
                        "store":  "Hy-Vee",
                        "was":  364,
-                       "now":  364,
-                       "drop":  0,
-                       "pct":  0,
+                       "now":  405,
+                       "drop":  -41,
+                       "pct":  -11.3,
                        "regression":  false,
                        "acked":  false
                    },
                    {
                        "store":  "Sam\u0027s Club",
-                       "was":  279,
-                       "now":  313,
-                       "drop":  -34,
-                       "pct":  -12.2,
+                       "was":  313,
+                       "now":  316,
+                       "drop":  -3,
+                       "pct":  -1,
                        "regression":  false,
                        "acked":  false
                    },
                    {
                        "store":  "Walmart",
                        "was":  366,
-                       "now":  366,
-                       "drop":  0,
-                       "pct":  0,
+                       "now":  410,
+                       "drop":  -44,
+                       "pct":  -12,
                        "regression":  false,
                        "acked":  false
                    }

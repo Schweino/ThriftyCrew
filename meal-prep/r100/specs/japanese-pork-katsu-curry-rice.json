@@ -17,9 +17,9 @@
                  "protein":  51,
                  "carbs":  99,
                  "fat":  36,
-                 "cost_ps":  "3.43"
+                 "cost_ps":  "3.42"
              },
-    "intro_html":  "Crispy breaded pork cutlets sliced over rice and blanketed in glossy Japanese curry sauce. This is the splurge bowl of the section, built big on purpose: \u003cstrong\u003e51 grams of protein\u003c/strong\u003e and 953 calories for about \u003cstrong\u003e$3.43\u003c/strong\u003e. Save it for the hungriest week on your calendar.",
+    "intro_html":  "Crispy breaded pork cutlets sliced over rice and blanketed in glossy Japanese curry sauce. This is the splurge bowl of the section, built big on purpose: \u003cstrong\u003e51 grams of protein\u003c/strong\u003e and 953 calories for about \u003cstrong\u003e$3.42\u003c/strong\u003e. Save it for the hungriest week on your calendar.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.25 cups dry (600 g)",
                                 "\u003cstrong\u003eJapanese Curry Roux (S\u0026B):\u003c/strong\u003e 7 (644 g)",
@@ -31,7 +31,7 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Rice, 3.25 cups dry: ~$1.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 3.25 cups dry: ~$0.89. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Japanese Curry Roux, 7: ~$20.73. \u003cstrong\u003eBuy 7 3.2oz boxs: $20.73.\u003c/strong\u003e",
                        "All-Purpose Flour, 14 tbsp: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Eggs, 7 large eggs: ~$0.86. \u003cstrong\u003eBuy 1 dozen: $1.47.\u003c/strong\u003e",
@@ -39,10 +39,10 @@
                        "Pork Chops, 5.25 lb: ~$21.88. \u003cstrong\u003eBuy 6 lbs: $25.02.\u003c/strong\u003e",
                        "Vegetable Oil, 6 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (black pepper, salt): ~$1.21. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $48.08 across 14 servings, so roughly $3.43 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $51.83 across 14 servings, roughly $3.70 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $47.91 across 14 servings, so roughly $3.42 per bowl.\u003c/strong\u003e",
+                       "\u003cstrong\u003eTrue shopping cost: about $51.66 across 14 servings, roughly $3.69 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$3.43 a bowl\u003c/strong\u003e for a katsu curry plate that runs $16 at a Japanese restaurant, and theirs comes with one cutlet and a polite scoop of rice.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.42 a bowl\u003c/strong\u003e for a katsu curry plate that runs $16 at a Japanese restaurant, and theirs comes with one cutlet and a polite scoop of rice.",
     "shop_smart":  [
                        "The boxed curry roux is the shocker: $20.73, over 40 percent of this batch. Our Japanese ground beef curry recipe builds the same style of sauce from flour and curry powder for a fraction of that if you want the cheaper route.",
                        "Pork chops at about $4.17 a pound do katsu duty just as well as pricier cutlets once they are pounded thin. The 6 lb pack keeps the unit price down.",
@@ -59,25 +59,27 @@
                 ],
     "portion_html":  "Weigh the rice pot and the curry pot, subtract the empty pot number, and divide each by 14, then split the sliced cutlets evenly. Each loaded bowl comes out to about 953 calories and 51 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.cookeatworld.com/katsu-curry/\" target=\"_blank\" rel=\"noopener\"\u003eCookEatWorld\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $3.43 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  48.08,
-    "cost_batch_true":  51.83,
-    "cost_per_serving":  3.43,
-    "cost_per_serving_true":  3.7,
+    "upsell_html":  "Hearty dinners for about $3.42 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  47.91,
+    "cost_batch_true":  51.66,
+    "cost_per_serving":  3.42,
+    "cost_per_serving_true":  3.69,
     "scaler":  {
-                   "cost":  "51.83",
+                   "cost":  "51.66",
                    "ing":  [
                                {
                                    "item":  "Rice",
                                    "grams":  600,
                                    "buy":  "3.25 cups dry",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
                                },
                                {
                                    "item":  "Japanese Curry Roux",
                                    "grams":  644,
-                                   "buy":  "7"
+                                   "buy":  "7",
+                                   "bid":  "japanese-curry-roux",
+                                   "gpu":  "28.350"
                                },
                                {
                                    "item":  "All-Purpose Flour",
@@ -131,13 +133,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Japanese pork katsu curry rice meal prep: 953 calories and 51g protein at about $3.43 a serving. Crispy breaded pork cutlets with thick curry sauce.",
+                 "description":  "Japanese pork katsu curry rice meal prep: 953 calories and 51g protein at about $3.42 a serving. Crispy breaded pork cutlets with thick curry sauce.",
                  "keywords":  "pork katsu curry, katsu curry rice, japanese curry meal prep, breaded pork cutlet, budget dinner recipe",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT30M",
                  "cookTime":  "PT40M",
                  "totalTime":  "PT70M",
-                 "costPerServing":  3.43,
+                 "costPerServing":  3.42,
                  "recipeIngredient":  [
                                           "5.25 lb pork chops",
                                           "3.25 cups dry rice",

@@ -31,18 +31,18 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Rice, 7 cups dry: ~$2.28. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "93/7 Ground Beef, 3.5 lb: ~$21.60. \u003cstrong\u003eBuy 4 lbs: $24.68.\u003c/strong\u003e",
+                       "Rice, 7 cups dry: ~$1.92. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "93/7 Ground Beef, 3.5 lb: ~$21.99. \u003cstrong\u003eBuy 4 lbs: $25.12.\u003c/strong\u003e",
                        "Olive Oil, 3.5 tbsp: ~$0.55. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "All-Purpose Flour, 3.5 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Beef Broth, 2.75 lb: ~$1.69. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Soy Sauce, 3.5 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Butter, 3.5 tbsp: ~$0.33. \u003cstrong\u003eBuy 1 lb box: $3.06.\u003c/strong\u003e",
+                       "Butter, 3.5 tbsp: ~$0.31. \u003cstrong\u003eBuy 1 lb box: $2.92.\u003c/strong\u003e",
                        "Eggs, 14 large eggs: ~$1.72. \u003cstrong\u003eBuy 2 dozens: $2.94.\u003c/strong\u003e",
                        "Green Onions, 17.5 tbsp: ~$1.25. \u003cstrong\u003eBuy 2 bunchs: $2.14.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper): ~$0.72. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $30.39 across 14 servings, so roughly $2.17 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $38.31 across 14 servings, roughly $2.74 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $30.40 across 14 servings, so roughly $2.17 per bowl.\u003c/strong\u003e",
+                       "\u003cstrong\u003eTrue shopping cost: about $38.25 across 14 servings, roughly $2.73 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.17 a bowl\u003c/strong\u003e for a plate lunch that runs $15 at any Hawaiian barbecue spot on the mainland. The gravy is flour, drippings, and broth, which is to say nearly free.",
     "shop_smart":  [
@@ -62,25 +62,25 @@
     "portion_html":  "Weigh the rice pot, subtract the empty pot number, and divide by 14 for the base, then give each container one patty, one egg, and an even ladle of gravy. Each bowl lands at about 647 calories and 39 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://girlscangrill.com/recipe/loco-moco/\" target=\"_blank\" rel=\"noopener\"\u003eGirls Can Grill\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about $2.17 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  30.39,
-    "cost_batch_true":  38.31,
+    "cost_batch":  30.4,
+    "cost_batch_true":  38.25,
     "cost_per_serving":  2.17,
-    "cost_per_serving_true":  2.74,
+    "cost_per_serving_true":  2.73,
     "scaler":  {
-                   "cost":  "38.31",
+                   "cost":  "38.25",
                    "ing":  [
                                {
                                    "item":  "Rice",
                                    "grams":  1295,
                                    "buy":  "7 cups dry",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
                                },
                                {
                                    "item":  "93/7 Ground Beef",
                                    "grams":  1588,
                                    "buy":  "3.5 lb",
-                                   "bid":  "93-7-ground-beef",
+                                   "bid":  "ground-beef-8020",
                                    "gpu":  "453.592"
                                },
                                {

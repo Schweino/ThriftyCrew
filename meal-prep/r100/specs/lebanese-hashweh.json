@@ -29,15 +29,15 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Butter, 0.75 cups: ~$1.34. \u003cstrong\u003eBuy 1 lb box: $3.06.\u003c/strong\u003e",
+                       "Butter, 0.75 cups: ~$1.27. \u003cstrong\u003eBuy 1 lb box: $2.92.\u003c/strong\u003e",
                        "Spaghetti, 4.25 oz dry: ~$0.25. \u003cstrong\u003eBuy 1 16oz box: $0.98.\u003c/strong\u003e",
-                       "Rice, 6.25 cups dry: ~$2.05. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 6.25 cups dry: ~$1.72. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Chicken Broth, 3.75 lb: ~$2.26. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Yellow Onion, 2.3: ~$0.65. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
-                       "93/7 Ground Beef, 2.5 lb: ~$15.11. \u003cstrong\u003eBuy 3 lbs: $18.51.\u003c/strong\u003e",
+                       "93/7 Ground Beef, 2.5 lb: ~$15.38. \u003cstrong\u003eBuy 3 lbs: $18.84.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper, ground cinnamon, ground allspice): ~$3.05. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $24.71 across 14 servings, so roughly $1.76 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $31.05 across 14 servings, roughly $2.22 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $24.58 across 14 servings, so roughly $1.76 per bowl.\u003c/strong\u003e",
+                       "\u003cstrong\u003eTrue shopping cost: about $30.91 across 14 servings, roughly $2.21 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$1.76 a bowl\u003c/strong\u003e for a dish a Middle Eastern restaurant would plate for $14. This is one of the cheapest full dinners on the entire board, and nobody eating it would ever guess.",
     "shop_smart":  [
@@ -57,12 +57,12 @@
     "portion_html":  "Weigh the full pot, subtract the empty pot number you wrote down in step 1, and divide by 14. Scoop that weight into each container and you get 14 even bowls at 577 calories and 25 grams of protein apiece.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://silkroadrecipes.com/lebanese-vermicelli-rice-hashweh/\" target=\"_blank\" rel=\"noopener\"\u003eSilk Road Recipes\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about $1.76 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  24.71,
-    "cost_batch_true":  31.05,
+    "cost_batch":  24.58,
+    "cost_batch_true":  30.91,
     "cost_per_serving":  1.76,
-    "cost_per_serving_true":  2.22,
+    "cost_per_serving_true":  2.21,
     "scaler":  {
-                   "cost":  "31.05",
+                   "cost":  "30.91",
                    "ing":  [
                                {
                                    "item":  "Butter",
@@ -82,8 +82,8 @@
                                    "item":  "Rice",
                                    "grams":  1163,
                                    "buy":  "6.25 cups dry",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
                                },
                                {
                                    "item":  "Salt",
@@ -124,7 +124,7 @@
                                    "item":  "93/7 Ground Beef",
                                    "grams":  1111,
                                    "buy":  "2.5 lb",
-                                   "bid":  "93-7-ground-beef",
+                                   "bid":  "ground-beef-8020",
                                    "gpu":  "453.592"
                                },
                                {

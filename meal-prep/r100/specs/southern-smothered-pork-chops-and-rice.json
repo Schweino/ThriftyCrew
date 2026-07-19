@@ -15,9 +15,9 @@
                  "protein":  45,
                  "carbs":  84,
                  "fat":  40,
-                 "cost_ps":  "2.32"
+                 "cost_ps":  "2.31"
              },
-    "intro_html":  "Smothered pork chops are Southern for a reason: golden fried chops buried under onion gravy with cream stirred in. Every bowl packs \u003cstrong\u003e45 grams of protein\u003c/strong\u003e over rice for about \u003cstrong\u003e$2.32\u003c/strong\u003e. Sunday dinner comfort at a Tuesday leftover price.",
+    "intro_html":  "Smothered pork chops are Southern for a reason: golden fried chops buried under onion gravy with cream stirred in. Every bowl packs \u003cstrong\u003e45 grams of protein\u003c/strong\u003e over rice for about \u003cstrong\u003e$2.31\u003c/strong\u003e. Sunday dinner comfort at a Tuesday leftover price.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Chops:\u003c/strong\u003e 5.25 lb (2380 g)",
                                 "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 5.25 cups (656 g)",
@@ -37,12 +37,12 @@
                        "Garlic, 6 tbsp: ~$0.75. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Chicken Broth, 3.75 lb: ~$2.26. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Heavy Cream, 1.75 cups: ~$2.58. \u003cstrong\u003eBuy 1 pint: $2.94.\u003c/strong\u003e",
-                       "Rice, 3.75 cups dry: ~$1.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Pantry seasonings (salt, black pepper, garlic powder, onion powder, cayenne pepper): ~$1.49. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $32.51 across 14 servings, so roughly $2.32 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $36.58 across 14 servings, roughly $2.61 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "Rice, 3.75 cups dry: ~$1.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, garlic powder, onion powder, cayenne pepper): ~$1.54. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $32.37 across 14 servings, so roughly $2.31 per bowl.\u003c/strong\u003e",
+                       "\u003cstrong\u003eTrue shopping cost: about $36.44 across 14 servings, roughly $2.60 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.32 a bowl\u003c/strong\u003e for fried pork chops smothered in creamy onion gravy over rice. A soul food plate like this runs $15 at a restaurant, and they will not send you home with 13 more.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.31 a bowl\u003c/strong\u003e for fried pork chops smothered in creamy onion gravy over rice. A soul food plate like this runs $15 at a restaurant, and they will not send you home with 13 more.",
     "shop_smart":  [
                        "Pork chops carry this batch at about $21.88. Family packs and bone-in sales are your friend, anything under $4 a pound is a green light to stock the freezer.",
                        "The flour, oil, broth, and rice are all pantry players. One bag or bottle covers several batches, so the real cash outlay for this recipe is mostly just the meat.",
@@ -60,13 +60,13 @@
                 ],
     "portion_html":  "Weigh the full pot, subtract the empty pot weight you wrote down, and divide by 14. Portion rice, chop, and gravy to that number and each bowl lands at about 896 calories with 45 grams of protein. This one is a heavyweight, built for big days.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://cookswithsoul.com/southern-smothered-pork-chops/\" target=\"_blank\" rel=\"noopener\"\u003eCooks with Soul\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $2.32 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  32.51,
-    "cost_batch_true":  36.58,
-    "cost_per_serving":  2.32,
-    "cost_per_serving_true":  2.61,
+    "upsell_html":  "Hearty dinners for about $2.31 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  32.37,
+    "cost_batch_true":  36.44,
+    "cost_per_serving":  2.31,
+    "cost_per_serving_true":  2.6,
     "scaler":  {
-                   "cost":  "36.58",
+                   "cost":  "36.44",
                    "ing":  [
                                {
                                    "item":  "Pork Chops",
@@ -156,19 +156,19 @@
                                    "item":  "Rice",
                                    "grams":  700,
                                    "buy":  "3.75 cups dry",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
                                }
                            ]
                },
     "head":  {
-                 "description":  "Southern smothered pork chops meal prep: 14 bowls, 896 calories and 45g protein each, about $2.32 a serving. Fried chops in creamy onion gravy over rice.",
+                 "description":  "Southern smothered pork chops meal prep: 14 bowls, 896 calories and 45g protein each, about $2.31 a serving. Fried chops in creamy onion gravy over rice.",
                  "keywords":  "smothered pork chops, southern pork chops, onion gravy, meal prep pork, budget comfort food, pork chops and rice",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",
                  "cookTime":  "PT45M",
                  "totalTime":  "PT70M",
-                 "costPerServing":  2.32,
+                 "costPerServing":  2.31,
                  "recipeIngredient":  [
                                           "5.25 lb pork chops",
                                           "5.25 cups all-purpose flour",

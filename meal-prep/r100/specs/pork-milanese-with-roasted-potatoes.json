@@ -15,9 +15,9 @@
                  "protein":  35,
                  "carbs":  66,
                  "fat":  25,
-                 "cost_ps":  "1.29"
+                 "cost_ps":  "1.31"
              },
-    "intro_html":  "Pork Milanese is a thin, pounded pork tenderloin cutlet in a crackly golden breadcrumb crust, here with simple roasted potatoes on the side. Fancy restaurant looks, fry-it-yourself price: \u003cstrong\u003e35 grams of protein\u003c/strong\u003e per serving for about \u003cstrong\u003e$1.29\u003c/strong\u003e. That is the cheapest way to eat something this crispy.",
+    "intro_html":  "Pork Milanese is a thin, pounded pork tenderloin cutlet in a crackly golden breadcrumb crust, here with simple roasted potatoes on the side. Fancy restaurant looks, fry-it-yourself price: \u003cstrong\u003e35 grams of protein\u003c/strong\u003e per serving for about \u003cstrong\u003e$1.31\u003c/strong\u003e. That is the cheapest way to eat something this crispy.",
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 3.25 lb (1488 g)",
                                 "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 1.75 cups (429 g)",
@@ -35,12 +35,12 @@
                        "All-Purpose Flour, 2.5 cups: ~$0.37. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Bread Crumbs, 5.25 cups: ~$1.63. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Vegetable Oil, 1.25 cups: ~$0.61. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Potato, 6.6: ~$1.36. \u003cstrong\u003eBuy 4 lbs: $1.76.\u003c/strong\u003e",
+                       "Potato, 6.6: ~$1.70. \u003cstrong\u003eBuy 4 lbs: $2.20.\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper): ~$0.25. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $18.01 across 14 servings, so roughly $1.29 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $24.97 across 14 servings, roughly $1.78 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $18.35 across 14 servings, so roughly $1.31 per bowl.\u003c/strong\u003e",
+                       "\u003cstrong\u003eTrue shopping cost: about $25.41 across 14 servings, roughly $1.82 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$1.29 a bowl\u003c/strong\u003e for breaded pork cutlets that Italian restaurants list at $18 and up. You could feed all 14 servings for the price of one restaurant Milanese and a soda.",
+    "cost_closing_html":  "About \u003cstrong\u003e$1.31 a bowl\u003c/strong\u003e for breaded pork cutlets that Italian restaurants list at $18 and up. You could feed all 14 servings for the price of one restaurant Milanese and a soda.",
     "shop_smart":  [
                        "Pork tenderloin at about $4 a pound sounds mid-range until you realize there is zero bone and zero waste. Every ounce you pay for lands on the plate.",
                        "The breading station is pantry cheap: flour, eggs, milk, and crumbs came to about $2.77 for all 14 cutlets. Restaurant markup on breading is basically pure profit. Yours now.",
@@ -57,13 +57,13 @@
                 ],
     "portion_html":  "Weigh your finished cutlets and potatoes in the pot, subtract the empty pot number from step 1, and divide by 14 to keep servings honest. Each portion lands at 629 calories and 35 grams of protein. Reheat in an air fryer or oven so the crust comes back to life.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://pudgefactor.com/pork-milanese/\" target=\"_blank\" rel=\"noopener\"\u003ePudge Factor\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $1.29 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  18.01,
-    "cost_batch_true":  24.97,
-    "cost_per_serving":  1.29,
-    "cost_per_serving_true":  1.78,
+    "upsell_html":  "Hearty dinners for about $1.31 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  18.35,
+    "cost_batch_true":  25.41,
+    "cost_per_serving":  1.31,
+    "cost_per_serving_true":  1.82,
     "scaler":  {
-                   "cost":  "24.97",
+                   "cost":  "25.41",
                    "ing":  [
                                {
                                    "item":  "Pork Tenderloin",
@@ -125,19 +125,19 @@
                                    "item":  "Potato",
                                    "grams":  1400,
                                    "buy":  "6.6",
-                                   "bid":  "potato",
+                                   "bid":  "russet-potatoes",
                                    "gpu":  "453.592"
                                }
                            ]
                },
     "head":  {
-                 "description":  "Pork Milanese with roasted potatoes: 629 calories and 35g protein at about $1.29 a serving. Crispy breaded pork tenderloin cutlets, 14 cheap servings.",
+                 "description":  "Pork Milanese with roasted potatoes: 629 calories and 35g protein at about $1.31 a serving. Crispy breaded pork tenderloin cutlets, 14 cheap servings.",
                  "keywords":  "pork milanese recipe, breaded pork cutlets, budget pork tenderloin recipe, crispy pork meal prep, cheap dinner ideas, roasted potatoes side",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT30M",
                  "cookTime":  "PT40M",
                  "totalTime":  "PT70M",
-                 "costPerServing":  1.29,
+                 "costPerServing":  1.31,
                  "recipeIngredient":  [
                                           "3.25 lb pork tenderloin",
                                           "5.25 cups bread crumbs",

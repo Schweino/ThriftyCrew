@@ -33,20 +33,20 @@
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
-                       "Butter, 1.25 cups: ~$1.79. \u003cstrong\u003eBuy 1 lb box: $3.06.\u003c/strong\u003e",
+                       "Butter, 1.25 cups: ~$1.70. \u003cstrong\u003eBuy 1 lb box: $2.92.\u003c/strong\u003e",
                        "Butter Crackers, 2.25 cups: ~$0.58. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Poppy Seeds, 4.75 tbsp: ~$1.42. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Poppy Seeds, 4.75 tbsp: ~$1.27. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Yellow Onion, 2.4: ~$0.67. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Garlic, 2.25 tbsp: ~$0.29. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
                        "All-Purpose Flour, 9 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Chicken Broth, 1.75 lb: ~$1.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Heavy Cream, 2.25 cups: ~$3.45. \u003cstrong\u003eBuy 2 pints: $5.87.\u003c/strong\u003e",
-                       "1/3 Fat Cream Cheese, 14 oz: ~$2.08. \u003cstrong\u003eBuy 2 8oz bricks: $2.38.\u003c/strong\u003e",
+                       "1/3 Fat Cream Cheese, 14 oz: ~$2.60. \u003cstrong\u003eBuy 2 8oz bricks: $2.97.\u003c/strong\u003e",
                        "Boneless Skinless Chicken Breast, 2.25 lb: ~$5.06. \u003cstrong\u003eBuy 3 lbs: $6.69.\u003c/strong\u003e",
-                       "Rice, 3.75 cups dry: ~$1.23. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 3.75 cups dry: ~$1.04. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (salt, black pepper): ~$0.24. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $18.02 across 14 servings, so roughly $1.29 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $24.40 across 14 servings, roughly $1.74 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $18.11 across 14 servings, so roughly $1.29 per bowl.\u003c/strong\u003e",
+                       "\u003cstrong\u003eTrue shopping cost: about $24.51 across 14 servings, roughly $1.75 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$1.29 a bowl\u003c/strong\u003e for creamy Southern comfort that a meat-and-three cafe would plate for $12. The entire 14-serving batch costs about what two of those plates would.",
     "shop_smart":  [
@@ -68,12 +68,12 @@
     "portion_html":  "Weigh the full pot before it goes into the pan, subtract the empty pot number from step 1, and divide by 14. After baking, portion by that weight into 14 containers. Each serving comes in at 701 calories and 25 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.everydaymadefresh.com/poppy-seed-chicken-and-rice-casserole/\" target=\"_blank\" rel=\"noopener\"\u003eEveryday Made Fresh\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
     "upsell_html":  "Hearty dinners for about $1.29 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  18.02,
-    "cost_batch_true":  24.4,
+    "cost_batch":  18.11,
+    "cost_batch_true":  24.51,
     "cost_per_serving":  1.29,
-    "cost_per_serving_true":  1.74,
+    "cost_per_serving_true":  1.75,
     "scaler":  {
-                   "cost":  "24.40",
+                   "cost":  "24.51",
                    "ing":  [
                                {
                                    "item":  "Butter",
@@ -92,7 +92,9 @@
                                {
                                    "item":  "Poppy Seeds",
                                    "grams":  39,
-                                   "buy":  "4.75 tbsp"
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "poppy-seeds",
+                                   "gpu":  "28.350"
                                },
                                {
                                    "item":  "Yellow Onion",
@@ -133,7 +135,7 @@
                                    "item":  "1/3 Fat Cream Cheese",
                                    "grams":  397,
                                    "buy":  "14 oz",
-                                   "bid":  "1-3-fat-cream-cheese",
+                                   "bid":  "cream-cheese",
                                    "gpu":  "28.350"
                                },
                                {
@@ -161,8 +163,8 @@
                                    "item":  "Rice",
                                    "grams":  700,
                                    "buy":  "3.75 cups dry",
-                                   "bid":  "jasmine-rice",
-                                   "gpu":  "28.350"
+                                   "bid":  "rice",
+                                   "gpu":  "453.592"
                                }
                            ]
                },

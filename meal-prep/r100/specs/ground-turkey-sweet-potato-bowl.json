@@ -16,9 +16,9 @@
                  "protein":  33,
                  "carbs":  63,
                  "fat":  20,
-                 "cost_ps":  "2.84"
+                 "cost_ps":  "3.19"
              },
-    "intro_html":  "Roasted sweet potato cubes under taco-seasoned turkey simmered in salsa, finished with sour cream, cheese, and cilantro. Each bowl brings \u003cstrong\u003e33 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.84\u003c/strong\u003e. Sweet, smoky, savory, and cheaper than anything with the word bowl on a menu.",
+    "intro_html":  "Roasted sweet potato cubes under taco-seasoned turkey simmered in salsa, finished with sour cream, cheese, and cilantro. Each bowl brings \u003cstrong\u003e33 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$3.19\u003c/strong\u003e. Sweet, smoky, savory, and cheaper than anything with the word bowl on a menu.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eSweet Potatoes:\u003c/strong\u003e 30 (3922 g)",
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 4.25 tbsp (57 g)",
@@ -32,16 +32,16 @@
     "cost_lines":  [
                        "Sweet Potatoes, 30: ~$12.80. \u003cstrong\u003eBuy 9 lbs: $13.32.\u003c/strong\u003e",
                        "Olive Oil, 4.25 tbsp: ~$0.67. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "93/7 Ground Turkey, 4.25 lb: ~$18.19. \u003cstrong\u003eBuy 5 lbs: $21.65.\u003c/strong\u003e",
+                       "93/7 Ground Turkey, 4.25 lb: ~$22.93. \u003cstrong\u003eBuy 5 lbs: $27.30.\u003c/strong\u003e",
                        "Salsa, 4.25 cups: ~$4.74. \u003cstrong\u003eBuy 3 16oz jars: $5.91.\u003c/strong\u003e",
-                       "Light Sour Cream, 2 cups: ~$1.78. \u003cstrong\u003eBuy 2 16oz tubs: $3.34.\u003c/strong\u003e",
+                       "Light Sour Cream, 2 cups: ~$1.96. \u003cstrong\u003eBuy 2 16oz tubs: $3.68.\u003c/strong\u003e",
                        "Mexican Cheese Blend, 4.25 oz: ~$1.02. \u003cstrong\u003eBuy 1 8oz bag: $1.97.\u003c/strong\u003e",
                        "Fresh Cilantro, 8 tbsp: ~$0.25. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
                        "Pantry seasonings (taco seasoning, salt, black pepper): ~$0.33. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $39.78 across 14 servings, so roughly $2.84 per bowl.\u003c/strong\u003e",
-                       "\u003cstrong\u003eTrue shopping cost: about $48.97 across 14 servings, roughly $3.50 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                       "\u003cstrong\u003eBatch total: about $44.70 across 14 servings, so roughly $3.19 per bowl.\u003c/strong\u003e",
+                       "\u003cstrong\u003eTrue shopping cost: about $54.96 across 14 servings, roughly $3.93 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$2.84 a bowl\u003c/strong\u003e for the kind of sweet potato power bowl the clean-eating spots price at $13. Yours has more meat and no line at lunch.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.19 a bowl\u003c/strong\u003e for the kind of sweet potato power bowl the clean-eating spots price at $13. Yours has more meat and no line at lunch.",
     "shop_smart":  [
                        "Sweet potatoes are the biggest line at $12.80 for about 9 lbs. Loose sweet potatoes by the pound usually beat the bagged ones here, so check both tags.",
                        "Salsa from the jar covers tomatoes, onion, and chiles in one $4.74 pour. Store brand on sale drops it under $4.",
@@ -58,13 +58,13 @@
                 ],
     "portion_html":  "Weigh the roasted sweet potatoes and the skillet of turkey, subtract the empty pot number, and divide each by 14 so every box gets an even share. Each bowl lands at about 568 calories and 33 grams of protein.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://thishealthytable.com/blog/ground-turkey-sweet-potato-bowl/\" target=\"_blank\" rel=\"noopener\"\u003eThis Healthy Table\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "Hearty dinners for about $2.84 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
-    "cost_batch":  39.78,
-    "cost_batch_true":  48.97,
-    "cost_per_serving":  2.84,
-    "cost_per_serving_true":  3.5,
+    "upsell_html":  "Hearty dinners for about $3.19 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  44.7,
+    "cost_batch_true":  54.96,
+    "cost_per_serving":  3.19,
+    "cost_per_serving_true":  3.93,
     "scaler":  {
-                   "cost":  "48.97",
+                   "cost":  "54.96",
                    "ing":  [
                                {
                                    "item":  "Sweet Potatoes",
@@ -84,7 +84,7 @@
                                    "item":  "93/7 Ground Turkey",
                                    "grams":  1905,
                                    "buy":  "4.25 lb",
-                                   "bid":  "93-7-ground-turkey",
+                                   "bid":  "ground-turkey",
                                    "gpu":  "453.592"
                                },
                                {
@@ -119,7 +119,7 @@
                                    "item":  "Light Sour Cream",
                                    "grams":  483,
                                    "buy":  "2 cups",
-                                   "bid":  "light-sour-cream",
+                                   "bid":  "sour-cream",
                                    "gpu":  "28.350"
                                },
                                {
@@ -139,13 +139,13 @@
                            ]
                },
     "head":  {
-                 "description":  "Ground turkey sweet potato bowl meal prep: 568 calories and 33g protein at about $2.84 a bowl. Roasted sweet potatoes, salsa turkey, sour cream.",
+                 "description":  "Ground turkey sweet potato bowl meal prep: 568 calories and 33g protein at about $3.19 a bowl. Roasted sweet potatoes, salsa turkey, sour cream.",
                  "keywords":  "ground turkey sweet potato bowl, sweet potato meal prep, healthy turkey bowl, budget meal prep, high protein dinner",
                  "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT20M",
                  "cookTime":  "PT30M",
                  "totalTime":  "PT50M",
-                 "costPerServing":  2.84,
+                 "costPerServing":  3.19,
                  "recipeIngredient":  [
                                           "4.25 lb 93/7 ground turkey",
                                           "30 sweet potatoes",
