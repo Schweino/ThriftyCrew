@@ -49,6 +49,8 @@
 .mpp-cal .cook{color:var(--navy);font-weight:700;}
 .mpp-cal .cook .tag{display:inline-block;background:var(--navy);color:#fff;font-size:.72em;border-radius:6px;padding:1px 7px;margin-right:6px;vertical-align:1px;}
 .mpp-cal .left{color:var(--ink);}
+.mpp-cal .none{color:#b3bcc9;font-style:italic;}
+.mpp-fillbtn{display:inline-block;margin-top:8px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-weight:800;font-size:.9em;padding:8px 14px;cursor:pointer;}
 .mpp-tot{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0;}
 .mpp-tile{flex:1 1 120px;background:var(--navy);color:#fff;border-radius:12px;padding:12px 10px;text-align:center;}
 .mpp-tile .n{font-size:1.25em;font-weight:800;}
@@ -102,8 +104,8 @@
   <h3 class="mpp-h">Your plan</h3>
   <p class="mpp-sub" id="mpp-plansub">Add at least one recipe above and your plan builds itself: cook nights, leftovers, one combined grocery list, and live cheapest prices.</p>
   <div id="mpp-out" class="mpp-hide">
-    <ul class="mpp-cal" id="mpp-cal"></ul>
     <div id="mpp-calwarn"></div>
+    <ul class="mpp-cal" id="mpp-cal"></ul>
     <div class="mpp-tot" id="mpp-tot"></div>
     <h4 style="color:var(--navy);margin:16px 0 2px;font-size:1.05em">Your grocery list</h4>
     <p class="mpp-sub" style="margin:0 0 6px" id="mpp-glsub">Grouped by each item's cheapest verified store this week.</p>
@@ -214,7 +216,13 @@ function buildCalendar(){
       di++;
     }
   });
-  if(di<d){ short=(d-di)*H; }
+  // every day in the range appears, planned or not: the calendar must reflect the full date range
+  while(di<d){
+    var day2=new Date(start.getTime()+di*86400000);
+    rows.push({d:fmtDay(day2),empty:true});
+    di++;
+  }
+  short=Math.max(0,target()-planned());
   if(extra>0){ extra=Math.max(0,planned()-target()); }
   return {rows:rows,short:short,extra:extra};
 }
@@ -247,12 +255,13 @@ function renderPlan(){
   var cal=buildCalendar();
   var ch='';
   cal.rows.forEach(function(row){
-    if(row.cook){ ch+='<li><span class="d">'+row.d+'</span><span class="cook"><span class="tag">COOK</span><a href="/'+row.slug+'/" style="color:inherit">'+esc(row.name)+'</a></span></li>'; }
+    if(row.empty){ ch+='<li><span class="d">'+row.d+'</span><span class="none">Not planned yet</span></li>'; }
+    else if(row.cook){ ch+='<li><span class="d">'+row.d+'</span><span class="cook"><span class="tag">COOK</span><a href="/'+row.slug+'/" style="color:inherit">'+esc(row.name)+'</a></span></li>'; }
     else { ch+='<li><span class="d">'+row.d+'</span><span class="left">Leftovers: '+esc(row.name)+'</span></li>'; }
   });
   $('mpp-cal').innerHTML=ch;
   var w='';
-  if(cal.short>0){ w='<div class="mpp-warn">Your picks cover about '+planned()+' of '+target()+' servings. Add a recipe or bump servings to cover the last '+cal.short+'.</div>'; }
+  if(cal.short>0){ w='<div class="mpp-warn">Your picks cover '+planned()+' of '+target()+' servings, so some days below are not planned yet. Add a recipe, or spread the difference across your picks.<br><button type="button" class="mpp-fillbtn" id="mpp-fill">Bump my picks to cover all '+target()+' servings</button></div>'; }
   else if(cal.extra>0){ w='<div class="mpp-warn" style="background:#ecf6f0;color:var(--ok);border-color:#bfe3cd">About '+cal.extra+' extra servings. Freeze them; future you says thanks.</div>'; }
   $('mpp-calwarn').innerHTML=w;
 
@@ -366,6 +375,21 @@ $('mpp-picks').addEventListener('change',function(e){
   var n=e.target.closest('.mpp-snum'); if(!n)return;
   var i=parseInt(n.getAttribute('data-i'));
   picks[i].sv=Math.max(2,Math.min(42,parseInt(n.value)||2));
+  renderPicks();
+});
+$('mpp-calwarn').addEventListener('click',function(e){
+  if(!e.target.closest('#mpp-fill'))return;
+  // round-robin +1 serving across picks until the target is covered or everything hits the 42 cap
+  var missing=Math.max(0,target()-planned());
+  var guard=0;
+  while(missing>0 && guard<1000){
+    var bumped=false;
+    for(var i=0;i<picks.length && missing>0;i++){
+      if(picks[i].sv<42){ picks[i].sv++; missing--; bumped=true; }
+    }
+    if(!bumped)break;   // every pick is at 42; they need another recipe
+    guard++;
+  }
   renderPicks();
 });
 $('mpp-print').addEventListener('click',printPlan);
