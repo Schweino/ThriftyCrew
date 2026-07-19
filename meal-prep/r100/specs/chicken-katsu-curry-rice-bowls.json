@@ -1,0 +1,329 @@
+﻿{
+    "name":  "Chicken Katsu Curry Rice Bowls",
+    "slug":  "chicken-katsu-curry-rice-bowls",
+    "cuisine":  "Japanese",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "https://thewoksoflife.com/chicken-katsu-curry-rice/",
+    "source_site":  "The Woks of Life",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base trimmed -34% (Rice)"
+               ],
+    "stat":  {
+                 "cal":  877,
+                 "protein":  65,
+                 "carbs":  103,
+                 "fat":  22,
+                 "cost_ps":  "2.35"
+             },
+    "intro_html":  "Crispy breaded chicken over rice, smothered in that sweet-savory Japanese curry gravy that restaurants charge real money for. Every bowl lands \u003cstrong\u003e65 grams of protein\u003c/strong\u003e at 877 calories, and the batch works out to about \u003cstrong\u003e$2.35 a bowl\u003c/strong\u003e. The curry sauce is mostly onions, carrots, and potatoes, which is exactly why it costs so little.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.5 cups (133 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 10 (1091 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 tbsp (18 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 3.5 tbsp (56 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1.25 tbsp (20 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 1.25 tbsp (15 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 3.7 (794 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 13 (794 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 3.75 lb (1680 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 3.5 tbsp (28 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 3.5 tbsp (49 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3175 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 7 tbsp (56 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 4 large eggs (175 g)",
+                                "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 4.75 cups (504 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.25 cups dry (794 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Vegetable Oil, 0.5 cups: ~$0.32. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 10: ~$2.74. \u003cstrong\u003eBuy 3 lbs: $3.42.\u003c/strong\u003e",
+                       "Garlic, 2 tbsp: ~$0.26. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Tomato Paste, 3.5 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Worcestershire Sauce, 1.25 tbsp: ~$0.07. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sugar, 1.25 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Potato, 3.7: ~$0.77. \u003cstrong\u003eBuy 2 lbs: $0.88.\u003c/strong\u003e",
+                       "Carrots, 13: ~$5.41. \u003cstrong\u003eBuy 2 lbs: $6.18.\u003c/strong\u003e",
+                       "Chicken Broth, 3.75 lb: ~$2.26. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cornstarch, 3.5 tbsp: ~$0.12. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Butter, 3.5 tbsp: ~$0.33. \u003cstrong\u003eBuy 1 lb box: $3.06.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 7 lb: ~$15.61. \u003cstrong\u003eBuy 7 lbs: $15.61.\u003c/strong\u003e",
+                       "All-Purpose Flour, 7 tbsp: ~$0.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Eggs, 4 large eggs: ~$0.43. \u003cstrong\u003eBuy 1 dozen: $1.47.\u003c/strong\u003e",
+                       "Bread Crumbs, 4.75 cups: ~$1.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 4.25 cups dry: ~$1.40. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (curry powder, salt, black pepper): ~$1.40. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $32.94 across 14 servings, so roughly $2.35 per bowl.\u003c/strong\u003e",
+                       "\u003cstrong\u003eTrue shopping cost: about $39.17 across 14 servings, roughly $2.80 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.35 a bowl\u003c/strong\u003e for crispy katsu, curry gravy, and rice. A katsu curry plate at a Japanese restaurant usually runs $14 to $17, so you are keeping roughly $12 every time you reach into the fridge instead of ordering out.",
+    "shop_smart":  [
+                       "The 7 pounds of chicken breast is the biggest line item at about $15.61. Warehouse-club packs like Member\u0027s Mark run close to $2.23 a pound, roughly half what small trays cost at a regular store.",
+                       "The curry sauce is built on onions, carrots, and potatoes, three of the cheapest vegetables in the store. Ten onions sounds like a lot until you see that 3 pounds costs $3.42.",
+                       "Skip the boxed Japanese curry roux bricks. Curry powder, flour, butter, and a spoon of tomato paste make the same sauce for a fraction of the price, and you control the salt."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Start the rice: rinse 4.25 cups dry rice and cook it in your rice cooker or a covered pot while everything else happens.",
+                    "Make the curry base: heat the vegetable oil in your big pot and cook the sliced onions over medium heat 15 to 20 minutes until soft and golden. Stir in the garlic, curry powder, and tomato paste and cook 2 minutes.",
+                    "Add the chopped potatoes, carrots, chicken broth, Worcestershire sauce, and sugar. Simmer 20 minutes until the vegetables are tender, then stir in the cornstarch mixed with a little cold water and the butter. Simmer until the sauce thickens and coats a spoon. Season with salt and pepper.",
+                    "Bread the chicken: slice the breasts into cutlets about a half inch thick. Dredge each in flour, then beaten egg, then bread crumbs, pressing the crumbs on.",
+                    "Fry the cutlets in batches in a skillet with a thin layer of oil, 3 to 4 minutes per side, until golden and the inside reads 165 F on a thermometer. Rest on a rack, then slice into strips.",
+                    "Portion rice into 14 containers, ladle curry sauce over, and top with sliced katsu. Keeping the katsu on top helps it stay crisper in the fridge."
+                ],
+    "portion_html":  "Weigh the full pot of curry, subtract the empty pot weight you wrote down, and divide by 14. That is your sauce weight per container, and split the rice and sliced katsu evenly on top. Each bowl lands at about 877 calories with 65 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thewoksoflife.com/chicken-katsu-curry-rice/\" target=\"_blank\" rel=\"noopener\"\u003eThe Woks of Life\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Hearty dinners for about $2.35 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  32.94,
+    "cost_batch_true":  39.17,
+    "cost_per_serving":  2.35,
+    "cost_per_serving_true":  2.8,
+    "scaler":  {
+                   "cost":  "39.17",
+                   "ing":  [
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "grams":  133,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  1091,
+                                   "buy":  "10",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  18,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "grams":  56,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "grams":  20,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "worcestershire",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Curry Powder",
+                                   "grams":  44,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "curry-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "grams":  15,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "grams":  794,
+                                   "buy":  "3.7",
+                                   "bid":  "potato",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "grams":  794,
+                                   "buy":  "13",
+                                   "bid":  "shredded-carrots",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  1680,
+                                   "buy":  "3.75 lb",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "grams":  28,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "grams":  49,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3175,
+                                   "buy":  "7 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  14,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "grams":  56,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "grams":  175,
+                                   "buy":  "4 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Bread Crumbs",
+                                   "grams":  504,
+                                   "buy":  "4.75 cups",
+                                   "bid":  "bread-crumbs",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  794,
+                                   "buy":  "4.25 cups dry",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Crispy chicken katsu with homemade Japanese curry over rice. 14 meal prep bowls, 877 calories and 65g protein each, about $2.35 per serving.",
+                 "keywords":  "chicken katsu curry, japanese curry meal prep, katsu curry rice, budget meal prep, high protein meal prep, cheap dinner recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT50M",
+                 "totalTime":  "PT80M",
+                 "costPerServing":  2.35,
+                 "recipeIngredient":  [
+                                          "7 lb boneless skinless chicken breast",
+                                          "4.25 cups dry rice",
+                                          "10 yellow onions",
+                                          "13 carrots (794 g)",
+                                          "3.7 potatoes (794 g)",
+                                          "3.75 lb chicken broth",
+                                          "4.75 cups bread crumbs",
+                                          "4 large eggs",
+                                          "7 tbsp all-purpose flour",
+                                          "3.5 tbsp butter",
+                                          "3.5 tbsp tomato paste",
+                                          "7 tbsp curry powder"
+                                      ],
+                 "steps":  [
+                               "Cook the rice while you build the curry.",
+                               "Saute onions until golden, add garlic, curry powder, and tomato paste, then simmer potatoes and carrots in broth with Worcestershire and sugar until tender.",
+                               "Thicken the curry with a cornstarch slurry and finish with butter.",
+                               "Slice chicken into cutlets, bread with flour, egg, and bread crumbs, and pan fry to 165 F.",
+                               "Portion rice into 14 containers, ladle on curry, and top with sliced katsu."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  133
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  1091
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  18
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Worcestershire Sauce",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Curry Powder",
+                                  "grams":  44
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  794
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  794
+                              },
+                              {
+                                  "item":  "Chicken Broth",
+                                  "grams":  1680
+                              },
+                              {
+                                  "item":  "Cornstarch",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  49
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  3175
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  175
+                              },
+                              {
+                                  "item":  "Bread Crumbs",
+                                  "grams":  504
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  794
+                              }
+                          ]
+}

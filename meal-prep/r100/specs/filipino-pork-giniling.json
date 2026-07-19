@@ -1,0 +1,292 @@
+﻿{
+    "name":  "Filipino Pork Giniling (Filipino Picadillo)",
+    "slug":  "filipino-pork-giniling",
+    "cuisine":  "Filipino",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "https://gypsyplate.com/giniling/",
+    "source_site":  "GypsyPlate",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.05"
+               ],
+    "stat":  {
+                 "cal":  571,
+                 "protein":  32,
+                 "carbs":  35,
+                 "fat":  34,
+                 "cost_ps":  "1.90"
+             },
+    "intro_html":  "Giniling is the Filipino cousin of picadillo: savory ground pork simmered in a soy and tomato sauce with potatoes, carrots, sweet golden raisins, and a boiled egg on top. Every bowl lands \u003cstrong\u003e32 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$1.90\u003c/strong\u003e. Sweet, salty, and filling in a way that makes the price tag feel like a typo.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eGround Pork:\u003c/strong\u003e 3.75 lb (1667 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.3 (368 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.75 tbsp (74 g)",
+                                "\u003cstrong\u003eCrushed Tomatoes (generic):\u003c/strong\u003e 1.5 cans (1186 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 7.5 tbsp (118 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.5 cups (137 g)",
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 1.5 tbsp (29 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 4.4 (937 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 2.4 (149 g)",
+                                "\u003cstrong\u003eFrozen Green Peas (generic):\u003c/strong\u003e 1.25 cups (164 g)",
+                                "\u003cstrong\u003eGolden Raisins (generic):\u003c/strong\u003e 13 tbsp (118 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 12 large eggs (612 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 6.25 tbsp (86 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Ground Pork, 3.75 lb: ~$12.53. \u003cstrong\u003eBuy 4 lbs: $13.64.\u003c/strong\u003e",
+                       "Yellow Onion, 3.3: ~$0.92. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 8.75 tbsp: ~$1.07. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Crushed Tomatoes, 1.5 cans: ~$2.25. \u003cstrong\u003eBuy 2 28oz cans: $3.02.\u003c/strong\u003e",
+                       "Tomato Paste, 7.5 tbsp: ~$0.60. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Soy Sauce, 0.5 cups: ~$0.54. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fish Sauce, 1.5 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Potato, 4.4: ~$0.91. \u003cstrong\u003eBuy 3 lbs: $1.32.\u003c/strong\u003e",
+                       "Carrots, 2.4: ~$1.01. \u003cstrong\u003eBuy 1 lb: $3.09.\u003c/strong\u003e",
+                       "Frozen Green Peas, 1.25 cups: ~$0.45. \u003cstrong\u003eBuy 1 12oz bag: $0.94.\u003c/strong\u003e",
+                       "Golden Raisins, 13 tbsp: ~$0.54. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Eggs, 12 large eggs: ~$1.50. \u003cstrong\u003eBuy 1 dozen: $1.50.\u003c/strong\u003e",
+                       "Vegetable Oil, 6.25 tbsp: ~$0.21. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (red bell pepper, salt, black pepper): ~$3.80. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $26.61 across 14 servings, so roughly $1.90 per bowl.\u003c/strong\u003e",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.35 across 14 servings, roughly $2.31 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.90 a bowl\u003c/strong\u003e for a plate a Filipino restaurant would happily charge you $12 for. The fish sauce bottle looks like a splurge at checkout, but it seasons this whole batch for 28 cents.",
+    "shop_smart":  [
+                       "Ground pork usually runs cheaper per pound than ground beef. The 4 lb pack drops the unit price further, and this recipe uses 3.75 lb of it, so almost nothing goes to waste.",
+                       "Potatoes are the stretcher here. About 91 cents of spuds adds two pounds of food to the pot without watering down the flavor.",
+                       "Eggs at $1.50 a dozen are the cheapest topping upgrade in the store. One bottle of fish sauce and one bag of golden raisins season several batches, so their real cost per bowl is pennies."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Hard boil the 12 eggs: cover with cold water, bring to a boil, kill the heat, lid on for 12 minutes, then cool, peel, and slice.",
+                    "Heat the vegetable oil in your biggest pot and cook the diced onion until soft, about 5 minutes. Add the garlic and cook 1 minute more.",
+                    "Add the ground pork and break it up as it browns. Cook until no pink remains, then stir in the soy sauce and fish sauce.",
+                    "Stir in the crushed tomatoes and tomato paste. Add the diced potatoes, carrots, and red bell pepper, cover, and simmer 15 to 20 minutes until the potatoes are fork tender.",
+                    "Stir in the frozen peas and golden raisins and simmer 5 more minutes. Taste and season with salt and black pepper.",
+                    "Portion into 14 containers and divide the sliced eggs across the tops."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty pot number you wrote down, and divide the difference by 14. That is one serving in grams. Scoop it out on the scale and each bowl lands at about 571 calories and 32 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://gypsyplate.com/giniling/\" target=\"_blank\" rel=\"noopener\"\u003eGypsyPlate\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Hearty dinners for about $1.90 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  26.61,
+    "cost_batch_true":  32.35,
+    "cost_per_serving":  1.9,
+    "cost_per_serving_true":  2.31,
+    "scaler":  {
+                   "cost":  "32.35",
+                   "ing":  [
+                               {
+                                   "item":  "Ground Pork",
+                                   "grams":  1667,
+                                   "buy":  "3.75 lb",
+                                   "bid":  "ground-pork",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  368,
+                                   "buy":  "3.3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  74,
+                                   "buy":  "8.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Crushed Tomatoes",
+                                   "grams":  1186,
+                                   "buy":  "1.5 cans",
+                                   "bid":  "crushed-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "grams":  118,
+                                   "buy":  "7.5 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  137,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fish Sauce",
+                                   "grams":  29,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "fish-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "grams":  937,
+                                   "buy":  "4.4",
+                                   "bid":  "potato",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "grams":  149,
+                                   "buy":  "2.4",
+                                   "bid":  "shredded-carrots",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "grams":  441,
+                                   "buy":  "3.7",
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Frozen Green Peas",
+                                   "grams":  164,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "frozen-green-peas",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Golden Raisins",
+                                   "grams":  118,
+                                   "buy":  "13 tbsp",
+                                   "bid":  "golden-raisins",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "grams":  612,
+                                   "buy":  "12 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "grams":  86,
+                                   "buy":  "6.25 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  21,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Filipino pork giniling meal prep: 571 calories and 32g protein per bowl at about $1.90 each. Savory soy tomato pork with potatoes, raisins, and egg.",
+                 "keywords":  "pork giniling, filipino picadillo, ground pork recipe, budget meal prep, cheap high protein dinner, filipino recipes",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT65M",
+                 "costPerServing":  1.9,
+                 "recipeIngredient":  [
+                                          "3.75 lb ground pork",
+                                          "3.3 yellow onions",
+                                          "8.75 tbsp minced garlic",
+                                          "1.5 cans crushed tomatoes",
+                                          "7.5 tbsp tomato paste",
+                                          "0.5 cup soy sauce",
+                                          "1.5 tbsp fish sauce",
+                                          "4.4 potatoes",
+                                          "2.4 carrots",
+                                          "1.25 cups frozen green peas",
+                                          "13 tbsp golden raisins",
+                                          "12 large eggs",
+                                          "6.25 tbsp vegetable oil"
+                                      ],
+                 "steps":  [
+                               "Hard boil the eggs, then cool, peel, and slice.",
+                               "Cook onion and garlic in oil, then brown the ground pork and season with soy sauce and fish sauce.",
+                               "Add crushed tomatoes, tomato paste, potatoes, carrots, and bell pepper; simmer covered until the potatoes are tender.",
+                               "Stir in peas and golden raisins and simmer 5 more minutes.",
+                               "Portion into 14 containers and top with sliced egg."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Ground Pork",
+                                  "grams":  1667
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  368
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  74
+                              },
+                              {
+                                  "item":  "Crushed Tomatoes",
+                                  "grams":  1186
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  118
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  137
+                              },
+                              {
+                                  "item":  "Fish Sauce",
+                                  "grams":  29
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  937
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  149
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  441
+                              },
+                              {
+                                  "item":  "Frozen Green Peas",
+                                  "grams":  164
+                              },
+                              {
+                                  "item":  "Golden Raisins",
+                                  "grams":  118
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  612
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  86
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

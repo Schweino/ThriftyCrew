@@ -1,0 +1,159 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"baked-sweet-and-sour-chicken-rice-bowls","base":14,"cost":18.21,"ing":[{"item":"Boneless Skinless Chicken Breast","grams":1867,"buy":"4 lb","bid":"chicken-breast","gpu":453.592},{"item":"Black Pepper","grams":9,"buy":"1.25 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Cornstarch","grams":448,"buy":"3.5 cups","bid":"cornstarch","gpu":28.350},{"item":"Eggs","grams":350,"buy":"7 large eggs","bid":"eggs","gpu":600.000},{"item":"Sugar","grams":336,"buy":"1.75 cups","bid":"sugar","gpu":453.592},{"item":"Ketchup","grams":160,"buy":"0.5 cups","bid":"ketchup","gpu":28.350},{"item":"White Vinegar","grams":140,"buy":"0.5 cups","bid":"white-vinegar","gpu":28.350},{"item":"Apple Cider Vinegar","grams":140,"buy":"0.5 cups","bid":"apple-cider-vinegar","gpu":29.570},{"item":"Soy Sauce","grams":37,"buy":"2.25 tbsp","bid":"soy-sauce","gpu":28.350},{"item":"Garlic Powder","grams":7,"buy":"0.75 tbsp","bid":"garlic-powder","gpu":28.350},{"item":"Vegetable Oil","grams":127,"buy":"0.5 cups","bid":"vegetable-oil","gpu":28.000},{"item":"Salt","grams":20,"buy":"1 tbsp","bid":"salt","gpu":28.350},{"item":"Rice","grams":700,"buy":"3.75 cups dry","bid":"jasmine-rice","gpu":28.350}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~678 cal &middot; 37g protein &middot; 96g carbs &middot; 15g fat &middot; ~$1.12 per serving.</strong></p>
+
+<p>Crispy-coated chicken baked in a glossy sweet and sour sauce, no deep fryer and no delivery fee. Each bowl brings <strong>37 grams of protein</strong> and 678 calories for about <strong>$1.12</strong>. That is not a typo. This is one of the cheapest takeout clones in the whole library.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Boneless Skinless Chicken Breast (Member's Mark):</strong> 4 lb (1867 g)</li>
+<li><strong>Cornstarch (generic):</strong> 3.5 cups (448 g)</li>
+<li><strong>Eggs (Great Value):</strong> 7 large eggs (350 g)</li>
+<li><strong>Sugar (Great Value):</strong> 1.75 cups (336 g)</li>
+<li><strong>Ketchup (generic):</strong> 0.5 cups (160 g)</li>
+<li><strong>White Vinegar (generic):</strong> 0.5 cups (140 g)</li>
+<li><strong>Apple Cider Vinegar (Great Value):</strong> 0.5 cups (140 g)</li>
+<li><strong>Soy Sauce (generic):</strong> 2.25 tbsp (37 g)</li>
+<li><strong>Vegetable Oil (Great Value):</strong> 0.5 cups (127 g)</li>
+<li><strong>Rice (Member's Mark):</strong> 3.75 cups dry (700 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Boneless Skinless Chicken Breast, 4 lb: ~$9.18. <strong>Buy 5 lbs: $11.15.</strong></li>
+<li>Cornstarch, 3.5 cups: ~$1.90. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Eggs, 7 large eggs: ~$0.86. <strong>Buy 1 dozen: $1.47.</strong></li>
+<li>Sugar, 1.75 cups: ~$0.60. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Ketchup, 0.5 cups: ~$0.29. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>White Vinegar, 0.5 cups: ~$0.27. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Apple Cider Vinegar, 0.5 cups: ~$0.35. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Soy Sauce, 2.25 tbsp: ~$0.15. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Vegetable Oil, 0.5 cups: ~$0.31. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Rice, 3.75 cups dry: ~$1.23. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Pantry seasonings (black pepper, garlic powder, salt): ~$0.49. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $15.63 across 14 servings, so roughly $1.12 per bowl.</strong></li>
+<li><strong>True shopping cost: about $18.21 across 14 servings, roughly $1.30 per bowl.</strong> This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches.</li>
+</ul>
+<p>About <strong>$1.12 a bowl</strong> for sweet and sour chicken that costs ten times that as a takeout combo, and theirs gets soggy in the car.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Chicken breast in the 5 lb club pack is the price-per-pound winner, and the extra pound goes in the freezer for next week's batch.</li>
+<li>Cornstarch, sugar, ketchup, and vinegar are all pantry cheapos that last many batches, so the real recurring cost of this dish is basically just the chicken and eggs.</li>
+<li>Skip the bottled sweet and sour sauce. The homemade version here costs well under a dollar for the whole batch and you control the sugar.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Preheat the oven to 325F. Cut the chicken breast into bite-size cubes and season with salt, pepper, and garlic powder.</li>
+<li>Set up a dredge: cornstarch in one bowl, beaten eggs in another. Toss the chicken in cornstarch, then coat in egg.</li>
+<li>Heat the vegetable oil in a large skillet over medium-high. Brown the chicken in batches, 1 to 2 minutes per side; it just needs color, not doneness yet. Move it to one or two 9x13 baking dishes.</li>
+<li>Whisk the sauce: sugar, ketchup, white vinegar, apple cider vinegar, and soy sauce. Pour it evenly over the chicken.</li>
+<li>Bake for about 1 hour, stirring every 15 minutes so the sauce thickens and glazes every piece. Chicken is done at 165F.</li>
+<li>While it bakes, cook the rice with water per package directions.</li>
+<li>Combine the rice and glazed chicken in your big pot, scraping every bit of sauce out of the baking dishes.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Weigh the full pot, subtract the empty-pot weight you wrote down, and divide by 14. Portion into 14 containers so every lunch is the same size. Each bowl checks in at <strong>678 calories and 37 grams of protein</strong>.</p>
+
+<p><em>Recipe adapted from <a href="https://therecipecritic.com/baked-sweet-and-sour-chicken/" target="_blank" rel="noopener">The Recipe Critic</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Hearty dinners for about $1.12 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>

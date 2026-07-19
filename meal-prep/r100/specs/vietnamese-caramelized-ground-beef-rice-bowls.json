@@ -1,0 +1,326 @@
+﻿{
+    "name":  "Vietnamese Caramelized Ground Beef Rice Bowls",
+    "slug":  "vietnamese-caramelized-ground-beef-rice-bowls",
+    "cuisine":  "Vietnamese",
+    "protein":  "ground beef",
+    "visibility":  "paid",
+    "source_url":  "https://www.kitchensanctuary.com/vietnamese-style-caramelized-minced-beef-rice-bowls/",
+    "source_site":  "Nicky\u0027s Kitchen Sanctuary",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  700,
+                 "protein":  38,
+                 "carbs":  99,
+                 "fat":  17,
+                 "cost_ps":  "4.40"
+             },
+    "intro_html":  "Vietnamese caramelized beef is sweet, salty, and sticky in the best possible order: ground beef glazed in brown sugar and fish sauce over rice with a pile of fresh vegetables. Each bowl brings \u003cstrong\u003e38 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$4.40\u003c/strong\u003e.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 7 tbsp (98 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.75 lb (1750 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6 tbsp (52 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 5.25 oz (147 g)",
+                                "\u003cstrong\u003eLemongrass Paste (Gourmet Garden (McCormick)):\u003c/strong\u003e 2.25 tbsp (35 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1.25 cups (284 g)",
+                                "\u003cstrong\u003eFish Sauce (Thai Kitchen):\u003c/strong\u003e 5.25 tbsp (94 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 3.5 tbsp (56 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 5.25 cups (262 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 3.5 (214 g)",
+                                "\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 0.75 cups (158 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.75 cups dry (1058 g)",
+                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 14 (4200 g)",
+                                "\u003cstrong\u003eCherry Tomatoes:\u003c/strong\u003e 3.25 cups (476 g)",
+                                "\u003cstrong\u003eToasted Sesame Seeds (generic):\u003c/strong\u003e 3.5 tbsp (32 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Vegetable Oil, 7 tbsp: ~$0.24. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "93/7 Ground Beef, 3.75 lb: ~$23.80. \u003cstrong\u003eBuy 4 lbs: $24.68.\u003c/strong\u003e",
+                       "Garlic, 6 tbsp: ~$0.75. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Jalapeno, 5.25 oz: ~$0.57. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Lemongrass Paste, 2.25 tbsp: ~$1.54. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Brown Sugar, 1.25 cups: ~$9.92. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Fish Sauce, 5.25 tbsp: ~$0.90. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 3.5 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Green Onions, 5.25 cups: ~$3.11. \u003cstrong\u003eBuy 3 bunchs: $3.21.\u003c/strong\u003e",
+                       "Red Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Carrots, 3.5: ~$1.46. \u003cstrong\u003eBuy 1 lb: $3.09.\u003c/strong\u003e",
+                       "Apple Cider Vinegar, 0.75 cups: ~$0.40. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 5.75 cups dry: ~$1.87. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cucumber, 14: ~$10.64. \u003cstrong\u003eBuy 14 eachs: $10.64.\u003c/strong\u003e",
+                       "Cherry Tomatoes, 3.25 cups: ~$4.67. \u003cstrong\u003eBuy 2 10oz clamshells: $5.55.\u003c/strong\u003e",
+                       "Toasted Sesame Seeds, 3.5 tbsp: ~$0.41. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, sugar): ~$0.10. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $61.57 across 14 servings, so roughly $4.40 per bowl.\u003c/strong\u003e",
+                       "\u003cstrong\u003eTrue shopping cost: about $66.82 across 14 servings, roughly $4.77 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$4.40 a bowl\u003c/strong\u003e for caramelized beef bowls stacked with fresh vegetables. A Vietnamese restaurant charges $15 for the equivalent, and it will not come with this much cucumber.",
+    "shop_smart":  [
+                       "The 93/7 ground beef is the anchor at about $14.61 for 3.75 pounds. Lean beef matters here, the glaze needs to stick to meat, not swim in grease.",
+                       "Cucumbers are the sneaky volume play, 14 of them keeping every bowl fresh and crunchy. Buy them loose, not shrink-wrapped, the loose ones run cheaper per pound.",
+                       "Lemongrass paste in the tube costs more per ounce than fresh stalks, but there is zero waste and it keeps in the fridge for months. For a few teaspoons per batch, the tube wins on real cost."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice per the package and set it aside.",
+                    "Prep the fresh toppings: slice the cucumbers, halve the cherry tomatoes, shred the carrots, and thinly slice the red onion and green onions.",
+                    "Heat the vegetable oil in your largest skillet over high heat and brown the ground beef hard, breaking it up, until cooked through with crispy edges.",
+                    "Add the garlic, jalapeno, and lemongrass paste and stir fry 1 minute.",
+                    "Add the brown sugar, fish sauce, soy sauce, and the splash of chicken broth. Cook, stirring, until the sugar melts into a dark, glossy caramel that coats the beef, 3 to 5 minutes.",
+                    "Fold in most of the green onions and pull it off the heat.",
+                    "Build bowls: rice, caramelized beef, then the fresh vegetables on top with a sprinkle of toasted sesame seeds."
+                ],
+    "portion_html":  "Weigh the rice and beef in the pot, subtract the empty pot weight you wrote down, and divide by 14, then split the fresh vegetables evenly across the containers. Each bowl lands at about 700 calories with 38 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.kitchensanctuary.com/vietnamese-style-caramelized-minced-beef-rice-bowls/\" target=\"_blank\" rel=\"noopener\"\u003eNicky\u0027s Kitchen Sanctuary\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Hearty dinners for about $4.40 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  61.57,
+    "cost_batch_true":  66.82,
+    "cost_per_serving":  4.4,
+    "cost_per_serving_true":  4.77,
+    "scaler":  {
+                   "cost":  "66.82",
+                   "ing":  [
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "grams":  98,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  1750,
+                                   "buy":  "3.75 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  52,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "grams":  147,
+                                   "buy":  "5.25 oz",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Lemongrass Paste",
+                                   "grams":  35,
+                                   "buy":  "2.25 tbsp"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "grams":  284,
+                                   "buy":  "1.25 cups",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fish Sauce",
+                                   "grams":  94,
+                                   "buy":  "5.25 tbsp",
+                                   "bid":  "fish-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  56,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  5,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "grams":  262,
+                                   "buy":  "5.25 cups",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "grams":  385,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "grams":  214,
+                                   "buy":  "3.5",
+                                   "bid":  "shredded-carrots",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Apple Cider Vinegar",
+                                   "grams":  158,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "apple-cider-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "grams":  7,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  1058,
+                                   "buy":  "5.75 cups dry",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cucumber",
+                                   "grams":  4200,
+                                   "buy":  "14",
+                                   "bid":  "cucumbers",
+                                   "gpu":  "300.000"
+                               },
+                               {
+                                   "item":  "Cherry Tomatoes",
+                                   "grams":  476,
+                                   "buy":  "3.25 cups"
+                               },
+                               {
+                                   "item":  "Toasted Sesame Seeds",
+                                   "grams":  32,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "toasted-sesame-seeds",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Vietnamese caramelized beef meal prep: 14 bowls, 700 calories and 38g protein each, about $4.40 a serving. Sticky-sweet glazed beef with fresh veg.",
+                 "keywords":  "vietnamese caramelized beef, ground beef rice bowls, vietnamese meal prep, fish sauce beef, budget asian recipe, beef bowls",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT55M",
+                 "costPerServing":  4.4,
+                 "recipeIngredient":  [
+                                          "3.75 lb 93/7 ground beef",
+                                          "5.75 cups dry rice",
+                                          "1.25 cups brown sugar",
+                                          "5.25 tbsp fish sauce",
+                                          "3.5 tbsp soy sauce",
+                                          "2.25 tbsp lemongrass paste",
+                                          "6 tbsp garlic",
+                                          "14 cucumbers",
+                                          "3.25 cups cherry tomatoes",
+                                          "3.5 carrots",
+                                          "3.5 red onions",
+                                          "5.25 cups green onions"
+                                      ],
+                 "steps":  [
+                               "Cook the rice and prep the fresh vegetables.",
+                               "Brown the ground beef hard, then add garlic, jalapeno, and lemongrass paste.",
+                               "Add brown sugar, fish sauce, soy, and broth and cook to a glossy caramel glaze.",
+                               "Fold in green onions off the heat.",
+                               "Assemble bowls with rice, beef, fresh veg, and sesame seeds, then portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  1750
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  147
+                              },
+                              {
+                                  "item":  "Lemongrass Paste",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Brown Sugar",
+                                  "grams":  284
+                              },
+                              {
+                                  "item":  "Fish Sauce",
+                                  "grams":  94
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  262
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  214
+                              },
+                              {
+                                  "item":  "Apple Cider Vinegar",
+                                  "grams":  158
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  7
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1058
+                              },
+                              {
+                                  "item":  "Cucumber",
+                                  "grams":  4200
+                              },
+                              {
+                                  "item":  "Cherry Tomatoes",
+                                  "grams":  476
+                              },
+                              {
+                                  "item":  "Toasted Sesame Seeds",
+                                  "grams":  32
+                              }
+                          ]
+}

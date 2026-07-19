@@ -1,0 +1,273 @@
+﻿{
+    "name":  "Chicken Souvlaki Rice Bowls",
+    "slug":  "chicken-souvlaki-rice-bowls",
+    "cuisine":  "Mediterranean/Greek",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "https://thegirlonbloor.com/meal-prep-chicken-souvlaki-bowls-video/",
+    "source_site":  "The Girl on Bloor",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Rice)",
+                   "portion factor 1.15"
+               ],
+    "stat":  {
+                 "cal":  562,
+                 "protein":  39,
+                 "carbs":  59,
+                 "fat":  18,
+                 "cost_ps":  "2.06"
+             },
+    "intro_html":  "Lemon-garlic-oregano chicken over rice with roasted zucchini, peppers, red onion, olives, cherry tomatoes, and a cool yogurt sauce. Each bowl runs \u003cstrong\u003e39 grams of protein\u003c/strong\u003e at a lean 562 calories for about \u003cstrong\u003e$2.06\u003c/strong\u003e. It is the Mediterranean fast-casual bowl, minus the $13 register total.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.5 cups dry (824 g)",
+                                "\u003cstrong\u003eCherry Tomatoes:\u003c/strong\u003e 2 cups (300 g)",
+                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 0.7 (209 g)",
+                                "\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 2 cups (272 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 2 cups (493 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 4 lb (1826 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 0.75 cups (163 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 2.6 (121 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4.75 tbsp (40 g)",
+                                "\u003cstrong\u003eZucchini:\u003c/strong\u003e 4 (789 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 4 (443 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Rice, 4.5 cups dry: ~$1.45. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Cherry Tomatoes, 2 cups: ~$2.94. \u003cstrong\u003eBuy 2 10oz clamshells: $5.55.\u003c/strong\u003e",
+                       "Cucumber, 0.7: ~$0.53. \u003cstrong\u003eBuy 1 each: $0.76.\u003c/strong\u003e",
+                       "Olives, 2 cups: ~$2.01. \u003cstrong\u003eBuy 2 6oz cans: $2.52.\u003c/strong\u003e",
+                       "Greek Yogurt, 2 cups: ~$1.52. \u003cstrong\u003eBuy 1 32oz tub: $2.79.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Breast, 4 lb: ~$8.98. \u003cstrong\u003eBuy 5 lbs: $11.15.\u003c/strong\u003e",
+                       "Olive Oil, 0.75 cups: ~$1.91. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Lemon Juice, 2.6: ~$0.46. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Garlic, 4.75 tbsp: ~$0.58. \u003cstrong\u003eBuy 1 head: $0.58.\u003c/strong\u003e",
+                       "Zucchini, 4: ~$2.64. \u003cstrong\u003eBuy 2 lbs: $3.04.\u003c/strong\u003e",
+                       "Red Onion, 4: ~$1.11. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Pantry seasonings (dried oregano, salt, black pepper, red bell pepper): ~$4.71. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $28.84 across 14 servings, so roughly $2.06 per bowl.\u003c/strong\u003e",
+                       "\u003cstrong\u003eTrue shopping cost: about $37.02 across 14 servings, roughly $2.64 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.06 a bowl\u003c/strong\u003e for a loaded Greek chicken bowl. The fast-casual Mediterranean chains charge $12 to $14 for the same idea with smaller chicken portions, so this batch beats them on price and protein at the same time.",
+    "shop_smart":  [
+                       "The marinade is pantry math: olive oil, lemon juice, garlic, and oregano. No bottled Greek dressing needed, and the flavor is better anyway.",
+                       "Plain Greek yogurt from a $2.79 tub plus grated cucumber, garlic, and lemon makes the sauce. A pre-made tzatziki tub costs about double for half the amount.",
+                       "Zucchini, red onion, and bell pepper roast down sweet and cost under $6 combined for the whole batch. Vegetables carry volume here so the chicken does not have to."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Marinate the chicken: cube the breasts and toss with most of the olive oil, lemon juice, garlic, oregano, salt, and pepper. Let it sit at least 30 minutes in the fridge.",
+                    "Cook the rice: 4.5 cups dry rice in a rice cooker or covered pot.",
+                    "Roast the vegetables: toss the chopped zucchini, red onion, and bell pepper with the remaining oil, salt, and pepper. Roast at 425 F for 20 to 25 minutes until browned at the edges.",
+                    "Sear the marinated chicken in a hot skillet in batches, 6 to 8 minutes, until charred at the edges and cooked through to 165 F.",
+                    "Make the yogurt sauce: stir the Greek yogurt with the grated cucumber (squeeze the water out first), a spoon of garlic, a squeeze of lemon juice, and a pinch of salt.",
+                    "Portion rice into 14 containers, then divide the chicken, roasted vegetables, olives, and halved cherry tomatoes. Pack the yogurt sauce in small cups on the side so it stays cold and fresh."
+                ],
+    "portion_html":  "Weigh your pot of cooked chicken and vegetables, subtract the empty pot weight you wrote down, and divide by 14 to portion evenly over the rice. Each bowl finishes at about 562 calories with 39 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://thegirlonbloor.com/meal-prep-chicken-souvlaki-bowls-video/\" target=\"_blank\" rel=\"noopener\"\u003eThe Girl on Bloor\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Hearty dinners for about $2.06 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  28.84,
+    "cost_batch_true":  37.02,
+    "cost_per_serving":  2.06,
+    "cost_per_serving_true":  2.64,
+    "scaler":  {
+                   "cost":  "37.02",
+                   "ing":  [
+                               {
+                                   "item":  "Rice",
+                                   "grams":  824,
+                                   "buy":  "4.5 cups dry",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cherry Tomatoes",
+                                   "grams":  300,
+                                   "buy":  "2 cups"
+                               },
+                               {
+                                   "item":  "Cucumber",
+                                   "grams":  209,
+                                   "buy":  "0.7",
+                                   "bid":  "cucumbers",
+                                   "gpu":  "300.000"
+                               },
+                               {
+                                   "item":  "Olives",
+                                   "grams":  272,
+                                   "buy":  "2 cups",
+                                   "bid":  "olives",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "grams":  493,
+                                   "buy":  "2 cups",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  1826,
+                                   "buy":  "4 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  163,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "grams":  121,
+                                   "buy":  "2.6",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  40,
+                                   "buy":  "4.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  12,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  24,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  5,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Zucchini",
+                                   "grams":  789,
+                                   "buy":  "4",
+                                   "bid":  "zucchini",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "grams":  443,
+                                   "buy":  "4",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "grams":  483,
+                                   "buy":  "4",
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  "120.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Greek chicken souvlaki rice bowls with roasted veg and yogurt sauce. 14 meal prep bowls, 562 calories and 39g protein each, about $2.06 a serving.",
+                 "keywords":  "chicken souvlaki bowls, greek meal prep, mediterranean rice bowls, tzatziki chicken, budget meal prep, high protein lunch",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT35M",
+                 "cookTime":  "PT35M",
+                 "totalTime":  "PT70M",
+                 "costPerServing":  2.06,
+                 "recipeIngredient":  [
+                                          "4 lb boneless skinless chicken breast",
+                                          "4.5 cups dry rice",
+                                          "4 zucchini",
+                                          "4 red onions",
+                                          "2 cups cherry tomatoes",
+                                          "2 cups olives",
+                                          "2 cups Greek yogurt",
+                                          "0.75 cup olive oil",
+                                          "2.6 lemons worth of lemon juice (121 g)",
+                                          "4.75 tbsp garlic",
+                                          "0.7 cucumber"
+                                      ],
+                 "steps":  [
+                               "Marinate cubed chicken in olive oil, lemon juice, garlic, and oregano for 30 minutes.",
+                               "Cook the rice and roast the zucchini, red onion, and bell pepper at 425 F.",
+                               "Sear the chicken in batches to 165 F.",
+                               "Stir Greek yogurt with grated cucumber, garlic, and lemon for the sauce.",
+                               "Portion rice, chicken, vegetables, olives, and tomatoes into 14 containers with sauce on the side."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Rice",
+                                  "grams":  824
+                              },
+                              {
+                                  "item":  "Cherry Tomatoes",
+                                  "grams":  300
+                              },
+                              {
+                                  "item":  "Cucumber",
+                                  "grams":  209
+                              },
+                              {
+                                  "item":  "Olives",
+                                  "grams":  272
+                              },
+                              {
+                                  "item":  "Greek Yogurt",
+                                  "grams":  493
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Breast",
+                                  "grams":  1826
+                              },
+                              {
+                                  "item":  "Olive Oil",
+                                  "grams":  163
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  121
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  40
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  12
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  24
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Zucchini",
+                                  "grams":  789
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  443
+                              },
+                              {
+                                  "item":  "Red Bell Pepper",
+                                  "grams":  483
+                              }
+                          ]
+}

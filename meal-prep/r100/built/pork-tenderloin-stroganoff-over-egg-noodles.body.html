@@ -1,0 +1,162 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"pork-tenderloin-stroganoff-over-egg-noodles","base":14,"cost":47.58,"ing":[{"item":"Butter","grams":98,"buy":"7 tbsp","bid":"butter","gpu":453.592},{"item":"White Mushrooms","grams":794,"buy":"11.25 cups","bid":"white-mushrooms","gpu":28.350},{"item":"Yellow Onion","grams":385,"buy":"3.5","bid":"onions","gpu":453.592},{"item":"Garlic","grams":52,"buy":"6 tbsp","bid":"garlic","gpu":50.000},{"item":"Pork Tenderloin","grams":2381,"buy":"5.25 lb","bid":"pork-tenderloin","gpu":453.592},{"item":"Salt","grams":21,"buy":"1.25 tbsp","bid":"salt","gpu":28.350},{"item":"Black Pepper","grams":4,"buy":"0.5 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Smoked Paprika","grams":24,"buy":"3.5 tbsp","bid":"smoked-paprika","gpu":28.350},{"item":"Italian Seasoning","grams":15,"buy":"3.5 tbsp","bid":"italian-seasoning","gpu":28.350},{"item":"Tomato Paste","grams":56,"buy":"3.5 tbsp","bid":"tomato-paste","gpu":28.350},{"item":"All-Purpose Flour","grams":56,"buy":"7 tbsp","bid":"flour","gpu":453.592},{"item":"Chicken Broth","grams":2100,"buy":"4.75 lb","bid":"chicken-broth","gpu":29.570},{"item":"Apple Cider Vinegar","grams":210,"buy":"1 cups","bid":"apple-cider-vinegar","gpu":29.570},{"item":"Lemon Juice","grams":52,"buy":"1","bid":"lemon-juice","gpu":29.570},{"item":"Egg Noodles","grams":794,"buy":"28 oz dry","bid":"egg-noodles","gpu":28.350},{"item":"Light Sour Cream","grams":805,"buy":"3.5 cups","bid":"light-sour-cream","gpu":28.350}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~613 cal &middot; 49g protein &middot; 56g carbs &middot; 21g fat &middot; ~$2.80 per serving.</strong></p>
+
+<p>Stroganoff is what happens when mushrooms, butter, and sour cream decide to make pork look fancy. This one delivers <strong>49 grams of protein</strong> per bowl over wide egg noodles, and it costs about <strong>$2.80 a serving</strong>. Comfort food math that actually works in your favor.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Butter (generic):</strong> 7 tbsp (98 g)</li>
+<li><strong>White Mushrooms:</strong> 11.25 cups (794 g)</li>
+<li><strong>Yellow Onion:</strong> 3.5 (385 g)</li>
+<li><strong>Garlic:</strong> 6 tbsp (52 g)</li>
+<li><strong>Pork Tenderloin:</strong> 5.25 lb (2381 g)</li>
+<li><strong>Tomato Paste (Great Value):</strong> 3.5 tbsp (56 g)</li>
+<li><strong>All-Purpose Flour (Great Value):</strong> 7 tbsp (56 g)</li>
+<li><strong>Chicken Broth (Swanson):</strong> 4.75 lb (2100 g)</li>
+<li><strong>Apple Cider Vinegar (Great Value):</strong> 1 cups (210 g)</li>
+<li><strong>Lemon Juice (ReaLemon):</strong> 1 (52 g)</li>
+<li><strong>Egg Noodles (Great Value wide):</strong> 28 oz dry (794 g)</li>
+<li><strong>Light Sour Cream (generic):</strong> 3.5 cups (805 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Butter, 7 tbsp: ~$0.66. <strong>Buy 1 lb box: $3.06.</strong></li>
+<li>White Mushrooms, 11.25 cups: ~$4.76. <strong>Buy 4 8oz packs: $5.44.</strong></li>
+<li>Yellow Onion, 3.5: ~$0.97. <strong>Buy 1 lb: $1.14.</strong></li>
+<li>Garlic, 6 tbsp: ~$0.75. <strong>Buy 2 heads: $1.15.</strong></li>
+<li>Pork Tenderloin, 5.25 lb: ~$20.84. <strong>Buy 6 lbs: $23.82.</strong></li>
+<li>Tomato Paste, 3.5 tbsp: ~$0.28. <strong>Buy 1 6oz can: $0.86.</strong></li>
+<li>All-Purpose Flour, 7 tbsp: ~$0.06. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Chicken Broth, 4.75 lb: ~$2.82. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Apple Cider Vinegar, 1 cups: ~$0.53. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Lemon Juice, 1: ~$0.20. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Egg Noodles, 28 oz dry: ~$3.05. <strong>Buy 3 12oz bags: $3.91.</strong></li>
+<li>Light Sour Cream, 3.5 cups: ~$2.96. <strong>Buy 2 16oz tubs: $3.34.</strong></li>
+<li>Pantry seasonings (salt, black pepper, smoked paprika, italian seasoning): ~$1.25. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $39.13 across 14 servings, so roughly $2.80 per bowl.</strong></li>
+<li><strong>True shopping cost: about $47.58 across 14 servings, roughly $3.40 per bowl.</strong> This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches.</li>
+</ul>
+<p>About <strong>$2.80 a bowl</strong> for creamy pork tenderloin stroganoff loaded with mushrooms. A sit-down restaurant charges $16 or more for the same plate, and theirs does not come with 13 more bowls waiting in the fridge.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Pork tenderloin is the big line item at about $20.84 of this batch. Whole tenderloins go on sale all the time, so when they dip under $4 a pound, buy two and freeze one for the next round.</li>
+<li>Buy whole white mushrooms in 8 oz packs and slice them yourself. Pre-sliced runs more per pound for about three minutes of knife work.</li>
+<li>Light sour cream in the store-brand tub tastes identical once it hits a warm sauce. Two 16 oz tubs cover the batch with a little left for taco night.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Boil the egg noodles in salted water until just al dente, drain, and set aside. They finish softening in the sauce, so do not overcook them here.</li>
+<li>Cut the pork tenderloin into bite-size pieces and season with salt, black pepper, and the smoked paprika. Sear in batches in about half the butter over medium-high heat until they hit 145F, then move them to a plate.</li>
+<li>Melt the rest of the butter in the same pot and cook the mushrooms and onions until browned and their liquid cooks off, about 8 to 10 minutes. Stir in the garlic for the last minute.</li>
+<li>Stir in the tomato paste and flour and cook for 1 minute, then whisk in the chicken broth, apple cider vinegar, and lemon juice. Simmer until the sauce thickens enough to coat a spoon, seasoning with the Italian seasoning as it goes.</li>
+<li>Return the pork and any juices to the pot and warm through. Pull the pot off the heat, then stir in the light sour cream. Off the heat matters, boiling sour cream is how you get a grainy sauce.</li>
+<li>Fold the noodles into the sauce until everything is coated and glossy.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Weigh the full pot, subtract the empty pot weight you wrote down, and divide by 14. That is your gram target per container. Scoop, weigh, repeat, and every bowl lands at about 613 calories with 49 grams of protein.</p>
+
+<p><em>Recipe adapted from <a href="https://www.eatpork.org/pork-stroganoff/" target="_blank" rel="noopener">National Pork Board (eatpork.org)</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Hearty dinners for about $2.80 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>

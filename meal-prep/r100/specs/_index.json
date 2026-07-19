@@ -1,0 +1,902 @@
+﻿[
+    {
+        "slug":  "chili-cornbread-casserole",
+        "name":  "Chili Cornbread Casserole",
+        "protein":  "ground beef",
+        "cuisine":  "American",
+        "cal":  696,
+        "cost":  2.8,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "lebanese-hashweh",
+        "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
+        "protein":  "ground beef",
+        "cuisine":  "Middle Eastern",
+        "cal":  577,
+        "cost":  1.76,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "mediterranean-beef-hummus-bowls",
+        "name":  "Mediterranean Beef Hummus Bowls",
+        "protein":  "ground beef",
+        "cuisine":  "Mediterranean",
+        "cal":  575,
+        "cost":  2.26,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "thai-basil-beef-bowls-with-coconut-rice",
+        "name":  "Thai Basil Beef Bowls with Coconut Rice",
+        "protein":  "ground beef",
+        "cuisine":  "Thai",
+        "cal":  593,
+        "cost":  3.68,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "indian-keema-matar-bowls",
+        "name":  "Indian Keema Matar (Ground Beef \u0026 Peas Curry) Bowls",
+        "protein":  "ground beef",
+        "cuisine":  "Indian / Pakistani",
+        "cal":  563,
+        "cost":  2.29,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "japanese-ground-beef-curry",
+        "name":  "Japanese Ground Beef Curry",
+        "protein":  "ground beef",
+        "cuisine":  "Japanese",
+        "cal":  590,
+        "cost":  3.49,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "greek-beef-and-chickpea-bowls",
+        "name":  "Greek Beef and Chickpea Bowls",
+        "protein":  "ground beef",
+        "cuisine":  "Mediterranean/Greek",
+        "cal":  630,
+        "cost":  3.09,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "beef-chow-mein-noodles",
+        "name":  "Beef Chow Mein Noodles",
+        "protein":  "ground beef",
+        "cuisine":  "Chinese",
+        "cal":  706,
+        "cost":  3.83,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "korean-beef-bibimbap-bowls",
+        "name":  "Korean Beef Bibimbap Bowls",
+        "protein":  "ground beef",
+        "cuisine":  "Korean",
+        "cal":  567,
+        "cost":  2.47,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "persian-kabob-koobideh-rice-bowls",
+        "name":  "Persian Kabob Koobideh Rice Bowls",
+        "protein":  "ground beef",
+        "cuisine":  "Persian / Iranian",
+        "cal":  616,
+        "cost":  3.39,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "arroz-con-carne-molida",
+        "name":  "Arroz con Carne Molida (Mexican Beef and Rice Skillet)",
+        "protein":  "ground beef",
+        "cuisine":  "Latin/Mexican",
+        "cal":  703,
+        "cost":  2.71,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "vietnamese-caramelized-ground-beef-rice-bowls",
+        "name":  "Vietnamese Caramelized Ground Beef Rice Bowls",
+        "protein":  "ground beef",
+        "cuisine":  "Vietnamese",
+        "cal":  700,
+        "cost":  4.4,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "beef-keema-curry-rice-bowls",
+        "name":  "Beef Keema Curry Rice Bowls",
+        "protein":  "ground beef",
+        "cuisine":  "Indian",
+        "cal":  567,
+        "cost":  2.09,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "hawaiian-loco-moco-rice-bowls",
+        "name":  "Hawaiian Loco Moco Rice Bowls",
+        "protein":  "ground beef",
+        "cuisine":  "Hawaiian",
+        "cal":  647,
+        "cost":  2.17,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "frito-pie-walking-taco-casserole",
+        "name":  "Frito Pie Walking Taco Casserole",
+        "protein":  "ground beef",
+        "cuisine":  "American",
+        "cal":  686,
+        "cost":  2.62,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "middle-eastern-beef-kofta-bowls-with-tzatziki",
+        "name":  "Middle Eastern Beef Kofta Bowls with Tzatziki",
+        "protein":  "ground beef",
+        "cuisine":  "Middle Eastern",
+        "cal":  562,
+        "cost":  3.86,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "cheesy-taco-spaghetti",
+        "name":  "Cheesy Taco Spaghetti",
+        "protein":  "ground beef",
+        "cuisine":  "American",
+        "cal":  603,
+        "cost":  2.81,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "cheesy-ground-beef-tortellini",
+        "name":  "Cheesy Ground Beef Tortellini",
+        "protein":  "ground beef",
+        "cuisine":  "American",
+        "cal":  566,
+        "cost":  2.6,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "baked-ziti-with-ground-beef",
+        "name":  "Baked Ziti with Ground Beef",
+        "protein":  "ground beef",
+        "cuisine":  "American",
+        "cal":  628,
+        "cost":  2.27,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "cheesy-beef-and-shells-casserole",
+        "name":  "Cheesy Beef and Shells Casserole",
+        "protein":  "ground beef",
+        "cuisine":  "American",
+        "cal":  616,
+        "cost":  1.86,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "pastitsio",
+        "name":  "Pastitsio (Greek Beef Pasta Bake)",
+        "protein":  "ground beef",
+        "cuisine":  "American",
+        "cal":  773,
+        "cost":  3.15,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "ground-beef-baked-gnocchi",
+        "name":  "Ground Beef Baked Gnocchi",
+        "protein":  "ground beef",
+        "cuisine":  "American",
+        "cal":  561,
+        "cost":  2.82,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "million-dollar-baked-spaghetti",
+        "name":  "Million Dollar Baked Spaghetti",
+        "protein":  "ground beef",
+        "cuisine":  "American",
+        "cal":  566,
+        "cost":  1.72,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "beef-stuffed-shells",
+        "name":  "Beef Stuffed Shells",
+        "protein":  "ground beef",
+        "cuisine":  "American",
+        "cal":  560,
+        "cost":  1.85,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "john-wayne-casserole",
+        "name":  "John Wayne Casserole",
+        "protein":  "ground beef",
+        "cuisine":  "American",
+        "cal":  578,
+        "cost":  2.08,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "johnny-marzetti-casserole",
+        "name":  "Johnny Marzetti Casserole",
+        "protein":  "ground beef",
+        "cuisine":  "American",
+        "cal":  568,
+        "cost":  2.68,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "braised-pork-ragu-over-pappardelle",
+        "name":  "Braised Pork Ragu over Pappardelle",
+        "protein":  "pork",
+        "cuisine":  "Italian",
+        "cal":  578,
+        "cost":  1.26,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "creamy-mushroom-pork-chops-over-mashed-potatoes",
+        "name":  "Creamy Mushroom Pork Chops over Mashed Potatoes",
+        "protein":  "pork",
+        "cuisine":  "American",
+        "cal":  591,
+        "cost":  2.46,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "vietnamese-lemongrass-pork-chops-with-broken-rice",
+        "name":  "Vietnamese Lemongrass Pork Chops with Broken Rice (Com Suon)",
+        "protein":  "pork",
+        "cuisine":  "Vietnamese",
+        "cal":  950,
+        "cost":  5.04,
+        "manual_balance":  true
+    },
+    {
+        "slug":  "asian-ground-pork-meatball-rice-bowls",
+        "name":  "Asian Ground Pork Meatball Rice Bowls",
+        "protein":  "pork",
+        "cuisine":  "Thai",
+        "cal":  841,
+        "cost":  2.04,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "chorizo-and-potato-bowls",
+        "name":  "Chorizo \u0026 Potato Bowls",
+        "protein":  "pork",
+        "cuisine":  "Mexican",
+        "cal":  656,
+        "cost":  2.35,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "sichuan-dan-dan-noodles-with-pork",
+        "name":  "Sichuan Dan Dan Noodles with Pork",
+        "protein":  "pork",
+        "cuisine":  "Chinese",
+        "cal":  880,
+        "cost":  3.13,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "southern-smothered-pork-chops-and-rice",
+        "name":  "Southern Smothered Pork Chops and Rice",
+        "protein":  "pork",
+        "cuisine":  "Southern American",
+        "cal":  896,
+        "cost":  2.32,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "pork-milanese-with-roasted-potatoes",
+        "name":  "Pork Milanese with Roasted Potatoes",
+        "protein":  "pork",
+        "cuisine":  "Italian-American",
+        "cal":  629,
+        "cost":  1.29,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "japanese-pork-katsu-curry-rice",
+        "name":  "Japanese Pork Katsu Curry Rice",
+        "protein":  "pork",
+        "cuisine":  "Japanese",
+        "cal":  953,
+        "cost":  3.43,
+        "manual_balance":  true
+    },
+    {
+        "slug":  "filipino-pork-giniling",
+        "name":  "Filipino Pork Giniling (Filipino Picadillo)",
+        "protein":  "pork",
+        "cuisine":  "Filipino",
+        "cal":  571,
+        "cost":  1.9,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "grilled-pork-tenderloin-burrito-bowl",
+        "name":  "Grilled Pork Tenderloin Burrito Bowl",
+        "protein":  "pork",
+        "cuisine":  "Tex-Mex",
+        "cal":  571,
+        "cost":  2.23,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "brazilianstyle-pork-ribs-bowls",
+        "name":  "Brazilian-Style Pork Ribs Bowls",
+        "protein":  "pork",
+        "cuisine":  "Brazilian",
+        "cal":  565,
+        "cost":  1.09,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "korean-gochujang-ground-pork-rice-bowls",
+        "name":  "Korean Gochujang Ground Pork Rice Bowls",
+        "protein":  "pork",
+        "cuisine":  "Korean",
+        "cal":  560,
+        "cost":  1.63,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "pork-tenderloin-stroganoff-over-egg-noodles",
+        "name":  "Pork Tenderloin Stroganoff over Egg Noodles",
+        "protein":  "pork",
+        "cuisine":  "American/Russian",
+        "cal":  613,
+        "cost":  2.8,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "thai-peanut-pork-tenderloin-rice-bowl",
+        "name":  "Thai Peanut Pork Tenderloin Rice Bowl",
+        "protein":  "pork",
+        "cuisine":  "Thai-inspired",
+        "cal":  583,
+        "cost":  1.6,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "panseared-pork-chops-with-cajun-dirty-rice",
+        "name":  "Pan-Seared Pork Chops with Cajun Dirty Rice",
+        "protein":  "pork",
+        "cuisine":  "Cajun/Creole",
+        "cal":  578,
+        "cost":  2.74,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "hong-kongstyle-baked-pork-chop-rice",
+        "name":  "Hong Kong-Style Baked Pork Chop Rice",
+        "protein":  "pork",
+        "cuisine":  "Hong Kong / Cantonese",
+        "cal":  655,
+        "cost":  1.97,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "creamy-pork-tenderloin-tagliatelle",
+        "name":  "Creamy Pork Tenderloin Tagliatelle (alla Castellana)",
+        "protein":  "pork",
+        "cuisine":  "Italian",
+        "cal":  788,
+        "cost":  1.47,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "cheesy-pork-chop-and-hash-brown-casserole",
+        "name":  "Cheesy Pork Chop and Hash Brown Casserole",
+        "protein":  "pork",
+        "cuisine":  "American",
+        "cal":  672,
+        "cost":  3.15,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "vietnamese-lemongrass-pork-noodle-bowls",
+        "name":  "Vietnamese Lemongrass Pork Noodle Bowls (Bun Thit Nuong)",
+        "protein":  "pork",
+        "cuisine":  "Vietnamese",
+        "cal":  569,
+        "cost":  2.64,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "thai-pork-drunken-noodles",
+        "name":  "Thai Pork Drunken Noodles (Pad Kee Mao)",
+        "protein":  "pork",
+        "cuisine":  "Thai",
+        "cal":  730,
+        "cost":  3,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "al-pastor-pork-taco-bowl-with-cilantro-lime-rice",
+        "name":  "Al Pastor Pork Taco Bowl with Cilantro Lime Rice",
+        "protein":  "pork",
+        "cuisine":  "Mexican",
+        "cal":  687,
+        "cost":  2.55,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "spicy-pork-noodles",
+        "name":  "Spicy Pork Noodles",
+        "protein":  "pork",
+        "cuisine":  "Chinese",
+        "cal":  874,
+        "cost":  3.31,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "countryfried-pork-chops-with-bacon-gravy",
+        "name":  "Country-Fried Pork Chops with Bacon Gravy",
+        "protein":  "pork",
+        "cuisine":  "Southern American",
+        "cal":  685,
+        "cost":  2.18,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "marry-me-pork-chops-over-pasta",
+        "name":  "Marry Me Pork Chops over Pasta",
+        "protein":  "pork",
+        "cuisine":  "Italian-American",
+        "cal":  669,
+        "cost":  2.36,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "chicken-scampi",
+        "name":  "Chicken Scampi",
+        "protein":  "chicken",
+        "cuisine":  "Italian-American",
+        "cal":  871,
+        "cost":  2.16,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "buffalo-chicken-pasta-bake",
+        "name":  "Buffalo Chicken Pasta Bake",
+        "protein":  "chicken",
+        "cuisine":  "American",
+        "cal":  606,
+        "cost":  1.12,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "baked-sweet-and-sour-chicken-rice-bowls",
+        "name":  "Baked Sweet and Sour Chicken Rice Bowls",
+        "protein":  "chicken",
+        "cuisine":  "Chinese",
+        "cal":  678,
+        "cost":  1.12,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "chicken-katsu-curry-rice-bowls",
+        "name":  "Chicken Katsu Curry Rice Bowls",
+        "protein":  "chicken",
+        "cuisine":  "Japanese",
+        "cal":  877,
+        "cost":  2.35,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "filipino-chicken-afritada-bowls",
+        "name":  "Filipino Chicken Afritada Bowls",
+        "protein":  "chicken",
+        "cuisine":  "Filipino",
+        "cal":  675,
+        "cost":  3.48,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "thai-red-curry-chicken-rice-bowls",
+        "name":  "Thai Red Curry Chicken Rice Bowls",
+        "protein":  "chicken",
+        "cuisine":  "Thai",
+        "cal":  637,
+        "cost":  2.29,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "chicken-biryani-rice-bowls",
+        "name":  "Chicken Biryani Rice Bowls",
+        "protein":  "chicken",
+        "cuisine":  "Indian",
+        "cal":  567,
+        "cost":  1.35,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "persian-fesenjan-chicken-bowls",
+        "name":  "Persian Fesenjan Chicken (Walnut-Pomegranate Stew) Bowls",
+        "protein":  "chicken",
+        "cuisine":  "Persian / Iranian",
+        "cal":  638,
+        "cost":  2.42,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "trinidadian-curry-chicken-bowls",
+        "name":  "Trinidadian Curry Chicken Bowls",
+        "protein":  "chicken",
+        "cuisine":  "Caribbean / Trinidadian",
+        "cal":  577,
+        "cost":  1.97,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "hungarian-chicken-paprikash",
+        "name":  "Hungarian Chicken Paprikash",
+        "protein":  "chicken",
+        "cuisine":  "Hungarian",
+        "cal":  877,
+        "cost":  2.4,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "chicken-souvlaki-rice-bowls",
+        "name":  "Chicken Souvlaki Rice Bowls",
+        "protein":  "chicken",
+        "cuisine":  "Mediterranean/Greek",
+        "cal":  562,
+        "cost":  2.06,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "ethiopian-doro-wat-chicken-bowls",
+        "name":  "Ethiopian Doro Wat Chicken Bowls",
+        "protein":  "chicken",
+        "cuisine":  "Ethiopian",
+        "cal":  574,
+        "cost":  2.48,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "harissa-chicken-rice-bowls",
+        "name":  "Harissa Chicken Rice Bowls",
+        "protein":  "chicken",
+        "cuisine":  "Mediterranean/North African",
+        "cal":  571,
+        "cost":  2.16,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "arroz-con-pollo-bowls",
+        "name":  "Arroz con Pollo (Chicken and Rice) Bowls",
+        "protein":  "chicken",
+        "cuisine":  "Latin/Mexican",
+        "cal":  628,
+        "cost":  2.1,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "creamy-cajun-chicken-penne-skillet-bowls",
+        "name":  "Creamy Cajun Chicken Penne Skillet Bowls",
+        "protein":  "chicken",
+        "cuisine":  "Cajun",
+        "cal":  570,
+        "cost":  1.61,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "chicken-mole-rice-bowls",
+        "name":  "Chicken Mole Rice Bowls",
+        "protein":  "chicken",
+        "cuisine":  "Mexican",
+        "cal":  560,
+        "cost":  2,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "malaysian-chicken-rendang-bowls",
+        "name":  "Malaysian Chicken Rendang Bowls",
+        "protein":  "chicken",
+        "cuisine":  "Malaysian",
+        "cal":  585,
+        "cost":  2.28,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "south-indian-chettinad-pepper-chicken-bowls",
+        "name":  "South Indian Chettinad Pepper Chicken Bowls",
+        "protein":  "chicken",
+        "cuisine":  "South Indian (Tamil/Chettinad)",
+        "cal":  561,
+        "cost":  2.15,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "poppy-seed-chicken-and-rice-casserole",
+        "name":  "Poppy Seed Chicken and Rice Casserole",
+        "protein":  "chicken",
+        "cuisine":  "American Southern",
+        "cal":  701,
+        "cost":  1.29,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "cajun-chicken-etouffee-rice-bowls",
+        "name":  "Cajun Chicken Etouffee Rice Bowls",
+        "protein":  "chicken",
+        "cuisine":  "Cajun/Creole",
+        "cal":  644,
+        "cost":  2.26,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "cajun-chicken-and-sausage-jambalaya",
+        "name":  "Cajun Chicken and Sausage Jambalaya",
+        "protein":  "chicken",
+        "cuisine":  "Cajun / Creole",
+        "cal":  570,
+        "cost":  1.66,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "west-african-jollof-rice-and-chicken",
+        "name":  "West African Jollof Rice and Chicken",
+        "protein":  "chicken",
+        "cuisine":  "West African / Nigerian",
+        "cal":  591,
+        "cost":  1.88,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "creamy-chicken-and-gnocchi-skillet",
+        "name":  "Creamy Chicken and Gnocchi Skillet",
+        "protein":  "chicken",
+        "cuisine":  "Italian-American",
+        "cal":  624,
+        "cost":  1.89,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "loaded-chicken-and-potato-casserole",
+        "name":  "Loaded Chicken and Potato Casserole",
+        "protein":  "chicken",
+        "cuisine":  "American",
+        "cal":  777,
+        "cost":  1.6,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "chicken-lo-mein-noodle-bowls",
+        "name":  "Chicken Lo Mein Noodle Bowls",
+        "protein":  "chicken",
+        "cuisine":  "Chinese",
+        "cal":  660,
+        "cost":  2.42,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "oyakodon",
+        "name":  "Oyakodon (Japanese Chicken and Egg Rice Bowls)",
+        "protein":  "chicken",
+        "cuisine":  "Japanese",
+        "cal":  747,
+        "cost":  1.99,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "filipino-chicken-inasal-bowls",
+        "name":  "Filipino Chicken Inasal Bowls",
+        "protein":  "chicken",
+        "cuisine":  "Filipino",
+        "cal":  562,
+        "cost":  2.39,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "chicken-pad-thai-noodle-bowls",
+        "name":  "Chicken Pad Thai Noodle Bowls",
+        "protein":  "chicken",
+        "cuisine":  "Thai",
+        "cal":  791,
+        "cost":  3.13,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "creamy-ground-turkey-and-chorizo-pasta",
+        "name":  "Creamy Ground Turkey and Chorizo Pasta",
+        "protein":  "ground turkey",
+        "cuisine":  "Italian",
+        "cal":  736,
+        "cost":  2.52,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "thai-coconut-curry-turkey-meatballs",
+        "name":  "Thai Coconut Curry Turkey Meatballs",
+        "protein":  "ground turkey",
+        "cuisine":  "Thai",
+        "cal":  662,
+        "cost":  2.78,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "ground-turkey-broccoli-cheddar-rice-skillet",
+        "name":  "Ground Turkey Broccoli Cheddar Rice Skillet",
+        "protein":  "ground turkey",
+        "cuisine":  "American",
+        "cal":  592,
+        "cost":  1.78,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "greek-ground-turkey-lemon-rice-bowls",
+        "name":  "Greek Ground Turkey Lemon Rice Bowls",
+        "protein":  "ground turkey",
+        "cuisine":  "Greek",
+        "cal":  567,
+        "cost":  2.02,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "turkey-sausage-and-cheesy-grits-bowl",
+        "name":  "Turkey Sausage and Cheesy Grits Bowl",
+        "protein":  "ground turkey",
+        "cuisine":  "Southern",
+        "cal":  561,
+        "cost":  1.44,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "ground-turkey-lo-mein",
+        "name":  "Ground Turkey Lo Mein",
+        "protein":  "ground turkey",
+        "cuisine":  "Chinese",
+        "cal":  565,
+        "cost":  3.35,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "green-chile-ground-turkey-skillet",
+        "name":  "Green Chile Ground Turkey Skillet",
+        "protein":  "ground turkey",
+        "cuisine":  "Southwest",
+        "cal":  723,
+        "cost":  3.1,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "creamy-ground-turkey-shell-pasta",
+        "name":  "Creamy Ground Turkey Shell Pasta",
+        "protein":  "ground turkey",
+        "cuisine":  "Italian-American",
+        "cal":  587,
+        "cost":  1.78,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "ground-turkey-sweet-potato-bowl",
+        "name":  "Ground Turkey Sweet Potato Bowl",
+        "protein":  "ground turkey",
+        "cuisine":  "Tex-Mex",
+        "cal":  568,
+        "cost":  2.84,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "turkey-kofta-rice-bowl-with-tahini-sauce",
+        "name":  "Turkey Kofta Rice Bowl with Tahini Sauce",
+        "protein":  "ground turkey",
+        "cuisine":  "Middle Eastern",
+        "cal":  594,
+        "cost":  2.23,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "ground-turkey-burrito-bowl",
+        "name":  "Ground Turkey Burrito Bowl",
+        "protein":  "ground turkey",
+        "cuisine":  "Mexican",
+        "cal":  574,
+        "cost":  2.4,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "vietnamese-turkey-banh-mi-bowls",
+        "name":  "Vietnamese Turkey Banh Mi Bowls",
+        "protein":  "ground turkey",
+        "cuisine":  "Vietnamese",
+        "cal":  674,
+        "cost":  3.38,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "turkey-keema-curry-with-peas",
+        "name":  "Turkey Keema Curry with Peas",
+        "protein":  "ground turkey",
+        "cuisine":  "Indian",
+        "cal":  641,
+        "cost":  2.23,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "creamy-ground-turkey-tortellini-skillet",
+        "name":  "Creamy Ground Turkey Tortellini Skillet",
+        "protein":  "ground turkey",
+        "cuisine":  "Italian",
+        "cal":  567,
+        "cost":  2.7,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "oneskillet-ground-turkey-thai-curry-with-rice",
+        "name":  "One-Skillet Ground Turkey Thai Curry with Rice",
+        "protein":  "ground turkey",
+        "cuisine":  "Thai",
+        "cal":  640,
+        "cost":  2.62,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "onepot-ground-turkey-stroganoff",
+        "name":  "One-Pot Ground Turkey Stroganoff",
+        "protein":  "ground turkey",
+        "cuisine":  "American",
+        "cal":  568,
+        "cost":  2.66,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "greek-turkey-meatballs-with-lemon-orzo",
+        "name":  "Greek Turkey Meatballs with Lemon Orzo",
+        "protein":  "ground turkey",
+        "cuisine":  "Greek",
+        "cal":  629,
+        "cost":  2.72,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "creamy-tomato-ground-turkey-gnocchi",
+        "name":  "Creamy Tomato Ground Turkey Gnocchi",
+        "protein":  "ground turkey",
+        "cuisine":  "Italian",
+        "cal":  795,
+        "cost":  2.78,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "turkey-drunken-noodles",
+        "name":  "Turkey Drunken Noodles (Pad Kee Mao)",
+        "protein":  "ground turkey",
+        "cuisine":  "Thai",
+        "cal":  562,
+        "cost":  3.53,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "highprotein-turkey-burger-bowl",
+        "name":  "High-Protein Turkey Burger Bowl",
+        "protein":  "ground turkey",
+        "cuisine":  "American",
+        "cal":  565,
+        "cost":  2.3,
+        "manual_balance":  false
+    },
+    {
+        "slug":  "baked-ziti-with-ground-turkey-and-ricotta",
+        "name":  "Baked Ziti with Ground Turkey and Ricotta",
+        "protein":  "ground turkey",
+        "cuisine":  "Italian",
+        "cal":  644,
+        "cost":  1.82,
+        "manual_balance":  false
+    }
+]

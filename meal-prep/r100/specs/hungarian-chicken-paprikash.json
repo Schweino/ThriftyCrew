@@ -1,0 +1,274 @@
+﻿{
+    "name":  "Hungarian Chicken Paprikash",
+    "slug":  "hungarian-chicken-paprikash",
+    "cuisine":  "Hungarian",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "https://alittleandalot.com/chicken-paprikash/",
+    "source_site":  "A Little And A Lot",
+    "manual_balance":  false,
+    "tuning":  [
+                   "protein clamp 340-\u003e240 g/serving",
+                   "base trimmed -37% (Egg Noodles)"
+               ],
+    "stat":  {
+                 "cal":  877,
+                 "protein":  61,
+                 "carbs":  71,
+                 "fat":  38,
+                 "cost_ps":  "2.40"
+             },
+    "intro_html":  "Chicken thighs braised in a deep red paprika and sour cream sauce over buttered egg noodles. This is a big bowl on purpose: \u003cstrong\u003e61 grams of protein\u003c/strong\u003e and 877 calories of old-world comfort for about \u003cstrong\u003e$2.40\u003c/strong\u003e. Grandma-level cooking at gas-station-snack pricing.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 2.75 cups (604 g)",
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 7.5 lb (3360 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 1.75 cups (219 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1.5 cups (343 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3.5 (385 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 10.25 tbsp (88 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 3.5 tbsp (56 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 1.25 tbsp (15 g)",
+                                "\u003cstrong\u003eCrushed Tomatoes (generic):\u003c/strong\u003e 2 cans (1488 g)",
+                                "\u003cstrong\u003eEgg Noodles (Great Value wide):\u003c/strong\u003e 26.5 oz dry (750 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 0.7 (35 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Light Sour Cream, 2.75 cups: ~$2.22. \u003cstrong\u003eBuy 2 16oz tubs: $3.34.\u003c/strong\u003e",
+                       "Boneless Skinless Chicken Thigh, 7.5 lb: ~$18.37. \u003cstrong\u003eBuy 8 lbs: $19.84.\u003c/strong\u003e",
+                       "All-Purpose Flour, 1.75 cups: ~$0.25. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Butter, 1.5 cups: ~$2.31. \u003cstrong\u003eBuy 1 lb box: $3.06.\u003c/strong\u003e",
+                       "Yellow Onion, 3.5: ~$0.97. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 10.25 tbsp: ~$1.27. \u003cstrong\u003eBuy 3 heads: $1.73.\u003c/strong\u003e",
+                       "Tomato Paste, 3.5 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 6oz can: $0.86.\u003c/strong\u003e",
+                       "Sugar, 1.25 tbsp: ~$0.03. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Crushed Tomatoes, 2 cans: ~$2.83. \u003cstrong\u003eBuy 2 28oz cans: $3.02.\u003c/strong\u003e",
+                       "Egg Noodles, 26.5 oz dry: ~$2.88. \u003cstrong\u003eBuy 3 12oz bags: $3.91.\u003c/strong\u003e",
+                       "Lemon Juice, 0.7: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, paprika, cayenne pepper, salt): ~$2.09. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $33.63 across 14 servings, so roughly $2.40 per bowl.\u003c/strong\u003e",
+                       "\u003cstrong\u003eTrue shopping cost: about $39.40 across 14 servings, roughly $2.81 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.40 a bowl\u003c/strong\u003e for a paprikash plate the old-school European restaurants price at $17, and they will not send you home with 13 more.",
+    "shop_smart":  [
+                       "Boneless skinless chicken thighs at $18.37 for 7.5 lb are the value cut of the poultry case, about $2.45 a pound, and they braise better than breast anyway.",
+                       "This uses a full 14 tablespoons of paprika, so skip the tiny spice-aisle jar and buy the big bottle or the bagged paprika in the international aisle. Same spice, half the price.",
+                       "Light sour cream finishes the sauce for $2.22 and works exactly like full fat here. Egg noodles round out the plate at about 28 cents a serving."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cut the chicken thighs into large chunks, season with salt and half the black pepper, and toss in the flour until coated.",
+                    "Brown the chicken in the butter in batches in your biggest pot, 3 to 4 minutes per side. Do not cook it through yet; set it aside.",
+                    "Cook the diced onion in the same pot until soft, add the garlic, then pull the pot off the heat and stir in the paprika and cayenne so they bloom without burning.",
+                    "Stir in the tomato paste, sugar, and crushed tomatoes, return the chicken, and simmer covered 20 to 25 minutes until the chicken reaches 165F and is tender.",
+                    "Boil the egg noodles, drain, and divide them among 14 containers.",
+                    "Off the heat, temper the sour cream with a ladle of hot sauce, stir it back in with the lemon juice, and ladle the paprikash over the noodles."
+                ],
+    "portion_html":  "Weigh the full pot of paprikash, subtract the empty pot number, and divide by 14, splitting the noodles evenly first. Each loaded bowl comes out to about 877 calories and 61 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://alittleandalot.com/chicken-paprikash/\" target=\"_blank\" rel=\"noopener\"\u003eA Little And A Lot\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Hearty dinners for about $2.40 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  33.63,
+    "cost_batch_true":  39.4,
+    "cost_per_serving":  2.4,
+    "cost_per_serving_true":  2.81,
+    "scaler":  {
+                   "cost":  "39.40",
+                   "ing":  [
+                               {
+                                   "item":  "Light Sour Cream",
+                                   "grams":  604,
+                                   "buy":  "2.75 cups",
+                                   "bid":  "light-sour-cream",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  3360,
+                                   "buy":  "7.5 lb",
+                                   "bid":  "boneless-skinless-chicken-thigh",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "grams":  219,
+                                   "buy":  "1.75 cups",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  14,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "grams":  343,
+                                   "buy":  "1.5 cups",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  385,
+                                   "buy":  "3.5",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  88,
+                                   "buy":  "10.25 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "grams":  56,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "grams":  96,
+                                   "buy":  "14 tbsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cayenne Pepper",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "cayenne-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "grams":  15,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Crushed Tomatoes",
+                                   "grams":  1488,
+                                   "buy":  "2 cans",
+                                   "bid":  "crushed-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Egg Noodles",
+                                   "grams":  750,
+                                   "buy":  "26.5 oz dry",
+                                   "bid":  "egg-noodles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "grams":  35,
+                                   "buy":  "0.7",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Hungarian chicken paprikash meal prep: 877 calories and 61g protein at about $2.40 a bowl. Paprika sour cream chicken thighs over egg noodles.",
+                 "keywords":  "chicken paprikash, hungarian chicken recipe, chicken thigh meal prep, budget dinner, high protein comfort food",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT70M",
+                 "costPerServing":  2.4,
+                 "recipeIngredient":  [
+                                          "7.5 lb boneless skinless chicken thighs",
+                                          "26.5 oz dry wide egg noodles",
+                                          "2.75 cups light sour cream",
+                                          "1.75 cups all-purpose flour",
+                                          "1.5 cups butter",
+                                          "3.5 yellow onions",
+                                          "10.25 tbsp minced garlic",
+                                          "3.5 tbsp tomato paste",
+                                          "2 cans crushed tomatoes",
+                                          "14 tbsp paprika"
+                                      ],
+                 "steps":  [
+                               "Flour-coat chunks of seasoned chicken thigh and brown them in butter in batches.",
+                               "Soften onion and garlic, then bloom the paprika off the heat.",
+                               "Add tomato paste, sugar, and crushed tomatoes; return the chicken and simmer to 165F.",
+                               "Boil the egg noodles and divide among 14 containers.",
+                               "Temper in the sour cream and lemon juice off the heat and ladle over the noodles."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Light Sour Cream",
+                                  "grams":  604
+                              },
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  3360
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  219
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  14
+                              },
+                              {
+                                  "item":  "Butter",
+                                  "grams":  343
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  385
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  88
+                              },
+                              {
+                                  "item":  "Tomato Paste",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Paprika",
+                                  "grams":  96
+                              },
+                              {
+                                  "item":  "Cayenne Pepper",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Sugar",
+                                  "grams":  15
+                              },
+                              {
+                                  "item":  "Crushed Tomatoes",
+                                  "grams":  1488
+                              },
+                              {
+                                  "item":  "Egg Noodles",
+                                  "grams":  750
+                              },
+                              {
+                                  "item":  "Lemon Juice",
+                                  "grams":  35
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              }
+                          ]
+}

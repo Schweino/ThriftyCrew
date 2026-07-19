@@ -1,0 +1,157 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"creamy-cajun-chicken-penne-skillet-bowls","base":14,"cost":27.73,"ing":[{"item":"Smoked Paprika","grams":16,"buy":"2.25 tbsp","bid":"smoked-paprika","gpu":28.350},{"item":"Dried Oregano","grams":4,"buy":"1.25 tbsp","bid":"dried-oregano","gpu":28.350},{"item":"Dried Thyme","grams":4,"buy":"1.25 tbsp","bid":"dried-thyme","gpu":28.350},{"item":"Garlic Powder","grams":6,"buy":"0.75 tbsp","bid":"garlic-powder","gpu":28.350},{"item":"Onion Powder","grams":4,"buy":"0.5 tbsp","bid":"onion-powder","gpu":28.350},{"item":"Cayenne Pepper","grams":1,"buy":"0.25 tbsp","bid":"cayenne-pepper","gpu":28.350},{"item":"Black Pepper","grams":2,"buy":"0.25 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Salt","grams":5,"buy":"0.25 tbsp","bid":"salt","gpu":28.350},{"item":"Olive Oil","grams":47,"buy":"3.5 tbsp","bid":"olive-oil","gpu":28.000},{"item":"Butter","grams":49,"buy":"3.5 tbsp","bid":"butter","gpu":453.592},{"item":"Boneless Skinless Chicken Breast","grams":1588,"buy":"3.5 lb","bid":"chicken-breast","gpu":453.592},{"item":"Yellow Onion","grams":385,"buy":"3.5","bid":"onions","gpu":453.592},{"item":"Penne Pasta","grams":1232,"buy":"43.5 oz dry","bid":"penne-pasta","gpu":28.350},{"item":"Diced Tomatoes","grams":1488,"buy":"3.6 cans","bid":"diced-tomatoes","gpu":28.350},{"item":"Chicken Broth","grams":1680,"buy":"3.75 lb","bid":"chicken-broth","gpu":29.570},{"item":"1/3 Fat Cream Cheese","grams":198,"buy":"7 oz","bid":"1-3-fat-cream-cheese","gpu":28.350},{"item":"Green Onions","grams":158,"buy":"3.25 cups","bid":"green-onions","gpu":90.000}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~570 cal &middot; 44g protein &middot; 71g carbs &middot; 14g fat &middot; ~$1.61 per serving.</strong></p>
+
+<p>One pot, no draining: penne cooks right in the smoky Cajun tomato broth, then cream cheese melts in to make it silky. Each bowl brings <strong>44 grams of protein</strong> at 570 calories for about <strong>$1.61</strong>, which makes this one of the cheapest full dinners in the whole library.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Olive Oil:</strong> 3.5 tbsp (47 g)</li>
+<li><strong>Butter (generic):</strong> 3.5 tbsp (49 g)</li>
+<li><strong>Boneless Skinless Chicken Breast (Member's Mark):</strong> 3.5 lb (1588 g)</li>
+<li><strong>Yellow Onion:</strong> 3.5 (385 g)</li>
+<li><strong>Penne Pasta (Barilla):</strong> 43.5 oz dry (1232 g)</li>
+<li><strong>Diced Tomatoes (Great Value):</strong> 3.6 cans (1488 g)</li>
+<li><strong>Chicken Broth (Swanson):</strong> 3.75 lb (1680 g)</li>
+<li><strong>1/3 Fat Cream Cheese (Great Value):</strong> 7 oz (198 g)</li>
+<li><strong>Green Onions:</strong> 3.25 cups (158 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Olive Oil, 3.5 tbsp: ~$0.55. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Butter, 3.5 tbsp: ~$0.33. <strong>Buy 1 lb box: $3.06.</strong></li>
+<li>Boneless Skinless Chicken Breast, 3.5 lb: ~$7.81. <strong>Buy 4 lbs: $8.92.</strong></li>
+<li>Yellow Onion, 3.5: ~$0.97. <strong>Buy 1 lb: $1.14.</strong></li>
+<li>Penne Pasta, 43.5 oz dry: ~$3.39. <strong>Buy 3 16oz boxs: $3.75.</strong></li>
+<li>Diced Tomatoes, 3.6 cans: ~$3.47. <strong>Buy 4 cans: $3.84.</strong></li>
+<li>Chicken Broth, 3.75 lb: ~$2.26. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>1/3 Fat Cream Cheese, 7 oz: ~$1.04. <strong>Buy 1 8oz brick: $1.19.</strong></li>
+<li>Green Onions, 3.25 cups: ~$1.88. <strong>Buy 2 bunchs: $2.14.</strong></li>
+<li>Pantry seasonings (smoked paprika, dried oregano, dried thyme, garlic powder, onion powder, cayenne pepper, black pepper, salt): ~$0.88. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $22.58 across 14 servings, so roughly $1.61 per bowl.</strong></li>
+<li><strong>True shopping cost: about $27.73 across 14 servings, roughly $1.98 per bowl.</strong> This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches.</li>
+</ul>
+<p>About <strong>$1.61 a bowl</strong> for creamy Cajun chicken pasta. The chain-restaurant version of this dish runs $15 to $17 a plate, so a single night out costs more than this entire week and a half of dinners.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>The Cajun seasoning is mixed from jars you already own: paprika, oregano, thyme, garlic powder, onion powder, and cayenne. The pre-mixed blends charge a premium for the same spoonfuls.</li>
+<li>One brick of 1/3 fat cream cheese at $1.19 makes the whole batch creamy. Heavy cream would cost more and add more fat for the same silkiness.</li>
+<li>Cooking the penne in the sauce means the starch thickens everything for free, and you skip wasting broth down the drain.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Stir together the Cajun blend: smoked paprika, oregano, thyme, garlic powder, onion powder, cayenne, black pepper, and salt.</li>
+<li>Cube the chicken breast, toss it with half the spice blend, and sear it in the olive oil and butter in your big pot until browned and cooked to 165 F. Set aside.</li>
+<li>Saute the diced onion in the same pot until soft, about 5 minutes, scraping up the browned bits.</li>
+<li>Add the penne, diced tomatoes with their juice, chicken broth, and the rest of the spice blend. Bring to a boil, then cover and simmer 12 to 15 minutes, stirring occasionally, until the pasta is tender and most of the liquid is absorbed.</li>
+<li>Cut the cream cheese into chunks and stir it in off the heat until fully melted and creamy.</li>
+<li>Return the chicken and fold in most of the green onions.</li>
+<li>Portion into 14 containers and top with the remaining green onions.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Set the whole pot on the scale, subtract the empty pot weight you wrote down, and divide by 14. Weigh that amount into each container. Every bowl comes out to about 570 calories with 44 grams of protein.</p>
+
+<p><em>Recipe adapted from <a href="https://www.budgetbytes.com/one-pot-creamy-cajun-chicken-pasta/" target="_blank" rel="noopener">Budget Bytes</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Hearty dinners for about $1.61 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>

@@ -77,17 +77,17 @@ $T = @'
   .gh-article-header .gh-article-meta,.gh-article-header [class*="byline"],.gh-article-excerpt,.mts-disclaimer{display:none !important}
   .v2{--bg:#f6f5f1;--surface:#fff;--surface2:#faf9f5;--ink:#152743;--ink-soft:#3a4a66;--mut:#727d90;--line:#e7e3d9;
     --gold:#b8901f;--gold-ink:#7d5f12;--gold-soft:#f4ecd4;--green:#1b763d;--green-soft:#e6f2ea;--sale:#b23b2e;--sale-soft:#fbeae7;
-    --shadow:0 1px 2px rgba(21,39,67,.06),0 8px 24px rgba(21,39,67,.07);--r:14px;
+    --shadow:0 1px 2px rgba(21,39,67,.06),0 8px 24px rgba(21,39,67,.07);--r:14px;--btnbg:#152743;--btnfg:#ffffff;
     color:var(--ink);background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    -webkit-font-smoothing:antialiased;line-height:1.4;max-width:700px;margin:0 auto;position:relative}
-  @media (prefers-color-scheme:dark){.v2{--bg:#0d1421;--surface:#151f33;--surface2:#111a2b;--ink:#eef2f8;--ink-soft:#c3cddd;--mut:#8b98af;--line:#26324a;--gold:#dcb453;--gold-ink:#e6c874;--gold-soft:rgba(220,180,83,.12);--green:#54b47c;--green-soft:rgba(84,180,124,.15);--sale:#e8756a;--sale-soft:rgba(232,117,106,.14);--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35)}}
+    -webkit-font-smoothing:antialiased;line-height:1.4;width:100%;min-width:0;max-width:700px;margin:0 auto;position:relative}
+  @media (prefers-color-scheme:dark){.v2{--bg:#0d1421;--surface:#151f33;--surface2:#111a2b;--ink:#eef2f8;--ink-soft:#c3cddd;--mut:#8b98af;--line:#26324a;--gold:#dcb453;--gold-ink:#e6c874;--gold-soft:rgba(220,180,83,.12);--green:#54b47c;--green-soft:rgba(84,180,124,.15);--sale:#e8756a;--sale-soft:rgba(232,117,106,.14);--btnbg:#eef2f8;--btnfg:#152743;--shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35)}}
   .v2 *{box-sizing:border-box}
   .v2 button{font-family:inherit}
   .v2 .proto{background:var(--gold-soft);color:var(--gold-ink);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;text-align:center;padding:6px 10px;border-radius:8px;margin:0 0 4px}
   .v2 .hdr{position:sticky;top:0;z-index:30;background:var(--surface);border-bottom:1px solid var(--line);padding:11px 14px 12px;box-shadow:var(--shadow);border-radius:0 0 12px 12px}
   .v2 .brandrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
   .v2 .brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px;letter-spacing:-.01em}
-  .v2 .brand .dot{width:22px;height:22px;border-radius:6px;background:var(--ink);color:var(--surface);display:grid;place-items:center;font-size:12px}
+  .v2 .brand .dot{width:22px;height:22px;border-radius:6px;background:var(--btnbg);color:var(--btnfg);display:grid;place-items:center;font-size:12px}
   .v2 .search{position:relative}
   .v2 .search input{width:100%;border:1.5px solid var(--line);background:var(--surface2);color:var(--ink);border-radius:11px;padding:11px 14px 11px 40px;font-size:16px;outline:none}
   .v2 .search input:focus{border-color:var(--gold)}
@@ -104,7 +104,7 @@ $T = @'
   .v2 .capture{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0 2px;padding:11px 14px;border:1.5px solid var(--gold);border-radius:12px;background:var(--gold-soft)}
   .v2 .capture .t{flex:1 1 220px;font-size:13px;color:var(--ink)}
   .v2 .capture .t b{font-weight:800}
-  .v2 .capture a{flex:0 0 auto;background:var(--ink);color:#fff;border-radius:9px;padding:9px 15px;font-size:13px;font-weight:800;text-decoration:none;white-space:nowrap}
+  .v2 .capture a{flex:0 0 auto;background:var(--btnbg);color:var(--btnfg);border-radius:9px;padding:9px 15px;font-size:13px;font-weight:800;text-decoration:none;white-space:nowrap}
   .v2 .stripwrap{margin:14px 0 2px}
   .v2 .strip-h{display:flex;align-items:baseline;justify-content:space-between;padding:0 14px 8px}
   .v2 .strip-h .t{font-size:15px;font-weight:800;letter-spacing:-.01em}
@@ -155,9 +155,9 @@ $T = @'
   .v2 .chip .mem{font-size:9.5px;color:var(--mut)}
   .v2 .chip a.see{font-size:11px;color:var(--gold-ink);font-weight:700;text-decoration:none;margin-top:1px}
   .v2 .noresult{text-align:center;color:var(--mut);padding:34px 20px;font-size:14px}
-  .v2 .listpill{position:fixed;left:50%;bottom:18px;transform:translate(-50%,120px);z-index:40;display:flex;align-items:center;gap:10px;background:var(--ink);color:#fff;border:none;border-radius:999px;padding:13px 20px;font-size:14.5px;font-weight:700;cursor:pointer;box-shadow:0 6px 22px rgba(21,39,67,.35);transition:transform .3s cubic-bezier(.2,.8,.3,1)}
+  .v2 .listpill{position:fixed;left:50%;bottom:18px;transform:translate(-50%,120px);z-index:40;display:flex;align-items:center;gap:10px;background:var(--btnbg);color:var(--btnfg);border:none;border-radius:999px;padding:13px 20px;font-size:14.5px;font-weight:700;cursor:pointer;box-shadow:0 6px 22px rgba(21,39,67,.35);transition:transform .3s cubic-bezier(.2,.8,.3,1)}
   .v2 .listpill.show{transform:translate(-50%,0)}
-  .v2 .listpill .badge{background:var(--gold);color:var(--ink);border-radius:999px;min-width:22px;height:22px;display:grid;place-items:center;font-size:13px;font-weight:800;padding:0 6px}
+  .v2 .listpill .badge{background:var(--gold);color:#152743;border-radius:999px;min-width:22px;height:22px;display:grid;place-items:center;font-size:13px;font-weight:800;padding:0 6px}
   .v2 .listpill .go{opacity:.7;font-size:13px}
   .v2 .backdrop{position:fixed;inset:0;background:rgba(10,16,26,.5);z-index:50;opacity:0;pointer-events:none;transition:opacity .25s}
   .v2 .backdrop.show{opacity:1;pointer-events:auto}
@@ -183,9 +183,28 @@ $T = @'
   .v2 .trip .note{font-size:12.5px;color:var(--ink-soft);margin:10px 0 0}
   .v2 .sheet-foot{padding:12px 18px calc(16px + env(safe-area-inset-bottom));display:flex;gap:10px;border-top:1px solid var(--line)}
   .v2 .btn{flex:1;border-radius:11px;padding:12px;font-size:14px;font-weight:800;cursor:pointer;border:1.5px solid var(--ink)}
-  .v2 .btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .v2 .btn.primary{background:var(--btnbg);color:var(--btnfg);border-color:var(--btnbg)}
   .v2 .btn.ghost{background:none;color:var(--ink)}
   .v2 .empty{text-align:center;color:var(--mut);padding:30px 10px;font-size:14px}
+  .v2 .howto{font-size:13.5px;line-height:1.55;color:var(--ink-soft);margin:0;padding:12px 15px;border:1px solid var(--line);border-radius:13px;background:var(--surface)}
+  .v2 .howto b{color:var(--ink);font-weight:800}
+  .v2 .wiz-q{font-size:13.5px;font-weight:800;color:var(--ink);margin:18px 0 9px}
+  .v2 .wiz-q:first-child{margin-top:2px}
+  .v2 .stopts{display:flex;flex-direction:column}
+  .v2 .stopt{display:flex;align-items:center;gap:11px;padding:10px 3px;border-bottom:1px solid var(--line);font-size:14.5px;cursor:pointer}
+  .v2 .stopt input{width:19px;height:19px;flex:0 0 auto;accent-color:var(--ink);cursor:pointer}
+  .v2 .stopt em{color:var(--mut);font-style:normal;font-size:12px;margin-left:2px}
+  .v2 .kbtns{display:flex;gap:9px;flex-wrap:wrap}
+  .v2 .kbtn{width:48px;height:48px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font-size:18px;font-weight:800;cursor:pointer;transition:.12s}
+  .v2 .kbtn.on{border-color:var(--btnbg);background:var(--btnbg);color:var(--btnfg)}
+  .v2 .plan-sum{font-size:13.5px;font-weight:800;color:var(--ink);margin:2px 0 14px}
+  .v2 .plan-store{margin:0 0 16px}
+  .v2 .plan-store-h{display:flex;align-items:baseline;gap:8px;font-size:15px;font-weight:800;color:var(--ink);border-bottom:2px solid var(--ink);padding-bottom:5px;margin-bottom:3px}
+  .v2 .plan-store-h .mem{font-size:10px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.04em}
+  .v2 .plan-store-h .c{margin-left:auto;font-size:12px;font-weight:600;color:var(--mut);white-space:nowrap}
+  .v2 .plan-item{display:flex;justify-content:space-between;gap:10px;padding:8px 2px;border-bottom:1px dotted var(--line);font-size:14.5px}
+  .v2 .plan-item .pp{color:var(--ink-soft);font-weight:700;white-space:nowrap}
+  .v2 .plan-un{font-size:12.5px;color:var(--mut);margin:14px 0 0;line-height:1.5}
   .v2 .foot{text-align:center;color:var(--mut);font-size:11.5px;padding:24px 20px 40px;line-height:1.6}
   @media (prefers-reduced-motion:reduce){.v2 *{transition:none !important}}
 </style>
@@ -196,7 +215,7 @@ $T = @'
     <div class="search"><span class="mag">&#128269;</span><input id="v2q" type="search" placeholder="Search every item..." autocomplete="off" aria-label="Search"><button class="clr" id="v2clr" aria-label="Clear">&times;</button></div>
   </header>
   <div class="hero" id="v2hero">
-    <div class="verdict"><div class="eyebrow">Where to shop this week</div><h2><b id="v2vstore"></b> wins the most staples</h2><p id="v2vdetail"></p></div>
+    <p class="howto"><b>Search your items</b> above and tap the <b>+</b> to drop each one into your list. When you are done, tap <b>My list</b> at the bottom and we will build the cheapest shopping trip for you.</p>
     <p class="trust">I'm Brad. I live here in Omaha and I check these prices every morning before most people are awake. No store pays to be on this board, there are no affiliate links, and no one can buy the word <b>cheapest</b>. If a store wins, its shelf price won.</p>
     <div class="capture"><div class="t"><b>Get this board every Friday, free.</b> The updated prices before you shop the weekend.</div><a href="#/portal/signup/free" data-portal="signup/free">Email me the board</a></div>
   </div>
@@ -209,9 +228,9 @@ $T = @'
   <div class="backdrop" id="v2backdrop"></div>
   <aside class="sheet" id="v2sheet" aria-label="My list">
     <div class="sheet-grab"></div>
-    <div class="sheet-h"><span class="t">Your list</span><button class="x" id="v2sheetx" aria-label="Close">&times;</button></div>
+    <div class="sheet-h"><span class="t" id="v2sheettitle">Your list</span><button class="x" id="v2sheetx" aria-label="Close">&times;</button></div>
     <div class="sheet-body" id="v2sheetbody"></div>
-    <div class="sheet-foot"><button class="btn ghost" id="v2clearlist">Clear</button><button class="btn primary" id="v2emaillist">Email my list</button></div>
+    <div class="sheet-foot" id="v2sheetfoot"></div>
   </aside>
 </div>
 <script>
@@ -227,8 +246,7 @@ $T = @'
   var LIST={}, ids=0;
   CATS.forEach(function(c,ci){c.items.forEach(function(it,ii){it.id="i"+ci+"_"+ii;ids++;});});
 
-  document.getElementById("v2vstore").textContent=B.verdict.store||"Aldi";
-  document.getElementById("v2vdetail").textContent="Cheapest on "+B.verdict.count+" of the "+B.verdict.total+" staples we track, more than any store you can walk into without a membership. Make it your first stop, then top up the rest wherever's close.";
+  // (verdict block removed per Brad; the instruction line replaces it. B.verdict.total still drives the item count below.)
 
   (function(){var d=document.getElementById("v2deals"),html="",deals=[];
     CATS.forEach(function(c){c.items.forEach(function(it){var b=best(it); if(b.t==="sale"){deals.push({it:it,b:b});}});});
@@ -271,24 +289,92 @@ $T = @'
 
   var pill=document.getElementById("v2pill"),pillN=document.getElementById("v2pilln");
   function syncPill(){var n=Object.keys(LIST).length;pillN.textContent=n;pill.classList.toggle("show",n>0);}
-  function openSheet(){renderSheet();document.getElementById("v2backdrop").classList.add("show");document.getElementById("v2sheet").classList.add("show");}
+
+  // every store that appears anywhere on the board, in shopping order
+  var ALL_STORES=(function(){var s={};CATS.forEach(function(c){c.items.forEach(function(it){it.st.forEach(function(x){s[x.s]=1;});});});return Object.keys(s);})();
+  var STORE_ORDER={"Aldi":1,"Walmart":2,"Hy-Vee":3,"Baker's":4,"Family Fare":5,"Fareway":6,"Sam's Club":7};
+  ALL_STORES.sort(function(a,b){return (STORE_ORDER[a]||9)-(STORE_ORDER[b]||9);});
+  var wiz={step:1,excluded:{},maxStores:2};
+
+  function priceAt(it,store){var r=null;it.st.forEach(function(x){if(x.s===store)r=x.p;});return r;}
+  function combosOf(arr,k){var res=[];(function rec(start,cur){if(cur.length===k){res.push(cur.slice());return;}for(var i=start;i<arr.length;i++){cur.push(arr[i]);rec(i+1,cur);cur.pop();}})(0,[]);return res;}
+  function solvePlan(items,allowed,K){
+    var kk=Math.min(K,allowed.length);if(kk<1)kk=1;
+    var gmin=items.map(function(it){var m=null;allowed.forEach(function(s){var x=priceAt(it,s);if(x!==null&&(m===null||x<m))m=x;});return m;});
+    var combos=combosOf(allowed,kk),bestC=null;
+    combos.forEach(function(cmb){var score=0;items.forEach(function(it,i){var m=null;cmb.forEach(function(st){var x=priceAt(it,st);if(x!==null&&(m===null||x<m))m=x;});if(m===null)score+=10;else if(gmin[i]>0)score+=m/gmin[i];});if(bestC===null||score<bestC.score)bestC={combo:cmb,score:score};});
+    var combo=bestC?bestC.combo:[],byStore={},uncovered=[];
+    combo.forEach(function(st){byStore[st]=[];});
+    items.forEach(function(it){var m=null,ms=null;combo.forEach(function(st){var x=priceAt(it,st);if(x!==null&&(m===null||x<m)){m=x;ms=st;}});if(ms===null)uncovered.push(it.n);else byStore[ms].push({n:it.n,p:m,u:it.u});});
+    return {byStore:byStore,uncovered:uncovered};
+  }
+  function planStores(plan){return Object.keys(plan.byStore).filter(function(s){return plan.byStore[s].length>0;}).sort(function(a,b){return plan.byStore[b].length-plan.byStore[a].length;});}
+
+  function openSheet(){wiz.step=1;document.getElementById("v2backdrop").classList.add("show");document.getElementById("v2sheet").classList.add("show");renderWiz();}
   function closeSheet(){document.getElementById("v2backdrop").classList.remove("show");document.getElementById("v2sheet").classList.remove("show");}
   pill.addEventListener("click",openSheet);
   document.getElementById("v2sheetx").addEventListener("click",closeSheet);
   document.getElementById("v2backdrop").addEventListener("click",closeSheet);
-  function renderSheet(){var body=document.getElementById("v2sheetbody"),ks=Object.keys(LIST);
-    if(!ks.length){body.innerHTML='<div class="empty">Your list is empty. Tap the + on any item while you browse and it lands here.</div>';return;}
-    var html="";ks.forEach(function(id){var it=LIST[id],b=best(it);
-      html+='<div class="li"><div class="lin"><div class="n">'+esc(it.n)+'</div><div class="s">cheapest at <b>'+sh(b.s)+'</b>, '+fmt(b.p,it.u)+'</div></div><button class="rm" data-rm="'+id+'" aria-label="Remove">&times;</button></div>';});
-    var split={};ks.forEach(function(id){var b=best(LIST[id]);(split[b.s]=split[b.s]||[]).push(LIST[id].n);});
-    var order=Object.keys(split).sort(function(a,b){return split[b].length-split[a].length;});
-    var chips=order.map(function(s){return '<span class="sp"><b>'+sh(s)+'</b> <span class="c">'+split[s].length+(split[s].length===1?' item':' items')+'</span></span>';}).join("");
-    var note=order.length===1?'Everything on your list is cheapest at '+sh(order[0])+' this week. One stop.':'Grab these at '+order.length+' stores for the lowest price on every item, or stick to '+sh(order[0])+' for '+split[order[0]].length+' of '+ks.length+' and save the trip.';
-    html+='<div class="trip"><div class="th">Your cheapest trip</div><div class="splits">'+chips+'</div><p class="note">'+note+'</p></div>';
-    body.innerHTML=html;
-    body.querySelectorAll("[data-rm]").forEach(function(btn){btn.addEventListener("click",function(){var id=btn.getAttribute("data-rm");delete LIST[id];var r=catsEl.querySelector('.row[data-id="'+id+'"] .row-add');if(r){r.classList.remove("on");r.textContent="+";}syncPill();renderSheet();if(!Object.keys(LIST).length)closeSheet();});});}
-  document.getElementById("v2clearlist").addEventListener("click",function(){Object.keys(LIST).forEach(function(id){var r=catsEl.querySelector('.row[data-id="'+id+'"] .row-add');if(r){r.classList.remove("on");r.textContent="+";}});LIST={};syncPill();closeSheet();});
-  document.getElementById("v2emaillist").addEventListener("click",function(){var b=this,o=b.textContent;b.textContent="✓ Check your inbox";setTimeout(function(){b.textContent=o;},1600);});
+
+  function renderWiz(){
+    var ks=Object.keys(LIST),title=document.getElementById("v2sheettitle"),body=document.getElementById("v2sheetbody"),foot=document.getElementById("v2sheetfoot");
+    if(!ks.length){title.textContent="Your list";body.innerHTML='<div class="empty">Your list is empty. Tap the + on any item while you browse and it lands here.</div>';foot.innerHTML="";return;}
+    if(wiz.step===1){
+      title.textContent="Your list ("+ks.length+")";
+      var h="";ks.forEach(function(id){var it=LIST[id],b=best(it);h+='<div class="li"><div class="lin"><div class="n">'+esc(it.n)+'</div><div class="s">cheapest '+fmt(b.p,it.u)+' at '+sh(b.s)+'</div></div><button class="rm" data-rm="'+id+'" aria-label="Remove">&times;</button></div>';});
+      body.innerHTML=h;
+      foot.innerHTML='<button class="btn ghost" data-w="clear">Clear</button><button class="btn primary" data-w="s2">Go to store selection &rarr;</button>';
+    } else if(wiz.step===2){
+      title.textContent="Choose your stores";
+      var allowed=ALL_STORES.filter(function(s){return !wiz.excluded[s];});
+      var rows=ALL_STORES.map(function(s){return '<label class="stopt"><input type="checkbox" data-store="'+esc(s)+'"'+(wiz.excluded[s]?"":" checked")+'><span>'+esc(sh(s))+(MEMBER[s]?' <em>needs membership</em>':'')+'</span></label>';}).join("");
+      var maxN=Math.max(1,allowed.length),kb="";
+      for(var k=1;k<=Math.min(maxN,5);k++){kb+='<button class="kbtn'+(wiz.maxStores===k?" on":"")+'" data-k="'+k+'">'+k+'</button>';}
+      body.innerHTML='<p class="wiz-q">Uncheck any store you would rather not shop at.</p><div class="stopts">'+rows+'</div><p class="wiz-q">How many stores are you willing to visit for the cheapest haul?</p><div class="kbtns">'+kb+'</div>';
+      foot.innerHTML='<button class="btn ghost" data-w="s1">&larr; Back</button><button class="btn primary" data-w="s3">See my plan &rarr;</button>';
+    } else {
+      title.textContent="Your shopping plan";
+      var allowed3=ALL_STORES.filter(function(s){return !wiz.excluded[s];});
+      if(!allowed3.length){body.innerHTML='<div class="empty">You unchecked every store. Go back and leave at least one.</div>';foot.innerHTML='<button class="btn ghost" data-w="s2">&larr; Back</button>';return;}
+      var plan=solvePlan(ks.map(function(id){return LIST[id];}),allowed3,wiz.maxStores),stores=planStores(plan);
+      var covered=ks.length-plan.uncovered.length;
+      var ph='<p class="plan-sum">'+stores.length+' store'+(stores.length===1?"":"s")+', '+covered+' of '+ks.length+' items at their cheapest.</p>';
+      stores.forEach(function(st){ph+='<div class="plan-store"><div class="plan-store-h">'+esc(sh(st))+(MEMBER[st]?' <span class="mem">membership</span>':'')+' <span class="c">'+plan.byStore[st].length+' item'+(plan.byStore[st].length===1?"":"s")+'</span></div>';plan.byStore[st].forEach(function(it){ph+='<div class="plan-item"><span>'+esc(it.n)+'</span><span class="pp">'+fmt(it.p,it.u)+'</span></div>';});ph+='</div>';});
+      if(plan.uncovered.length)ph+='<p class="plan-un"><b>Not sold at your chosen stores:</b> '+plan.uncovered.map(esc).join(", ")+'</p>';
+      body.innerHTML=ph;
+      foot.innerHTML='<button class="btn ghost" data-w="s2">&larr; Back</button><button class="btn primary" data-w="print">Print list</button>';
+    }
+  }
+
+  function printPlan(){
+    var ks=Object.keys(LIST);if(!ks.length)return;
+    var allowed=ALL_STORES.filter(function(s){return !wiz.excluded[s];});if(!allowed.length)return;
+    var plan=solvePlan(ks.map(function(id){return LIST[id];}),allowed,wiz.maxStores),stores=planStores(plan);
+    var w=window.open("","_blank");if(!w){alert("Allow pop-ups to print your list.");return;}
+    var h='<html><head><title>My Thrifty Crew shopping list</title><style>body{font-family:-apple-system,Segoe UI,Arial,sans-serif;color:#111;max-width:620px;margin:22px auto;padding:0 18px}h1{font-size:21px;margin:0 0 2px}.sub{color:#666;font-size:12px;margin:0 0 14px}h2{font-size:15px;border-bottom:2px solid #111;padding-bottom:4px;margin:20px 0 6px}.it{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dotted #ccc;font-size:14px}.un{color:#666;font-size:13px;margin-top:16px}@media print{body{margin:0}}</style></head><body>';
+    h+='<h1>My shopping list</h1><p class="sub">Thrifty Crew &middot; thriftycrew.com/omaha-grocery-prices &middot; prices checked this morning</p>';
+    stores.forEach(function(st){h+='<h2>'+esc(sh(st))+(MEMBER[st]?' (membership)':'')+'</h2>';plan.byStore[st].forEach(function(it){h+='<div class="it"><span>&#9744; '+esc(it.n)+'</span><span>'+fmt(it.p,it.u)+'</span></div>';});});
+    if(plan.uncovered.length)h+='<p class="un"><b>Not at your chosen stores:</b> '+plan.uncovered.map(esc).join(", ")+'</p>';
+    h+='</body></html>';
+    w.document.write(h);w.document.close();w.focus();setTimeout(function(){try{w.print();}catch(e){}},350);
+  }
+
+  function removeItem(id){delete LIST[id];var r=catsEl.querySelector('.row[data-id="'+id+'"] .row-add');if(r){r.classList.remove("on");r.textContent="+";}syncPill();if(!Object.keys(LIST).length){closeSheet();}else{renderWiz();}}
+  function clearList(){Object.keys(LIST).forEach(function(id){var r=catsEl.querySelector('.row[data-id="'+id+'"] .row-add');if(r){r.classList.remove("on");r.textContent="+";}});LIST={};syncPill();closeSheet();}
+
+  var sheetEl=document.getElementById("v2sheet");
+  sheetEl.addEventListener("click",function(e){
+    var rm=e.target.closest("[data-rm]");if(rm){removeItem(rm.getAttribute("data-rm"));return;}
+    var kb=e.target.closest("[data-k]");if(kb){wiz.maxStores=parseInt(kb.getAttribute("data-k"),10);renderWiz();return;}
+    var w=e.target.closest("[data-w]");if(w){var a=w.getAttribute("data-w");
+      if(a==="clear")clearList();else if(a==="s1"){wiz.step=1;renderWiz();}else if(a==="s2"){wiz.step=2;renderWiz();}else if(a==="s3"){wiz.step=3;renderWiz();}else if(a==="print")printPlan();return;}
+  });
+  sheetEl.addEventListener("change",function(e){
+    var cb=e.target.closest("[data-store]");if(!cb)return;
+    var s=cb.getAttribute("data-store");if(cb.checked)delete wiz.excluded[s];else wiz.excluded[s]=1;
+    var allowed=ALL_STORES.filter(function(x){return !wiz.excluded[x];});if(wiz.maxStores>allowed.length)wiz.maxStores=Math.max(1,allowed.length);
+    renderWiz();
+  });
 })();
 </script>
 '@

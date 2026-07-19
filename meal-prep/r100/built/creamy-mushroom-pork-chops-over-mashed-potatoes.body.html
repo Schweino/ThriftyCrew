@@ -1,0 +1,159 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"creamy-mushroom-pork-chops-over-mashed-potatoes","base":14,"cost":42.61,"ing":[{"item":"Butter","grams":98,"buy":"7 tbsp","bid":"butter","gpu":453.592},{"item":"White Mushrooms","grams":794,"buy":"11.25 cups","bid":"white-mushrooms","gpu":28.350},{"item":"Pork Chops","grams":2380,"buy":"5.25 lb","bid":"pork-chops","gpu":453.592},{"item":"Salt","grams":70,"buy":"4 tbsp","bid":"salt","gpu":28.350},{"item":"All-Purpose Flour","grams":109,"buy":"13.5 tbsp","bid":"flour","gpu":453.592},{"item":"Olive Oil","grams":142,"buy":"0.75 cups","bid":"olive-oil","gpu":28.000},{"item":"Chicken Broth","grams":840,"buy":"1.75 lb","bid":"chicken-broth","gpu":29.570},{"item":"Worcestershire Sauce","grams":20,"buy":"1.25 tbsp","bid":"worcestershire","gpu":29.570},{"item":"Heavy Cream","grams":278,"buy":"1.25 cups","bid":"heavy-cream","gpu":29.800},{"item":"Garlic","grams":52,"buy":"6 tbsp","bid":"garlic","gpu":50.000},{"item":"Potato","grams":1400,"buy":"6.6","bid":"potato","gpu":453.592},{"item":"Black Pepper","grams":4,"buy":"0.5 tbsp","bid":"black-pepper","gpu":28.350}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~591 cal &middot; 40g protein &middot; 28g carbs &middot; 35g fat &middot; ~$2.46 per serving.</strong></p>
+
+<p>Seared pork chops smothered in a creamy mushroom gravy over mashed potatoes. Steakhouse comfort at <strong>40 grams of protein</strong> and 591 calories per plate, for about <strong>$2.46</strong>. The gravy is built on the browned bits the chops leave behind, which is flavor you already paid for.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Butter (generic):</strong> 7 tbsp (98 g)</li>
+<li><strong>White Mushrooms:</strong> 11.25 cups (794 g)</li>
+<li><strong>Pork Chops:</strong> 5.25 lb (2380 g)</li>
+<li><strong>All-Purpose Flour (Great Value):</strong> 13.5 tbsp (109 g)</li>
+<li><strong>Olive Oil:</strong> 0.75 cups (142 g)</li>
+<li><strong>Chicken Broth (Swanson):</strong> 1.75 lb (840 g)</li>
+<li><strong>Worcestershire Sauce (Lea & Perrins):</strong> 1.25 tbsp (20 g)</li>
+<li><strong>Heavy Cream (Great Value):</strong> 1.25 cups (278 g)</li>
+<li><strong>Garlic:</strong> 6 tbsp (52 g)</li>
+<li><strong>Potato (generic):</strong> 6.6 (1400 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Butter, 7 tbsp: ~$0.66. <strong>Buy 1 lb box: $3.06.</strong></li>
+<li>White Mushrooms, 11.25 cups: ~$4.76. <strong>Buy 4 8oz packs: $5.44.</strong></li>
+<li>Pork Chops, 5.25 lb: ~$21.88. <strong>Buy 6 lbs: $25.02.</strong></li>
+<li>All-Purpose Flour, 13.5 tbsp: ~$0.12. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Olive Oil, 0.75 cups: ~$1.66. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Chicken Broth, 1.75 lb: ~$1.13. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Worcestershire Sauce, 1.25 tbsp: ~$0.07. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Heavy Cream, 1.25 cups: ~$1.73. <strong>Buy 1 pint: $2.94.</strong></li>
+<li>Garlic, 6 tbsp: ~$0.75. <strong>Buy 2 heads: $1.15.</strong></li>
+<li>Potato, 6.6: ~$1.36. <strong>Buy 4 lbs: $1.76.</strong></li>
+<li>Pantry seasonings (salt, black pepper): ~$0.26. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $34.38 across 14 servings, so roughly $2.46 per bowl.</strong></li>
+<li><strong>True shopping cost: about $42.61 across 14 servings, roughly $3.04 per bowl.</strong> This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches.</li>
+</ul>
+<p>About <strong>$2.46 a bowl</strong> for smothered pork chops with mashed potatoes. A smothered chop plate runs $14 to $17 at a steakhouse or diner, and it comes with exactly zero leftovers.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Pork chops are the whole budget here at $21.88 for 5.25 pounds. This is a recipe worth timing to the weekly ad; sale chops can cut the batch cost by a fifth.</li>
+<li>Four packs of white mushrooms for $4.76 make the gravy taste far more expensive than it is. Mushrooms are the cheapest way to make cream sauce eat like a steakhouse.</li>
+<li>Whole potatoes for the mash cost $1.36. That is about 10 cents of side dish per plate.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Start the potatoes: peel, chunk, and boil in salted water 15 to 20 minutes until fork tender. Drain and mash with a spoonful of the butter and a pinch of salt. Cover and keep warm.</li>
+<li>Season the chops with salt and pepper and dust lightly with some of the flour. Sear in olive oil in your big skillet, 4 to 5 minutes per side, until golden and the centers read 145 F. Rest on a plate.</li>
+<li>Melt the butter in the same skillet and cook the sliced mushrooms without crowding until browned, about 8 minutes. Stir in the garlic for 1 minute.</li>
+<li>Sprinkle in the remaining flour and stir 1 to 2 minutes.</li>
+<li>Whisk in the chicken broth and Worcestershire, scraping up the browned bits, then stir in the heavy cream. Simmer 3 to 4 minutes until the gravy coats a spoon.</li>
+<li>Return the chops and any juices to the gravy for a minute to warm through.</li>
+<li>Portion mashed potatoes into 14 containers, top with a chop, and ladle mushroom gravy over each.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Weigh the pot of mashed potatoes, subtract the empty pot weight you wrote down, and divide by 14 for the base, then split the chops and gravy evenly on top. Each plate lands at about 591 calories with 40 grams of protein.</p>
+
+<p><em>Recipe adapted from <a href="https://thecozycook.com/mushroom-pork-chops/" target="_blank" rel="noopener">The Cozy Cook</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Hearty dinners for about $2.46 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>

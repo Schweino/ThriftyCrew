@@ -1,0 +1,241 @@
+﻿{
+    "name":  "Mediterranean Beef Hummus Bowls",
+    "slug":  "mediterranean-beef-hummus-bowls",
+    "cuisine":  "Mediterranean",
+    "protein":  "ground beef",
+    "visibility":  "paid",
+    "source_url":  "https://www.budgetbytes.com/mediterranean-hummus-bowls/",
+    "source_site":  "Budget Bytes",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +50% (Rice)"
+               ],
+    "stat":  {
+                 "cal":  575,
+                 "protein":  27,
+                 "carbs":  85,
+                 "fat":  14,
+                 "cost_ps":  "2.26"
+             },
+    "intro_html":  "Warm cumin-spiced beef over rice with a generous swipe of hummus, cool cucumber, olives, and feta. It is the fast-casual Mediterranean bowl, except you keep the extra ten dollars. Each bowl brings \u003cstrong\u003e27 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.26\u003c/strong\u003e, and there is no actual cooking beyond browning beef and making rice.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 1.75 lb (794 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 7 cups dry (1300 g)",
+                                "\u003cstrong\u003eHummus (Great Value classic):\u003c/strong\u003e 3.5 cups (784 g)",
+                                "\u003cstrong\u003eCherry Tomatoes:\u003c/strong\u003e 0.5 cups (60 g)",
+                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 2 (525 g)",
+                                "\u003cstrong\u003eRed Onion:\u003c/strong\u003e 1 (96 g)",
+                                "\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 3.5 cups (472 g)",
+                                "\u003cstrong\u003eFeta Cheese (Great Value crumbled):\u003c/strong\u003e 7 oz (198 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "93/7 Ground Beef, 1.75 lb: ~$10.80. \u003cstrong\u003eBuy 2 lbs: $12.34.\u003c/strong\u003e",
+                       "Rice, 7 cups dry: ~$2.29. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Hummus, 3.5 cups: ~$7.94. \u003cstrong\u003eBuy 3 10oz tubs: $8.59.\u003c/strong\u003e",
+                       "Cherry Tomatoes, 0.5 cups: ~$0.59. \u003cstrong\u003eBuy 1 10oz clamshell: $2.78.\u003c/strong\u003e",
+                       "Cucumber, 2: ~$1.33. \u003cstrong\u003eBuy 2 eachs: $1.52.\u003c/strong\u003e",
+                       "Red Onion, 1: ~$0.24. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Olives, 3.5 cups: ~$3.50. \u003cstrong\u003eBuy 3 6oz cans: $3.78.\u003c/strong\u003e",
+                       "Feta Cheese, 7 oz: ~$4.58. \u003cstrong\u003eBuy 2 6oz tubs: $7.87.\u003c/strong\u003e",
+                       "Pantry seasonings (dried oregano, ground cumin, garlic powder, salt, black pepper): ~$0.38. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $31.65 across 14 servings, so roughly $2.26 per bowl.\u003c/strong\u003e",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.69 across 14 servings, roughly $2.91 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.26 a bowl\u003c/strong\u003e for the same build a fast-casual Mediterranean chain sells for $12 to $13. Fourteen bowls here costs about what two cost there, and yours come with more beef.",
+    "shop_smart":  [
+                       "Store-brand hummus in the 10 ounce tubs was the best per-ounce deal on our board. The fancy brands charge nearly double for the same chickpeas.",
+                       "Feta is the priciest line per ounce in this bowl. Buy the block or tub on sale and crumble it yourself, and never pay for pre-crumbled at full price.",
+                       "Beef is the anchor cost. This recipe only needs 1.75 pounds across 14 servings because the hummus and feta carry flavor, which is exactly why it stays cheap."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice: 7 cups dry with water per your usual method.",
+                    "Brown the ground beef in your big pot over medium-high until no pink remains, then drain.",
+                    "Season the beef with the oregano, cumin, garlic powder, salt, and pepper and cook 2 more minutes so the spices wake up.",
+                    "Chop the cucumber, halve the cherry tomatoes, and thin-slice the red onion.",
+                    "Build each bowl: rice on the bottom, a scoop of hummus on one side, spiced beef on the other, then cucumber, tomatoes, red onion, olives, and feta.",
+                    "Keep the fresh veg toppings in their own corner of the container so everything stays crisp until you eat."
+                ],
+    "portion_html":  "Weigh the pot of seasoned beef, subtract the empty pot number from step 1, and divide by 14 so each bowl gets an even share. Do the same with the rice. Each finished bowl comes in at 575 calories and 27 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.budgetbytes.com/mediterranean-hummus-bowls/\" target=\"_blank\" rel=\"noopener\"\u003eBudget Bytes\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Hearty dinners for about $2.26 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  31.65,
+    "cost_batch_true":  40.69,
+    "cost_per_serving":  2.26,
+    "cost_per_serving_true":  2.91,
+    "scaler":  {
+                   "cost":  "40.69",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  794,
+                                   "buy":  "1.75 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  2,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  4,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  3,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  5,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  1300,
+                                   "buy":  "7 cups dry",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Hummus",
+                                   "grams":  784,
+                                   "buy":  "3.5 cups",
+                                   "bid":  "hummus",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cherry Tomatoes",
+                                   "grams":  60,
+                                   "buy":  "0.5 cups"
+                               },
+                               {
+                                   "item":  "Cucumber",
+                                   "grams":  525,
+                                   "buy":  "2",
+                                   "bid":  "cucumbers",
+                                   "gpu":  "300.000"
+                               },
+                               {
+                                   "item":  "Red Onion",
+                                   "grams":  96,
+                                   "buy":  "1",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olives",
+                                   "grams":  472,
+                                   "buy":  "3.5 cups",
+                                   "bid":  "olives",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Feta Cheese",
+                                   "grams":  198,
+                                   "buy":  "7 oz",
+                                   "bid":  "feta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Mediterranean beef hummus bowls: 575 calories and 27g protein at about $2.26 a serving. Spiced beef, hummus, feta, and crisp veggies in 14 bowls.",
+                 "keywords":  "mediterranean hummus bowls, beef hummus bowl recipe, budget mediterranean meal prep, cheap rice bowls, feta beef bowls, fast casual copycat",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT25M",
+                 "totalTime":  "PT45M",
+                 "costPerServing":  2.26,
+                 "recipeIngredient":  [
+                                          "1.75 lb 93/7 ground beef",
+                                          "7 cups dry rice",
+                                          "3.5 cups hummus",
+                                          "2 cucumbers",
+                                          "0.5 cups cherry tomatoes",
+                                          "1 red onion",
+                                          "3.5 cups olives",
+                                          "7 oz crumbled feta cheese"
+                                      ],
+                 "steps":  [
+                               "Cook the rice.",
+                               "Brown the beef, drain, and season with oregano, cumin, garlic powder, salt, and pepper.",
+                               "Chop cucumber, halve cherry tomatoes, and slice red onion.",
+                               "Assemble 14 bowls: rice, hummus, beef, then vegetables, olives, and feta.",
+                               "Keep fresh toppings separated in the container so they stay crisp."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  794
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  2
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  5
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1300
+                              },
+                              {
+                                  "item":  "Hummus",
+                                  "grams":  784
+                              },
+                              {
+                                  "item":  "Cherry Tomatoes",
+                                  "grams":  60
+                              },
+                              {
+                                  "item":  "Cucumber",
+                                  "grams":  525
+                              },
+                              {
+                                  "item":  "Red Onion",
+                                  "grams":  96
+                              },
+                              {
+                                  "item":  "Olives",
+                                  "grams":  472
+                              },
+                              {
+                                  "item":  "Feta Cheese",
+                                  "grams":  198
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

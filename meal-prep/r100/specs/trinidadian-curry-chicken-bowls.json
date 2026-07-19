@@ -1,0 +1,241 @@
+﻿{
+    "name":  "Trinidadian Curry Chicken Bowls",
+    "slug":  "trinidadian-curry-chicken-bowls",
+    "cuisine":  "Caribbean / Trinidadian",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "https://gypsyplate.com/trinidadian-curry-chicken/",
+    "source_site":  "GypsyPlate",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +60% (Potato)",
+                   "portion factor 1.6"
+               ],
+    "stat":  {
+                 "cal":  577,
+                 "protein":  58,
+                 "carbs":  34,
+                 "fat":  22,
+                 "cost_ps":  "1.97"
+             },
+    "intro_html":  "Trini curry chicken starts with green seasoning and blooming curry powder in hot oil, and ends with chicken and potatoes swimming in gravy you will want to drink. Each bowl delivers a massive \u003cstrong\u003e58 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$1.97\u003c/strong\u003e. Island flavor, gas station coffee price.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 8.5 lb (3810 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 22 tbsp (22 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.75 cups (137 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 (308 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 5.75 tbsp (48 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 8.75 tbsp (78 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 10 (2143 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Boneless Skinless Chicken Thigh, 8.5 lb: ~$20.83. \u003cstrong\u003eBuy 9 lbs: $22.32.\u003c/strong\u003e",
+                       "Fresh Cilantro, 22 tbsp: ~$0.69. \u003cstrong\u003eBuy 1 bunch: $1.78.\u003c/strong\u003e",
+                       "Vegetable Oil, 0.75 cups: ~$0.33. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Yellow Onion, 3: ~$0.77. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Garlic, 5.75 tbsp: ~$0.69. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Jalapeno, 8.75 tbsp: ~$0.30. \u003cstrong\u003eBuy 1 lb: $1.76.\u003c/strong\u003e",
+                       "Potato, 10: ~$2.08. \u003cstrong\u003eBuy 5 lbs: $2.20.\u003c/strong\u003e",
+                       "Pantry seasonings (ground cumin, curry powder, ground turmeric, garam masala, salt, black pepper): ~$1.86. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $27.55 across 14 servings, so roughly $1.97 per bowl.\u003c/strong\u003e",
+                       "\u003cstrong\u003eTrue shopping cost: about $32.54 across 14 servings, roughly $2.32 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.97 a bowl\u003c/strong\u003e for Trinidadian curry chicken with potatoes. A Caribbean takeout plate runs $13 or more, so this batch saves you roughly $150 versus eating out 14 times.",
+    "shop_smart":  [
+                       "This recipe leans hard on chicken thighs, 8.5 pounds at about $20.83. That is the biggest protein load in this series per dollar, thighs at $2.45 a pound are hard to beat.",
+                       "Potatoes stretch the batch at about $2.14 for 10 of them. Pound for pound, potatoes are still the cheapest filling food in the store, use them.",
+                       "Curry powder, turmeric, cumin, and garam masala look like a long list, but they are jars you buy once. The fresh cash for this batch is basically chicken, potatoes, and an onion."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Blend or finely chop the cilantro, garlic, jalapeno, and half the onion into a rough green seasoning paste. Toss the chicken thighs, cut into large chunks, with the paste and a big pinch of salt. Let it sit at least 15 minutes, longer if you have it.",
+                    "Stir the curry powder, turmeric, cumin, and garam masala with a few tablespoons of water to make a slurry.",
+                    "Heat the vegetable oil in your largest pot over medium-high. Pour in the curry slurry and fry it, stirring, until the water cooks off and the oil separates and the kitchen smells serious, 2 to 3 minutes.",
+                    "Add the chicken and remaining onion and stir to coat every piece in the fried curry. Cook 5 minutes, letting the chicken release its own liquid.",
+                    "Add the potatoes, peeled and cut in chunks, plus enough water to come halfway up. Cover and simmer until the potatoes are tender, the gravy thickens, and the chicken reads 165F, about 25 minutes.",
+                    "Taste for salt and black pepper, and mash a few potato chunks against the pot wall if you want the gravy thicker."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty pot weight you wrote down, and divide by 14. Portion to that number and each bowl lands at about 577 calories with 58 grams of protein, the highest protein count on this page.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://gypsyplate.com/trinidadian-curry-chicken/\" target=\"_blank\" rel=\"noopener\"\u003eGypsyPlate\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Hearty dinners for about $1.97 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  27.55,
+    "cost_batch_true":  32.54,
+    "cost_per_serving":  1.97,
+    "cost_per_serving_true":  2.32,
+    "scaler":  {
+                   "cost":  "32.54",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Thigh",
+                                   "grams":  3810,
+                                   "buy":  "8.5 lb",
+                                   "bid":  "boneless-skinless-chicken-thigh",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "grams":  22,
+                                   "buy":  "22 tbsp",
+                                   "bid":  "cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  6,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Curry Powder",
+                                   "grams":  70,
+                                   "buy":  "11 tbsp",
+                                   "bid":  "curry-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Turmeric",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "ground-turmeric",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garam Masala",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "garam-masala",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "grams":  137,
+                                   "buy":  "0.75 cups",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  308,
+                                   "buy":  "3",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  48,
+                                   "buy":  "5.75 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "grams":  78,
+                                   "buy":  "8.75 tbsp",
+                                   "bid":  "jalapenos",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "grams":  2143,
+                                   "buy":  "10",
+                                   "bid":  "potato",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  32,
+                                   "buy":  "1.75 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  6,
+                                   "buy":  "0.75 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Trinidadian curry chicken meal prep: 14 bowls, 577 calories and 58g protein each, about $1.97 a serving. Chicken thighs and potatoes in curry gravy.",
+                 "keywords":  "trinidadian curry chicken, trini curry, caribbean chicken recipe, curry chicken meal prep, high protein meal prep, budget curry",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT65M",
+                 "costPerServing":  1.97,
+                 "recipeIngredient":  [
+                                          "8.5 lb boneless skinless chicken thighs",
+                                          "10 potatoes (2143 g)",
+                                          "22 tbsp fresh cilantro",
+                                          "3 yellow onions",
+                                          "5.75 tbsp garlic",
+                                          "8.75 tbsp jalapeno",
+                                          "0.75 cup vegetable oil"
+                                      ],
+                 "steps":  [
+                               "Marinate chicken chunks in a blended green seasoning of cilantro, garlic, jalapeno, and onion.",
+                               "Fry a curry powder and spice slurry in hot oil until the oil separates.",
+                               "Add chicken and onion and coat in the fried curry.",
+                               "Add potato chunks and water, then cover and simmer until tender and 165F.",
+                               "Thicken the gravy, season, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Boneless Skinless Chicken Thigh",
+                                  "grams":  3810
+                              },
+                              {
+                                  "item":  "Fresh Cilantro",
+                                  "grams":  22
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  6
+                              },
+                              {
+                                  "item":  "Curry Powder",
+                                  "grams":  70
+                              },
+                              {
+                                  "item":  "Ground Turmeric",
+                                  "grams":  4
+                              },
+                              {
+                                  "item":  "Garam Masala",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  137
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  308
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  48
+                              },
+                              {
+                                  "item":  "Jalapeno",
+                                  "grams":  78
+                              },
+                              {
+                                  "item":  "Potato",
+                                  "grams":  2143
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  32
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  6
+                              }
+                          ]
+}

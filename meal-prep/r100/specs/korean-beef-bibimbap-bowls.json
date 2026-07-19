@@ -1,0 +1,288 @@
+﻿{
+    "name":  "Korean Beef Bibimbap Bowls",
+    "slug":  "korean-beef-bibimbap-bowls",
+    "cuisine":  "Korean",
+    "protein":  "ground beef",
+    "visibility":  "paid",
+    "source_url":  "https://wellnessmama.com/recipes/korean-rice-bowls/",
+    "source_site":  "Wellness Mama",
+    "manual_balance":  false,
+    "tuning":  [
+                   "base +20% (Rice)"
+               ],
+    "stat":  {
+                 "cal":  567,
+                 "protein":  38,
+                 "carbs":  69,
+                 "fat":  15,
+                 "cost_ps":  "2.47"
+             },
+    "intro_html":  "Bibimbap is the original meal prep bowl: rice on the bottom, savory-sweet gochujang beef, crisp cucumber and carrot, and an egg on top. Ours delivers \u003cstrong\u003e38 grams of protein\u003c/strong\u003e per bowl for about \u003cstrong\u003e$2.47\u003c/strong\u003e, which is roughly what the restaurant version charges just for the egg and the smile.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eGochujang (generic):\u003c/strong\u003e 0.5 cups (140 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 3.5 tbsp (56 g)",
+                                "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 3.5 tbsp (52 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 3.5 tbsp (74 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1.25 tbsp (16 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5.25 cups dry (970 g)",
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 3.5 lb (1588 g)",
+                                "\u003cstrong\u003eSugar-Free Maple Syrup (generic):\u003c/strong\u003e 7 tbsp (119 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 5 (320 g)",
+                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 3.5 (1050 g)",
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 13.25 tbsp (79 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 14 large eggs (700 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Gochujang, 0.5 cups: ~$1.29. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Soy Sauce, 3.5 tbsp: ~$0.22. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice Vinegar, 3.5 tbsp: ~$0.43. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Honey, 3.5 tbsp: ~$0.65. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Sesame Oil, 1.25 tbsp: ~$0.30. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 5.25 cups dry: ~$1.71. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "93/7 Ground Beef, 3.5 lb: ~$21.60. \u003cstrong\u003eBuy 4 lbs: $24.68.\u003c/strong\u003e",
+                       "Sugar-Free Maple Syrup, 7 tbsp: ~$0.47. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Carrots, 5: ~$2.18. \u003cstrong\u003eBuy 1 lb: $3.09.\u003c/strong\u003e",
+                       "Cucumber, 3.5: ~$2.66. \u003cstrong\u003eBuy 4 eachs: $3.04.\u003c/strong\u003e",
+                       "Green Onions, 13.25 tbsp: ~$0.94. \u003cstrong\u003eBuy 1 bunch: $1.07.\u003c/strong\u003e",
+                       "Eggs, 14 large eggs: ~$1.72. \u003cstrong\u003eBuy 2 dozens: $2.94.\u003c/strong\u003e",
+                       "Pantry seasonings (garlic powder, toasted sesame seeds, salt, black pepper): ~$0.36. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $34.53 across 14 servings, so roughly $2.47 per bowl.\u003c/strong\u003e",
+                       "\u003cstrong\u003eTrue shopping cost: about $40.25 across 14 servings, roughly $2.88 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$2.47 a bowl\u003c/strong\u003e for bibimbap that runs $14 to $16 at a Korean restaurant. Fourteen bowls for the price of two nights out is the kind of math we like around here.",
+    "shop_smart":  [
+                       "Ground beef is over 60 percent of this batch cost. The 4 pound value pack drops the per-pound price enough to matter, and the extra half pound freezes fine.",
+                       "One tub of gochujang covers several batches of this recipe. It looks pricey on the shelf but works out to about $1.29 per batch, which is cheap heat.",
+                       "Cucumbers are the sneaky cost here at four for about $3. If your store sells them loose, weigh a few and pick the heavy ones. Same price, more food."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice: 5.25 cups dry rice with water per your rice cooker or pot method.",
+                    "Whisk the sauce: gochujang, soy sauce, rice vinegar, honey, and sesame oil.",
+                    "Brown the ground beef in your big pot over medium-high until no pink remains, then drain. Stir in the sugar-free maple syrup, garlic powder, and half the sauce, and simmer 3 minutes.",
+                    "Shred the carrots and thin-slice the cucumbers. Toss the cucumbers with a pinch of salt so they stay crisp in the fridge.",
+                    "Fry or soft-scramble the 14 eggs. For meal prep that keeps, cook the yolks through.",
+                    "Build each bowl: rice, beef, carrots, cucumber, one egg, a drizzle of the remaining sauce, and a sprinkle of green onion and sesame seeds."
+                ],
+    "portion_html":  "Weigh the pot of finished beef, subtract the empty pot number from step 1, and divide by 14 so every bowl gets the same share. Do the same quick math on the rice. Each assembled bowl lands at 567 calories and 38 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://wellnessmama.com/recipes/korean-rice-bowls/\" target=\"_blank\" rel=\"noopener\"\u003eWellness Mama\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Hearty dinners for about $2.47 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  34.53,
+    "cost_batch_true":  40.25,
+    "cost_per_serving":  2.47,
+    "cost_per_serving_true":  2.88,
+    "scaler":  {
+                   "cost":  "40.25",
+                   "ing":  [
+                               {
+                                   "item":  "Gochujang",
+                                   "grams":  140,
+                                   "buy":  "0.5 cups",
+                                   "bid":  "gochujang",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  56,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice Vinegar",
+                                   "grams":  52,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "rice-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "grams":  74,
+                                   "buy":  "3.5 tbsp",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "grams":  16,
+                                   "buy":  "1.25 tbsp",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  3,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Toasted Sesame Seeds",
+                                   "grams":  10,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "toasted-sesame-seeds",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  970,
+                                   "buy":  "5.25 cups dry",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  1588,
+                                   "buy":  "3.5 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Sugar-Free Maple Syrup",
+                                   "grams":  119,
+                                   "buy":  "7 tbsp",
+                                   "bid":  "sugar-free-maple-syrup",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "grams":  320,
+                                   "buy":  "5",
+                                   "bid":  "shredded-carrots",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cucumber",
+                                   "grams":  1050,
+                                   "buy":  "3.5",
+                                   "bid":  "cucumbers",
+                                   "gpu":  "300.000"
+                               },
+                               {
+                                   "item":  "Green Onions",
+                                   "grams":  79,
+                                   "buy":  "13.25 tbsp",
+                                   "bid":  "green-onions",
+                                   "gpu":  "90.000"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "grams":  700,
+                                   "buy":  "14 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Korean beef bibimbap meal prep bowls: 567 calories and 38g protein at about $2.47 a serving. Gochujang beef, rice, veggies, and an egg in 14 bowls.",
+                 "keywords":  "beef bibimbap meal prep, korean beef bowls, gochujang ground beef, budget korean recipe, rice bowl meal prep, cheap high protein dinner",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT25M",
+                 "cookTime":  "PT30M",
+                 "totalTime":  "PT55M",
+                 "costPerServing":  2.47,
+                 "recipeIngredient":  [
+                                          "3.5 lb 93/7 ground beef",
+                                          "5.25 cups dry rice",
+                                          "0.5 cups gochujang",
+                                          "3.5 tbsp soy sauce",
+                                          "3.5 tbsp rice vinegar",
+                                          "3.5 tbsp honey",
+                                          "1.25 tbsp sesame oil",
+                                          "7 tbsp sugar-free maple syrup",
+                                          "5 carrots",
+                                          "3.5 cucumbers",
+                                          "14 large eggs",
+                                          "13.25 tbsp green onions"
+                                      ],
+                 "steps":  [
+                               "Cook the rice.",
+                               "Whisk gochujang, soy sauce, rice vinegar, honey, and sesame oil into a sauce.",
+                               "Brown the beef, drain, then simmer with syrup, garlic powder, and half the sauce.",
+                               "Shred carrots, slice and salt the cucumbers, and cook the eggs through.",
+                               "Assemble 14 bowls: rice, beef, vegetables, egg, remaining sauce, green onion, and sesame seeds."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Gochujang",
+                                  "grams":  140
+                              },
+                              {
+                                  "item":  "Soy Sauce",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Rice Vinegar",
+                                  "grams":  52
+                              },
+                              {
+                                  "item":  "Honey",
+                                  "grams":  74
+                              },
+                              {
+                                  "item":  "Sesame Oil",
+                                  "grams":  16
+                              },
+                              {
+                                  "item":  "Garlic Powder",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Toasted Sesame Seeds",
+                                  "grams":  10
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  970
+                              },
+                              {
+                                  "item":  "93/7 Ground Beef",
+                                  "grams":  1588
+                              },
+                              {
+                                  "item":  "Sugar-Free Maple Syrup",
+                                  "grams":  119
+                              },
+                              {
+                                  "item":  "Carrots",
+                                  "grams":  320
+                              },
+                              {
+                                  "item":  "Cucumber",
+                                  "grams":  1050
+                              },
+                              {
+                                  "item":  "Green Onions",
+                                  "grams":  79
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  4
+                              }
+                          ]
+}

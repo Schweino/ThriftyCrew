@@ -1,0 +1,159 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"ethiopian-doro-wat-chicken-bowls","base":14,"cost":39.34,"ing":[{"item":"Boneless Skinless Chicken Thigh","grams":3175,"buy":"7 lb","bid":"boneless-skinless-chicken-thigh","gpu":453.592},{"item":"Lemon Juice","grams":164,"buy":"3.5","bid":"lemon-juice","gpu":29.570},{"item":"Red Onion","grams":770,"buy":"7","bid":"onions","gpu":453.592},{"item":"Vegetable Oil","grams":147,"buy":"0.75 cups","bid":"vegetable-oil","gpu":28.000},{"item":"Garlic","grams":105,"buy":"12.25 tbsp","bid":"garlic","gpu":50.000},{"item":"Ginger","grams":21,"buy":"3.5 tbsp","bid":"ginger","gpu":453.592},{"item":"Berbere Seasoning","grams":60,"buy":"8.75 tbsp"},{"item":"Paprika","grams":24,"buy":"3.5 tbsp","bid":"paprika","gpu":28.350},{"item":"Tomato Paste","grams":112,"buy":"7 tbsp","bid":"tomato-paste","gpu":28.350},{"item":"Chicken Broth","grams":1260,"buy":"2.75 lb","bid":"chicken-broth","gpu":29.570},{"item":"Butter","grams":98,"buy":"7 tbsp","bid":"butter","gpu":453.592},{"item":"Eggs","grams":875,"buy":"18 large eggs","bid":"eggs","gpu":600.000},{"item":"Salt","grams":20,"buy":"1 tbsp","bid":"salt","gpu":28.350},{"item":"Black Pepper","grams":4,"buy":"0.5 tbsp","bid":"black-pepper","gpu":28.350}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~574 cal &middot; 54g protein &middot; 13g carbs &middot; 32g fat &middot; ~$2.48 per serving.</strong></p>
+
+<p>Ethiopia's national dish: chicken thighs braised in a deep red berbere and slow-cooked onion sauce, finished with hard boiled eggs. Each bowl brings a serious <strong>54 grams of protein</strong> at just 574 calories for about <strong>$2.48</strong>. The onions cook down into the sauce itself, so there is no flour, no cream, and no filler.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Boneless Skinless Chicken Thigh (Member's Mark):</strong> 7 lb (3175 g)</li>
+<li><strong>Lemon Juice (ReaLemon):</strong> 3.5 (164 g)</li>
+<li><strong>Red Onion:</strong> 7 (770 g)</li>
+<li><strong>Vegetable Oil (Great Value):</strong> 0.75 cups (147 g)</li>
+<li><strong>Garlic:</strong> 12.25 tbsp (105 g)</li>
+<li><strong>Ginger (generic):</strong> 3.5 tbsp (21 g)</li>
+<li><strong>Tomato Paste (Great Value):</strong> 7 tbsp (112 g)</li>
+<li><strong>Chicken Broth (Swanson):</strong> 2.75 lb (1260 g)</li>
+<li><strong>Butter (generic):</strong> 7 tbsp (98 g)</li>
+<li><strong>Eggs (Great Value):</strong> 18 large eggs (875 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Boneless Skinless Chicken Thigh, 7 lb: ~$17.36. <strong>Buy 7 lbs: $17.36.</strong></li>
+<li>Lemon Juice, 3.5: ~$0.62. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Red Onion, 7: ~$1.94. <strong>Buy 2 lbs: $2.28.</strong></li>
+<li>Vegetable Oil, 0.75 cups: ~$0.36. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Garlic, 12.25 tbsp: ~$1.51. <strong>Buy 3 heads: $1.73.</strong></li>
+<li>Ginger, 3.5 tbsp: ~$0.16. <strong>Buy 1 piece: $0.75.</strong></li>
+<li>Tomato Paste, 7 tbsp: ~$0.57. <strong>Buy 1 6oz can: $0.86.</strong></li>
+<li>Chicken Broth, 2.75 lb: ~$1.69. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Butter, 7 tbsp: ~$0.66. <strong>Buy 1 lb box: $3.06.</strong></li>
+<li>Eggs, 18 large eggs: ~$2.14. <strong>Buy 2 dozens: $2.94.</strong></li>
+<li>Pantry seasonings (berbere seasoning, paprika, salt, black pepper): ~$7.69. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $34.70 across 14 servings, so roughly $2.48 per bowl.</strong></li>
+<li><strong>True shopping cost: about $39.34 across 14 servings, roughly $2.81 per bowl.</strong> This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches.</li>
+</ul>
+<p>About <strong>$2.48 a bowl</strong> for doro wat. Ethiopian restaurants charge $16 to $20 for this dish with injera, and most towns only have one place that makes it at all. Your fridge is now that place.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Chicken thighs at $17.36 for 7 pounds are the anchor, and thighs are the right cut here anyway; breasts would dry out in a long braise.</li>
+<li>Berbere is the one specialty jar, and it is worth it: the batch uses about $7 worth and one jar keeps seasoning batch after batch. Check international aisles or online before paying spice-boutique prices.</li>
+<li>Eighteen eggs for $2.14 turn each bowl into a two-protein meal. Eggs remain the cheapest protein upgrade in the store.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Cut the chicken thighs into large chunks and toss with the lemon juice and a big pinch of salt. Let them sit while you cook the onions.</li>
+<li>Finely chop the red onions and cook them dry in your big pot over medium-low heat, stirring often, 15 to 20 minutes until soft and deeply golden. This slow onion melt is the backbone of doro wat, so do not rush it.</li>
+<li>Add the vegetable oil, garlic, and ginger and cook 2 minutes. Stir in the berbere and paprika and toast 1 to 2 minutes until brick red and fragrant.</li>
+<li>Stir in the tomato paste, then the chicken broth. Simmer 10 minutes to marry the sauce.</li>
+<li>Add the chicken and simmer gently, partially covered, 25 to 30 minutes until it reaches 165 F and the sauce has thickened. Stir in the butter at the end for gloss.</li>
+<li>Meanwhile, hard boil the eggs: 11 minutes in boiling water, then an ice bath, then peel. Prick or slash each egg lightly and let them warm in the sauce for the last 5 minutes.</li>
+<li>Portion into 14 containers with a hard boiled egg or so in each, covered in sauce.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Weigh the full pot before adding the peeled eggs, subtract the empty pot weight you wrote down, and divide by 14 for the stew, then add the eggs evenly across containers. Each bowl comes out to about 574 calories with 54 grams of protein.</p>
+
+<p><em>Recipe adapted from <a href="https://www.chilipeppermadness.com/recipes/doro-wat/" target="_blank" rel="noopener">Chili Pepper Madness</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Hearty dinners for about $2.48 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>

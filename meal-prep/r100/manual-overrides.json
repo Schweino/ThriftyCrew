@@ -1,0 +1,18 @@
+{
+  "readme": "Explicit grams (at SOURCE serving count) for lines the parser cannot resolve safely. Key: '<proposed_name>::<canonical item>'. Values reviewed by hand against the source recipe's intent. R100 build.",
+  "overrides": {
+    "Arroz con Carne Molida (Mexican Beef and Rice Skillet)::Rice": 400,
+    "Sichuan Dan Dan Noodles with Pork::Broccoli Florets": 454,
+    "Vietnamese Lemongrass Pork Noodle Bowls (Bun Thit Nuong)::Pork Loin": 680,
+    "Trinidadian Curry Chicken Bowls::Curry Powder": 25,
+    "Oyakodon (Japanese Chicken and Egg Rice Bowls)::Rice": 185,
+    "Ground Turkey Broccoli Cheddar Rice Skillet::Broccoli Florets": 300,
+    "Turkey Keema Curry with Peas::Fresh Cilantro": 30,
+    "Turkey Keema Curry with Peas::Rice": 370,
+    "Pastitsio (Greek Beef Pasta Bake)::Ground Cinnamon": 2.6,
+    "Chili Cornbread Casserole::Chicken Broth": 240,
+    "Creamy Mushroom Pork Chops over Mashed Potatoes::Chicken Broth": 240,
+    "Turkey Sausage and Cheesy Grits Bowl::Chicken Broth": 240,
+    "Pastitsio (Greek Beef Pasta Bake)::Beef Broth": 480
+  }
+}

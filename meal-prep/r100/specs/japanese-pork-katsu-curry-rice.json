@@ -1,0 +1,196 @@
+﻿{
+    "name":  "Japanese Pork Katsu Curry Rice",
+    "slug":  "japanese-pork-katsu-curry-rice",
+    "cuisine":  "Japanese",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "https://www.cookeatworld.com/katsu-curry/",
+    "source_site":  "CookEatWorld",
+    "manual_balance":  true,
+    "tuning":  [
+                   "breading clamp 108-\u003e50 g/serving",
+                   "base trimmed -54% (Rice)",
+                   "RICH-DISH FLAG: still \u003e900 after trim - manual balance in spec phase"
+               ],
+    "stat":  {
+                 "cal":  953,
+                 "protein":  51,
+                 "carbs":  99,
+                 "fat":  36,
+                 "cost_ps":  "3.43"
+             },
+    "intro_html":  "Crispy breaded pork cutlets sliced over rice and blanketed in glossy Japanese curry sauce. This is the splurge bowl of the section, built big on purpose: \u003cstrong\u003e51 grams of protein\u003c/strong\u003e and 953 calories for about \u003cstrong\u003e$3.43\u003c/strong\u003e. Save it for the hungriest week on your calendar.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.25 cups dry (600 g)",
+                                "\u003cstrong\u003eJapanese Curry Roux (S\u0026B):\u003c/strong\u003e 7 (644 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 14 tbsp (112 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 7 large eggs (350 g)",
+                                "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 6.5 cups (700 g)",
+                                "\u003cstrong\u003ePork Chops:\u003c/strong\u003e 5.25 lb (2380 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 6 tbsp (84 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Rice, 3.25 cups dry: ~$1.06. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Japanese Curry Roux, 7: ~$20.73. \u003cstrong\u003eBuy 7 3.2oz boxs: $20.73.\u003c/strong\u003e",
+                       "All-Purpose Flour, 14 tbsp: ~$0.13. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Eggs, 7 large eggs: ~$0.86. \u003cstrong\u003eBuy 1 dozen: $1.47.\u003c/strong\u003e",
+                       "Bread Crumbs, 6.5 cups: ~$2.01. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pork Chops, 5.25 lb: ~$21.88. \u003cstrong\u003eBuy 6 lbs: $25.02.\u003c/strong\u003e",
+                       "Vegetable Oil, 6 tbsp: ~$0.20. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (black pepper, salt): ~$1.21. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $48.08 across 14 servings, so roughly $3.43 per bowl.\u003c/strong\u003e",
+                       "\u003cstrong\u003eTrue shopping cost: about $51.83 across 14 servings, roughly $3.70 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$3.43 a bowl\u003c/strong\u003e for a katsu curry plate that runs $16 at a Japanese restaurant, and theirs comes with one cutlet and a polite scoop of rice.",
+    "shop_smart":  [
+                       "The boxed curry roux is the shocker: $20.73, over 40 percent of this batch. Our Japanese ground beef curry recipe builds the same style of sauce from flour and curry powder for a fraction of that if you want the cheaper route.",
+                       "Pork chops at about $4.17 a pound do katsu duty just as well as pricier cutlets once they are pounded thin. The 6 lb pack keeps the unit price down.",
+                       "Generic bread crumbs cost $2.01 for the whole crust job. Panko is more authentic and still cheap; use whichever is on sale."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Cook the rice: rinse, simmer covered with water until tender, and set aside.",
+                    "Pound the pork chops to about half an inch thick and season both sides with salt and black pepper.",
+                    "Set up a breading line: flour in one dish, beaten eggs in the next, bread crumbs in the third. Coat each chop flour, then egg, then crumbs, pressing so the crust sticks.",
+                    "Shallow fry in the vegetable oil over medium-high heat, 3 to 4 minutes per side, until deep golden and 145F inside. Rest on a rack so the crust stays crisp.",
+                    "Make the curry sauce: bring water to a simmer per the roux package, drop in the curry roux blocks, and stir until dissolved and thick.",
+                    "Slice the cutlets into strips, portion rice into 14 containers, lay the katsu on top, and ladle the curry alongside so the crust is not swimming in it."
+                ],
+    "portion_html":  "Weigh the rice pot and the curry pot, subtract the empty pot number, and divide each by 14, then split the sliced cutlets evenly. Each loaded bowl comes out to about 953 calories and 51 grams of protein.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.cookeatworld.com/katsu-curry/\" target=\"_blank\" rel=\"noopener\"\u003eCookEatWorld\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Hearty dinners for about $3.43 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  48.08,
+    "cost_batch_true":  51.83,
+    "cost_per_serving":  3.43,
+    "cost_per_serving_true":  3.7,
+    "scaler":  {
+                   "cost":  "51.83",
+                   "ing":  [
+                               {
+                                   "item":  "Rice",
+                                   "grams":  600,
+                                   "buy":  "3.25 cups dry",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Japanese Curry Roux",
+                                   "grams":  644,
+                                   "buy":  "7"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "grams":  112,
+                                   "buy":  "14 tbsp",
+                                   "bid":  "flour",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "grams":  350,
+                                   "buy":  "7 large eggs",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Bread Crumbs",
+                                   "grams":  700,
+                                   "buy":  "6.5 cups",
+                                   "bid":  "bread-crumbs",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Pork Chops",
+                                   "grams":  2380,
+                                   "buy":  "5.25 lb",
+                                   "bid":  "pork-chops",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  28,
+                                   "buy":  "4 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "grams":  84,
+                                   "buy":  "6 tbsp",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Japanese pork katsu curry rice meal prep: 953 calories and 51g protein at about $3.43 a serving. Crispy breaded pork cutlets with thick curry sauce.",
+                 "keywords":  "pork katsu curry, katsu curry rice, japanese curry meal prep, breaded pork cutlet, budget dinner recipe",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT30M",
+                 "cookTime":  "PT40M",
+                 "totalTime":  "PT70M",
+                 "costPerServing":  3.43,
+                 "recipeIngredient":  [
+                                          "5.25 lb pork chops",
+                                          "3.25 cups dry rice",
+                                          "7 boxes Japanese curry roux",
+                                          "14 tbsp all-purpose flour",
+                                          "7 large eggs",
+                                          "6.5 cups bread crumbs",
+                                          "6 tbsp vegetable oil"
+                                      ],
+                 "steps":  [
+                               "Cook the rice and set aside.",
+                               "Pound the chops thin, season, and bread them in flour, egg, and bread crumbs.",
+                               "Shallow fry 3 to 4 minutes per side until golden and 145F; rest on a rack.",
+                               "Simmer the curry roux blocks in water until thick.",
+                               "Slice the katsu over rice in 14 containers and ladle the curry alongside."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Rice",
+                                  "grams":  600
+                              },
+                              {
+                                  "item":  "Japanese Curry Roux",
+                                  "grams":  644
+                              },
+                              {
+                                  "item":  "All-Purpose Flour",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Eggs",
+                                  "grams":  350
+                              },
+                              {
+                                  "item":  "Bread Crumbs",
+                                  "grams":  700
+                              },
+                              {
+                                  "item":  "Pork Chops",
+                                  "grams":  2380
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  28
+                              },
+                              {
+                                  "item":  "Vegetable Oil",
+                                  "grams":  84
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  20
+                              }
+                          ]
+}

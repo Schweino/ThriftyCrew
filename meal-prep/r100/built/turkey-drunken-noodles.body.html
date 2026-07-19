@@ -1,0 +1,158 @@
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"turkey-drunken-noodles","base":14,"cost":57.22,"ing":[{"item":"Rice Noodles","grams":1293,"buy":"45.5 oz dry"},{"item":"Soy Sauce","grams":223,"buy":"0.75 cups","bid":"soy-sauce","gpu":28.350},{"item":"Oyster Sauce","grams":189,"buy":"6.75 oz"},{"item":"Fish Sauce","grams":42,"buy":"2.25 tbsp","bid":"fish-sauce","gpu":29.570},{"item":"Brown Sugar","grams":47,"buy":"3.5 tbsp","bid":"brown-sugar","gpu":28.350},{"item":"Sriracha","grams":18,"buy":"1.25 tbsp","bid":"sriracha","gpu":29.570},{"item":"93/7 Ground Turkey","grams":1588,"buy":"3.5 lb","bid":"93-7-ground-turkey","gpu":453.592},{"item":"Jalapeno","grams":98,"buy":"11 tbsp","bid":"jalapenos","gpu":453.592},{"item":"Garlic","grams":70,"buy":"8.25 tbsp","bid":"garlic","gpu":50.000},{"item":"Green Onions","grams":315,"buy":"6.25 cups","bid":"green-onions","gpu":90.000},{"item":"Fresh Basil","grams":42,"buy":"28 tbsp"},{"item":"Salt","grams":20,"buy":"1 tbsp","bid":"salt","gpu":28.350},{"item":"Black Pepper","grams":4,"buy":"0.5 tbsp","bid":"black-pepper","gpu":28.350}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+<p><strong>Makes 14 servings &middot; ~562 cal &middot; 30g protein &middot; 87g carbs &middot; 9g fat &middot; ~$3.53 per serving.</strong></p>
+
+<p>Drunken noodles with ground turkey: all the basil, jalapeno, and chewy rice noodles of pad kee mao, with 9 grams of fat per bowl instead of takeout's mystery number. Each serving brings <strong>30 grams of protein</strong> for about <strong>$3.53</strong>.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>Rice Noodles (Thai Kitchen):</strong> 45.5 oz dry (1293 g)</li>
+<li><strong>Soy Sauce (generic):</strong> 0.75 cups (223 g)</li>
+<li><strong>Oyster Sauce (Lee Kum Kee):</strong> 6.75 oz (189 g)</li>
+<li><strong>Fish Sauce (Thai Kitchen):</strong> 2.25 tbsp (42 g)</li>
+<li><strong>Brown Sugar (generic):</strong> 3.5 tbsp (47 g)</li>
+<li><strong>Sriracha (Huy Fong Foods):</strong> 1.25 tbsp (18 g)</li>
+<li><strong>93/7 Ground Turkey (Jennie-O):</strong> 3.5 lb (1588 g)</li>
+<li><strong>Jalapeno:</strong> 11 tbsp (98 g)</li>
+<li><strong>Garlic:</strong> 8.25 tbsp (70 g)</li>
+<li><strong>Green Onions:</strong> 6.25 cups (315 g)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<ul>
+<li>Rice Noodles, 45.5 oz dry: ~$15.51. <strong>Buy 4 14oz boxs: $19.05.</strong></li>
+<li>Soy Sauce, 0.75 cups: ~$0.88. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Oyster Sauce, 6.75 oz: ~$5.14. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Fish Sauce, 2.25 tbsp: ~$0.40. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Brown Sugar, 3.5 tbsp: ~$1.64. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>Sriracha, 1.25 tbsp: ~$0.13. <strong>Buy 1 (lasts several batches).</strong></li>
+<li>93/7 Ground Turkey, 3.5 lb: ~$15.16. <strong>Buy 4 lbs: $17.32.</strong></li>
+<li>Jalapeno, 11 tbsp: ~$0.38. <strong>Buy 1 lb: $1.76.</strong></li>
+<li>Garlic, 8.25 tbsp: ~$1.01. <strong>Buy 2 heads: $1.15.</strong></li>
+<li>Green Onions, 6.25 cups: ~$3.74. <strong>Buy 4 bunchs: $4.28.</strong></li>
+<li>Pantry seasonings (fresh basil, salt, black pepper): ~$5.47. <strong>From jars you keep on hand.</strong></li>
+<li><strong>Batch total: about $49.46 across 14 servings, so roughly $3.53 per bowl.</strong></li>
+<li><strong>True shopping cost: about $57.22 across 14 servings, roughly $4.09 per bowl.</strong> This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches.</li>
+</ul>
+<p>About <strong>$3.53 a bowl</strong> for lean drunken noodles. The Thai restaurant charges $14 for pad kee mao, and theirs is not built around 93/7 turkey with macros you can actually track.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Rice noodles are the top line at about $16.79. An Asian market sells wide rice noodles for a fraction of the name-brand box price, and wide noodles are the authentic move for pad kee mao anyway.</li>
+<li>Ground turkey at about $12.71 for 3.5 pounds beats ground beef on price and fat both. Watch for the frozen rolls, they run cheaper still.</li>
+<li>Oyster sauce, fish sauce, and sriracha are all one-bottle buys that season this batch for about $3 combined and stay in your fridge door for the next ten recipes.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Weigh your empty mixing pot and write the number down for portioning later.</li>
+<li>Soak or boil the rice noodles per the package until just shy of tender, drain, and rinse.</li>
+<li>Stir together the soy sauce, oyster sauce, fish sauce, brown sugar, and sriracha for the sauce.</li>
+<li>Heat your largest skillet or pot over high heat and brown the ground turkey, breaking it into crumbles, until cooked through to 165F with some crispy edges.</li>
+<li>Add the garlic and jalapeno and stir fry 1 minute.</li>
+<li>Add the noodles and the sauce and toss until the noodles drink up the sauce and everything is glossy.</li>
+<li>Off the heat, fold in the green onions and fresh basil so they wilt without cooking flat.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Weigh the full pot, subtract the empty pot weight you wrote down, and divide by 14. Portion to that number and each bowl lands at about 562 calories with 30 grams of protein.</p>
+
+<p><em>Recipe adapted from <a href="https://www.theroastedroot.net/drunken-noodles-pad-kee-mao-with-ground-turkey/" target="_blank" rel="noopener">The Roasted Root</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+
+<hr>
+<p><em>Hearty dinners for about $3.53 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>

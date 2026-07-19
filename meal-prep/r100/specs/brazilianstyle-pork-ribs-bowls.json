@@ -1,0 +1,243 @@
+﻿{
+    "name":  "Brazilian-Style Pork Ribs Bowls",
+    "slug":  "brazilianstyle-pork-ribs-bowls",
+    "cuisine":  "Brazilian",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "https://www.easyanddelish.com/from-brazil-to-you-brazilian-style-pork-ribs-costela-de-porco-assada/",
+    "source_site":  "Easy and Delish",
+    "manual_balance":  false,
+    "tuning":  [
+                   "added Rice base 500g (src scale)",
+                   "base +50% (Rice)"
+               ],
+    "stat":  {
+                 "cal":  565,
+                 "protein":  44,
+                 "carbs":  68,
+                 "fat":  10,
+                 "cost_ps":  "1.09"
+             },
+    "intro_html":  "Brazilian churrasco flavor on a Nebraska budget: pork marinated in garlic, mustard, Worcestershire, vinegar, and honey, roasted until the edges caramelize, then served over rice. Each bowl brings \u003cstrong\u003e44 grams of protein\u003c/strong\u003e and 565 calories for about \u003cstrong\u003e$1.09\u003c/strong\u003e. That is the cheapest serving of any recipe in its weight class.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 5.5 lb (2540 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 6.5 tbsp (56 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 (98 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 1.5 tbsp (21 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1.5 tbsp (24 g)",
+                                "\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 7.5 tbsp (112 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 2 tbsp (40 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 6.25 cups dry (1140 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_lines":  [
+                       "Pork Loin, 5.5 lb: ~$11.09. \u003cstrong\u003eBuy 6 lbs: $11.88.\u003c/strong\u003e",
+                       "Garlic, 6.5 tbsp: ~$0.81. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
+                       "Yellow Onion, 1: ~$0.25. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
+                       "Dijon Mustard, 1.5 tbsp: ~$0.11. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Worcestershire Sauce, 1.5 tbsp: ~$0.08. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Apple Cider Vinegar, 7.5 tbsp: ~$0.28. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Honey, 2 tbsp: ~$0.35. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 6.25 cups dry: ~$2.01. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Pantry seasonings (salt, black pepper, dried oregano, ground cumin, cayenne pepper): ~$0.27. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
+                       "\u003cstrong\u003eBatch total: about $15.25 across 14 servings, so roughly $1.09 per bowl.\u003c/strong\u003e",
+                       "\u003cstrong\u003eTrue shopping cost: about $17.27 across 14 servings, roughly $1.23 per bowl.\u003c/strong\u003e This is what you actually pay when you buy whole packages, since you cannot grab a partial box, can, or jar, and you will have a little left over for next time. Pantry staples like rice, seasoning, and long-lasting sauces are counted at what this batch actually uses, because one package covers several batches."
+                   ],
+    "cost_closing_html":  "About \u003cstrong\u003e$1.09 a bowl\u003c/strong\u003e for churrasco-style pork that a Brazilian steakhouse charges more than that just to hand you the little green card.",
+    "shop_smart":  [
+                       "We swap pork loin in for ribs, and that one substitution is the whole budget story: loin runs about a third the per-pound price of ribs with far more meat and no bones to pay for.",
+                       "Mustard, Worcestershire, vinegar, and honey are all pantry bottles that last several batches, so the recurring cost of this recipe is basically pork and rice.",
+                       "Watch for whole pork loins on sale under $2 a pound. Buy the big one, cut it into batch-size pieces, and freeze; it holds quality for months."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Whisk the marinade: minced garlic, grated onion, Dijon mustard, Worcestershire sauce, apple cider vinegar, honey, salt, pepper, oregano, cumin, and cayenne.",
+                    "Cut the pork loin into thick slabs (about 1.5 inches), coat them in the marinade, and refrigerate at least 2 hours, overnight if you can plan that far ahead.",
+                    "Preheat the oven to 375F. Arrange the pork in a roasting pan, pour any extra marinade over, and cover tightly with foil.",
+                    "Roast covered for 35 to 40 minutes, then uncover, spoon the pan juices back over the meat, and roast 15 to 20 minutes more until the edges brown and the pork reaches at least 145F.",
+                    "Rest the pork 10 minutes, then slice or cube it and toss it back through the pan juices.",
+                    "While the pork roasts, cook 6.25 cups dry rice with water per package directions.",
+                    "Combine the rice, pork, and every drop of pan sauce in your weighed pot."
+                ],
+    "portion_html":  "Put the full pot on the scale, subtract the empty-pot number, and divide by 14. Scoop each portion into a container, making sure the pan juices get shared out evenly. Every bowl carries \u003cstrong\u003e565 calories and 44 grams of protein\u003c/strong\u003e.",
+    "credit_html":  "Recipe adapted from \u003ca href=\"https://www.easyanddelish.com/from-brazil-to-you-brazilian-style-pork-ribs-costela-de-porco-assada/\" target=\"_blank\" rel=\"noopener\"\u003eEasy and Delish\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
+    "upsell_html":  "Hearty dinners for about $1.09 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  15.25,
+    "cost_batch_true":  17.27,
+    "cost_per_serving":  1.09,
+    "cost_per_serving_true":  1.23,
+    "scaler":  {
+                   "cost":  "17.27",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Loin",
+                                   "grams":  2540,
+                                   "buy":  "5.5 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  56,
+                                   "buy":  "6.5 tbsp",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  98,
+                                   "buy":  "1",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  34,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "grams":  21,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "grams":  24,
+                                   "buy":  "1.5 tbsp",
+                                   "bid":  "worcestershire",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  1,
+                                   "buy":  "0.25 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cayenne Pepper",
+                                   "grams":  3,
+                                   "buy":  "0.5 tbsp",
+                                   "bid":  "cayenne-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Apple Cider Vinegar",
+                                   "grams":  112,
+                                   "buy":  "7.5 tbsp",
+                                   "bid":  "apple-cider-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "grams":  40,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  1140,
+                                   "buy":  "6.25 cups dry",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "Brazilian-style marinated pork meal prep bowls over rice, roasted until caramelized. 565 calories and 44g protein for about $1.09 a serving.",
+                 "keywords":  "brazilian pork bowls, pork rice bowls, marinated pork loin, budget meal prep, cheap high protein meals, churrasco at home",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT1H",
+                 "totalTime":  "PT1H20M",
+                 "costPerServing":  1.09,
+                 "recipeIngredient":  [
+                                          "5.5 lb pork loin",
+                                          "6.25 cups dry rice",
+                                          "6.5 tbsp garlic",
+                                          "7.5 tbsp apple cider vinegar",
+                                          "2 tbsp honey",
+                                          "1.5 tbsp Dijon mustard"
+                                      ],
+                 "steps":  [
+                               "Whisk garlic, onion, mustard, Worcestershire, vinegar, honey, and spices into a marinade.",
+                               "Cut the pork loin into thick slabs and marinate at least 2 hours.",
+                               "Roast covered at 375F for 35 to 40 minutes, then uncovered 15 to 20 more until browned and at least 145F.",
+                               "Rest, slice, and toss the pork back through the pan juices.",
+                               "Cook the rice, combine with the pork and sauce, and portion into 14 containers."
+                           ]
+             },
+    "ingredients_grams":  [
+                              {
+                                  "item":  "Pork Loin",
+                                  "grams":  2540
+                              },
+                              {
+                                  "item":  "Garlic",
+                                  "grams":  56
+                              },
+                              {
+                                  "item":  "Yellow Onion",
+                                  "grams":  98
+                              },
+                              {
+                                  "item":  "Salt",
+                                  "grams":  34
+                              },
+                              {
+                                  "item":  "Black Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Dijon Mustard",
+                                  "grams":  21
+                              },
+                              {
+                                  "item":  "Worcestershire Sauce",
+                                  "grams":  24
+                              },
+                              {
+                                  "item":  "Dried Oregano",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Ground Cumin",
+                                  "grams":  1
+                              },
+                              {
+                                  "item":  "Cayenne Pepper",
+                                  "grams":  3
+                              },
+                              {
+                                  "item":  "Apple Cider Vinegar",
+                                  "grams":  112
+                              },
+                              {
+                                  "item":  "Honey",
+                                  "grams":  40
+                              },
+                              {
+                                  "item":  "Rice",
+                                  "grams":  1140
+                              }
+                          ]
+}
