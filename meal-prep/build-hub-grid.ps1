@@ -109,7 +109,23 @@ $html=$html.Replace('113 high-protein meal prep dinners.', "$total high-protein 
 $html=$html.Replace('All 113 recipes with full instructions', "All $total recipes with full instructions")
 $html=$html.Replace('113 high-protein dinners, macros from real', "$total high-protein dinners, macros from real")
 
+# 4) members-only recipe-suggestion form (idempotent; inserted before the final CTA)
+$formSrc=[IO.File]::ReadAllText((Join-Path $root 'recipe-request-form.html'),[Text.Encoding]::UTF8).Trim()
+$formBlock='<!--RECIPE-SUGGEST-START--><div class="mpr-suggest" style="margin:3.4rem 0 0">'+$formSrc+'</div><!--RECIPE-SUGGEST-END-->'
+$rs='<!--RECIPE-SUGGEST-START-->'; $re='<!--RECIPE-SUGGEST-END-->'
+$rsi=$html.IndexOf($rs)
+if($rsi -ge 0){
+  $ree=$html.IndexOf($re,$rsi)+$re.Length
+  $html=$html.Substring(0,$rsi)+$formBlock+$html.Substring($ree)
+} else {
+  $ctaTok='<div class="mpr-cta">'
+  $ci=$html.IndexOf($ctaTok); if($ci -lt 0){ throw 'mpr-cta not found for form insert' }
+  $html=$html.Substring(0,$ci)+$formBlock+$html.Substring($ci)
+}
+
 # --- guards ---
+if($html -notmatch [regex]::Escape('id="smprrf-form"')){ throw 'recipe-suggest form missing after splice' }
+if(([regex]::Matches($html,'<!--RECIPE-SUGGEST-START-->')).Count -ne 1){ throw 'recipe-suggest markers not unique' }
 $nCards=([regex]::Matches($html,'<div class="mpr-card"')).Count
 if($nCards -ne $total){ throw "card count $nCards != $total" }
 if($counts.chicken+$counts.pork+$counts.beef+$counts.turkey -ne $total){ throw 'counts do not sum to total' }

@@ -1,0 +1,136 @@
+<div id="smprrf-root">
+<style>
+#smprrf-root{--navy:#16263f;--gold:#e2a43c;--gold-d:#8a6d1f;--cream:#f6f1e7;--ink:#3a4658;--line:#e2e8f0;--err:#b23b2e;--ok:#1f7a4d;
+  max-width:640px;margin:0 auto;font-size:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;}
+#smprrf-root *{box-sizing:border-box;}
+.smprrf-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:28px 26px;box-shadow:0 8px 30px rgba(22,38,63,.08);}
+.smprrf-h{color:var(--navy);font-size:1.5em;line-height:1.25;font-weight:800;margin:0 0 6px;}
+.smprrf-sub{color:var(--ink);font-size:1em;line-height:1.5;margin:0 0 20px;}
+.smprrf-field{margin:0 0 16px;}
+.smprrf-field label{display:block;color:var(--navy);font-weight:700;font-size:.92em;margin:0 0 6px;}
+.smprrf-req{color:var(--err);font-weight:700;}
+.smprrf-opt{color:var(--ink);font-weight:400;font-size:.85em;opacity:.75;}
+.smprrf-field input{width:100%;padding:12px 13px;font-size:1em;color:var(--navy);background:#fff;
+  border:1.5px solid var(--line);border-radius:10px;transition:border-color .15s,box-shadow .15s;appearance:none;}
+.smprrf-field input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,164,60,.22);}
+.smprrf-note{color:var(--ink);font-size:.83em;line-height:1.45;margin:6px 2px 0;}
+.smprrf-hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;overflow:hidden;}
+.smprrf-btn{width:100%;margin-top:4px;padding:14px 18px;font-size:1.05em;font-weight:800;color:var(--navy);
+  background:var(--gold);border:none;border-radius:10px;cursor:pointer;transition:filter .15s,transform .05s;}
+.smprrf-btn:hover{filter:brightness(1.04);}
+.smprrf-btn:active{transform:translateY(1px);}
+.smprrf-btn:disabled{opacity:.6;cursor:default;}
+.smprrf-msg{margin-top:14px;padding:12px 14px;border-radius:10px;font-size:.95em;line-height:1.45;display:none;}
+.smprrf-msg.ok{display:block;background:#eaf6ef;color:var(--ok);border:1px solid #bfe3cd;}
+.smprrf-msg.bad{display:block;background:#fbeceb;color:var(--err);border:1px solid #f2c9c5;}
+.smprrf-gate{color:var(--ink);font-size:1em;line-height:1.6;margin:0 0 4px;}
+.smprrf-hide{display:none!important;}
+@media (max-width:520px){.smprrf-card{padding:22px 18px;border-radius:14px;}.smprrf-h{font-size:1.3em;}}
+</style>
+
+<div class="smprrf-card">
+  <h3 class="smprrf-h">Got a recipe we should add?</h3>
+
+  <!-- shown while we check membership -->
+  <p class="smprrf-sub" id="smprrf-load">Checking your membership...</p>
+
+  <!-- shown to non-members / free members -->
+  <div class="smprrf-hide" id="smprrf-gatewrap">
+    <p class="smprrf-gate">Suggesting recipes is a member perk. Members get every recipe with full instructions, grocery lists, and live prices, and they can send us dishes to add next.</p>
+    <a class="smprrf-btn" style="display:block;text-align:center;text-decoration:none;margin-top:14px" href="https://www.thriftycrew.com/#/portal/signup">Join for $1 a month</a>
+  </div>
+
+  <!-- shown to paid members -->
+  <form id="smprrf-form" class="smprrf-hide" novalidate>
+    <p class="smprrf-sub">Found a dish you'd love us to build a budget, high-protein version of? Send it over and we'll look at adding it to the library.</p>
+
+    <div class="smprrf-field">
+      <label for="smprrf-name">Recipe name <span class="smprrf-req">*</span></label>
+      <input type="text" id="smprrf-name" name="recipe" placeholder="e.g. Chicken tikka masala" maxlength="300" required autocomplete="off">
+    </div>
+
+    <div class="smprrf-field">
+      <label for="smprrf-url">Recipe URL <span class="smprrf-req">*</span></label>
+      <input type="url" id="smprrf-url" name="url" placeholder="https://..." maxlength="2000" required autocomplete="off" inputmode="url">
+      <p class="smprrf-note"><strong>Required.</strong> A link to the recipe you have in mind lets us match the flavors and rebuild it as a 14-serving, macro-counted meal prep.</p>
+    </div>
+
+    <div class="smprrf-field">
+      <label for="smprrf-email">Enter email to be notified when it's added <span class="smprrf-opt">(optional)</span></label>
+      <input type="email" id="smprrf-email" name="email" placeholder="you@example.com" maxlength="200" autocomplete="email" inputmode="email">
+    </div>
+
+    <div class="smprrf-hp" aria-hidden="true">
+      <label>Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+    </div>
+
+    <button type="submit" class="smprrf-btn" id="smprrf-btn">Send it in</button>
+    <div class="smprrf-msg" id="smprrf-msg" role="status" aria-live="polite"></div>
+  </form>
+</div>
+
+<script>
+(function(){
+  var ENDPOINT = "https://smp-feed.ancient-snow-93df.workers.dev/submit-recipe";
+  var root = document.getElementById("smprrf-root");
+  if(!root) return;
+  var load = root.querySelector("#smprrf-load");
+  var gateWrap = root.querySelector("#smprrf-gatewrap");
+  var form = root.querySelector("#smprrf-form");
+  var nameInput = root.querySelector("#smprrf-name");
+  var urlInput = root.querySelector("#smprrf-url");
+  var emailInput = root.querySelector("#smprrf-email");
+  var hp = form.querySelector("input[name=website]");
+  var btn = root.querySelector("#smprrf-btn");
+  var msg = root.querySelector("#smprrf-msg");
+  var memberEmail = "";
+
+  function show(kind, text){ msg.className = "smprrf-msg " + kind; msg.textContent = text; }
+  function clearMsg(){ msg.className = "smprrf-msg"; msg.textContent = ""; }
+
+  // Membership gate: only paid/comped members get the form. Everyone else sees the join nudge.
+  fetch("/members/api/member/", { credentials: "include", headers: { "app-pragma": "no-cache" } })
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .catch(function(){ return null; })
+    .then(function(m){
+      load.classList.add("smprrf-hide");
+      var paid = m && (m.status === "paid" || m.status === "comped");
+      if(paid){
+        memberEmail = (m.email || "");
+        form.classList.remove("smprrf-hide");
+      } else {
+        gateWrap.classList.remove("smprrf-hide");
+      }
+    });
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    clearMsg();
+    var recipe = (nameInput.value || "").trim();
+    var url = (urlInput.value || "").trim();
+    var email = emailInput ? (emailInput.value || "").trim() : "";
+
+    if(!recipe){ show("bad","Please enter the recipe name."); nameInput.focus(); return; }
+    if(!/^https?:\/\/.+/i.test(url)){ show("bad","Please paste the recipe's URL (it must start with http)."); urlInput.focus(); return; }
+    if(email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)){ show("bad","That email doesn't look right. Fix it or leave it blank."); emailInput.focus(); return; }
+    if(!memberEmail){ show("bad","We couldn't confirm your membership. Please refresh and try again."); return; }
+
+    btn.disabled = true; var label = btn.textContent; btn.textContent = "Sending...";
+    fetch(ENDPOINT, {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ recipe:recipe, url:url, email:email, memberEmail:memberEmail, website: hp ? hp.value : "" })
+    }).then(function(r){ return r.json().catch(function(){ return {ok:false}; }); })
+      .then(function(res){
+        if(res && res.ok){
+          form.reset();
+          show("ok", email ? "Thanks! Got it. We'll email you when it's in the library." : "Thanks! Got it. We'll take a look at adding it.");
+        } else {
+          show("bad", (res && res.error) ? res.error : "Something went wrong. Please try again.");
+        }
+      }).catch(function(){ show("bad","Could not send right now. Please try again in a moment."); })
+      .then(function(){ btn.disabled=false; btn.textContent=label; });
+  });
+})();
+</script>
+</div>
