@@ -56,10 +56,11 @@ function AddBoard($rows) {
   foreach ($r in $rows) {
     $id = [string]$r.id
     $lo = $null; $los = ''; $lot = ''; $nStores = 0
+    $st = [ordered]@{}   # per-store per-unit prices (same unit as the row) - the Meal Plan Builder's store split needs these
     foreach ($s in $r.stores) {
       $p = [double]$s.per_unit
       if (([string]$s.type) -eq 'everyday' -and $ovr.ContainsKey($id) -and $ovr[$id].ContainsKey([string]$s.store)) { $ov=[double]$ovr[$id][[string]$s.store]; if ($ov -gt 0) { $p = $ov } }
-      if ($p -gt 0) { $nStores++ }
+      if ($p -gt 0) { $nStores++; $st[[string]$s.store] = [math]::Round($p,4) }
       if ($p -gt 0 -and ($null -eq $lo -or $p -lt $lo)) { $lo = $p; $los = [string]$s.store; $lot = [string]$s.type }
     }
     if ($null -ne $lo) {
@@ -69,7 +70,7 @@ function AddBoard($rows) {
         # n = how many of the 6 stores actually have a price for this ingredient - so the UI never overclaims
         # "checked at 6 stores" for an item only 1-2 stores have been priced at yet (new adds, or an item some
         # stores simply don't carry).
-        $row = [ordered]@{ unit=[string]$r.unit; cheapest=[math]::Round($lo,4); store=$los; type=$lot; url=$u; n=$nStores }
+        $row = [ordered]@{ unit=[string]$r.unit; cheapest=[math]::Round($lo,4); store=$los; type=$lot; url=$u; n=$nStores; stores=$st }
         # attach the sale's end date when the winning chip IS the sale and its window is known
         if ($lot -eq 'sale') { $sk = $id + '|' + $los; if ($saleEnd.ContainsKey($sk)) { $row['sale_end'] = $saleEnd[$sk] } }
         $ing[$id] = $row

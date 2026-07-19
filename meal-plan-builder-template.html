@@ -58,11 +58,21 @@
 .mpp-store{margin:14px 0 4px;color:var(--navy);font-weight:800;font-size:1em;border-bottom:2px solid var(--gold);padding-bottom:3px;}
 .mpp-store span{color:var(--mut);font-weight:600;font-size:.85em;}
 .mpp-gl{list-style:none;margin:0;padding:0;}
-.mpp-gl li{display:flex;justify-content:space-between;gap:10px;padding:6px 2px;border-bottom:1px dotted #e2e8f0;font-size:.92em;flex-wrap:wrap;}
-.mpp-gl .it{color:var(--navy);font-weight:600;}
+.mpp-gl li{display:flex;align-items:center;gap:8px;padding:6px 2px;border-bottom:1px dotted #e2e8f0;font-size:.92em;flex-wrap:wrap;}
+.mpp-gl .it{color:var(--navy);font-weight:600;flex:1 1 130px;}
 .mpp-gl .amt{color:var(--ink);}
-.mpp-gl .pr{color:var(--ok);font-weight:700;white-space:nowrap;}
+.mpp-gl .pkgn{color:var(--gold-d);font-weight:700;white-space:nowrap;}
+.mpp-gl .pr{color:var(--ok);font-weight:700;white-space:nowrap;margin-left:auto;}
 .mpp-gl .un{color:var(--mut);font-size:.85em;font-style:italic;}
+.mpp-minus{width:26px;height:26px;border-radius:999px;border:1.5px solid #d8dee8;background:#fff;color:var(--err);font-weight:800;font-size:1em;line-height:1;cursor:pointer;flex:0 0 auto;}
+.mpp-minus:hover{border-color:var(--err);}
+.mpp-reg{margin:12px 0 4px;padding:12px 14px;background:var(--cream);border:1px solid #e5dcc8;border-radius:10px;font-size:.98em;color:var(--navy);}
+.mpp-reg b{color:var(--ok);}
+.mpp-removedwrap{margin:12px 0 0;padding:10px 13px;background:#f6f8fb;border:1px dashed #c9d2de;border-radius:10px;font-size:.88em;}
+.mpp-removedwrap b{color:var(--navy);}
+.mpp-back{display:inline-block;margin:3px 4px 0 0;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:3px 10px;font-size:.92em;color:var(--navy);cursor:pointer;}
+.mpp-back:hover{border-color:var(--gold);}
+.mpp-storehint{margin:8px 0 0;padding:10px 13px;border-radius:10px;font-size:.9em;background:#fbf3e8;color:#8a6d1f;border:1px solid #efd9b4;}
 .mpp-note{font-size:.83em;color:var(--mut);line-height:1.5;margin:12px 0 0;}
 .mpp-hide{display:none!important;}
 @media (max-width:520px){.mpp-card{padding:18px 14px;border-radius:14px;}.mpp-cal .d{width:78px;}.mpp-row{flex-wrap:wrap;}.mpp-rmeta{white-space:normal;}}
@@ -108,11 +118,14 @@
     <ul class="mpp-cal" id="mpp-cal"></ul>
     <div class="mpp-tot" id="mpp-tot"></div>
     <h4 style="color:var(--navy);margin:16px 0 2px;font-size:1.05em">Your grocery list</h4>
-    <p class="mpp-sub" style="margin:0 0 6px" id="mpp-glsub">Grouped by each item's cheapest verified store this week.</p>
+    <p class="mpp-sub" style="margin:0 0 8px">Which store(s) are you shopping at? We split your list so every item lands at the cheapest of YOUR stores, priced as the whole packages you have to buy.</p>
+    <div class="mpp-chips" id="mpp-storechips"></div>
+    <div id="mpp-removed"></div>
     <div id="mpp-gl"></div>
-    <p class="mpp-note">Totals assume you buy what the plan uses; register totals vary by package size. Prices come from our verified Omaha grocery board and refresh daily. Tap any recipe name in the calendar for its full instructions.</p>
+    <p class="mpp-note">Prices assume you own none of it: every item is priced as full packages (a 2 lb bag of rice costs what the bag costs). Tap the minus on anything you already have and the totals update. Prices come from our verified Omaha grocery board and refresh daily.</p>
     <div style="margin-top:14px">
-      <button type="button" class="mpp-btn mpp-btn2" id="mpp-print">Print this plan</button>
+      <button type="button" class="mpp-btn mpp-btn2" id="mpp-printlist">Print shopping list</button>
+      <button type="button" class="mpp-btn mpp-btn2" id="mpp-print">Print full plan</button>
       <button type="button" class="mpp-btn mpp-btn2" id="mpp-reset" style="border-color:#c9d2de;color:var(--mut)">Start over</button>
     </div>
   </div>
@@ -233,7 +246,7 @@ function mergeList(){
     var f=p.sv/14;
     byslug[p.s].ing.forEach(function(ing){
       var k=ing.i;
-      if(!items[k]) items[k]={i:k,g:0,buyNum:0,buySkel:null,skelOk:true,bid:ing.bid,gpu:ing.gpu};
+      if(!items[k]) items[k]={i:k,g:0,buyNum:0,buySkel:null,skelOk:true,bid:ing.bid,gpu:ing.gpu,pk:ing.pk,pl:ing.pl};
       var it=items[k];
       it.g+=ing.g*f;
       var m=String(ing.b).match(/^(\d+(?:\.\d+)?)(.*)$/);
@@ -245,6 +258,47 @@ function mergeList(){
     });
   });
   return Object.keys(items).map(function(k){return items[k];});
+}
+
+// ---- store split with WHOLE-PACKAGE pricing (assume the user owns none of it) ----
+var STORES=['Walmart','Aldi',"Baker's",'Family Fare','Fareway','Hy-Vee',"Sam's Club"];
+var selStores=[]; var removed={};
+var SINGULAR={'lb':1,'each':1,'pint':1,'orange':1,'head':1,'bunch':1,'piece':1,'dozen':1,'gallon':1};
+function pkgN(it){ if(!it.pk||it.pk<=0)return null; var n=Math.ceil(it.g/it.pk-0.02); return n<1?1:n; }
+function pkgLabel(it){
+  var n=pkgN(it); if(n===null||!it.pl)return null;
+  var base=it.pl.replace(/\s*\(.*\)$/,'');
+  if(SINGULAR[base]){ return n+' '+base+(n>1&&base==='lb'?'':''); }
+  return n+' × '+base;
+}
+function storePkgCost(it,store){
+  if(!it.bid||!it.gpu||!feedData||!feedData.ingredients||!feedData.ingredients[it.bid])return null;
+  var e=feedData.ingredients[it.bid];
+  if(!e.stores||!e.stores[store]||e.stores[store]<=0)return null;
+  var ppg=e.stores[store]/it.gpu;
+  var n=pkgN(it);
+  if(n===null){ return {cost:it.g*ppg, partial:true}; }
+  return {cost:n*it.pk*ppg, partial:false};
+}
+function computeAssignment(){
+  var merged=mergeList().filter(function(it){return !removed[it.i];});
+  var groups={}; var other=[]; var regTotal=0; var priced=0;
+  merged.forEach(function(it){
+    var best=null,bestStore=null;
+    selStores.forEach(function(st){
+      var c=storePkgCost(it,st);
+      if(c&&(best===null||c.cost<best.cost)){ best=c; bestStore=st; }
+    });
+    var amt=it.skelOk&&it.buySkel!==null?(fmtQty(it.buyNum)+it.buySkel):null;
+    var d={i:it.i,amt:amt,g:Math.round(it.g),pkg:pkgLabel(it)};
+    if(best){
+      d.cost=best.cost; d.partial=best.partial;
+      regTotal+=best.cost; priced++;
+      if(!groups[bestStore])groups[bestStore]={items:[],sub:0};
+      groups[bestStore].items.push(d); groups[bestStore].sub+=best.cost;
+    } else { other.push(d); }
+  });
+  return {groups:groups,other:other,regTotal:regTotal,priced:priced,total:merged.length};
 }
 
 function renderPlan(){
@@ -278,44 +332,62 @@ function renderPlan(){
   renderGrocery();
 }
 
+function itemRow(d,withPrice){
+  var h='<li><button type="button" class="mpp-minus" data-rm="'+esc(d.i)+'" aria-label="I already have this">&minus;</button>'
+    +'<span class="it">'+esc(d.i)+'</span>'
+    +'<span class="amt">'+(d.amt?esc(d.amt)+' ':'')+'('+d.g+' g)</span>'
+    +(d.pkg?'<span class="pkgn">'+esc(d.pkg)+'</span>':'');
+  if(withPrice&&typeof d.cost==='number'){ h+='<span class="pr">'+money(d.cost)+(d.partial?' <span class="un">partial-pack est.</span>':'')+'</span>'; }
+  else if(!withPrice){ h+='<span class="un" style="margin-left:auto">pick stores to price</span>'; }
+  else { h+='<span class="un" style="margin-left:auto">not priced at your stores</span>'; }
+  return h+'</li>';
+}
+function renderRemoved(){
+  var names=Object.keys(removed);
+  if(!names.length){ $('mpp-removed').innerHTML=''; return; }
+  var h='<div class="mpp-removedwrap"><b>Already have ('+names.length+'):</b> tap to put one back. ';
+  names.sort().forEach(function(n){ h+='<button type="button" class="mpp-back" data-add="'+esc(n)+'">'+esc(n)+' +</button>'; });
+  h+='</div>';
+  $('mpp-removed').innerHTML=h;
+}
 function renderGrocery(){
-  var merged=mergeList();
-  var stores={},pantry=[];
-  var liveTotal=0,livedItems=0;
-  merged.forEach(function(it){
-    var amt=it.skelOk&&it.buySkel!==null?(fmtQty(it.buyNum)+it.buySkel):null;
-    var disp={i:it.i,amt:amt,g:Math.round(it.g)};
-    var e=(it.bid&&feedData&&feedData.ingredients&&feedData.ingredients[it.bid])?feedData.ingredients[it.bid]:null;
-    if(e&&e.cheapest>0&&it.gpu>0){
-      var c=e.cheapest*(it.g/it.gpu);
-      liveTotal+=c; livedItems++;
-      disp.pr=money(c); disp.st=e.store; disp.unit='$'+e.cheapest.toFixed(2)+'/'+e.unit;
-      if(!stores[e.store])stores[e.store]={items:[],sub:0};
-      stores[e.store].items.push(disp); stores[e.store].sub+=c;
-    } else { pantry.push(disp); }
-  });
+  renderRemoved();
+  // store chips
+  var ch='';
+  STORES.forEach(function(st){ ch+='<button type="button" class="mpp-chip'+(selStores.indexOf(st)>=0?' on':'')+'" data-st="'+esc(st)+'">'+esc(st)+'</button>'; });
+  $('mpp-storechips').innerHTML=ch;
+
+  if(!feedData){ $('mpp-gl').innerHTML='<p class="mpp-sub">Live prices are loading...</p>'; return; }
   var html='';
-  Object.keys(stores).sort(function(a,b){return stores[b].sub-stores[a].sub;}).forEach(function(st){
-    var s=stores[st];
-    html+='<div class="mpp-store">'+esc(st)+' <span>'+s.items.length+' item'+(s.items.length>1?'s':'')+' &middot; about '+money(s.sub)+'</span></div><ul class="mpp-gl">';
-    s.items.sort(function(a,b){return a.i<b.i?-1:1;}).forEach(function(d){
-      html+='<li><span class="it">'+esc(d.i)+'</span><span class="amt">'+(d.amt?esc(d.amt)+' ':'')+'('+d.g+' g)</span><span class="pr">'+d.pr+' <span class="un">'+d.unit+' at cheapest</span></span></li>';
+  if(!selStores.length){
+    html+='<div class="mpp-storehint">Select at least one store above and we will split your list and price it in whole packages.</div>';
+    var merged=mergeList().filter(function(it){return !removed[it.i];});
+    html+='<ul class="mpp-gl" style="margin-top:10px">';
+    merged.sort(function(a,b){return a.i<b.i?-1:1;}).forEach(function(it){
+      var amt=it.skelOk&&it.buySkel!==null?(fmtQty(it.buyNum)+it.buySkel):null;
+      html+=itemRow({i:it.i,amt:amt,g:Math.round(it.g),pkg:pkgLabel(it)},false);
     });
     html+='</ul>';
+    $('mpp-gl').innerHTML=html; return;
+  }
+  var A=computeAssignment();
+  html+='<div class="mpp-reg">Register estimate at your '+selStores.length+' store'+(selStores.length>1?'s':'')+': <b>'+money(A.regTotal)+'</b> <span style="color:var(--mut);font-size:.85em">('+A.priced+' of '+A.total+' items priced, whole packages)</span></div>';
+  Object.keys(A.groups).sort(function(a,b){return A.groups[b].sub-A.groups[a].sub;}).forEach(function(st){
+    var s=A.groups[st];
+    html+='<div class="mpp-store">'+esc(st)+' <span>'+s.items.length+' item'+(s.items.length>1?'s':'')+' &middot; about '+money(s.sub)+'</span></div><ul class="mpp-gl">';
+    s.items.sort(function(a,b){return a.i<b.i?-1:1;}).forEach(function(d){ html+=itemRow(d,true); });
+    html+='</ul>';
   });
-  if(pantry.length){
-    html+='<div class="mpp-store">Also on your list <span>'+pantry.length+' item'+(pantry.length>1?'s':'')+' &middot; included in the estimate</span></div><ul class="mpp-gl">';
-    pantry.sort(function(a,b){return a.i<b.i?-1:1;}).forEach(function(d){
-      html+='<li><span class="it">'+esc(d.i)+'</span><span class="amt">'+(d.amt?esc(d.amt)+' ':'')+'('+d.g+' g)</span><span class="un">pantry or not price-tracked</span></li>';
-    });
+  if(A.other.length){
+    html+='<div class="mpp-store">Not priced at your stores <span>'+A.other.length+' item'+(A.other.length>1?'s':'')+' &middot; still on your list</span></div><ul class="mpp-gl">';
+    A.other.sort(function(a,b){return a.i<b.i?-1:1;}).forEach(function(d){ html+=itemRow(d,true); });
     html+='</ul>';
   }
   $('mpp-gl').innerHTML=html;
-  $('mpp-glsub').textContent = feedData ? ('Grouped by each item\'s cheapest verified store this week. Live-priced portion: about '+money(liveTotal)+' across '+livedItems+' items.') : 'Live prices are loading; the everyday estimate above still applies.';
 }
 
 function save(){
-  try{ localStorage.setItem('mpp-v1',JSON.stringify({sd:sd.value,ed:ed.value,hh:hh.value,rc:rc.value,picks:picks})); }catch(e){}
+  try{ localStorage.setItem('mpp-v1',JSON.stringify({sd:sd.value,ed:ed.value,hh:hh.value,rc:rc.value,picks:picks,sel:selStores,rem:Object.keys(removed)})); }catch(e){}
 }
 function restore(){
   try{
@@ -323,6 +395,8 @@ function restore(){
     if(!s)return false;
     if(s.sd)sd.value=s.sd; if(s.ed)ed.value=s.ed; if(s.hh)hh.value=s.hh; if(s.rc)rc.value=s.rc;
     if(s.picks&&s.picks.length){ picks=s.picks.filter(function(p){return byslug[p.s];}); }
+    if(s.sel&&s.sel.length){ selStores=s.sel.filter(function(x){return STORES.indexOf(x)>=0;}); }
+    if(s.rem&&s.rem.length){ removed={}; s.rem.forEach(function(n){removed[n]=1;}); }
     return true;
   }catch(e){ return false; }
 }
@@ -331,13 +405,25 @@ function printPlan(){
   var cal=buildCalendar();
   var rowsH='';
   cal.rows.forEach(function(r){ rowsH+='<tr><td class="d">'+r.d+'</td><td>'+(r.cook?'<b>COOK: '+esc(r.name)+'</b>':'Leftovers: '+esc(r.name))+'</td></tr>'; });
-  var merged=mergeList();
   var listH='';
-  merged.sort(function(a,b){return a.i<b.i?-1:1;}).forEach(function(it){
-    var amt=it.skelOk&&it.buySkel!==null?(fmtQty(it.buyNum)+it.buySkel):null;
-    var e=(it.bid&&feedData&&feedData.ingredients&&feedData.ingredients[it.bid])?feedData.ingredients[it.bid]:null;
-    listH+='<li><span>'+esc(it.i)+'</span><span>'+(amt?esc(amt)+' ':'')+'('+Math.round(it.g)+' g)'+(e&&e.cheapest>0?' &middot; '+esc(e.store):'')+'</span></li>';
-  });
+  if(selStores.length){
+    var A=computeAssignment();
+    Object.keys(A.groups).sort().forEach(function(st){
+      listH+='<li style="border-bottom:2px solid #e2a43c"><b>'+esc(st)+'</b><span>about '+money(A.groups[st].sub)+'</span></li>';
+      A.groups[st].items.sort(function(a,b){return a.i<b.i?-1:1;}).forEach(function(d){
+        listH+='<li><span>&#9744; '+esc(d.i)+'</span><span>'+(d.pkg?esc(d.pkg)+' &middot; ':'')+money(d.cost)+'</span></li>';
+      });
+    });
+    if(A.other.length){
+      listH+='<li style="border-bottom:2px solid #e2a43c"><b>Also on your list</b><span></span></li>';
+      A.other.forEach(function(d){ listH+='<li><span>&#9744; '+esc(d.i)+'</span><span>'+(d.amt?esc(d.amt)+' ':'')+'('+d.g+' g)</span></li>'; });
+    }
+  } else {
+    mergeList().filter(function(it){return !removed[it.i];}).sort(function(a,b){return a.i<b.i?-1:1;}).forEach(function(it){
+      var amt=it.skelOk&&it.buySkel!==null?(fmtQty(it.buyNum)+it.buySkel):null;
+      listH+='<li><span>&#9744; '+esc(it.i)+'</span><span>'+(amt?esc(amt)+' ':'')+'('+Math.round(it.g)+' g)</span></li>';
+    });
+  }
   var sv=planned();
   var cost=picks.reduce(function(a,p){return a+byslug[p.s].cps*p.sv;},0);
   var css='@page{margin:14mm}body{font:13px/1.5 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#16263f;max-width:720px;margin:0 auto}h1{font-size:20px;margin:0 0 2px}.m{color:#555;font-size:12px;margin:0 0 12px}h2{font-size:14px;border-bottom:2px solid #e2a43c;padding-bottom:3px;margin:16px 0 8px}table{width:100%;border-collapse:collapse}td{padding:4px 6px;border-bottom:1px dotted #ccc;font-size:12px}td.d{width:110px;color:#666}ul{list-style:none;margin:0;padding:0}li{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px dotted #ccc;font-size:12px}li span:last-child{white-space:nowrap;color:#333}.b{margin-top:12px;font-size:12px}.f{margin-top:14px;font-size:10px;color:#999}';
@@ -346,9 +432,45 @@ function printPlan(){
     +'<h2>Cook nights</h2><table>'+rowsH+'</table>'
     +'<h2>Grocery list</h2><ul>'+listH+'</ul>'
     +'<p class="f">Thrifty Crew &middot; thriftycrew.com &middot; prices verified weekly at Omaha stores</p></body></html>';
+  printHtml(html);
+}
+function printHtml(html){
   var f=document.createElement('iframe'); f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0;opacity:0';
   document.body.appendChild(f); var d=f.contentWindow.document; d.open(); d.write(html); d.close();
   f.contentWindow.focus(); setTimeout(function(){ try{f.contentWindow.print();}catch(e){} setTimeout(function(){f.remove();},2000); },350);
+}
+function printList(){
+  var css='@page{margin:14mm}body{font:13px/1.55 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#16263f;max-width:640px;margin:0 auto}h1{font-size:19px;margin:0 0 2px}.m{color:#555;font-size:12px;margin:0 0 12px}h2{font-size:14px;border-bottom:2px solid #e2a43c;padding-bottom:3px;margin:14px 0 6px}h2 span{color:#777;font-weight:400;font-size:11px}ul{list-style:none;margin:0;padding:0}li{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px dotted #ccc;font-size:12.5px}li span:last-child{white-space:nowrap;color:#333}.t{margin-top:12px;font-size:13px;font-weight:700}.f{margin-top:14px;font-size:10px;color:#999}';
+  var body='<h1>Shopping list</h1>';
+  if(selStores.length){
+    var A=computeAssignment();
+    body+='<p class="m">'+esc(sd.value)+' to '+esc(ed.value)+' &middot; '+selStores.map(esc).join(' + ')+' &middot; whole packages, nothing assumed on hand</p>';
+    Object.keys(A.groups).sort(function(a,b){return A.groups[b].sub-A.groups[a].sub;}).forEach(function(st){
+      var s=A.groups[st];
+      body+='<h2>'+esc(st)+' <span>'+s.items.length+' items &middot; about '+money(s.sub)+'</span></h2><ul>';
+      s.items.sort(function(a,b){return a.i<b.i?-1:1;}).forEach(function(d){
+        body+='<li><span>&#9744; '+esc(d.i)+(d.amt?' &middot; '+esc(d.amt):'')+'</span><span>'+(d.pkg?esc(d.pkg)+' &middot; ':'')+money(d.cost)+'</span></li>';
+      });
+      body+='</ul>';
+    });
+    if(A.other.length){
+      body+='<h2>Also on your list <span>not priced at your stores</span></h2><ul>';
+      A.other.sort(function(a,b){return a.i<b.i?-1:1;}).forEach(function(d){
+        body+='<li><span>&#9744; '+esc(d.i)+'</span><span>'+(d.amt?esc(d.amt)+' ':'')+'('+d.g+' g)</span></li>';
+      });
+      body+='</ul>';
+    }
+    body+='<p class="t">Register estimate: '+money(A.regTotal)+'</p>';
+  } else {
+    body+='<p class="m">'+esc(sd.value)+' to '+esc(ed.value)+'</p><ul>';
+    mergeList().filter(function(it){return !removed[it.i];}).sort(function(a,b){return a.i<b.i?-1:1;}).forEach(function(it){
+      var amt=it.skelOk&&it.buySkel!==null?(fmtQty(it.buyNum)+it.buySkel):null;
+      body+='<li><span>&#9744; '+esc(it.i)+'</span><span>'+(amt?esc(amt)+' ':'')+'('+Math.round(it.g)+' g)</span></li>';
+    });
+    body+='</ul>';
+  }
+  body+='<p class="f">Thrifty Crew &middot; thriftycrew.com &middot; prices verified at Omaha stores</p>';
+  printHtml('<!doctype html><html><head><meta charset="utf-8"><title>Shopping list</title><style>'+css+'</style></head><body>'+body+'</body></html>');
 }
 
 // ---- events ----
@@ -393,9 +515,27 @@ $('mpp-calwarn').addEventListener('click',function(e){
   renderPicks();
 });
 $('mpp-print').addEventListener('click',printPlan);
+$('mpp-printlist').addEventListener('click',printList);
 $('mpp-reset').addEventListener('click',function(){
-  picks=[]; try{localStorage.removeItem('mpp-v1');}catch(e){}
+  picks=[]; removed={}; try{localStorage.removeItem('mpp-v1');}catch(e){}
   renderPicks(); renderList();
+});
+$('mpp-storechips').addEventListener('click',function(e){
+  var b=e.target.closest('.mpp-chip'); if(!b)return;
+  var st=b.getAttribute('data-st');
+  var i=selStores.indexOf(st);
+  if(i>=0){ selStores.splice(i,1); } else { selStores.push(st); }
+  renderGrocery(); save();
+});
+$('mpp-gl').addEventListener('click',function(e){
+  var b=e.target.closest('.mpp-minus'); if(!b)return;
+  removed[b.getAttribute('data-rm')]=1;
+  renderGrocery(); save();
+});
+$('mpp-removed').addEventListener('click',function(e){
+  var b=e.target.closest('.mpp-back'); if(!b)return;
+  delete removed[b.getAttribute('data-add')];
+  renderGrocery(); save();
 });
 
 // ---- init ----

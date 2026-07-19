@@ -21,6 +21,26 @@ $item=@{}
 foreach($p in $mapNew.PSObject.Properties){ $item[$p.Name]=@{bid=$p.Value.bid;gpu=[double]$p.Value.gpu;unit=[string]$p.Value.unit} }
 foreach($m in $mapOld){ if(-not $item.ContainsKey($m.item)){ $item[$m.item]=@{bid=$m.board_id;gpu=[double]$m.grams_per_unit;unit=[string]$m.unit} } }
 $UNIT_G=@{ lb=453.592; oz=28.3495; floz=29.57; kg=1000.0; g=1.0 }
+
+# package sizes per item (whole-package pricing in the tool: "assume the user owns nothing"):
+# pantry staples from pantry-packages.json + fresh/boxed items parsed from cost-engine's $PKG table
+$pkg=@{}
+foreach($p in ((Get-Content (Join-Path $here 'r100\pantry-packages.json') -Raw | ConvertFrom-Json).packages).PSObject.Properties){
+  $pkg[$p.Name]=@{ g=[double]$p.Value.g; l=[string]$p.Value.label }
+}
+foreach($p in ((Get-Content (Join-Path $here 'planner-extra-packages.json') -Raw | ConvertFrom-Json).packages).PSObject.Properties){
+  if(-not $pkg.ContainsKey($p.Name)){ $pkg[$p.Name]=@{ g=[double]$p.Value.g; l=[string]$p.Value.label } }
+}
+$engineSrc=Get-Content (Join-Path $here 'r100\cost-engine.ps1') -Raw
+$pkgBlock=[regex]::Match($engineSrc,'\$PKG\s*=\s*@\{(?s)(.*?)\r?\n\}').Groups[1].Value
+$pkgRe = '''([^'']+)''\s*=\s*@\{g=([\d.]+|\$LB|\$OZ);label=''([^'']*)''\}'
+foreach($m in [regex]::Matches($pkgBlock,$pkgRe)){
+  $nm=$m.Groups[1].Value.Trim()
+  if($pkg.ContainsKey($nm)){ continue }   # pantry file wins
+  $gv=$m.Groups[2].Value
+  $g = if($gv -match 'LB'){453.592} elseif($gv -match 'OZ'){28.3495} else {[double]$gv}
+  $pkg[$nm]=@{ g=$g; l=$m.Groups[3].Value }
+}
 function Feed-Gpu($it){
   if(-not $item.ContainsKey($it)){ return $null }
   $b=$item[$it]
@@ -62,6 +82,7 @@ foreach($r in $db){
     $fb=Feed-Gpu $ing.item
     $extra=''
     if($fb){ $withBid++; $extra=',"bid":'+(J $fb.bid)+',"gpu":'+$fb.gpu }
+    if($pkg.ContainsKey($ing.item)){ $extra+=',"pk":'+$pkg[$ing.item].g+',"pl":'+(J $pkg[$ing.item].l) }
     [void]$ings.Add('{"i":'+(J $ing.item)+',"g":'+$g+',"b":'+(J ([string]$ing.buy))+$extra+'}')
   }
   $cps=[double]$r.cost_per_serving
@@ -75,4 +96,7 @@ $check=$js.Substring(8,$js.Length-9)
 $null=$check | ConvertFrom-Json   # throws if malformed
 [IO.File]::WriteAllText((Join-Path $here 'planner-data.js'),$js,(New-Object System.Text.UTF8Encoding($false)))
 $kb=[Math]::Round((Get-Item (Join-Path $here 'planner-data.js')).Length/1024,0)
-Write-Output ("planner-data.js: {0} recipes, {1}/{2} ingredient lines feed-priced, {3} KB" -f $rows.Count,$withBid,$totalIng,$kb)
+$noPkg=@{}
+foreach($r in $db){ foreach($ing in $r.ingredients){ if($ing.grams -gt 0 -and -not $pkg.ContainsKey($ing.item)){ $noPkg[$ing.item]=1 } } }
+Write-Output ("planner-data.js: {0} recipes, {1}/{2} ingredient lines feed-priced, {3} KB, pkg table {4} items" -f $rows.Count,$withBid,$totalIng,$kb,$pkg.Count)
+if($noPkg.Count -gt 0){ Write-Output ("ITEMS WITHOUT PACKAGE DEF ({0}): {1}" -f $noPkg.Count, (($noPkg.Keys | Sort-Object) -join ', ')) }
