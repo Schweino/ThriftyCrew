@@ -135,7 +135,7 @@
 //__DATA__
 (function(){
 if(window.__mpp)return; window.__mpp=1;
-var FEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json';
+var FEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json?s=2';   // ?s=2: new cache key since the feed gained per-store prices
 var $=function(id){return document.getElementById(id);};
 var sd=$('mpp-sd'),ed=$('mpp-ed'),hh=$('mpp-hh'),rc=$('mpp-rc'),q=$('mpp-q');
 var byslug={}; MPP.forEach(function(r){byslug[r.s]=r;});
