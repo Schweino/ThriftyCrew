@@ -1,26 +1,16 @@
 ﻿{
-    "generated":  "2026-07-18 12:34",
-    "gap_count":  11,
+    "generated":  "2026-07-19 12:36",
+    "gap_count":  16,
     "gaps":  [
                  {
-                     "commodity":  "celery",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Pure Pacific Organic Celery Sticks, 2.5 lbs."
+                     "commodity":  "bread",
+                     "store":  "Family Fare",
+                     "candidate":  "Our Family White Sandwich Bread"
                  },
                  {
-                     "commodity":  "mangoes",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Nutty \u0026 Fruity Chili Tamarind Mango, 28 oz."
-                 },
-                 {
-                     "commodity":  "cilantro",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Samyang MEP Ramen Bowl, Red Pepper and Chicken \u0026 Cilantro, 6 pk."
-                 },
-                 {
-                     "commodity":  "italian-sausage",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Member\u0027s Mark Cafe Spicy Italian Sausage, Frozen, Case, 20 lbs."
+                     "commodity":  "jalapenos",
+                     "store":  "Family Fare",
+                     "candidate":  "Famous Dave\u0027s Medium Jalapeno Corn Bread Mix 15 Oz"
                  },
                  {
                      "commodity":  "egg-whites",
@@ -28,9 +18,9 @@
                      "candidate":  "Jimmy Dean Delights Croissant Breakfast Sandwiches With Turkey Sausage, Egg White, And Cheese, Frozen 4 Ct"
                  },
                  {
-                     "commodity":  "cake-mix",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Kodiak Cakes Power Cakes Flapjack and Waffle Mix, 72 oz."
+                     "commodity":  "chocolate-chips",
+                     "store":  "Family Fare",
+                     "candidate":  "Little Debbie Cosmic Brownies, With Chocolate Chip Candy 6 Ea"
                  },
                  {
                      "commodity":  "pickles",
@@ -38,24 +28,59 @@
                      "candidate":  "Barrel O\u0027 Fun Dill Pickle Potato Chips 7 Oz"
                  },
                  {
-                     "commodity":  "grape-juice",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Monster Energy Juice, Voodoo Grape, Juice + Energy Drink, 16 fl. oz., 24 pk."
+                     "commodity":  "sandwich-cookies",
+                     "store":  "Family Fare",
+                     "candidate":  "Little Debbie Sandwich Cookies, Oatmeal Creme Pies 12 Ea"
                  },
                  {
-                     "commodity":  "frozen-burritos",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Three Bridges Egg and Sausage Breakfast Burrito, 8 oz., 4 ct."
+                     "commodity":  "mouthwash",
+                     "store":  "Family Fare",
+                     "candidate":  "Biotene Dry Mouth Fresh Mint Oral Rinse 16 Fl Oz"
                  },
                  {
-                     "commodity":  "mandarin-oranges",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Member\u0027s Mark Mandarin Oranges 4 oz., 24 ct."
+                     "commodity":  "canned-pasta",
+                     "store":  "Walmart",
+                     "candidate":  "(4 pack) Chef Boyardee Overstuffed Beef Ravioli in Pasta Sau"
                  },
                  {
-                     "commodity":  "fruit-cocktail",
+                     "commodity":  "oyster-sauce",
+                     "store":  "Fareway",
+                     "candidate":  "Ty Ling Oyster Style Sauce"
+                 },
+                 {
+                     "commodity":  "sesame-oil",
+                     "store":  "Fareway",
+                     "candidate":  "House of Tsang Pure Sesame Seed Oil"
+                 },
+                 {
+                     "commodity":  "corn-muffin-mix",
+                     "store":  "Fareway",
+                     "candidate":  "Krusteaz Honey Cornbread and Muffin Mix"
+                 },
+                 {
+                     "commodity":  "refrigerated-biscuits",
+                     "store":  "Aldi",
+                     "candidate":  "Bake House Creations Jumbo Flaky Biscuits"
+                 },
+                 {
+                     "commodity":  "refrigerated-biscuits",
+                     "store":  "Fareway",
+                     "candidate":  "Pillsbury Grands! Flaky Layers Buttermilk Biscuits"
+                 },
+                 {
+                     "commodity":  "refrigerated-biscuits",
                      "store":  "Sam\u0027s Club",
-                     "candidate":  "Dole Fruit Bowls Cherry Mixed Fruit in 100% Juice 4 oz., 20 pk."
+                     "candidate":  "Pillsbury Southern Style Biscuits 2 oz., 24 pk."
+                 },
+                 {
+                     "commodity":  "sun-dried-tomatoes",
+                     "store":  "Baker\u0027s",
+                     "candidate":  "California Sun Dry Sun-Dried Julienne Tomatoes in Oil"
+                 },
+                 {
+                     "commodity":  "poblano-peppers",
+                     "store":  "Family Fare",
+                     "candidate":  "Del Monte Whole Kernel Southwest Style Corn With Poblano \u0026 Red Peppers 15.25 Oz"
                  }
              ]
 }

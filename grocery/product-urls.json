@@ -1,6 +1,6 @@
 ﻿{
     "readme":  "Durable per-store direct product URLs + verified price for the Omaha grocery prices page. Keyed by commodity id -\u003e store -\u003e {url,price,size,name}. Survives weekly regeneration; build-deals-page.ps1 renders a \u0027See item\u0027 link per chip.",
-    "updated":  "2026-07-18",
+    "updated":  "2026-07-19",
     "items":  {
                   "1-3-fat-cream-cheese":  {
                                                "commodity":  "1/3 Fat Cream Cheese",
@@ -604,9 +604,9 @@
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/24371/hy-vee-100-apple-juice-no-sugar-added",
                                                      "name":  "Hy-Vee 100% Apple Juice No Sugar Added",
                                                      "board_pu":  0.0467,
-                                                     "price":  2.19,
+                                                     "price":  2,
                                                      "size":  "64 fl oz",
-                                                     "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
+                                                     "verified":  "2026-07-19 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                  },
                                       "Sam\u0027s Club":  {
                                                               "url":  "https://www.samsclub.com/ip/13620310700",
@@ -1046,12 +1046,6 @@
                                                      "name":  "Kroger Naturally Hardwood Smoked Thick Cut Bacon",
                                                      "board_pu":  3.79
                                                  },
-                                "Family Fare":  {
-                                                    "url":  "https://www.shopfamilyfare.com/shop/meat/bacon/our_family_bacon_premium_thick_cut_16_oz/p/1564405684715338221",
-                                                    "price":  5.99,
-                                                    "size":  "16 oz",
-                                                    "name":  "Our Family Bacon, Premium, Thick Cut 16 Oz"
-                                                },
                                 "Fareway":  {
                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/33112296-fareway-hickory-bacon",
                                                 "price":  5.47,
@@ -1285,7 +1279,7 @@
                                                           "price":  3.99,
                                                           "size":  "16.9 fl oz",
                                                           "name":  "Nothing But The Truth Organic Balsamic Vinegar",
-                                                          "verified":  "2026-07-18 Hy-Vee search API (storeId 1465)"
+                                                          "verified":  "2026-07-19 Hy-Vee search API (storeId 1465)"
                                                       },
                                            "Walmart":  {
                                                            "url":  "https://www.walmart.com/ip/10320860",
@@ -1448,6 +1442,23 @@
                                                     "size":  "8 ct"
                                                 }
                                 },
+                  "bay-leaves":  {
+                                     "commodity":  "Bay Leaves",
+                                     "Hy-Vee":  {
+                                                    "url":  "https://www.hy-vee.com/aisles-online/p/2210699/mccormick-gourmet-organic-turkish-bay-leaves",
+                                                    "name":  "McCormick Gourmet Organic Turkish Bay Leaves",
+                                                    "price":  "$9.99",
+                                                    "size":  "0.18 oz",
+                                                    "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "url":  "https://www.samsclub.com/ip/13613464913",
+                                                             "name":  "Member\u0027s Mark Whole Bay Leaves, 2 oz.",
+                                                             "price":  "$8.54",
+                                                             "size":  "2 oz",
+                                                             "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                         }
+                                 },
                   "bbq-sauce":  {
                                     "commodity":  "bbq-sauce",
                                     "Aldi":  {
@@ -1652,19 +1663,19 @@
                                                     "name":  "DINTY MOORE Beef Stew With Potatoes \u0026 Carrots, 20 Oz Can",
                                                     "board_pu":  0.198
                                                 },
+                                    "Hy-Vee":  {
+                                                   "url":  "https://www.hy-vee.com/aisles-online/p/11342/dinty-moore-beef-stew-38-oz",
+                                                   "price":  6.99,
+                                                   "size":  "38 oz",
+                                                   "name":  "Dinty Moore Beef Stew",
+                                                   "verified":  "2026-07-19 Hy-Vee search API (storeId 1465)"
+                                               },
                                     "Walmart":  {
                                                     "url":  "https://www.walmart.com/ip/1454063903",
                                                     "price":  10.72,
                                                     "size":  "80 oz",
                                                     "name":  "(4 pack) Armour Star Classic Homestyle Beef Stew, 13g Protei"
-                                                },
-                                    "Hy-Vee":  {
-                                                   "url":  "https://www.hy-vee.com/aisles-online/p/11342/dinty-moore-beef-stew",
-                                                   "name":  "Dinty Moore Beef Stew",
-                                                   "price":  "$6.99",
-                                                   "size":  "38 oz",
-                                                   "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                               }
+                                                }
                                 },
                   "bell-peppers":  {
                                        "commodity":  "bell-peppers",
@@ -1901,11 +1912,11 @@
                                                            "name":  "Fresh Blueberries 1 PT Clamshell"
                                                        },
                                       "Family Fare":  {
-                                                          "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/berries/fresh_blueberries/p/2471148",
-                                                          "price":  5.49,
-                                                          "size":  "1 pt",
-                                                          "name":  "Fresh Blueberries",
-                                                          "board_pu":  0.3563
+                                                          "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/berries/flavor_ripe_blueberries_18_oz/p/2341070",
+                                                          "name":  "Flavor Ripe Blueberries 18 Oz",
+                                                          "price":  "$6.99",
+                                                          "size":  "18 oz",
+                                                          "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)"
                                                       },
                                       "Fareway":  {
                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/135827-blueberries-1-pt",
@@ -2284,6 +2295,13 @@
                                                        "name":  "Fareway Plain Bread Crumbs 15 oz",
                                                        "board_pu":  0.166
                                                    },
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/3309869/gustare-vita-italian-bread-crumbs-13-4-oz",
+                                                      "price":  3.99,
+                                                      "size":  "13.4 oz",
+                                                      "name":  "Gustare Vita Italian Bread Crumbs",
+                                                      "verified":  "2026-07-19 Hy-Vee search API (storeId 1465)"
+                                                  },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/13803520339",
                                                                "name":  "Vigo Italian Style Bread Crumbs, 5 lbs.",
@@ -2300,14 +2318,7 @@
                                                        "name":  "Great Value Italian Style Bread Crumbs, 15 oz",
                                                        "board_pu":  0.0813,
                                                        "recipe_pu":  0.081
-                                                   },
-                                       "Hy-Vee":  {
-                                                      "url":  "https://www.hy-vee.com/aisles-online/p/3309869/gustare-vita-italian-bread-crumbs",
-                                                      "name":  "Gustare Vita Italian Bread Crumbs",
-                                                      "price":  "$3.99",
-                                                      "size":  "13.4 oz",
-                                                      "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                  }
+                                                   }
                                    },
                   "breakfast-sandwiches":  {
                                                "commodity":  "breakfast-sandwiches",
@@ -2834,6 +2845,23 @@
                                                           "size":  "8 fl oz",
                                                           "name":  "Kraft Classic Caesar Dressing, 8 fl oz Bottle"
                                                       }
+                                      },
+                  "cajun-seasoning":  {
+                                          "commodity":  "Cajun / Creole Seasoning",
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/12104/louisiana-fish-fry-products-original-cajun-seasoning-8-oz",
+                                                         "name":  "Louisiana Fish Fry Products Original Cajun Seasoning 8 oz",
+                                                         "price":  "$2.99",
+                                                         "size":  "8 oz",
+                                                         "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                     },
+                                          "Sam\u0027s Club":  {
+                                                                  "url":  "https://www.samsclub.com/ip/13758664381",
+                                                                  "name":  "Tony Chachere\u0027s Original Creole Seasoning 32 oz.",
+                                                                  "price":  "$5.33",
+                                                                  "size":  "32 oz",
+                                                                  "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                              }
                                       },
                   "cake-mix":  {
                                    "commodity":  "cake-mix",
@@ -3909,6 +3937,23 @@
                                                       "board_pu":  3.97
                                                   }
                                   },
+                  "cayenne-pepper":  {
+                                         "commodity":  "Cayenne Pepper (ground)",
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/3225648/that-s-smart-cayenne-pepper-3-oz",
+                                                        "name":  "That\u0027s Smart! Cayenne Pepper 3 oz",
+                                                        "price":  "$1.25",
+                                                        "size":  "3 oz",
+                                                        "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                    },
+                                         "Sam\u0027s Club":  {
+                                                                 "url":  "https://www.samsclub.com/ip/13891214885",
+                                                                 "name":  "Member\u0027s Mark Cayenne Pepper, 16 oz.",
+                                                                 "price":  "$7.58",
+                                                                 "size":  "16 oz",
+                                                                 "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                             }
+                                     },
                   "celery":  {
                                  "commodity":  "Celery",
                                  "Aldi":  {
@@ -4045,10 +4090,11 @@
                                                },
                                    "Hy-Vee":  {
                                                   "url":  "https://www.hy-vee.com/aisles-online/p/4217633/hy-vee-charcoal-briquets",
-                                                  "price":  5.99,
-                                                  "size":  "7.7 lb",
                                                   "name":  "Hy-Vee Charcoal Briquets",
-                                                  "board_pu":  0.7779
+                                                  "board_pu":  0.7779,
+                                                  "price":  6.29,
+                                                  "size":  "7.7 lb",
+                                                  "verified":  "2026-07-19 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                               },
                                    "Sam\u0027s Club":  {
                                                            "url":  "https://www.samsclub.com/ip/Kingsford-Original-Charcoal-Briquets-2-Pack-20-lbs/13893070389",
@@ -4201,6 +4247,23 @@
                                                           "board_pu":  0.2029
                                                       }
                                       },
+                  "cheese-tortellini":  {
+                                            "commodity":  "Cheese Tortellini",
+                                            "Hy-Vee":  {
+                                                           "url":  "https://www.hy-vee.com/aisles-online/p/1334638/hy-vee-select-cheese-tortellini",
+                                                           "price":  7.99,
+                                                           "size":  "42 oz",
+                                                           "name":  "Hy-Vee Select Cheese Tortellini",
+                                                           "verified":  "2026-07-19 Hy-Vee search API (storeId 1465)"
+                                                       },
+                                            "Sam\u0027s Club":  {
+                                                                    "url":  "https://www.samsclub.com/ip/13862021192",
+                                                                    "name":  "Member\u0027s Mark Five Cheese Tortellini (24 oz., 2 pk.)",
+                                                                    "price":  "$10.53",
+                                                                    "size":  "48 oz",
+                                                                    "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                                }
+                                        },
                   "cherries":  {
                                    "commodity":  "cherries",
                                    "Aldi":  {
@@ -4592,6 +4655,16 @@
                                                       "name":  "Great Value Chili Beans, 15.5 oz"
                                                   }
                                   },
+                  "chili-crisp":  {
+                                      "commodity":  "Chili Crisp / Chili Oil",
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/4223512/lee-kum-kee-chili-crisp-hot-honey-sauce",
+                                                     "name":  "Lee Kum Kee Chili Crisp Hot Honey Sauce",
+                                                     "price":  "$6.49",
+                                                     "size":  "20 oz",
+                                                     "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                 }
+                                  },
                   "chili-powder":  {
                                        "commodity":  "Chili Powder",
                                        "Aldi":  {
@@ -4653,6 +4726,23 @@
                                                        "recipe_pu":  0.36
                                                    }
                                    },
+                  "chipotle-adobo":  {
+                                         "commodity":  "Chipotle Peppers in Adobo",
+                                         "Family Fare":  {
+                                                             "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/san_marcos_original_recipe_chipotles_peppers_in_adobo_sauce_7_5_oz/p/2392969",
+                                                             "name":  "San Marcos Original Recipe Chipotles Peppers In Adobo Sauce 7.5 Oz",
+                                                             "price":  "$1.99",
+                                                             "size":  "7.5 oz",
+                                                             "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                         },
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/64253/la-costena-chipotles-in-adobo-sauce",
+                                                        "name":  "La Costena Chipotles in Adobo Sauce",
+                                                        "price":  "$3.29",
+                                                        "size":  "7 oz",
+                                                        "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                    }
+                                     },
                   "chipotle-in-adobo":  {
                                             "commodity":  "Chipotle Peppers in Adobo",
                                             "Baker\u0027s":  {
@@ -5516,6 +5606,13 @@
                                                                 "size":  "14 oz",
                                                                 "name":  "Hormel® Mary Kitchen® Corned Beef Hash NET WT 14 oz. (397g"
                                                             },
+                                           "Hy-Vee":  {
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/47144/hormel-mary-kitchen-corned-beef-hash-25-oz",
+                                                          "price":  6.99,
+                                                          "size":  "25 oz",
+                                                          "name":  "Hormel Mary Kitchen Homestyle Corned Beef Hash",
+                                                          "verified":  "2026-07-19 Hy-Vee search API (storeId 1465)"
+                                                      },
                                            "Sam\u0027s Club":  {
                                                                    "url":  "https://www.samsclub.com/ip/13868521290",
                                                                    "name":  "Hormel Mary Kitchen Corned Beef Hash, 14 oz., 6 pk.",
@@ -5529,15 +5626,25 @@
                                                            "price":  2.72,
                                                            "size":  "14 oz",
                                                            "name":  "Armour Corned Beef Hash, 16g Protein Per Serving, 14 oz Can"
-                                                       },
-                                           "Hy-Vee":  {
-                                                          "url":  "https://www.hy-vee.com/aisles-online/p/47144/hormel-mary-kitchen-homestyle-corned-beef-hash",
-                                                          "name":  "Hormel Mary Kitchen Homestyle Corned Beef Hash",
-                                                          "price":  "$6.99",
-                                                          "size":  "25 oz",
-                                                          "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                      }
+                                                       }
                                        },
+                  "corn-muffin-mix":  {
+                                          "commodity":  "Corn Muffin Mix",
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/2917017/that-s-smart-corn-muffin-mix",
+                                                         "name":  "That\u0027s Smart Corn Muffin Mix",
+                                                         "price":  "$0.54",
+                                                         "size":  "7.5 oz",
+                                                         "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                     },
+                                          "Sam\u0027s Club":  {
+                                                                  "url":  "https://www.samsclub.com/ip/13875408667",
+                                                                  "name":  "JIFFY Corn Muffin Mix, 40 oz.",
+                                                                  "price":  "$2.82",
+                                                                  "size":  "40 oz",
+                                                                  "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                              }
+                                      },
                   "cornstarch":  {
                                      "commodity":  "Cornstarch",
                                      "Aldi":  {
@@ -5840,11 +5947,11 @@
                                                             "board_pu":  0.2056
                                                         },
                                        "Family Fare":  {
-                                                           "url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/cream_cheese/cream_cheese_bar_our_family_2_ct/p/1564405684712726060",
-                                                           "price":  3.99,
-                                                           "size":  "16 oz",
-                                                           "name":  "Cream Cheese Bar Our Family (2 Ct)",
-                                                           "board_pu":  0.2494
+                                                           "url":  "https://www.shopfamilyfare.com/shop/bakery/danishes_coffee_cakes_sweet_rolls/bakery_fresh_cream_cheese_iced_cinnamon_rolls_4_ct/p/1564405684713023286",
+                                                           "name":  "Bakery Fresh Cream Cheese Iced Cinnamon Rolls (4 Ct)",
+                                                           "price":  "$5.99",
+                                                           "size":  "18 oz",
+                                                           "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)"
                                                        },
                                        "Fareway":  {
                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25913229-fareway-cream-cheese-original-8-oz",
@@ -6128,6 +6235,23 @@
                                                     "board_pu":  0.76
                                                 }
                                 },
+                  "curry-powder":  {
+                                       "commodity":  "Curry Powder",
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/3176432/mccormick-curry-powder",
+                                                      "name":  "McCormick Curry Powder",
+                                                      "price":  "$6.99",
+                                                      "size":  "1.75 oz",
+                                                      "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                  },
+                                       "Sam\u0027s Club":  {
+                                                               "url":  "https://www.samsclub.com/ip/13629410820",
+                                                               "name":  "Member\u0027s Mark Salt-Free Curry Powder, 18 oz.",
+                                                               "price":  "$8.98",
+                                                               "size":  "18 oz",
+                                                               "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                           }
+                                   },
                   "deli-ham":  {
                                    "commodity":  "deli-ham",
                                    "Aldi":  {
@@ -6732,6 +6856,33 @@
                                                         "board_pu":  0.0431
                                                     }
                                     },
+                  "dried-basil":  {
+                                      "commodity":  "Basil (dried)",
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/3225608/that-s-smart-basil-leaves-1-oz",
+                                                     "name":  "That\u0027s Smart! Basil Leaves 1 oz",
+                                                     "price":  "$1.25",
+                                                     "size":  "1 oz",
+                                                     "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                 },
+                                      "Sam\u0027s Club":  {
+                                                              "url":  "https://www.samsclub.com/ip/13591373938",
+                                                              "name":  "Member\u0027s Mark Dried Basil Leaf, 6.25 oz.",
+                                                              "price":  "$6.64",
+                                                              "size":  "6.25 oz",
+                                                              "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                          }
+                                  },
+                  "dried-dill":  {
+                                     "commodity":  "Dill Weed (dried)",
+                                     "Hy-Vee":  {
+                                                    "url":  "https://www.hy-vee.com/aisles-online/p/2918306/hy-vee-dill-weed",
+                                                    "price":  2.99,
+                                                    "size":  "0.75 oz",
+                                                    "name":  "Hy-Vee Dill Weed",
+                                                    "verified":  "2026-07-19 Hy-Vee search API (storeId 1465)"
+                                                }
+                                 },
                   "dried-oregano":  {
                                         "commodity":  "Dried Oregano",
                                         "Aldi":  {
@@ -6874,6 +7025,23 @@
                                                          "recipe_pu":  1.3
                                                      }
                                      },
+                  "dried-thyme":  {
+                                      "commodity":  "Thyme (dried)",
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/22591/hy-vee-thyme",
+                                                     "name":  "Hy-Vee Thyme",
+                                                     "price":  "$2.99",
+                                                     "size":  "0.75 oz",
+                                                     "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                 },
+                                      "Sam\u0027s Club":  {
+                                                              "url":  "https://www.samsclub.com/ip/13908405858",
+                                                              "name":  "Member\u0027s Mark Thyme Leaves, 8.25 oz.",
+                                                              "price":  "$7.24",
+                                                              "size":  "8.25 oz",
+                                                              "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                          }
+                                  },
                   "dryer-sheets":  {
                                        "commodity":  "dryer-sheets",
                                        "Aldi":  {
@@ -7423,6 +7591,16 @@
                                                       "recipe_pu":  0.563
                                                   }
                                   },
+                  "fish-sauce":  {
+                                     "commodity":  "Fish Sauce",
+                                     "Hy-Vee":  {
+                                                    "url":  "https://www.hy-vee.com/aisles-online/p/2425544/dynasty-premium-fish-sauce",
+                                                    "name":  "Dynasty Premium Fish Sauce",
+                                                    "price":  "$3.49",
+                                                    "size":  "6.7 oz",
+                                                    "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                }
+                                 },
                   "fish-sticks":  {
                                       "commodity":  "fish-sticks",
                                       "Aldi":  {
@@ -7463,6 +7641,16 @@
                                                       "size":  "24.7 oz"
                                                   }
                                   },
+                  "five-spice-powder":  {
+                                            "commodity":  "Chinese Five Spice",
+                                            "Hy-Vee":  {
+                                                           "url":  "https://www.hy-vee.com/aisles-online/p/400543/mccormick-gourmet-chinese-five-spice-blend-1-75-oz",
+                                                           "name":  "McCormick Gourmet Chinese Five Spice Blend, 1.75 oz",
+                                                           "price":  "$9.99",
+                                                           "size":  "1.75 oz",
+                                                           "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                       }
+                                        },
                   "floor-cleaner":  {
                                         "commodity":  "Floor Cleaner",
                                         "Baker\u0027s":  {
@@ -7593,6 +7781,16 @@
                                                        "board_pu":  1.25
                                                    }
                                    },
+                  "fresh-basil":  {
+                                      "commodity":  "Basil (fresh)",
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/332699/johnson-family-farm-fresh-basil",
+                                                     "price":  2.99,
+                                                     "size":  "0.75 oz",
+                                                     "name":  "Johnson Family Farm Fresh Basil",
+                                                     "verified":  "2026-07-19 Hy-Vee search API (storeId 1465)"
+                                                 }
+                                  },
                   "fresh-cilantro":  {
                                          "commodity":  "Fresh Cilantro",
                                          "Aldi":  {
@@ -7716,6 +7914,16 @@
                                                             "size":  "lb"
                                                         }
                                         },
+                  "fresh-mint":  {
+                                     "commodity":  "Mint (fresh)",
+                                     "Hy-Vee":  {
+                                                    "url":  "https://www.hy-vee.com/aisles-online/p/269490/johnson-family-farm-fresh-mint",
+                                                    "price":  2.99,
+                                                    "size":  "0.75 oz",
+                                                    "name":  "Johnson Family Farm Fresh Mint",
+                                                    "verified":  "2026-07-19 Hy-Vee search API (storeId 1465)"
+                                                }
+                                 },
                   "fries":  {
                                 "commodity":  "Fries",
                                 "Aldi":  {
@@ -8277,6 +8485,13 @@
                                                       "name":  "Fareway Steamables Green Peas",
                                                       "board_pu":  0.12
                                                   },
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/2969855/that-s-smart-sweet-peas",
+                                                     "price":  0.98,
+                                                     "size":  "12 oz",
+                                                     "name":  "That\u0027s Smart! Sweet Peas (Frozen)",
+                                                     "verified":  "2026-07-19 Hy-Vee search API (storeId 1465)"
+                                                 },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/Great-Value-Frozen-Sweet-Peas-16-oz-Steamable-Bag/10315048",
                                                       "price":  0.98,
@@ -8284,14 +8499,7 @@
                                                       "name":  "Great Value Frozen Sweet Peas",
                                                       "board_pu":  0.0612,
                                                       "recipe_pu":  0.065
-                                                  },
-                                      "Hy-Vee":  {
-                                                     "url":  "https://www.hy-vee.com/aisles-online/p/2969855/that-s-smart-sweet-peas-frozen",
-                                                     "name":  "That\u0027s Smart! Sweet Peas (Frozen)",
-                                                     "price":  "$0.98",
-                                                     "size":  "12 oz",
-                                                     "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                 }
+                                                  }
                                   },
                   "frozen-pizza":  {
                                        "commodity":  "frozen-pizza",
@@ -8580,6 +8788,16 @@
                                                            "board_pu":  0.499
                                                        }
                                        },
+                  "garam-masala":  {
+                                       "commodity":  "Garam Masala",
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/400549/mccormick-gourmet-garam-masala-blend-1-7-oz",
+                                                      "name":  "McCormick Gourmet Garam Masala Blend, 1.7 oz",
+                                                      "price":  "$5.99",
+                                                      "size":  "1.7 oz",
+                                                      "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                  }
+                                   },
                   "garlic":  {
                                  "commodity":  "Garlic (Bulb)",
                                  "Aldi":  {
@@ -8830,6 +9048,16 @@
                                                         "size":  "32 fl oz"
                                                     }
                                     },
+                  "gochujang":  {
+                                    "commodity":  "Gochujang (Korean Chili Paste)",
+                                    "Hy-Vee":  {
+                                                   "url":  "https://www.hy-vee.com/aisles-online/p/2491377/hy-vee-korean-gochujang-sauce",
+                                                   "name":  "Hy-Vee Korean Gochujang Sauce",
+                                                   "price":  "$4.99",
+                                                   "size":  "11.8 fl oz",
+                                                   "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                               }
+                                },
                   "golden-raisins":  {
                                          "commodity":  "Golden Raisins",
                                          "Aldi":  {
@@ -9145,10 +9373,11 @@
                                                        },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/344740/hy-vee-nonfat-plain-greek-yogurt",
-                                                      "price":  5.88,
-                                                      "size":  "32 oz",
                                                       "name":  "Hy-Vee NonFat Plain Greek Yogurt",
-                                                      "recipe_pu":  0.1838
+                                                      "recipe_pu":  0.1838,
+                                                      "price":  4.49,
+                                                      "size":  "32 oz",
+                                                      "verified":  "2026-07-19 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Chobani-Vanilla-Zero-Sugar-Greek-Yogurt-40-oz/18606558574",
@@ -9367,6 +9596,26 @@
                                                        "board_pu":  1.07
                                                    }
                                    },
+                  "grits":  {
+                                "commodity":  "Grits (quick)",
+                                "Hy-Vee":  {
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/8100/quaker-quick-enriched-white-hominy-grits",
+                                               "name":  "Quaker Quick Enriched White Hominy Grits",
+                                               "price":  "$3.99",
+                                               "size":  "24 oz",
+                                               "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                           }
+                            },
+                  "ground-allspice":  {
+                                          "commodity":  "Allspice (ground)",
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/4884/morton-bassett-ground-allspice",
+                                                         "name":  "Morton \u0026 Bassett Ground Allspice",
+                                                         "price":  "$9.99",
+                                                         "size":  "2.3 oz",
+                                                         "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                     }
+                                      },
                   "ground-beef-8020":  {
                                            "commodity":  "80/20 Ground Beef",
                                            "Aldi":  {
@@ -9377,10 +9626,11 @@
                                                         "board_pu":  5.99
                                                     },
                                            "Family Fare":  {
-                                                               "url":  "https://www.shopfamilyfare.com/shop/meat/beef/ground/fresh_80_lean_ground_beef_value_pack/p/1564405684713030543",
-                                                               "price":  7.99,
-                                                               "size":  "lb",
-                                                               "name":  "Fresh 80% Lean Ground Beef, Value Pack"
+                                                               "url":  "https://www.shopfamilyfare.com/shop/meat/beef/ground/standard_pride_80_20_100_pure_ground_beef_48_oz_discount_limit_2/p/7931635",
+                                                               "name":  "Standard Pride 80%/20% 100% Pure Ground Beef 48 Oz Discount Limit 2",
+                                                               "price":  "$21.99",
+                                                               "size":  "48 oz",
+                                                               "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)"
                                                            },
                                            "Fareway":  {
                                                            "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386578-80-lean-20-fat-ground-beef-1-each",
@@ -9442,7 +9692,7 @@
                                                          "price":  1.25,
                                                          "size":  "2.5 oz",
                                                          "name":  "That\u0027s Smart Ground Cinnamon",
-                                                         "verified":  "2026-07-18 Hy-Vee search API (storeId 1465)"
+                                                         "verified":  "2026-07-19 Hy-Vee search API (storeId 1465)"
                                                      },
                                           "Sam\u0027s Club":  {
                                                                   "url":  "https://www.samsclub.com/ip/13599663121",
@@ -9463,6 +9713,26 @@
                                                           "recipe_pu":  0.508
                                                       }
                                       },
+                  "ground-cloves":  {
+                                        "commodity":  "Cloves (ground)",
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/4141464/hy-vee-ground-cloves",
+                                                       "price":  1.33,
+                                                       "size":  "0.55 oz",
+                                                       "name":  "Hy-Vee Ground Cloves",
+                                                       "verified":  "2026-07-19 Hy-Vee search API (storeId 1465)"
+                                                   }
+                                    },
+                  "ground-coriander":  {
+                                           "commodity":  "Coriander (ground)",
+                                           "Hy-Vee":  {
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/4141465/hy-vee-coriander-seed",
+                                                          "name":  "Hy-Vee Coriander Seed",
+                                                          "price":  "$1.33",
+                                                          "size":  "0.5 oz",
+                                                          "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                      }
+                                       },
                   "ground-cumin":  {
                                        "commodity":  "Ground Cumin",
                                        "Aldi":  {
@@ -9523,6 +9793,33 @@
                                                        "recipe_pu":  0.548
                                                    }
                                    },
+                  "ground-ginger":  {
+                                        "commodity":  "Ginger (ground)",
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2925188/hy-vee-ground-ginger",
+                                                       "price":  2.99,
+                                                       "size":  "2 oz",
+                                                       "name":  "Hy-Vee Ground Ginger",
+                                                       "verified":  "2026-07-19 Hy-Vee search API (storeId 1465)"
+                                                   },
+                                        "Sam\u0027s Club":  {
+                                                                "url":  "https://www.samsclub.com/ip/13591373069",
+                                                                "name":  "Member\u0027s Mark Organic Ground Ginger, 7 oz.",
+                                                                "price":  "$5.58",
+                                                                "size":  "7 oz",
+                                                                "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                            }
+                                    },
+                  "ground-nutmeg":  {
+                                        "commodity":  "Nutmeg (ground)",
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2973757/hy-vee-ground-nutmeg-2-12-oz",
+                                                       "price":  3.99,
+                                                       "size":  "2.12 oz",
+                                                       "name":  "Hy-Vee Ground Nutmeg 2.12 oz",
+                                                       "verified":  "2026-07-19 Hy-Vee search API (storeId 1465)"
+                                                   }
+                                    },
                   "ground-pork":  {
                                       "commodity":  "ground-pork",
                                       "Aldi":  {
@@ -9846,6 +10143,16 @@
                                                     "size":  "50 fl oz"
                                                 }
                                 },
+                  "harissa-paste":  {
+                                        "commodity":  "Harissa Paste",
+                                        "Hy-Vee":  {
+                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2345453/morton-bassett-harissa",
+                                                       "name":  "Morton \u0026 Bassett Harissa",
+                                                       "price":  "$11.99",
+                                                       "size":  "1.9 oz",
+                                                       "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                   }
+                                    },
                   "hash-browns":  {
                                       "commodity":  "hash-browns",
                                       "Aldi":  {
@@ -9977,6 +10284,16 @@
                                                                "recipe_pu":  3.96
                                                            }
                                            },
+                  "hoisin-sauce":  {
+                                       "commodity":  "Hoisin Sauce",
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/187120/lee-kum-kee-hoisin-sauce-8-5-oz",
+                                                      "name":  "Lee Kum Kee Hoisin Sauce 8.5 oz",
+                                                      "price":  "$4.99",
+                                                      "size":  "8.5 oz",
+                                                      "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                  }
+                                   },
                   "hominy":  {
                                  "commodity":  "Hominy",
                                  "Baker\u0027s":  {
@@ -10037,6 +10354,13 @@
                                                 "size":  "16 oz",
                                                 "name":  "Fareway Pure Honey"
                                             },
+                                "Hy-Vee":  {
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/5183/pillsbury-grands-flaky-layers-honey-butter-big-biscuits-8-count",
+                                               "name":  "Pillsbury Grands! Flaky Layers Honey Butter Big Biscuits, 8 count",
+                                               "price":  "$3.49",
+                                               "size":  "16.3 oz",
+                                               "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                           },
                                 "Sam\u0027s Club":  {
                                                         "url":  "https://www.samsclub.com/ip/15006863838",
                                                         "name":  "Member’s Mark Wildflower Pure Premium Honey, 48 oz.",
@@ -10052,14 +10376,7 @@
                                                 "recipe_pu":  0.225,
                                                 "price":  2.98,
                                                 "size":  "12 oz"
-                                            },
-                                "Hy-Vee":  {
-                                               "url":  "https://www.hy-vee.com/aisles-online/p/5183/pillsbury-grands-flaky-layers-honey-butter-big-biscuits-8-count",
-                                               "name":  "Pillsbury Grands! Flaky Layers Honey Butter Big Biscuits, 8 count",
-                                               "price":  "$3.49",
-                                               "size":  "16.3 oz",
-                                               "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                           }
+                                            }
                             },
                   "honeydew":  {
                                    "commodity":  "honeydew",
@@ -11413,6 +11730,16 @@
                                                    "size":  "52 fl oz"
                                                }
                                },
+                  "lemongrass-paste":  {
+                                           "commodity":  "Lemongrass Paste",
+                                           "Hy-Vee":  {
+                                                          "url":  "https://www.hy-vee.com/aisles-online/p/35932/gourmet-garden-lemongrass-stir-in-paste-4-0-oz",
+                                                          "name":  "Gourmet Garden Lemongrass Stir-In Paste, 4.0 oz",
+                                                          "price":  "$6.99",
+                                                          "size":  "4 oz",
+                                                          "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                      }
+                                       },
                   "lemon-juice":  {
                                       "commodity":  "Lemon Juice",
                                       "Aldi":  {
@@ -12158,7 +12485,7 @@
                                                        "price":  8.99,
                                                        "size":  "32 oz",
                                                        "name":  "Spice World Minced Garlic",
-                                                       "verified":  "2026-07-18 Hy-Vee search API (storeId 1465)"
+                                                       "verified":  "2026-07-19 Hy-Vee search API (storeId 1465)"
                                                    },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/7874215051",
@@ -12191,6 +12518,16 @@
                                                       "verified":  "2026-07-16 Hy-Vee search API (storeId 1465)"
                                                   }
                                    },
+                  "mirin":  {
+                                "commodity":  "Mirin (Sweet Cooking Wine)",
+                                "Hy-Vee":  {
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/332189/kikkoman-aji-mirin-sweet-cooking-rice-wine",
+                                               "name":  "Kikkoman Aji Mirin Sweet Cooking Rice Wine\r\n",
+                                               "price":  "$6.99",
+                                               "size":  "10 fl oz",
+                                               "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                           }
+                            },
                   "mixed-nuts":  {
                                      "commodity":  "mixed-nuts",
                                      "Aldi":  {
@@ -12362,10 +12699,11 @@
                                                  "board_pu":  0.1862
                                              },
                                     "Family Fare":  {
-                                                        "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/mushrooms/our_family_mushrooms_white_whole_8_oz/p/1564405684713576546",
-                                                        "price":  2.49,
+                                                        "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/mushrooms/our_family_mushrooms_white_sliced_8_oz/p/1564405684713576547",
+                                                        "name":  "Our Family Mushrooms, White, Sliced 8 Oz",
+                                                        "price":  "$2.59",
                                                         "size":  "8 oz",
-                                                        "name":  "Our Family Mushrooms, White, Whole 8 Oz"
+                                                        "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)"
                                                     },
                                     "Fareway":  {
                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18545165",
@@ -12695,11 +13033,11 @@
                                                       "board_pu":  1.29
                                                   },
                                  "Family Fare":  {
-                                                     "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/our_family_medium_yellow_onion/p/1564405684714568560",
-                                                     "name":  "Our Family Medium Yellow Onion",
-                                                     "price":  "$3.19",
-                                                     "size":  "3 lb",
-                                                     "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                     "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/our_family_onion_yellow/p/1764405684715786064",
+                                                     "name":  "Our Family Onion Yellow",
+                                                     "price":  "$4.99",
+                                                     "size":  "5 lb",
+                                                     "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)"
                                                  },
                                  "Fareway":  {
                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16519988-onions-yellow-1-ea",
@@ -13153,10 +13491,11 @@
                                                 "board_pu":  0.3488
                                             },
                                    "Family Fare":  {
-                                                       "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/our_family_natural_finely_cut_parmesan_shredded_cheese_6_oz/p/7081842",
-                                                       "price":  2.59,
-                                                       "size":  "6 oz",
-                                                       "name":  "Our Family Natural Finely Cut Parmesan Shredded Cheese 6 Oz"
+                                                       "url":  "https://www.shopfamilyfare.com/shop/pantry/crackers/toppers_dips/our_family_grated_cheese_parmesan_16_oz/p/1564405684712451099",
+                                                       "name":  "Our Family Grated Cheese, Parmesan 16 Oz",
+                                                       "price":  "$6.49",
+                                                       "size":  "16 oz",
+                                                       "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)"
                                                    },
                                    "Fareway":  {
                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24713413",
@@ -13251,10 +13590,11 @@
                                                      "board_pu":  0.0831
                                                  },
                                 "Family Fare":  {
-                                                    "url":  "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/angel_hair_spaghetti/dried_spaghetti_pasta_thin_our_family/p/7081750",
-                                                    "name":  "Dried Spaghetti Pasta, Thin Our Family",
+                                                    "url":  "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/angel_hair_spaghetti/enriched_macaroni_product_spaghetti/p/7081758",
+                                                    "name":  "Enriched Macaroni Product, Spaghetti",
                                                     "price":  "$2.49",
-                                                    "size":  "32 oz"
+                                                    "size":  "32 oz",
+                                                    "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)"
                                                 },
                                 "Fareway":  {
                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24461263",
@@ -14004,6 +14344,26 @@
                                                 "board_pu":  2.74
                                             }
                             },
+                  "poblano-peppers":  {
+                                          "commodity":  "Poblano Peppers (fresh)",
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/37443/poblano-peppers",
+                                                         "name":  "Poblano Peppers",
+                                                         "price":  "$4.99",
+                                                         "size":  "lb",
+                                                         "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                     }
+                                      },
+                  "poppy-seeds":  {
+                                      "commodity":  "Poppy Seeds",
+                                      "Hy-Vee":  {
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/292438/lemon-poppy-seed-dessert-loaf",
+                                                     "name":  "Lemon Poppy Seed Dessert Loaf",
+                                                     "price":  "$2.5",
+                                                     "size":  "7 oz",
+                                                     "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                 }
+                                  },
                   "popsicles":  {
                                     "commodity":  "popsicles",
                                     "Aldi":  {
@@ -14068,10 +14428,11 @@
                                                           "board_pu":  3.99
                                                       },
                                      "Family Fare":  {
-                                                         "url":  "https://www.shopfamilyfare.com/shop/meat/pork/fresh/fresh_assorted_pork_chops_value_pack/p/1564405684713031264",
-                                                         "price":  4.79,
+                                                         "url":  "https://www.shopfamilyfare.com/shop/meat/pork/fresh/fresh_assorted_bone_in_pork_chops/p/1564405684713031263",
+                                                         "name":  "Fresh Assorted Bone In Pork Chops",
+                                                         "price":  "$4.79",
                                                          "size":  "lb",
-                                                         "name":  "Fresh Assorted Pork Chops Value Pack"
+                                                         "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)"
                                                      },
                                      "Fareway":  {
                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84388353-center-cut-pork-chops-1-each",
@@ -14309,11 +14670,11 @@
                                                             "board_pu":  0.2238
                                                         },
                                        "Family Fare":  {
-                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/potato_chips/our_family_potato_chips_sour_cream_onion_flavored_7_75_oz/p/1564405684709885304",
-                                                           "name":  "Our Family Potato Chips, Sour Cream \u0026 Onion Flavored 7.75 Oz",
+                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/potato_chips/our_family_potato_chips_cheddar_sour_cream_flavored_7_75_oz/p/1564405684709279259",
+                                                           "name":  "Our Family Potato Chips, Cheddar \u0026 Sour Cream Flavored 7.75 Oz",
                                                            "price":  "$1.99",
                                                            "size":  "7.75 oz",
-                                                           "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                           "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)"
                                                        },
                                        "Fareway":  {
                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25557168",
@@ -14346,6 +14707,16 @@
                                                        "board_pu":  0.1923
                                                    }
                                    },
+                  "potato-gnocchi":  {
+                                         "commodity":  "Potato Gnocchi",
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/835070/gustare-vita-basil-potato-gnocchi",
+                                                        "name":  "Gustare Vita Basil Potato Gnocchi",
+                                                        "price":  "$2.99",
+                                                        "size":  "16 oz",
+                                                        "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                    }
+                                     },
                   "powdered-sugar":  {
                                          "commodity":  "powdered-sugar",
                                          "Aldi":  {
@@ -14772,6 +15143,23 @@
                                                          "board_pu":  0.1061
                                                      }
                                      },
+                  "ranch-seasoning-mix":  {
+                                              "commodity":  "Ranch Seasoning Mix (packet)",
+                                              "Hy-Vee":  {
+                                                             "url":  "https://www.hy-vee.com/aisles-online/p/605706/hy-vee-ranch-dressing-mix",
+                                                             "name":  "Hy-Vee Ranch Dressing Mix",
+                                                             "price":  "$0.99",
+                                                             "size":  "1.12 oz",
+                                                             "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                         },
+                                              "Sam\u0027s Club":  {
+                                                                      "url":  "https://www.samsclub.com/ip/7110021078",
+                                                                      "name":  "Hidden Valley Original Ranch Salad Dressing and Seasoning Mix, 16 oz.",
+                                                                      "price":  "$8.98",
+                                                                      "size":  "16 oz",
+                                                                      "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                                  }
+                                          },
                   "raspberries":  {
                                       "commodity":  "raspberries",
                                       "Aldi":  {
@@ -14902,6 +15290,16 @@
                                                           "name":  "Fresh Red Bell Pepper, Each",
                                                           "recipe_pu":  0.98
                                                       }
+                                      },
+                  "red-curry-paste":  {
+                                          "commodity":  "Thai Red Curry Paste",
+                                          "Hy-Vee":  {
+                                                         "url":  "https://www.hy-vee.com/aisles-online/p/67057/thai-kitchen-gluten-free-red-curry-paste",
+                                                         "name":  "Thai Kitchen Gluten Free Red Curry Paste\r\n",
+                                                         "price":  "$6.99",
+                                                         "size":  "4 oz",
+                                                         "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                     }
                                       },
                   "red-pepper-flakes":  {
                                             "commodity":  "Red Pepper Flakes",
@@ -15110,6 +15508,16 @@
                                                         "size":  "16 oz"
                                                     }
                                     },
+                  "refrigerated-biscuits":  {
+                                                "commodity":  "Refrigerated Biscuit Dough",
+                                                "Hy-Vee":  {
+                                                               "url":  "https://www.hy-vee.com/aisles-online/p/23564/hy-vee-buttermilk-biscuits-10ct",
+                                                               "name":  "Hy-Vee Buttermilk Biscuits 10ct",
+                                                               "price":  "$1.29",
+                                                               "size":  "7.5 oz",
+                                                               "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                           }
+                                            },
                   "relish":  {
                                  "commodity":  "relish",
                                  "Aldi":  {
@@ -15272,6 +15680,16 @@
                                                      "size":  "7.23 oz"
                                                  }
                                  },
+                  "rice-noodles":  {
+                                       "commodity":  "Rice Noodles",
+                                       "Hy-Vee":  {
+                                                      "url":  "https://www.hy-vee.com/aisles-online/p/18776/a-taste-of-thai-rice-noodle",
+                                                      "name":  "A Taste of Thai Rice Noodle\r\n",
+                                                      "price":  "$5.99",
+                                                      "size":  "16 oz",
+                                                      "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                  }
+                                   },
                   "rice-vinegar":  {
                                        "commodity":  "Rice Vinegar",
                                        "Aldi":  {
@@ -15433,11 +15851,11 @@
                                                        "board_pu":  0.399
                                                    },
                                           "Family Fare":  {
-                                                              "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/potatoes/our_family_potatoes_russet_idaho/p/2341145",
-                                                              "price":  5.49,
-                                                              "size":  "10 lb",
-                                                              "name":  "Our Family Potatoes Russet Idaho",
-                                                              "board_pu":  0.549
+                                                              "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/potatoes/fresh_idaho_russet_potatoes_our_family/p/1564405684706717650",
+                                                              "name":  "Fresh Idaho Russet Potatoes Our Family",
+                                                              "price":  "$3.49",
+                                                              "size":  "5 lb",
+                                                              "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)"
                                                           },
                                           "Fareway":  {
                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16417856-russet-potato-bag-5-lbs",
@@ -15645,7 +16063,7 @@
                                               "price":  1.58,
                                               "size":  "26 oz",
                                               "name":  "Hy-Vee Iodized Salt",
-                                              "verified":  "2026-07-18 Hy-Vee search API (storeId 1465)"
+                                              "verified":  "2026-07-19 Hy-Vee search API (storeId 1465)"
                                           },
                                "Sam\u0027s Club":  {
                                                        "url":  "https://www.samsclub.com/ip/13589509673",
@@ -15802,6 +16220,16 @@
                                                                "recipe_pu":  0.111
                                                            }
                                            },
+                  "sesame-oil":  {
+                                     "commodity":  "Sesame Oil (toasted)",
+                                     "Hy-Vee":  {
+                                                    "url":  "https://www.hy-vee.com/aisles-online/p/3451737/hy-vee-toasted-sesame-oil",
+                                                    "name":  "Hy-Vee Toasted Sesame Oil",
+                                                    "price":  "$5.99",
+                                                    "size":  "8.5 fl oz",
+                                                    "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                }
+                                 },
                   "shampoo":  {
                                   "commodity":  "shampoo",
                                   "Aldi":  {
@@ -15975,11 +16403,11 @@
                                                                "board_pu":  0.2278
                                                            },
                                           "Family Fare":  {
-                                                              "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/our_family_natural_part_skim_mozzarella_shredded_cheese_32_oz/p/7081847",
-                                                              "price":  7.89,
+                                                              "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/our_family_natural_finely_cut_mexican_shredded_cheese_32_oz/p/7081849",
+                                                              "name":  "Our Family Natural Finely Cut Mexican Shredded Cheese 32 Oz",
+                                                              "price":  "$7.89",
                                                               "size":  "32 oz",
-                                                              "name":  "Our Family Natural Part Skim Mozzarella Shredded Cheese 32 Oz",
-                                                              "board_pu":  0.2158
+                                                              "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)"
                                                           },
                                           "Fareway":  {
                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24712009-fareway-cheese-mild-cheddar-fancy-shredded-8-oz",
@@ -16177,7 +16605,7 @@
                                                           "price":  0.99,
                                                           "size":  "15 oz",
                                                           "name":  "Hy-Vee Sloppy Joe Sauce",
-                                                          "verified":  "2026-07-18 Hy-Vee search API (storeId 1465)"
+                                                          "verified":  "2026-07-19 Hy-Vee search API (storeId 1465)"
                                                       },
                                            "Walmart":  {
                                                            "url":  "https://www.walmart.com/ip/15610428",
@@ -16925,6 +17353,30 @@
                                                                 "verified":  "2026-07-14 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                             }
                                              },
+                  "sun-dried-tomatoes":  {
+                                             "commodity":  "Sun-Dried Tomatoes",
+                                             "Family Fare":  {
+                                                                 "url":  "https://www.shopfamilyfare.com/shop/meat/sausage/smoked/gilbert_s_sausage_chicken_caprese_with_basil_mozzarella_sun_dried_tomatoes_10_oz/p/5588160",
+                                                                 "name":  "Gilbert\u0027s Sausage, Chicken, Caprese, With Basil, Mozzarella \u0026 Sun Dried Tomatoes 10 Oz",
+                                                                 "price":  "$6.99",
+                                                                 "size":  "10 oz",
+                                                                 "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                             },
+                                             "Hy-Vee":  {
+                                                            "url":  "https://www.hy-vee.com/aisles-online/p/1603/mission-sun-dried-tomato-basil-wraps-6ct",
+                                                            "price":  4.99,
+                                                            "size":  "15 oz",
+                                                            "name":  "Mission Sun-Dried Tomato Basil Wraps 6Ct",
+                                                            "verified":  "2026-07-19 Hy-Vee search API (storeId 1465)"
+                                                        },
+                                             "Sam\u0027s Club":  {
+                                                                     "url":  "https://www.samsclub.com/ip/17242460680",
+                                                                     "name":  "Terra Verde Italian Sundried Tomatoes in Oil, 24 oz.",
+                                                                     "price":  "$9.98",
+                                                                     "size":  "24 oz",
+                                                                     "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                                 }
+                                         },
                   "sweet-chili-sauce":  {
                                             "commodity":  "Sweet Chili Sauce",
                                             "Baker\u0027s":  {
@@ -17116,6 +17568,33 @@
                                                      "name":  "HERDEZ TAQUERIA STREET LIQUID SAUCE Roja Taco Sauce, 9 oz Bo"
                                                  }
                                  },
+                  "taco-seasoning":  {
+                                         "commodity":  "Taco Seasoning (packet)",
+                                         "Hy-Vee":  {
+                                                        "url":  "https://www.hy-vee.com/aisles-online/p/58545/hy-vee-original-taco-seasoning-mix",
+                                                        "name":  "Hy-Vee Original Taco Seasoning Mix",
+                                                        "price":  "$0.99",
+                                                        "size":  "1.25 oz",
+                                                        "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                    },
+                                         "Sam\u0027s Club":  {
+                                                                 "url":  "https://www.samsclub.com/ip/17019619523",
+                                                                 "name":  "Member’s Mark Taco Seasoning, 23 oz.",
+                                                                 "price":  "$6.98",
+                                                                 "size":  "23 oz",
+                                                                 "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                             }
+                                     },
+                  "tahini":  {
+                                 "commodity":  "Tahini (Sesame Paste)",
+                                 "Hy-Vee":  {
+                                                "url":  "https://www.hy-vee.com/aisles-online/p/57164/krinos-imported-tahini-16-oz",
+                                                "name":  "Krinos Imported Tahini 16 oz",
+                                                "price":  "$9.99",
+                                                "size":  "16 oz",
+                                                "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                            }
+                             },
                   "tampons":  {
                                   "commodity":  "tampons",
                                   "Fareway":  {
@@ -17332,6 +17811,23 @@
                                                   "board_pu":  7.98
                                               }
                               },
+                  "toasted-sesame-seeds":  {
+                                               "commodity":  "Sesame Seeds",
+                                               "Hy-Vee":  {
+                                                              "url":  "https://www.hy-vee.com/aisles-online/p/4039509/ball-park-sesame-seed-burger-buns-8-count",
+                                                              "price":  3.79,
+                                                              "size":  "16 oz",
+                                                              "name":  "Ball Park Sesame Seed Burger Buns, 8 Count",
+                                                              "verified":  "2026-07-19 Hy-Vee search API (storeId 1465)"
+                                                          },
+                                               "Sam\u0027s Club":  {
+                                                                       "url":  "https://www.samsclub.com/ip/17787764079",
+                                                                       "name":  "Member\u0027s Mark Black Sesame Seed, 22 oz.",
+                                                                       "price":  "$7.98",
+                                                                       "size":  "22 oz",
+                                                                       "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                                   }
+                                           },
                   "toaster-pastries":  {
                                            "commodity":  "toaster-pastries",
                                            "Aldi":  {
@@ -17462,6 +17958,23 @@
                                                        "board_pu":  0.7058
                                                    }
                                    },
+                  "tomatillos":  {
+                                     "commodity":  "Tomatillos (fresh)",
+                                     "Hy-Vee":  {
+                                                    "url":  "https://www.hy-vee.com/aisles-online/p/37464/tomatillos",
+                                                    "name":  "Tomatillos",
+                                                    "price":  "$3.99",
+                                                    "size":  "lb",
+                                                    "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                },
+                                     "Sam\u0027s Club":  {
+                                                             "url":  "https://www.samsclub.com/ip/19644657661",
+                                                             "name":  "Southern Valley Farm Fresh Peeled Tomatillos, 16 oz.",
+                                                             "price":  "$2.96",
+                                                             "size":  "16 oz",
+                                                             "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                         }
+                                 },
                   "tomatoes":  {
                                    "commodity":  "tomatoes",
                                    "Aldi":  {
@@ -17478,12 +17991,6 @@
                                                         "name":  "Fresh Roma Tomato",
                                                         "board_pu":  1.49
                                                     },
-                                   "Family Fare":  {
-                                                       "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/tomatoes/fresh_tomatoes_hot_house/p/2311734",
-                                                       "price":  3.99,
-                                                       "size":  "lb",
-                                                       "name":  "Fresh Tomatoes, Hot House"
-                                                   },
                                    "Fareway":  {
                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17330187",
                                                    "price":  1.29,
@@ -17909,9 +18416,9 @@
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/2913522/tall-kitchen-bags-with-twist-ties",
                                                     "name":  "Tall Kitchen Bags With Twist Ties",
                                                     "board_pu":  0.0569,
-                                                    "price":  4.49,
+                                                    "price":  4.99,
                                                     "size":  "box",
-                                                    "verified":  "2026-07-16 Hy-Vee GraphQL (storeId 1465, current shelf price)"
+                                                    "verified":  "2026-07-19 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                                 },
                                      "Sam\u0027s Club":  {
                                                              "url":  "https://www.samsclub.com/ip/7874222567",
@@ -18165,6 +18672,23 @@
                                                         "board_pu":  0.314
                                                     }
                                      },
+                  "walnuts":  {
+                                  "commodity":  "Walnuts",
+                                  "Hy-Vee":  {
+                                                 "url":  "https://www.hy-vee.com/aisles-online/p/56914/hy-vee-english-walnuts",
+                                                 "name":  "Hy-Vee English Walnuts",
+                                                 "price":  "$7.99",
+                                                 "size":  "16 oz",
+                                                 "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                             },
+                                  "Sam\u0027s Club":  {
+                                                          "url":  "https://www.samsclub.com/ip/16938718244",
+                                                          "name":  "Members Mark Halves \u0026 Pieces Walnuts, 32 oz.",
+                                                          "price":  "$8.48",
+                                                          "size":  "32 oz",
+                                                          "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                      }
+                              },
                   "watermelon":  {
                                      "commodity":  "Whole Watermelon",
                                      "Aldi":  {
@@ -18538,11 +19062,11 @@
                                               "board_pu":  0.0872
                                           },
                                  "Family Fare":  {
-                                                     "url":  "https://www.shopfamilyfare.com/shop/dairy/yogurt/individual_size/yoplait_low_fat_french_vanilla_yogurt_6_oz/p/37031",
-                                                     "name":  "Yoplait Low Fat French Vanilla Yogurt 6 Oz",
+                                                     "url":  "https://www.shopfamilyfare.com/shop/dairy/yogurt/individual_size/yoplait_low_fat_cherry_orchard_yogurt_6_oz/p/37027",
+                                                     "name":  "Yoplait Low Fat Cherry Orchard Yogurt 6 Oz",
                                                      "price":  "$0.89",
                                                      "size":  "6 oz",
-                                                     "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
+                                                     "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)"
                                                  },
                                  "Fareway":  {
                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386666-fareway-nonfat-plain-greek-yogurt-32-oz",
@@ -18661,12 +19185,11 @@
                                                         "recipe_pu":  1.79
                                                     },
                                    "Family Fare":  {
-                                                       "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/squashes/yellow_zucchini_yellow_squash/p/2311283",
-                                                       "price":  1.99,
+                                                       "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/squashes/zucchini_squash/p/12434",
+                                                       "name":  "Zucchini Squash",
+                                                       "price":  "$2.29",
                                                        "size":  "lb",
-                                                       "name":  "Yellow Zucchini/Yellow Squash",
-                                                       "board_pu":  1.99,
-                                                       "recipe_pu":  2.29
+                                                       "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)"
                                                    },
                                    "Fareway":  {
                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/193785",
@@ -18691,494 +19214,6 @@
                                                    "board_pu":  1.52,
                                                    "recipe_pu":  1.52
                                                }
-                               },
-                  "ground-allspice":  {
-                                          "Hy-Vee":  {
-                                                         "url":  "https://www.hy-vee.com/aisles-online/p/4884/morton-bassett-ground-allspice",
-                                                         "name":  "Morton \u0026 Bassett Ground Allspice",
-                                                         "price":  "$9.99",
-                                                         "size":  "2.3 oz",
-                                                         "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                     }
-                                      },
-                  "dried-basil":  {
-                                      "Hy-Vee":  {
-                                                     "url":  "https://www.hy-vee.com/aisles-online/p/3225608/that-s-smart-basil-leaves-1-oz",
-                                                     "name":  "That\u0027s Smart! Basil Leaves 1 oz",
-                                                     "price":  "$1.25",
-                                                     "size":  "1 oz",
-                                                     "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                 },
-                                      "Sam\u0027s Club":  {
-                                                              "url":  "https://www.samsclub.com/ip/13591373938",
-                                                              "name":  "Member\u0027s Mark Dried Basil Leaf, 6.25 oz.",
-                                                              "price":  "$6.64",
-                                                              "size":  "6.25 oz",
-                                                              "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                          }
-                                  },
-                  "fresh-basil":  {
-                                      "Hy-Vee":  {
-                                                     "url":  "https://www.hy-vee.com/aisles-online/p/332699/johnson-family-farm-fresh-basil",
-                                                     "name":  "Johnson Family Farm Fresh Basil",
-                                                     "price":  "$2.99",
-                                                     "size":  "0.75 oz",
-                                                     "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                 }
-                                  },
-                  "bay-leaves":  {
-                                     "Hy-Vee":  {
-                                                    "url":  "https://www.hy-vee.com/aisles-online/p/2210699/mccormick-gourmet-organic-turkish-bay-leaves",
-                                                    "name":  "McCormick Gourmet Organic Turkish Bay Leaves",
-                                                    "price":  "$9.99",
-                                                    "size":  "0.18 oz",
-                                                    "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                },
-                                     "Sam\u0027s Club":  {
-                                                             "url":  "https://www.samsclub.com/ip/13613464913",
-                                                             "name":  "Member\u0027s Mark Whole Bay Leaves, 2 oz.",
-                                                             "price":  "$8.54",
-                                                             "size":  "2 oz",
-                                                             "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                         }
-                                 },
-                  "cajun-seasoning":  {
-                                          "Hy-Vee":  {
-                                                         "url":  "https://www.hy-vee.com/aisles-online/p/12104/louisiana-fish-fry-products-original-cajun-seasoning-8-oz",
-                                                         "name":  "Louisiana Fish Fry Products Original Cajun Seasoning 8 oz",
-                                                         "price":  "$2.99",
-                                                         "size":  "8 oz",
-                                                         "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                     },
-                                          "Sam\u0027s Club":  {
-                                                                  "url":  "https://www.samsclub.com/ip/13758664381",
-                                                                  "name":  "Tony Chachere\u0027s Original Creole Seasoning 32 oz.",
-                                                                  "price":  "$5.33",
-                                                                  "size":  "32 oz",
-                                                                  "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                              }
-                                      },
-                  "cayenne-pepper":  {
-                                         "Hy-Vee":  {
-                                                        "url":  "https://www.hy-vee.com/aisles-online/p/3225648/that-s-smart-cayenne-pepper-3-oz",
-                                                        "name":  "That\u0027s Smart! Cayenne Pepper 3 oz",
-                                                        "price":  "$1.25",
-                                                        "size":  "3 oz",
-                                                        "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                    },
-                                         "Sam\u0027s Club":  {
-                                                                 "url":  "https://www.samsclub.com/ip/13891214885",
-                                                                 "name":  "Member\u0027s Mark Cayenne Pepper, 16 oz.",
-                                                                 "price":  "$7.58",
-                                                                 "size":  "16 oz",
-                                                                 "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                             }
-                                     },
-                  "cheese-tortellini":  {
-                                            "Hy-Vee":  {
-                                                           "url":  "https://www.hy-vee.com/aisles-online/p/1334638/hy-vee-select-cheese-tortellini",
-                                                           "name":  "Hy-Vee Select Cheese Tortellini",
-                                                           "price":  "$7.99",
-                                                           "size":  "42 oz",
-                                                           "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                       },
-                                            "Sam\u0027s Club":  {
-                                                                    "url":  "https://www.samsclub.com/ip/13862021192",
-                                                                    "name":  "Member\u0027s Mark Five Cheese Tortellini (24 oz., 2 pk.)",
-                                                                    "price":  "$10.53",
-                                                                    "size":  "48 oz",
-                                                                    "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                                }
-                                        },
-                  "chili-crisp":  {
-                                      "Hy-Vee":  {
-                                                     "url":  "https://www.hy-vee.com/aisles-online/p/4223512/lee-kum-kee-chili-crisp-hot-honey-sauce",
-                                                     "name":  "Lee Kum Kee Chili Crisp Hot Honey Sauce",
-                                                     "price":  "$6.49",
-                                                     "size":  "20 oz",
-                                                     "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                 }
-                                  },
-                  "five-spice-powder":  {
-                                            "Hy-Vee":  {
-                                                           "url":  "https://www.hy-vee.com/aisles-online/p/400543/mccormick-gourmet-chinese-five-spice-blend-1-75-oz",
-                                                           "name":  "McCormick Gourmet Chinese Five Spice Blend, 1.75 oz",
-                                                           "price":  "$9.99",
-                                                           "size":  "1.75 oz",
-                                                           "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                       }
-                                        },
-                  "chipotle-adobo":  {
-                                         "Family Fare":  {
-                                                             "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/peppers/san_marcos_original_recipe_chipotles_peppers_in_adobo_sauce_7_5_oz/p/2392969",
-                                                             "name":  "San Marcos Original Recipe Chipotles Peppers In Adobo Sauce 7.5 Oz",
-                                                             "price":  "$1.99",
-                                                             "size":  "7.5 oz",
-                                                             "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                         },
-                                         "Hy-Vee":  {
-                                                        "url":  "https://www.hy-vee.com/aisles-online/p/64253/la-costena-chipotles-in-adobo-sauce",
-                                                        "name":  "La Costena Chipotles in Adobo Sauce",
-                                                        "price":  "$3.29",
-                                                        "size":  "7 oz",
-                                                        "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                    }
-                                     },
-                  "ground-cloves":  {
-                                        "Hy-Vee":  {
-                                                       "url":  "https://www.hy-vee.com/aisles-online/p/4141464/hy-vee-ground-cloves",
-                                                       "name":  "Hy-Vee Ground Cloves",
-                                                       "price":  "$1.33",
-                                                       "size":  "0.55 oz",
-                                                       "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                   }
-                                    },
-                  "ground-coriander":  {
-                                           "Hy-Vee":  {
-                                                          "url":  "https://www.hy-vee.com/aisles-online/p/4141465/hy-vee-coriander-seed",
-                                                          "name":  "Hy-Vee Coriander Seed",
-                                                          "price":  "$1.33",
-                                                          "size":  "0.5 oz",
-                                                          "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                      }
-                                       },
-                  "corn-muffin-mix":  {
-                                          "Hy-Vee":  {
-                                                         "url":  "https://www.hy-vee.com/aisles-online/p/2917017/that-s-smart-corn-muffin-mix",
-                                                         "name":  "That\u0027s Smart Corn Muffin Mix",
-                                                         "price":  "$0.54",
-                                                         "size":  "7.5 oz",
-                                                         "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                     },
-                                          "Sam\u0027s Club":  {
-                                                                  "url":  "https://www.samsclub.com/ip/13875408667",
-                                                                  "name":  "JIFFY Corn Muffin Mix, 40 oz.",
-                                                                  "price":  "$2.82",
-                                                                  "size":  "40 oz",
-                                                                  "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                              }
-                                      },
-                  "curry-powder":  {
-                                       "Hy-Vee":  {
-                                                      "url":  "https://www.hy-vee.com/aisles-online/p/3176432/mccormick-curry-powder",
-                                                      "name":  "McCormick Curry Powder",
-                                                      "price":  "$6.99",
-                                                      "size":  "1.75 oz",
-                                                      "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                  },
-                                       "Sam\u0027s Club":  {
-                                                               "url":  "https://www.samsclub.com/ip/13629410820",
-                                                               "name":  "Member\u0027s Mark Salt-Free Curry Powder, 18 oz.",
-                                                               "price":  "$8.98",
-                                                               "size":  "18 oz",
-                                                               "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                           }
-                                   },
-                  "dried-dill":  {
-                                     "Hy-Vee":  {
-                                                    "url":  "https://www.hy-vee.com/aisles-online/p/2918306/hy-vee-dill-weed",
-                                                    "name":  "Hy-Vee Dill Weed",
-                                                    "price":  "$2.99",
-                                                    "size":  "0.75 oz",
-                                                    "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                }
-                                 },
-                  "fish-sauce":  {
-                                     "Hy-Vee":  {
-                                                    "url":  "https://www.hy-vee.com/aisles-online/p/2425544/dynasty-premium-fish-sauce",
-                                                    "name":  "Dynasty Premium Fish Sauce",
-                                                    "price":  "$3.49",
-                                                    "size":  "6.7 oz",
-                                                    "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                }
-                                 },
-                  "garam-masala":  {
-                                       "Hy-Vee":  {
-                                                      "url":  "https://www.hy-vee.com/aisles-online/p/400549/mccormick-gourmet-garam-masala-blend-1-7-oz",
-                                                      "name":  "McCormick Gourmet Garam Masala Blend, 1.7 oz",
-                                                      "price":  "$5.99",
-                                                      "size":  "1.7 oz",
-                                                      "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                  }
-                                   },
-                  "ground-ginger":  {
-                                        "Hy-Vee":  {
-                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2925188/hy-vee-ground-ginger",
-                                                       "name":  "Hy-Vee Ground Ginger",
-                                                       "price":  "$2.99",
-                                                       "size":  "2 oz",
-                                                       "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                   },
-                                        "Sam\u0027s Club":  {
-                                                                "url":  "https://www.samsclub.com/ip/13591373069",
-                                                                "name":  "Member\u0027s Mark Organic Ground Ginger, 7 oz.",
-                                                                "price":  "$5.58",
-                                                                "size":  "7 oz",
-                                                                "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                            }
-                                    },
-                  "gochujang":  {
-                                    "Hy-Vee":  {
-                                                   "url":  "https://www.hy-vee.com/aisles-online/p/2491377/hy-vee-korean-gochujang-sauce",
-                                                   "name":  "Hy-Vee Korean Gochujang Sauce",
-                                                   "price":  "$4.99",
-                                                   "size":  "11.8 fl oz",
-                                                   "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                               }
-                                },
-                  "grits":  {
-                                "Hy-Vee":  {
-                                               "url":  "https://www.hy-vee.com/aisles-online/p/8100/quaker-quick-enriched-white-hominy-grits",
-                                               "name":  "Quaker Quick Enriched White Hominy Grits",
-                                               "price":  "$3.99",
-                                               "size":  "24 oz",
-                                               "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                           }
-                            },
-                  "harissa-paste":  {
-                                        "Hy-Vee":  {
-                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2345453/morton-bassett-harissa",
-                                                       "name":  "Morton \u0026 Bassett Harissa",
-                                                       "price":  "$11.99",
-                                                       "size":  "1.9 oz",
-                                                       "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                   }
-                                    },
-                  "hoisin-sauce":  {
-                                       "Hy-Vee":  {
-                                                      "url":  "https://www.hy-vee.com/aisles-online/p/187120/lee-kum-kee-hoisin-sauce-8-5-oz",
-                                                      "name":  "Lee Kum Kee Hoisin Sauce 8.5 oz",
-                                                      "price":  "$4.99",
-                                                      "size":  "8.5 oz",
-                                                      "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                  }
-                                   },
-                  "lemongrass-paste":  {
-                                           "Hy-Vee":  {
-                                                          "url":  "https://www.hy-vee.com/aisles-online/p/35932/gourmet-garden-lemongrass-stir-in-paste-4-0-oz",
-                                                          "name":  "Gourmet Garden Lemongrass Stir-In Paste, 4.0 oz",
-                                                          "price":  "$6.99",
-                                                          "size":  "4 oz",
-                                                          "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                      }
-                                       },
-                  "fresh-mint":  {
-                                     "Hy-Vee":  {
-                                                    "url":  "https://www.hy-vee.com/aisles-online/p/269490/johnson-family-farm-fresh-mint",
-                                                    "name":  "Johnson Family Farm Fresh Mint",
-                                                    "price":  "$2.99",
-                                                    "size":  "0.75 oz",
-                                                    "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                }
-                                 },
-                  "mirin":  {
-                                "Hy-Vee":  {
-                                               "url":  "https://www.hy-vee.com/aisles-online/p/332189/kikkoman-aji-mirin-sweet-cooking-rice-wine",
-                                               "name":  "Kikkoman Aji Mirin Sweet Cooking Rice Wine\r\n",
-                                               "price":  "$6.99",
-                                               "size":  "10 fl oz",
-                                               "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                           }
-                            },
-                  "ground-nutmeg":  {
-                                        "Hy-Vee":  {
-                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2973757/hy-vee-ground-nutmeg-2-12-oz",
-                                                       "name":  "Hy-Vee Ground Nutmeg 2.12 oz",
-                                                       "price":  "$3.99",
-                                                       "size":  "2.12 oz",
-                                                       "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                   }
-                                    },
-                  "poblano-peppers":  {
-                                          "Hy-Vee":  {
-                                                         "url":  "https://www.hy-vee.com/aisles-online/p/37443/poblano-peppers",
-                                                         "name":  "Poblano Peppers",
-                                                         "price":  "$4.99",
-                                                         "size":  "lb",
-                                                         "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                     }
-                                      },
-                  "poppy-seeds":  {
-                                      "Hy-Vee":  {
-                                                     "url":  "https://www.hy-vee.com/aisles-online/p/292438/lemon-poppy-seed-dessert-loaf",
-                                                     "name":  "Lemon Poppy Seed Dessert Loaf",
-                                                     "price":  "$2.5",
-                                                     "size":  "7 oz",
-                                                     "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                 }
-                                  },
-                  "potato-gnocchi":  {
-                                         "Hy-Vee":  {
-                                                        "url":  "https://www.hy-vee.com/aisles-online/p/835070/gustare-vita-basil-potato-gnocchi",
-                                                        "name":  "Gustare Vita Basil Potato Gnocchi",
-                                                        "price":  "$2.99",
-                                                        "size":  "16 oz",
-                                                        "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                    }
-                                     },
-                  "ranch-seasoning-mix":  {
-                                              "Sam\u0027s Club":  {
-                                                                      "url":  "https://www.samsclub.com/ip/7110021078",
-                                                                      "name":  "Hidden Valley Original Ranch Salad Dressing and Seasoning Mix, 16 oz.",
-                                                                      "price":  "$8.98",
-                                                                      "size":  "16 oz",
-                                                                      "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                                  },
-                                              "Hy-Vee":  {
-                                                             "url":  "https://www.hy-vee.com/aisles-online/p/605706/hy-vee-ranch-dressing-mix",
-                                                             "name":  "Hy-Vee Ranch Dressing Mix",
-                                                             "price":  "$0.99",
-                                                             "size":  "1.12 oz",
-                                                             "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                         }
-                                          },
-                  "refrigerated-biscuits":  {
-                                                "Hy-Vee":  {
-                                                               "url":  "https://www.hy-vee.com/aisles-online/p/23564/hy-vee-buttermilk-biscuits-10ct",
-                                                               "name":  "Hy-Vee Buttermilk Biscuits 10ct",
-                                                               "price":  "$1.29",
-                                                               "size":  "7.5 oz",
-                                                               "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                           }
-                                            },
-                  "rice-noodles":  {
-                                       "Hy-Vee":  {
-                                                      "url":  "https://www.hy-vee.com/aisles-online/p/18776/a-taste-of-thai-rice-noodle",
-                                                      "name":  "A Taste of Thai Rice Noodle\r\n",
-                                                      "price":  "$5.99",
-                                                      "size":  "16 oz",
-                                                      "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                  }
-                                   },
-                  "sesame-oil":  {
-                                     "Hy-Vee":  {
-                                                    "url":  "https://www.hy-vee.com/aisles-online/p/3451737/hy-vee-toasted-sesame-oil",
-                                                    "name":  "Hy-Vee Toasted Sesame Oil",
-                                                    "price":  "$5.99",
-                                                    "size":  "8.5 fl oz",
-                                                    "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                }
-                                 },
-                  "toasted-sesame-seeds":  {
-                                               "Hy-Vee":  {
-                                                              "url":  "https://www.hy-vee.com/aisles-online/p/4039509/ball-park-sesame-seed-burger-buns-8-count",
-                                                              "name":  "Ball Park Sesame Seed Burger Buns, 8 Count",
-                                                              "price":  "$3.79",
-                                                              "size":  "16 oz",
-                                                              "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                          },
-                                               "Sam\u0027s Club":  {
-                                                                       "url":  "https://www.samsclub.com/ip/17787764079",
-                                                                       "name":  "Member\u0027s Mark Black Sesame Seed, 22 oz.",
-                                                                       "price":  "$7.98",
-                                                                       "size":  "22 oz",
-                                                                       "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                                   }
-                                           },
-                  "sun-dried-tomatoes":  {
-                                             "Hy-Vee":  {
-                                                            "url":  "https://www.hy-vee.com/aisles-online/p/1603/mission-sun-dried-tomato-basil-wraps-6ct",
-                                                            "name":  "Mission Sun-Dried Tomato Basil Wraps 6Ct",
-                                                            "price":  "$4.99",
-                                                            "size":  "15 oz",
-                                                            "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                        },
-                                             "Family Fare":  {
-                                                                 "url":  "https://www.shopfamilyfare.com/shop/meat/sausage/smoked/gilbert_s_sausage_chicken_caprese_with_basil_mozzarella_sun_dried_tomatoes_10_oz/p/5588160",
-                                                                 "name":  "Gilbert\u0027s Sausage, Chicken, Caprese, With Basil, Mozzarella \u0026 Sun Dried Tomatoes 10 Oz",
-                                                                 "price":  "$6.99",
-                                                                 "size":  "10 oz",
-                                                                 "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                             },
-                                             "Sam\u0027s Club":  {
-                                                                     "url":  "https://www.samsclub.com/ip/17242460680",
-                                                                     "name":  "Terra Verde Italian Sundried Tomatoes in Oil, 24 oz.",
-                                                                     "price":  "$9.98",
-                                                                     "size":  "24 oz",
-                                                                     "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                                 }
-                                         },
-                  "taco-seasoning":  {
-                                         "Sam\u0027s Club":  {
-                                                                 "url":  "https://www.samsclub.com/ip/17019619523",
-                                                                 "name":  "Member’s Mark Taco Seasoning, 23 oz.",
-                                                                 "price":  "$6.98",
-                                                                 "size":  "23 oz",
-                                                                 "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                             },
-                                         "Hy-Vee":  {
-                                                        "url":  "https://www.hy-vee.com/aisles-online/p/58545/hy-vee-original-taco-seasoning-mix",
-                                                        "name":  "Hy-Vee Original Taco Seasoning Mix",
-                                                        "price":  "$0.99",
-                                                        "size":  "1.25 oz",
-                                                        "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                    }
-                                     },
-                  "tahini":  {
-                                 "Hy-Vee":  {
-                                                "url":  "https://www.hy-vee.com/aisles-online/p/57164/krinos-imported-tahini-16-oz",
-                                                "name":  "Krinos Imported Tahini 16 oz",
-                                                "price":  "$9.99",
-                                                "size":  "16 oz",
-                                                "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                            }
-                             },
-                  "red-curry-paste":  {
-                                          "Hy-Vee":  {
-                                                         "url":  "https://www.hy-vee.com/aisles-online/p/67057/thai-kitchen-gluten-free-red-curry-paste",
-                                                         "name":  "Thai Kitchen Gluten Free Red Curry Paste\r\n",
-                                                         "price":  "$6.99",
-                                                         "size":  "4 oz",
-                                                         "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                     }
-                                      },
-                  "dried-thyme":  {
-                                      "Hy-Vee":  {
-                                                     "url":  "https://www.hy-vee.com/aisles-online/p/22591/hy-vee-thyme",
-                                                     "name":  "Hy-Vee Thyme",
-                                                     "price":  "$2.99",
-                                                     "size":  "0.75 oz",
-                                                     "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                 },
-                                      "Sam\u0027s Club":  {
-                                                              "url":  "https://www.samsclub.com/ip/13908405858",
-                                                              "name":  "Member\u0027s Mark Thyme Leaves, 8.25 oz.",
-                                                              "price":  "$7.24",
-                                                              "size":  "8.25 oz",
-                                                              "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                          }
-                                  },
-                  "tomatillos":  {
-                                     "Hy-Vee":  {
-                                                    "url":  "https://www.hy-vee.com/aisles-online/p/37464/tomatillos",
-                                                    "name":  "Tomatillos",
-                                                    "price":  "$3.99",
-                                                    "size":  "lb",
-                                                    "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                },
-                                     "Sam\u0027s Club":  {
-                                                             "url":  "https://www.samsclub.com/ip/19644657661",
-                                                             "name":  "Southern Valley Farm Fresh Peeled Tomatillos, 16 oz.",
-                                                             "price":  "$2.96",
-                                                             "size":  "16 oz",
-                                                             "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                         }
-                                 },
-                  "walnuts":  {
-                                  "Hy-Vee":  {
-                                                 "url":  "https://www.hy-vee.com/aisles-online/p/56914/hy-vee-english-walnuts",
-                                                 "name":  "Hy-Vee English Walnuts",
-                                                 "price":  "$7.99",
-                                                 "size":  "16 oz",
-                                                 "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                             },
-                                  "Sam\u0027s Club":  {
-                                                          "url":  "https://www.samsclub.com/ip/16938718244",
-                                                          "name":  "Members Mark Halves \u0026 Pieces Walnuts, 32 oz.",
-                                                          "price":  "$8.48",
-                                                          "size":  "32 oz",
-                                                          "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)"
-                                                      }
-                              }
+                               }
               }
 }

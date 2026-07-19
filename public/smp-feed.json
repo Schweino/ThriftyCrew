@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-07-18T12:35:13",
-    "week_of":  "2026-07-18",
-    "ingredient_count":  482,
-    "recipe_count":  113,
+    "generated":  "2026-07-19T12:37:28",
+    "week_of":  "2026-07-19",
+    "ingredient_count":  504,
+    "recipe_count":  213,
     "ingredients":  {
                         "ground-beef-8020":  {
                                                  "unit":  "lb",
@@ -12,6 +12,14 @@
                                                  "url":  "https://www.samsclub.com/ip/13563422570",
                                                  "n":  7
                                              },
+                        "achiote-paste":  {
+                                              "unit":  "oz",
+                                              "cheapest":  0.6486,
+                                              "store":  "Walmart",
+                                              "type":  "everyday",
+                                              "url":  "",
+                                              "n":  1
+                                          },
                         "air-freshener":  {
                                               "unit":  "oz",
                                               "cheapest":  0.2027,
@@ -44,6 +52,14 @@
                                       "url":  "https://www.samsclub.com/ip/13602764464",
                                       "n":  7
                                   },
+                        "ground-allspice":  {
+                                                "unit":  "oz",
+                                                "cheapest":  1.06,
+                                                "store":  "Walmart",
+                                                "type":  "everyday",
+                                                "url":  "",
+                                                "n":  5
+                                            },
                         "almond-milk":  {
                                             "unit":  "floz",
                                             "cheapest":  0.0358,
@@ -228,6 +244,22 @@
                                          "url":  "",
                                          "n":  5
                                      },
+                        "dried-basil":  {
+                                            "unit":  "oz",
+                                            "cheapest":  0.978,
+                                            "store":  "Walmart",
+                                            "type":  "everyday",
+                                            "url":  "",
+                                            "n":  4
+                                        },
+                        "fresh-basil":  {
+                                            "unit":  "oz",
+                                            "cheapest":  3.56,
+                                            "store":  "Walmart",
+                                            "type":  "everyday",
+                                            "url":  "",
+                                            "n":  4
+                                        },
                         "batteries":  {
                                           "unit":  "each",
                                           "cheapest":  0.28,
@@ -236,6 +268,14 @@
                                           "url":  "https://www.samsclub.com/ip/18075258612",
                                           "n":  5
                                       },
+                        "bay-leaves":  {
+                                           "unit":  "oz",
+                                           "cheapest":  3.995,
+                                           "store":  "Walmart",
+                                           "type":  "everyday",
+                                           "url":  "",
+                                           "n":  5
+                                       },
                         "bbq-sauce":  {
                                           "unit":  "oz",
                                           "cheapest":  0.07,
@@ -266,8 +306,16 @@
                                              "store":  "Sam\u0027s Club",
                                              "type":  "everyday",
                                              "url":  "https://www.samsclub.com/ip/13888070896",
-                                             "n":  5
+                                             "n":  6
                                          },
+                        "berbere-seasoning":  {
+                                                  "unit":  "oz",
+                                                  "cheapest":  1.1044,
+                                                  "store":  "Walmart",
+                                                  "type":  "everyday",
+                                                  "url":  "",
+                                                  "n":  1
+                                              },
                         "black-olives":  {
                                              "unit":  "oz",
                                              "cheapest":  0.2944,
@@ -334,12 +382,11 @@
                                       },
                         "chicken-breast":  {
                                                "unit":  "lb",
-                                               "cheapest":  1.99,
-                                               "store":  "Family Fare",
-                                               "type":  "sale",
-                                               "url":  "https://www.shopfamilyfare.com/shop/meat/chicken/fresh_chicken/boneless_skinless_chicken_breasts/p/1564405684713031766",
-                                               "n":  7,
-                                               "sale_end":  "2026-07-18"
+                                               "cheapest":  2.23,
+                                               "store":  "Walmart",
+                                               "type":  "everyday",
+                                               "url":  "https://www.walmart.com/ip/27935840",
+                                               "n":  7
                                            },
                         "bottled-water":  {
                                               "unit":  "each",
@@ -371,7 +418,7 @@
                                       "store":  "Baker\u0027s",
                                       "type":  "everyday",
                                       "url":  "",
-                                      "n":  6
+                                      "n":  5
                                   },
                         "bread-crumbs":  {
                                              "unit":  "oz",
@@ -469,6 +516,14 @@
                                                 "url":  "https://www.aldi.us/store/aldi/products/18649500-tuscan-garden-dressing-and-dip-classic-caesar-16-fl-oz",
                                                 "n":  4
                                             },
+                        "cajun-seasoning":  {
+                                                "unit":  "oz",
+                                                "cheapest":  0.1666,
+                                                "store":  "Sam\u0027s Club",
+                                                "type":  "everyday",
+                                                "url":  "https://www.samsclub.com/ip/13758664381",
+                                                "n":  6
+                                            },
                         "cake-mix":  {
                                          "unit":  "each",
                                          "cheapest":  1.29,
@@ -479,10 +534,10 @@
                                      },
                         "beef-stew":  {
                                           "unit":  "oz",
-                                          "cheapest":  0.134,
-                                          "store":  "Walmart",
+                                          "cheapest":  0.1538,
+                                          "store":  "Sam\u0027s Club",
                                           "type":  "everyday",
-                                          "url":  "https://www.walmart.com/ip/1454063903",
+                                          "url":  "",
                                           "n":  5
                                       },
                         "canned-beets":  {
@@ -535,11 +590,11 @@
                                         },
                         "canned-green-chilies":  {
                                                      "unit":  "oz",
-                                                     "cheapest":  0.2475,
-                                                     "store":  "Baker\u0027s",
+                                                     "cheapest":  0.2125,
+                                                     "store":  "Aldi",
                                                      "type":  "everyday",
-                                                     "url":  "https://www.bakersplus.com/p/kroger-diced-green-chile-peppers/0001111084009",
-                                                     "n":  4
+                                                     "url":  "",
+                                                     "n":  6
                                                  },
                         "diced-tomatoes":  {
                                                "unit":  "oz",
@@ -603,7 +658,7 @@
                                              "store":  "Baker\u0027s",
                                              "type":  "everyday",
                                              "url":  "https://www.bakersplus.com/p/chef-boyardee-beefaroni-15-oz/0006414404302",
-                                             "n":  4
+                                             "n":  3
                                          },
                         "canned-peaches":  {
                                                "unit":  "oz",
@@ -733,6 +788,14 @@
                                             "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20562021",
                                             "n":  5
                                         },
+                        "cayenne-pepper":  {
+                                               "unit":  "oz",
+                                               "cheapest":  0.4167,
+                                               "store":  "Hy-Vee",
+                                               "type":  "everyday",
+                                               "url":  "https://www.hy-vee.com/aisles-online/p/3225648/that-s-smart-cayenne-pepper-3-oz",
+                                               "n":  6
+                                           },
                         "celery":  {
                                        "unit":  "each",
                                        "cheapest":  1.49,
@@ -758,13 +821,21 @@
                                                 "url":  "https://www.aldi.us/store/aldi/products/20224774-savoritz-family-size-cheese-crackers-21-oz",
                                                 "n":  7
                                             },
+                        "cheese-tortellini":  {
+                                                  "unit":  "oz",
+                                                  "cheapest":  0.1693,
+                                                  "store":  "Aldi",
+                                                  "type":  "everyday",
+                                                  "url":  "",
+                                                  "n":  7
+                                              },
                         "cherries":  {
                                          "unit":  "lb",
                                          "cheapest":  2.49,
                                          "store":  "Aldi",
                                          "type":  "everyday",
                                          "url":  "https://www.aldi.us/store/aldi/products/20151060-red-cherries-bag-1-lb",
-                                         "n":  6
+                                         "n":  7
                                      },
                         "chicken-broth":  {
                                               "unit":  "floz",
@@ -814,6 +885,14 @@
                                             "url":  "https://www.walmart.com/ip/10534044",
                                             "n":  3
                                         },
+                        "chili-crisp":  {
+                                            "unit":  "oz",
+                                            "cheapest":  0.3245,
+                                            "store":  "Hy-Vee",
+                                            "type":  "everyday",
+                                            "url":  "https://www.hy-vee.com/aisles-online/p/4223512/lee-kum-kee-chili-crisp-hot-honey-sauce",
+                                            "n":  5
+                                        },
                         "chili-powder":  {
                                              "unit":  "oz",
                                              "cheapest":  0.36,
@@ -822,6 +901,22 @@
                                              "url":  "https://www.walmart.com/ip/157643393",
                                              "n":  7
                                          },
+                        "five-spice-powder":  {
+                                                  "unit":  "oz",
+                                                  "cheapest":  3.6303,
+                                                  "store":  "Baker\u0027s",
+                                                  "type":  "everyday",
+                                                  "url":  "",
+                                                  "n":  3
+                                              },
+                        "chipotle-adobo":  {
+                                               "unit":  "oz",
+                                               "cheapest":  0.2129,
+                                               "store":  "Baker\u0027s",
+                                               "type":  "everyday",
+                                               "url":  "",
+                                               "n":  5
+                                           },
                         "chocolate-chips":  {
                                                 "unit":  "oz",
                                                 "cheapest":  0.2219,
@@ -871,6 +966,14 @@
                                             "n":  6,
                                             "sale_end":  "2026-07-21"
                                         },
+                        "ground-cloves":  {
+                                              "unit":  "oz",
+                                              "cheapest":  1.09,
+                                              "store":  "Walmart",
+                                              "type":  "everyday",
+                                              "url":  "",
+                                              "n":  5
+                                          },
                         "cocktail-sauce":  {
                                                "unit":  "oz",
                                                "cheapest":  0.165,
@@ -945,6 +1048,14 @@
                                               "url":  "https://www.aldi.us/store/aldi/products/20201294-carlini-original-canola-cooking-spray-8-oz",
                                               "n":  6
                                           },
+                        "ground-coriander":  {
+                                                 "unit":  "oz",
+                                                 "cheapest":  0.9964,
+                                                 "store":  "Walmart",
+                                                 "type":  "everyday",
+                                                 "url":  "",
+                                                 "n":  5
+                                             },
                         "corn-dogs":  {
                                           "unit":  "each",
                                           "cheapest":  0.449,
@@ -953,6 +1064,14 @@
                                           "url":  "https://www.samsclub.com/ip/State-Fair-Classic-Corn-Dogs-Frozen-30-ct/13864923221",
                                           "n":  5
                                       },
+                        "corn-muffin-mix":  {
+                                                "unit":  "oz",
+                                                "cheapest":  0.0705,
+                                                "store":  "Sam\u0027s Club",
+                                                "type":  "everyday",
+                                                "url":  "https://www.samsclub.com/ip/13875408667",
+                                                "n":  6
+                                            },
                         "corned-beef-hash":  {
                                                  "unit":  "oz",
                                                  "cheapest":  0.1943,
@@ -1057,6 +1176,14 @@
                                           "url":  "https://www.samsclub.com/ip/13624559685",
                                           "n":  7
                                       },
+                        "curry-powder":  {
+                                             "unit":  "oz",
+                                             "cheapest":  0.4989,
+                                             "store":  "Sam\u0027s Club",
+                                             "type":  "everyday",
+                                             "url":  "https://www.samsclub.com/ip/13629410820",
+                                             "n":  6
+                                         },
                         "deodorant":  {
                                           "unit":  "oz",
                                           "cheapest":  0.9985,
@@ -1089,6 +1216,14 @@
                                               "url":  "https://www.aldi.us/store/aldi/products/18648757-burman-s-all-natural-dijon-mustard-12-oz",
                                               "n":  4
                                           },
+                        "dried-dill":  {
+                                           "unit":  "oz",
+                                           "cheapest":  1.5145,
+                                           "store":  "Walmart",
+                                           "type":  "everyday",
+                                           "url":  "",
+                                           "n":  5
+                                       },
                         "dinner-rolls":  {
                                              "unit":  "each",
                                              "cheapest":  0.1658,
@@ -1249,6 +1384,14 @@
                                      "url":  "https://www.samsclub.com/ip/13874852267",
                                      "n":  5
                                  },
+                        "fish-sauce":  {
+                                           "unit":  "floz",
+                                           "cheapest":  0.284,
+                                           "store":  "Walmart",
+                                           "type":  "everyday",
+                                           "url":  "",
+                                           "n":  5
+                                       },
                         "fish-sticks":  {
                                             "unit":  "oz",
                                             "cheapest":  0.2112,
@@ -1392,7 +1535,7 @@
                                              "store":  "Baker\u0027s",
                                              "type":  "everyday",
                                              "url":  "",
-                                             "n":  6
+                                             "n":  7
                                          },
                         "frozen-waffles":  {
                                                "unit":  "each",
@@ -1434,6 +1577,14 @@
                                                  "url":  "",
                                                  "n":  5
                                              },
+                        "garam-masala":  {
+                                             "unit":  "oz",
+                                             "cheapest":  1.643,
+                                             "store":  "Walmart",
+                                             "type":  "everyday",
+                                             "url":  "",
+                                             "n":  4
+                                         },
                         "garlic":  {
                                        "unit":  "each",
                                        "cheapest":  0.5633,
@@ -1466,6 +1617,14 @@
                                         "url":  "https://www.aldi.us/store/aldi/products/20191275-baker-s-corner-strawberry-gelatin-3-oz",
                                         "n":  5
                                     },
+                        "ground-ginger":  {
+                                              "unit":  "oz",
+                                              "cheapest":  0.7971,
+                                              "store":  "Sam\u0027s Club",
+                                              "type":  "everyday",
+                                              "url":  "https://www.samsclub.com/ip/13591373069",
+                                              "n":  5
+                                          },
                         "fresh-ginger":  {
                                              "unit":  "lb",
                                              "cheapest":  3.97,
@@ -1482,6 +1641,14 @@
                                               "url":  "https://www.walmart.com/ip/Great-Value-Glass-Cleaner-32-Fluid-Ounce/410079393",
                                               "n":  5
                                           },
+                        "gochujang":  {
+                                          "unit":  "oz",
+                                          "cheapest":  0.2608,
+                                          "store":  "Walmart",
+                                          "type":  "everyday",
+                                          "url":  "",
+                                          "n":  3
+                                      },
                         "graham-crackers":  {
                                                 "unit":  "oz",
                                                 "cheapest":  0.1382,
@@ -1562,6 +1729,14 @@
                                              "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16614371",
                                              "n":  5
                                          },
+                        "grits":  {
+                                      "unit":  "oz",
+                                      "cheapest":  0.0023,
+                                      "store":  "Sam\u0027s Club",
+                                      "type":  "everyday",
+                                      "url":  "",
+                                      "n":  6
+                                  },
                         "ground-cinnamon":  {
                                                 "unit":  "oz",
                                                 "cheapest":  0.1698,
@@ -1650,6 +1825,14 @@
                                           "url":  "https://www.samsclub.com/ip/13952103236",
                                           "n":  7
                                       },
+                        "harissa-paste":  {
+                                              "unit":  "oz",
+                                              "cheapest":  0.498,
+                                              "store":  "Walmart",
+                                              "type":  "everyday",
+                                              "url":  "",
+                                              "n":  2
+                                          },
                         "heavy-cream":  {
                                             "unit":  "floz",
                                             "cheapest":  0.11,
@@ -1658,6 +1841,14 @@
                                             "url":  "https://www.samsclub.com/ip/13607413640",
                                             "n":  6
                                         },
+                        "hoisin-sauce":  {
+                                             "unit":  "floz",
+                                             "cheapest":  0.271,
+                                             "store":  "Walmart",
+                                             "type":  "everyday",
+                                             "url":  "",
+                                             "n":  5
+                                         },
                         "honey":  {
                                       "unit":  "oz",
                                       "cheapest":  0.1662,
@@ -1794,6 +1985,14 @@
                                           "url":  "https://www.aldi.us/store/aldi/products/18775019-jalapeno-pepper-package-8-oz",
                                           "n":  5
                                       },
+                        "japanese-curry-roux":  {
+                                                    "unit":  "oz",
+                                                    "cheapest":  0.9125,
+                                                    "store":  "Walmart",
+                                                    "type":  "everyday",
+                                                    "url":  "",
+                                                    "n":  2
+                                                },
                         "jarred-gravy":  {
                                              "unit":  "oz",
                                              "cheapest":  0.0912,
@@ -1907,6 +2106,14 @@
                                          "url":  "https://www.samsclub.com/ip/18783816184",
                                          "n":  6
                                      },
+                        "lemongrass-paste":  {
+                                                 "unit":  "oz",
+                                                 "cheapest":  1.1975,
+                                                 "store":  "Baker\u0027s",
+                                                 "type":  "everyday",
+                                                 "url":  "",
+                                                 "n":  2
+                                             },
                         "lemons":  {
                                        "unit":  "each",
                                        "cheapest":  0.5,
@@ -2012,6 +2219,14 @@
                                               "url":  "https://www.samsclub.com/ip/7874215051",
                                               "n":  5
                                           },
+                        "fresh-mint":  {
+                                           "unit":  "oz",
+                                           "cheapest":  0.6244,
+                                           "store":  "Family Fare",
+                                           "type":  "everyday",
+                                           "url":  "",
+                                           "n":  3
+                                       },
                         "miracle-whip":  {
                                              "unit":  "oz",
                                              "cheapest":  0.0963,
@@ -2020,6 +2235,14 @@
                                              "url":  "https://www.aldi.us/store/aldi/products/20243936-burman-s-whipped-dressing-30-fl-oz",
                                              "n":  4
                                          },
+                        "mirin":  {
+                                      "unit":  "floz",
+                                      "cheapest":  0.26,
+                                      "store":  "Walmart",
+                                      "type":  "everyday",
+                                      "url":  "",
+                                      "n":  4
+                                  },
                         "mixed-nuts":  {
                                            "unit":  "oz",
                                            "cheapest":  0.3654,
@@ -2052,6 +2275,14 @@
                                           "url":  "https://www.samsclub.com/ip/Whole-White-Mushrooms-24-oz/13894703507",
                                           "n":  7
                                       },
+                        "ground-nutmeg":  {
+                                              "unit":  "oz",
+                                              "cheapest":  1.64,
+                                              "store":  "Walmart",
+                                              "type":  "everyday",
+                                              "url":  "",
+                                              "n":  5
+                                          },
                         "oat-milk":  {
                                          "unit":  "floz",
                                          "cheapest":  0.0545,
@@ -2124,6 +2355,14 @@
                                              "url":  "https://www.samsclub.com/ip/Sprayway-Industrial-Strength-Oven-Cleaner-20-oz-6-pk/13606761740",
                                              "n":  5
                                          },
+                        "oyster-sauce":  {
+                                             "unit":  "floz",
+                                             "cheapest":  0.2587,
+                                             "store":  "Walmart",
+                                             "type":  "everyday",
+                                             "url":  "",
+                                             "n":  2
+                                         },
                         "pancake-mix":  {
                                             "unit":  "oz",
                                             "cheapest":  0.0484,
@@ -2174,12 +2413,11 @@
                                             },
                         "parmesan":  {
                                          "unit":  "oz",
-                                         "cheapest":  0.2878,
-                                         "store":  "Family Fare",
-                                         "type":  "sale",
-                                         "url":  "https://www.shopfamilyfare.com/shop/deli/cheese/shredded_cheese/our_family_natural_finely_cut_parmesan_shredded_cheese_6_oz/p/7081842",
-                                         "n":  6,
-                                         "sale_end":  "2026-07-18"
+                                         "cheapest":  0.3092,
+                                         "store":  "Sam\u0027s Club",
+                                         "type":  "everyday",
+                                         "url":  "https://www.samsclub.com/ip/15176922436",
+                                         "n":  6
                                      },
                         "dried-parsley":  {
                                               "unit":  "oz",
@@ -2309,8 +2547,32 @@
                                       "store":  "Aldi",
                                       "type":  "everyday",
                                       "url":  "https://www.aldi.us/store/aldi/products/16631392-plum-bag-2-lbs",
-                                      "n":  5
+                                      "n":  6
                                   },
+                        "poblano-peppers":  {
+                                                "unit":  "lb",
+                                                "cheapest":  3.26,
+                                                "store":  "Walmart",
+                                                "type":  "everyday",
+                                                "url":  "",
+                                                "n":  4
+                                            },
+                        "pomegranate-molasses":  {
+                                                     "unit":  "floz",
+                                                     "cheapest":  0.548,
+                                                     "store":  "Walmart",
+                                                     "type":  "everyday",
+                                                     "url":  "",
+                                                     "n":  1
+                                                 },
+                        "poppy-seeds":  {
+                                            "unit":  "oz",
+                                            "cheapest":  0.3571,
+                                            "store":  "Hy-Vee",
+                                            "type":  "everyday",
+                                            "url":  "https://www.hy-vee.com/aisles-online/p/292438/lemon-poppy-seed-dessert-loaf",
+                                            "n":  5
+                                        },
                         "popsicles":  {
                                           "unit":  "each",
                                           "cheapest":  0.0547,
@@ -2321,12 +2583,11 @@
                                       },
                         "pork-chops":  {
                                            "unit":  "lb",
-                                           "cheapest":  2.49,
-                                           "store":  "Family Fare",
-                                           "type":  "sale",
-                                           "url":  "https://www.shopfamilyfare.com/shop/meat/pork/fresh/fresh_assorted_pork_chops_value_pack/p/1564405684713031264",
-                                           "n":  7,
-                                           "sale_end":  "2026-07-18"
+                                           "cheapest":  2.52,
+                                           "store":  "Sam\u0027s Club",
+                                           "type":  "everyday",
+                                           "url":  "https://www.samsclub.com/ip/17799324269",
+                                           "n":  7
                                        },
                         "pork-shoulder":  {
                                               "unit":  "lb",
@@ -2334,7 +2595,7 @@
                                               "store":  "Sam\u0027s Club",
                                               "type":  "everyday",
                                               "url":  "https://www.samsclub.com/ip/13775166208",
-                                              "n":  6
+                                              "n":  7
                                           },
                         "pork-tenderloin":  {
                                                 "unit":  "lb",
@@ -2353,6 +2614,14 @@
                                              "url":  "https://www.aldi.us/store/aldi/products/18648308-clancy-s-original-potato-chips-10-oz",
                                              "n":  7
                                          },
+                        "potato-gnocchi":  {
+                                               "unit":  "oz",
+                                               "cheapest":  0.1074,
+                                               "store":  "Aldi",
+                                               "type":  "everyday",
+                                               "url":  "",
+                                               "n":  6
+                                           },
                         "powdered-sugar":  {
                                                "unit":  "lb",
                                                "cheapest":  0.925,
@@ -2433,6 +2702,14 @@
                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068057",
                                                "n":  7
                                            },
+                        "ranch-seasoning-mix":  {
+                                                    "unit":  "oz",
+                                                    "cheapest":  0.4975,
+                                                    "store":  "Walmart",
+                                                    "type":  "everyday",
+                                                    "url":  "",
+                                                    "n":  7
+                                                },
                         "raspberries":  {
                                             "unit":  "oz",
                                             "cheapest":  0.4158,
@@ -2482,6 +2759,14 @@
                                               "url":  "https://www.aldi.us/store/aldi/products/18649428-casa-mamita-traditional-refried-beans-16-oz",
                                               "n":  5
                                           },
+                        "refrigerated-biscuits":  {
+                                                      "unit":  "oz",
+                                                      "cheapest":  0.0155,
+                                                      "store":  "Baker\u0027s",
+                                                      "type":  "everyday",
+                                                      "url":  "",
+                                                      "n":  4
+                                                  },
                         "ribeye-steak":  {
                                              "unit":  "lb",
                                              "cheapest":  13.97,
@@ -2498,6 +2783,14 @@
                                            "url":  "https://www.samsclub.com/ip/20168601775",
                                            "n":  5
                                        },
+                        "rice-noodles":  {
+                                             "unit":  "oz",
+                                             "cheapest":  0.2806,
+                                             "store":  "Baker\u0027s",
+                                             "type":  "everyday",
+                                             "url":  "",
+                                             "n":  5
+                                         },
                         "rice-vinegar":  {
                                              "unit":  "floz",
                                              "cheapest":  0.2433,
@@ -2552,7 +2845,7 @@
                                                  "store":  "Aldi",
                                                  "type":  "everyday",
                                                  "url":  "https://www.aldi.us/store/aldi/products/20114967-benton-s-vanilla-sandwich-creme-cookies-25-oz",
-                                                 "n":  6
+                                                 "n":  5
                                              },
                         "sauerkraut":  {
                                            "unit":  "oz",
@@ -2562,6 +2855,22 @@
                                            "url":  "https://www.bakersplus.com/p/kroger-shredded-sauerkraut/0001111097759",
                                            "n":  3
                                        },
+                        "sesame-oil":  {
+                                           "unit":  "floz",
+                                           "cheapest":  0.6214,
+                                           "store":  "Walmart",
+                                           "type":  "everyday",
+                                           "url":  "",
+                                           "n":  4
+                                       },
+                        "toasted-sesame-seeds":  {
+                                                     "unit":  "oz",
+                                                     "cheapest":  0.2369,
+                                                     "store":  "Hy-Vee",
+                                                     "type":  "everyday",
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/4039509/ball-park-sesame-seed-burger-buns-8-count",
+                                                     "n":  6
+                                                 },
                         "shampoo":  {
                                         "unit":  "floz",
                                         "cheapest":  0.0858,
@@ -2624,7 +2933,7 @@
                                                  "store":  "Hy-Vee",
                                                  "type":  "everyday",
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/444508/hy-vee-sloppy-joe-sauce",
-                                                 "n":  3
+                                                 "n":  4
                                              },
                         "soda":  {
                                      "unit":  "floz",
@@ -2707,6 +3016,14 @@
                                              "url":  "https://www.aldi.us/store/aldi/products/18647754-chef-s-cupboard-chicken-stuffing-mix-6-oz",
                                              "n":  6
                                          },
+                        "sun-dried-tomatoes":  {
+                                                   "unit":  "oz",
+                                                   "cheapest":  0.3327,
+                                                   "store":  "Hy-Vee",
+                                                   "type":  "everyday",
+                                                   "url":  "https://www.hy-vee.com/aisles-online/p/1603/mission-sun-dried-tomato-basil-wraps-6ct",
+                                                   "n":  5
+                                               },
                         "sweet-corn":  {
                                            "unit":  "each",
                                            "cheapest":  0.6,
@@ -2763,6 +3080,22 @@
                                            "url":  "https://www.hy-vee.com/aisles-online/p/58177/hy-vee-medium-taco-sauce",
                                            "n":  2
                                        },
+                        "taco-seasoning":  {
+                                               "unit":  "oz",
+                                               "cheapest":  0.3035,
+                                               "store":  "Sam\u0027s Club",
+                                               "type":  "everyday",
+                                               "url":  "https://www.samsclub.com/ip/17019619523",
+                                               "n":  7
+                                           },
+                        "tahini":  {
+                                       "unit":  "oz",
+                                       "cheapest":  0.3731,
+                                       "store":  "Walmart",
+                                       "type":  "everyday",
+                                       "url":  "",
+                                       "n":  4
+                                   },
                         "tampons":  {
                                         "unit":  "each",
                                         "cheapest":  0.1769,
@@ -2803,6 +3136,22 @@
                                                "url":  "https://www.hy-vee.com/aisles-online/p/288877/hy-vee-hickory-house-rockin-teriyaki-marinade",
                                                "n":  2
                                            },
+                        "red-curry-paste":  {
+                                                "unit":  "oz",
+                                                "cheapest":  0.4514,
+                                                "store":  "Walmart",
+                                                "type":  "everyday",
+                                                "url":  "",
+                                                "n":  4
+                                            },
+                        "dried-thyme":  {
+                                            "unit":  "oz",
+                                            "cheapest":  0.8776,
+                                            "store":  "Sam\u0027s Club",
+                                            "type":  "everyday",
+                                            "url":  "https://www.samsclub.com/ip/13908405858",
+                                            "n":  5
+                                        },
                         "tilapia":  {
                                         "unit":  "lb",
                                         "cheapest":  4.425,
@@ -2835,6 +3184,14 @@
                                              "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18481761",
                                              "n":  7
                                          },
+                        "tomatillos":  {
+                                           "unit":  "lb",
+                                           "cheapest":  1.99,
+                                           "store":  "Family Fare",
+                                           "type":  "everyday",
+                                           "url":  "",
+                                           "n":  6
+                                       },
                         "tomato-paste":  {
                                              "unit":  "oz",
                                              "cheapest":  0.1108,
@@ -2955,6 +3312,14 @@
                                                 "url":  "https://www.walmart.com/ip/54258473",
                                                 "n":  3
                                             },
+                        "walnuts":  {
+                                        "unit":  "oz",
+                                        "cheapest":  0.265,
+                                        "store":  "Sam\u0027s Club",
+                                        "type":  "everyday",
+                                        "url":  "https://www.samsclub.com/ip/16938718244",
+                                        "n":  7
+                                    },
                         "whipped-cream":  {
                                               "unit":  "oz",
                                               "cheapest":  0.1771,
@@ -3100,14 +3465,6 @@
                                                         "url":  "https://www.samsclub.com/ip/Member-s-Mark-Mild-Cheddar-Shredded-Cheese-16-oz-2-pk/13771120208",
                                                         "n":  6
                                                     },
-                        "curry-powder":  {
-                                             "unit":  "oz",
-                                             "cheapest":  0.5,
-                                             "store":  "Sam\u0027s Club",
-                                             "type":  "everyday",
-                                             "url":  "https://www.samsclub.com/ip/Member-s-Mark-Salt-Free-Curry-Powder-18-oz/13629410820",
-                                             "n":  5
-                                         },
                         "fries":  {
                                       "unit":  "oz",
                                       "cheapest":  0.067,
@@ -3140,14 +3497,6 @@
                                        "url":  "https://www.samsclub.com/ip/Organic-Ginger-Root-1-75-lbs/13888814112",
                                        "n":  6
                                    },
-                        "gochujang":  {
-                                          "unit":  "oz",
-                                          "cheapest":  0.261,
-                                          "store":  "Walmart",
-                                          "type":  "everyday",
-                                          "url":  "https://www.walmart.com/ip/7260864094",
-                                          "n":  3
-                                      },
                         "golden-raisins":  {
                                                "unit":  "oz",
                                                "cheapest":  0.13,
@@ -3188,14 +3537,6 @@
                                                      "url":  "https://www.samsclub.com/ip/Member-s-Mark-Naturally-Hickory-Smoked-Bacon-3-lbs/13892064138",
                                                      "n":  6
                                                  },
-                        "hoisin-sauce":  {
-                                             "unit":  "oz",
-                                             "cheapest":  0.271,
-                                             "store":  "Walmart",
-                                             "type":  "everyday",
-                                             "url":  "https://www.walmart.com/ip/178135682",
-                                             "n":  4
-                                         },
                         "honey-dijon-mustard":  {
                                                     "unit":  "oz",
                                                     "cheapest":  0.1375,
@@ -3236,14 +3577,6 @@
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/2970344/thats-smart-pineapple-chunks",
                                                  "n":  6
                                              },
-                        "poblano-peppers":  {
-                                                "unit":  "lb",
-                                                "cheapest":  2.99,
-                                                "store":  "Family Fare",
-                                                "type":  "everyday",
-                                                "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/green_pasilla_peppers_capsicums/p/2311679",
-                                                "n":  4
-                                            },
                         "potato":  {
                                        "unit":  "lb",
                                        "cheapest":  0.44,
@@ -3284,14 +3617,6 @@
                                              "url":  "https://www.walmart.com/ip/10534080",
                                              "n":  5
                                          },
-                        "sesame-oil":  {
-                                           "unit":  "oz",
-                                           "cheapest":  0.536,
-                                           "store":  "Walmart",
-                                           "type":  "everyday",
-                                           "url":  "https://www.walmart.com/ip/600101709",
-                                           "n":  4
-                                       },
                         "sugar-free-maple-syrup":  {
                                                        "unit":  "oz",
                                                        "cheapest":  0.1121,
@@ -3300,30 +3625,6 @@
                                                        "url":  "https://www.bakersplus.com/p/kroger-sugar-free-original-pancake-syrup/0001111014734",
                                                        "n":  3
                                                    },
-                        "tahini":  {
-                                       "unit":  "oz",
-                                       "cheapest":  0.331,
-                                       "store":  "Walmart",
-                                       "type":  "everyday",
-                                       "url":  "https://www.walmart.com/ip/181163509",
-                                       "n":  3
-                                   },
-                        "toasted-sesame-seeds":  {
-                                                     "unit":  "oz",
-                                                     "cheapest":  0.36,
-                                                     "store":  "Sam\u0027s Club",
-                                                     "type":  "everyday",
-                                                     "url":  "https://www.samsclub.com/ip/Member-s-Mark-White-Sesame-Seed-20-5-oz/17777018655",
-                                                     "n":  5
-                                                 },
-                        "tomatillos":  {
-                                           "unit":  "lb",
-                                           "cheapest":  1.99,
-                                           "store":  "Family Fare",
-                                           "type":  "everyday",
-                                           "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/other_vegetables/tomatillos/p/12573",
-                                           "n":  5
-                                       },
                         "traditional-pasta-sauce":  {
                                                         "unit":  "oz",
                                                         "cheapest":  0.073,
@@ -3476,14 +3777,6 @@
                                              "url":  "https://www.walmart.com/ip/185310896",
                                              "n":  4
                                          },
-                        "ranch-seasoning-mix":  {
-                                                    "unit":  "each",
-                                                    "cheapest":  0.64,
-                                                    "store":  "Walmart",
-                                                    "type":  "everyday",
-                                                    "url":  "https://www.walmart.com/ip/187211086",
-                                                    "n":  5
-                                                },
                         "reduced-fat-mozzarella":  {
                                                        "unit":  "oz",
                                                        "cheapest":  0.18,
@@ -3524,14 +3817,6 @@
                                                  "url":  "https://www.walmart.com/ip/46491672",
                                                  "n":  4
                                              },
-                        "sun-dried-tomatoes":  {
-                                                   "unit":  "oz",
-                                                   "cheapest":  0.42,
-                                                   "store":  "Sam\u0027s Club",
-                                                   "type":  "everyday",
-                                                   "url":  "https://www.samsclub.com/ip/Terra-Verde-Italian-Sundried-Tomatoes-in-Oil-24-oz/17242460680",
-                                                   "n":  6
-                                               },
                         "canned-sweet-corn":  {
                                                   "unit":  "each",
                                                   "cheapest":  0.78,
@@ -3540,14 +3825,6 @@
                                                   "url":  "https://www.walmart.com/ip/589659824",
                                                   "n":  6
                                               },
-                        "taco-seasoning":  {
-                                               "unit":  "each",
-                                               "cheapest":  0.47,
-                                               "store":  "Walmart",
-                                               "type":  "everyday",
-                                               "url":  "https://www.walmart.com/ip/379517847",
-                                               "n":  6
-                                           },
                         "turkey-pepperoni":  {
                                                  "unit":  "oz",
                                                  "cheapest":  0.584,
@@ -3580,22 +3857,6 @@
                                                  "url":  "https://www.walmart.com/ip/465384428",
                                                  "n":  3
                                              },
-                        "bay-leaves":  {
-                                           "unit":  "oz",
-                                           "cheapest":  1.25,
-                                           "store":  "Walmart",
-                                           "type":  "everyday",
-                                           "url":  "https://www.walmart.com/ip/325566140",
-                                           "n":  4
-                                       },
-                        "garam-masala":  {
-                                             "unit":  "oz",
-                                             "cheapest":  0.994,
-                                             "store":  "Walmart",
-                                             "type":  "everyday",
-                                             "url":  "https://www.walmart.com/ip/12020501120",
-                                             "n":  4
-                                         },
                         "corn-tortillas":  {
                                                "unit":  "each",
                                                "cheapest":  0.0561,
@@ -3644,14 +3905,6 @@
                                                      "url":  "https://www.samsclub.com/ip/French-s-Classic-Regular-Worcestershire-Sauce-1-gal/4150073831",
                                                      "n":  5
                                                  },
-                        "cayenne-pepper":  {
-                                               "unit":  "oz",
-                                               "cheapest":  0.4167,
-                                               "store":  "Hy-Vee",
-                                               "type":  "everyday",
-                                               "url":  "https://www.hy-vee.com/aisles-online/p/3225648/thats-smart-cayenne-pepper-3-oz",
-                                               "n":  5
-                                           },
                         "smoked-paprika":  {
                                                "unit":  "oz",
                                                "cheapest":  0.631,
@@ -3668,14 +3921,6 @@
                                             "url":  "https://www.samsclub.com/ip/Athenos-Crumbled-Traditional-Feta-Cheese-24-oz/13874852267",
                                             "n":  6
                                         },
-                        "dried-dill":  {
-                                           "unit":  "oz",
-                                           "cheapest":  1.51,
-                                           "store":  "Walmart",
-                                           "type":  "everyday",
-                                           "url":  "https://www.walmart.com/ip/28645449",
-                                           "n":  4
-                                       },
                         "mozzarella-cheese":  {
                                                   "unit":  "oz",
                                                   "cheapest":  0.1521,
@@ -3692,14 +3937,6 @@
                                          "url":  "https://www.aldi.us/store/aldi/products/3253345-cucumber-each",
                                          "n":  6
                                      },
-                        "dried-basil":  {
-                                            "unit":  "oz",
-                                            "cheapest":  1.2,
-                                            "store":  "Walmart",
-                                            "type":  "everyday",
-                                            "url":  "https://www.walmart.com/ip/16318451645",
-                                            "n":  4
-                                        },
                         "apple-cider":  {
                                             "unit":  "floz",
                                             "cheapest":  0.0561,
@@ -3708,14 +3945,6 @@
                                             "url":  "https://www.hy-vee.com/aisles-online/p/2122497/hy-vee-100-apple-cider",
                                             "n":  3
                                         },
-                        "ground-ginger":  {
-                                              "unit":  "oz",
-                                              "cheapest":  0.7971,
-                                              "store":  "Sam\u0027s Club",
-                                              "type":  "everyday",
-                                              "url":  "https://www.samsclub.com/ip/Member-s-Mark-Organic-Ground-Ginger-7-oz/13591373069",
-                                              "n":  5
-                                          },
                         "au-jus-gravy-mix":  {
                                                  "unit":  "oz",
                                                  "cheapest":  0.98,
@@ -3732,14 +3961,6 @@
                                                "url":  "https://www.walmart.com/ip/17814052306",
                                                "n":  4
                                            },
-                        "ground-coriander":  {
-                                                 "unit":  "oz",
-                                                 "cheapest":  1.96,
-                                                 "store":  "Walmart",
-                                                 "type":  "everyday",
-                                                 "url":  "https://www.walmart.com/ip/946318290",
-                                                 "n":  4
-                                             },
                         "condensed-french-onion-soup":  {
                                                             "unit":  "each",
                                                             "cheapest":  1.12,
@@ -3780,36 +4001,12 @@
                                                    "url":  "https://www.bakersplus.com/p/pompeian-white-wine-vinegar/0007040400149",
                                                    "n":  5
                                                },
-                        "ground-nutmeg":  {
-                                              "unit":  "oz",
-                                              "cheapest":  1.64,
-                                              "store":  "Walmart",
-                                              "type":  "everyday",
-                                              "url":  "https://www.walmart.com/ip/344742144",
-                                              "n":  4
-                                          },
                         "pineapple-juice":  {
                                                 "unit":  "floz",
                                                 "cheapest":  0.0633,
                                                 "store":  "Baker\u0027s",
                                                 "type":  "everyday",
                                                 "url":  "https://www.bakersplus.com/p/simply-pineapple-juice-drink-bottle/0002500013405",
-                                                "n":  4
-                                            },
-                        "fish-sauce":  {
-                                           "unit":  "floz",
-                                           "cheapest":  0.284,
-                                           "store":  "Walmart",
-                                           "type":  "everyday",
-                                           "url":  "https://www.walmart.com/ip/6040573156",
-                                           "n":  4
-                                       },
-                        "ground-allspice":  {
-                                                "unit":  "oz",
-                                                "cheapest":  1.06,
-                                                "store":  "Walmart",
-                                                "type":  "everyday",
-                                                "url":  "https://www.walmart.com/ip/603026137",
                                                 "n":  4
                                             },
                         "cheddar-cheese":  {
@@ -3820,14 +4017,6 @@
                                                "url":  "https://www.samsclub.com/ip/Member-s-Mark-Standard-Shredded-Mild-Yellow-Cheddar-Cheese-5-lbs/13589400932",
                                                "n":  6
                                            },
-                        "dried-thyme":  {
-                                            "unit":  "oz",
-                                            "cheapest":  0.8776,
-                                            "store":  "Sam\u0027s Club",
-                                            "type":  "everyday",
-                                            "url":  "https://www.samsclub.com/ip/Member-s-Mark-Thyme-Leaves-8-25-oz/13908405858",
-                                            "n":  5
-                                        },
                         "all-purpose-flour":  {
                                                   "unit":  "oz",
                                                   "cheapest":  0.0212,
@@ -3859,25 +4048,29 @@
                                        "type":  "everyday",
                                        "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/pickled_vegetables_fruits/reese_non_pareil_capers_3_5_fl_oz/p/37554",
                                        "n":  1
-                                   },
-                        "five-spice-powder":  {
-                                                  "unit":  "oz",
-                                                  "cheapest":  3.63,
-                                                  "store":  "Baker\u0027s",
-                                                  "type":  "everyday",
-                                                  "url":  "https://www.bakersplus.com/p/private-selection-chinese-five-spice-blend-shaker/0001111002371",
-                                                  "n":  1
-                                              },
-                        "fresh-mint":  {
-                                           "unit":  "each",
-                                           "cheapest":  2.49,
-                                           "store":  "Baker\u0027s",
-                                           "type":  "everyday",
-                                           "url":  "https://www.bakersplus.com/p/simple-truth-organic-mint/0001111001818",
-                                           "n":  1
-                                       }
+                                   }
                     },
     "recipes":  {
+                    "baked-sweet-and-sour-chicken-rice-bowls":  {
+                                                                    "name":  "Baked Sweet and Sour Chicken Rice Bowls",
+                                                                    "servings":  14,
+                                                                    "week_cost":  18.02,
+                                                                    "per_serving":  1.29,
+                                                                    "calories":  678,
+                                                                    "sale_items":  [
+
+                                                                                   ]
+                                                                },
+                    "brazilianstyle-pork-ribs-bowls":  {
+                                                           "name":  "Brazilian-Style Pork Ribs Bowls",
+                                                           "servings":  14,
+                                                           "week_cost":  18.56,
+                                                           "per_serving":  1.33,
+                                                           "calories":  565,
+                                                           "sale_items":  [
+
+                                                                          ]
+                                                       },
                     "hot-honey-chicken-bowls":  {
                                                     "name":  "Hot Honey Chicken and Broccoli Bowls",
                                                     "servings":  14,
@@ -3918,6 +4111,36 @@
 
                                                                         ]
                                                      },
+                    "filipino-chicken-inasal-bowls":  {
+                                                          "name":  "Filipino Chicken Inasal Bowls",
+                                                          "servings":  14,
+                                                          "week_cost":  22.83,
+                                                          "per_serving":  1.63,
+                                                          "calories":  562,
+                                                          "sale_items":  [
+
+                                                                         ]
+                                                      },
+                    "braised-pork-ragu-over-pappardelle":  {
+                                                               "name":  "Braised Pork Ragu over Pappardelle",
+                                                               "servings":  14,
+                                                               "week_cost":  23.31,
+                                                               "per_serving":  1.66,
+                                                               "calories":  578,
+                                                               "sale_items":  [
+
+                                                                              ]
+                                                           },
+                    "cajun-chicken-and-sausage-jambalaya":  {
+                                                                "name":  "Cajun Chicken and Sausage Jambalaya",
+                                                                "servings":  14,
+                                                                "week_cost":  23.46,
+                                                                "per_serving":  1.68,
+                                                                "calories":  570,
+                                                                "sale_items":  [
+
+                                                                               ]
+                                                            },
                     "italian-sausage-penne":  {
                                                   "name":  "Italian Sausage Penne with Peppers",
                                                   "servings":  14,
@@ -3948,6 +4171,16 @@
 
                                                                         ]
                                                      },
+                    "poppy-seed-chicken-and-rice-casserole":  {
+                                                                  "name":  "Poppy Seed Chicken and Rice Casserole",
+                                                                  "servings":  14,
+                                                                  "week_cost":  24.51,
+                                                                  "per_serving":  1.75,
+                                                                  "calories":  701,
+                                                                  "sale_items":  [
+
+                                                                                 ]
+                                                              },
                     "slow-cooker-honey-garlic-pork-bowls":  {
                                                                 "name":  "Slow Cooker Honey Garlic Pork Bowls",
                                                                 "servings":  14,
@@ -3978,6 +4211,46 @@
 
                                                                            ]
                                                         },
+                    "pork-milanese-with-roasted-potatoes":  {
+                                                                "name":  "Pork Milanese with Roasted Potatoes",
+                                                                "servings":  14,
+                                                                "week_cost":  25.41,
+                                                                "per_serving":  1.82,
+                                                                "calories":  629,
+                                                                "sale_items":  [
+
+                                                                               ]
+                                                            },
+                    "buffalo-chicken-pasta-bake":  {
+                                                       "name":  "Buffalo Chicken Pasta Bake",
+                                                       "servings":  14,
+                                                       "week_cost":  25.56,
+                                                       "per_serving":  1.83,
+                                                       "calories":  606,
+                                                       "sale_items":  [
+
+                                                                      ]
+                                                   },
+                    "turkey-sausage-and-cheesy-grits-bowl":  {
+                                                                 "name":  "Turkey Sausage and Cheesy Grits Bowl",
+                                                                 "servings":  14,
+                                                                 "week_cost":  25.6,
+                                                                 "per_serving":  1.83,
+                                                                 "calories":  561,
+                                                                 "sale_items":  [
+
+                                                                                ]
+                                                             },
+                    "korean-gochujang-ground-pork-rice-bowls":  {
+                                                                    "name":  "Korean Gochujang Ground Pork Rice Bowls",
+                                                                    "servings":  14,
+                                                                    "week_cost":  26.39,
+                                                                    "per_serving":  1.88,
+                                                                    "calories":  560,
+                                                                    "sale_items":  [
+
+                                                                                   ]
+                                                                },
                     "slow-cooker-filipino-pork-adobo-bowls":  {
                                                                   "name":  "Slow Cooker Filipino Pork Adobo Bowls",
                                                                   "servings":  14,
@@ -4018,6 +4291,26 @@
 
                                                                                      ]
                                                                   },
+                    "creamy-cajun-chicken-penne-skillet-bowls":  {
+                                                                     "name":  "Creamy Cajun Chicken Penne Skillet Bowls",
+                                                                     "servings":  14,
+                                                                     "week_cost":  27.13,
+                                                                     "per_serving":  1.94,
+                                                                     "calories":  570,
+                                                                     "sale_items":  [
+
+                                                                                    ]
+                                                                 },
+                    "south-indian-chettinad-pepper-chicken-bowls":  {
+                                                                        "name":  "South Indian Chettinad Pepper Chicken Bowls",
+                                                                        "servings":  14,
+                                                                        "week_cost":  27.23,
+                                                                        "per_serving":  1.94,
+                                                                        "calories":  561,
+                                                                        "sale_items":  [
+
+                                                                                       ]
+                                                                    },
                     "chicken-parmesan-pasta":  {
                                                    "name":  "Chicken Parmesan Pasta",
                                                    "servings":  14,
@@ -4038,6 +4331,26 @@
 
                                                                                   ]
                                                                },
+                    "west-african-jollof-rice-and-chicken":  {
+                                                                 "name":  "West African Jollof Rice and Chicken",
+                                                                 "servings":  14,
+                                                                 "week_cost":  27.44,
+                                                                 "per_serving":  1.96,
+                                                                 "calories":  591,
+                                                                 "sale_items":  [
+
+                                                                                ]
+                                                             },
+                    "oyakodon":  {
+                                     "name":  "Oyakodon (Japanese Chicken and Egg Rice Bowls)",
+                                     "servings":  14,
+                                     "week_cost":  27.5,
+                                     "per_serving":  1.96,
+                                     "calories":  747,
+                                     "sale_items":  [
+
+                                                    ]
+                                 },
                     "slow-cooker-dr-pepper-pulled-pork-bowls":  {
                                                                     "name":  "Slow Cooker Dr Pepper Pulled Pork Bowls",
                                                                     "servings":  14,
@@ -4048,6 +4361,16 @@
 
                                                                                    ]
                                                                 },
+                    "trinidadian-curry-chicken-bowls":  {
+                                                            "name":  "Trinidadian Curry Chicken Bowls",
+                                                            "servings":  14,
+                                                            "week_cost":  28.1,
+                                                            "per_serving":  2.01,
+                                                            "calories":  577,
+                                                            "sale_items":  [
+
+                                                                           ]
+                                                        },
                     "slow-cooker-ranch-pork-potato-bowls":  {
                                                                 "name":  "Slow Cooker Ranch Pork and Potato Bowls",
                                                                 "servings":  14,
@@ -4058,6 +4381,16 @@
 
                                                                                ]
                                                             },
+                    "thai-peanut-pork-tenderloin-rice-bowl":  {
+                                                                  "name":  "Thai Peanut Pork Tenderloin Rice Bowl",
+                                                                  "servings":  14,
+                                                                  "week_cost":  28.53,
+                                                                  "per_serving":  2.04,
+                                                                  "calories":  583,
+                                                                  "sale_items":  [
+
+                                                                                 ]
+                                                              },
                     "slow-cooker-chicken-curry-rice-bowls":  {
                                                                  "name":  "Slow Cooker Chicken Curry Rice Bowls",
                                                                  "servings":  14,
@@ -4078,6 +4411,26 @@
 
                                                                                  ]
                                                               },
+                    "chicken-biryani-rice-bowls":  {
+                                                       "name":  "Chicken Biryani Rice Bowls",
+                                                       "servings":  14,
+                                                       "week_cost":  28.95,
+                                                       "per_serving":  2.07,
+                                                       "calories":  567,
+                                                       "sale_items":  [
+
+                                                                      ]
+                                                   },
+                    "arroz-con-pollo-bowls":  {
+                                                  "name":  "Arroz con Pollo (Chicken and Rice) Bowls",
+                                                  "servings":  14,
+                                                  "week_cost":  29.25,
+                                                  "per_serving":  2.09,
+                                                  "calories":  628,
+                                                  "sale_items":  [
+
+                                                                 ]
+                                              },
                     "slow-cooker-general-tso-chicken-bowls":  {
                                                                   "name":  "Slow Cooker General Tso\u0027s Chicken Bowls",
                                                                   "servings":  14,
@@ -4088,6 +4441,26 @@
 
                                                                                  ]
                                                               },
+                    "ethiopian-doro-wat-chicken-bowls":  {
+                                                             "name":  "Ethiopian Doro Wat Chicken Bowls",
+                                                             "servings":  14,
+                                                             "week_cost":  29.58,
+                                                             "per_serving":  2.11,
+                                                             "calories":  574,
+                                                             "sale_items":  [
+
+                                                                            ]
+                                                         },
+                    "loaded-chicken-and-potato-casserole":  {
+                                                                "name":  "Loaded Chicken and Potato Casserole",
+                                                                "servings":  14,
+                                                                "week_cost":  29.87,
+                                                                "per_serving":  2.13,
+                                                                "calories":  777,
+                                                                "sale_items":  [
+
+                                                                               ]
+                                                            },
                     "slow-cooker-pulled-pork-bowl":  {
                                                          "name":  "BBQ Pulled Pork Rice Bowl",
                                                          "servings":  14,
@@ -4108,6 +4481,16 @@
 
                                                                               ]
                                                            },
+                    "chicken-mole-rice-bowls":  {
+                                                    "name":  "Chicken Mole Rice Bowls",
+                                                    "servings":  14,
+                                                    "week_cost":  30.21,
+                                                    "per_serving":  2.16,
+                                                    "calories":  560,
+                                                    "sale_items":  [
+
+                                                                   ]
+                                                },
                     "slow-cooker-italian-pork-loin-bowls":  {
                                                                 "name":  "Slow Cooker Italian Pork and White Bean Bowls",
                                                                 "servings":  14,
@@ -4118,6 +4501,26 @@
 
                                                                                ]
                                                             },
+                    "filipino-pork-giniling":  {
+                                                   "name":  "Filipino Pork Giniling (Filipino Picadillo)",
+                                                   "servings":  14,
+                                                   "week_cost":  30.48,
+                                                   "per_serving":  2.18,
+                                                   "calories":  571,
+                                                   "sale_items":  [
+
+                                                                  ]
+                                               },
+                    "lebanese-hashweh":  {
+                                             "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
+                                             "servings":  14,
+                                             "week_cost":  30.91,
+                                             "per_serving":  2.21,
+                                             "calories":  577,
+                                             "sale_items":  [
+
+                                                            ]
+                                         },
                     "cheesy-beef-broccoli-bowls":  {
                                                        "name":  "Cheesy Beef and Broccoli Rice Bowls",
                                                        "servings":  14,
@@ -4138,6 +4541,26 @@
 
                                                                                 ]
                                                              },
+                    "hong-kongstyle-baked-pork-chop-rice":  {
+                                                                "name":  "Hong Kong-Style Baked Pork Chop Rice",
+                                                                "servings":  14,
+                                                                "week_cost":  31.56,
+                                                                "per_serving":  2.25,
+                                                                "calories":  655,
+                                                                "sale_items":  [
+
+                                                                               ]
+                                                            },
+                    "creamy-pork-tenderloin-tagliatelle":  {
+                                                               "name":  "Creamy Pork Tenderloin Tagliatelle (alla Castellana)",
+                                                               "servings":  14,
+                                                               "week_cost":  31.99,
+                                                               "per_serving":  2.28,
+                                                               "calories":  788,
+                                                               "sale_items":  [
+
+                                                                              ]
+                                                           },
                     "slow-cooker-bbq-pulled-chicken-bowls":  {
                                                                  "name":  "Slow Cooker BBQ Pulled Chicken Bowls",
                                                                  "servings":  14,
@@ -4158,16 +4581,6 @@
 
                                                                           ]
                                                        },
-                    "slow-cooker-chicken-tinga-bowls":  {
-                                                            "name":  "Slow Cooker Chicken Tinga Bowls",
-                                                            "servings":  14,
-                                                            "week_cost":  32.24,
-                                                            "per_serving":  2.3,
-                                                            "calories":  560,
-                                                            "sale_items":  [
-
-                                                                           ]
-                                                        },
                     "slow-cooker-pork-posole-verde-bowls":  {
                                                                 "name":  "Slow Cooker Pork Posole Verde Bowls",
                                                                 "servings":  14,
@@ -4178,6 +4591,26 @@
 
                                                                                ]
                                                             },
+                    "slow-cooker-chicken-tinga-bowls":  {
+                                                            "name":  "Slow Cooker Chicken Tinga Bowls",
+                                                            "servings":  14,
+                                                            "week_cost":  32.24,
+                                                            "per_serving":  2.3,
+                                                            "calories":  560,
+                                                            "sale_items":  [
+
+                                                                           ]
+                                                        },
+                    "persian-fesenjan-chicken-bowls":  {
+                                                           "name":  "Persian Fesenjan Chicken (Walnut-Pomegranate Stew) Bowls",
+                                                           "servings":  14,
+                                                           "week_cost":  32.29,
+                                                           "per_serving":  2.31,
+                                                           "calories":  638,
+                                                           "sale_items":  [
+
+                                                                          ]
+                                                       },
                     "slow-cooker-butter-chicken-rice-bowls":  {
                                                                   "name":  "Slow Cooker Butter Chicken Rice Bowls",
                                                                   "servings":  14,
@@ -4198,6 +4631,16 @@
 
                                                                             ]
                                                          },
+                    "chicken-souvlaki-rice-bowls":  {
+                                                        "name":  "Chicken Souvlaki Rice Bowls",
+                                                        "servings":  14,
+                                                        "week_cost":  32.92,
+                                                        "per_serving":  2.35,
+                                                        "calories":  562,
+                                                        "sale_items":  [
+
+                                                                       ]
+                                                    },
                     "slow-cooker-kung-pao-chicken-bowls":  {
                                                                "name":  "Slow Cooker Kung Pao Chicken Bowls",
                                                                "servings":  14,
@@ -4208,6 +4651,16 @@
 
                                                                               ]
                                                            },
+                    "al-pastor-pork-taco-bowl-with-cilantro-lime-rice":  {
+                                                                             "name":  "Al Pastor Pork Taco Bowl with Cilantro Lime Rice",
+                                                                             "servings":  14,
+                                                                             "week_cost":  33.35,
+                                                                             "per_serving":  2.38,
+                                                                             "calories":  687,
+                                                                             "sale_items":  [
+
+                                                                                            ]
+                                                                         },
                     "slow-cooker-buffalo-chicken-bowl":  {
                                                              "name":  "Slow Cooker Buffalo Chicken and Rice Bowl",
                                                              "servings":  14,
@@ -4218,6 +4671,36 @@
 
                                                                             ]
                                                          },
+                    "asian-ground-pork-meatball-rice-bowls":  {
+                                                                  "name":  "Asian Ground Pork Meatball Rice Bowls",
+                                                                  "servings":  14,
+                                                                  "week_cost":  33.52,
+                                                                  "per_serving":  2.39,
+                                                                  "calories":  841,
+                                                                  "sale_items":  [
+
+                                                                                 ]
+                                                              },
+                    "spicy-pork-noodles":  {
+                                               "name":  "Spicy Pork Noodles",
+                                               "servings":  14,
+                                               "week_cost":  33.57,
+                                               "per_serving":  2.4,
+                                               "calories":  874,
+                                               "sale_items":  [
+
+                                                              ]
+                                           },
+                    "cajun-chicken-etouffee-rice-bowls":  {
+                                                              "name":  "Cajun Chicken Etouffee Rice Bowls",
+                                                              "servings":  14,
+                                                              "week_cost":  33.85,
+                                                              "per_serving":  2.42,
+                                                              "calories":  644,
+                                                              "sale_items":  [
+
+                                                                             ]
+                                                          },
                     "slow-cooker-chicken-tacos-rice-bowls":  {
                                                                  "name":  "Slow Cooker Chicken Taco Rice Bowls",
                                                                  "servings":  14,
@@ -4228,6 +4711,16 @@
 
                                                                                 ]
                                                              },
+                    "hungarian-chicken-paprikash":  {
+                                                        "name":  "Hungarian Chicken Paprikash",
+                                                        "servings":  14,
+                                                        "week_cost":  33.94,
+                                                        "per_serving":  2.42,
+                                                        "calories":  877,
+                                                        "sale_items":  [
+
+                                                                       ]
+                                                    },
                     "slow-cooker-cilantro-lime-chicken-bowls":  {
                                                                     "name":  "Slow Cooker Cilantro Lime Chicken Bowls",
                                                                     "servings":  14,
@@ -4248,6 +4741,16 @@
 
                                                                               ]
                                                            },
+                    "million-dollar-baked-spaghetti":  {
+                                                           "name":  "Million Dollar Baked Spaghetti",
+                                                           "servings":  14,
+                                                           "week_cost":  34.23,
+                                                           "per_serving":  2.44,
+                                                           "calories":  566,
+                                                           "sale_items":  [
+
+                                                                          ]
+                                                       },
                     "slow-cooker-chicken-shawarma-bowls":  {
                                                                "name":  "Slow Cooker Chicken Shawarma Bowls",
                                                                "servings":  14,
@@ -4368,6 +4871,66 @@
 
                                                               ]
                                            },
+                    "chicken-lo-mein-noodle-bowls":  {
+                                                         "name":  "Chicken Lo Mein Noodle Bowls",
+                                                         "servings":  14,
+                                                         "week_cost":  35.3,
+                                                         "per_serving":  2.52,
+                                                         "calories":  660,
+                                                         "sale_items":  [
+
+                                                                        ]
+                                                     },
+                    "beef-keema-curry-rice-bowls":  {
+                                                        "name":  "Beef Keema Curry Rice Bowls",
+                                                        "servings":  14,
+                                                        "week_cost":  35.71,
+                                                        "per_serving":  2.55,
+                                                        "calories":  567,
+                                                        "sale_items":  [
+
+                                                                       ]
+                                                    },
+                    "harissa-chicken-rice-bowls":  {
+                                                       "name":  "Harissa Chicken Rice Bowls",
+                                                       "servings":  14,
+                                                       "week_cost":  35.79,
+                                                       "per_serving":  2.56,
+                                                       "calories":  571,
+                                                       "sale_items":  [
+
+                                                                      ]
+                                                   },
+                    "malaysian-chicken-rendang-bowls":  {
+                                                            "name":  "Malaysian Chicken Rendang Bowls",
+                                                            "servings":  14,
+                                                            "week_cost":  35.9,
+                                                            "per_serving":  2.56,
+                                                            "calories":  585,
+                                                            "sale_items":  [
+
+                                                                           ]
+                                                        },
+                    "chicken-katsu-curry-rice-bowls":  {
+                                                           "name":  "Chicken Katsu Curry Rice Bowls",
+                                                           "servings":  14,
+                                                           "week_cost":  35.94,
+                                                           "per_serving":  2.57,
+                                                           "calories":  877,
+                                                           "sale_items":  [
+
+                                                                          ]
+                                                       },
+                    "thai-red-curry-chicken-rice-bowls":  {
+                                                              "name":  "Thai Red Curry Chicken Rice Bowls",
+                                                              "servings":  14,
+                                                              "week_cost":  36,
+                                                              "per_serving":  2.57,
+                                                              "calories":  637,
+                                                              "sale_items":  [
+
+                                                                             ]
+                                                          },
                     "slow-cooker-chicken-tikka-masala-rice-bowls":  {
                                                                         "name":  "Slow Cooker Chicken Tikka Masala Rice Bowls",
                                                                         "servings":  14,
@@ -4378,6 +4941,16 @@
 
                                                                                        ]
                                                                     },
+                    "grilled-pork-tenderloin-burrito-bowl":  {
+                                                                 "name":  "Grilled Pork Tenderloin Burrito Bowl",
+                                                                 "servings":  14,
+                                                                 "week_cost":  36.25,
+                                                                 "per_serving":  2.59,
+                                                                 "calories":  571,
+                                                                 "sale_items":  [
+
+                                                                                ]
+                                                             },
                     "slow-cooker-king-ranch-chicken-bowls":  {
                                                                  "name":  "Slow Cooker King Ranch Chicken Bowls",
                                                                  "servings":  14,
@@ -4388,6 +4961,16 @@
 
                                                                                 ]
                                                              },
+                    "southern-smothered-pork-chops-and-rice":  {
+                                                                   "name":  "Southern Smothered Pork Chops and Rice",
+                                                                   "servings":  14,
+                                                                   "week_cost":  36.44,
+                                                                   "per_serving":  2.6,
+                                                                   "calories":  896,
+                                                                   "sale_items":  [
+
+                                                                                  ]
+                                                               },
                     "teriyaki-chicken-bowl":  {
                                                   "name":  "Teriyaki Chicken and Rice Bowl",
                                                   "servings":  14,
@@ -4418,6 +5001,16 @@
 
                                                                                  ]
                                                               },
+                    "chicken-scampi":  {
+                                           "name":  "Chicken Scampi",
+                                           "servings":  14,
+                                           "week_cost":  36.81,
+                                           "per_serving":  2.63,
+                                           "calories":  871,
+                                           "sale_items":  [
+
+                                                          ]
+                                       },
                     "slow-cooker-chicken-saag-rice-bowls":  {
                                                                 "name":  "Slow Cooker Chicken Saag Rice Bowls",
                                                                 "servings":  14,
@@ -4428,6 +5021,46 @@
 
                                                                                ]
                                                             },
+                    "beef-stuffed-shells":  {
+                                                "name":  "Beef Stuffed Shells",
+                                                "servings":  14,
+                                                "week_cost":  37.82,
+                                                "per_serving":  2.7,
+                                                "calories":  560,
+                                                "sale_items":  [
+
+                                                               ]
+                                            },
+                    "john-wayne-casserole":  {
+                                                 "name":  "John Wayne Casserole",
+                                                 "servings":  14,
+                                                 "week_cost":  37.82,
+                                                 "per_serving":  2.7,
+                                                 "calories":  578,
+                                                 "sale_items":  [
+
+                                                                ]
+                                             },
+                    "cheesy-beef-and-shells-casserole":  {
+                                                             "name":  "Cheesy Beef and Shells Casserole",
+                                                             "servings":  14,
+                                                             "week_cost":  37.95,
+                                                             "per_serving":  2.71,
+                                                             "calories":  616,
+                                                             "sale_items":  [
+
+                                                                            ]
+                                                         },
+                    "turkey-keema-curry-with-peas":  {
+                                                         "name":  "Turkey Keema Curry with Peas",
+                                                         "servings":  14,
+                                                         "week_cost":  38,
+                                                         "per_serving":  2.71,
+                                                         "calories":  641,
+                                                         "sale_items":  [
+
+                                                                        ]
+                                                     },
                     "slow-cooker-chicken-tortilla-soup-bowls":  {
                                                                     "name":  "Slow Cooker Chicken Tortilla Soup Bowls",
                                                                     "servings":  14,
@@ -4438,6 +5071,16 @@
 
                                                                                    ]
                                                                 },
+                    "hawaiian-loco-moco-rice-bowls":  {
+                                                          "name":  "Hawaiian Loco Moco Rice Bowls",
+                                                          "servings":  14,
+                                                          "week_cost":  38.25,
+                                                          "per_serving":  2.73,
+                                                          "calories":  647,
+                                                          "sale_items":  [
+
+                                                                         ]
+                                                      },
                     "slow-cooker-chicken-chile-verde-bowls":  {
                                                                   "name":  "Slow Cooker Chicken Chile Verde Bowls",
                                                                   "servings":  14,
@@ -4458,6 +5101,16 @@
 
                                                                             ]
                                                          },
+                    "korean-beef-bibimbap-bowls":  {
+                                                       "name":  "Korean Beef Bibimbap Bowls",
+                                                       "servings":  14,
+                                                       "week_cost":  38.48,
+                                                       "per_serving":  2.75,
+                                                       "calories":  567,
+                                                       "sale_items":  [
+
+                                                                      ]
+                                                   },
                     "slow-cooker-chicken-cacciatore-pasta":  {
                                                                  "name":  "Slow Cooker Chicken Cacciatore Pasta",
                                                                  "servings":  14,
@@ -4468,6 +5121,26 @@
 
                                                                                 ]
                                                              },
+                    "creamy-chicken-and-gnocchi-skillet":  {
+                                                               "name":  "Creamy Chicken and Gnocchi Skillet",
+                                                               "servings":  14,
+                                                               "week_cost":  39.02,
+                                                               "per_serving":  2.79,
+                                                               "calories":  624,
+                                                               "sale_items":  [
+
+                                                                              ]
+                                                           },
+                    "highprotein-turkey-burger-bowl":  {
+                                                           "name":  "High-Protein Turkey Burger Bowl",
+                                                           "servings":  14,
+                                                           "week_cost":  39.04,
+                                                           "per_serving":  2.79,
+                                                           "calories":  565,
+                                                           "sale_items":  [
+
+                                                                          ]
+                                                       },
                     "turkey-taco-rice-skillet":  {
                                                      "name":  "Turkey Taco Rice Skillet",
                                                      "servings":  14,
@@ -4528,6 +5201,16 @@
 
                                                                                   ]
                                                                },
+                    "greek-ground-turkey-lemon-rice-bowls":  {
+                                                                 "name":  "Greek Ground Turkey Lemon Rice Bowls",
+                                                                 "servings":  14,
+                                                                 "week_cost":  39.54,
+                                                                 "per_serving":  2.82,
+                                                                 "calories":  567,
+                                                                 "sale_items":  [
+
+                                                                                ]
+                                                             },
                     "slow-cooker-cuban-mojo-pork-bowls":  {
                                                               "name":  "Slow Cooker Cuban Mojo Pork Bowls",
                                                               "servings":  14,
@@ -4538,6 +5221,16 @@
 
                                                                              ]
                                                           },
+                    "baked-ziti-with-ground-turkey-and-ricotta":  {
+                                                                      "name":  "Baked Ziti with Ground Turkey and Ricotta",
+                                                                      "servings":  14,
+                                                                      "week_cost":  39.83,
+                                                                      "per_serving":  2.84,
+                                                                      "calories":  644,
+                                                                      "sale_items":  [
+
+                                                                                     ]
+                                                                  },
                     "cheesy-zucchini-beef-rice-skillet":  {
                                                               "name":  "Cheesy Zucchini Beef and Rice Skillet",
                                                               "servings":  14,
@@ -4548,6 +5241,56 @@
 
                                                                              ]
                                                           },
+                    "countryfried-pork-chops-with-bacon-gravy":  {
+                                                                     "name":  "Country-Fried Pork Chops with Bacon Gravy",
+                                                                     "servings":  14,
+                                                                     "week_cost":  40.02,
+                                                                     "per_serving":  2.86,
+                                                                     "calories":  685,
+                                                                     "sale_items":  [
+
+                                                                                    ]
+                                                                 },
+                    "mediterranean-beef-hummus-bowls":  {
+                                                            "name":  "Mediterranean Beef Hummus Bowls",
+                                                            "servings":  14,
+                                                            "week_cost":  40.21,
+                                                            "per_serving":  2.87,
+                                                            "calories":  575,
+                                                            "sale_items":  [
+
+                                                                           ]
+                                                        },
+                    "frito-pie-walking-taco-casserole":  {
+                                                             "name":  "Frito Pie Walking Taco Casserole",
+                                                             "servings":  14,
+                                                             "week_cost":  40.29,
+                                                             "per_serving":  2.88,
+                                                             "calories":  686,
+                                                             "sale_items":  [
+
+                                                                            ]
+                                                         },
+                    "creamy-ground-turkey-shell-pasta":  {
+                                                             "name":  "Creamy Ground Turkey Shell Pasta",
+                                                             "servings":  14,
+                                                             "week_cost":  40.41,
+                                                             "per_serving":  2.89,
+                                                             "calories":  587,
+                                                             "sale_items":  [
+
+                                                                            ]
+                                                         },
+                    "marry-me-pork-chops-over-pasta":  {
+                                                           "name":  "Marry Me Pork Chops over Pasta",
+                                                           "servings":  14,
+                                                           "week_cost":  40.87,
+                                                           "per_serving":  2.92,
+                                                           "calories":  669,
+                                                           "sale_items":  [
+
+                                                                          ]
+                                                       },
                     "slow-cooker-barbacoa-bowl":  {
                                                       "name":  "Slow Cooker Barbacoa Burrito Bowl",
                                                       "servings":  14,
@@ -4558,6 +5301,26 @@
 
                                                                      ]
                                                   },
+                    "chorizo-and-potato-bowls":  {
+                                                     "name":  "Chorizo \u0026 Potato Bowls",
+                                                     "servings":  14,
+                                                     "week_cost":  41.16,
+                                                     "per_serving":  2.94,
+                                                     "calories":  656,
+                                                     "sale_items":  [
+
+                                                                    ]
+                                                 },
+                    "indian-keema-matar-bowls":  {
+                                                     "name":  "Indian Keema Matar (Ground Beef \u0026 Peas Curry) Bowls",
+                                                     "servings":  14,
+                                                     "week_cost":  41.33,
+                                                     "per_serving":  2.95,
+                                                     "calories":  563,
+                                                     "sale_items":  [
+
+                                                                    ]
+                                                 },
                     "slow-cooker-italian-beef-bowl":  {
                                                           "name":  "Slow Cooker Italian Beef Rice Bowl",
                                                           "servings":  14,
@@ -4568,6 +5331,26 @@
 
                                                                          ]
                                                       },
+                    "ground-turkey-burrito-bowl":  {
+                                                       "name":  "Ground Turkey Burrito Bowl",
+                                                       "servings":  14,
+                                                       "week_cost":  41.83,
+                                                       "per_serving":  2.99,
+                                                       "calories":  574,
+                                                       "sale_items":  [
+
+                                                                      ]
+                                                   },
+                    "vietnamese-lemongrass-pork-noodle-bowls":  {
+                                                                    "name":  "Vietnamese Lemongrass Pork Noodle Bowls (Bun Thit Nuong)",
+                                                                    "servings":  14,
+                                                                    "week_cost":  41.89,
+                                                                    "per_serving":  2.99,
+                                                                    "calories":  569,
+                                                                    "sale_items":  [
+
+                                                                                   ]
+                                                                },
                     "slow-cooker-salsa-verde-pork-bowls":  {
                                                                "name":  "Slow Cooker Salsa Verde Pork Bowls",
                                                                "servings":  14,
@@ -4578,6 +5361,16 @@
 
                                                                               ]
                                                            },
+                    "baked-ziti-with-ground-beef":  {
+                                                        "name":  "Baked Ziti with Ground Beef",
+                                                        "servings":  14,
+                                                        "week_cost":  42.26,
+                                                        "per_serving":  3.02,
+                                                        "calories":  628,
+                                                        "sale_items":  [
+
+                                                                       ]
+                                                    },
                     "slow-cooker-crack-chicken-bowls":  {
                                                             "name":  "Slow Cooker Crack Chicken Bowls",
                                                             "servings":  14,
@@ -4588,6 +5381,26 @@
 
                                                                            ]
                                                         },
+                    "turkey-kofta-rice-bowl-with-tahini-sauce":  {
+                                                                     "name":  "Turkey Kofta Bowls with Tahini Sauce",
+                                                                     "servings":  14,
+                                                                     "week_cost":  43.04,
+                                                                     "per_serving":  3.07,
+                                                                     "calories":  594,
+                                                                     "sale_items":  [
+
+                                                                                    ]
+                                                                 },
+                    "ground-turkey-broccoli-cheddar-rice-skillet":  {
+                                                                        "name":  "Ground Turkey Broccoli Cheddar Rice Skillet",
+                                                                        "servings":  14,
+                                                                        "week_cost":  43.16,
+                                                                        "per_serving":  3.08,
+                                                                        "calories":  592,
+                                                                        "sale_items":  [
+
+                                                                                       ]
+                                                                    },
                     "ground-beef-and-broccoli-bowls":  {
                                                            "name":  "Ground Beef and Broccoli Bowls",
                                                            "servings":  14,
@@ -4598,6 +5411,16 @@
 
                                                                           ]
                                                        },
+                    "arroz-con-carne-molida":  {
+                                                   "name":  "Arroz con Carne Molida (Mexican Beef and Rice Skillet)",
+                                                   "servings":  14,
+                                                   "week_cost":  43.66,
+                                                   "per_serving":  3.12,
+                                                   "calories":  703,
+                                                   "sale_items":  [
+
+                                                                  ]
+                                               },
                     "beef-chili-mac":  {
                                            "name":  "Beef Chili Mac",
                                            "servings":  14,
@@ -4608,6 +5431,26 @@
 
                                                           ]
                                        },
+                    "panseared-pork-chops-with-cajun-dirty-rice":  {
+                                                                       "name":  "Pan-Seared Pork Chops with Cajun Dirty Rice",
+                                                                       "servings":  14,
+                                                                       "week_cost":  43.9,
+                                                                       "per_serving":  3.14,
+                                                                       "calories":  578,
+                                                                       "sale_items":  [
+
+                                                                                      ]
+                                                                   },
+                    "oneskillet-ground-turkey-thai-curry-with-rice":  {
+                                                                          "name":  "One-Skillet Ground Turkey Thai Curry with Rice",
+                                                                          "servings":  14,
+                                                                          "week_cost":  44.22,
+                                                                          "per_serving":  3.16,
+                                                                          "calories":  640,
+                                                                          "sale_items":  [
+
+                                                                                         ]
+                                                                      },
                     "slow-cooker-teriyaki-pork-bowls":  {
                                                             "name":  "Slow Cooker Teriyaki Pork Bowls",
                                                             "servings":  14,
@@ -4638,6 +5481,16 @@
 
                                                                        ]
                                                     },
+                    "creamy-mushroom-pork-chops-over-mashed-potatoes":  {
+                                                                            "name":  "Creamy Mushroom Pork Chops over Mashed Potatoes",
+                                                                            "servings":  14,
+                                                                            "week_cost":  45.04,
+                                                                            "per_serving":  3.22,
+                                                                            "calories":  591,
+                                                                            "sale_items":  [
+
+                                                                                           ]
+                                                                        },
                     "slow-cooker-balsamic-pork-bowls":  {
                                                             "name":  "Slow Cooker Balsamic Pork Bowls",
                                                             "servings":  14,
@@ -4648,6 +5501,16 @@
 
                                                                            ]
                                                         },
+                    "johnny-marzetti-casserole":  {
+                                                      "name":  "Johnny Marzetti Casserole",
+                                                      "servings":  14,
+                                                      "week_cost":  45.49,
+                                                      "per_serving":  3.25,
+                                                      "calories":  568,
+                                                      "sale_items":  [
+
+                                                                     ]
+                                                  },
                     "mongolian-ground-beef-bowls":  {
                                                         "name":  "Mongolian Ground Beef Bowls",
                                                         "servings":  14,
@@ -4658,6 +5521,26 @@
 
                                                                        ]
                                                     },
+                    "filipino-chicken-afritada-bowls":  {
+                                                            "name":  "Filipino Chicken Afritada Bowls",
+                                                            "servings":  14,
+                                                            "week_cost":  45.79,
+                                                            "per_serving":  3.27,
+                                                            "calories":  675,
+                                                            "sale_items":  [
+
+                                                                           ]
+                                                        },
+                    "beef-chow-mein-noodles":  {
+                                                   "name":  "Beef Chow Mein Noodles",
+                                                   "servings":  14,
+                                                   "week_cost":  45.95,
+                                                   "per_serving":  3.28,
+                                                   "calories":  706,
+                                                   "sale_items":  [
+
+                                                                  ]
+                                               },
                     "slow-cooker-maple-dijon-pork-bowls":  {
                                                                "name":  "Slow Cooker Maple Dijon Pork Bowls",
                                                                "servings":  14,
@@ -4668,6 +5551,26 @@
 
                                                                               ]
                                                            },
+                    "creamy-ground-turkey-and-chorizo-pasta":  {
+                                                                   "name":  "Creamy Ground Turkey and Chorizo Pasta",
+                                                                   "servings":  14,
+                                                                   "week_cost":  46.12,
+                                                                   "per_serving":  3.29,
+                                                                   "calories":  736,
+                                                                   "sale_items":  [
+
+                                                                                  ]
+                                                               },
+                    "thai-pork-drunken-noodles":  {
+                                                      "name":  "Thai Pork Drunken Noodles (Pad Kee Mao)",
+                                                      "servings":  14,
+                                                      "week_cost":  46.29,
+                                                      "per_serving":  3.31,
+                                                      "calories":  730,
+                                                      "sale_items":  [
+
+                                                                     ]
+                                                  },
                     "cheeseburger-rice-bowls":  {
                                                     "name":  "Cheeseburger Rice Bowls",
                                                     "servings":  14,
@@ -4788,6 +5691,16 @@
 
                                                                                    ]
                                                                 },
+                    "cheesy-ground-beef-tortellini":  {
+                                                          "name":  "Cheesy Ground Beef Tortellini",
+                                                          "servings":  14,
+                                                          "week_cost":  47.75,
+                                                          "per_serving":  3.41,
+                                                          "calories":  566,
+                                                          "sale_items":  [
+
+                                                                         ]
+                                                      },
                     "mediterranean-ground-turkey-bowls":  {
                                                               "name":  "Mediterranean Ground Turkey Bowls",
                                                               "servings":  14,
@@ -4828,6 +5741,26 @@
 
                                                            ]
                                         },
+                    "creamy-ground-turkey-tortellini-skillet":  {
+                                                                    "name":  "Creamy Ground Turkey Tortellini Skillet",
+                                                                    "servings":  14,
+                                                                    "week_cost":  48.29,
+                                                                    "per_serving":  3.45,
+                                                                    "calories":  567,
+                                                                    "sale_items":  [
+
+                                                                                   ]
+                                                                },
+                    "chicken-pad-thai-noodle-bowls":  {
+                                                          "name":  "Chicken Pad Thai Noodle Bowls",
+                                                          "servings":  14,
+                                                          "week_cost":  48.35,
+                                                          "per_serving":  3.45,
+                                                          "calories":  791,
+                                                          "sale_items":  [
+
+                                                                         ]
+                                                      },
                     "sloppy-joe-rice-bowls":  {
                                                   "name":  "Sloppy Joe Rice Bowls",
                                                   "servings":  14,
@@ -4858,6 +5791,16 @@
 
                                                                         ]
                                                      },
+                    "thai-coconut-curry-turkey-meatballs":  {
+                                                                "name":  "Thai Coconut Curry Turkey Meatballs",
+                                                                "servings":  14,
+                                                                "week_cost":  48.82,
+                                                                "per_serving":  3.49,
+                                                                "calories":  662,
+                                                                "sale_items":  [
+
+                                                                               ]
+                                                            },
                     "loaded-beef-taco-skillet-bowls":  {
                                                            "name":  "Loaded Beef Taco Skillet Bowls",
                                                            "servings":  14,
@@ -4928,6 +5871,26 @@
 
                                                                   ]
                                                },
+                    "ground-beef-baked-gnocchi":  {
+                                                      "name":  "Ground Beef Baked Gnocchi",
+                                                      "servings":  14,
+                                                      "week_cost":  49.5,
+                                                      "per_serving":  3.54,
+                                                      "calories":  561,
+                                                      "sale_items":  [
+
+                                                                     ]
+                                                  },
+                    "pork-tenderloin-stroganoff-over-egg-noodles":  {
+                                                                        "name":  "Pork Tenderloin Stroganoff over Egg Noodles",
+                                                                        "servings":  14,
+                                                                        "week_cost":  49.75,
+                                                                        "per_serving":  3.55,
+                                                                        "calories":  613,
+                                                                        "sale_items":  [
+
+                                                                                       ]
+                                                                    },
                     "beef-picadillo-rice-bowls":  {
                                                       "name":  "Cuban Beef Picadillo Rice Bowls",
                                                       "servings":  14,
@@ -4938,6 +5901,16 @@
 
                                                                      ]
                                                   },
+                    "cheesy-taco-spaghetti":  {
+                                                  "name":  "Cheesy Taco Spaghetti",
+                                                  "servings":  14,
+                                                  "week_cost":  50.05,
+                                                  "per_serving":  3.58,
+                                                  "calories":  603,
+                                                  "sale_items":  [
+
+                                                                 ]
+                                              },
                     "slow-cooker-turkey-chili-bowls":  {
                                                            "name":  "Slow Cooker Turkey Chili Bowls",
                                                            "servings":  14,
@@ -4948,6 +5921,16 @@
 
                                                                           ]
                                                        },
+                    "persian-kabob-koobideh-rice-bowls":  {
+                                                              "name":  "Persian Kabob Koobideh Rice Bowls",
+                                                              "servings":  14,
+                                                              "week_cost":  50.23,
+                                                              "per_serving":  3.59,
+                                                              "calories":  616,
+                                                              "sale_items":  [
+
+                                                                             ]
+                                                          },
                     "turkey-sloppy-joe-bowls":  {
                                                     "name":  "Turkey Sloppy Joe Bowls",
                                                     "servings":  14,
@@ -4968,6 +5951,16 @@
 
                                                                           ]
                                                        },
+                    "greek-beef-and-chickpea-bowls":  {
+                                                          "name":  "Greek Beef and Chickpea Bowls",
+                                                          "servings":  14,
+                                                          "week_cost":  50.82,
+                                                          "per_serving":  3.63,
+                                                          "calories":  630,
+                                                          "sale_items":  [
+
+                                                                         ]
+                                                      },
                     "thai-turkey-larb-bowls":  {
                                                    "name":  "Thai Turkey Larb Bowls",
                                                    "servings":  14,
@@ -4988,6 +5981,36 @@
 
                                                                   ]
                                                },
+                    "japanese-pork-katsu-curry-rice":  {
+                                                           "name":  "Japanese Pork Katsu Curry Rice",
+                                                           "servings":  14,
+                                                           "week_cost":  51.66,
+                                                           "per_serving":  3.69,
+                                                           "calories":  953,
+                                                           "sale_items":  [
+
+                                                                          ]
+                                                       },
+                    "chili-cornbread-casserole":  {
+                                                      "name":  "Chili Cornbread Casserole",
+                                                      "servings":  14,
+                                                      "week_cost":  51.82,
+                                                      "per_serving":  3.7,
+                                                      "calories":  696,
+                                                      "sale_items":  [
+
+                                                                     ]
+                                                  },
+                    "vietnamese-turkey-banh-mi-bowls":  {
+                                                            "name":  "Vietnamese Turkey Banh Mi Bowls",
+                                                            "servings":  14,
+                                                            "week_cost":  51.84,
+                                                            "per_serving":  3.7,
+                                                            "calories":  674,
+                                                            "sale_items":  [
+
+                                                                           ]
+                                                        },
                     "turkey-meatball-marinara-pasta":  {
                                                            "name":  "Turkey Meatball Marinara Pasta",
                                                            "servings":  14,
@@ -4998,6 +6021,26 @@
 
                                                                           ]
                                                        },
+                    "middle-eastern-beef-kofta-bowls-with-tzatziki":  {
+                                                                          "name":  "Middle Eastern Beef Kofta Bowls with Tzatziki",
+                                                                          "servings":  14,
+                                                                          "week_cost":  52.62,
+                                                                          "per_serving":  3.76,
+                                                                          "calories":  562,
+                                                                          "sale_items":  [
+
+                                                                                         ]
+                                                                      },
+                    "green-chile-ground-turkey-skillet":  {
+                                                              "name":  "Green Chile Ground Turkey Skillet",
+                                                              "servings":  14,
+                                                              "week_cost":  52.74,
+                                                              "per_serving":  3.77,
+                                                              "calories":  723,
+                                                              "sale_items":  [
+
+                                                                             ]
+                                                          },
                     "ground-turkey-stir-fry-bowls":  {
                                                          "name":  "Ground Turkey Stir Fry Bowls",
                                                          "servings":  14,
@@ -5007,6 +6050,136 @@
                                                          "sale_items":  [
 
                                                                         ]
-                                                     }
+                                                     },
+                    "japanese-ground-beef-curry":  {
+                                                       "name":  "Japanese Ground Beef Curry",
+                                                       "servings":  14,
+                                                       "week_cost":  53.26,
+                                                       "per_serving":  3.8,
+                                                       "calories":  590,
+                                                       "sale_items":  [
+
+                                                                      ]
+                                                   },
+                    "ground-turkey-lo-mein":  {
+                                                  "name":  "Ground Turkey Lo Mein",
+                                                  "servings":  14,
+                                                  "week_cost":  54.17,
+                                                  "per_serving":  3.87,
+                                                  "calories":  565,
+                                                  "sale_items":  [
+
+                                                                 ]
+                                              },
+                    "cheesy-pork-chop-and-hash-brown-casserole":  {
+                                                                      "name":  "Cheesy Pork Chop and Hash Brown Casserole",
+                                                                      "servings":  14,
+                                                                      "week_cost":  54.19,
+                                                                      "per_serving":  3.87,
+                                                                      "calories":  672,
+                                                                      "sale_items":  [
+
+                                                                                     ]
+                                                                  },
+                    "sichuan-dan-dan-noodles-with-pork":  {
+                                                              "name":  "Sichuan Dan Dan Noodles with Pork",
+                                                              "servings":  14,
+                                                              "week_cost":  54.29,
+                                                              "per_serving":  3.88,
+                                                              "calories":  880,
+                                                              "sale_items":  [
+
+                                                                             ]
+                                                          },
+                    "ground-turkey-sweet-potato-bowl":  {
+                                                            "name":  "Ground Turkey Sweet Potato Bowl",
+                                                            "servings":  14,
+                                                            "week_cost":  54.96,
+                                                            "per_serving":  3.93,
+                                                            "calories":  568,
+                                                            "sale_items":  [
+
+                                                                           ]
+                                                        },
+                    "creamy-tomato-ground-turkey-gnocchi":  {
+                                                                "name":  "Creamy Tomato Ground Turkey Gnocchi",
+                                                                "servings":  14,
+                                                                "week_cost":  54.96,
+                                                                "per_serving":  3.93,
+                                                                "calories":  795,
+                                                                "sale_items":  [
+
+                                                                               ]
+                                                            },
+                    "onepot-ground-turkey-stroganoff":  {
+                                                            "name":  "One-Pot Ground Turkey Stroganoff",
+                                                            "servings":  14,
+                                                            "week_cost":  56.08,
+                                                            "per_serving":  4.01,
+                                                            "calories":  568,
+                                                            "sale_items":  [
+
+                                                                           ]
+                                                        },
+                    "pastitsio":  {
+                                      "name":  "Pastitsio (Greek Beef Pasta Bake)",
+                                      "servings":  14,
+                                      "week_cost":  57.11,
+                                      "per_serving":  4.08,
+                                      "calories":  773,
+                                      "sale_items":  [
+
+                                                     ]
+                                  },
+                    "greek-turkey-meatballs-with-lemon-orzo":  {
+                                                                   "name":  "Greek Turkey Meatballs with Lemon Orzo",
+                                                                   "servings":  14,
+                                                                   "week_cost":  57.17,
+                                                                   "per_serving":  4.08,
+                                                                   "calories":  629,
+                                                                   "sale_items":  [
+
+                                                                                  ]
+                                                               },
+                    "turkey-drunken-noodles":  {
+                                                   "name":  "Turkey Drunken Noodles (Pad Kee Mao)",
+                                                   "servings":  14,
+                                                   "week_cost":  58.2,
+                                                   "per_serving":  4.16,
+                                                   "calories":  562,
+                                                   "sale_items":  [
+
+                                                                  ]
+                                               },
+                    "thai-basil-beef-bowls-with-coconut-rice":  {
+                                                                    "name":  "Thai Basil Beef Bowls with Coconut Rice",
+                                                                    "servings":  14,
+                                                                    "week_cost":  58.34,
+                                                                    "per_serving":  4.17,
+                                                                    "calories":  593,
+                                                                    "sale_items":  [
+
+                                                                                   ]
+                                                                },
+                    "vietnamese-caramelized-ground-beef-rice-bowls":  {
+                                                                          "name":  "Vietnamese Caramelized Ground Beef Rice Bowls",
+                                                                          "servings":  14,
+                                                                          "week_cost":  60.81,
+                                                                          "per_serving":  4.34,
+                                                                          "calories":  700,
+                                                                          "sale_items":  [
+
+                                                                                         ]
+                                                                      },
+                    "vietnamese-lemongrass-pork-chops-with-broken-rice":  {
+                                                                              "name":  "Vietnamese Lemongrass Pork Chops with Broken Rice (Com Suon)",
+                                                                              "servings":  14,
+                                                                              "week_cost":  70.24,
+                                                                              "per_serving":  5.02,
+                                                                              "calories":  950,
+                                                                              "sale_items":  [
+
+                                                                                             ]
+                                                                          }
                 }
 }

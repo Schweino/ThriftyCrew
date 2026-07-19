@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-07-18 22:40",
-    "board":  "comparison-2026-07-18.json",
-    "total_tiles":  2291,
-    "violations":  300,
+    "generated":  "2026-07-19 12:55",
+    "board":  "comparison-2026-07-19.json",
+    "total_tiles":  2295,
+    "violations":  308,
     "by_store":  {
                      "Walmart":  {
                                      "coverage":  54,
@@ -15,9 +15,9 @@
                                      "violations":  36
                                  },
                      "Family Fare":  {
-                                         "coverage":  51,
-                                         "tiles":  228,
-                                         "violations":  51
+                                         "coverage":  59,
+                                         "tiles":  232,
+                                         "violations":  59
                                      },
                      "Hy-Vee":  {
                                     "coverage":  27,
@@ -122,6 +122,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "bacon",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Chuck Wagon Bacon, Smoked, Ends \u0026 Pieces 32 Oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "bagels",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -215,6 +223,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Sugar \u0027N Spice Bay Leaves",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bell-peppers",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Yellow Bell Pepper",
                      "link":  ""
                  },
                  {
@@ -615,6 +631,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Rana 5 Cheese Tortellini",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cherries",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Regular/Red/Black Cherries",
                      "link":  ""
                  },
                  {
@@ -1098,6 +1122,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "frozen-pizza",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Jack\u0027s Original Thin Sausage Pizza 14.9 Oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "fruit-snacks",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -1270,7 +1302,7 @@
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "That\u0027s Smart! Ground Cinnamon 2.5 Oz",
+                     "board":  "Bakery Fresh White Iced Cinnamon Rolls (4 Ct)",
                      "link":  ""
                  },
                  {
@@ -1706,6 +1738,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "plums",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Plum Black Large",
+                     "link":  ""
+                 },
+                 {
                      "id":  "poblano-peppers",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -1767,6 +1807,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "McCormick Poppy Seed",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pork-shoulder",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Pork Shoulder Country Style Ribs Value Pack",
                      "link":  ""
                  },
                  {
@@ -2066,6 +2114,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "sloppy-joe-sauce",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Manwich Sloppy Joe Sauce, Original 15 Oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "sparkling-water",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -2306,6 +2362,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "tomatoes",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh Tomato On The Vine (Sold Individually, Not By Bunch)",
+                     "link":  ""
+                 },
+                 {
                      "id":  "tortilla-chips",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
@@ -2443,5 +2507,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  291
+    "coverage_violations":  299
 }
