@@ -158,3 +158,20 @@ everything. Retrofit visible credit onto the existing 113 AFTER the new 100 ship
 - Upsert by slug; single lexical html card (scaler block + "\n" + prose). Accept-Version v5.0 still OK for posts.
 - After publish: fetch PUBLIC page, verify scaler data + credit + noindex NOT set (these are indexable).
 - recipes-db.json + r100 specs + scripts push to GitHub repo (cloud pipeline rebuilds depend on repo state).
+
+## FINAL STATUS 2026-07-18 late night (#125 CLOSED)
+- Board mandate DONE: all 165 recipe ingredients board-tracked. 42 remaps + 46 new commodities
+  (1 semantic dupe folded into canned-green-chilies). Board live at 424 commodities / 3,093 prices.
+- 7-store depth on the 46 new: 7-store:4 | 6:8 | 5:15 | 4:9 | 3:3 | 2:4 | 1:3 = 207 cells.
+  The 1-store tail is honest Walmart-only specialty (achiote, pomegranate molasses, berbere).
+  Captures: Walmart NEXT_DATA (46/46 terms), Sam's 17 found / 29 not-carried, Fareway 37 in-store
+  verified (merged with standing 382 -> 419, no coverage collapse), Aldi 10 (+tortelloni), Baker's 42.
+- Cost delta after board completion: 5 recipes moved >2c (inasal, rendang, caramelized beef,
+  lemongrass pork chops, banh mi). All 100 cards rebuilt from final board.
+- ORDERING LESSON: the 5-slug republish ran BEFORE the final board rebuild regenerated cards,
+  so live went stale by one generation. Caught by a full byte-sweep (admin html vs built body;
+  normalize: strip <!--kg-card-begin/end: html--> wrappers + CRLF->LF). Republished the 5;
+  final sweep = 100/100 byte-identical live. recipes-db (22:41:43) carries final costs (verified 4.09/4.84).
+  RULE: any republish must run AFTER the last card rebuild, then byte-sweep to confirm.
+- All state pushed through da62dac (incl. final public/board.json). 06:30 daily runs over this state.
+- Still open elsewhere: #124 credit retrofit on the original 113 + their SMP-branded JSON-LD heads.
