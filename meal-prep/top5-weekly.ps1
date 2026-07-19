@@ -1,5 +1,5 @@
 <#
-  top5-weekly.ps1 - Re-costs all 113 recipes with THIS WEEK's grocery-board prices and maintains the
+  top5-weekly.ps1 - Re-costs all recipes in recipes-db (213) with THIS WEEK's grocery-board prices and maintains the
   "Top 5 cheapest recipes this week" section on the Meal Prep hub page (slug meal-prep-recipes).
 
   METHOD (honest, no invented prices): week_cost = cost_batch_true + delta, where delta sums each
