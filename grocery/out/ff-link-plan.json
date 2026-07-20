@@ -164,10 +164,6 @@
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
-                        "id":  "pork-shoulder",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
                         "id":  "potato-gnocchi",
                         "why":  "not attempted - circuit breaker tripped"
                     },
@@ -224,6 +220,10 @@
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
+                        "id":  "tomatoes",
+                        "why":  "not attempted - circuit breaker tripped"
+                    },
+                    {
                         "id":  "tortilla-chips",
                         "why":  "not attempted - circuit breaker tripped"
                     },
@@ -237,6 +237,6 @@
                     }
                 ],
     "worked":  58,
-    "generated":  "2026-07-19 12:39",
-    "board":  "comparison-2026-07-19.json"
+    "generated":  "2026-07-20 13:51",
+    "board":  "comparison-2026-07-20.json"
 }

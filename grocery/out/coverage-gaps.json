@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-19 12:36",
-    "gap_count":  16,
+    "generated":  "2026-07-20 13:49",
+    "gap_count":  20,
     "gaps":  [
                  {
                      "commodity":  "bread",
@@ -11,6 +11,16 @@
                      "commodity":  "jalapenos",
                      "store":  "Family Fare",
                      "candidate":  "Famous Dave\u0027s Medium Jalapeno Corn Bread Mix 15 Oz"
+                 },
+                 {
+                     "commodity":  "pork-shoulder",
+                     "store":  "Family Fare",
+                     "candidate":  "Fresh Pork Steak, Shoulder Open Acres"
+                 },
+                 {
+                     "commodity":  "tilapia",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Encrusted tilapia fillet, $12.98 lb."
                  },
                  {
                      "commodity":  "egg-whites",
@@ -31,6 +41,16 @@
                      "commodity":  "sandwich-cookies",
                      "store":  "Family Fare",
                      "candidate":  "Little Debbie Sandwich Cookies, Oatmeal Creme Pies 12 Ea"
+                 },
+                 {
+                     "commodity":  "breakfast-sandwiches",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Hy-Vee Sausage, Egg, \u0026 Cheese Muffin Breakfast Sandwiches"
+                 },
+                 {
+                     "commodity":  "garlic-bread",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Hy-Vee garlic bread, SAVE! .50, $2.98 PERKS PRICES, NON-MEMBER PRICE $3.48"
                  },
                  {
                      "commodity":  "mouthwash",

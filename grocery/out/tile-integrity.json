@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-07-19 12:55",
-    "board":  "comparison-2026-07-19.json",
-    "total_tiles":  2295,
-    "violations":  308,
+    "generated":  "2026-07-20 14:00",
+    "board":  "comparison-2026-07-20.json",
+    "total_tiles":  2292,
+    "violations":  321,
     "by_store":  {
                      "Walmart":  {
                                      "coverage":  54,
@@ -15,14 +15,14 @@
                                      "violations":  36
                                  },
                      "Family Fare":  {
-                                         "coverage":  59,
-                                         "tiles":  232,
-                                         "violations":  59
+                                         "coverage":  58,
+                                         "tiles":  231,
+                                         "violations":  58
                                      },
                      "Hy-Vee":  {
-                                    "coverage":  27,
-                                    "tiles":  405,
-                                    "violations":  28
+                                    "coverage":  38,
+                                    "tiles":  403,
+                                    "violations":  42
                                 },
                      "Sam\u0027s Club":  {
                                              "coverage":  39,
@@ -48,6 +48,14 @@
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger 80/20 Ground Beef Roll 3 LB",
                      "link":  ""
+                 },
+                 {
+                     "id":  "ground-beef-8020",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-DRIFT",
+                     "detail":  "board $7.49 vs link $6.99  (7.2% off)",
+                     "board":  "Ground Beef Roll 80 Lean 20 Fat",
+                     "link":  "Ground Beef Roll 80 Lean 20 Fat"
                  },
                  {
                      "id":  "achiote-paste",
@@ -111,6 +119,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger Granny Smith Apples 3 Pound Bag",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "apples",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Granny Smith apples, $1.68 lb.",
                      "link":  ""
                  },
                  {
@@ -258,6 +274,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "blueberries",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh Blueberries, 1 Pint",
+                     "link":  ""
+                 },
+                 {
                      "id":  "body-wash",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -278,7 +302,7 @@
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Hy-Vee boneless skinless chicken breasts, sold in 2.5 lb. bag for $6.99 23g per 4 oz., $6.99",
+                     "board":  "Hy-Vee fresh boneless skinless chicken breasts, 100% natural, value pack No antibiotics ever., $3.99 lb.",
                      "link":  ""
                  },
                  {
@@ -294,7 +318,7 @@
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Hy-Vee purified drinking water, 40 pk. bottles 16.9 fl. oz., $4.99",
+                     "board":  "Hy-Vee spring water, 24 pk. mini bottles 10 fl. oz., $3.99",
                      "link":  ""
                  },
                  {
@@ -303,6 +327,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Purified Drinking Water Our Family (24 Ct   16.9 Oz)",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bratwurst",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Johnsonville Original Brats 5 Count",
                      "link":  ""
                  },
                  {
@@ -334,7 +366,7 @@
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "That\u0027s Smart! cereal, 12 to 18 oz., $1.99",
+                     "board":  "Hy Vee Whole Grain Raisin Bran",
                      "link":  ""
                  },
                  {
@@ -658,6 +690,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "chicken-thighs",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-DRIFT",
+                     "detail":  "board $1.77 vs link $2.29  (22.7% off)",
+                     "board":  "Hy Vee 100 Natural Chicken Thighs Value Pack",
+                     "link":  "Hy-Vee 100% Natural Chicken Thighs Value Pack"
+                 },
+                 {
                      "id":  "chili-crisp",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -850,6 +890,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "cotton-swabs",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Q-Tips cotton swabs, 500 ct., $4.99",
+                     "link":  ""
+                 },
+                 {
                      "id":  "crackers",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -994,6 +1042,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "dishwasher-detergent",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy Vee Dishwasher Detergent 60 Packs",
+                     "link":  ""
+                 },
+                 {
                      "id":  "disinfectant-spray",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -1038,7 +1094,7 @@
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Hy-Vee facial tissue, 280 ct., $4.99",
+                     "board":  "Hy-Vee facial tissue, 70 or 144 ct., $2.29",
                      "link":  ""
                  },
                  {
@@ -1118,7 +1174,7 @@
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Jacks Pepperoni Pizza Thin Crust",
+                     "board":  "Roma Original or Bellatoria personal pizza, 5.67 to 11.05 oz., $2.22 ea. with purchase of 4",
                      "link":  ""
                  },
                  {
@@ -1135,6 +1191,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Mott\u0027s Assorted Fruit Flavored Snacks, 0.8 oz., 90 pk.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fruit-snacks",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee fruit snacks, 40 ct., $6.99",
                      "link":  ""
                  },
                  {
@@ -1239,14 +1303,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Sempio Gochujang Korean Hot Pepper Paste",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "granola-bars",
-                     "store":  "Hy-Vee",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Hy Vee Chewy Granola Bars Variety Pack 18Ct",
                      "link":  ""
                  },
                  {
@@ -1498,6 +1554,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "lettuce",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Dole spinach 8 oz. pkg., classic romaine 9 oz. pkg. or greener selection 11 oz. pkg., 2/ $5.00",
+                     "link":  ""
+                 },
+                 {
                      "id":  "lime-juice",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
@@ -1518,7 +1582,15 @@
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Jumbo Ripe \u0026 Ready mangos, each, $1.99 each",
+                     "board":  "Mangoes",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "marshmallows",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy Vee Marshmallows",
                      "link":  ""
                  },
                  {
@@ -1591,6 +1663,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kikkoman Manjo Aji Mirin Cooking Rice Wine",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "muffins",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Entenmann\u0027s Little Bites muffins, 5 ct., $3.29",
                      "link":  ""
                  },
                  {
@@ -1674,6 +1754,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "paper-napkins",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee napkins, 250 ct., $2.88",
+                     "link":  ""
+                 },
+                 {
                      "id":  "paper-plates",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -1720,6 +1808,14 @@
                      "detail":  "board $2.99 vs link $2.7489  (8.8% off)",
                      "board":  "Yellow Flesh Peaches",
                      "link":  "Del Monte Sliced Yellow Cling Peaches In Heavy Syrup"
+                 },
+                 {
+                     "id":  "peanut-butter",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Skippy peanut butter, 15 to 16.3 oz., $1.98",
+                     "link":  ""
                  },
                  {
                      "id":  "pineapple",
@@ -1807,14 +1903,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "McCormick Poppy Seed",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "pork-shoulder",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Pork Shoulder Country Style Ribs Value Pack",
                      "link":  ""
                  },
                  {
@@ -2122,19 +2210,19 @@
                      "link":  ""
                  },
                  {
+                     "id":  "soda",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee soda or mixer, 2 liter, 4/ $5.00",
+                     "link":  ""
+                 },
+                 {
                      "id":  "sparkling-water",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Liquid Death Sparkling Water",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "spinach",
-                     "store":  "Hy-Vee",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Dole Spinach",
                      "link":  ""
                  },
                  {
@@ -2295,6 +2383,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Simply Organic Thyme",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "toaster-pastries",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Pop-Tarts original 12 ct. or Protein Boostin\u0027 toaster pastries 8 ct., - .50 off with digital coupon, $2.99",
                      "link":  ""
                  },
                  {
@@ -2499,6 +2595,14 @@
                  },
                  {
                      "id":  "yogurt",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-DRIFT",
+                     "detail":  "board $0.1 vs link $0.1317  (24.1% off)",
+                     "board":  "Yoplait Original Low Fat Yogurt",
+                     "link":  "Yoplait Original Low Fat Yogurt"
+                 },
+                 {
+                     "id":  "yogurt",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -2507,5 +2611,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  299
+    "coverage_violations":  309
 }
