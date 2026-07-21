@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-07-20 14:00",
+    "generated":  "2026-07-21 13:27",
     "tol":  0.3,
     "no_link_count":  415,
     "max_no_link":  0,
@@ -1695,18 +1695,8 @@
                         "store":  "Hy-Vee"
                     }
                 ],
-    "mismatch_count":  42,
+    "mismatch_count":  41,
     "mismatch":  [
-                     {
-                         "id":  "yogurt",
-                         "store":  "Hy-Vee",
-                         "unit":  "oz",
-                         "board":  0.1,
-                         "link":  0.1317,
-                         "off_pct":  32,
-                         "product":  "Yoplait Original Low Fat Yogurt",
-                         "size":  "6 oz"
-                     },
                      {
                          "id":  "balsamic-vinegar",
                          "store":  "Hy-Vee",

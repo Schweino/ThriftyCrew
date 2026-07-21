@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-07-20 14:00",
-    "board":  "comparison-2026-07-20.json",
+    "generated":  "2026-07-21 13:26",
+    "board":  "comparison-2026-07-21.json",
     "total_tiles":  2292,
-    "violations":  321,
+    "violations":  318,
     "by_store":  {
                      "Walmart":  {
                                      "coverage":  54,
@@ -15,19 +15,19 @@
                                      "violations":  36
                                  },
                      "Family Fare":  {
-                                         "coverage":  58,
-                                         "tiles":  231,
-                                         "violations":  58
+                                         "coverage":  59,
+                                         "tiles":  232,
+                                         "violations":  59
                                      },
                      "Hy-Vee":  {
-                                    "coverage":  38,
+                                    "coverage":  37,
                                     "tiles":  403,
-                                    "violations":  42
+                                    "violations":  39
                                 },
                      "Sam\u0027s Club":  {
-                                             "coverage":  39,
-                                             "tiles":  329,
-                                             "violations":  39
+                                             "coverage":  38,
+                                             "tiles":  328,
+                                             "violations":  38
                                          },
                      "Aldi":  {
                                   "coverage":  15,
@@ -48,14 +48,6 @@
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger 80/20 Ground Beef Roll 3 LB",
                      "link":  ""
-                 },
-                 {
-                     "id":  "ground-beef-8020",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $7.49 vs link $6.99  (7.2% off)",
-                     "board":  "Ground Beef Roll 80 Lean 20 Fat",
-                     "link":  "Ground Beef Roll 80 Lean 20 Fat"
                  },
                  {
                      "id":  "achiote-paste",
@@ -327,14 +319,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Purified Drinking Water Our Family (24 Ct   16.9 Oz)",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "bratwurst",
-                     "store":  "Hy-Vee",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Johnsonville Original Brats 5 Count",
                      "link":  ""
                  },
                  {
@@ -1906,6 +1890,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "pork-shoulder",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Pork Shoulder Country Style Ribs Value Pack",
+                     "link":  ""
+                 },
+                 {
                      "id":  "potato-gnocchi",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
@@ -2562,14 +2554,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "whole-chicken",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Organic Whole Chicken",
-                     "link":  ""
-                 },
-                 {
                      "id":  "yeast",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -2595,14 +2579,6 @@
                  },
                  {
                      "id":  "yogurt",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.1 vs link $0.1317  (24.1% off)",
-                     "board":  "Yoplait Original Low Fat Yogurt",
-                     "link":  "Yoplait Original Low Fat Yogurt"
-                 },
-                 {
-                     "id":  "yogurt",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -2611,5 +2587,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  309
+    "coverage_violations":  308
 }

@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-20T13:50:17",
-    "week_of":  "2026-07-20",
+    "generated":  "2026-07-21T13:15:42",
+    "week_of":  "2026-07-21",
     "ingredient_count":  504,
     "recipe_count":  213,
     "ingredients":  {
@@ -17,8 +17,8 @@
                                                                 "Baker\u0027s":  5.99,
                                                                 "Walmart":  6.28,
                                                                 "Fareway":  6.49,
-                                                                "Family Fare":  7.33,
-                                                                "Hy-Vee":  7.49
+                                                                "Hy-Vee":  6.99,
+                                                                "Family Fare":  7.33
                                                             }
                                              },
                         "achiote-paste":  {
@@ -1207,7 +1207,7 @@
                                                  "cheapest":  0.1193,
                                                  "store":  "Hy-Vee",
                                                  "type":  "everyday",
-                                                 "url":  "https://www.hy-vee.com/aisles-online/p/4153107/libby-s-premium-mandarin-oranges-in-light-syrup",
+                                                 "url":  "https://www.hy-vee.com/aisles-online/p/2836162/hy-vee-mandarin-oranges-no-sugar-added",
                                                  "n":  3,
                                                  "stores":  {
                                                                 "Hy-Vee":  0.1193,
@@ -1577,7 +1577,7 @@
                                                                  "Family Fare":  0.2995,
                                                                  "Fareway":  0.3495
                                                              },
-                                                  "sale_end":  "2026-07-20"
+                                                  "sale_end":  "2026-07-26"
                                               },
                         "cherries":  {
                                          "unit":  "lb",
@@ -1591,9 +1591,9 @@
                                                         "Walmart":  2.5,
                                                         "Family Fare":  2.77,
                                                         "Sam\u0027s Club":  2.94,
-                                                        "Hy-Vee":  3.99,
                                                         "Baker\u0027s":  3.99,
-                                                        "Fareway":  4.99
+                                                        "Fareway":  4.99,
+                                                        "Hy-Vee":  5.99
                                                     }
                                      },
                         "chicken-broth":  {
@@ -2707,7 +2707,7 @@
                                                             "Baker\u0027s":  0.1175,
                                                             "Fareway":  0.152
                                                         },
-                                             "sale_end":  "2026-07-20"
+                                             "sale_end":  "2026-07-26"
                                          },
                         "french-bread":  {
                                              "unit":  "each",
@@ -4152,7 +4152,7 @@
                                              "cheapest":  0.1056,
                                              "store":  "Hy-Vee",
                                              "type":  "everyday",
-                                             "url":  "https://www.hy-vee.com/aisles-online/p/56924/hy-vee-marshmallows",
+                                             "url":  "",
                                              "n":  6,
                                              "stores":  {
                                                             "Hy-Vee":  0.1056,
@@ -4318,7 +4318,7 @@
                                         "cheapest":  0.658,
                                         "store":  "Hy-Vee",
                                         "type":  "sale",
-                                        "url":  "https://www.hy-vee.com/aisles-online/p/72773/blueberry-muffins-4-ct",
+                                        "url":  "",
                                         "n":  5,
                                         "stores":  {
                                                        "Hy-Vee":  0.658,
@@ -4327,7 +4327,7 @@
                                                        "Sam\u0027s Club":  1.0293,
                                                        "Family Fare":  1.4975
                                                    },
-                                        "sale_end":  "2026-07-20"
+                                        "sale_end":  "2026-07-26"
                                     },
                         "mushrooms":  {
                                           "unit":  "oz",
@@ -4676,7 +4676,7 @@
                                                            "Fareway":  0.0783,
                                                            "Family Fare":  0.1621
                                                        },
-                                            "sale_end":  "2026-07-20"
+                                            "sale_end":  "2026-07-26"
                                         },
                         "peaches":  {
                                         "unit":  "lb",
@@ -4757,8 +4757,8 @@
                                                          "Aldi":  0.4056,
                                                          "Walmart":  0.4733,
                                                          "Hy-Vee":  0.5817,
-                                                         "Family Fare":  0.7483,
-                                                         "Fareway":  0.9971
+                                                         "Fareway":  0.9971,
+                                                         "Family Fare":  0.9975
                                                      }
                                       },
                         "pesto":  {
@@ -4958,14 +4958,15 @@
                                               "store":  "Sam\u0027s Club",
                                               "type":  "everyday",
                                               "url":  "https://www.samsclub.com/ip/13775166208",
-                                              "n":  6,
+                                              "n":  7,
                                               "stores":  {
                                                              "Sam\u0027s Club":  1.94,
+                                                             "Hy-Vee":  1.99,
                                                              "Walmart":  2.24,
                                                              "Baker\u0027s":  2.49,
-                                                             "Hy-Vee":  2.99,
+                                                             "Aldi":  2.99,
                                                              "Fareway":  2.99,
-                                                             "Aldi":  2.99
+                                                             "Family Fare":  3.3267
                                                          }
                                           },
                         "pork-tenderloin":  {
@@ -5330,7 +5331,7 @@
                                                           "Fareway":  0.6138,
                                                           "Aldi":  0.6429
                                                       },
-                                           "sale_end":  "2026-07-20"
+                                           "sale_end":  "2026-07-26"
                                        },
                         "rice-noodles":  {
                                              "unit":  "oz",
@@ -5635,7 +5636,7 @@
                                      "cheapest":  0.0185,
                                      "store":  "Hy-Vee",
                                      "type":  "sale",
-                                     "url":  "https://www.hy-vee.com/aisles-online/p/3993381/hy-vee-cola-12pk",
+                                     "url":  "",
                                      "n":  7,
                                      "stores":  {
                                                     "Hy-Vee":  0.0185,
@@ -5646,7 +5647,7 @@
                                                     "Sam\u0027s Club":  0.0439,
                                                     "Family Fare":  0.0516
                                                 },
-                                     "sale_end":  "2026-07-20"
+                                     "sale_end":  "2026-07-26"
                                  },
                         "sour-cream":  {
                                            "unit":  "oz",
@@ -5704,7 +5705,7 @@
                                         "cheapest":  0.149,
                                         "store":  "Hy-Vee",
                                         "type":  "everyday",
-                                        "url":  "",
+                                        "url":  "https://www.hy-vee.com/aisles-online/p/38701/birds-eye-chopped-spinach-frozen-vegetables-10-oz-box",
                                         "n":  7,
                                         "stores":  {
                                                        "Hy-Vee":  0.149,
@@ -5755,9 +5756,9 @@
                                                             "Aldi":  0.1181,
                                                             "Walmart":  0.1475,
                                                             "Baker\u0027s":  0.1559,
-                                                            "Hy-Vee":  0.1869,
                                                             "Fareway":  0.1869,
-                                                            "Family Fare":  0.1875
+                                                            "Family Fare":  0.1875,
+                                                            "Hy-Vee":  0.2494
                                                         }
                                          },
                         "string-cheese":  {
@@ -5904,13 +5905,13 @@
                                  },
                         "taco-sauce":  {
                                            "unit":  "oz",
-                                           "cheapest":  0.1869,
+                                           "cheapest":  0.1681,
                                            "store":  "Hy-Vee",
                                            "type":  "everyday",
                                            "url":  "https://www.hy-vee.com/aisles-online/p/58177/hy-vee-medium-taco-sauce",
                                            "n":  2,
                                            "stores":  {
-                                                          "Hy-Vee":  0.1869,
+                                                          "Hy-Vee":  0.1681,
                                                           "Walmart":  0.4067
                                                       }
                                        },
@@ -6425,14 +6426,13 @@
                                               "store":  "Walmart",
                                               "type":  "everyday",
                                               "url":  "https://www.walmart.com/ip/Tyson-All-Natural-Fresh-Premium-Young-Whole-Chicken-5-0-6-5-lb/19400244",
-                                              "n":  7,
+                                              "n":  6,
                                               "stores":  {
                                                              "Walmart":  1.46,
                                                              "Baker\u0027s":  1.49,
                                                              "Family Fare":  1.79,
                                                              "Aldi":  1.8107,
                                                              "Hy-Vee":  2.19,
-                                                             "Sam\u0027s Club":  2.47,
                                                              "Fareway":  2.49
                                                          }
                                           },
@@ -6527,7 +6527,7 @@
                                                       "Walmart":  0.0825,
                                                       "Baker\u0027s":  0.0833,
                                                       "Aldi":  0.0872,
-                                                      "Hy-Vee":  0.1,
+                                                      "Hy-Vee":  0.1317,
                                                       "Family Fare":  0.1483,
                                                       "Fareway":  0.1562,
                                                       "Sam\u0027s Club":  0.2163
