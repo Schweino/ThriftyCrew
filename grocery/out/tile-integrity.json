@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-07-21 13:26",
-    "board":  "comparison-2026-07-21.json",
-    "total_tiles":  2292,
-    "violations":  318,
+    "generated":  "2026-07-22 13:34",
+    "board":  "comparison-2026-07-22.json",
+    "total_tiles":  2293,
+    "violations":  319,
     "by_store":  {
                      "Walmart":  {
                                      "coverage":  54,
@@ -30,9 +30,9 @@
                                              "violations":  38
                                          },
                      "Aldi":  {
-                                  "coverage":  15,
-                                  "tiles":  297,
-                                  "violations":  15
+                                  "coverage":  16,
+                                  "tiles":  298,
+                                  "violations":  16
                               },
                      "Baker\u0027s":  {
                                           "coverage":  75,
@@ -527,6 +527,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Black Top Premium Wild Alaska Pink Salmon 14.75 oz., 4 pk.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cantaloupe",
+                     "store":  "Aldi",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kandy Plus Cantaloupe",
                      "link":  ""
                  },
                  {
@@ -2587,5 +2595,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  308
+    "coverage_violations":  309
 }

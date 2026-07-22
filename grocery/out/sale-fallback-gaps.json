@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-21 13:15",
-    "gap_count":  24,
+    "generated":  "2026-07-22 13:22",
+    "gap_count":  25,
     "gaps":  [
                  {
                      "commodity":  "almond-milk",
@@ -26,6 +26,11 @@
                      "commodity":  "body-wash",
                      "store":  "Baker\u0027s",
                      "sale_per_unit":  0.3495
+                 },
+                 {
+                     "commodity":  "cantaloupe",
+                     "store":  "Aldi",
+                     "sale_per_unit":  1.99
                  },
                  {
                      "commodity":  "cat-food",

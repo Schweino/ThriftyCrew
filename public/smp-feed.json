@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-21T13:15:42",
-    "week_of":  "2026-07-21",
+    "generated":  "2026-07-22T13:22:48",
+    "week_of":  "2026-07-22",
     "ingredient_count":  504,
     "recipe_count":  213,
     "ingredients":  {
@@ -1425,9 +1425,10 @@
                                            "store":  "Fareway",
                                            "type":  "everyday",
                                            "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16606119",
-                                           "n":  5,
+                                           "n":  6,
                                            "stores":  {
                                                           "Fareway":  1.49,
+                                                          "Aldi":  1.99,
                                                           "Walmart":  2.69,
                                                           "Baker\u0027s":  3.5,
                                                           "Family Fare":  3.99,
@@ -1840,8 +1841,7 @@
                                                            "Sam\u0027s Club":  1.594,
                                                            "Hy-Vee":  1.6633,
                                                            "Fareway":  1.9967
-                                                       },
-                                            "sale_end":  "2026-07-21"
+                                                       }
                                         },
                         "ground-cloves":  {
                                               "unit":  "oz",
@@ -1931,14 +1931,13 @@
                                                       "Walmart":  0.44,
                                                       "Hy-Vee":  0.5262,
                                                       "Family Fare":  0.5898
-                                                  },
-                                       "sale_end":  "2026-07-21"
+                                                  }
                                    },
                         "coffee-creamer":  {
                                                "unit":  "floz",
                                                "cheapest":  0.0841,
                                                "store":  "Aldi",
-                                               "type":  "everyday",
+                                               "type":  "sale",
                                                "url":  "https://www.aldi.us/store/aldi/products/20537075-friendly-farms-french-vanilla-creamer-32-fl-oz",
                                                "n":  7,
                                                "stores":  {
@@ -1949,7 +1948,8 @@
                                                               "Fareway":  0.1212,
                                                               "Hy-Vee":  0.1244,
                                                               "Family Fare":  0.125
-                                                          }
+                                                          },
+                                               "sale_end":  "2026-07-28"
                                            },
                         "coffee-pods":  {
                                             "unit":  "each",
@@ -1965,8 +1965,7 @@
                                                            "Walmart":  0.3431,
                                                            "Hy-Vee":  0.949,
                                                            "Fareway":  0.999
-                                                       },
-                                            "sale_end":  "2026-07-21"
+                                                       }
                                         },
                         "cookies":  {
                                         "unit":  "oz",
@@ -2464,7 +2463,7 @@
                                                           "Sam\u0027s Club":  0.0749,
                                                           "Walmart":  0.2756,
                                                           "Fareway":  0.2778,
-                                                          "Aldi":  0.499,
+                                                          "Aldi":  0.5255,
                                                           "Hy-Vee":  0.8
                                                       }
                                        },
@@ -4680,21 +4679,20 @@
                                         },
                         "peaches":  {
                                         "unit":  "lb",
-                                        "cheapest":  1.69,
+                                        "cheapest":  1.745,
                                         "store":  "Aldi",
-                                        "type":  "sale",
+                                        "type":  "everyday",
                                         "url":  "https://www.aldi.us/store/aldi/products/17327459-peach-bag-2-lbs",
                                         "n":  7,
                                         "stores":  {
-                                                       "Aldi":  1.69,
+                                                       "Aldi":  1.745,
                                                        "Baker\u0027s":  1.79,
                                                        "Walmart":  1.84,
                                                        "Fareway":  1.99,
                                                        "Sam\u0027s Club":  2.4675,
                                                        "Hy-Vee":  2.99,
                                                        "Family Fare":  2.99
-                                                   },
-                                        "sale_end":  "2026-07-21"
+                                                   }
                                     },
                         "peanut-butter":  {
                                               "unit":  "oz",
@@ -4816,8 +4814,7 @@
                                                          "Sam\u0027s Club":  2.97,
                                                          "Hy-Vee":  3.88,
                                                          "Fareway":  4.99
-                                                     },
-                                          "sale_end":  "2026-07-21"
+                                                     }
                                       },
                         "pita-bread":  {
                                            "unit":  "each",
@@ -4984,8 +4981,7 @@
                                                                "Hy-Vee":  3.99,
                                                                "Fareway":  3.99,
                                                                "Family Fare":  5.49
-                                                           },
-                                                "sale_end":  "2026-07-21"
+                                                           }
                                             },
                         "potato-chips":  {
                                              "unit":  "oz",
@@ -5207,8 +5203,7 @@
                                                            "Sam\u0027s Club":  0.5517,
                                                            "Fareway":  0.6467,
                                                            "Hy-Vee":  0.8317
-                                                       },
-                                            "sale_end":  "2026-07-21"
+                                                       }
                                         },
                         "razors":  {
                                        "unit":  "each",
@@ -5810,20 +5805,21 @@
                                                },
                         "sweet-corn":  {
                                            "unit":  "each",
-                                           "cheapest":  0.6,
-                                           "store":  "Baker\u0027s",
-                                           "type":  "everyday",
-                                           "url":  "https://www.bakersplus.com/p/fresh-sweet-corn-on-the-cob-each/0000000004590",
+                                           "cheapest":  0.5975,
+                                           "store":  "Aldi",
+                                           "type":  "sale",
+                                           "url":  "https://www.aldi.us/store/aldi/products/16383707-yellow-sweet-corn-package-4-ct",
                                            "n":  7,
                                            "stores":  {
+                                                          "Aldi":  0.5975,
                                                           "Baker\u0027s":  0.6,
                                                           "Sam\u0027s Club":  0.6212,
-                                                          "Aldi":  0.7375,
                                                           "Walmart":  0.74,
                                                           "Fareway":  0.75,
                                                           "Hy-Vee":  1.2475,
                                                           "Family Fare":  1.4975
-                                                      }
+                                                      },
+                                           "sale_end":  "2026-07-28"
                                        },
                         "sweet-potatoes":  {
                                                "unit":  "lb",

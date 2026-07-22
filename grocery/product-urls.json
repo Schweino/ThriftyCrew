@@ -1,6 +1,6 @@
 ﻿{
     "readme":  "Durable per-store direct product URLs + verified price for the Omaha grocery prices page. Keyed by commodity id -\u003e store -\u003e {url,price,size,name}. Survives weekly regeneration; build-deals-page.ps1 renders a \u0027See item\u0027 link per chip.",
-    "updated":  "2026-07-21",
+    "updated":  "2026-07-22",
     "items":  {
                   "1-3-fat-cream-cheese":  {
                                                "commodity":  "1/3 Fat Cream Cheese",
@@ -934,7 +934,7 @@
                                                    "price":  1.79,
                                                    "size":  "3.5 oz",
                                                    "name":  "Gerber Stage 4 Toddler Food, Cherry Banana Vanilla Puree Pouch",
-                                                   "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                   "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                                },
                                     "Sam\u0027s Club":  {
                                                             "url":  "https://www.samsclub.com/ip/13607262841",
@@ -1273,7 +1273,7 @@
                                                           "price":  3.99,
                                                           "size":  "16.9 fl oz",
                                                           "name":  "Nothing But The Truth Organic Balsamic Vinegar",
-                                                          "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                          "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                                       },
                                            "Walmart":  {
                                                            "url":  "https://www.walmart.com/ip/10320860",
@@ -1662,7 +1662,7 @@
                                                    "price":  6.99,
                                                    "size":  "38 oz",
                                                    "name":  "Dinty Moore Beef Stew",
-                                                   "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                   "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                                },
                                     "Walmart":  {
                                                     "url":  "https://www.walmart.com/ip/1454063903",
@@ -2160,11 +2160,11 @@
                                                     "board_pu":  5.1314
                                                 },
                                     "Hy-Vee":  {
-                                                   "url":  "https://www.hy-vee.com/aisles-online/p/65395/johnsonville-original-brats-5-count-19-oz",
-                                                   "price":  5.99,
-                                                   "size":  "19 oz",
+                                                   "url":  "https://www.hy-vee.com/aisles-online/p/65395/johnsonville-original-brats-5-count",
                                                    "name":  "Johnsonville Original Brats 5 Count",
-                                                   "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                   "price":  "$5.99",
+                                                   "size":  "19 oz",
+                                                   "verified":  "2026-07-22 DERIVED from the price row (same record the board priced)"
                                                },
                                     "Sam\u0027s Club":  {
                                                             "url":  "https://www.samsclub.com/ip/Johnsonville-Brats-Original-Pork-Bratwurst-Links-18-ct/13610718508",
@@ -2285,7 +2285,7 @@
                                                       "price":  3.99,
                                                       "size":  "13.4 oz",
                                                       "name":  "Gustare Vita Italian Bread Crumbs",
-                                                      "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                      "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/13803520339",
@@ -5602,7 +5602,7 @@
                                                           "price":  6.99,
                                                           "size":  "25 oz",
                                                           "name":  "Hormel Mary Kitchen Homestyle Corned Beef Hash",
-                                                          "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                          "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                                       },
                                            "Sam\u0027s Club":  {
                                                                    "url":  "https://www.samsclub.com/ip/13868521290",
@@ -6858,7 +6858,7 @@
                                                     "price":  2.99,
                                                     "size":  "0.75 oz",
                                                     "name":  "Hy-Vee Dill Weed",
-                                                    "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                    "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                                 }
                                  },
                   "dried-oregano":  {
@@ -7767,7 +7767,7 @@
                                                      "price":  2.99,
                                                      "size":  "0.75 oz",
                                                      "name":  "Johnson Family Farm Fresh Basil",
-                                                     "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                     "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                                  }
                                   },
                   "fresh-cilantro":  {
@@ -7900,7 +7900,7 @@
                                                     "price":  2.99,
                                                     "size":  "0.75 oz",
                                                     "name":  "Johnson Family Farm Fresh Mint",
-                                                    "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                    "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                                 }
                                  },
                   "fries":  {
@@ -8468,7 +8468,7 @@
                                                      "price":  0.98,
                                                      "size":  "12 oz",
                                                      "name":  "That\u0027s Smart! Sweet Peas (Frozen)",
-                                                     "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                     "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                                  },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/Great-Value-Frozen-Sweet-Peas-16-oz-Steamable-Bag/10315048",
@@ -9140,7 +9140,7 @@
                                                  "price":  3.99,
                                                  "size":  "11 oz",
                                                  "name":  "Post Honey Bunches of Oats Crunchy Honey Roasted Granola",
-                                                 "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                 "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                              },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/3000043607",
@@ -9670,7 +9670,7 @@
                                                          "price":  1.25,
                                                          "size":  "2.5 oz",
                                                          "name":  "That\u0027s Smart Ground Cinnamon",
-                                                         "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                         "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                                      },
                                           "Sam\u0027s Club":  {
                                                                   "url":  "https://www.samsclub.com/ip/13599663121",
@@ -9698,7 +9698,7 @@
                                                        "price":  4.99,
                                                        "size":  "2 oz",
                                                        "name":  "Hy-Vee Ground Cloves",
-                                                       "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                       "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                                    }
                                     },
                   "ground-coriander":  {
@@ -9778,7 +9778,7 @@
                                                        "price":  1.98,
                                                        "size":  "2 oz",
                                                        "name":  "Hy-Vee Ground Ginger",
-                                                       "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                       "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                                    },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/13591373069",
@@ -9795,7 +9795,7 @@
                                                        "price":  3.99,
                                                        "size":  "2.12 oz",
                                                        "name":  "Hy-Vee Ground Nutmeg 2.12 oz",
-                                                       "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                       "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                                    }
                                     },
                   "ground-pork":  {
@@ -12451,7 +12451,7 @@
                                                        "price":  8.99,
                                                        "size":  "32 oz",
                                                        "name":  "Spice World Minced Garlic",
-                                                       "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                       "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                                    },
                                         "Sam\u0027s Club":  {
                                                                 "url":  "https://www.samsclub.com/ip/7874215051",
@@ -14616,11 +14616,11 @@
                                                             "board_pu":  0.2238
                                                         },
                                        "Family Fare":  {
-                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/potato_chips/our_family_potato_chips_cheddar_sour_cream_flavored_7_75_oz/p/1564405684709279259",
-                                                           "name":  "Our Family Potato Chips, Cheddar \u0026 Sour Cream Flavored 7.75 Oz",
+                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/potato_chips/our_family_potato_chips_sour_cream_onion_flavored_7_75_oz/p/1564405684709885304",
+                                                           "name":  "Our Family Potato Chips, Sour Cream \u0026 Onion Flavored 7.75 Oz",
                                                            "price":  "$1.99",
                                                            "size":  "7.75 oz",
-                                                           "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)"
+                                                           "verified":  "2026-07-22 DERIVED from the price row (same record the board priced)"
                                                        },
                                        "Fareway":  {
                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25557168",
@@ -15870,7 +15870,7 @@
                                                 "price":  8.99,
                                                 "size":  "20 oz",
                                                 "name":  "Trident Seafoods Alaska Salmon Fillet",
-                                                "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                             },
                                  "Sam\u0027s Club":  {
                                                          "url":  "https://www.samsclub.com/ip/20035262025",
@@ -16011,7 +16011,7 @@
                                               "price":  1.58,
                                               "size":  "26 oz",
                                               "name":  "Hy-Vee Iodized Salt",
-                                              "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                              "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                           },
                                "Sam\u0027s Club":  {
                                                        "url":  "https://www.samsclub.com/ip/13589509673",
@@ -16553,7 +16553,7 @@
                                                           "price":  0.99,
                                                           "size":  "15 oz",
                                                           "name":  "Hy-Vee Sloppy Joe Sauce",
-                                                          "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                          "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                                       },
                                            "Walmart":  {
                                                            "url":  "https://www.walmart.com/ip/15610428",
@@ -16736,7 +16736,7 @@
                                                    "price":  3.59,
                                                    "size":  "16.9 fl oz",
                                                    "name":  "Lee Kum Kee Premium Dark Soy Sauce",
-                                                   "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                   "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                                },
                                     "Sam\u0027s Club":  {
                                                             "url":  "https://www.samsclub.com/ip/Kikkoman-Traditionally-Brewed-Soy-Sauce-64-oz/13713850307",
@@ -16836,7 +16836,7 @@
                                                  "price":  1.49,
                                                  "size":  "10 oz",
                                                  "name":  "Birds Eye Chopped Spinach",
-                                                 "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                 "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                              },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/13803520057",
@@ -16871,11 +16871,11 @@
                                                   "board_pu":  0.62
                                               },
                                   "Hy-Vee":  {
-                                                 "url":  "https://www.hy-vee.com/aisles-online/p/4210404/hy-vee-heavy-duty-scrubber-sponges",
+                                                 "url":  "https://www.hy-vee.com/aisles-online/p/4209805/hy-vee-non-scratch-scrubber-sponges",
                                                  "price":  2.99,
                                                  "size":  "3 ct",
                                                  "name":  "Hy-Vee Heavy Duty Scrubber Sponges",
-                                                 "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                 "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                              },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/13951713165",
@@ -17315,7 +17315,7 @@
                                                             "price":  4.99,
                                                             "size":  "15 oz",
                                                             "name":  "Mission Sun-Dried Tomato Basil Wraps 6Ct",
-                                                            "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                            "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                                         },
                                              "Sam\u0027s Club":  {
                                                                      "url":  "https://www.samsclub.com/ip/17242460680",
@@ -17767,7 +17767,7 @@
                                                               "price":  3.79,
                                                               "size":  "16 oz",
                                                               "name":  "Ball Park Sesame Seed Burger Buns, 8 Count",
-                                                              "verified":  "2026-07-21 Hy-Vee search API (storeId 1465)"
+                                                              "verified":  "2026-07-22 Hy-Vee search API (storeId 1465)"
                                                           },
                                                "Sam\u0027s Club":  {
                                                                        "url":  "https://www.samsclub.com/ip/17787764079",
