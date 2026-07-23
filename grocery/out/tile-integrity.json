@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-07-23 06:55",
+    "generated":  "2026-07-23 07:41",
     "board":  "comparison-2026-07-22.json",
-    "total_tiles":  1952,
-    "violations":  228,
+    "total_tiles":  1945,
+    "violations":  183,
     "by_store":  {
                      "Walmart":  {
                                      "coverage":  7,
@@ -10,14 +10,14 @@
                                      "violations":  9
                                  },
                      "Fareway":  {
-                                     "coverage":  30,
-                                     "tiles":  352,
-                                     "violations":  36
+                                     "coverage":  0,
+                                     "tiles":  345,
+                                     "violations":  0
                                  },
                      "Family Fare":  {
-                                         "coverage":  20,
+                                         "coverage":  10,
                                          "tiles":  232,
-                                         "violations":  23
+                                         "violations":  14
                                      },
                      "Hy-Vee":  {
                                     "coverage":  38,
@@ -63,14 +63,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Simple Truth Organic Ground Allspice Shaker",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "ground-allspice",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Simply Organic Allspice",
                      "link":  ""
                  },
                  {
@@ -138,14 +130,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "fresh-basil",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Simply Organic Basil",
-                     "link":  ""
-                 },
-                 {
                      "id":  "bay-leaves",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -200,14 +184,6 @@
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy-Vee fresh boneless skinless chicken breasts, 100% natural, value pack No antibiotics ever., $3.99 lb.",
                      "link":  ""
-                 },
-                 {
-                     "id":  "chicken-breast",
-                     "store":  "Fareway",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $3.99 vs link $5  (20.2% off)",
-                     "board":  "Boneless Skinless Chicken Breast",
-                     "link":  "Boneless Skinless Chicken Breast"
                  },
                  {
                      "id":  "bottled-water",
@@ -314,14 +290,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "canned-green-chilies",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "La Preferida Organic Mild Diced Green Chiles",
-                     "link":  ""
-                 },
-                 {
                      "id":  "diced-tomatoes",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -370,14 +338,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "canned-pumpkin",
-                     "store":  "Fareway",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.1372 vs link $0.166  (17.3% off)",
-                     "board":  "Libby\u0027s Pumpkin 100% Pure Pumpkin29 oz",
-                     "link":  "Libby\u0027s Pumpkin Libby\u0027S 100% Pure Pumpkin"
-                 },
-                 {
                      "id":  "canned-salmon",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -407,22 +367,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger Whole Carrots (5 lb)",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "carrots",
-                     "store":  "Fareway",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $1.245 vs link $0.998  (24.7% off)",
-                     "board":  "Carrot",
-                     "link":  "Carrot"
-                 },
-                 {
-                     "id":  "cayenne-pepper",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Simply Organic Cayenne",
                      "link":  ""
                  },
                  {
@@ -458,14 +402,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "cheese-tortellini",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Rana 5 Cheese Tortellini",
-                     "link":  ""
-                 },
-                 {
                      "id":  "chicken-noodle-soup",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -498,14 +434,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "chili-crisp",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "WUJU Chili Crisp Sweet Heat",
-                     "link":  ""
-                 },
-                 {
                      "id":  "five-spice-powder",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -522,14 +450,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "chipotle-adobo",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "San Marcos Chipotle Peppers in Adobo Sauce",
-                     "link":  ""
-                 },
-                 {
                      "id":  "clementines",
                      "store":  "Baker\u0027s",
                      "fault":  "PRICE-DRIFT",
@@ -543,14 +463,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger Ground Cloves Shaker",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "ground-cloves",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "McCormick Ground Cloves",
                      "link":  ""
                  },
                  {
@@ -583,14 +495,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Sugar \u0027N Spice Coriander Ground Pp",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "ground-coriander",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Simply Organic Coriander",
                      "link":  ""
                  },
                  {
@@ -674,22 +578,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "curry-powder",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "McCormick Curry Powder",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "tomatoes-green-chilies",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Our Family Tomatoes, With Green Chiles, Diced 14.5 Oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "tomatoes-green-chilies",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -711,14 +599,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Tampico Dill Weed",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "dried-dill",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Simply Organic Dill Weed",
                      "link":  ""
                  },
                  {
@@ -791,14 +671,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Soiree Traditional Feta Cheese Crumble",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "fish-sauce",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Thai Kitchen Gluten Free Premium Fish Sauce",
                      "link":  ""
                  },
                  {
@@ -954,14 +826,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "grits",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Bob\u0027s Red Mill Corn Grits, Polenta",
-                     "link":  ""
-                 },
-                 {
                      "id":  "ground-cinnamon",
                      "store":  "Sam\u0027s Club",
                      "fault":  "PRICE-DRIFT",
@@ -970,20 +834,20 @@
                      "link":  "Pillsbury Cinnamon Rolls with Cinnabon Icing 13 oz., 4 pk."
                  },
                  {
+                     "id":  "ground-cumin",
+                     "store":  "Family Fare",
+                     "fault":  "PRICE-DRIFT",
+                     "detail":  "board $1.145 vs link $1.295  (11.6% off)",
+                     "board":  "Sugar \u0027N Spice Cumin Ground Pp",
+                     "link":  "Sugar \u0027N Spice Smoked Cumin Ground Pp"
+                 },
+                 {
                      "id":  "ground-turmeric",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Sugar \u0027N Spice Turmeric Ground 2 Oz",
                      "link":  ""
-                 },
-                 {
-                     "id":  "half-and-half",
-                     "store":  "Fareway",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.1047 vs link $0.1238  (15.4% off)",
-                     "board":  "Kemps Fresh Half \u0026 Half",
-                     "link":  "Kemps Fresh Half \u0026 Half"
                  },
                  {
                      "id":  "deli-ham",
@@ -1039,14 +903,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger Hoisin Sauce",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "hoisin-sauce",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "House of Tsang Hoisin Sauce",
                      "link":  ""
                  },
                  {
@@ -1146,14 +1002,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "lime-juice",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Mc Cormick Mayonesa (Mayonnaise) With Lime Juice 28 Fl Oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "egg-whites",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -1178,43 +1026,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "mayonnaise",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Our Family Mayo, Real 30 Fl Oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "microwave-popcorn",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy Vee Extra Butter Microwave Popcorn 6Ct",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "miracle-whip",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Low carbMiracle Whip M",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "miracle-whip",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Miracle Whip Light Dressing 30 Fl Oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "mirin",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kikkoman Sweet Cooking Rice Seasoning (Aji-Mirin)",
                      "link":  ""
                  },
                  {
@@ -1255,14 +1071,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger Ground Nutmeg",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "ground-nutmeg",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "McCormick Ground Nutmeg",
                      "link":  ""
                  },
                  {
@@ -1354,35 +1162,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "poblano-peppers",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Poblano Pepper",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "poppy-seeds",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Poppy Seeds Sugar \u0027N Spice",
-                     "link":  ""
-                 },
-                 {
                      "id":  "poppy-seeds",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger Poppy Seeds Shaker",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "poppy-seeds",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "McCormick Poppy Seed",
                      "link":  ""
                  },
                  {
@@ -1402,35 +1186,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "potato-gnocchi",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "DeLallo Mini Gnocchi",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "potato-gnocchi",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "De Lallo Potato Gnocchi 16 Oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "ramen",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Maruchan Chicken Flavor Ramen Noodle Soup 12 Count",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "ranch-dressing",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Our Family Buttermilk Ranch Dressing 16 Fl Oz",
                      "link":  ""
                  },
                  {
@@ -1447,14 +1207,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger Ranch Salad Dressing and Seasoning Mix Packet",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "ranch-seasoning-mix",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Hidden Valley Original Ranch Salad Dressing \u0026 Seasoning Mix",
                      "link":  ""
                  },
                  {
@@ -1490,22 +1242,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "rice-noodles",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Thai Kitchen Gluten Free Stir Fry Rice Noodles",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "rice-noodles",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Thai Kitchen Med Pad Thai Rice Noodle Cart 9.77 Oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "rotisserie-chicken",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -1538,27 +1274,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "sesame-oil",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kikkoman Sesame Oil 5 Fl Oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "toasted-sesame-seeds",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger Sesame Seed Shaker",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "toasted-sesame-seeds",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "McCormick Sesame Seed",
                      "link":  ""
                  },
                  {
@@ -1568,14 +1288,6 @@
                      "detail":  "priced tile with no See-item link",
                      "board":  "Lysol Mango \u0026 Hibiscus Bathroom Cleaner 32 Fl Oz",
                      "link":  ""
-                 },
-                 {
-                     "id":  "sliced-cheese",
-                     "store":  "Fareway",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.2067 vs link $0.155  (33.4% off)",
-                     "board":  "Fareway American Cheese Slices",
-                     "link":  "Fareway American Cheese Slices"
                  },
                  {
                      "id":  "sloppy-joe-sauce",
@@ -1658,27 +1370,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "taco-seasoning",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Taco Bell Original Taco Seasoning Mix",
-                     "link":  ""
-                 },
-                 {
                      "id":  "tahini",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Simple Truth Organic Tahini",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "tahini",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Krinos Tahini Ground Sesame Seeds",
                      "link":  ""
                  },
                  {
@@ -1698,27 +1394,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "red-curry-paste",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Thai Kitchen Gluten Free Red Curry Paste",
-                     "link":  ""
-                 },
-                 {
                      "id":  "dried-thyme",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Private Selection Thyme Leaves Shaker",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "dried-thyme",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Simply Organic Thyme",
                      "link":  ""
                  },
                  {
@@ -1736,14 +1416,6 @@
                      "detail":  "board $1.99 vs link $2.49  (20.1% off)",
                      "board":  "Tomatillos",
                      "link":  "Tomatillos"
-                 },
-                 {
-                     "id":  "tomatillos",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Tomatillo",
-                     "link":  ""
                  },
                  {
                      "id":  "tomatillos",
@@ -1802,14 +1474,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "walnuts",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Fareway Walnut Halves",
-                     "link":  ""
-                 },
-                 {
                      "id":  "whipped-cream",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -1819,34 +1483,10 @@
                  },
                  {
                      "id":  "white-vinegar",
-                     "store":  "Fareway",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.039 vs link $0.0312  (25.1% off)",
-                     "board":  "Fareway White Distilled Vinegar 128 fl oz",
-                     "link":  "Fareway White Distilled Vinegar"
-                 },
-                 {
-                     "id":  "white-vinegar",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger Distilled White Vinegar 64 fl oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "yeast",
-                     "store":  "Fareway",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Red Star Active Dry Yeast 4 oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "mustard",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Our Family Mustard, Yellow 20 Oz",
                      "link":  ""
                  },
                  {
@@ -1867,5 +1507,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  210
+    "coverage_violations":  170
 }

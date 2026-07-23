@@ -58,17 +58,17 @@ foreach ($id in $byIdRaw.Keys) {
   if (-not $incMap.ContainsKey($id)) { continue }
   $inc = $incMap[$id]; $exc = $excMap[$id]
   $cands = @($byIdRaw[$id].candidates)
-  $matches = @()
+  $hits = New-Object System.Collections.ArrayList
   foreach ($c in $cands) {
     $name = [string]$c.name; if (-not $name) { continue }
     $okInc = $false; foreach ($p in $inc) { if ($name -imatch $p) { $okInc = $true; break } }
     if (-not $okInc) { continue }
     $bad = $false; foreach ($p in $exc) { if ($p -and $name -imatch $p) { $bad = $true; break } }
     if ($bad) { continue }
-    $matches += $c
+    [void]$hits.Add($c)
   }
-  if (-not $matches.Count) { $dropped += $id; continue }
-  $best = $matches | Sort-Object @{Expression={PerUnit $_}}, @{Expression={([string]$_.name).Length}} | Select-Object -First 1
+  if (-not $hits.Count) { $dropped += $id; continue }
+  $best = $hits | Sort-Object @{Expression={PerUnit $_}}, @{Expression={([string]$_.name).Length}} | Select-Object -First 1
   [void]$outRows.Add([ordered]@{
     id=$id; name=[string]$best.name; price=[string]$best.price; per=[string]$best.per;
     orig=[string]$best.orig; unit=[string]$best.unit; size=[string]$best.size; url=[string]$best.url

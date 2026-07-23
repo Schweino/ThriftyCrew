@@ -1,7 +1,17 @@
 ﻿{
-    "generated":  "2026-07-23 07:01",
-    "gap_count":  341,
+    "generated":  "2026-07-23 07:36",
+    "gap_count":  387,
     "gaps":  [
+                 {
+                     "commodity":  "chicken-breast",
+                     "store":  "Fareway",
+                     "candidate":  "Boneless Skinless Chicken Breast"
+                 },
+                 {
+                     "commodity":  "onions",
+                     "store":  "Fareway",
+                     "candidate":  "Yellow Onions"
+                 },
                  {
                      "commodity":  "sweet-corn",
                      "store":  "Walmart",
@@ -9,8 +19,18 @@
                  },
                  {
                      "commodity":  "watermelon",
+                     "store":  "Fareway",
+                     "candidate":  "Seedless Watermelon"
+                 },
+                 {
+                     "commodity":  "watermelon",
                      "store":  "Walmart",
                      "candidate":  "Fresh Seedless Watermelon"
+                 },
+                 {
+                     "commodity":  "peaches",
+                     "store":  "Fareway",
+                     "candidate":  "Peach"
                  },
                  {
                      "commodity":  "bread",
@@ -39,13 +59,28 @@
                  },
                  {
                      "commodity":  "lemons",
+                     "store":  "Fareway",
+                     "candidate":  "Lemon"
+                 },
+                 {
+                     "commodity":  "lemons",
                      "store":  "Walmart",
                      "candidate":  "Fresh Lemon"
                  },
                  {
                      "commodity":  "limes",
+                     "store":  "Fareway",
+                     "candidate":  "Limes"
+                 },
+                 {
+                     "commodity":  "limes",
                      "store":  "Walmart",
                      "candidate":  "Fresh Lime"
+                 },
+                 {
+                     "commodity":  "tomatoes",
+                     "store":  "Fareway",
+                     "candidate":  "Roma Tomato"
                  },
                  {
                      "commodity":  "bell-peppers",
@@ -56,6 +91,11 @@
                      "commodity":  "celery",
                      "store":  "Walmart",
                      "candidate":  "Fresh Whole Celery Stalk"
+                 },
+                 {
+                     "commodity":  "cucumbers",
+                     "store":  "Fareway",
+                     "candidate":  "Cucumber"
                  },
                  {
                      "commodity":  "cucumbers",
@@ -79,13 +119,33 @@
                  },
                  {
                      "commodity":  "sweet-potatoes",
+                     "store":  "Fareway",
+                     "candidate":  "Sweet Potato (Yam)"
+                 },
+                 {
+                     "commodity":  "sweet-potatoes",
                      "store":  "Walmart",
                      "candidate":  "Sweet Potatoes Whole Fresh 3-Pound Bag"
+                 },
+                 {
+                     "commodity":  "tortillas",
+                     "store":  "Fareway",
+                     "candidate":  "Frescados Flour Taco Style Tortillas"
+                 },
+                 {
+                     "commodity":  "hamburger-buns",
+                     "store":  "Fareway",
+                     "candidate":  "Fareway Premium Hamburger Buns"
                  },
                  {
                      "commodity":  "bagels",
                      "store":  "Walmart",
                      "candidate":  "Great Value Pre-Sliced Plain Bagels 6 Count"
+                 },
+                 {
+                     "commodity":  "pasta-sauce",
+                     "store":  "Fareway",
+                     "candidate":  "Fareway Traditional Pasta Sauce"
                  },
                  {
                      "commodity":  "mac-and-cheese",
@@ -158,6 +218,16 @@
                      "candidate":  "Great Value Original Potato Chips Party Size"
                  },
                  {
+                     "commodity":  "soda",
+                     "store":  "Fareway",
+                     "candidate":  "Shasta Cola"
+                 },
+                 {
+                     "commodity":  "bottled-water",
+                     "store":  "Fareway",
+                     "candidate":  "Fareway 24 Pack Purified Drinking Water"
+                 },
+                 {
                      "commodity":  "bottled-water",
                      "store":  "Walmart",
                      "candidate":  "Great Value Purified Drinking Water 24 Count"
@@ -189,6 +259,11 @@
                  },
                  {
                      "commodity":  "trash-bags",
+                     "store":  "Fareway",
+                     "candidate":  "Bright Essentials Trash Bags, Tall Kitchen, Drawstring, Unscented"
+                 },
+                 {
+                     "commodity":  "trash-bags",
                      "store":  "Walmart",
                      "candidate":  "Great Value 13-Gallon Drawstring Tall Kitchen Trash Bags 40 Count"
                  },
@@ -196,6 +271,11 @@
                      "commodity":  "aluminum-foil",
                      "store":  "Walmart",
                      "candidate":  "Great Value Aluminum Foil 75 sq ft Roll"
+                 },
+                 {
+                     "commodity":  "storage-bags",
+                     "store":  "Fareway",
+                     "candidate":  "Bright Essentials Freezer Bags, Double Zipper, Gallon Size"
                  },
                  {
                      "commodity":  "storage-bags",
@@ -214,6 +294,11 @@
                  },
                  {
                      "commodity":  "hand-soap",
+                     "store":  "Fareway",
+                     "candidate":  "Softsoap Aquarium Liquid Hand Soap Refill"
+                 },
+                 {
+                     "commodity":  "hand-soap",
                      "store":  "Walmart",
                      "candidate":  "Equate Liquid Hand Soap Clear Refill"
                  },
@@ -224,13 +309,28 @@
                  },
                  {
                      "commodity":  "mangoes",
+                     "store":  "Fareway",
+                     "candidate":  "Red Mango"
+                 },
+                 {
+                     "commodity":  "mangoes",
                      "store":  "Walmart",
                      "candidate":  "Fresh Red Mango"
                  },
                  {
                      "commodity":  "cantaloupe",
+                     "store":  "Fareway",
+                     "candidate":  "Cantaloupe Melon"
+                 },
+                 {
+                     "commodity":  "cantaloupe",
                      "store":  "Walmart",
                      "candidate":  "Fresh Cantaloupe"
+                 },
+                 {
+                     "commodity":  "honeydew",
+                     "store":  "Fareway",
+                     "candidate":  "Honeydew Melon"
                  },
                  {
                      "commodity":  "honeydew",
@@ -261,6 +361,11 @@
                      "commodity":  "plums",
                      "store":  "Walmart",
                      "candidate":  "Fresh Plums"
+                 },
+                 {
+                     "commodity":  "grapefruit",
+                     "store":  "Fareway",
+                     "candidate":  "Red Grapefruit"
                  },
                  {
                      "commodity":  "grapefruit",
@@ -309,6 +414,11 @@
                  },
                  {
                      "commodity":  "jalapenos",
+                     "store":  "Fareway",
+                     "candidate":  "Jalapeno Pepper"
+                 },
+                 {
+                     "commodity":  "jalapenos",
                      "store":  "Walmart",
                      "candidate":  "Fresh Jalapenos"
                  },
@@ -316,6 +426,11 @@
                      "commodity":  "cilantro",
                      "store":  "Walmart",
                      "candidate":  "Fresh Cut Cilantro Clamshell"
+                 },
+                 {
+                     "commodity":  "fresh-ginger",
+                     "store":  "Fareway",
+                     "candidate":  "Ginger Root"
                  },
                  {
                      "commodity":  "fresh-ginger",
@@ -368,6 +483,16 @@
                      "candidate":  "Great Value Fully Cooked Polska Kielbasa"
                  },
                  {
+                     "commodity":  "chicken-wings",
+                     "store":  "Fareway",
+                     "candidate":  "Fresh Cut Chicken Wings"
+                 },
+                 {
+                     "commodity":  "rotisserie-chicken",
+                     "store":  "Fareway",
+                     "candidate":  "Roasted Whole Chicken"
+                 },
+                 {
                      "commodity":  "rotisserie-chicken",
                      "store":  "Walmart",
                      "candidate":  "Freshness Guaranteed Traditional Rotisserie Whole Chicken"
@@ -386,6 +511,11 @@
                      "commodity":  "cod",
                      "store":  "Walmart",
                      "candidate":  "Marketside Skinless Wild Caught Cod Fillet"
+                 },
+                 {
+                     "commodity":  "canned-chicken",
+                     "store":  "Fareway",
+                     "candidate":  "Fareway Premium Chunk Chicken Breast"
                  },
                  {
                      "commodity":  "canned-chicken",
@@ -424,6 +554,11 @@
                  },
                  {
                      "commodity":  "string-cheese",
+                     "store":  "Fareway",
+                     "candidate":  "Fareway Low-Moisture Part-Skim Sticks Mozzarella String Cheese"
+                 },
+                 {
+                     "commodity":  "string-cheese",
                      "store":  "Walmart",
                      "candidate":  "Great Value Part-Skim Mozzarella String Cheese"
                  },
@@ -454,6 +589,11 @@
                  },
                  {
                      "commodity":  "hot-dog-buns",
+                     "store":  "Fareway",
+                     "candidate":  "Corner Store Hot Dog Buns, White"
+                 },
+                 {
+                     "commodity":  "hot-dog-buns",
                      "store":  "Walmart",
                      "candidate":  "Great Value Hot Dog Buns White"
                  },
@@ -466,6 +606,11 @@
                      "commodity":  "english-muffins",
                      "store":  "Walmart",
                      "candidate":  "Great Value Original Fork Split English Muffins"
+                 },
+                 {
+                     "commodity":  "croissants",
+                     "store":  "Fareway",
+                     "candidate":  "Bakery Fresh Croissants"
                  },
                  {
                      "commodity":  "croissants",
@@ -654,6 +799,11 @@
                  },
                  {
                      "commodity":  "instant-mashed-potatoes",
+                     "store":  "Fareway",
+                     "candidate":  "Idahoan Buttery Homestyle Mashed Potatoes"
+                 },
+                 {
+                     "commodity":  "instant-mashed-potatoes",
                      "store":  "Walmart",
                      "candidate":  "Idahoan Buttery Homestyle Mashed Potatoes"
                  },
@@ -754,6 +904,11 @@
                  },
                  {
                      "commodity":  "microwave-popcorn",
+                     "store":  "Fareway",
+                     "candidate":  "Fareway 3 Pack Butter Movie Theater Microwave Popcorn Bags"
+                 },
+                 {
+                     "commodity":  "microwave-popcorn",
                      "store":  "Walmart",
                      "candidate":  "Great Value Extra Butter Flavored Microwave Popcorn"
                  },
@@ -764,13 +919,28 @@
                  },
                  {
                      "commodity":  "granola-bars",
+                     "store":  "Fareway",
+                     "candidate":  "Quaker Granola Bars, Chocolate Chip"
+                 },
+                 {
+                     "commodity":  "granola-bars",
                      "store":  "Walmart",
                      "candidate":  "Great Value Chewy Granola Bars Variety Pack"
                  },
                  {
                      "commodity":  "protein-bars",
+                     "store":  "Fareway",
+                     "candidate":  "CLIF BAR Energy Protein Bars, Chocolate Chip, Non-Gmo 12 oz"
+                 },
+                 {
+                     "commodity":  "protein-bars",
                      "store":  "Walmart",
                      "candidate":  "Great Value Peanut Butter and Dark Chocolate Protein Bars"
+                 },
+                 {
+                     "commodity":  "fruit-snacks",
+                     "store":  "Fareway",
+                     "candidate":  "Welch\u0027s Strawberry Fruit Snacks"
                  },
                  {
                      "commodity":  "fruit-snacks",
@@ -804,6 +974,11 @@
                  },
                  {
                      "commodity":  "grape-juice",
+                     "store":  "Fareway",
+                     "candidate":  "Old Orchard 100% Juice, Grape"
+                 },
+                 {
+                     "commodity":  "grape-juice",
                      "store":  "Walmart",
                      "candidate":  "Great Value 100% Concord Grape Juice"
                  },
@@ -819,6 +994,11 @@
                  },
                  {
                      "commodity":  "fruit-punch",
+                     "store":  "Fareway",
+                     "candidate":  "Hawaiian Punch Fruit Juicy Red"
+                 },
+                 {
+                     "commodity":  "fruit-punch",
                      "store":  "Walmart",
                      "candidate":  "Hawaiian Punch Fruit Juicy Red"
                  },
@@ -826,6 +1006,11 @@
                      "commodity":  "sports-drinks",
                      "store":  "Walmart",
                      "candidate":  "Gatorade Thirst Quencher Fruit Punch"
+                 },
+                 {
+                     "commodity":  "sparkling-water",
+                     "store":  "Fareway",
+                     "candidate":  "Clear Frost Sparkling Water, Black Cherry"
                  },
                  {
                      "commodity":  "sparkling-water",
@@ -924,6 +1109,11 @@
                  },
                  {
                      "commodity":  "dryer-sheets",
+                     "store":  "Fareway",
+                     "candidate":  "Bright Essentials Dryer Sheets, Fresh Scent, Wrinkle Reducing"
+                 },
+                 {
+                     "commodity":  "dryer-sheets",
                      "store":  "Walmart",
                      "candidate":  "Snuggle Blue Sparkle Dryer Sheets"
                  },
@@ -944,13 +1134,28 @@
                  },
                  {
                      "commodity":  "paper-plates",
+                     "store":  "Fareway",
+                     "candidate":  "Bright Essentials Heavy-Duty Designer 7 Inch Paper Plates"
+                 },
+                 {
+                     "commodity":  "paper-plates",
                      "store":  "Walmart",
                      "candidate":  "Great Value Disposable Paper Plates 8.5 Inch"
                  },
                  {
                      "commodity":  "paper-napkins",
+                     "store":  "Fareway",
+                     "candidate":  "Bright Essentials 2-Ply Everyday Napkins"
+                 },
+                 {
+                     "commodity":  "paper-napkins",
                      "store":  "Walmart",
                      "candidate":  "Great Value Disposable Paper Napkins White"
+                 },
+                 {
+                     "commodity":  "sandwich-bags",
+                     "store":  "Fareway",
+                     "candidate":  "Bright Essentials Sandwich Bags, Double Zipper, Sandwich Size"
                  },
                  {
                      "commodity":  "sandwich-bags",
@@ -1039,6 +1244,11 @@
                  },
                  {
                      "commodity":  "bar-soap",
+                     "store":  "Fareway",
+                     "candidate":  "Irish Spring Men\u0027s Bar Soap, Original Clean"
+                 },
+                 {
+                     "commodity":  "bar-soap",
                      "store":  "Walmart",
                      "candidate":  "Dial Gold Antibacterial Deodorant Bar Soap"
                  },
@@ -1066,6 +1276,11 @@
                      "commodity":  "hand-sanitizer",
                      "store":  "Walmart",
                      "candidate":  "Germ-X Original Hand Sanitizer Gel"
+                 },
+                 {
+                     "commodity":  "facial-tissues",
+                     "store":  "Fareway",
+                     "candidate":  "Kleenex Trusted Care Facial Tissues Flat Box 2 Ply"
                  },
                  {
                      "commodity":  "facial-tissues",
@@ -1179,6 +1394,11 @@
                  },
                  {
                      "commodity":  "dried-parsley",
+                     "store":  "Fareway",
+                     "candidate":  "McCormick Parsley Flakes 0.25 oz"
+                 },
+                 {
+                     "commodity":  "dried-parsley",
                      "store":  "Walmart",
                      "candidate":  "Parsley Flakes (bulk)"
                  },
@@ -1268,6 +1488,11 @@
                      "candidate":  "HORMEL MARY KITCHEN Corned Beef Hash, Shelf Stable, 7.5 oz S"
                  },
                  {
+                     "commodity":  "clam-chowder",
+                     "store":  "Fareway",
+                     "candidate":  "Campbell\u0027s New England Clam Chowder18.8 fl oz"
+                 },
+                 {
                      "commodity":  "chili-beans",
                      "store":  "Walmart",
                      "candidate":  "Wolf Brand Chili With Beans"
@@ -1296,6 +1521,11 @@
                      "commodity":  "canned-yams",
                      "store":  "Walmart",
                      "candidate":  "Bruce\u0027s Yams Cut Sweet Potatoes in Syrup, Canned Vegetables,"
+                 },
+                 {
+                     "commodity":  "cranberry-sauce",
+                     "store":  "Fareway",
+                     "candidate":  "Ocean Spray Whole Cranberry Sauce, Canned Side Dish"
                  },
                  {
                      "commodity":  "cranberry-sauce",
@@ -1373,6 +1603,11 @@
                      "candidate":  "Juanitaâ€™s Foods Mexican Style Hominy, 25 oz, Can"
                  },
                  {
+                     "commodity":  "onion-soup-mix",
+                     "store":  "Fareway",
+                     "candidate":  "Fareway Onion Soup Mix"
+                 },
+                 {
                      "commodity":  "dijon-mustard",
                      "store":  "Walmart",
                      "candidate":  "Grey Poupon Dijon Mustard, 10 oz. Squeeze Bottle"
@@ -1424,6 +1659,11 @@
                  },
                  {
                      "commodity":  "horseradish",
+                     "store":  "Fareway",
+                     "candidate":  "Inglehoffer Thick-n-Creamy Horseradish3.75 oz"
+                 },
+                 {
+                     "commodity":  "horseradish",
                      "store":  "Walmart",
                      "candidate":  "Inglehoffer Extra Hot and Creamy Horseradish, 4 oz Jar"
                  },
@@ -1469,11 +1709,6 @@
                  },
                  {
                      "commodity":  "oyster-sauce",
-                     "store":  "Fareway",
-                     "candidate":  "Ty Ling Oyster Style Sauce"
-                 },
-                 {
-                     "commodity":  "oyster-sauce",
                      "store":  "Walmart",
                      "candidate":  "Heinz Golden Mark Oyster Sauce 9.2oz"
                  },
@@ -1496,11 +1731,6 @@
                      "commodity":  "tahini",
                      "store":  "Walmart",
                      "candidate":  "Krinos Tahini Spread with Velvety Texture 16oz Jar - Premium"
-                 },
-                 {
-                     "commodity":  "sesame-oil",
-                     "store":  "Fareway",
-                     "candidate":  "House of Tsang Pure Sesame Seed Oil"
                  },
                  {
                      "commodity":  "sesame-oil",
@@ -1614,6 +1844,11 @@
                  },
                  {
                      "commodity":  "poppy-seeds",
+                     "store":  "Fareway",
+                     "candidate":  "McCormick Poppy Seed"
+                 },
+                 {
+                     "commodity":  "poppy-seeds",
                      "store":  "Walmart",
                      "candidate":  "Great Value Poppy Seeds, 2.37 oz"
                  },
@@ -1629,11 +1864,6 @@
                  },
                  {
                      "commodity":  "corn-muffin-mix",
-                     "store":  "Fareway",
-                     "candidate":  "Krusteaz Honey Cornbread and Muffin Mix"
-                 },
-                 {
-                     "commodity":  "corn-muffin-mix",
                      "store":  "Walmart",
                      "candidate":  "Bob\u0027s Red Mill, Cornbread Baking Mix, 13 oz"
                  },
@@ -1641,11 +1871,6 @@
                      "commodity":  "refrigerated-biscuits",
                      "store":  "Aldi",
                      "candidate":  "Bake House Creations Jumbo Flaky Biscuits"
-                 },
-                 {
-                     "commodity":  "refrigerated-biscuits",
-                     "store":  "Fareway",
-                     "candidate":  "Pillsbury Grands! Flaky Layers Buttermilk Biscuits"
                  },
                  {
                      "commodity":  "refrigerated-biscuits",
@@ -1681,6 +1906,11 @@
                      "commodity":  "chipotle-adobo",
                      "store":  "Walmart",
                      "candidate":  "La Costea Chipotle Peppers in Adobo Sauce, 7 oz"
+                 },
+                 {
+                     "commodity":  "tomatillos",
+                     "store":  "Fareway",
+                     "candidate":  "Tomatillo"
                  },
                  {
                      "commodity":  "tomatillos",
