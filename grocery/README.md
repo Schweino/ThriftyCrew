@@ -46,6 +46,13 @@ It re-checks both gates, then downloads the pages to `out\bakers\page-NN.jpg`. T
 
 ## Notes / gotchas
 
+- **WALMART PULLS MUST RUN THE FULL WORKLIST** (all ~447 commodity-search.json terms, not a
+  core-staples subset). A partial pull no longer breaks anything - compare-deals UNIONS Walmart's
+  recent captures, so a 50-term throttled day just backfills from the last comprehensive capture -
+  but the union needs a comprehensive capture inside its 14-day window. build-walmart-deals stamps
+  `pull_terms` on every output, and audit-walmart-fullpull.ps1 warns (guards) + emails
+  (check-ad-cycles, deduped) from day 10 if no >=200-term capture is fresh. See
+  INCIDENT-2026-07-23-walmart-flood.md for why a 50-term pull once collapsed the board 410 -> 80.
 - Flipp + SFML responses must be fetched with `Invoke-WebRequest -UseBasicParsing` then UTF-8-decoded + `ConvertFrom-Json` (or `[xml]`). `Invoke-RestMethod` returns empty objects for these.
 - Aldi's store field is `merchant_store_code` (not `store_code`); the Omaha 72nd St store is `446-048` at zip `68132`. Its weekly publication id changes every week â€” the script always fetches the current one.
 - Family Fare's Freshop API caps ~100 items/page; the script pages by the reported `total` (~1,200 items).

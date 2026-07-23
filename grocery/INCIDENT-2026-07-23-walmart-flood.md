@@ -106,10 +106,17 @@ correctness fix.
 A from-scratch adversarial review of the incident and every fix, done after the original work.
 
 ## RCA correction
-The ~20 Gmail alerts came from **local** pipeline runs, not the cloud. The cloud job runs
-`check-ad-cycles.ps1 -NoAlert` and its only secret is GHOST_ADMIN_KEY - it has no Gmail token and
-cannot send these emails at all. Its email channel is GitHub's own workflow-failure notification,
-which the already-committed-today gate caps at one scheduled run (= one possible email) per day.
+The ~20 Gmail alerts came from **local** pipeline runs, not the cloud. To be precise about which
+"cloud" can email (Brad's correction): the **Cloudflare Worker** CAN send Gmail - it holds
+GOOGLE_CLIENT_ID/SECRET/REFRESH_TOKEN secrets and emails contact@ for the item-request and
+recipe-suggest forms - but it plays no part in pipeline alerting. The **GitHub Actions daily job**
+is the one that cannot: it runs `check-ad-cycles.ps1 -NoAlert` and its only secret is
+GHOST_ADMIN_KEY, so its failure channel is GitHub's own workflow-failure notification, capped at
+one scheduled run (= one possible email) per day by the already-committed-today gate. Every LOCAL
+email path (check-ad-cycles, local-watchdog, the audits) funnels through send-alert.ps1 - verified
+by grep: it is the only script that calls the Gmail API - so the per-type daily de-dup is a true
+choke point. (If we ever want the Actions job to send real Gmail alerts, routing a POST through
+the Worker is the ready-made path; today GitHub's own email covers it.)
 The flood mechanics and fixes are unchanged; the source attribution in the timeline is corrected.
 
 ## What the re-review verified
