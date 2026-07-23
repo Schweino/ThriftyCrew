@@ -366,23 +366,23 @@
                            "commodity":  "Cannellini Beans",
                            "category":  "Beans \u0026 Canned",
                            "unit":  "oz",
-                           "cheapest_store":  "Walmart",
+                           "cheapest_store":  "Aldi",
                            "stores":  [
                                           {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.055,
+                                              "store":  "Aldi",
+                                              "per_unit":  0.0548,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.0613,
+                                              "store":  "Walmart",
+                                              "per_unit":  0.0551,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
                                               "store":  "Hy-Vee",
-                                              "per_unit":  0.0639,
+                                              "per_unit":  0.0568,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
@@ -499,37 +499,37 @@
                            "stores":  [
                                           {
                                               "store":  "Sam\u0027s Club",
-                                              "per_unit":  0.18,
+                                              "per_unit":  0.1521,
                                               "type":  "everyday",
                                               "bulk":  true
                                           },
                                           {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.218,
+                                              "store":  "Aldi",
+                                              "per_unit":  0.2056,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.26,
+                                              "store":  "Walmart",
+                                              "per_unit":  0.2155,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
                                               "store":  "Baker\u0027s",
-                                              "per_unit":  0.29,
-                                              "type":  "everyday",
-                                              "bulk":  false
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.31,
+                                              "per_unit":  0.2278,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
                                               "store":  "Family Fare",
-                                              "per_unit":  0.32,
+                                              "per_unit":  0.2466,
+                                              "type":  "everyday",
+                                              "bulk":  false
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.2494,
                                               "type":  "everyday",
                                               "bulk":  false
                                           }
@@ -790,19 +790,19 @@
                            "stores":  [
                                           {
                                               "store":  "Sam\u0027s Club",
-                                              "per_unit":  0.0334,
+                                              "per_unit":  0.067,
                                               "type":  "everyday",
                                               "bulk":  true
                                           },
                                           {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.092,
+                                              "store":  "Aldi",
+                                              "per_unit":  0.0903,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.0997,
+                                              "store":  "Walmart",
+                                              "per_unit":  0.0928,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
@@ -813,14 +813,14 @@
                                               "bulk":  false
                                           },
                                           {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.1088,
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.1158,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.1559,
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.1374,
                                               "type":  "everyday",
                                               "bulk":  false
                                           }
@@ -874,13 +874,19 @@
                            "stores":  [
                                           {
                                               "store":  "Walmart",
-                                              "per_unit":  0.078,
+                                              "per_unit":  0.0612,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
                                               "store":  "Aldi",
-                                              "per_unit":  0.0908,
+                                              "per_unit":  0.0808,
+                                              "type":  "everyday",
+                                              "bulk":  false
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.0817,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
@@ -901,12 +907,6 @@
                                               "per_unit":  0.1442,
                                               "type":  "everyday",
                                               "bulk":  true
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.1458,
-                                              "type":  "everyday",
-                                              "bulk":  false
                                           }
                                       ]
                        },
@@ -931,13 +931,13 @@
                                           },
                                           {
                                               "store":  "Aldi",
-                                              "per_unit":  4.38,
+                                              "per_unit":  3.98,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  4.49,
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  3.99,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
@@ -948,8 +948,8 @@
                                               "bulk":  false
                                           },
                                           {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  4.99,
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  5.99,
                                               "type":  "everyday",
                                               "bulk":  false
                                           }
@@ -996,31 +996,25 @@
                            "stores":  [
                                           {
                                               "store":  "Sam\u0027s Club",
-                                              "per_unit":  0.13,
+                                              "per_unit":  0.1332,
                                               "type":  "everyday",
                                               "bulk":  true
                                           },
                                           {
                                               "store":  "Aldi",
-                                              "per_unit":  0.22,
+                                              "per_unit":  0.1995,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
                                               "store":  "Walmart",
-                                              "per_unit":  0.265,
+                                              "per_unit":  0.2383,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
                                               "store":  "Hy-Vee",
-                                              "per_unit":  0.27,
-                                              "type":  "everyday",
-                                              "bulk":  false
-                                          },
-                                          {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.57,
+                                              "per_unit":  0.266,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
@@ -1033,6 +1027,12 @@
                                               "membership":  false,
                                               "item":  "Sun-MaidÂ® California Golden Raisins Dried Fruit Snack",
                                               "size":  "12 oz"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.57,
+                                              "type":  "everyday",
+                                              "bulk":  false
                                           }
                                       ],
                            "cheapest_store":  "Sam\u0027s Club",
@@ -1089,23 +1089,23 @@
                            "commodity":  "Green Beans",
                            "category":  "Beans \u0026 Canned",
                            "unit":  "oz",
-                           "cheapest_store":  "Walmart",
+                           "cheapest_store":  "Hy-Vee",
                            "stores":  [
                                           {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.054,
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.0524,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
                                               "store":  "Aldi",
-                                              "per_unit":  0.0567,
+                                              "per_unit":  0.0531,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.0607,
+                                              "store":  "Walmart",
+                                              "per_unit":  0.0538,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
@@ -1149,13 +1149,13 @@
                                               "bulk":  false
                                           },
                                           {
-                                              "store":  "Family Fare",
+                                              "store":  "Baker\u0027s",
                                               "per_unit":  0.99,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
-                                              "store":  "Baker\u0027s",
+                                              "store":  "Family Fare",
                                               "per_unit":  0.99,
                                               "type":  "everyday",
                                               "bulk":  false
@@ -1167,8 +1167,14 @@
                            "commodity":  "Hickory Smoked Bacon",
                            "category":  "Meat \u0026 Poultry",
                            "unit":  "lb",
-                           "cheapest_store":  "Walmart",
+                           "cheapest_store":  "Sam\u0027s Club",
                            "stores":  [
+                                          {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  3.607,
+                                              "type":  "everyday",
+                                              "bulk":  true
+                                          },
                                           {
                                               "store":  "Walmart",
                                               "per_unit":  3.96,
@@ -1176,32 +1182,26 @@
                                               "bulk":  false
                                           },
                                           {
-                                              "store":  "Sam\u0027s Club",
-                                              "per_unit":  3.96,
-                                              "type":  "everyday",
-                                              "bulk":  true
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  4.59,
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  3.97,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  4.99,
+                                              "store":  "Aldi",
+                                              "per_unit":  3.99,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
                                               "store":  "Baker\u0027s",
-                                              "per_unit":  5.32,
+                                              "per_unit":  4.4444,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
                                               "store":  "Family Fare",
-                                              "per_unit":  7.99,
+                                              "per_unit":  5.495,
                                               "type":  "everyday",
                                               "bulk":  false
                                           }
@@ -1497,35 +1497,35 @@
                            "commodity":  "Marinara Sauce",
                            "category":  "Sauces \u0026 Condiments",
                            "unit":  "oz",
-                           "cheapest_store":  "Walmart",
+                           "cheapest_store":  "Hy-Vee",
                            "stores":  [
                                           {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.076,
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.0658,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
                                               "store":  "Aldi",
-                                              "per_unit":  0.0788,
+                                              "per_unit":  0.0704,
+                                              "type":  "everyday",
+                                              "bulk":  false
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.0725,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
                                               "store":  "Baker\u0027s",
-                                              "per_unit":  0.0829,
-                                              "type":  "everyday",
-                                              "bulk":  false
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.0865,
+                                              "per_unit":  0.0765,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
                                               "store":  "Family Fare",
-                                              "per_unit":  0.1871,
+                                              "per_unit":  0.1621,
                                               "type":  "everyday",
                                               "bulk":  false
                                           }
@@ -1796,13 +1796,13 @@
                            "stores":  [
                                           {
                                               "store":  "Aldi",
-                                              "per_unit":  0.44,
+                                              "per_unit":  0.399,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
                                               "store":  "Sam\u0027s Club",
-                                              "per_unit":  0.45,
+                                              "per_unit":  0.456,
                                               "type":  "everyday",
                                               "bulk":  true
                                           },
@@ -1814,19 +1814,19 @@
                                           },
                                           {
                                               "store":  "Baker\u0027s",
-                                              "per_unit":  0.6,
-                                              "type":  "everyday",
-                                              "bulk":  false
-                                          },
-                                          {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.88,
+                                              "per_unit":  0.499,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
                                               "store":  "Family Fare",
-                                              "per_unit":  0.99,
+                                              "per_unit":  0.549,
+                                              "type":  "everyday",
+                                              "bulk":  false
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.55,
                                               "type":  "everyday",
                                               "bulk":  false
                                           }
@@ -2011,35 +2011,35 @@
                            "commodity":  "Rotini Pasta",
                            "category":  "Pasta, Rice \u0026 Grains",
                            "unit":  "oz",
-                           "cheapest_store":  "Walmart",
+                           "cheapest_store":  "Aldi",
                            "stores":  [
                                           {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.078,
+                                              "store":  "Aldi",
+                                              "per_unit":  0.0591,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  0.0781,
+                                              "store":  "Walmart",
+                                              "per_unit":  0.0606,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
                                               "store":  "Family Fare",
-                                              "per_unit":  0.0806,
+                                              "per_unit":  0.0778,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
                                               "store":  "Hy-Vee",
-                                              "per_unit":  0.09,
+                                              "per_unit":  0.0793,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.1369,
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.0831,
                                               "type":  "everyday",
                                               "bulk":  false
                                           }
@@ -2350,35 +2350,35 @@
                            "commodity":  "Traditional Pasta Sauce",
                            "category":  "Sauces \u0026 Condiments",
                            "unit":  "oz",
-                           "cheapest_store":  "Walmart",
+                           "cheapest_store":  "Hy-Vee",
                            "stores":  [
                                           {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.073,
-                                              "type":  "everyday",
-                                              "bulk":  false
-                                          },
-                                          {
                                               "store":  "Hy-Vee",
-                                              "per_unit":  0.0746,
+                                              "per_unit":  0.0658,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
                                               "store":  "Aldi",
-                                              "per_unit":  0.0788,
+                                              "per_unit":  0.0704,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.0829,
+                                              "store":  "Walmart",
+                                              "per_unit":  0.0725,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
                                               "store":  "Baker\u0027s",
-                                              "per_unit":  0.0829,
+                                              "per_unit":  0.0765,
+                                              "type":  "everyday",
+                                              "bulk":  false
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.1621,
                                               "type":  "everyday",
                                               "bulk":  false
                                           }
@@ -2393,19 +2393,25 @@
                            "stores":  [
                                           {
                                               "store":  "Sam\u0027s Club",
-                                              "per_unit":  0.17,
+                                              "per_unit":  0.1654,
                                               "type":  "everyday",
                                               "bulk":  true
                                           },
                                           {
                                               "store":  "Aldi",
-                                              "per_unit":  0.22,
+                                              "per_unit":  0.1862,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
                                           {
                                               "store":  "Walmart",
-                                              "per_unit":  0.236,
+                                              "per_unit":  0.2356,
+                                              "type":  "everyday",
+                                              "bulk":  false
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.2488,
                                               "type":  "everyday",
                                               "bulk":  false
                                           },
@@ -2417,13 +2423,7 @@
                                           },
                                           {
                                               "store":  "Family Fare",
-                                              "per_unit":  0.32,
-                                              "type":  "everyday",
-                                              "bulk":  false
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.54,
+                                              "per_unit":  0.3113,
                                               "type":  "everyday",
                                               "bulk":  false
                                           }
@@ -2703,14 +2703,14 @@
                            "category":  "Meat \u0026 Poultry",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  10.99,
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  6.64,
                                               "unit":  "lb",
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Fresh Beef Chuck Roast, Boneless",
-                                              "size":  "lb"
+                                              "membership":  true,
+                                              "item":  "Member\u0027s Mark USDA Choice Angus Beef Boneless Chuck Roast, priced per pound",
+                                              "size":  "priced per lb"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -2723,26 +2723,6 @@
                                               "size":  "Fresh, ~1.6-2.85 lb"
                                           },
                                           {
-                                              "store":  "Sam\u0027s Club",
-                                              "per_unit":  7.47,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  true,
-                                              "item":  "Member\u0027s Mark USDA Choice Angus Beef Boneless Chuck Roast, priced per pound",
-                                              "size":  "priced per lb"
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  10.99,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Beef Boneless Chuck Roast",
-                                              "size":  "lbs ($10.99/lb)"
-                                          },
-                                          {
                                               "store":  "Aldi",
                                               "per_unit":  7.99,
                                               "unit":  "lb",
@@ -2753,6 +2733,16 @@
                                               "size":  "per lb"
                                           },
                                           {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  8.99,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Beef Boneless Chuck Roast",
+                                              "size":  "lbs ($10.99/lb)"
+                                          },
+                                          {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  10.99,
                                               "unit":  "lb",
@@ -2761,6 +2751,16 @@
                                               "membership":  false,
                                               "item":  "Choice Beef Chuck Roast",
                                               "size":  "per lb"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  10.99,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Beef Chuck Roast, Boneless",
+                                              "size":  "lb"
                                           }
                                       ],
                            "cheapest_store":  "Sam\u0027s Club",
@@ -3058,6 +3058,26 @@
                            "category":  "Beans \u0026 Canned",
                            "stores":  [
                                           {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.2129,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Gluten Free Whole Chipotle Peppers in Adobo Sauce",
+                                              "size":  "7 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.2343,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "San Marcos Peppers Chipolte",
+                                              "size":  "7.5 oz"
+                                          },
+                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  0.2653,
                                               "unit":  "oz",
@@ -3068,34 +3088,14 @@
                                               "size":  "7.5 oz"
                                           },
                                           {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.211,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "San Marcos Peppers Chipolte",
-                                              "size":  "7.5 oz"
-                                          },
-                                          {
                                               "store":  "Hy-Vee",
-                                              "per_unit":  0.4992,
+                                              "per_unit":  0.47,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "La Costena Chipotle Peppers in Adobo Sauce",
                                               "size":  "12 oz"
-                                          },
-                                          {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  0.21,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "KrogerÂ® Gluten Free Whole Chipotle Peppers in Adobo Sauce",
-                                              "size":  "7 oz"
                                           }
                                       ],
                            "cheapest_store":  "Baker\u0027s",
@@ -3109,6 +3109,36 @@
                            "category":  "Beans \u0026 Canned",
                            "stores":  [
                                           {
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.1371,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Thai Kitchen Unsweetened Coconut Milk",
+                                              "size":  "13.66 fl. oz. cans, 6 pk. ($1.87/can)"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.1467,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Savia Coconut Milk",
+                                              "size":  "13.5 fl oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.1474,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Premium Coconut Milk",
+                                              "size":  "13.5 fl oz"
+                                          },
+                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  0.2067,
                                               "unit":  "floz",
@@ -3119,43 +3149,13 @@
                                               "size":  "13.5 fl oz"
                                           },
                                           {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.147,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Savia Coconut Milk",
-                                              "size":  "13.5 fl oz"
-                                          },
-                                          {
-                                              "store":  "Sam\u0027s Club",
-                                              "per_unit":  0.1369,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  true,
-                                              "item":  "Thai Kitchen Unsweetened Coconut Milk",
-                                              "size":  "13.66 fl. oz. cans, 6 pk. ($1.87/can)"
-                                          },
-                                          {
                                               "store":  "Hy-Vee",
-                                              "per_unit":  0.2511,
+                                              "per_unit":  0.2215,
                                               "unit":  "floz",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "Hy-Vee Coconut Milk",
-                                              "size":  "13.5 fl oz"
-                                          },
-                                          {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  0.22,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "KrogerÂ® Premium Coconut Milk",
                                               "size":  "13.5 fl oz"
                                           }
                                       ],
@@ -3170,6 +3170,26 @@
                            "category":  "Beans \u0026 Canned",
                            "stores":  [
                                           {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.2125,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Pueblo Lindo Chopped Green Chiles",
+                                              "size":  "4 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.2475,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "KrogerÂ® Diced Green Chile Peppers",
+                                              "size":  "4 oz"
+                                          },
+                                          {
                                               "store":  "Family Fare",
                                               "per_unit":  0.2975,
                                               "unit":  "oz",
@@ -3180,18 +3200,8 @@
                                               "size":  "4 oz"
                                           },
                                           {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.22,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Great Value Canned Medium Diced Green Chiles",
-                                              "size":  "4 oz"
-                                          },
-                                          {
                                               "store":  "Hy-Vee",
-                                              "per_unit":  0.4475,
+                                              "per_unit":  0.3557,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
@@ -3200,27 +3210,17 @@
                                               "size":  "4 oz"
                                           },
                                           {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.2375,
+                                              "store":  "Walmart",
+                                              "per_unit":  0.3671,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Pueblo Lindo Chopped Green Chiles",
-                                              "size":  "4 oz"
-                                          },
-                                          {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  0.25,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "KrogerÂ® Diced Green Chile Peppers",
+                                              "item":  "Great Value Canned Medium Diced Green Chiles",
                                               "size":  "4 oz"
                                           }
                                       ],
-                           "cheapest_store":  "Walmart",
+                           "cheapest_store":  "Aldi",
                            "cheapest_price":  0.22,
                            "cheapest_type":  "everyday"
                        },
@@ -3546,14 +3546,24 @@
                            "category":  "Spices \u0026 Baking",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  1.69,
+                                              "store":  "Sam\u0027s Club",
+                                              "per_unit":  0.8283,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  true,
+                                              "item":  "Green Bell Peppers",
+                                              "size":  "6 ct. ($0.83/pepper)"
+                                          },
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.83,
                                               "unit":  "each",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Fresh Green Peppers",
-                                              "size":  "1 ct"
+                                              "item":  "Green Peppers, Package",
+                                              "size":  "3 ct"
                                           },
                                           {
                                               "store":  "Walmart",
@@ -3566,14 +3576,14 @@
                                               "size":  "1 each"
                                           },
                                           {
-                                              "store":  "Sam\u0027s Club",
-                                              "per_unit":  0.83,
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  0.99,
                                               "unit":  "each",
                                               "type":  "everyday",
                                               "bulk":  false,
-                                              "membership":  true,
-                                              "item":  "Green Bell Peppers",
-                                              "size":  "6 ct. ($0.83/pepper)"
+                                              "membership":  false,
+                                              "item":  "Fresh Large Green Bell Pepper",
+                                              "size":  "1 ct"
                                           },
                                           {
                                               "store":  "Hy-Vee",
@@ -3586,23 +3596,13 @@
                                               "size":  "1 ct (2 for $3.00)"
                                           },
                                           {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.9167,
+                                              "store":  "Family Fare",
+                                              "per_unit":  1.69,
                                               "unit":  "each",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Green Peppers, Package",
-                                              "size":  "3 ct"
-                                          },
-                                          {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  0.99,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Fresh Large Green Bell Pepper",
+                                              "item":  "Fresh Green Peppers",
                                               "size":  "1 ct"
                                           }
                                       ],
@@ -3759,38 +3759,8 @@
                            "category":  "Meat \u0026 Poultry",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  5.89,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Johnsonville Sausage, Italian, Hot 19 Oz",
-                                              "size":  "19 oz"
-                                          },
-                                          {
-                                              "store":  "Walmart",
-                                              "per_unit":  4.98,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Johnsonville Hot Italian Pork Sausage Links, 19 oz, (5 Count) Refrigerated",
-                                              "size":  "19 oz (5 links)"
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  5.0442,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Johnsonville Hot Italian Sausage, 5 Count",
-                                              "size":  "19 oz"
-                                          },
-                                          {
                                               "store":  "Aldi",
-                                              "per_unit":  2.5179,
+                                              "per_unit":  2.4842,
                                               "unit":  "lb",
                                               "type":  "everyday",
                                               "bulk":  false,
@@ -3799,14 +3769,44 @@
                                               "size":  "19 oz"
                                           },
                                           {
+                                              "store":  "Walmart",
+                                              "per_unit":  2.5011,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Johnsonville Hot Italian Pork Sausage Links, 19 oz, (5 Count) Refrigerated",
+                                              "size":  "19 oz (5 links)"
+                                          },
+                                          {
                                               "store":  "Baker\u0027s",
-                                              "per_unit":  4.88,
+                                              "per_unit":  4.29,
                                               "unit":  "lb",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "KrogerÂ® Hot Italian Sausage",
                                               "size":  "18 oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  4.88,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Johnsonville Hot Italian Sausage, 5 Count",
+                                              "size":  "19 oz"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  5.8863,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Johnsonville Sausage, Italian, Hot 19 Oz",
+                                              "size":  "19 oz"
                                           }
                                       ],
                            "cheapest_store":  "Aldi",
@@ -4155,28 +4155,8 @@
                            "category":  "Cheese \u0026 Dairy",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.4056,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Our Family Grated Cheese, Parmesan 16 Oz",
-                                              "size":  "16 oz"
-                                          },
-                                          {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.343,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Great Value Grated Parmesan Cheese, 16 oz Bottle",
-                                              "size":  "16 oz"
-                                          },
-                                          {
                                               "store":  "Sam\u0027s Club",
-                                              "per_unit":  0.31,
+                                              "per_unit":  0.3092,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
@@ -4185,18 +4165,18 @@
                                               "size":  "24 oz."
                                           },
                                           {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.3744,
+                                              "store":  "Walmart",
+                                              "per_unit":  0.3467,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Hy-Vee Grated Parmesan Cheese",
+                                              "item":  "Great Value Grated Parmesan Cheese, 16 oz Bottle",
                                               "size":  "16 oz"
                                           },
                                           {
                                               "store":  "Aldi",
-                                              "per_unit":  0.3863,
+                                              "per_unit":  0.3488,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
@@ -4213,6 +4193,26 @@
                                               "membership":  false,
                                               "item":  "KrogerÂ® Grated Parmesan Cheese",
                                               "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.4056,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Grated Cheese, Parmesan 16 Oz",
+                                              "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.4612,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Grated Parmesan Cheese",
+                                              "size":  "16 oz"
                                           }
                                       ],
                            "cheapest_store":  "Sam\u0027s Club",
@@ -4226,28 +4226,8 @@
                            "category":  "Pasta, Rice \u0026 Grains",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.1181,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Creamette Penne Rigate 1 Lb",
-                                              "size":  "1 lb"
-                                          },
-                                          {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.078,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Great Value Penne Pasta",
-                                              "size":  "16 oz"
-                                          },
-                                          {
                                               "store":  "Sam\u0027s Club",
-                                              "per_unit":  0.0888,
+                                              "per_unit":  0.0571,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
@@ -4256,18 +4236,8 @@
                                               "size":  "16 oz., 6 pk. ($1.42/box)"
                                           },
                                           {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.09,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Hy-Vee Penne Rigate",
-                                              "size":  "16 oz"
-                                          },
-                                          {
                                               "store":  "Aldi",
-                                              "per_unit":  0.0781,
+                                              "per_unit":  0.0591,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
@@ -4276,8 +4246,38 @@
                                               "size":  "16 oz"
                                           },
                                           {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.0606,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Penne Pasta",
+                                              "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.0778,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Creamette Penne Rigate 1 Lb",
+                                              "size":  "1 lb"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.0793,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Penne Rigate",
+                                              "size":  "16 oz"
+                                          },
+                                          {
                                               "store":  "Baker\u0027s",
-                                              "per_unit":  0.08,
+                                              "per_unit":  0.0831,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
@@ -4286,7 +4286,7 @@
                                               "size":  "16 oz"
                                           }
                                       ],
-                           "cheapest_store":  "Walmart",
+                           "cheapest_store":  "Sam\u0027s Club",
                            "cheapest_price":  0.078,
                            "cheapest_type":  "everyday"
                        },
@@ -4297,18 +4297,8 @@
                            "category":  "Produce",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.2742,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Mt Olive Pepperoncini, Italian Seasoned 12 Fl Oz",
-                                              "size":  "12 fl oz"
-                                          },
-                                          {
                                               "store":  "Walmart",
-                                              "per_unit":  0.158,
+                                              "per_unit":  0.1524,
                                               "unit":  "floz",
                                               "type":  "everyday",
                                               "bulk":  false,
@@ -4317,24 +4307,34 @@
                                               "size":  "12 fl oz"
                                           },
                                           {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.2809,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Mezzetta Medium Heat Golden Greek Peperoncini",
-                                              "size":  "32 fl oz"
-                                          },
-                                          {
                                               "store":  "Baker\u0027s",
-                                              "per_unit":  0.25,
+                                              "per_unit":  0.1949,
                                               "unit":  "floz",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "KrogerÂ® Whole Pepperoncini Peppers",
                                               "size":  "16 fl oz"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.2599,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Mt Olive Pepperoncini, Italian Seasoned 12 Fl Oz",
+                                              "size":  "12 fl oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.2599,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Mezzetta Medium Heat Golden Greek Peperoncini",
+                                              "size":  "32 fl oz"
                                           }
                                       ],
                            "cheapest_store":  "Walmart",
@@ -5863,38 +5863,8 @@
                            "category":  "Produce",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.99,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Cilantro (Chinese Parsley/Coriander)",
-                                              "size":  "1 ct"
-                                          },
-                                          {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.93,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Fresh Cilantro Bunch",
-                                              "size":  ""
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.99,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Cilantro",
-                                              "size":  "1 ct"
-                                          },
-                                          {
                                               "store":  "Aldi",
-                                              "per_unit":  0.99,
+                                              "per_unit":  0.89,
                                               "unit":  "each",
                                               "type":  "everyday",
                                               "bulk":  false,
@@ -5911,9 +5881,39 @@
                                               "membership":  false,
                                               "item":  "Cilantro",
                                               "size":  "1 ct"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.99,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Cilantro",
+                                              "size":  "1 ct"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.99,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Cilantro (Chinese Parsley/Coriander)",
+                                              "size":  "1 ct"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  1.78,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Cilantro Bunch",
+                                              "size":  ""
                                           }
                                       ],
-                           "cheapest_store":  "Walmart",
+                           "cheapest_store":  "Aldi",
                            "cheapest_price":  0.93,
                            "cheapest_type":  "everyday"
                        },
@@ -5923,6 +5923,26 @@
                            "unit":  "lb",
                            "category":  "Produce",
                            "stores":  [
+                                          {
+                                              "store":  "Aldi",
+                                              "per_unit":  1.7,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Jalapeno Peppers, Package",
+                                              "size":  "8 oz"
+                                          },
+                                          {
+                                              "store":  "Baker\u0027s",
+                                              "per_unit":  1.99,
+                                              "unit":  "lb",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Jalapeno Peppers",
+                                              "size":  "per lb"
+                                          },
                                           {
                                               "store":  "Family Fare",
                                               "per_unit":  2.29,
@@ -5942,26 +5962,6 @@
                                               "membership":  false,
                                               "item":  "Jalapeno Pepper",
                                               "size":  "0.15 lbs ($2.99/lb)"
-                                          },
-                                          {
-                                              "store":  "Aldi",
-                                              "per_unit":  1.9,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Jalapeno Peppers, Package",
-                                              "size":  "8 oz"
-                                          },
-                                          {
-                                              "store":  "Baker\u0027s",
-                                              "per_unit":  1.99,
-                                              "unit":  "lb",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Fresh Jalapeno Peppers",
-                                              "size":  "per lb"
                                           }
                                       ],
                            "cheapest_store":  "Aldi",
@@ -6026,26 +6026,6 @@
                            "category":  "Sauces \u0026 Condiments",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.169,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Our Family Worcestershire Sauce 10 Fl Oz",
-                                              "size":  "10 fl oz"
-                                          },
-                                          {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.1,
-                                              "unit":  "floz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Worcestershire Sauce",
-                                              "size":  ""
-                                          },
-                                          {
                                               "store":  "Sam\u0027s Club",
                                               "per_unit":  0.0686,
                                               "unit":  "floz",
@@ -6066,6 +6046,16 @@
                                               "size":  "10 fl oz"
                                           },
                                           {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.1,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Worcestershire Sauce",
+                                              "size":  ""
+                                          },
+                                          {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  0.146,
                                               "unit":  "floz",
@@ -6074,6 +6064,16 @@
                                               "membership":  false,
                                               "item":  "KrogerÂ® Worcestershire Sauce",
                                               "size":  "15 fl oz"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.169,
+                                              "unit":  "floz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Worcestershire Sauce 10 Fl Oz",
+                                              "size":  "10 fl oz"
                                           }
                                       ],
                            "cheapest_store":  "Sam\u0027s Club",
@@ -6351,26 +6351,6 @@
                            "category":  "Dairy \u0026 Cheese",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.8113,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Culinary Tours Feta Chunk Cheese 8 Oz",
-                                              "size":  "8 oz"
-                                          },
-                                          {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.563,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Feta Cheese",
-                                              "size":  ""
-                                          },
-                                          {
                                               "store":  "Sam\u0027s Club",
                                               "per_unit":  0.3033,
                                               "unit":  "oz",
@@ -6381,8 +6361,18 @@
                                               "size":  "24 oz"
                                           },
                                           {
+                                              "store":  "Aldi",
+                                              "per_unit":  0.4725,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Emporium Selection Original Feta Cheese Crumbles",
+                                              "size":  "4 oz"
+                                          },
+                                          {
                                               "store":  "Hy-Vee",
-                                              "per_unit":  0.7488,
+                                              "per_unit":  0.615,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
@@ -6391,14 +6381,24 @@
                                               "size":  "8 oz"
                                           },
                                           {
-                                              "store":  "Aldi",
-                                              "per_unit":  0.5225,
+                                              "store":  "Walmart",
+                                              "per_unit":  0.656,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
-                                              "item":  "Emporium Selection Original Feta Cheese Crumbles",
-                                              "size":  "4 oz"
+                                              "item":  "Feta Cheese",
+                                              "size":  ""
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.8113,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Culinary Tours Feta Chunk Cheese 8 Oz",
+                                              "size":  "8 oz"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -6473,26 +6473,6 @@
                            "category":  "Dairy \u0026 Cheese",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.2494,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Our Family Low Moisture Part Skim Mozzarella 16 Oz",
-                                              "size":  "16 oz"
-                                          },
-                                          {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.218,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Mozzarella Cheese (32 oz)",
-                                              "size":  "32 oz"
-                                          },
-                                          {
                                               "store":  "Sam\u0027s Club",
                                               "per_unit":  0.1521,
                                               "unit":  "oz",
@@ -6503,24 +6483,24 @@
                                               "size":  "5 lb"
                                           },
                                           {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.2494,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Cheese",
-                                              "size":  "32 oz"
-                                          },
-                                          {
                                               "store":  "Aldi",
-                                              "per_unit":  0.2438,
+                                              "per_unit":  0.2056,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "Happy Farms Mozzarella Cheese Block",
                                               "size":  "8 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.2155,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Mozzarella Cheese (32 oz)",
+                                              "size":  "32 oz"
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -6530,6 +6510,26 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "KrogerÂ® Mozzarella Shredded Cheese Family Size",
+                                              "size":  "32 oz"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.2466,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Low Moisture Part Skim Mozzarella 16 Oz",
+                                              "size":  "16 oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.2494,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Shredded Low-Moisture Part-Skim Mozzarella Cheese",
                                               "size":  "32 oz"
                                           }
                                       ],
@@ -6544,44 +6544,14 @@
                            "category":  "Produce",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.89,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Fresh Cucumbers",
-                                              "size":  "1 ea"
-                                          },
-                                          {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.76,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Fresh Cucumber, Each",
-                                              "size":  ""
-                                          },
-                                          {
                                               "store":  "Sam\u0027s Club",
-                                              "per_unit":  1.09,
+                                              "per_unit":  0.3827,
                                               "unit":  "each",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  true,
                                               "item":  "Seedless English Cucumbers, 3 ct",
                                               "size":  "3 ct"
-                                          },
-                                          {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.99,
-                                              "unit":  "each",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Cucumber",
-                                              "size":  "1 ct"
                                           },
                                           {
                                               "store":  "Aldi",
@@ -6594,6 +6564,16 @@
                                               "size":  "1 each"
                                           },
                                           {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.76,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Cucumber, Each",
+                                              "size":  ""
+                                          },
+                                          {
                                               "store":  "Baker\u0027s",
                                               "per_unit":  0.89,
                                               "unit":  "each",
@@ -6602,9 +6582,29 @@
                                               "membership":  false,
                                               "item":  "Cucumber",
                                               "size":  "1 ct"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.89,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Fresh Cucumbers",
+                                              "size":  "1 ea"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.99,
+                                              "unit":  "each",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Cucumber",
+                                              "size":  "1 ct"
                                           }
                                       ],
-                           "cheapest_store":  "Aldi",
+                           "cheapest_store":  "Sam\u0027s Club",
                            "cheapest_price":  0.65,
                            "cheapest_type":  "everyday"
                        },
@@ -7806,28 +7806,8 @@
                            "category":  "Dairy \u0026 Cheese",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.3238,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Our Family Natural Medium Cheddar Cheese 8 Oz",
-                                              "size":  "8 oz"
-                                          },
-                                          {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.21,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Great Value Sharp Cheddar Block, 64 oz",
-                                              "size":  ""
-                                          },
-                                          {
                                               "store":  "Sam\u0027s Club",
-                                              "per_unit":  0.1763,
+                                              "per_unit":  0.1521,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
@@ -7836,24 +7816,24 @@
                                               "size":  "32 oz"
                                           },
                                           {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.2494,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Hy-Vee Cheese Sharp Cheddar Chunk",
-                                              "size":  "32 oz"
-                                          },
-                                          {
                                               "store":  "Aldi",
-                                              "per_unit":  0.2438,
+                                              "per_unit":  0.2056,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "Happy Farms Mild Cheddar Cheese Block",
                                               "size":  "8 oz"
+                                          },
+                                          {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.2155,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value Sharp Cheddar Block, 64 oz",
+                                              "size":  ""
                                           },
                                           {
                                               "store":  "Baker\u0027s",
@@ -7863,6 +7843,26 @@
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "KrogerÂ® Sharp Cheddar Shredded Cheese Family Size",
+                                              "size":  "32 oz"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.2466,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family Natural Medium Cheddar Cheese 8 Oz",
+                                              "size":  "8 oz"
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.2494,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Cheese Sharp Cheddar Chunk",
                                               "size":  "32 oz"
                                           }
                                       ],
@@ -8080,26 +8080,6 @@
                            "category":  "Spices \u0026 Baking",
                            "stores":  [
                                           {
-                                              "store":  "Family Fare",
-                                              "per_unit":  0.0374,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Our Family All Purpose Flour, Unbleached 5 Lb",
-                                              "size":  "5 lb"
-                                          },
-                                          {
-                                              "store":  "Walmart",
-                                              "per_unit":  0.027,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Great Value All-Purpose Flour, 25 lb",
-                                              "size":  ""
-                                          },
-                                          {
                                               "store":  "Sam\u0027s Club",
                                               "per_unit":  0.0212,
                                               "unit":  "oz",
@@ -8110,18 +8090,8 @@
                                               "size":  "25 lb"
                                           },
                                           {
-                                              "store":  "Hy-Vee",
-                                              "per_unit":  0.0374,
-                                              "unit":  "oz",
-                                              "type":  "everyday",
-                                              "bulk":  false,
-                                              "membership":  false,
-                                              "item":  "Hy-Vee Bleached All Purpose Flour",
-                                              "size":  "5 lb"
-                                          },
-                                          {
                                               "store":  "Aldi",
-                                              "per_unit":  0.0269,
+                                              "per_unit":  0.0244,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
@@ -8130,13 +8100,43 @@
                                               "size":  "5 lb"
                                           },
                                           {
+                                              "store":  "Walmart",
+                                              "per_unit":  0.0269,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Great Value All-Purpose Flour, 25 lb",
+                                              "size":  ""
+                                          },
+                                          {
+                                              "store":  "Hy-Vee",
+                                              "per_unit":  0.0298,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Hy-Vee Bleached All Purpose Flour",
+                                              "size":  "5 lb"
+                                          },
+                                          {
                                               "store":  "Baker\u0027s",
-                                              "per_unit":  0.0324,
+                                              "per_unit":  0.0299,
                                               "unit":  "oz",
                                               "type":  "everyday",
                                               "bulk":  false,
                                               "membership":  false,
                                               "item":  "KrogerÂ® Bleached All Purpose Flour",
+                                              "size":  "5 lb"
+                                          },
+                                          {
+                                              "store":  "Family Fare",
+                                              "per_unit":  0.035,
+                                              "unit":  "oz",
+                                              "type":  "everyday",
+                                              "bulk":  false,
+                                              "membership":  false,
+                                              "item":  "Our Family All Purpose Flour, Unbleached 5 Lb",
                                               "size":  "5 lb"
                                           }
                                       ],
@@ -8452,6 +8452,6 @@
                                       ]
                        }
                    ],
-    "built_at":  "2026-07-23T12:29:27",
+    "built_at":  "2026-07-23T13:40:30",
     "reverified":  "2026-07-07 (monthly floor re-verify: Sam\u0027s+Walmart full re-pull; Aldi/Hy-Vee/Baker\u0027s spot-confirmed)"
 }

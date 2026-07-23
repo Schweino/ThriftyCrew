@@ -1,0 +1,539 @@
+﻿{
+    "generated":  "2026-07-23T13:37:21",
+    "tol":  0.25,
+    "min_agree":  2,
+    "proposals":  [
+                      {
+                          "recipe_id":  "cannellini-beans",
+                          "board_id":  "canned-white-beans",
+                          "recipe_label":  "Cannellini Beans",
+                          "board_label":  "Canned White Beans (Great Northern / Cannellini / Navy)",
+                          "unit":  "oz-\u003eoz x1",
+                          "stores_agreeing":  "4/4",
+                          "prices":  "Walmart 0.06~0.06 | Aldi 0.06~0.05 | Hy-Vee 0.06~0.06 | Baker\u0027s 0.06~0.06"
+                      },
+                      {
+                          "recipe_id":  "fries",
+                          "board_id":  "frozen-fries",
+                          "recipe_label":  "Fries",
+                          "board_label":  "Frozen French Fries",
+                          "unit":  "oz-\u003eoz x1",
+                          "stores_agreeing":  "3/6",
+                          "prices":  "Sam\u0027s Club 0.03!=0.07 | Walmart 0.09~0.09 | Aldi 0.10~0.09 | Baker\u0027s 0.10~0.10 | Hy-Vee 0.11!=0.14 | Family Fare 0.16!=0.12"
+                      },
+                      {
+                          "recipe_id":  "ginger",
+                          "board_id":  "fresh-ginger",
+                          "recipe_label":  "Ginger",
+                          "board_label":  "Ginger Root",
+                          "unit":  "lb-\u003elb x1",
+                          "stores_agreeing":  "3/4",
+                          "prices":  "Walmart 3.97~3.97 | Aldi 4.38~3.98 | Hy-Vee 4.49!=5.99 | Baker\u0027s 4.99~3.99"
+                      },
+                      {
+                          "recipe_id":  "green-cabbage",
+                          "board_id":  "cabbage",
+                          "recipe_label":  "Green Cabbage",
+                          "board_label":  "Cabbage (green)",
+                          "unit":  "lb-\u003elb x1",
+                          "stores_agreeing":  "4/4",
+                          "prices":  "Aldi 0.79~0.79 | Walmart 0.85~0.85 | Hy-Vee 0.89~0.89 | Baker\u0027s 0.99~0.99"
+                      },
+                      {
+                          "recipe_id":  "marinara-sauce",
+                          "board_id":  "pasta-sauce",
+                          "recipe_label":  "Marinara Sauce",
+                          "board_label":  "Pasta Sauce (marinara)",
+                          "unit":  "oz-\u003eoz x1",
+                          "stores_agreeing":  "5/5",
+                          "prices":  "Walmart 0.08~0.07 | Aldi 0.08~0.07 | Baker\u0027s 0.08~0.08 | Hy-Vee 0.09~0.07 | Family Fare 0.19~0.16"
+                      },
+                      {
+                          "recipe_id":  "olives",
+                          "board_id":  "olive-oil",
+                          "recipe_label":  "Olives",
+                          "board_label":  "Olive Oil",
+                          "unit":  "oz-\u003efloz x0.9587",
+                          "stores_agreeing":  "2/5",
+                          "prices":  "Sam\u0027s Club 0.21~0.18 | Aldi 0.23!=0.33 | Baker\u0027s 0.24~0.26 | Hy-Vee 0.27!=0.45 | Family Fare 0.42!=0.20"
+                      },
+                      {
+                          "recipe_id":  "potato",
+                          "board_id":  "russet-potatoes",
+                          "recipe_label":  "Potato",
+                          "board_label":  "Russet Potatoes",
+                          "unit":  "lb-\u003elb x1",
+                          "stores_agreeing":  "4/6",
+                          "prices":  "Aldi 0.44~0.40 | Sam\u0027s Club 0.45~0.46 | Hy-Vee 0.49~0.49 | Baker\u0027s 0.60~0.50 | Walmart 0.88!=0.55 | Family Fare 0.99!=0.55"
+                      },
+                      {
+                          "recipe_id":  "white-mushrooms",
+                          "board_id":  "mushrooms",
+                          "recipe_label":  "White Mushrooms",
+                          "board_label":  "Mushrooms (white / baby bella)",
+                          "unit":  "oz-\u003eoz x1",
+                          "stores_agreeing":  "5/6",
+                          "prices":  "Sam\u0027s Club 0.17~0.17 | Aldi 0.22~0.19 | Walmart 0.24~0.24 | Baker\u0027s 0.25~0.25 | Family Fare 0.32~0.31 | Hy-Vee 0.54!=0.25"
+                      },
+                      {
+                          "recipe_id":  "chipotle-in-adobo",
+                          "board_id":  "chipotle-adobo",
+                          "recipe_label":  "Chipotle Peppers in Adobo",
+                          "board_label":  "Chipotle Peppers in Adobo",
+                          "unit":  "oz-\u003eoz x1",
+                          "stores_agreeing":  "4/4",
+                          "prices":  "Family Fare 0.27~0.27 | Walmart 0.21~0.23 | Hy-Vee 0.50~0.47 | Baker\u0027s 0.21~0.21"
+                      },
+                      {
+                          "recipe_id":  "coconut-milk",
+                          "board_id":  "coconut-milk-canned",
+                          "recipe_label":  "Coconut Milk (Canned)",
+                          "board_label":  "Canned Coconut Milk",
+                          "unit":  "floz-\u003efloz x1",
+                          "stores_agreeing":  "3/4",
+                          "prices":  "Walmart 0.15~0.15 | Sam\u0027s Club 0.14~0.14 | Hy-Vee 0.25~0.22 | Baker\u0027s 0.22!=0.15"
+                      },
+                      {
+                          "recipe_id":  "pepperoncini",
+                          "board_id":  "banana-peppers",
+                          "recipe_label":  "Pepperoncini",
+                          "board_label":  "Banana Peppers / Pepperoncini",
+                          "unit":  "floz-\u003eoz x1.0431",
+                          "stores_agreeing":  "4/4",
+                          "prices":  "Family Fare 0.27~0.26 | Walmart 0.16~0.15 | Hy-Vee 0.28~0.26 | Baker\u0027s 0.25~0.19"
+                      },
+                      {
+                          "recipe_id":  "fresh-cilantro",
+                          "board_id":  "cilantro",
+                          "recipe_label":  "Fresh Cilantro",
+                          "board_label":  "Cilantro (bunch)",
+                          "unit":  "each-\u003eeach x1",
+                          "stores_agreeing":  "3/4",
+                          "prices":  "Walmart 0.93!=1.78 | Hy-Vee 0.99~0.99 | Aldi 0.99~0.89 | Baker\u0027s 0.99~0.99"
+                      },
+                      {
+                          "recipe_id":  "jalapeno",
+                          "board_id":  "jalapenos",
+                          "recipe_label":  "Jalapeno Pepper",
+                          "board_label":  "Jalapeno Peppers",
+                          "unit":  "lb-\u003elb x1",
+                          "stores_agreeing":  "3/3",
+                          "prices":  "Hy-Vee 2.99~2.99 | Aldi 1.90~1.70 | Baker\u0027s 1.99~1.99"
+                      },
+                      {
+                          "recipe_id":  "worcestershire-sauce",
+                          "board_id":  "worcestershire",
+                          "recipe_label":  "Worcestershire Sauce",
+                          "board_label":  "Worcestershire Sauce",
+                          "unit":  "floz-\u003efloz x1",
+                          "stores_agreeing":  "2/2",
+                          "prices":  "Walmart 0.10~0.10 | Hy-Vee 0.10~0.10"
+                      },
+                      {
+                          "recipe_id":  "feta-cheese",
+                          "board_id":  "feta",
+                          "recipe_label":  "Feta Cheese",
+                          "board_label":  "Feta Cheese",
+                          "unit":  "oz-\u003eoz x1",
+                          "stores_agreeing":  "4/4",
+                          "prices":  "Walmart 0.56~0.66 | Sam\u0027s Club 0.30~0.30 | Hy-Vee 0.75~0.62 | Aldi 0.52~0.47"
+                      },
+                      {
+                          "recipe_id":  "cucumber",
+                          "board_id":  "cucumbers",
+                          "recipe_label":  "Cucumber",
+                          "board_label":  "Cucumbers",
+                          "unit":  "each-\u003eeach x1",
+                          "stores_agreeing":  "5/6",
+                          "prices":  "Family Fare 0.89~0.89 | Walmart 0.76~0.76 | Sam\u0027s Club 1.09!=0.38 | Hy-Vee 0.99~0.99 | Aldi 0.65~0.65 | Baker\u0027s 0.89~0.89"
+                      },
+                      {
+                          "recipe_id":  "all-purpose-flour",
+                          "board_id":  "flour",
+                          "recipe_label":  "All-Purpose Flour",
+                          "board_label":  "All-Purpose Flour",
+                          "unit":  "oz-\u003elb x0.0625",
+                          "stores_agreeing":  "6/6",
+                          "prices":  "Family Fare 0.04~0.03 | Walmart 0.03~0.03 | Sam\u0027s Club 0.02~0.02 | Hy-Vee 0.04~0.03 | Aldi 0.03~0.02 | Baker\u0027s 0.03~0.03"
+                      }
+                  ],
+    "unproven":  [
+                     {
+                         "recipe_id":  "93-7-ground-turkey",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "ground-turkey",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "boneless-skinless-chicken-thigh",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "chicken-breast",
+                         "score":  0.75
+                     },
+                     {
+                         "recipe_id":  "1-3-fat-cream-cheese",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "cream-cheese",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "apple",
+                         "reason":  "unit mismatch (row \u0027each\u0027 vs board \u0027lb\u0027)",
+                         "best_guess":  "apples"
+                     },
+                     {
+                         "recipe_id":  "cashews",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  null,
+                         "score":  0
+                     },
+                     {
+                         "recipe_id":  "cheddar-cheese-shredded",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "shredded-cheese",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "frozen-chopped-spinach",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "shrimp",
+                         "score":  0.33
+                     },
+                     {
+                         "recipe_id":  "frozen-green-peas",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "frozen-peas",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "golden-raisins",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "raisins",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "greek-yogurt",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "yogurt",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "green-beans",
+                         "reason":  "label+unit matched \u0027fresh-green-beans\u0027 but only 0/4 store prices agree (form difference?)",
+                         "best_guess":  "fresh-green-beans",
+                         "prices":  "Walmart 0.05!=0.10 | Aldi 0.06!=0.19 | Hy-Vee 0.06!=0.19 | Baker\u0027s 0.07!=0.14"
+                     },
+                     {
+                         "recipe_id":  "hickory-smoked-bacon",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "bacon",
+                         "score":  0.33
+                     },
+                     {
+                         "recipe_id":  "honey-dijon-mustard",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "dijon-mustard",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "light-sour-cream",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "sour-cream",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "pineapple-chunks",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "pineapple",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "provolone-cheese",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "cottage-cheese",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "red-bell-pepper",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "bell-peppers",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "roasted-red-peppers",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "red-pepper-flakes",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "rotini-pasta",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "pasta",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "sugar-free-maple-syrup",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "maple-syrup",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "traditional-pasta-sauce",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "pasta-sauce",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "zero-sugar-soda",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "sugar",
+                         "score":  0.33
+                     },
+                     {
+                         "recipe_id":  "93-7-ground-beef",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "ground-beef-8020",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "sugar-free-bbq-sauce",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "bbq-sauce",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "beef-chuck-roast",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "chuck-roast",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "frozen-broccoli-florets",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "frozen-broccoli",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "buffalo-wing-sauce",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "pasta-sauce",
+                         "score":  0.33
+                     },
+                     {
+                         "recipe_id":  "diced-green-chiles",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "tomatoes-green-chilies",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "fajita-seasoning",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "taco-seasoning",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "frozen-green-beans",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "fresh-green-beans",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "green-bell-pepper",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "bell-peppers",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "hot-honey",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "hot-dogs",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "hot-italian-sausage",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "italian-sausage",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "parmesan-cheese",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "parmesan",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "penne-pasta",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "pasta",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "reduced-fat-mozzarella",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "shredded-cheese",
+                         "score":  0.25
+                     },
+                     {
+                         "recipe_id":  "jasmine-rice",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "rice",
+                         "score":  0.33
+                     },
+                     {
+                         "recipe_id":  "salsa-verde",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "salsa",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "seasoned-black-beans",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "canned-black-beans",
+                         "score":  0.75
+                     },
+                     {
+                         "recipe_id":  "shredded-carrots",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "shredded-cheese",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "canned-sweet-corn",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "sweet-corn",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "turkey-pepperoni",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "ground-turkey",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "zero-sugar-soda-2l",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "sugar",
+                         "score":  0.33
+                     },
+                     {
+                         "recipe_id":  "pork-loin",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "pork-chops",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "fat-free-cheddar",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "cottage-cheese",
+                         "score":  0.25
+                     },
+                     {
+                         "recipe_id":  "corn-tortillas",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "sweet-corn",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "jerk-seasoning",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "italian-seasoning",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "liquid-smoke",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "dish-soap",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "smoked-paprika",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "kielbasa",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "mozzarella-cheese",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "cottage-cheese",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "apple-cider",
+                         "reason":  "label+unit matched \u0027apple-cider-vinegar\u0027 but only 0/2 store prices agree (form difference?)",
+                         "best_guess":  "apple-cider-vinegar",
+                         "prices":  "Family Fare 0.07!=0.12 | Baker\u0027s 0.17!=0.11"
+                     },
+                     {
+                         "recipe_id":  "au-jus-gravy-mix",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "pancake-mix",
+                         "score":  0.25
+                     },
+                     {
+                         "recipe_id":  "dried-rosemary",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "dried-oregano",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "condensed-french-onion-soup",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "onion-soup-mix",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "celery-salt",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "celery",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "sweet-chili-sauce",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "chili-beans",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "swiss-cheese",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "cottage-cheese",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "white-wine-vinegar",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "white-vinegar",
+                         "score":  0.67
+                     },
+                     {
+                         "recipe_id":  "pineapple-juice",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "orange-juice",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "cheddar-cheese",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "cottage-cheese",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "sriracha",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  null,
+                         "score":  0
+                     },
+                     {
+                         "recipe_id":  "breadcrumbs",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  "bread-crumbs",
+                         "score":  0.5
+                     },
+                     {
+                         "recipe_id":  "capers",
+                         "reason":  "no full-token board label match",
+                         "best_guess":  null,
+                         "score":  0
+                     }
+                 ]
+}

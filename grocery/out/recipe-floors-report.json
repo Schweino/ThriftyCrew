@@ -1,54 +1,29 @@
 ﻿{
     "derived_from":  "candidates-2026-07-23.json",
-    "updated_cells":  239,
-    "unchanged_cells":  147,
+    "updated_cells":  349,
+    "unchanged_cells":  212,
     "ids_with_no_board_match":  [
                                     "93-7-ground-turkey",
                                     "boneless-skinless-chicken-thigh",
                                     "1-3-fat-cream-cheese",
-                                    "apple",
-                                    "cannellini-beans",
                                     "cashews",
-                                    "cheddar-cheese-shredded",
-                                    "fries",
                                     "frozen-chopped-spinach",
-                                    "frozen-green-peas",
-                                    "ginger",
-                                    "golden-raisins",
                                     "greek-yogurt",
-                                    "green-beans",
-                                    "green-cabbage",
-                                    "hickory-smoked-bacon",
                                     "honey-dijon-mustard",
                                     "light-sour-cream",
-                                    "marinara-sauce",
                                     "olives",
-                                    "pineapple-chunks",
-                                    "potato",
                                     "provolone-cheese",
                                     "red-bell-pepper",
                                     "roasted-red-peppers",
-                                    "rotini-pasta",
                                     "sugar-free-maple-syrup",
-                                    "traditional-pasta-sauce",
-                                    "white-mushrooms",
                                     "zero-sugar-soda",
                                     "93-7-ground-beef",
                                     "sugar-free-bbq-sauce",
-                                    "beef-chuck-roast",
                                     "frozen-broccoli-florets",
                                     "buffalo-wing-sauce",
-                                    "chipotle-in-adobo",
-                                    "coconut-milk",
-                                    "diced-green-chiles",
                                     "fajita-seasoning",
                                     "frozen-green-beans",
-                                    "green-bell-pepper",
                                     "hot-honey",
-                                    "hot-italian-sausage",
-                                    "parmesan-cheese",
-                                    "penne-pasta",
-                                    "pepperoncini",
                                     "reduced-fat-mozzarella",
                                     "jasmine-rice",
                                     "salsa-verde",
@@ -61,14 +36,8 @@
                                     "fat-free-cheddar",
                                     "corn-tortillas",
                                     "jerk-seasoning",
-                                    "fresh-cilantro",
-                                    "jalapeno",
                                     "liquid-smoke",
-                                    "worcestershire-sauce",
                                     "smoked-paprika",
-                                    "feta-cheese",
-                                    "mozzarella-cheese",
-                                    "cucumber",
                                     "apple-cider",
                                     "au-jus-gravy-mix",
                                     "dried-rosemary",
@@ -78,13 +47,12 @@
                                     "swiss-cheese",
                                     "white-wine-vinegar",
                                     "pineapple-juice",
-                                    "cheddar-cheese",
-                                    "all-purpose-flour",
                                     "sriracha",
                                     "breadcrumbs",
                                     "capers"
                                 ],
     "ids_with_unit_mismatch":  [
+                                   "apple (row \u0027each\u0027 vs board \u0027lb\u0027)",
                                    "milk (row \u0027each\u0027 vs board \u0027gallon\u0027)",
                                    "ranch-seasoning-mix (row \u0027each\u0027 vs board \u0027oz\u0027)",
                                    "taco-seasoning (row \u0027each\u0027 vs board \u0027oz\u0027)",
@@ -93,11 +61,26 @@
     "cells_with_no_everyday_candidate":  [
                                              "balsamic-vinegar/Family Fare",
                                              "brown-sugar/Family Fare",
+                                             "cannellini-beans/Family Fare",
                                              "dijon-mustard/Family Fare",
                                              "enchilada-sauce/Family Fare",
+                                             "frozen-green-peas/Sam\u0027s Club",
+                                             "ginger/Sam\u0027s Club",
+                                             "ginger/Family Fare",
+                                             "golden-raisins/Family Fare",
+                                             "golden-raisins/Baker\u0027s",
+                                             "green-beans/Baker\u0027s",
+                                             "green-beans/Family Fare",
+                                             "green-cabbage/Family Fare",
                                              "hominy/Family Fare",
+                                             "pineapple-chunks/Baker\u0027s",
+                                             "pineapple-chunks/Family Fare",
                                              "poblano-peppers/Family Fare",
                                              "red-wine-vinegar/Family Fare",
+                                             "coconut-milk/Family Fare",
+                                             "green-bell-pepper/Family Fare",
+                                             "green-bell-pepper/Hy-Vee",
+                                             "parmesan-cheese/Baker\u0027s",
                                              "pork-tenderloin/Sam\u0027s Club",
                                              "sun-dried-tomatoes/Baker\u0027s",
                                              "teriyaki-sauce/Family Fare",
@@ -106,6 +89,13 @@
                                              "teriyaki-sauce/Baker\u0027s",
                                              "rice-vinegar/Family Fare",
                                              "rice-vinegar/Aldi",
+                                             "fresh-cilantro/Family Fare",
+                                             "jalapeno/Family Fare",
+                                             "worcestershire-sauce/Family Fare",
+                                             "worcestershire-sauce/Sam\u0027s Club",
+                                             "worcestershire-sauce/Baker\u0027s",
+                                             "feta-cheese/Family Fare",
+                                             "feta-cheese/Baker\u0027s",
                                              "dried-basil/Family Fare",
                                              "green-onions/Aldi",
                                              "apple-cider-vinegar/Hy-Vee",
@@ -190,6 +180,48 @@
                                   "item":  "Las Palmas Mild Enchilada Sauce, 28 oz"
                               },
                               {
+                                  "id":  "fries",
+                                  "store":  "Sam\u0027s Club",
+                                  "old":  0.0334,
+                                  "new":  0.067,
+                                  "item":  "Ore-Ida Crispy Crinkles French Fries, Frozen 8 lbs."
+                              },
+                              {
+                                  "id":  "fries",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.1088,
+                                  "new":  0.1374,
+                                  "item":  "Hy-Vee Crinkle Cut Fries"
+                              },
+                              {
+                                  "id":  "fries",
+                                  "store":  "Family Fare",
+                                  "old":  0.1559,
+                                  "new":  0.1158,
+                                  "item":  "Frozen Carrots, Crinkle Cut Our Family Steamable"
+                              },
+                              {
+                                  "id":  "frozen-green-peas",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.1458,
+                                  "new":  0.0817,
+                                  "item":  "That\u0027s Smart! Sweet Peas (Frozen)"
+                              },
+                              {
+                                  "id":  "ginger",
+                                  "store":  "Hy-Vee",
+                                  "old":  4.49,
+                                  "new":  5.99,
+                                  "item":  "Melissa Ginger Root"
+                              },
+                              {
+                                  "id":  "hickory-smoked-bacon",
+                                  "store":  "Family Fare",
+                                  "old":  7.99,
+                                  "new":  5.495,
+                                  "item":  "Chuck Wagon Bacon, Smoked, Ends \u0026 Pieces 32 Oz"
+                              },
+                              {
                                   "id":  "hominy",
                                   "store":  "Baker\u0027s",
                                   "old":  0.1155,
@@ -267,6 +299,27 @@
                                   "item":  "Creamy Peanut Butter Our Family"
                               },
                               {
+                                  "id":  "potato",
+                                  "store":  "Walmart",
+                                  "old":  0.88,
+                                  "new":  0.55,
+                                  "item":  "Fresh Russet Potatoes, 5 lb Bag"
+                              },
+                              {
+                                  "id":  "potato",
+                                  "store":  "Family Fare",
+                                  "old":  0.99,
+                                  "new":  0.549,
+                                  "item":  "Our Family Potatoes Russet Idaho"
+                              },
+                              {
+                                  "id":  "rotini-pasta",
+                                  "store":  "Aldi",
+                                  "old":  0.1369,
+                                  "new":  0.0591,
+                                  "item":  "Reggano Spaghetti"
+                              },
+                              {
                                   "id":  "sesame-oil",
                                   "store":  "Baker\u0027s",
                                   "old":  1.24,
@@ -302,6 +355,20 @@
                                   "item":  "Our Family Tomato Paste 12 Oz"
                               },
                               {
+                                  "id":  "traditional-pasta-sauce",
+                                  "store":  "Family Fare",
+                                  "old":  0.0829,
+                                  "new":  0.1621,
+                                  "item":  "Full Circle Market Pasta Sauce, Marinara 24 Oz"
+                              },
+                              {
+                                  "id":  "white-mushrooms",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.54,
+                                  "new":  0.2488,
+                                  "item":  "Highline Whole White Mushrooms"
+                              },
+                              {
                                   "id":  "white-vinegar",
                                   "store":  "Sam\u0027s Club",
                                   "old":  0.047,
@@ -316,11 +383,32 @@
                                   "item":  "Hy Vee White Distilled Vinegar"
                               },
                               {
+                                  "id":  "coconut-milk",
+                                  "store":  "Baker\u0027s",
+                                  "old":  0.22,
+                                  "new":  0.1474,
+                                  "item":  "Simple Truth Organic® Unsweetened Coconut Milk 13.5 fl oz"
+                              },
+                              {
+                                  "id":  "diced-green-chiles",
+                                  "store":  "Walmart",
+                                  "old":  0.22,
+                                  "new":  0.3671,
+                                  "item":  "Ortega Mild Fire Roasted Diced Green Chiles, Kosher, 7 oz Ca"
+                              },
+                              {
                                   "id":  "ground-cumin",
                                   "store":  "Family Fare",
                                   "old":  1.745,
                                   "new":  1.145,
                                   "item":  "Sugar \u0027N Spice Cumin Ground Pp"
+                              },
+                              {
+                                  "id":  "hot-italian-sausage",
+                                  "store":  "Walmart",
+                                  "old":  4.98,
+                                  "new":  2.5011,
+                                  "item":  "Marketside Mild Italian Sausage 5 Links"
                               },
                               {
                                   "id":  "hot-sauce",
@@ -349,6 +437,20 @@
                                   "old":  0.37,
                                   "new":  0.2756,
                                   "item":  "Kroger Extra Virgin Olive Oil"
+                              },
+                              {
+                                  "id":  "penne-pasta",
+                                  "store":  "Family Fare",
+                                  "old":  0.1181,
+                                  "new":  0.0778,
+                                  "item":  "Dried Spaghetti Pasta, Thin Our Family"
+                              },
+                              {
+                                  "id":  "penne-pasta",
+                                  "store":  "Sam\u0027s Club",
+                                  "old":  0.0888,
+                                  "new":  0.0571,
+                                  "item":  "Member\u0027s Mark Spaghetti Pasta Pantry Pack, 1 lb., 6 pk."
                               },
                               {
                                   "id":  "sun-dried-tomatoes",
@@ -414,6 +516,13 @@
                                   "item":  "Thats Smart Black Pepper"
                               },
                               {
+                                  "id":  "fresh-cilantro",
+                                  "store":  "Walmart",
+                                  "old":  0.93,
+                                  "new":  1.78,
+                                  "item":  "Fresh Cut Cilantro Clamshell"
+                              },
+                              {
                                   "id":  "dried-parsley",
                                   "store":  "Walmart",
                                   "old":  1.44,
@@ -426,6 +535,13 @@
                                   "old":  1.18,
                                   "new":  2.86,
                                   "item":  "Kroger Ground Red Cayenne Pepper Shaker"
+                              },
+                              {
+                                  "id":  "cucumber",
+                                  "store":  "Sam\u0027s Club",
+                                  "old":  1.09,
+                                  "new":  0.3827,
+                                  "item":  "Member\u0027s Mark by FujiSan Cucumber Avocado Roll, 15 pcs."
                               },
                               {
                                   "id":  "ground-ginger",

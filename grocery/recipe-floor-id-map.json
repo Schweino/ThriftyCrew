@@ -1,4 +1,39 @@
-{
-  "readme": "recipe-floor-id -> board-commodity-id mappings for derive-recipe-floors.ps1. EVERY entry is a ONE-TIME HUMAN VERIFICATION that the two ids are the SAME commodity in the SAME form (fresh vs frozen, block vs shredded, plain vs seasoned all count as DIFFERENT). A verified entry automates that row's monthly floor refresh forever; a wrong one silently prices the floor off a different product (the board-collision class). Add entries as the monthly agent hand-checks the no-board-match list; include reviewed dates.",
-  "map": {}
+﻿{
+    "readme":  "recipe-floor-id -\u003e board-commodity-id mappings for derive-recipe-floors.ps1. EVERY entry is a ONE-TIME HUMAN VERIFICATION that the two ids are the SAME commodity in the SAME form (fresh vs frozen, block vs shredded, plain vs seasoned all count as DIFFERENT). A verified entry automates that row\u0027s monthly floor refresh forever; a wrong one silently prices the floor off a different product (the board-collision class). Add entries as the monthly agent hand-checks the no-board-match list; include reviewed dates.",
+    "map":  {
+                "ginger":  "fresh-ginger",
+                "fresh-cilantro":  "cilantro",
+                "worcestershire-sauce":  "worcestershire",
+                "feta-cheese":  "feta",
+                "hickory-smoked-bacon":  "bacon",
+                "jalapeno":  "jalapenos",
+                "frozen-green-peas":  "frozen-peas",
+                "mozzarella-cheese":  "shredded-cheese",
+                "cucumber":  "cucumbers",
+                "traditional-pasta-sauce":  "pasta-sauce",
+                "golden-raisins":  "raisins",
+                "rotini-pasta":  "pasta",
+                "fries":  "frozen-fries",
+                "green-cabbage":  "cabbage",
+                "cannellini-beans":  "canned-white-beans",
+                "green-bell-pepper":  "bell-peppers",
+                "marinara-sauce":  "pasta-sauce",
+                "penne-pasta":  "pasta",
+                "white-mushrooms":  "mushrooms",
+                "coconut-milk":  "coconut-milk-canned",
+                "potato":  "russet-potatoes",
+                "beef-chuck-roast":  "chuck-roast",
+                "chipotle-in-adobo":  "chipotle-adobo",
+                "green-beans":  "canned-green-beans",
+                "parmesan-cheese":  "parmesan",
+                "pineapple-chunks":  "canned-pineapple",
+                "hot-italian-sausage":  "italian-sausage",
+                "cheddar-cheese-shredded":  "shredded-cheese",
+                "cheddar-cheese":  "shredded-cheese",
+                "pepperoncini":  "banana-peppers",
+                "diced-green-chiles":  "canned-green-chilies",
+                "all-purpose-flour":  "flour",
+                "apple":  "apples"
+            },
+    "review_log":  "2026-07-23: 16 mappings accepted from propose-floor-id-map.ps1 evidence gate (full label-token match + unit reconciliation + multi-store price agreement \u003c=25%) with human review of each; REJECTED olives-\u003eolive-oil (single-token false positive, different product) - see out/floor-id-map-proposals.json for the evidence rows. pepperoncini-\u003ebanana-peppers verified intentional: the board commodity label is literally Banana Peppers / Pepperoncini. ROUND 2 (2026-07-23): 17 more accepted via curated price-test (\u003e=2-store everyday agreement + form review). REJECTED with evidence: boneless-skinless-chicken-thigh-\u003echicken-thighs (board=bone-in drumstick pricing, 1/6), jasmine-rice-\u003erice (0/6, jasmine pricier), salsa-verde-\u003esalsa (1/5), seasoned-black-beans-\u003ecanned-black-beans (1/4), 93-7-ground-turkey-\u003eground-turkey (3 stores cheapest = fattier grind, would understate), red-bell-pepper-\u003ebell-peppers (board cheapest = green), zero-sugar-soda-2l-\u003esoda (2L vs 12-pack economics), frozen-broccoli-florets-\u003efrozen-broccoli (cuts-vs-florets understating risk). apple-\u003eapples accepted on identity; its each-vs-lb unit mismatch is the deriver\u0027s refusal flow, safe."
 }
