@@ -1,0 +1,22 @@
+{
+  "week_of": "2026-07-22",
+  "verdicts": [
+    { "id": "strawberries", "entries": [ { "store": "Sam's Club", "keep": false, "annotation": null, "reason": "Monster Energy Strawberry Shot is an energy drink, not strawberries" } ] },
+    { "id": "ground-cinnamon", "entries": [ { "store": "Sam's Club", "keep": false, "annotation": null, "reason": "Pillsbury Cinnamon Rolls, not ground cinnamon spice" } ] },
+    { "id": "toasted-sesame-seeds", "entries": [ { "store": "Hy-Vee", "keep": false, "annotation": null, "reason": "Ball Park Sesame Seed Burger Buns, not sesame seeds" } ] },
+    { "id": "sun-dried-tomatoes", "entries": [ { "store": "Hy-Vee", "keep": false, "annotation": null, "reason": "Mission Sun-Dried Tomato Basil tortilla Wraps, not sun-dried tomatoes" } ] },
+    { "id": "fresh-mint", "entries": [ { "store": "Family Fare", "keep": false, "annotation": null, "reason": "TheraBreath Fresh Mint Oral Rinse (mouthwash), not fresh mint herb" } ] },
+    { "id": "poppy-seeds", "entries": [ { "store": "Hy-Vee", "keep": false, "annotation": null, "reason": "Lemon Poppy Seed Dessert Loaf (cake), not poppy seeds" } ] },
+    { "id": "cucumbers", "entries": [ { "store": "Sam's Club", "keep": false, "annotation": null, "reason": "Cucumber Avocado sushi Roll, not cucumbers" } ] },
+    { "id": "grits", "entries": [ { "store": "Sam's Club", "keep": false, "annotation": null, "reason": "$0.0023/oz is an impossible price - per-packet size mis-divided" } ] },
+    { "id": "pita-bread", "entries": [ { "store": "Sam's Club", "keep": false, "annotation": null, "reason": "Stacy's Pita Thins (chips/crackers), not pita bread" } ] },
+    { "id": "olive-oil", "entries": [ { "store": "Family Fare", "keep": false, "annotation": null, "reason": "Violi Mediterranean Blend (sunflower + olive blend), not pure olive oil" } ] },
+    { "id": "broccoli", "entries": [ { "store": "Sam's Club", "keep": false, "annotation": null, "reason": "frozen Broccoli Normandy blend (broccoli/cauliflower/carrot), not fresh broccoli crowns" } ] },
+    { "id": "refrigerated-biscuits", "entries": [ { "store": "Baker's", "keep": false, "annotation": null, "reason": "$0.0155/oz implausibly low - bad size/count parse" } ] },
+    { "id": "spinach", "entries": [ { "store": "Hy-Vee", "keep": true, "annotation": "frozen chopped (commodity is fresh spinach)", "reason": "Birds Eye Chopped Spinach is frozen, not fresh" } ] },
+    { "id": "carrots", "entries": [ { "store": "Sam's Club", "keep": true, "annotation": "organic, 5 lb bulk", "reason": "organic + bulk pack" } ] },
+    { "id": "avocados", "entries": [ { "store": "Walmart", "keep": true, "annotation": "small Hass", "reason": "small size variety" } ] },
+    { "id": "muffins", "entries": [ { "store": "Hy-Vee", "keep": true, "annotation": "mini/bite-size", "reason": "Entenmann's Little Bites are mini muffins" } ] },
+    { "id": "lettuce", "entries": [ { "store": "Walmart", "keep": true, "annotation": "romaine (commodity is iceberg)", "reason": "romaine hearts, not iceberg head" } ] }
+  ]
+}

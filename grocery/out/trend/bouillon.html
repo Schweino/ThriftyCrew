@@ -29,7 +29,7 @@
 <div class="tp-hero">
   <p class="tp-kicker">This week in Omaha</p>
   <div class="tp-price">$0.048<span class="tp-unit">/oz</span></div>
-  <div class="tp-where">Cheapest at Baker&#39;s, week of Jul 19</div>
+  <div class="tp-where">Cheapest at Baker&#39;s, week of Jul 22</div>
 </div>
 <p class="tp-record"><strong>Record low we have tracked:</strong> $0.048 per oz at Baker&#39;s (week of Jul 17). This week ties that low.</p>
 <p class="tp-read">At $0.048 per oz, this is the best price we have tracked for bouillon (cubes / granules / base). If it is on your list, this is a good week to stock up.</p>
@@ -125,13 +125,16 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-17","07-18","07-19"],"s":{"Baker's":[0.048,0.048,0.048],"Walmart":[0.0813,0.0813,0.0813],"Sam's Club":[0.1419,0.1419,0.1419],"Hy-Vee":[0.6316,0.6316,0.6316]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-17","07-18","07-19","07-20","07-21","07-22"],"s":{"Baker's":[0.048,0.048,0.048,0.048,0.048,0.048],"Walmart":[0.0813,0.0813,0.0813,0.0813,0.0813,null],"Sam's Club":[0.1419,0.1419,0.1419,0.1419,0.1419,0.28],"Hy-Vee":[0.6316,0.6316,0.6316,0.6316,0.6316,0.6316]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
 <table class="tp-table">
 <thead><tr><th>Week of</th><th>Cheapest price</th><th>Store</th></tr></thead>
 <tbody>
+<tr class="tp-low"><td>Jul 22</td><td>$0.048 per oz</td><td>Baker&#39;s</td></tr>
+<tr class="tp-low"><td>Jul 21</td><td>$0.048 per oz</td><td>Baker&#39;s</td></tr>
+<tr class="tp-low"><td>Jul 20</td><td>$0.048 per oz</td><td>Baker&#39;s</td></tr>
 <tr class="tp-low"><td>Jul 19</td><td>$0.048 per oz</td><td>Baker&#39;s</td></tr>
 <tr class="tp-low"><td>Jul 18</td><td>$0.048 per oz</td><td>Baker&#39;s</td></tr>
 <tr class="tp-low"><td>Jul 17</td><td>$0.048 per oz</td><td>Baker&#39;s</td></tr>
@@ -141,8 +144,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Baker&#39;s</td><td>$0.048 per oz</td><td><span class="tp-item">Knorr Chicken Cube Bouillon 8 ct / 3.1 oz</span></td></tr>
-<tr><td>Walmart</td><td>$0.0813 per oz</td><td><span class="tp-item">Knorr Select Vegetable Base, Shelf Stable Granulated Bouillo</span></td></tr>
-<tr><td>Sam&#39;s Club</td><td>$0.1419 per oz</td><td><span class="tp-item">Knorr Chicken Flavor Bouillon 70.4 oz.</span></td></tr>
+<tr><td>Sam&#39;s Club</td><td>$0.28 per oz</td><td><span class="tp-item">Member&#39;s Mark Beef Bouillon, 32 oz.</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.6316 per oz</td><td><span class="tp-item">Knorr Chicken Flavor Bouillon Granulated</span></td></tr>
 </tbody></table>
 <p class="tp-links"><a href="/omaha-grocery-prices/?ref=trend">See the full live Omaha price board</a> &middot; <a href="/omaha-price-tracker/?ref=trend">All tracked staples</a></p>

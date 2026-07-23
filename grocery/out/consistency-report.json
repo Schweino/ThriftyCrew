@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-07-22 13:34",
+    "generated":  "2026-07-23 06:55",
     "tol":  0.3,
     "no_link_count":  415,
     "max_no_link":  0,
@@ -1695,8 +1695,18 @@
                         "store":  "Hy-Vee"
                     }
                 ],
-    "mismatch_count":  41,
+    "mismatch_count":  52,
     "mismatch":  [
+                     {
+                         "id":  "hot-dogs",
+                         "store":  "Sam\u0027s Club",
+                         "unit":  "oz",
+                         "board":  0.2262,
+                         "link":  0.155,
+                         "off_pct":  31,
+                         "product":  "Ball Park Classic Original Length Hot Dogs, 24 ct.",
+                         "size":  "2.815 lb"
+                     },
                      {
                          "id":  "balsamic-vinegar",
                          "store":  "Hy-Vee",
@@ -1749,6 +1759,16 @@
                      },
                      {
                          "id":  "brown-sugar",
+                         "store":  "Walmart",
+                         "unit":  "oz",
+                         "board":  0.062,
+                         "link":  0.16,
+                         "off_pct":  158,
+                         "product":  "Florida Crystals Regenerative Organic Light Brown Sugar, 24 oz Pouch",
+                         "size":  "24 oz"
+                     },
+                     {
+                         "id":  "brown-sugar",
                          "store":  "Hy-Vee",
                          "unit":  "oz",
                          "board":  0.0934,
@@ -1766,6 +1786,16 @@
                          "off_pct":  100,
                          "product":  "Splenda Brown Sugar Blend 1 Lb",
                          "size":  "16 oz"
+                     },
+                     {
+                         "id":  "curry-powder",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  2.49,
+                         "link":  1.395,
+                         "off_pct":  44,
+                         "product":  "Sugar N Spice Curry Powder Pp",
+                         "size":  "2 oz"
                      },
                      {
                          "id":  "enchilada-sauce",
@@ -1796,6 +1826,16 @@
                          "off_pct":  63,
                          "product":  "Juanita\u0027s Foods Mexican Style Hominy, 110 oz, Can 110 oz t",
                          "size":  "110 oz"
+                     },
+                     {
+                         "id":  "honey",
+                         "store":  "Walmart",
+                         "unit":  "oz",
+                         "board":  0.225,
+                         "link":  0.5388,
+                         "off_pct":  139,
+                         "product":  "Texas Roadhouse Honey Cinnamon Whipped Buttery Spread, 7.35 oz",
+                         "size":  "7.35 oz"
                      },
                      {
                          "id":  "honey",
@@ -1879,6 +1919,16 @@
                      },
                      {
                          "id":  "toasted-sesame-seeds",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  2.65,
+                         "link":  0.2959,
+                         "off_pct":  89,
+                         "product":  "Pepperidge Farm® Soft White With Sesame Seeds Hoagie Rolls 14.500 Oz",
+                         "size":  "14.500 oz"
+                     },
+                     {
+                         "id":  "toasted-sesame-seeds",
                          "store":  "Hy-Vee",
                          "unit":  "oz",
                          "board":  2.65,
@@ -1929,6 +1979,16 @@
                      },
                      {
                          "id":  "olive-oil",
+                         "store":  "Sam\u0027s Club",
+                         "unit":  "floz",
+                         "board":  0.19,
+                         "link":  0.2808,
+                         "off_pct":  48,
+                         "product":  "Filippo Berio Extra Virgin Olive Oil, 67.6 oz.",
+                         "size":  "67.6 oz"
+                     },
+                     {
+                         "id":  "olive-oil",
                          "store":  "Family Fare",
                          "unit":  "floz",
                          "board":  0.3991,
@@ -1936,6 +1996,16 @@
                          "off_pct":  48,
                          "product":  "Violi Mediterranean Blend, Italian Sunflower \u0026 Extra Virgin Olive Oil 33.8 Oz",
                          "size":  "33.8 oz"
+                     },
+                     {
+                         "id":  "salsa",
+                         "store":  "Walmart",
+                         "unit":  "oz",
+                         "board":  0.123,
+                         "link":  0.342,
+                         "off_pct":  178,
+                         "product":  "WHOLLY Guacamole Avocado Verde Salsa 10 oz",
+                         "size":  "10 oz"
                      },
                      {
                          "id":  "sun-dried-tomatoes",
@@ -1956,6 +2026,16 @@
                          "off_pct":  61,
                          "product":  "Kikkoman Teriyaki BBQ Original 20.5 oz Glass Bottle",
                          "size":  "20.5 oz"
+                     },
+                     {
+                         "id":  "bay-leaves",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  33.25,
+                         "link":  15.3,
+                         "off_pct":  54,
+                         "product":  "Sugar \u0027N Spice Bay Leaves",
+                         "size":  "0.3 oz"
                      },
                      {
                          "id":  "rice-vinegar",
@@ -1986,6 +2066,26 @@
                          "off_pct":  76,
                          "product":  "Hy-Vee Iodized Salt",
                          "size":  "26 oz"
+                     },
+                     {
+                         "id":  "salt",
+                         "store":  "Walmart",
+                         "unit":  "oz",
+                         "board":  0.036,
+                         "link":  0.0827,
+                         "off_pct":  130,
+                         "product":  "Morton Coarse Kosher Salt, Coarse Salt for Cooking, 3 lb.",
+                         "size":  "48 oz"
+                     },
+                     {
+                         "id":  "salt",
+                         "store":  "Sam\u0027s Club",
+                         "unit":  "oz",
+                         "board":  0.0372,
+                         "link":  0.2545,
+                         "off_pct":  584,
+                         "product":  "Member\u0027s Mark Avocado Oil Veggie Straw Sea Salt, 23.5 oz.",
+                         "size":  "23.5 oz"
                      },
                      {
                          "id":  "ground-ginger",
@@ -2106,6 +2206,16 @@
                          "off_pct":  62,
                          "product":  "Pillsbury Cinnamon Rolls with Cinnabon Icing 13 oz., 4 pk.",
                          "size":  "52 oz"
+                     },
+                     {
+                         "id":  "ground-cinnamon",
+                         "store":  "Family Fare",
+                         "unit":  "oz",
+                         "board":  0.676,
+                         "link":  0.3328,
+                         "off_pct":  51,
+                         "product":  "Bakery Fresh White Iced Cinnamon Rolls (4 Ct)",
+                         "size":  "18 oz"
                      }
                  ]
 }

@@ -4,107 +4,27 @@
                  ],
     "refused":  [
                     {
-                        "id":  "ground-allspice",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
-                    },
-                    {
                         "id":  "applesauce",
                         "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
-                        "id":  "bacon",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
-                    },
-                    {
-                        "id":  "fresh-basil",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
-                    },
-                    {
-                        "id":  "bay-leaves",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
-                    },
-                    {
-                        "id":  "bell-peppers",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "bottled-water",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "cajun-seasoning",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "cayenne-pepper",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "cheese-tortellini",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "cherries",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "chili-crisp",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
                         "id":  "ground-cloves",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "ground-coriander",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "corn-muffin-mix",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "curry-powder",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "tomatoes-green-chilies",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "dried-dill",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "fish-sauce",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "storage-bags",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "frozen-pizza",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "garam-masala",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "gelatin",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "ground-ginger",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "grits",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "ground-cinnamon",
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
@@ -120,23 +40,11 @@
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
-                        "id":  "hoisin-sauce",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "ice-cream",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
                         "id":  "lime-juice",
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "mayonnaise",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "fresh-mint",
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
@@ -148,23 +56,11 @@
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
-                        "id":  "ground-nutmeg",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
                         "id":  "paper-towels",
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
-                        "id":  "plums",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
                         "id":  "poppy-seeds",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "pork-shoulder",
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
@@ -176,23 +72,11 @@
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
-                        "id":  "ranch-seasoning-mix",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "refrigerated-biscuits",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
                         "id":  "rice-noodles",
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "sesame-oil",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "toasted-sesame-seeds",
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
@@ -204,35 +88,7 @@
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
-                        "id":  "salt",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "taco-seasoning",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "toilet-bowl-cleaner",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "toilet-paper",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
                         "id":  "tomatillos",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "tomatoes",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "tortilla-chips",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "walnuts",
                         "why":  "not attempted - circuit breaker tripped"
                     },
                     {
@@ -240,7 +96,7 @@
                         "why":  "not attempted - circuit breaker tripped"
                     }
                 ],
-    "worked":  59,
-    "generated":  "2026-07-22 13:24",
+    "worked":  23,
+    "generated":  "2026-07-23 06:46",
     "board":  "comparison-2026-07-22.json"
 }

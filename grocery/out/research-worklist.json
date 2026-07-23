@@ -1,8 +1,13 @@
 ﻿{
-    "generated":  "2026-07-22 13:22",
+    "generated":  "2026-07-23 07:01",
     "items":  [
                   {
                       "commodity":  "almond-milk",
+                      "store":  "Baker\u0027s",
+                      "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
+                  },
+                  {
+                      "commodity":  "baby-wipes",
                       "store":  "Baker\u0027s",
                       "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
                   },
@@ -12,37 +17,12 @@
                       "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
                   },
                   {
-                      "commodity":  "bar-soap",
-                      "store":  "Baker\u0027s",
-                      "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
-                  },
-                  {
-                      "commodity":  "body-wash",
-                      "store":  "Baker\u0027s",
-                      "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
-                  },
-                  {
                       "commodity":  "cantaloupe",
                       "store":  "Aldi",
                       "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
                   },
                   {
-                      "commodity":  "cat-food",
-                      "store":  "Baker\u0027s",
-                      "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
-                  },
-                  {
-                      "commodity":  "cheese-crackers",
-                      "store":  "Baker\u0027s",
-                      "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
-                  },
-                  {
-                      "commodity":  "coffee-pods",
-                      "store":  "Baker\u0027s",
-                      "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
-                  },
-                  {
-                      "commodity":  "crackers",
+                      "commodity":  "charcoal",
                       "store":  "Baker\u0027s",
                       "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
                   },
@@ -52,52 +32,12 @@
                       "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
                   },
                   {
-                      "commodity":  "dryer-sheets",
+                      "commodity":  "pepperoni",
                       "store":  "Baker\u0027s",
                       "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
                   },
                   {
-                      "commodity":  "fruit-snacks",
-                      "store":  "Baker\u0027s",
-                      "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
-                  },
-                  {
-                      "commodity":  "conditioner",
-                      "store":  "Baker\u0027s",
-                      "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
-                  },
-                  {
-                      "commodity":  "oat-milk",
-                      "store":  "Baker\u0027s",
-                      "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
-                  },
-                  {
-                      "commodity":  "paper-plates",
-                      "store":  "Baker\u0027s",
-                      "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
-                  },
-                  {
-                      "commodity":  "pretzels",
-                      "store":  "Baker\u0027s",
-                      "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
-                  },
-                  {
-                      "commodity":  "protein-bars",
-                      "store":  "Baker\u0027s",
-                      "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
-                  },
-                  {
-                      "commodity":  "shampoo",
-                      "store":  "Baker\u0027s",
-                      "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
-                  },
-                  {
-                      "commodity":  "sparkling-water",
-                      "store":  "Baker\u0027s",
-                      "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
-                  },
-                  {
-                      "commodity":  "turkey-bacon",
+                      "commodity":  "sports-drinks",
                       "store":  "Baker\u0027s",
                       "reason":  "on sale now with no everyday fallback - research the next-cheapest EVERYDAY item so it does not vanish when the sale ends"
                   }

@@ -29,7 +29,7 @@
 <div class="tp-hero">
   <p class="tp-kicker">This week in Omaha</p>
   <div class="tp-price">$0.066<span class="tp-unit">/oz</span></div>
-  <div class="tp-where">Cheapest at Hy-Vee, week of Jul 19</div>
+  <div class="tp-where">Cheapest at Hy-Vee, week of Jul 22</div>
 </div>
 <p class="tp-record"><strong>Record low we have tracked:</strong> $0.066 per oz at Hy-Vee (week of Jul 17). This week ties that low.</p>
 <p class="tp-read">At $0.066 per oz, this is the best price we have tracked for sloppy joe sauce (manwich style). If it is on your list, this is a good week to stock up.</p>
@@ -125,13 +125,16 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-17","07-18","07-19"],"s":{"Hy-Vee":[0.066,0.066,0.066],"Walmart":[0.0931,0.0931,0.0931],"Baker's":[0.0994,0.0994,0.0994],"Family Fare":[null,null,0.1]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-17","07-18","07-19","07-20","07-21","07-22"],"s":{"Hy-Vee":[0.066,0.066,0.066,0.066,0.066,0.066],"Walmart":[0.0931,0.0931,0.0931,0.0931,0.0931,null],"Baker's":[0.0994,0.0994,0.0994,0.0994,0.0994,0.0994],"Family Fare":[null,null,0.1,0.1,0.1,0.1]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
 <table class="tp-table">
 <thead><tr><th>Week of</th><th>Cheapest price</th><th>Store</th></tr></thead>
 <tbody>
+<tr class="tp-low"><td>Jul 22</td><td>$0.066 per oz</td><td>Hy-Vee</td></tr>
+<tr class="tp-low"><td>Jul 21</td><td>$0.066 per oz</td><td>Hy-Vee</td></tr>
+<tr class="tp-low"><td>Jul 20</td><td>$0.066 per oz</td><td>Hy-Vee</td></tr>
 <tr class="tp-low"><td>Jul 19</td><td>$0.066 per oz</td><td>Hy-Vee</td></tr>
 <tr class="tp-low"><td>Jul 18</td><td>$0.066 per oz</td><td>Hy-Vee</td></tr>
 <tr class="tp-low"><td>Jul 17</td><td>$0.066 per oz</td><td>Hy-Vee</td></tr>
@@ -141,7 +144,6 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Hy-Vee</td><td>$0.066 per oz</td><td><span class="tp-item">Hy-Vee Sloppy Joe Sauce</span></td></tr>
-<tr><td>Walmart</td><td>$0.0931 per oz</td><td><span class="tp-item">Manwich Sloppy Joe Sauce, Bold Flavor, Canned Sauce, 16 oz.</span></td></tr>
 <tr><td>Baker&#39;s</td><td>$0.0994 per oz</td><td><span class="tp-item">Manwich Sloppy Joe Sauce Bold Flavor Canned Sauce 16 OZ ti</span></td></tr>
 <tr><td>Family Fare</td><td>$0.10 per oz</td><td><span class="tp-item">Manwich Sloppy Joe Sauce, Original 15 Oz</span></td></tr>
 </tbody></table>

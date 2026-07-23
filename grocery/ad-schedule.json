@@ -1,5 +1,5 @@
 ﻿{
-    "updated":  "2026-07-22",
+    "updated":  "2026-07-23",
     "note":  "Per-store weekly-ad cycle tracker. \u0027current\u0027 = the live ad window; \u0027next_pull\u0027 = day AFTER it expires (when the new ad is live), so the automation pulls each store the day its new ad drops. Dates are read from each store\u0027s OWN feed and SELF-CORRECT every pull (check-ad-cycles advances next_pull to the real new-ad end+1), so they never go stale. VERIFIED cadences (all weekly / 7-day): Hy-Vee = Mon-Sun (new ad Monday); Aldi = Wed-Tue (new ad Wednesday); Baker\u0027s = Wed-Tue (new ad Wednesday); Family Fare = Sun-Sat (new ad Sunday). Server ads (Hy-Vee/Aldi/Family Fare) auto-pull HEADLESS on their next_pull day; Baker\u0027s ad is BROWSER-only so its Wed next_pull is served by the Wednesday agent (fires Wed-Sat). Sam\u0027s + Walmart = no ad cycle (national), refreshed weekly by the browser agent.",
     "stores":  [
                    {
@@ -103,10 +103,10 @@
                        "method":  "browser",
                        "cadence_days":  7,
                        "current":  {
-                                       "from":  "2026-07-15",
-                                       "to":  "2026-07-21"
+                                       "from":  "2026-07-22",
+                                       "to":  "2026-07-28"
                                    },
-                       "next_pull":  "2026-07-22",
+                       "next_pull":  "2026-07-29",
                        "history":  [
                                        {
                                            "from":  "2026-07-01",
@@ -122,6 +122,11 @@
                                            "from":  "2026-07-15",
                                            "to":  "2026-07-21",
                                            "detected":  "2026-07-15"
+                                       },
+                                       {
+                                           "from":  "2026-07-22",
+                                           "to":  "2026-07-28",
+                                           "detected":  "2026-07-23"
                                        }
                                    ]
                    },
@@ -152,15 +157,20 @@
                        "method":  "browser",
                        "cadence_days":  7,
                        "current":  {
-                                       "from":  "2026-07-12",
-                                       "to":  "2026-07-18"
+                                       "from":  "2026-07-19",
+                                       "to":  "2026-07-25"
                                    },
-                       "next_pull":  "2026-07-19",
+                       "next_pull":  "2026-07-26",
                        "history":  [
                                        {
                                            "from":  "2026-07-12",
                                            "to":  "2026-07-18",
                                            "detected":  "2026-07-12"
+                                       },
+                                       {
+                                           "from":  "2026-07-19",
+                                           "to":  "2026-07-25",
+                                           "detected":  "2026-07-23"
                                        }
                                    ],
                        "note":  "Fareway Omaha (store 043). Board data = shop.fareway.com storefront (Instacart Storefront platform but NO markup - in-store prices, Omaha; browser-only) pulled by the Wednesday agent -\u003e build-fareway-regular.ps1 -\u003e out/regular/fareway-regular-*.json. Weekly ad = Sun-Sat image flyer (server-downloadable via pull-fareway-ads.ps1) + a monthly ad; ad SALE supplement -\u003e out/fareway/fareway-deals-*.json via -FarewayFile."

@@ -29,7 +29,7 @@
 <div class="tp-hero">
   <p class="tp-kicker">This week in Omaha</p>
   <div class="tp-price">$0.0548<span class="tp-unit">/oz</span></div>
-  <div class="tp-where">Cheapest at Aldi, week of Jul 19</div>
+  <div class="tp-where">Cheapest at Aldi, week of Jul 22</div>
 </div>
 <p class="tp-record"><strong>Record low we have tracked:</strong> $0.0548 per oz at Aldi (week of Jul 17). This week ties that low.</p>
 <p class="tp-read">At $0.0548 per oz, this is the best price we have tracked for canned white beans (great northern / cannellini / navy). If it is on your list, this is a good week to stock up.</p>
@@ -125,13 +125,16 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-17","07-18","07-19"],"s":{"Aldi":[0.0548,0.0548,0.0548],"Walmart":[0.0551,0.0551,0.0551],"Hy-Vee":[0.0639,0.0639,0.0639],"Baker's":[0.0645,0.0645,0.0645]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-17","07-18","07-19","07-20","07-21","07-22"],"s":{"Aldi":[0.0548,0.0548,0.0548,0.0548,0.0548,0.0548],"Walmart":[0.0551,0.0551,0.0551,0.0551,0.0551,null],"Hy-Vee":[0.0639,0.0639,0.0639,0.0568,0.0568,0.0568],"Baker's":[0.0645,0.0645,0.0645,0.0645,0.0645,0.0645]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
 <table class="tp-table">
 <thead><tr><th>Week of</th><th>Cheapest price</th><th>Store</th></tr></thead>
 <tbody>
+<tr class="tp-low"><td>Jul 22</td><td>$0.0548 per oz</td><td>Aldi</td></tr>
+<tr class="tp-low"><td>Jul 21</td><td>$0.0548 per oz</td><td>Aldi</td></tr>
+<tr class="tp-low"><td>Jul 20</td><td>$0.0548 per oz</td><td>Aldi</td></tr>
 <tr class="tp-low"><td>Jul 19</td><td>$0.0548 per oz</td><td>Aldi</td></tr>
 <tr class="tp-low"><td>Jul 18</td><td>$0.0548 per oz</td><td>Aldi</td></tr>
 <tr class="tp-low"><td>Jul 17</td><td>$0.0548 per oz</td><td>Aldi</td></tr>
@@ -141,8 +144,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Aldi</td><td>$0.0548 per oz</td><td><span class="tp-item">Dakota&#39;s Pride Cannellini Beans</span></td></tr>
-<tr><td>Walmart</td><td>$0.0551 per oz</td><td><span class="tp-item">Great Value Great Northern Beans, 15.5 oz</span></td></tr>
-<tr><td>Hy-Vee</td><td>$0.0639 per oz</td><td><span class="tp-item">Hy-Vee Cannellini Beans</span></td></tr>
+<tr><td>Hy-Vee</td><td>$0.0568 per oz</td><td><span class="tp-item">Hy-Vee Cannellini Beans</span></td></tr>
 <tr><td>Baker&#39;s</td><td>$0.0645 per oz</td><td><span class="tp-item">Kroger® Great Northern Beans 15.5 oz</span></td></tr>
 </tbody></table>
 <p class="tp-links"><a href="/omaha-grocery-prices/?ref=trend">See the full live Omaha price board</a> &middot; <a href="/omaha-price-tracker/?ref=trend">All tracked staples</a></p>

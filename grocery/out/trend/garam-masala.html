@@ -28,10 +28,10 @@
 </style>
 <div class="tp-hero">
   <p class="tp-kicker">This week in Omaha</p>
-  <div class="tp-price">$1.64<span class="tp-unit">/oz</span></div>
-  <div class="tp-where">Cheapest at Walmart, week of Jul 19</div>
+  <div class="tp-price">$3.09<span class="tp-unit">/oz</span></div>
+  <div class="tp-where">Cheapest at Baker&#39;s, week of Jul 22</div>
 </div>
-<p class="tp-record"><strong>Record low we have tracked:</strong> $0.994 per oz at Walmart (week of Jul 12). This week is about 65 percent above that low.</p>
+<p class="tp-record"><strong>Record low we have tracked:</strong> $0.994 per oz at Walmart (week of Jul 12). This week is about 211 percent above that low.</p>
 <p class="tp-read">This one is usually cheaper. The tracked low is $0.994 per oz at Walmart, so unless you need it right now, it may pay to wait a week or two.</p>
 <h2>Price history</h2>
 <div class="tp-chartwrap" id="tp-chart"></div>
@@ -125,13 +125,16 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-14","07-17","07-19"],"s":{"Walmart":[0.994,0.994,0.994,1.643],"Baker's":[2.6862,2.6862,2.6862,3.0876],"Hy-Vee":[3.5235,3.5235,3.5235,3.5235],"Family Fare":[3.6611,3.6611,3.6611,3.6611]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-14","07-17","07-19","07-20","07-21","07-22"],"s":{"Walmart":[0.994,0.994,0.994,1.643,1.643,1.643,null],"Baker's":[2.6862,2.6862,2.6862,3.0876,3.0876,3.0876,3.0876],"Hy-Vee":[3.5235,3.5235,3.5235,3.5235,3.5235,3.5235,3.5235],"Family Fare":[3.6611,3.6611,3.6611,3.6611,3.6611,3.6611,3.6611]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
 <table class="tp-table">
 <thead><tr><th>Week of</th><th>Cheapest price</th><th>Store</th></tr></thead>
 <tbody>
+<tr><td>Jul 22</td><td>$3.09 per oz</td><td>Baker&#39;s</td></tr>
+<tr><td>Jul 21</td><td>$1.64 per oz</td><td>Walmart</td></tr>
+<tr><td>Jul 20</td><td>$1.64 per oz</td><td>Walmart</td></tr>
 <tr><td>Jul 19</td><td>$1.64 per oz</td><td>Walmart</td></tr>
 <tr class="tp-low"><td>Jul 17</td><td>$0.994 per oz</td><td>Walmart</td></tr>
 <tr class="tp-low"><td>Jul 14</td><td>$0.994 per oz</td><td>Walmart</td></tr>
@@ -141,8 +144,7 @@ function tcChart(root, d){
 <table class="tp-table">
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
-<tr class="tp-low"><td>Walmart</td><td>$1.64 per oz</td><td><span class="tp-item">24 Mantra Organic Garam Masala</span></td></tr>
-<tr><td>Baker&#39;s</td><td>$3.09 per oz</td><td><span class="tp-item">Private Selection Garam Masala Blend Shaker</span></td></tr>
+<tr class="tp-low"><td>Baker&#39;s</td><td>$3.09 per oz</td><td><span class="tp-item">Private Selection Garam Masala Blend Shaker</span></td></tr>
 <tr><td>Hy-Vee</td><td>$3.52 per oz</td><td><span class="tp-item">McCormick Gourmet Garam Masala Blend, 1.7 oz</span></td></tr>
 <tr><td>Family Fare</td><td>$3.66 per oz</td><td><span class="tp-item">Finest Reserve Garam Masala 1.8 Oz</span></td></tr>
 </tbody></table>

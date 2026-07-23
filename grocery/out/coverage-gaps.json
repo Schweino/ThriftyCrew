@@ -1,11 +1,306 @@
 ﻿{
-    "generated":  "2026-07-22 13:22",
-    "gap_count":  19,
+    "generated":  "2026-07-23 07:01",
+    "gap_count":  341,
     "gaps":  [
+                 {
+                     "commodity":  "sweet-corn",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Sweet Corn on the Cob"
+                 },
+                 {
+                     "commodity":  "watermelon",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Seedless Watermelon"
+                 },
                  {
                      "commodity":  "bread",
                      "store":  "Family Fare",
                      "candidate":  "Our Family White Sandwich Bread"
+                 },
+                 {
+                     "commodity":  "bread",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value White Round Top Bread (20 oz loaf)"
+                 },
+                 {
+                     "commodity":  "canned-tuna",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Chunk Light Tuna in Water"
+                 },
+                 {
+                     "commodity":  "shrimp",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Frozen Raw Large Peeled Deveined Tail-off Shrimp Value Bag"
+                 },
+                 {
+                     "commodity":  "sirloin-steak",
+                     "store":  "Walmart",
+                     "candidate":  "Beef Choice Angus Thin Sliced Sirloin Tip Steak"
+                 },
+                 {
+                     "commodity":  "lemons",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Lemon"
+                 },
+                 {
+                     "commodity":  "limes",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Lime"
+                 },
+                 {
+                     "commodity":  "bell-peppers",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Green Bell Pepper"
+                 },
+                 {
+                     "commodity":  "celery",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Whole Celery Stalk"
+                 },
+                 {
+                     "commodity":  "cucumbers",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Cucumber"
+                 },
+                 {
+                     "commodity":  "garlic",
+                     "store":  "Walmart",
+                     "candidate":  "Garlic Bulb Fresh Whole"
+                 },
+                 {
+                     "commodity":  "spinach",
+                     "store":  "Walmart",
+                     "candidate":  "Marketside Fresh Spinach Bag"
+                 },
+                 {
+                     "commodity":  "mushrooms",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Whole White Mushrooms"
+                 },
+                 {
+                     "commodity":  "sweet-potatoes",
+                     "store":  "Walmart",
+                     "candidate":  "Sweet Potatoes Whole Fresh 3-Pound Bag"
+                 },
+                 {
+                     "commodity":  "bagels",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Pre-Sliced Plain Bagels 6 Count"
+                 },
+                 {
+                     "commodity":  "mac-and-cheese",
+                     "store":  "Walmart",
+                     "candidate":  "Kraft Mac and Cheese Original 5 Boxes"
+                 },
+                 {
+                     "commodity":  "ramen",
+                     "store":  "Walmart",
+                     "candidate":  "Maruchan Ramen Noodle Soup Chicken 12 Pack"
+                 },
+                 {
+                     "commodity":  "vegetable-oil",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Vegetable Oil 1 Gallon"
+                 },
+                 {
+                     "commodity":  "oatmeal",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value 100% Whole Grain Old Fashioned Oats"
+                 },
+                 {
+                     "commodity":  "jelly",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Concord Grape Jelly"
+                 },
+                 {
+                     "commodity":  "canned-black-beans",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Black Beans"
+                 },
+                 {
+                     "commodity":  "canned-corn",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value No Salt Added Golden Sweet Whole Kernel Corn"
+                 },
+                 {
+                     "commodity":  "diced-tomatoes",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Diced Tomatoes in Tomato Juice"
+                 },
+                 {
+                     "commodity":  "chicken-broth",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Chicken Broth Carton"
+                 },
+                 {
+                     "commodity":  "mustard",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Yellow Mustard Squeeze Bottle"
+                 },
+                 {
+                     "commodity":  "ranch-dressing",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Classic Ranch Dressing"
+                 },
+                 {
+                     "commodity":  "black-pepper",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Ground Black Pepper"
+                 },
+                 {
+                     "commodity":  "tortilla-chips",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Restaurant Style White Corn Tortilla Chips"
+                 },
+                 {
+                     "commodity":  "potato-chips",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Original Potato Chips Party Size"
+                 },
+                 {
+                     "commodity":  "bottled-water",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Purified Drinking Water 24 Count"
+                 },
+                 {
+                     "commodity":  "frozen-fries",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Crinkle Cut French Fried Potatoes"
+                 },
+                 {
+                     "commodity":  "paper-towels",
+                     "store":  "Walmart",
+                     "candidate":  "Scott Paper Towels Choose-A-Sheet 6 Double Rolls"
+                 },
+                 {
+                     "commodity":  "toilet-paper",
+                     "store":  "Walmart",
+                     "candidate":  "Scott ComfortPlus Toilet Paper 12 Mega Rolls"
+                 },
+                 {
+                     "commodity":  "dish-soap",
+                     "store":  "Walmart",
+                     "candidate":  "Dawn Ultra Dishwashing Liquid Original"
+                 },
+                 {
+                     "commodity":  "dishwasher-detergent",
+                     "store":  "Walmart",
+                     "candidate":  "Cascade Platinum Plus Dishwasher Pods 57 Count"
+                 },
+                 {
+                     "commodity":  "trash-bags",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value 13-Gallon Drawstring Tall Kitchen Trash Bags 40 Count"
+                 },
+                 {
+                     "commodity":  "aluminum-foil",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Aluminum Foil 75 sq ft Roll"
+                 },
+                 {
+                     "commodity":  "storage-bags",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Freezer Guard Double Zipper Freezer Bags Gallon 40 Count"
+                 },
+                 {
+                     "commodity":  "all-purpose-cleaner",
+                     "store":  "Walmart",
+                     "candidate":  "Murphy Oil Soap Cleaning Spray, No-Rinse Floor Cleaner, Orange Scent, 22 fl oz Bottle"
+                 },
+                 {
+                     "commodity":  "bleach",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Concentrated Liquid Bleach"
+                 },
+                 {
+                     "commodity":  "hand-soap",
+                     "store":  "Walmart",
+                     "candidate":  "Equate Liquid Hand Soap Clear Refill"
+                 },
+                 {
+                     "commodity":  "pears",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Pears Bartlett Bulk"
+                 },
+                 {
+                     "commodity":  "mangoes",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Red Mango"
+                 },
+                 {
+                     "commodity":  "cantaloupe",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Cantaloupe"
+                 },
+                 {
+                     "commodity":  "honeydew",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Honeydew Melon"
+                 },
+                 {
+                     "commodity":  "pineapple",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Pineapple"
+                 },
+                 {
+                     "commodity":  "raspberries",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Raspberries"
+                 },
+                 {
+                     "commodity":  "blackberries",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Blackberries"
+                 },
+                 {
+                     "commodity":  "cherries",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Red Cherries"
+                 },
+                 {
+                     "commodity":  "plums",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Plums"
+                 },
+                 {
+                     "commodity":  "grapefruit",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Grapefruit"
+                 },
+                 {
+                     "commodity":  "zucchini",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Zucchini"
+                 },
+                 {
+                     "commodity":  "cauliflower",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Whole White Cauliflower"
+                 },
+                 {
+                     "commodity":  "asparagus",
+                     "store":  "Walmart",
+                     "candidate":  "Marketside Fresh Asparagus Spears"
+                 },
+                 {
+                     "commodity":  "brussels-sprouts",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Whole Brussels Sprouts"
+                 },
+                 {
+                     "commodity":  "cabbage",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Green Cabbage"
+                 },
+                 {
+                     "commodity":  "kale",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Kale Greens Bunch"
+                 },
+                 {
+                     "commodity":  "green-onions",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Whole Green Onion Bunch"
                  },
                  {
                      "commodity":  "jalapenos",
@@ -13,9 +308,129 @@
                      "candidate":  "Famous Dave\u0027s Medium Jalapeno Corn Bread Mix 15 Oz"
                  },
                  {
+                     "commodity":  "jalapenos",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Jalapenos"
+                 },
+                 {
+                     "commodity":  "cilantro",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Cut Cilantro Clamshell"
+                 },
+                 {
+                     "commodity":  "fresh-ginger",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Ginger Root"
+                 },
+                 {
+                     "commodity":  "radishes",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Bagged Whole Red Radish"
+                 },
+                 {
+                     "commodity":  "red-potatoes",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Red Potatoes"
+                 },
+                 {
+                     "commodity":  "fresh-green-beans",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Green Beans"
+                 },
+                 {
+                     "commodity":  "ribeye-steak",
+                     "store":  "Walmart",
+                     "candidate":  "Ribeye Steak Choice Angus Beef"
+                 },
+                 {
+                     "commodity":  "chuck-roast",
+                     "store":  "Walmart",
+                     "candidate":  "Chuck Roast Choice Angus Beef"
+                 },
+                 {
+                     "commodity":  "ground-pork",
+                     "store":  "Walmart",
+                     "candidate":  "Tyson All Natural 85% Lean Ground Pork"
+                 },
+                 {
+                     "commodity":  "italian-sausage",
+                     "store":  "Walmart",
+                     "candidate":  "Marketside Mild Italian Sausage 5 Links"
+                 },
+                 {
+                     "commodity":  "bratwurst",
+                     "store":  "Walmart",
+                     "candidate":  "Marketside Beer \u0027N Bratwurst 5 Links"
+                 },
+                 {
+                     "commodity":  "kielbasa",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Fully Cooked Polska Kielbasa"
+                 },
+                 {
+                     "commodity":  "rotisserie-chicken",
+                     "store":  "Walmart",
+                     "candidate":  "Freshness Guaranteed Traditional Rotisserie Whole Chicken"
+                 },
+                 {
                      "commodity":  "tilapia",
                      "store":  "Hy-Vee",
                      "candidate":  "Encrusted tilapia fillet, $12.98 lb."
+                 },
+                 {
+                     "commodity":  "tilapia",
+                     "store":  "Walmart",
+                     "candidate":  "Marketside Farm Raised Skinless Tilapia Fillets"
+                 },
+                 {
+                     "commodity":  "cod",
+                     "store":  "Walmart",
+                     "candidate":  "Marketside Skinless Wild Caught Cod Fillet"
+                 },
+                 {
+                     "commodity":  "canned-chicken",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Chunk Chicken Breast"
+                 },
+                 {
+                     "commodity":  "pepperoni",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Original Pepperoni Slices"
+                 },
+                 {
+                     "commodity":  "heavy-cream",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Heavy Whipping Cream"
+                 },
+                 {
+                     "commodity":  "half-and-half",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Half \u0026 Half"
+                 },
+                 {
+                     "commodity":  "whipped-cream",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Original Dairy Whipped Topping"
+                 },
+                 {
+                     "commodity":  "almond-milk",
+                     "store":  "Walmart",
+                     "candidate":  "bettergoods Unsweetened Original Almond Milk"
+                 },
+                 {
+                     "commodity":  "oat-milk",
+                     "store":  "Walmart",
+                     "candidate":  "Planet Oat Original Oatmilk"
+                 },
+                 {
+                     "commodity":  "string-cheese",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Part-Skim Mozzarella String Cheese"
+                 },
+                 {
+                     "commodity":  "feta",
+                     "store":  "Walmart",
+                     "candidate":  "Frigo Crumbled Feta Cheese"
                  },
                  {
                      "commodity":  "egg-whites",
@@ -23,9 +438,149 @@
                      "candidate":  "Jimmy Dean Delights Croissant Breakfast Sandwiches With Turkey Sausage, Egg White, And Cheese, Frozen 4 Ct"
                  },
                  {
+                     "commodity":  "egg-whites",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value 100% Liquid Egg Whites"
+                 },
+                 {
+                     "commodity":  "buttermilk",
+                     "store":  "Walmart",
+                     "candidate":  "Kemps Select 1% Lowfat Buttermilk"
+                 },
+                 {
+                     "commodity":  "coffee-creamer",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value French Vanilla Coffee Creamer"
+                 },
+                 {
+                     "commodity":  "hot-dog-buns",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Hot Dog Buns White"
+                 },
+                 {
+                     "commodity":  "dinner-rolls",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Sweet Hawaiian Rolls"
+                 },
+                 {
+                     "commodity":  "english-muffins",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Original Fork Split English Muffins"
+                 },
+                 {
+                     "commodity":  "croissants",
+                     "store":  "Walmart",
+                     "candidate":  "Marketside All Butter Whole Croissants"
+                 },
+                 {
+                     "commodity":  "muffins",
+                     "store":  "Walmart",
+                     "candidate":  "Marketside Baked Blueberry Muffins"
+                 },
+                 {
+                     "commodity":  "donuts",
+                     "store":  "Walmart",
+                     "candidate":  "Freshness Guaranteed Glazed Donuts"
+                 },
+                 {
+                     "commodity":  "french-bread",
+                     "store":  "Walmart",
+                     "candidate":  "Freshness Guaranteed French Bakery Bread Loaf"
+                 },
+                 {
+                     "commodity":  "pita-bread",
+                     "store":  "Walmart",
+                     "candidate":  "Toufayan Whole Wheat Pita Bread"
+                 },
+                 {
+                     "commodity":  "pancake-mix",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Complete Pancake \u0026 Waffle Mix Buttermilk"
+                 },
+                 {
+                     "commodity":  "maple-syrup",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Original Syrup"
+                 },
+                 {
+                     "commodity":  "baking-powder",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Double Acting Baking Powder"
+                 },
+                 {
+                     "commodity":  "baking-soda",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Baking Soda"
+                 },
+                 {
+                     "commodity":  "yeast",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Active Dry Yeast 3 Count"
+                 },
+                 {
+                     "commodity":  "vanilla-extract",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Pure Vanilla Extract"
+                 },
+                 {
                      "commodity":  "chocolate-chips",
                      "store":  "Family Fare",
                      "candidate":  "Little Debbie Cosmic Brownies, With Chocolate Chip Candy 6 Ea"
+                 },
+                 {
+                     "commodity":  "chocolate-chips",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Semi-Sweet Chocolate Baking Chips"
+                 },
+                 {
+                     "commodity":  "cocoa-powder",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Baking Unsweetened Cocoa Powder"
+                 },
+                 {
+                     "commodity":  "powdered-sugar",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Confectioners Powdered Sugar"
+                 },
+                 {
+                     "commodity":  "frosting",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Vanilla Frosting Tub White"
+                 },
+                 {
+                     "commodity":  "evaporated-milk",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Evaporated Milk"
+                 },
+                 {
+                     "commodity":  "condensed-milk",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Sweetened Condensed Milk"
+                 },
+                 {
+                     "commodity":  "cooking-spray",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Original Cooking Spray"
+                 },
+                 {
+                     "commodity":  "coconut-oil",
+                     "store":  "Walmart",
+                     "candidate":  "LouAna 100% Pure Coconut Oil"
+                 },
+                 {
+                     "commodity":  "apple-cider-vinegar",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Apple Cider Vinegar"
+                 },
+                 {
+                     "commodity":  "worcestershire",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Worcestershire Sauce"
+                 },
+                 {
+                     "commodity":  "bbq-sauce",
+                     "store":  "Walmart",
+                     "candidate":  "Sweet Baby Ray\u0027s Original Barbecue Sauce"
                  },
                  {
                      "commodity":  "pickles",
@@ -33,9 +588,284 @@
                      "candidate":  "Barrel O\u0027 Fun Dill Pickle Potato Chips 7 Oz"
                  },
                  {
+                     "commodity":  "pickles",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Kosher Spears Dill Pickle Fresh Pack"
+                 },
+                 {
+                     "commodity":  "relish",
+                     "store":  "Walmart",
+                     "candidate":  "Vlasic Sweet Relish"
+                 },
+                 {
+                     "commodity":  "canned-pinto-beans",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Pinto Beans"
+                 },
+                 {
+                     "commodity":  "refried-beans",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Traditional Refried Beans"
+                 },
+                 {
+                     "commodity":  "baked-beans",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Brown Sugar Hickory Baked Beans"
+                 },
+                 {
+                     "commodity":  "canned-chili",
+                     "store":  "Walmart",
+                     "candidate":  "Wolf Brand Chili With Beans"
+                 },
+                 {
+                     "commodity":  "canned-green-beans",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Cut Green Beans"
+                 },
+                 {
+                     "commodity":  "canned-peas",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Sweet Peas"
+                 },
+                 {
+                     "commodity":  "canned-mushrooms",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value White Mushrooms Pieces and Stems"
+                 },
+                 {
+                     "commodity":  "chicken-noodle-soup",
+                     "store":  "Walmart",
+                     "candidate":  "Campbell\u0027s Condensed Chicken Noodle Soup"
+                 },
+                 {
+                     "commodity":  "tomato-soup",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Tomato Condensed Soup"
+                 },
+                 {
+                     "commodity":  "cream-of-mushroom-soup",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Cream of Mushroom Condensed Soup"
+                 },
+                 {
+                     "commodity":  "cream-of-chicken-soup",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Cream of Chicken Condensed Soup"
+                 },
+                 {
+                     "commodity":  "instant-mashed-potatoes",
+                     "store":  "Walmart",
+                     "candidate":  "Idahoan Buttery Homestyle Mashed Potatoes"
+                 },
+                 {
+                     "commodity":  "stuffing-mix",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Chicken-Flavored Stuffing Mix"
+                 },
+                 {
+                     "commodity":  "brown-rice",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Brown Rice Whole Grain"
+                 },
+                 {
+                     "commodity":  "egg-noodles",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Wide Egg Noodles"
+                 },
+                 {
+                     "commodity":  "lasagna-noodles",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Lasagna Pasta"
+                 },
+                 {
+                     "commodity":  "alfredo-sauce",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Alfredo Pasta Sauce"
+                 },
+                 {
+                     "commodity":  "pizza-sauce",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Pizza Sauce"
+                 },
+                 {
+                     "commodity":  "queso",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Salsa Con Queso Cheese Dip"
+                 },
+                 {
+                     "commodity":  "hummus",
+                     "store":  "Walmart",
+                     "candidate":  "Marketside Classic Hummus"
+                 },
+                 {
+                     "commodity":  "marshmallows",
+                     "store":  "Walmart",
+                     "candidate":  "Jet-Puffed Marshmallows"
+                 },
+                 {
+                     "commodity":  "graham-crackers",
+                     "store":  "Walmart",
+                     "candidate":  "Honey Maid Honey Graham Crackers"
+                 },
+                 {
+                     "commodity":  "beef-broth",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Beef Broth"
+                 },
+                 {
+                     "commodity":  "canned-peaches",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Sliced Yellow Cling Peaches in Juice"
+                 },
+                 {
+                     "commodity":  "canned-pineapple",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Canned Pineapple Chunks in Pineapple Juice"
+                 },
+                 {
+                     "commodity":  "peanuts",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Dry Roasted Peanuts"
+                 },
+                 {
+                     "commodity":  "almonds",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Whole Natural Almonds"
+                 },
+                 {
+                     "commodity":  "raisins",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Sun-Dried Raisins"
+                 },
+                 {
+                     "commodity":  "mixed-nuts",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Roasted \u0026 Lightly Salted Mixed Nuts"
+                 },
+                 {
+                     "commodity":  "crackers",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Saltine Crackers"
+                 },
+                 {
+                     "commodity":  "pretzels",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Mini Pretzel Twists"
+                 },
+                 {
+                     "commodity":  "microwave-popcorn",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Extra Butter Flavored Microwave Popcorn"
+                 },
+                 {
                      "commodity":  "sandwich-cookies",
                      "store":  "Family Fare",
                      "candidate":  "Little Debbie Sandwich Cookies, Oatmeal Creme Pies 12 Ea"
+                 },
+                 {
+                     "commodity":  "granola-bars",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Chewy Granola Bars Variety Pack"
+                 },
+                 {
+                     "commodity":  "protein-bars",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Peanut Butter and Dark Chocolate Protein Bars"
+                 },
+                 {
+                     "commodity":  "fruit-snacks",
+                     "store":  "Walmart",
+                     "candidate":  "Mott\u0027s Fruit Flavored Snacks Assorted Fruit Family Pack"
+                 },
+                 {
+                     "commodity":  "toaster-pastries",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Frosted Cherry Toaster Pastries"
+                 },
+                 {
+                     "commodity":  "rice-cakes",
+                     "store":  "Walmart",
+                     "candidate":  "Quaker Rice Cakes Whole Grain Chocolate"
+                 },
+                 {
+                     "commodity":  "pudding-cups",
+                     "store":  "Walmart",
+                     "candidate":  "Snack Pack Chocolate and Vanilla Pudding Cups Family Pack"
+                 },
+                 {
+                     "commodity":  "gelatin",
+                     "store":  "Walmart",
+                     "candidate":  "Jell-O Strawberry Gelatin Dessert Mix, 3 oz Box"
+                 },
+                 {
+                     "commodity":  "apple-juice",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value No Added Sweeteners 100% Apple Juice"
+                 },
+                 {
+                     "commodity":  "grape-juice",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value 100% Concord Grape Juice"
+                 },
+                 {
+                     "commodity":  "cranberry-juice",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Cranberry Juice Cocktail"
+                 },
+                 {
+                     "commodity":  "lemonade",
+                     "store":  "Walmart",
+                     "candidate":  "Simply Lemonade"
+                 },
+                 {
+                     "commodity":  "fruit-punch",
+                     "store":  "Walmart",
+                     "candidate":  "Hawaiian Punch Fruit Juicy Red"
+                 },
+                 {
+                     "commodity":  "sports-drinks",
+                     "store":  "Walmart",
+                     "candidate":  "Gatorade Thirst Quencher Fruit Punch"
+                 },
+                 {
+                     "commodity":  "sparkling-water",
+                     "store":  "Walmart",
+                     "candidate":  "bubly Strawberry Sunset Sparkling Water"
+                 },
+                 {
+                     "commodity":  "iced-tea",
+                     "store":  "Walmart",
+                     "candidate":  "Beef Choice Angus Thin Sliced Sirloin Tip Steak"
+                 },
+                 {
+                     "commodity":  "tea-bags",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Black Tea Bags"
+                 },
+                 {
+                     "commodity":  "coffee-pods",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Donut Shop Medium Roast Coffee Pods"
+                 },
+                 {
+                     "commodity":  "instant-coffee",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Classic Medium Roast Instant Coffee"
+                 },
+                 {
+                     "commodity":  "frozen-waffles",
+                     "store":  "Walmart",
+                     "candidate":  "Eggo Homestyle Waffles"
+                 },
+                 {
+                     "commodity":  "frozen-corn",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Frozen Whole Kernel Golden Corn"
+                 },
+                 {
+                     "commodity":  "frozen-peas",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Frozen Sweet Peas"
                  },
                  {
                      "commodity":  "breakfast-sandwiches",
@@ -43,9 +873,144 @@
                      "candidate":  "Hy-Vee Sausage, Egg, \u0026 Cheese Muffin Breakfast Sandwiches"
                  },
                  {
+                     "commodity":  "breakfast-sandwiches",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Croissant Sandwiches Sausage Egg and Cheese"
+                 },
+                 {
+                     "commodity":  "frozen-burritos",
+                     "store":  "Walmart",
+                     "candidate":  "Tina\u0027s Big Burrito Beef \u0026 Bean"
+                 },
+                 {
+                     "commodity":  "frozen-meatballs",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Fully Cooked Homestyle Meatballs"
+                 },
+                 {
+                     "commodity":  "frozen-lasagna",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Italian-Style Three Meat Lasagna"
+                 },
+                 {
+                     "commodity":  "hash-browns",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Shredded Hash Browns"
+                 },
+                 {
+                     "commodity":  "tater-tots",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Tater Tots"
+                 },
+                 {
+                     "commodity":  "corn-dogs",
+                     "store":  "Walmart",
+                     "candidate":  "State Fair Classic Corn Dogs"
+                 },
+                 {
+                     "commodity":  "fish-sticks",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Breaded Fish Sticks"
+                 },
+                 {
                      "commodity":  "garlic-bread",
                      "store":  "Hy-Vee",
                      "candidate":  "Hy-Vee garlic bread, SAVE! .50, $2.98 PERKS PRICES, NON-MEMBER PRICE $3.48"
+                 },
+                 {
+                     "commodity":  "popsicles",
+                     "store":  "Walmart",
+                     "candidate":  "FunPops Freeze Pops Variety Pack"
+                 },
+                 {
+                     "commodity":  "dryer-sheets",
+                     "store":  "Walmart",
+                     "candidate":  "Snuggle Blue Sparkle Dryer Sheets"
+                 },
+                 {
+                     "commodity":  "fabric-softener",
+                     "store":  "Walmart",
+                     "candidate":  "Snuggle Blue Sparkle Liquid Fabric Softener"
+                 },
+                 {
+                     "commodity":  "stain-remover",
+                     "store":  "Walmart",
+                     "candidate":  "Shout Active Enzyme Laundry Stain Remover Spray"
+                 },
+                 {
+                     "commodity":  "sponges",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Non-Scratch Scrub Sponges"
+                 },
+                 {
+                     "commodity":  "paper-plates",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Disposable Paper Plates 8.5 Inch"
+                 },
+                 {
+                     "commodity":  "paper-napkins",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Disposable Paper Napkins White"
+                 },
+                 {
+                     "commodity":  "sandwich-bags",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Double Zipper Sandwich Bags"
+                 },
+                 {
+                     "commodity":  "plastic-wrap",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Plastic Wrap 200 Sq Ft"
+                 },
+                 {
+                     "commodity":  "parchment-paper",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Unbleached Parchment Paper 50 Sq Ft"
+                 },
+                 {
+                     "commodity":  "toilet-bowl-cleaner",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Toilet Bowl Cleaner Fresh Scent"
+                 },
+                 {
+                     "commodity":  "glass-cleaner",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Glass Cleaner"
+                 },
+                 {
+                     "commodity":  "disinfecting-wipes",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Disinfecting Wipes Fresh Scent"
+                 },
+                 {
+                     "commodity":  "disinfectant-spray",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Disinfectant Spray"
+                 },
+                 {
+                     "commodity":  "batteries",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Alkaline AA Batteries"
+                 },
+                 {
+                     "commodity":  "charcoal",
+                     "store":  "Walmart",
+                     "candidate":  "Kingsford Original Charcoal Briquettes"
+                 },
+                 {
+                     "commodity":  "toothpaste",
+                     "store":  "Baker\u0027s",
+                     "candidate":  "Colgate Toothpaste"
+                 },
+                 {
+                     "commodity":  "toothpaste",
+                     "store":  "Walmart",
+                     "candidate":  "Colgate Baking Soda and Peroxide Whitening Toothpaste"
+                 },
+                 {
+                     "commodity":  "toothbrushes",
+                     "store":  "Walmart",
+                     "candidate":  "Equate Manual Toothbrushes Soft"
                  },
                  {
                      "commodity":  "mouthwash",
@@ -53,9 +1018,454 @@
                      "candidate":  "Biotene Dry Mouth Fresh Mint Oral Rinse 16 Fl Oz"
                  },
                  {
-                     "commodity":  "canned-pasta",
+                     "commodity":  "mouthwash",
                      "store":  "Walmart",
-                     "candidate":  "(4 pack) Chef Boyardee Overstuffed Beef Ravioli in Pasta Sau"
+                     "candidate":  "Equate Antiseptic Mouthwash Blue Mint"
+                 },
+                 {
+                     "commodity":  "shampoo",
+                     "store":  "Walmart",
+                     "candidate":  "Suave Essentials Daily Clarifying Shampoo"
+                 },
+                 {
+                     "commodity":  "conditioner",
+                     "store":  "Walmart",
+                     "candidate":  "Alberto VO5 Strawberries \u0026 Cream Conditioner"
+                 },
+                 {
+                     "commodity":  "body-wash",
+                     "store":  "Walmart",
+                     "candidate":  "Suave Strawberry Delight Uplifting Body Wash"
+                 },
+                 {
+                     "commodity":  "bar-soap",
+                     "store":  "Walmart",
+                     "candidate":  "Dial Gold Antibacterial Deodorant Bar Soap"
+                 },
+                 {
+                     "commodity":  "deodorant",
+                     "store":  "Walmart",
+                     "candidate":  "Suave 48hr Protection Antiperspirant Deodorant"
+                 },
+                 {
+                     "commodity":  "razors",
+                     "store":  "Walmart",
+                     "candidate":  "Equate 2-Blade Disposable Razors"
+                 },
+                 {
+                     "commodity":  "shaving-cream",
+                     "store":  "Walmart",
+                     "candidate":  "Barbasol Original Thick \u0026 Rich Shaving Cream"
+                 },
+                 {
+                     "commodity":  "lotion",
+                     "store":  "Walmart",
+                     "candidate":  "Aveeno Daily Moisturizing Body Lotion"
+                 },
+                 {
+                     "commodity":  "hand-sanitizer",
+                     "store":  "Walmart",
+                     "candidate":  "Germ-X Original Hand Sanitizer Gel"
+                 },
+                 {
+                     "commodity":  "facial-tissues",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Everyday Soft Facial Tissues"
+                 },
+                 {
+                     "commodity":  "cotton-swabs",
+                     "store":  "Walmart",
+                     "candidate":  "Equate 100% Pure Cotton Swabs"
+                 },
+                 {
+                     "commodity":  "feminine-pads",
+                     "store":  "Walmart",
+                     "candidate":  "Equate Maxi Pads Super Absorbency"
+                 },
+                 {
+                     "commodity":  "tampons",
+                     "store":  "Walmart",
+                     "candidate":  "Playtex Sport Tampons Unscented Multi-Pack"
+                 },
+                 {
+                     "commodity":  "diapers",
+                     "store":  "Walmart",
+                     "candidate":  "Parent\u0027s Choice Dry \u0026 Gentle Diapers Size 4"
+                 },
+                 {
+                     "commodity":  "baby-wipes",
+                     "store":  "Walmart",
+                     "candidate":  "Ricitos de Oro Gentle Baby Wipes 3 Pack"
+                 },
+                 {
+                     "commodity":  "baby-formula",
+                     "store":  "Walmart",
+                     "candidate":  "Enfamil Infant Powder Baby Formula with Iron"
+                 },
+                 {
+                     "commodity":  "baby-food",
+                     "store":  "Walmart",
+                     "candidate":  "Parent\u0027s Choice Stage 2 Baby Food Variety Pack 12 Pouches"
+                 },
+                 {
+                     "commodity":  "dog-food",
+                     "store":  "Walmart",
+                     "candidate":  "Ol\u0027 Roy Complete Nutrition T-Bone and Bacon Dry Dog Food"
+                 },
+                 {
+                     "commodity":  "cat-food",
+                     "store":  "Walmart",
+                     "candidate":  "Purina Friskies Seafood Sensations Dry Cat Food"
+                 },
+                 {
+                     "commodity":  "cat-litter",
+                     "store":  "Walmart",
+                     "candidate":  "Special Kitty Scoopable Tight Clumping Cat Litter"
+                 },
+                 {
+                     "commodity":  "dog-treats",
+                     "store":  "Walmart",
+                     "candidate":  "Canine Carry Outs Steak Bites Beef Flavor Dog Treats"
+                 },
+                 {
+                     "commodity":  "floor-cleaner",
+                     "store":  "Walmart",
+                     "candidate":  "Murphy Oil Soap Cleaning Spray, No-Rinse Floor Cleaner, Orange Scent, 22 fl oz Bottle"
+                 },
+                 {
+                     "commodity":  "drain-cleaner",
+                     "store":  "Walmart",
+                     "candidate":  "Mister Plumber 32oz Drain Opener"
+                 },
+                 {
+                     "commodity":  "oven-cleaner",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Fume Free Oven Cleaner Aerosol Spray, 16 oz"
+                 },
+                 {
+                     "commodity":  "shower-cleaner",
+                     "store":  "Walmart",
+                     "candidate":  "Scrub Free Total Bathroom Cleaner with OxiClean, Lemon Scent, 32 fl oz"
+                 },
+                 {
+                     "commodity":  "furniture-polish",
+                     "store":  "Walmart",
+                     "candidate":  "Pledge Expert Care Wood Polish, Lemon Enhancing, Aerosol, 9.7 oz"
+                 },
+                 {
+                     "commodity":  "insect-spray",
+                     "store":  "Walmart",
+                     "candidate":  "Raid Defend Ant \u0026 Roach Killer, Indoor Insecticide, Lemon Scent, 20 oz"
+                 },
+                 {
+                     "commodity":  "cornstarch",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Corn Starch, 16 oz"
+                 },
+                 {
+                     "commodity":  "bread-crumbs",
+                     "store":  "Walmart",
+                     "candidate":  "Kikkoman Panko Breadcrumbs 2pk, 16 oz"
+                 },
+                 {
+                     "commodity":  "paprika",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Paprika, 2.5 oz"
+                 },
+                 {
+                     "commodity":  "dried-oregano",
+                     "store":  "Walmart",
+                     "candidate":  "Oregano Leaves"
+                 },
+                 {
+                     "commodity":  "dried-parsley",
+                     "store":  "Walmart",
+                     "candidate":  "Parsley Flakes (bulk)"
+                 },
+                 {
+                     "commodity":  "ground-cinnamon",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Ground Cinnamon, 2.5 oz"
+                 },
+                 {
+                     "commodity":  "ground-turmeric",
+                     "store":  "Walmart",
+                     "candidate":  "Badia Ground Turmeric, 16 oz"
+                 },
+                 {
+                     "commodity":  "red-pepper-flakes",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Crushed Red Pepper, 12 oz"
+                 },
+                 {
+                     "commodity":  "garlic-powder",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Garlic Powder, 3.4 oz"
+                 },
+                 {
+                     "commodity":  "onion-powder",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Onion Powder, 3.25 oz"
+                 },
+                 {
+                     "commodity":  "chili-powder",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Chili Powder, 3 oz"
+                 },
+                 {
+                     "commodity":  "ground-cumin",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Ground Cumin, 2.5 oz"
+                 },
+                 {
+                     "commodity":  "chickpeas",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Garbanzos Chick Peas, 15.5 oz"
+                 },
+                 {
+                     "commodity":  "kidney-beans",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Dark Red Kidney Beans, 15.5 oz"
+                 },
+                 {
+                     "commodity":  "crushed-tomatoes",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Crushed Tomatoes with Puree, 28 oz"
+                 },
+                 {
+                     "commodity":  "tomato-paste",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Tomato Paste, 6 oz"
+                 },
+                 {
+                     "commodity":  "tomato-sauce",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Tomato Sauce, 15 oz"
+                 },
+                 {
+                     "commodity":  "soy-sauce",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Less Sodium Soy Sauce, 15 fl oz"
+                 },
+                 {
+                     "commodity":  "white-vinegar",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Distilled White Vinegar, 32 fl oz"
+                 },
+                 {
+                     "commodity":  "lemon-juice",
+                     "store":  "Walmart",
+                     "candidate":  "ReaLemon Lemon Juice (gal)"
+                 },
+                 {
+                     "commodity":  "beef-stew",
+                     "store":  "Walmart",
+                     "candidate":  "DINTY MOORE Beef Stew with Potatoes and Carrots, Shelf Stabl"
+                 },
+                 {
+                     "commodity":  "corned-beef-hash",
+                     "store":  "Walmart",
+                     "candidate":  "HORMEL MARY KITCHEN Corned Beef Hash, Shelf Stable, 7.5 oz S"
+                 },
+                 {
+                     "commodity":  "chili-beans",
+                     "store":  "Walmart",
+                     "candidate":  "Wolf Brand Chili With Beans"
+                 },
+                 {
+                     "commodity":  "canned-white-beans",
+                     "store":  "Walmart",
+                     "candidate":  "Bush\u0027s Great Northern Beans, Canned Northern Beans, 15.8 oz"
+                 },
+                 {
+                     "commodity":  "canned-mixed-vegetables",
+                     "store":  "Walmart",
+                     "candidate":  "Veg-All Original Mixed Vegetables, 29 oz., Can"
+                 },
+                 {
+                     "commodity":  "canned-beets",
+                     "store":  "Walmart",
+                     "candidate":  "Del Monte Sliced Beets, Canned Vegetables, 14.5 oz Can"
+                 },
+                 {
+                     "commodity":  "sauerkraut",
+                     "store":  "Walmart",
+                     "candidate":  "Silver Floss Naturally Fermented Shredded Sauerkraut, 2 lb B"
+                 },
+                 {
+                     "commodity":  "canned-yams",
+                     "store":  "Walmart",
+                     "candidate":  "Bruce\u0027s Yams Cut Sweet Potatoes in Syrup, Canned Vegetables,"
+                 },
+                 {
+                     "commodity":  "cranberry-sauce",
+                     "store":  "Walmart",
+                     "candidate":  "Ocean SprayÂ® Jellied Cranberry Sauce, Canned Side Dish, 14 o"
+                 },
+                 {
+                     "commodity":  "canned-pumpkin",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value 100% Pure Pumpkin, 15 oz"
+                 },
+                 {
+                     "commodity":  "mandarin-oranges",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Member\u0027s Mark Mandarin Oranges 4 oz., 24 ct."
+                 },
+                 {
+                     "commodity":  "mandarin-oranges",
+                     "store":  "Walmart",
+                     "candidate":  "Dole Fruit Bowls Mandarin Oranges in 100% Fruit Juice, 4 oz"
+                 },
+                 {
+                     "commodity":  "fruit-cocktail",
+                     "store":  "Walmart",
+                     "candidate":  "Dole Fruit Bowls Peaches, Mandarin Oranges, and Mixed Fruit"
+                 },
+                 {
+                     "commodity":  "canned-pears",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Pear Halves in Pear Juice, 15 oz"
+                 },
+                 {
+                     "commodity":  "tomatoes-green-chilies",
+                     "store":  "Walmart",
+                     "candidate":  "ROTEL Original Diced Tomatoes and Green Chilies, 10 oz"
+                 },
+                 {
+                     "commodity":  "canned-green-chilies",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Canned Medium Diced Green Chiles, 4 oz"
+                 },
+                 {
+                     "commodity":  "black-olives",
+                     "store":  "Walmart",
+                     "candidate":  "Early California Medium Pitted Black Ripe Olives, 6 oz. Can."
+                 },
+                 {
+                     "commodity":  "artichoke-hearts",
+                     "store":  "Walmart",
+                     "candidate":  "Del Monte Quartered Artichoke Hearts 14 oz Can, Canned Veget"
+                 },
+                 {
+                     "commodity":  "vegetable-broth",
+                     "store":  "Walmart",
+                     "candidate":  "Pacific Foods Low Sodium Organic Vegetable Broth, 32 oz Cart"
+                 },
+                 {
+                     "commodity":  "bouillon",
+                     "store":  "Walmart",
+                     "candidate":  "Knorr Bouillon Premium Vegetable Flavor Base, 11 oz"
+                 },
+                 {
+                     "commodity":  "coconut-milk-canned",
+                     "store":  "Walmart",
+                     "candidate":  "Thai Kitchen Unsweetened Coconut Milk, 13.66 fl oz Can"
+                 },
+                 {
+                     "commodity":  "canned-potatoes",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Canned Diced Potatoes, Gluten-Free, 15 oz Can"
+                 },
+                 {
+                     "commodity":  "hominy",
+                     "store":  "Walmart",
+                     "candidate":  "Juanitaâ€™s Foods Mexican Style Hominy, 25 oz, Can"
+                 },
+                 {
+                     "commodity":  "dijon-mustard",
+                     "store":  "Walmart",
+                     "candidate":  "Grey Poupon Dijon Mustard, 10 oz. Squeeze Bottle"
+                 },
+                 {
+                     "commodity":  "honey-mustard",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Honey Dijon Mustard, 12 oz"
+                 },
+                 {
+                     "commodity":  "caesar-dressing",
+                     "store":  "Walmart",
+                     "candidate":  "Litehouse Caesar Dressing \u0026 Spread"
+                 },
+                 {
+                     "commodity":  "blue-cheese-dressing",
+                     "store":  "Walmart",
+                     "candidate":  "Wish-Bone Chunky Blue Cheese Salad Dressing, 15 fl oz"
+                 },
+                 {
+                     "commodity":  "balsamic-vinegar",
+                     "store":  "Walmart",
+                     "candidate":  "Colavita Balsamic Vinegar of Modena IGP, 17 Fluid Ounce Bott"
+                 },
+                 {
+                     "commodity":  "rice-vinegar",
+                     "store":  "Walmart",
+                     "candidate":  "O California Yuzu Rice Vinegar, 10.1 fl oz (300 ml)"
+                 },
+                 {
+                     "commodity":  "red-wine-vinegar",
+                     "store":  "Walmart",
+                     "candidate":  "Bertolli Red Wine Vinegar, 16.9 oz"
+                 },
+                 {
+                     "commodity":  "teriyaki-sauce",
+                     "store":  "Walmart",
+                     "candidate":  "Kikkoman Teriyaki Baste \u0026 Glaze (No Preservatives Added), 11"
+                 },
+                 {
+                     "commodity":  "cocktail-sauce",
+                     "store":  "Walmart",
+                     "candidate":  "Louisiana Fish Fry Products Cocktail Sauce, 12 oz Bottle"
+                 },
+                 {
+                     "commodity":  "tartar-sauce",
+                     "store":  "Walmart",
+                     "candidate":  "Louisiana Fish Fry Creamy Tartar Sauce with Relish \u0026 Lemon,"
+                 },
+                 {
+                     "commodity":  "horseradish",
+                     "store":  "Walmart",
+                     "candidate":  "Inglehoffer Extra Hot and Creamy Horseradish, 4 oz Jar"
+                 },
+                 {
+                     "commodity":  "enchilada-sauce",
+                     "store":  "Walmart",
+                     "candidate":  "Siete Foods Gluten Free Red Enchilada Sauce, 15 oz. Jar"
+                 },
+                 {
+                     "commodity":  "taco-sauce",
+                     "store":  "Walmart",
+                     "candidate":  "HERDEZ TAQUERIA STREET SAUCE Cilantro Lime Mild Taco Sauce,"
+                 },
+                 {
+                     "commodity":  "sloppy-joe-sauce",
+                     "store":  "Walmart",
+                     "candidate":  "Manwich Sloppy Joe Sauce, Bold Flavor, Canned Sauce, 16 oz."
+                 },
+                 {
+                     "commodity":  "minced-garlic",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Minced Garlic in Water, 8 oz Jar"
+                 },
+                 {
+                     "commodity":  "pickled-jalapenos",
+                     "store":  "Walmart",
+                     "candidate":  "Mt. Olive Jalapeno Pepper Slices, 12 fl oz Jar"
+                 },
+                 {
+                     "commodity":  "green-olives",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Stuffed Feta Cheese Green Olives, 7 oz Jar"
+                 },
+                 {
+                     "commodity":  "banana-peppers",
+                     "store":  "Walmart",
+                     "candidate":  "Mezzetta Mild Banana Pepper Rings, 16 fl oz Jar"
+                 },
+                 {
+                     "commodity":  "fish-sauce",
+                     "store":  "Walmart",
+                     "candidate":  "Louisiana Fish Fry Products Cocktail Sauce, 12 oz Bottle"
                  },
                  {
                      "commodity":  "oyster-sauce",
@@ -63,14 +1473,169 @@
                      "candidate":  "Ty Ling Oyster Style Sauce"
                  },
                  {
+                     "commodity":  "oyster-sauce",
+                     "store":  "Walmart",
+                     "candidate":  "Heinz Golden Mark Oyster Sauce 9.2oz"
+                 },
+                 {
+                     "commodity":  "hoisin-sauce",
+                     "store":  "Walmart",
+                     "candidate":  "Lee Kum Kee Hoisin Sauce 20 oz."
+                 },
+                 {
+                     "commodity":  "gochujang",
+                     "store":  "Walmart",
+                     "candidate":  "BORN WITH SEOUL Original Sesame Gochujang 9.5 ounce"
+                 },
+                 {
+                     "commodity":  "mirin",
+                     "store":  "Walmart",
+                     "candidate":  "Kikkoman Kotteri Mirin, 20 oz"
+                 },
+                 {
+                     "commodity":  "tahini",
+                     "store":  "Walmart",
+                     "candidate":  "Krinos Tahini Spread with Velvety Texture 16oz Jar - Premium"
+                 },
+                 {
                      "commodity":  "sesame-oil",
                      "store":  "Fareway",
                      "candidate":  "House of Tsang Pure Sesame Seed Oil"
                  },
                  {
+                     "commodity":  "sesame-oil",
+                     "store":  "Walmart",
+                     "candidate":  "La Tourangelle, Toasted Sesame Oil, 16.9 fl oz (500 ml)"
+                 },
+                 {
+                     "commodity":  "toasted-sesame-seeds",
+                     "store":  "Walmart",
+                     "candidate":  "Terrasoul Superfoods Organic Hulled Sesame Seeds, 2 Lbs - Pe"
+                 },
+                 {
+                     "commodity":  "chili-crisp",
+                     "store":  "Walmart",
+                     "candidate":  "Lee Kum Kee Chiu Chow Style Chili Crisp Oil, 7.2 oz"
+                 },
+                 {
+                     "commodity":  "red-curry-paste",
+                     "store":  "Walmart",
+                     "candidate":  "Mae Ploy Red Curry Paste, 14 oz"
+                 },
+                 {
+                     "commodity":  "harissa-paste",
+                     "store":  "Walmart",
+                     "candidate":  "Mina, Harissa Spicy Moroccan Red Pepper Sauce , 10 Fl oz"
+                 },
+                 {
+                     "commodity":  "achiote-paste",
+                     "store":  "Walmart",
+                     "candidate":  "Goya Pasta De Achiote (Annatto Paste), 3.5 oz"
+                 },
+                 {
+                     "commodity":  "pomegranate-molasses",
+                     "store":  "Walmart",
+                     "candidate":  "Sadaf brand Pomegranate Molasses, 10 Fl oz. in a bottle"
+                 },
+                 {
+                     "commodity":  "japanese-curry-roux",
+                     "store":  "Walmart",
+                     "candidate":  "S\u0026B Golden Curry Mild Japanese Curry Mix, 3.2 oz, 1 count Bo"
+                 },
+                 {
+                     "commodity":  "ranch-seasoning-mix",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Classic Ranch Salad Dressing \u0026 Recipe Mix, 1 oz"
+                 },
+                 {
+                     "commodity":  "curry-powder",
+                     "store":  "Walmart",
+                     "candidate":  "VAHDAM Curry Powder Spice Blend, 1.76 oz Tin   Authentic Ind"
+                 },
+                 {
+                     "commodity":  "garam-masala",
+                     "store":  "Walmart",
+                     "candidate":  "24 Mantra Organic Garam Masala"
+                 },
+                 {
+                     "commodity":  "five-spice-powder",
+                     "store":  "Walmart",
+                     "candidate":  "McCormick Gourmet Kosher Chinese Five Spice Blend, 1.75 oz B"
+                 },
+                 {
+                     "commodity":  "cayenne-pepper",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Cayenne Pepper, 2.25 oz"
+                 },
+                 {
+                     "commodity":  "dried-thyme",
+                     "store":  "Walmart",
+                     "candidate":  "McCormick Gourmet Organic Thyme Leaves, 0.65 oz Bottle"
+                 },
+                 {
+                     "commodity":  "dried-basil",
+                     "store":  "Walmart",
+                     "candidate":  "McCormick Gourmet Organic Basil Leaves, 0.55 oz Bottle"
+                 },
+                 {
+                     "commodity":  "dried-dill",
+                     "store":  "Walmart",
+                     "candidate":  "Frontier Co-op Certified Organic Dill Weed, 16 oz. Bag"
+                 },
+                 {
+                     "commodity":  "bay-leaves",
+                     "store":  "Walmart",
+                     "candidate":  "VAHDAM Bay Leaves, Whole Indian Bay Leaf Spice, Aromatic Nat"
+                 },
+                 {
+                     "commodity":  "ground-cloves",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Ground Cloves, 2 oz"
+                 },
+                 {
+                     "commodity":  "ground-coriander",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Organic Ground Coriander, 1.5 oz"
+                 },
+                 {
+                     "commodity":  "ground-allspice",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Ground Allspice, 2 oz"
+                 },
+                 {
+                     "commodity":  "ground-nutmeg",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Ground Nutmeg, 1.5 oz"
+                 },
+                 {
+                     "commodity":  "ground-ginger",
+                     "store":  "Walmart",
+                     "candidate":  "McCormick Ground Ginger, 1.5 oz Bottle"
+                 },
+                 {
+                     "commodity":  "poppy-seeds",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Poppy Seeds, 2.37 oz"
+                 },
+                 {
+                     "commodity":  "walnuts",
+                     "store":  "Walmart",
+                     "candidate":  "FISHER Chef\u0027s Naturals Chopped Walnuts, 16 oz, Naturally Glu"
+                 },
+                 {
+                     "commodity":  "grits",
+                     "store":  "Walmart",
+                     "candidate":  "Quaker Original Quick 5-Minute Grits, Shelf-Stable, 24 Oz Ca"
+                 },
+                 {
                      "commodity":  "corn-muffin-mix",
                      "store":  "Fareway",
                      "candidate":  "Krusteaz Honey Cornbread and Muffin Mix"
+                 },
+                 {
+                     "commodity":  "corn-muffin-mix",
+                     "store":  "Walmart",
+                     "candidate":  "Bob\u0027s Red Mill, Cornbread Baking Mix, 13 oz"
                  },
                  {
                      "commodity":  "refrigerated-biscuits",
@@ -84,8 +1649,23 @@
                  },
                  {
                      "commodity":  "refrigerated-biscuits",
-                     "store":  "Sam\u0027s Club",
-                     "candidate":  "Pillsbury Southern Style Biscuits 2 oz., 24 pk."
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Jumbo Buttermilk Biscuits, 16 oz, 8 Count"
+                 },
+                 {
+                     "commodity":  "cheese-tortellini",
+                     "store":  "Walmart",
+                     "candidate":  "Great Value Family Size Cheese Tortellini, Pasta, 36 oz Bag"
+                 },
+                 {
+                     "commodity":  "potato-gnocchi",
+                     "store":  "Walmart",
+                     "candidate":  "DeLallo Potato Gnocchi Pasta, Made in Italy, Non-GMO, 16 oz"
+                 },
+                 {
+                     "commodity":  "rice-noodles",
+                     "store":  "Walmart",
+                     "candidate":  "Thai Kitchen Gluten Free Gluten Free Stir Fry Rice Noodles,"
                  },
                  {
                      "commodity":  "sun-dried-tomatoes",
@@ -93,9 +1673,39 @@
                      "candidate":  "California Sun Dry Sun-Dried Julienne Tomatoes in Oil"
                  },
                  {
+                     "commodity":  "sun-dried-tomatoes",
+                     "store":  "Walmart",
+                     "candidate":  "California Sun Dry, Sun-Dried Tomatoes in Oil with Herbs, Ju"
+                 },
+                 {
+                     "commodity":  "chipotle-adobo",
+                     "store":  "Walmart",
+                     "candidate":  "La Costea Chipotle Peppers in Adobo Sauce, 7 oz"
+                 },
+                 {
+                     "commodity":  "tomatillos",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Tomatillos Milpero, 16 oz"
+                 },
+                 {
                      "commodity":  "poblano-peppers",
                      "store":  "Family Fare",
                      "candidate":  "Del Monte Whole Kernel Southwest Style Corn With Poblano \u0026 Red Peppers 15.25 Oz"
+                 },
+                 {
+                     "commodity":  "poblano-peppers",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Poblano Peppers, 16 oz"
+                 },
+                 {
+                     "commodity":  "fresh-basil",
+                     "store":  "Walmart",
+                     "candidate":  "McCormick Gourmet Organic Basil Leaves, 0.55 oz Bottle"
+                 },
+                 {
+                     "commodity":  "fresh-mint",
+                     "store":  "Walmart",
+                     "candidate":  "Fresh Mint, 0.5 oz Clamshell"
                  }
              ]
 }
