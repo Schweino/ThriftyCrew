@@ -245,6 +245,30 @@ function CleanItemName([string]$item) {
 $ADURLS = @{}
 try { $adDoc = Get-Content (Join-Path $root 'ad-urls.json') -Raw | ConvertFrom-Json; foreach ($p in $adDoc.urls.PSObject.Properties) { $ADURLS[[string]$p.Name] = [string]$p.Value } } catch {}
 
+# THE ALL-3 RULE (Brad, 2026-07-23): every tile that shows a price and a name MUST also carry a link -
+# no exceptions, ever. Exact product links stay the gold standard (price-verified, the gates above), but a
+# cell we cannot exactly link no longer renders as a bare name: it gets a clearly-labeled "Find at <store>"
+# link to that store's own SEARCH for the item. Honest (the label says search, not item), always available
+# (works even for by-weight produce that has no product page anywhere), and self-upgrading (the moment an
+# exact link resolves, it replaces the search link). Enforced twice: by construction here, and by the
+# post-build assertion at the bottom of this script that hard-fails the build if any priced chip somehow
+# renders without an href.
+$SEARCHURLS = @{
+  'Walmart'     = 'https://www.walmart.com/search?q={q}'
+  "Baker's"     = 'https://www.bakersplus.com/search?query={q}&searchType=default_search'
+  'Hy-Vee'      = 'https://www.hy-vee.com/aisles-online/search?search={q}'
+  'Aldi'        = 'https://www.aldi.us/store/aldi/s?k={q}'
+  'Fareway'     = 'https://shop.fareway.com/store/fareway-meat-grocery/s?k={q}'
+  "Sam's Club"  = 'https://www.samsclub.com/s/{q}'
+  'Family Fare' = 'https://www.shopfamilyfare.com/search?search_term={q}'
+}
+function SearchLink([string]$store, [string]$query) {
+  $tpl = $SEARCHURLS[$store]
+  if (-not $tpl -or -not $query) { return '' }
+  $u = $tpl.Replace('{q}', [uri]::EscapeDataString($query))
+  return "<a class='pg-see pg-see-search' href='" + (HtmlEnc $u) + "' target='_blank' rel='nofollow noopener' title='No exact product page for this one - opens " + (HtmlEnc $store) + "&#39;s own search for it.'>Find at store &rarr;</a>"
+}
+
 function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$boardPU, [string]$unit, [string]$cellType) {
   $url = $null
   if (($purls.ContainsKey($id)) -and ($purls[$id].ContainsKey($store)) -and (-not $formFlip.ContainsKey($id + '|' + $store))) {
@@ -305,13 +329,17 @@ function SeeLink([string]$id, [string]$store, [string]$boardItem, [double]$board
     $adU = $ADURLS[$store]
     $pill = if ($adU) {
       "<a class='pg-adonly' href='" + (HtmlEnc $adU) + "' target='_blank' rel='nofollow noopener' title='Flyer-only price from this week&#39;s " + (HtmlEnc $store) + " ad. Opens the ad; find the item inside.'>weekly ad &#8599;</a>"
-    } else { "<span class='pg-adonly'>weekly ad</span>" }
+    } else { (SearchLink $store $boardItem) }   # no ad URL for this store -> the all-3 rule still holds via search
     # pill is a SIBLING of the name, not inside it: the name clamps at 2 lines, and a clamped container
     # would clip the pill exactly when the name is long.
     return "<span class='pg-itemname' title='" + $nm + " - priced from the weekly ad'>" + $nm + "</span>" + $pill
   }
-  if ($nm) { return "<span class='pg-itemname' title='" + $nm + "'>" + $nm + "</span>" }
-  return ''
+  # ALL-3 RULE: an everyday cell with no exact link renders the name PLUS the store-search link, never a
+  # bare name. And a priced cell with no name at all still gets a search link on the commodity so the tile
+  # can never show a price with nothing to click.
+  $q = if ($boardItem) { [string]$boardItem } else { ($id -replace '-', ' ') }
+  if ($nm) { return "<span class='pg-itemname' title='" + $nm + "'>" + $nm + "</span>" + (SearchLink $store $q) }
+  return (SearchLink $store $q)
 }
 
 # store scoreboard: how many commodities each store is the outright cheapest on (the summary a shopper wants first)
@@ -803,6 +831,7 @@ $css = @'
 .pg-note2{font-size:.62em;color:var(--amber);background:var(--amber-t);padding:1px 6px;border-radius:5px;font-weight:600}
 .pg-sale{display:inline-block;align-self:flex-start;margin-top:4px;font-size:.62em;font-weight:700;color:#b23b2e;background:rgba(178,59,46,.09);border:1px solid rgba(178,59,46,.22);padding:1px 6px;border-radius:5px;white-space:nowrap}
 .pg-see{margin-top:5px;font-size:.68em;font-weight:700;color:var(--green-d);text-decoration:none;border-top:1px dotted var(--bd);padding-top:5px}
+.pg-see-search{color:var(--mut);font-weight:600}.pg-see-search:hover{color:var(--green-d)}
 .pg-itemname{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:break-word;margin-top:5px;font-size:.66em;font-weight:500;color:var(--mut);border-top:1px dotted var(--bd);padding-top:5px;line-height:1.3}
 .pg-adonly{display:inline-block;align-self:flex-start;font-size:.6em;font-weight:600;color:var(--mut);border:1px solid var(--bd);border-radius:3px;padding:1px 5px;margin-top:4px;white-space:nowrap;opacity:.85}
 a.pg-adonly{text-decoration:none;cursor:pointer}
@@ -1475,7 +1504,37 @@ $boardUrl = 'https://smp-feed.ancient-snow-93df.workers.dev/board.json?v=' + $bh
 $js = $js.Replace('__BOARD_URL__', $boardUrl)
 Write-Output ("chips: {0} rows -> public\board.json ({1} KB, lazily injected); post keeps the per-row answer" -f $boardChips.Count, [math]::Round($boardJson.Length/1KB,0))
 
-($css + $body + $js + $histBlock) | Set-Content $Out -Encoding UTF8
+# ---- THE ALL-3 ASSERTION (Brad's rule, 2026-07-23): a tile that shows a price MUST carry a link. ----
+# SeeLink now guarantees this by construction (exact link -> weekly-ad pill -> store-search fallback), but a
+# construction guarantee without an assertion is one refactor away from silent regression - so scan the FINAL
+# HTML: every pg-chip that contains a pg-price must contain an <a. Hard-fail the build (exit 2) on any
+# violation; a build that fails here never reaches publish.
+$finalHtml = ($css + $body + $js + $histBlock)
+# scan BOTH artifacts: the page shell AND every chip row in the board.json feed (that is where the priced
+# chips actually live - they are injected client-side; asserting only the page shell guards almost nothing)
+$bare = 0; $searchN = 0; $pricedN = 0
+$scanTargets = @($finalHtml) + @($boardChips.Values)
+foreach ($target in $scanTargets) {
+  $parts = [regex]::Split([string]$target, "<div class='pg-chip")
+  for ($i = 1; $i -lt $parts.Count; $i++) {   # parts[0] precedes the first chip
+    # a chip contains no nested divs, so its own markup ends at the FIRST </div> - cutting there stops a
+    # later element's <a from masking a bare chip in the same split segment
+    $seg = $parts[$i]
+    $end = $seg.IndexOf('</div>')
+    if ($end -ge 0) { $seg = $seg.Substring(0, $end) }
+    if ($seg -match 'pg-price') {
+      $pricedN++
+      if ($seg -match 'pg-see-search') { $searchN++ }
+      if ($seg -notmatch '<a ') { $bare++ }
+    }
+  }
+}
+if ($bare -gt 0) {
+  Write-Output ("ALL-3 VIOLATION: $bare priced chip(s) rendered without any link - the SeeLink fallback chain is broken. NOT writing the page.")
+  exit 2
+}
+$finalHtml | Set-Content $Out -Encoding UTF8
+Write-Output ("all-3 rule: $pricedN priced chips, 0 bare ($searchN on store-search fallback links)")
 Write-Output ("deals page -> " + $Out + "  (" + $totalCommodities + " commodities, " + $totalPrices + " prices, history popup on " + $(if ($entries) { $entries.Count } else { 0 }) + " items)")
 
 
