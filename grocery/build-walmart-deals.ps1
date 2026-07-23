@@ -282,6 +282,42 @@ function Build-Row($raw) {
   return @{ err=("INVARIANT: no shape reproduces Sam's " + $up + '/' + $u.tok + ' -> ' + ($errs -join ' | ')) }
 }
 
+# ---- multipack pre-filter: reject exactly what guards.ps1 guard 5 would reject, so the board never sees it ----
+# 2026-07-23: a broadened Walmart pull dragged in bulk multipacks ("(4 pack) Domino Sugar, 10 lb" = 40 lb) and
+# ice-cream novelties whose name states only the pack TOTAL. All 32 hard-failed guard 5 and blocked the whole
+# nightly publish, firing ~20 alert emails. These are never a normal shopper's single-buy unit, so they do not
+# belong on the board. Mirror guard 5's arithmetic EXACTLY (including its allowlist) so builder and guard stay
+# in lockstep - a row this rejects is a row the guard would have hard-failed, and vice versa.
+# (Defined ABOVE the self-test so `-SelfTest` can prove the filter still rejects the 2026-07-23 junk.)
+function BW-SizeIsPackTotal([string]$name, [double]$sizeVal) {
+  if ($sizeVal -le 0) { return $false }
+  $n = $name.ToLower(); $packs = @()
+  foreach ($m in [regex]::Matches($n, '(\d+)\s*(?:pk|pack)\b')) { $v = [int]$m.Groups[1].Value; if ($v -gt 1) { $packs += $v } }
+  if (-not $packs.Count) { return $false }
+  $cands = @($packs); if ($packs.Count -gt 1) { $p = 1; foreach ($x in $packs) { $p *= $x }; $cands += $p }
+  foreach ($wm in [regex]::Matches($n, '([\d.]+)\s*(?:fl\s?oz|oz|lb)\b')) {
+    $w = 0.0; if (-not [double]::TryParse($wm.Groups[1].Value, [ref]$w)) { continue }
+    foreach ($c in $cands) { $tot = $w * $c; if ($tot -gt 0 -and ([math]::Abs($tot - $sizeVal) / $tot) -le 0.03) { return $true } }
+  }
+  return $false
+}
+$bwAllowF = Join-Path $root 'multipack-allowlist.json'
+$bwAllow = @()
+if (Test-Path $bwAllowF) { $bwAllow = @((Get-Content $bwAllowF -Raw | ConvertFrom-Json).allow | ForEach-Object { $_.store + '|' + $_.item }) }
+function BW-IsMultipackReject($item, $size) {
+  $name = [string]$item; $sz = [string]$size
+  if (-not $name -or -not $sz) { return $false }
+  $pn = [regex]::Match($name.ToLower(), '(\d+)\s*(?:pk\b|pack\b)')
+  if (-not $pn.Success -or [int]$pn.Groups[1].Value -le 1) { return $false }
+  $ps = [regex]::Match($sz.ToLower(), '(\d+)\s*(?:x|pk\b|pack\b|ct\b|count\b)')
+  if ($ps.Success -and [int]$ps.Groups[1].Value -gt 1) { return $false }
+  if ($sz -notmatch '[\d.]+\s*(fl\s?oz|oz|lb|gal|qt|l|ml|g)\b') { return $false }
+  $sv = 0.0; [void][double]::TryParse(([regex]::Match($sz, '[\d.]+').Value), [ref]$sv)
+  if (BW-SizeIsPackTotal $name $sv) { return $false }
+  if ($bwAllow -contains ('Walmart|' + $name)) { return $false }
+  return $true
+}
+
 if ($SelfTest) {
   $fail = 0
   function _R($n,$lp,$up) { [pscustomobject]@{ q='t'; n=$n; lp=$lp; up=$up; id='1' } }
@@ -385,42 +421,27 @@ if ($SelfTest) {
   if ([math]::Abs($ge.unit_price - 1.09) -lt 0.005) { Write-Output ("ok    emitted row prices to " + [math]::Round($ge.unit_price,4) + "/each [" + $ge.basis + "]  (quarantined shape gave " + [math]::Round($old.unit_price,4) + " [" + $old.basis + "])") }
   else { Write-Output "FAIL  emitted cucumber row -> $($ge.unit_price)"; $fail++ }
 
-  if ($fail -eq 0) { Write-Output 'SELF-TEST PASS' ; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
-}
-
-# ---- multipack pre-filter: reject exactly what guards.ps1 guard 5 would reject, so the board never sees it ----
-# 2026-07-23: a broadened Walmart pull dragged in bulk multipacks ("(4 pack) Domino Sugar, 10 lb" = 40 lb) and
-# ice-cream novelties whose name states only the pack TOTAL. All 32 hard-failed guard 5 and blocked the whole
-# nightly publish, firing ~20 alert emails. These are never a normal shopper's single-buy unit, so they do not
-# belong on the board. Mirror guard 5's arithmetic EXACTLY (including its allowlist) so builder and guard stay
-# in lockstep - a row this rejects is a row the guard would have hard-failed, and vice versa.
-function BW-SizeIsPackTotal([string]$name, [double]$sizeVal) {
-  if ($sizeVal -le 0) { return $false }
-  $n = $name.ToLower(); $packs = @()
-  foreach ($m in [regex]::Matches($n, '(\d+)\s*(?:pk|pack)\b')) { $v = [int]$m.Groups[1].Value; if ($v -gt 1) { $packs += $v } }
-  if (-not $packs.Count) { return $false }
-  $cands = @($packs); if ($packs.Count -gt 1) { $p = 1; foreach ($x in $packs) { $p *= $x }; $cands += $p }
-  foreach ($wm in [regex]::Matches($n, '([\d.]+)\s*(?:fl\s?oz|oz|lb)\b')) {
-    $w = 0.0; if (-not [double]::TryParse($wm.Groups[1].Value, [ref]$w)) { continue }
-    foreach ($c in $cands) { $tot = $w * $c; if ($tot -gt 0 -and ([math]::Abs($tot - $sizeVal) / $tot) -le 0.03) { return $true } }
+  # 11. THE 2026-07-23 MULTIPACK FILTER. The exact junk that flooded the inbox must be REJECTED, and a real
+  #     single-buy unit must be KEPT. This is what stops the builder from producing what guard 5 blocks.
+  $mpReject = @(
+    @{ n='(4 pack) Domino Premium Pure Cane Granulated Sugar, 10 lb'; s='640 oz' }  # 40 lb bulk case
+    @{ n='(8 pack) Gold Medal All Purpose Flour, 5 lb Bag';           s='640 oz' }  # 40 lb bulk case
+    @{ n="Great Value Vanilla Ice Cream Sandwiches, 42 fl oz, 12 Pack"; s='42 fl oz' }  # novelty multipack
+  )
+  foreach ($m in $mpReject) {
+    if (BW-IsMultipackReject $m.n $m.s) { Write-Output "ok    rejects bulk multipack: $($m.n.Substring(0,[Math]::Min(38,$m.n.Length)))" }
+    else { Write-Output "FAIL  did NOT reject multipack '$($m.n)' - the 2026-07-23 junk would ship"; $fail++ }
   }
-  return $false
-}
-$bwAllowF = Join-Path $root 'multipack-allowlist.json'
-$bwAllow = @()
-if (Test-Path $bwAllowF) { $bwAllow = @((Get-Content $bwAllowF -Raw | ConvertFrom-Json).allow | ForEach-Object { $_.store + '|' + $_.item }) }
-function BW-IsMultipackReject($item, $size) {
-  $name = [string]$item; $sz = [string]$size
-  if (-not $name -or -not $sz) { return $false }
-  $pn = [regex]::Match($name.ToLower(), '(\d+)\s*(?:pk\b|pack\b)')
-  if (-not $pn.Success -or [int]$pn.Groups[1].Value -le 1) { return $false }
-  $ps = [regex]::Match($sz.ToLower(), '(\d+)\s*(?:x|pk\b|pack\b|ct\b|count\b)')
-  if ($ps.Success -and [int]$ps.Groups[1].Value -gt 1) { return $false }
-  if ($sz -notmatch '[\d.]+\s*(fl\s?oz|oz|lb|gal|qt|l|ml|g)\b') { return $false }
-  $sv = 0.0; [void][double]::TryParse(([regex]::Match($sz, '[\d.]+').Value), [ref]$sv)
-  if (BW-SizeIsPackTotal $name $sv) { return $false }
-  if ($bwAllow -contains ('Walmart|' + $name)) { return $false }
-  return $true
+  $mpKeep = @(
+    @{ n='Great Value Granulated Sugar, 4 lb'; s='4 lb' }                              # real single unit
+    @{ n='(12 pack) Great Northern Beans, 15.5 oz'; s='186 oz' }                       # size IS the arithmetic pack total -> keep
+  )
+  foreach ($m in $mpKeep) {
+    if (-not (BW-IsMultipackReject $m.n $m.s)) { Write-Output "ok    keeps legit unit: $($m.n.Substring(0,[Math]::Min(38,$m.n.Length)))" }
+    else { Write-Output "FAIL  wrongly rejected '$($m.n)' - real product would vanish"; $fail++ }
+  }
+
+  if ($fail -eq 0) { Write-Output 'SELF-TEST PASS' ; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
 }
 
 # ---------------------------------------------------------------- build

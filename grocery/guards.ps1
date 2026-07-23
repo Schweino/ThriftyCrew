@@ -76,6 +76,27 @@ foreach ($c in $puCases) {
 if ($puBad.Count) { [void]$fail.Add("HARD FAIL: pu-lib per-unit math regressed [" + ($puBad -join '; ') + "] - the publish path prices with this engine; see test-pu-lib.ps1") }
 else { Say '  ok    pu-lib per-unit engine self-check' }
 
+# ---------------------------------------------------------------- 0b: the 2026-07-23 incident self-tests
+# The Walmart alert flood had two producers: a PARTIAL pull that "newest-file-wins" turned into a coverage
+# collapse (fixed by compare-deals' union), and a builder that emitted BULK MULTIPACKS (fixed by
+# build-walmart-deals' reject filter). Blocking the publish was not enough - the AUTOMATED job must never
+# PRODUCE the incident again. So run both scripts' -SelfTest suites here, in the gate the daily cloud job runs,
+# and HARD FAIL the publish if either regresses. Each suite is pure computation (synthetic inputs, no board
+# mutation, no network), safe on every run. If the invocation itself throws, degrade to a warning - a broken
+# test must never block the board by crashing.
+foreach ($st in @(
+  @{ label='partial-pull union (compare-deals)';       file='compare-deals.ps1' },
+  @{ label='multipack reject + pricing (walmart-deals)'; file='build-walmart-deals.ps1' }
+)) {
+  try {
+    $stPath = Join-Path $root $st.file
+    if (-not (Test-Path $stPath)) { Say ("  warn  self-test skipped, missing $($st.file)"); continue }
+    & powershell -ExecutionPolicy Bypass -File $stPath -SelfTest *> $null
+    if ($LASTEXITCODE -ne 0) { [void]$fail.Add("HARD FAIL: $($st.label) self-test regressed (exit $LASTEXITCODE) - run '$($st.file) -SelfTest'. This is the 2026-07-23 partial-pull / multipack guard; a regression here re-opens the flood.") }
+    else { Say "  ok    $($st.label) self-test" }
+  } catch { Say ("  warn  could not run $($st.label) self-test: " + $_.Exception.Message) }
+}
+
 # ---------------------------------------------------------------- 1 + 2: delegate to the existing audits
 foreach ($g in @(
     @{ f='audit-price-mode.ps1';        n='price-mode (in-store pricing)' },

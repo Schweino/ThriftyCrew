@@ -314,6 +314,31 @@ function Get-UnitPrice($deal, $cat) {
 function Test-IsMultibuy([string]$t) { return ((ConvertTo-DigitNumerals ("" + $t)) -match '(?i)buy\s*\d+\s*,?\s*get\s*\d+') }
 
 # ---------------------------------------------------------------- SELF-TEST (provable multibuy math; -SelfTest exits here)
+# Which everyday-price files (out\regular\<store>-regular-<date>.json) to load per store. EVERYDAY-ONLY stores
+# (Walmart) run no weekly ad cycle, so a partial daily refresh (a throttled ~50-item pull) must UNION with the
+# recent captures or it collapses the board - the 2026-07-23 incident, when a 50-of-410 Walmart pull cut the
+# store to 80 cells and the coverage guard blocked the publish. Every OTHER store here runs weekly SALES, and
+# dating its everyday rows would let today's everyday price filter a still-valid sale out of the freshness
+# ranker - so they stay newest-file-only. PURE function (operates on a passed file list, reads no disk) so
+# `compare-deals.ps1 -SelfTest` can prove the union never silently regresses to newest-only.
+$EVERYDAY_ONLY_STORES = @('walmart')   # out\regular stores with no ad cycle; safe (and required) to union
+function Select-RegularFileSet($fileObjs, [datetime]$asof, [int]$unionMaxAgeDays) {
+  $fileObjs |
+    Where-Object { $_.BaseName -match '^[a-z0-9-]+-regular-\d{4}-\d{2}-\d{2}$' } |
+    Group-Object { ($_.BaseName -replace '-regular-.*$','') } |
+    ForEach-Object {
+      $grp = $_.Group | Sort-Object Name -Descending
+      if ($EVERYDAY_ONLY_STORES -contains $_.Name) {
+        $grp | Where-Object {
+          $m = [regex]::Match($_.BaseName, '(\d{4}-\d{2}-\d{2})$')
+          $m.Success -and [math]::Abs(([datetime]$m.Groups[1].Value - $asof).TotalDays) -le $unionMaxAgeDays
+        }
+      } else {
+        $grp | Select-Object -First 1
+      }
+    }
+}
+
 if ($SelfTest) {
   $script:fail = 0
   function _Near($label, $got, $want, $tol) {
@@ -353,6 +378,26 @@ if ($SelfTest) {
   $mixTok = '(?i)\bmix\b(?!\s*(?:&|and)\s*match)'
   if ('tyson chicken thighs, mix & match buy 1 get 2 free' -notmatch $mixTok) { Write-Output "ok    'mix & match' not excluded" } else { Write-Output "FAIL  'mix & match' wrongly excluded"; $script:fail++ }
   if ('grape drink mix' -match $mixTok) { Write-Output "ok    'drink mix' still excluded" } else { Write-Output "FAIL  'drink mix' no longer excluded"; $script:fail++ }
+
+  # --- 12-14: partial-pull coverage (reproduces the 2026-07-23 Walmart flood) -----------------------------
+  # A throttled Walmart pull returns ~50 of 410 commodities. Under newest-file-wins that partial REPLACED the
+  # last full capture and cut the store to 80 cells; the coverage guard blocked the publish and the un-deduped
+  # alerts flooded. These cases fail the build if the union ever regresses, so the automated job proves the fix
+  # is intact on every run (guards.ps1 runs this self-test as a blocking invariant).
+  function _RegFiles($names){ $names | ForEach-Object { [pscustomobject]@{ BaseName=$_; Name=($_ + '.json') } } }
+  $asof = [datetime]'2026-07-23'
+  # 12. the partial pull must UNION with the last full capture, not replace it (both files load)
+  $u = @(Select-RegularFileSet (_RegFiles @('walmart-regular-2026-07-18','walmart-regular-2026-07-23')) $asof 14 | ForEach-Object { $_.BaseName })
+  if ($u.Count -eq 2) { Write-Output 'ok    Walmart partial pull UNIONS with last full capture (no collapse)' }
+  else { Write-Output ("FAIL  Walmart union regressed to newest-only ({0} file) - the 2026-07-23 collapse would recur" -f $u.Count); $script:fail++ }
+  # 13. an ad-cycling store stays newest-only (dating its everyday rows would filter a still-valid weekly sale)
+  $b = @(Select-RegularFileSet (_RegFiles @('bakers-regular-2026-07-11','bakers-regular-2026-07-18')) $asof 14 | ForEach-Object { $_.BaseName })
+  if ($b.Count -eq 1 -and $b[0] -eq 'bakers-regular-2026-07-18') { Write-Output 'ok    ad-cycling store stays newest-only (sales not filtered out)' }
+  else { Write-Output "FAIL  ad-cycling store must stay newest-only (union would drop valid sales)"; $script:fail++ }
+  # 14. a Walmart capture older than the union window is excluded (never resurrect ancient prices)
+  $o = @(Select-RegularFileSet (_RegFiles @('walmart-regular-2026-06-01','walmart-regular-2026-07-23')) $asof 14 | ForEach-Object { $_.BaseName })
+  if ($o.Count -eq 1 -and $o[0] -eq 'walmart-regular-2026-07-23') { Write-Output 'ok    stale-beyond-window Walmart capture excluded' }
+  else { Write-Output "FAIL  union age window not enforced (would load ancient prices)"; $script:fail++ }
 
   Write-Output ('-'*54)
   if ($script:fail -eq 0) { Write-Output 'SELF-TEST PASS  (all multibuy / BOGO cases correct)'; exit 0 }
@@ -481,20 +526,7 @@ if (Test-Path $regDir) {
   # exists and the last full capture everywhere else - no stale-low, no coverage loss. This is the same
   # multi-capture pattern Sam's already uses. Every OTHER store here can run weekly sales, so unioning old files
   # would resurrect expired prices; they stay newest-only.
-  $regFiles = Get-ChildItem (Join-Path $regDir '*-regular-*.json') -ErrorAction SilentlyContinue |
-    Where-Object { $_.BaseName -match '^[a-z0-9-]+-regular-\d{4}-\d{2}-\d{2}$' } |
-    Group-Object { ($_.BaseName -replace '-regular-.*$','') } |
-    ForEach-Object {
-      $grp = $_.Group | Sort-Object Name -Descending
-      if ($_.Name -eq 'walmart') {
-        $grp | Where-Object {
-          $m = [regex]::Match($_.BaseName, '(\d{4}-\d{2}-\d{2})$')
-          $m.Success -and [math]::Abs(([datetime]$m.Groups[1].Value - [datetime]$today).TotalDays) -le $WalmartMaxAgeDays
-        }
-      } else {
-        $grp | Select-Object -First 1
-      }
-    }
+  $regFiles = Select-RegularFileSet (Get-ChildItem (Join-Path $regDir '*-regular-*.json') -ErrorAction SilentlyContinue) ([datetime]$today) $WalmartMaxAgeDays
   foreach ($rf in $regFiles) {
     $ex = Get-Content $rf.FullName -Raw | ConvertFrom-Json
     # PRICE-MODE GATE (2026-07-15): Aldi/Fareway are Instacart storefronts whose DELIVERY catalog is marked up
