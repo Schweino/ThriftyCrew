@@ -1,0 +1,4 @@
+{
+  "readme": "recipe-floor-id -> board-commodity-id mappings for derive-recipe-floors.ps1. EVERY entry is a ONE-TIME HUMAN VERIFICATION that the two ids are the SAME commodity in the SAME form (fresh vs frozen, block vs shredded, plain vs seasoned all count as DIFFERENT). A verified entry automates that row's monthly floor refresh forever; a wrong one silently prices the floor off a different product (the board-collision class). Add entries as the monthly agent hand-checks the no-board-match list; include reviewed dates.",
+  "map": {}
+}

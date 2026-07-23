@@ -655,7 +655,10 @@ foreach ($d in $deals) {
 $candList = New-Object System.Collections.Generic.List[object]
 foreach ($g in ($matched | Group-Object id)) {
   $f = $g.Group[0]
-  $candList.Add([pscustomobject]@{ id=$g.Name; label=$f.label; unit=$f.unit; candidates=@($g.Group | Select-Object store,name,price_text,size_text,regular,unit_price,basis) })
+  # price_type added 2026-07-23 so derive-recipe-floors.ps1 can tell an EVERYDAY candidate from a sale -
+  # the everyday floor per store is the cheapest everyday-typed candidate, which the comparison row hides
+  # whenever a sale is winning that store.
+  $candList.Add([pscustomobject]@{ id=$g.Name; label=$f.label; unit=$f.unit; candidates=@($g.Group | Select-Object store,name,price_text,size_text,regular,unit_price,basis,price_type) })
 }
 $candPfx = if ($OutName -eq 'comparison') { 'candidates' } else { "$OutName-candidates" }
 (@{ week_of=$today; commodities=$candList } | ConvertTo-Json -Depth 8) | Set-Content (Join-Path $OutDir ("$candPfx-"+$today+".json")) -Encoding UTF8

@@ -26,6 +26,22 @@ $repo = Split-Path -Parent $root
 $log  = Join-Path $root 'local-daily-log.txt'
 function Log($m) { Add-Content -Path $log -Value (("[" + (Get-Date).ToString('s') + "] ") + $m) }
 
+# ---- LOG ROTATION (1st of the month): the pipeline logs grow forever and every line rides every bot ----
+# commit. Roll last month's logs into a gitignored archive; git history keeps the old content anyway.
+if ((Get-Date).Day -eq 1) {
+  $arch = Join-Path $root 'logs-archive'
+  if (-not (Test-Path $arch)) { New-Item -ItemType Directory -Path $arch -Force | Out-Null }
+  $stamp = (Get-Date).AddMonths(-1).ToString('yyyy-MM')
+  foreach ($lf in @('ad-cycle-log.txt', 'alert-log.txt', 'local-daily-log.txt')) {
+    $src = Join-Path $root $lf
+    $dst = Join-Path $arch ($lf -replace '\.txt$', "-$stamp.txt")
+    if ((Test-Path $src) -and -not (Test-Path $dst)) { Move-Item $src $dst -Force -ErrorAction SilentlyContinue }
+  }
+  # monthly off-Ghost content backup (read-only; see ghost-export.ps1). Non-fatal: a backup hiccup must
+  # never block the day's prices.
+  try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'ghost-export.ps1') 2>&1 | ForEach-Object { Log ("ghost-export: " + $_) } } catch { Log ("ghost-export threw: " + $_.Exception.Message) }
+}
+
 # ---- LOCK: never two of these at once (StartWhenAvailable + a manual run could overlap) ----------
 $lock = Join-Path $env:LOCALAPPDATA 'smp-daily-local.lock'
 if (Test-Path $lock) {

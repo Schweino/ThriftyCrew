@@ -36,6 +36,7 @@ param([switch]$Quiet)
 $ErrorActionPreference = 'Stop'
 $root = $PSScriptRoot
 . (Join-Path $root 'pu-lib.ps1')   # THE per-unit math - the same one build-deals-page publishes with
+. (Join-Path $root 'multipack-lib.ps1')   # THE multipack math - the same one build-walmart-deals pre-filters with
 $fail = New-Object System.Collections.ArrayList
 $warn = New-Object System.Collections.ArrayList
 function Say($s) { if (-not $Quiet) { Write-Output $s } }
@@ -106,6 +107,27 @@ try {
   $wfp = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-walmart-fullpull.ps1') 2>$null
   if ($LASTEXITCODE -eq 1) { [void]$warn.Add([string]$wfp) } else { Say ("  ok    " + [string]$wfp) }
 } catch { Say ("  warn  could not run audit-walmart-fullpull: " + $_.Exception.Message) }
+
+# ADVISORY, never blocks: allowlists rot. An entry in multipack-allowlist / coverage-gap-allowlist was
+# reviewed against the store ONCE and then trusted forever - but the store's packaging and naming move, so
+# an entry without a `reviewed` date, or one past 120 days, deserves fresh eyes. Warn with the count; the
+# entries themselves say what to re-check. (Advisory by design: an old-but-correct entry blocking the
+# board would be the cries-wolf failure this file keeps re-learning.)
+try {
+  $stale = 0; $undated = 0
+  foreach ($alf in @('multipack-allowlist.json', 'coverage-gap-allowlist.json')) {
+    $p = Join-Path $root $alf
+    if (-not (Test-Path $p)) { continue }
+    $doc = Get-Content $p -Raw | ConvertFrom-Json
+    $entries = if ($doc.PSObject.Properties['allow']) { @($doc.allow) } elseif ($doc.PSObject.Properties['gaps']) { @($doc.gaps) } else { @() }
+    foreach ($e in $entries) {
+      if (-not $e.PSObject.Properties['reviewed'] -or -not $e.reviewed) { $undated++; continue }
+      try { if (([datetime]::Today - [datetime]$e.reviewed).TotalDays -gt 120) { $stale++ } } catch { $undated++ }
+    }
+  }
+  if (($stale + $undated) -gt 0) { [void]$warn.Add("allowlist hygiene: $stale entr(y/ies) reviewed >120 days ago + $undated with no 'reviewed' date - re-verify against the store and stamp 'reviewed: yyyy-MM-dd' (multipack-allowlist / coverage-gap-allowlist)") }
+  else { Say '  ok    allowlist entries all carry a fresh reviewed date' }
+} catch { Say ("  warn  allowlist hygiene check threw: " + $_.Exception.Message) }
 
 # ---------------------------------------------------------------- 1 + 2: delegate to the existing audits
 foreach ($g in @(
@@ -268,29 +290,11 @@ if ($unpriceable -gt 0) { [void]$warn.Add("$unpriceable linked cell(s) carry no 
 # declare a pack count but state no per-unit weight ("Summit Cola 12 Pack"), and names where the stated weight is
 # the package TOTAL rather than one unit ("Knorr Bouillon Cubes, 3.1 oz, 8 Pack Box" - 8 cubes inside a 3.1 oz
 # box). Those still need a human to look at the store page, which is the only thing a human is actually needed for.
-function Test-SizeIsPackTotal([string]$name, [double]$sizeVal) {
-  if ($sizeVal -le 0) { return $false }
-  $n = $name.ToLower()
-  $packs = @()
-  foreach ($m in [regex]::Matches($n, '(\d+)\s*(?:pk|pack)\b')) { $v = [int]$m.Groups[1].Value; if ($v -gt 1) { $packs += $v } }
-  if (-not $packs.Count) { return $false }
-  # a name can carry two counts ("(2 pack) Pearls Sliced Olives, 6 Pack of 6.5 oz Cans" = 2 x 6 x 6.5 = 78 oz),
-  # so try each count AND their product.
-  $cands = @($packs)
-  if ($packs.Count -gt 1) { $prod = 1; foreach ($p in $packs) { $prod *= $p }; $cands += $prod }
-  foreach ($wm in [regex]::Matches($n, '([\d.]+)\s*(?:fl\s?oz|oz|lb)\b')) {
-    $w = 0.0; if (-not [double]::TryParse($wm.Groups[1].Value, [ref]$w)) { continue }
-    foreach ($c in $cands) {
-      $tot = $w * $c
-      # 3% covers the stores' own rounding of a pack total (2 x 15 oz listed as 29.9, 12 x 15.5 as 186.4)
-      if ($tot -gt 0 -and ([math]::Abs($tot - $sizeVal) / $tot) -le 0.03) { return $true }
-    }
-  }
-  return $false
-}
-$allowF = Join-Path $root 'multipack-allowlist.json'
-$allow = @()
-if (Test-Path $allowF) { $allow = @((Get-Content $allowF -Raw | ConvertFrom-Json).allow | ForEach-Object { $_.store + '|' + $_.item }) }
+# 2026-07-23: the arithmetic above now lives in multipack-lib.ps1 (dot-sourced at the top), shared with
+# build-walmart-deals.ps1's pre-filter so builder and gate can never drift apart - a row the builder keeps
+# is a row this guard accepts, by construction. The essay above stays here because THIS is where the
+# design was learned; the lib is deliberately just the math.
+$allow = Get-MpAllowKeys $root
 $mp = 0; $mpTotals = 0; $mpUnknown = 0
 foreach ($f in (RegFiles)) {
   $prefix = ($f.BaseName -replace '-regular-.*$','')
@@ -299,19 +303,12 @@ foreach ($f in (RegFiles)) {
   $doc = Get-Content $f.FullName -Raw | ConvertFrom-Json
   foreach ($d in $doc.deals) {
     $name = [string]$d.item; $size = [string]$d.size
-    if (-not $name -or -not $size) { continue }
-    $pn = [regex]::Match($name.ToLower(), '(\d+)\s*(?:pk\b|pack\b)')
-    if (-not $pn.Success) { continue }
-    if ([int]$pn.Groups[1].Value -le 1) { continue }
-    $ps = [regex]::Match($size.ToLower(), '(\d+)\s*(?:x|pk\b|pack\b|ct\b|count\b)')
-    if ($ps.Success -and ([int]$ps.Groups[1].Value) -gt 1) { continue }
-    if ($size -notmatch '[\d.]+\s*(fl\s?oz|oz|lb|gal|qt|l|ml|g)\b') { continue }
+    $verdict = Test-MpClassify ([string]$doc.store) $name $size $allow
+    if ($verdict -eq 'not-multipack') { continue }
     # the size already IS the pack total -> the row is correct, not a bug. Do the multiplication rather than
-    # demanding a human confirm it (see the note above this function).
-    $sv = 0.0; [void][double]::TryParse(([regex]::Match($size, '[\d.]+').Value), [ref]$sv)
-    if (Test-SizeIsPackTotal $name $sv) { $mpTotals++; continue }
-    $key = [string]$doc.store + '|' + $name
-    if ($allow -contains $key) { continue }
+    # demanding a human confirm it (see the note above).
+    if ($verdict -eq 'pack-total')  { $mpTotals++; continue }
+    if ($verdict -eq 'allowlisted') { continue }
     # NOTHING TO MULTIPLY -> STILL A HARD FAIL. This gate fails CLOSED, on purpose.
     # I first made this case an "unknown" (count it, warn, move on), because 109 of Walmart's 711 board item
     # names are TRUNCATED AT EXACTLY 60 CHARS and the per-unit weight lives at the END of a grocery name, so it

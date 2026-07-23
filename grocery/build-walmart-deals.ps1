@@ -273,6 +273,14 @@ function Build-Row($raw) {
       regular   = $null
       source_ad = 'everyday shelf price'
       price_type = 'everyday'
+      # THE current_price CONTRACT (guard 10), added 2026-07-23: what the store CHARGES, in the SAME BASIS as
+      # ad_price. Here that is the same store-sourced number ad_price was built from (lp/up straight off
+      # Walmart's own priceLines - the emit invariant above already proves ad_price reproduces it through the
+      # real engine), so guard 10's ad==current check is a FILE-INTEGRITY invariant for these rows: any
+      # post-build edit, bad merge, or corruption that moves ad_price without current_price now hard-fails the
+      # gate instead of publishing. The independent store-truth check remains the builder's reproduce-invariant
+      # at capture time (same division of labor as Baker's guard 11 raw-capture check).
+      current_price = $t.ad
       wm_unit_price = $upm.Groups[0].Value.Trim()   # kept for audit; the engine ignores unknown fields
       item_id       = [string]$raw.id
       qty_basis     = ($t.shape + '; qty ' + $basis)
@@ -286,36 +294,13 @@ function Build-Row($raw) {
 # 2026-07-23: a broadened Walmart pull dragged in bulk multipacks ("(4 pack) Domino Sugar, 10 lb" = 40 lb) and
 # ice-cream novelties whose name states only the pack TOTAL. All 32 hard-failed guard 5 and blocked the whole
 # nightly publish, firing ~20 alert emails. These are never a normal shopper's single-buy unit, so they do not
-# belong on the board. Mirror guard 5's arithmetic EXACTLY (including its allowlist) so builder and guard stay
-# in lockstep - a row this rejects is a row the guard would have hard-failed, and vice versa.
-# (Defined ABOVE the self-test so `-SelfTest` can prove the filter still rejects the 2026-07-23 junk.)
-function BW-SizeIsPackTotal([string]$name, [double]$sizeVal) {
-  if ($sizeVal -le 0) { return $false }
-  $n = $name.ToLower(); $packs = @()
-  foreach ($m in [regex]::Matches($n, '(\d+)\s*(?:pk|pack)\b')) { $v = [int]$m.Groups[1].Value; if ($v -gt 1) { $packs += $v } }
-  if (-not $packs.Count) { return $false }
-  $cands = @($packs); if ($packs.Count -gt 1) { $p = 1; foreach ($x in $packs) { $p *= $x }; $cands += $p }
-  foreach ($wm in [regex]::Matches($n, '([\d.]+)\s*(?:fl\s?oz|oz|lb)\b')) {
-    $w = 0.0; if (-not [double]::TryParse($wm.Groups[1].Value, [ref]$w)) { continue }
-    foreach ($c in $cands) { $tot = $w * $c; if ($tot -gt 0 -and ([math]::Abs($tot - $sizeVal) / $tot) -le 0.03) { return $true } }
-  }
-  return $false
-}
-$bwAllowF = Join-Path $root 'multipack-allowlist.json'
-$bwAllow = @()
-if (Test-Path $bwAllowF) { $bwAllow = @((Get-Content $bwAllowF -Raw | ConvertFrom-Json).allow | ForEach-Object { $_.store + '|' + $_.item }) }
+# belong on the board. The arithmetic is ONE shared function (multipack-lib.ps1, dot-sourced by guards.ps1 too),
+# so builder and gate can never drift apart - a row this rejects is a row the guard would have hard-failed,
+# BY CONSTRUCTION, not by two hand-synced copies. (Defined ABOVE the self-test so -SelfTest proves it.)
+. (Join-Path $root 'multipack-lib.ps1')
+$bwAllow = Get-MpAllowKeys $root
 function BW-IsMultipackReject($item, $size) {
-  $name = [string]$item; $sz = [string]$size
-  if (-not $name -or -not $sz) { return $false }
-  $pn = [regex]::Match($name.ToLower(), '(\d+)\s*(?:pk\b|pack\b)')
-  if (-not $pn.Success -or [int]$pn.Groups[1].Value -le 1) { return $false }
-  $ps = [regex]::Match($sz.ToLower(), '(\d+)\s*(?:x|pk\b|pack\b|ct\b|count\b)')
-  if ($ps.Success -and [int]$ps.Groups[1].Value -gt 1) { return $false }
-  if ($sz -notmatch '[\d.]+\s*(fl\s?oz|oz|lb|gal|qt|l|ml|g)\b') { return $false }
-  $sv = 0.0; [void][double]::TryParse(([regex]::Match($sz, '[\d.]+').Value), [ref]$sv)
-  if (BW-SizeIsPackTotal $name $sv) { return $false }
-  if ($bwAllow -contains ('Walmart|' + $name)) { return $false }
-  return $true
+  return ((Test-MpClassify 'Walmart' ([string]$item) ([string]$size) $script:bwAllow) -eq 'reject')
 }
 
 if ($SelfTest) {

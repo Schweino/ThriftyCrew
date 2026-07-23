@@ -64,3 +64,7 @@ ghost-config.ps1
 Thumbs.db
 .DS_Store
 grocery/out/captures/
+grocery/logs-archive/
+!/site-backups/
+site-backups/*
+!site-backups/ghost-export-*.zip

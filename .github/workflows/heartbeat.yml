@@ -25,25 +25,29 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 50     # enough history to find the bot's last commit
-
+      # 2026-07-23: API instead of checkout. The old version cloned 50 commits and searched them for the
+      # bot - which (a) paid for a checkout every day and (b) went blind (false alarm) whenever 50+ human
+      # commits landed between bot commits, which a busy day can produce. The commits API filters by author
+      # server-side with no clone at all: cheaper AND immune to commit volume. The 36h threshold is
+      # unchanged: a full missed day plus cron-drift slack; two clean days in a row can never trip it.
+      # Since the 2026-07-23 local-primary flip the bot commit normally comes from Brad's PC (~13:30-14:30
+      # UTC) with the 16:00 UTC cloud run as backup - this heartbeat is deliberately indifferent to WHICH
+      # runner committed; it only cares that SOMEONE did.
       - name: Has the pipeline committed recently?
         shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          LAST=$(git log --author="smp-pipeline-bot" -1 --format=%ct || true)
-          if [ -z "$LAST" ]; then
-            echo "::error::No smp-pipeline-bot commit found in the last 50 commits. The daily pipeline may be dead."
+          SINCE=$(date -u -d '36 hours ago' +%Y-%m-%dT%H:%M:%SZ)
+          RESP=$(curl -sf -H "Authorization: Bearer $GH_TOKEN" -H "User-Agent: smp-heartbeat" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/commits?author=actions@users.noreply.github.com&since=$SINCE&per_page=1") || {
+            echo "::error::Heartbeat could not reach the commits API - cannot confirm the pipeline is alive. Check Actions + the repo manually."
+            exit 1
+          }
+          COUNT=$(echo "$RESP" | python3 -c "import sys,json; print(len(json.load(sys.stdin)))")
+          if [ "$COUNT" -eq 0 ]; then
+            echo "::error::The daily grocery pipeline has not committed in 36h. Neither the local 8:30am run nor the 16:00 UTC cloud backup is committing. The live board and smp-feed.json are serving stale prices. Check the local task log (grocery/local-daily-log.txt on the PC) and the Actions tab for 'Daily grocery pipeline'."
             exit 1
           fi
-          NOW=$(date +%s)
-          AGE_H=$(( (NOW - LAST) / 3600 ))
-          echo "Last pipeline commit was ${AGE_H}h ago ($(git log --author='smp-pipeline-bot' -1 --format=%cd))."
-          # 36h = a full missed day plus slack for cron drift. Two clean days in a row can never trip this.
-          if [ "$AGE_H" -gt 36 ]; then
-            echo "::error::The daily grocery pipeline has not committed for ${AGE_H}h (>36h). It is not running, or it is failing before its commit step. The live board and smp-feed.json are serving stale prices. Check the Actions tab for 'Daily grocery pipeline'."
-            exit 1
-          fi
-          echo "OK: pipeline is alive."
+          echo "OK: pipeline is alive (a bot commit exists within the last 36h)."

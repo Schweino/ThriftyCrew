@@ -233,10 +233,44 @@ async function sendRequesterEmail(env, { email, item, commodity, cheapest }) {
   return (await r.json()).id;
 }
 
+// ops alert: lets the GitHub Actions backup run send a REAL Gmail alert to Brad (it holds no Google
+// token of its own - only GHOST_ADMIN_KEY - so it proves itself with the same SHA-256-of-admin-key
+// auth as /notify and this Worker does the sending). Recipient is fixed server-side; a stolen hash
+// could only ever email Brad about the pipeline, never exfiltrate or spam third parties. The cloud
+// runs at most once per day, which is the de-dup.
+async function sendOpsEmail(env, { subject, body }) {
+  const token = await getAccessToken(env);
+  const raw =
+    "To: schweino68@gmail.com\r\n" +
+    "Subject: " + subject.replace(/[\r\n]+/g, " ").slice(0, 200) + "\r\n" +
+    "Content-Type: text/plain; charset=UTF-8\r\n\r\n" +
+    body.slice(0, 5000) + "\r\n\r\n(Automated ops alert relayed through the smp-feed Worker.)";
+  const r = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", {
+    method: "POST",
+    headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" },
+    body: JSON.stringify({ raw: b64url(raw) }),
+  });
+  if (!r.ok) throw new Error("gmail send failed: " + r.status + " " + (await r.text()).slice(0, 200));
+  return (await r.json()).id;
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const origin = request.headers.get("Origin") || "";
+
+    // server-to-server only (no CORS path): the Actions backup posts here on failure.
+    if (url.pathname === "/ops-alert") {
+      if (request.method !== "POST") return json({ ok: false, error: "method not allowed" }, 405, origin);
+      if (!(await notifyAuthOk(env, request))) return json({ ok: false, error: "unauthorized" }, 401, origin);
+      let data;
+      try { data = await request.json(); } catch { return json({ ok: false, error: "invalid JSON" }, 400, origin); }
+      const subject = (data.subject || "").toString().trim();
+      const body = (data.body || "").toString().trim();
+      if (!subject || !body) return json({ ok: false, error: "bad payload" }, 400, origin);
+      try { const id = await sendOpsEmail(env, { subject, body }); return json({ ok: true, id: id }, 200, origin); }
+      catch (e) { return json({ ok: false, error: "send failed" }, 502, origin); }
+    }
 
     if (url.pathname === "/alert") {
       if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders(origin) });

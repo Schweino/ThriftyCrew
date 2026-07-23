@@ -272,6 +272,12 @@ function Build-Row($raw) {
       size      = $t.size
       regular   = $null
       source_ad = 'everyday club price (Omaha 68137)'
+      # THE current_price CONTRACT (guard 10), added 2026-07-23: what the store CHARGES, same basis as
+      # ad_price - here the same store-sourced number ad_price was built from (Sam's own lp/up; the emit
+      # invariant above proves ad_price reproduces it through the real engine). Guard 10's ad==current check
+      # becomes a file-integrity invariant for Sam's rows: an edit/merge/corruption that moves ad_price
+      # without current_price hard-fails the gate. Store-truth stays with the capture-time reproduce-invariant.
+      current_price = $t.ad
       sams_unit_price = $upm.Groups[0].Value.Trim()   # kept for audit; the engine ignores unknown fields
       sams_item_id    = [string]$raw.id
       qty_basis       = ($t.shape + '; qty ' + $basis)
@@ -410,6 +416,11 @@ $outFile = Join-Path $outDir ("sams-deals-$Date.json")
   club       = "Omaha Sam's Club, 13130 L St, 68137"
   captured   = $Date
   shape      = 'PACKAGE price + pack size (ad_price = price of ONE size). Built by build-sams-deals.ps1; every row verified to reproduce Sam''s own unitPrice through compare-deals'' real Get-UnitPrice.'
+  # HOW COMPREHENSIVE was this slice? Sam's is CAPTCHA-walled and pulled in slices; compare-deals unions every
+  # slice in its 14-day window, so a slice keeps the file dates fresh while the OLDER slices quietly carry most
+  # of the coverage toward the window's cliff (the exact masking that hid the 2026-07-23 Walmart aging risk).
+  # Distinct search terms is the machine-readable slice-vs-comprehensive marker audit-walmart-fullpull watches.
+  pull_terms = @($raw | Select-Object -ExpandProperty q -Unique).Count
   deals      = $ded
 } | ConvertTo-Json -Depth 6 | Set-Content $outFile -Encoding UTF8
 

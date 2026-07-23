@@ -1,0 +1,550 @@
+﻿{
+    "derived_from":  "candidates-2026-07-23.json",
+    "updated_cells":  239,
+    "unchanged_cells":  147,
+    "ids_with_no_board_match":  [
+                                    "93-7-ground-turkey",
+                                    "boneless-skinless-chicken-thigh",
+                                    "1-3-fat-cream-cheese",
+                                    "apple",
+                                    "cannellini-beans",
+                                    "cashews",
+                                    "cheddar-cheese-shredded",
+                                    "fries",
+                                    "frozen-chopped-spinach",
+                                    "frozen-green-peas",
+                                    "ginger",
+                                    "golden-raisins",
+                                    "greek-yogurt",
+                                    "green-beans",
+                                    "green-cabbage",
+                                    "hickory-smoked-bacon",
+                                    "honey-dijon-mustard",
+                                    "light-sour-cream",
+                                    "marinara-sauce",
+                                    "olives",
+                                    "pineapple-chunks",
+                                    "potato",
+                                    "provolone-cheese",
+                                    "red-bell-pepper",
+                                    "roasted-red-peppers",
+                                    "rotini-pasta",
+                                    "sugar-free-maple-syrup",
+                                    "traditional-pasta-sauce",
+                                    "white-mushrooms",
+                                    "zero-sugar-soda",
+                                    "93-7-ground-beef",
+                                    "sugar-free-bbq-sauce",
+                                    "beef-chuck-roast",
+                                    "frozen-broccoli-florets",
+                                    "buffalo-wing-sauce",
+                                    "chipotle-in-adobo",
+                                    "coconut-milk",
+                                    "diced-green-chiles",
+                                    "fajita-seasoning",
+                                    "frozen-green-beans",
+                                    "green-bell-pepper",
+                                    "hot-honey",
+                                    "hot-italian-sausage",
+                                    "parmesan-cheese",
+                                    "penne-pasta",
+                                    "pepperoncini",
+                                    "reduced-fat-mozzarella",
+                                    "jasmine-rice",
+                                    "salsa-verde",
+                                    "seasoned-black-beans",
+                                    "shredded-carrots",
+                                    "canned-sweet-corn",
+                                    "turkey-pepperoni",
+                                    "zero-sugar-soda-2l",
+                                    "pork-loin",
+                                    "fat-free-cheddar",
+                                    "corn-tortillas",
+                                    "jerk-seasoning",
+                                    "fresh-cilantro",
+                                    "jalapeno",
+                                    "liquid-smoke",
+                                    "worcestershire-sauce",
+                                    "smoked-paprika",
+                                    "feta-cheese",
+                                    "mozzarella-cheese",
+                                    "cucumber",
+                                    "apple-cider",
+                                    "au-jus-gravy-mix",
+                                    "dried-rosemary",
+                                    "condensed-french-onion-soup",
+                                    "celery-salt",
+                                    "sweet-chili-sauce",
+                                    "swiss-cheese",
+                                    "white-wine-vinegar",
+                                    "pineapple-juice",
+                                    "cheddar-cheese",
+                                    "all-purpose-flour",
+                                    "sriracha",
+                                    "breadcrumbs",
+                                    "capers"
+                                ],
+    "ids_with_unit_mismatch":  [
+                                   "milk (row \u0027each\u0027 vs board \u0027gallon\u0027)",
+                                   "ranch-seasoning-mix (row \u0027each\u0027 vs board \u0027oz\u0027)",
+                                   "taco-seasoning (row \u0027each\u0027 vs board \u0027oz\u0027)",
+                                   "fresh-mint (row \u0027each\u0027 vs board \u0027oz\u0027)"
+                               ],
+    "cells_with_no_everyday_candidate":  [
+                                             "balsamic-vinegar/Family Fare",
+                                             "brown-sugar/Family Fare",
+                                             "dijon-mustard/Family Fare",
+                                             "enchilada-sauce/Family Fare",
+                                             "hominy/Family Fare",
+                                             "poblano-peppers/Family Fare",
+                                             "red-wine-vinegar/Family Fare",
+                                             "pork-tenderloin/Sam\u0027s Club",
+                                             "sun-dried-tomatoes/Baker\u0027s",
+                                             "teriyaki-sauce/Family Fare",
+                                             "teriyaki-sauce/Sam\u0027s Club",
+                                             "teriyaki-sauce/Aldi",
+                                             "teriyaki-sauce/Baker\u0027s",
+                                             "rice-vinegar/Family Fare",
+                                             "rice-vinegar/Aldi",
+                                             "dried-basil/Family Fare",
+                                             "green-onions/Aldi",
+                                             "apple-cider-vinegar/Hy-Vee",
+                                             "dried-thyme/Family Fare"
+                                         ],
+    "deltas_over_25pct":  [
+                              {
+                                  "id":  "balsamic-vinegar",
+                                  "store":  "Baker\u0027s",
+                                  "old":  0.3142,
+                                  "new":  0.2264,
+                                  "item":  "Filippo Berio® Balsamic Vinegar of Modena 16.9 fl oz"
+                              },
+                              {
+                                  "id":  "balsamic-vinegar",
+                                  "store":  "Walmart",
+                                  "old":  0.4639,
+                                  "new":  0.2301,
+                                  "item":  "Pompeian Balsamic Vinegar - 16 fl oz"
+                              },
+                              {
+                                  "id":  "balsamic-vinegar",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.1757,
+                                  "new":  0.2264,
+                                  "item":  "Nothing But The Truth Organic Balsamic Vinegar"
+                              },
+                              {
+                                  "id":  "bread-crumbs",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.1193,
+                                  "new":  0.2978,
+                                  "item":  "Gustare Vita Italian Bread Crumbs"
+                              },
+                              {
+                                  "id":  "bread-crumbs",
+                                  "store":  "Baker\u0027s",
+                                  "old":  0.1193,
+                                  "new":  0.3113,
+                                  "item":  "Kikkoman® Panko Japanese Style Bread Crumbs"
+                              },
+                              {
+                                  "id":  "brown-sugar",
+                                  "store":  "Sam\u0027s Club",
+                                  "old":  0.03,
+                                  "new":  0.0623,
+                                  "item":  "Member\u0027s Mark Light Brown Sugar, 7 lbs."
+                              },
+                              {
+                                  "id":  "brown-sugar",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.0934,
+                                  "new":  0.0616,
+                                  "item":  "That\u0027s Smart! Light Brown Sugar"
+                              },
+                              {
+                                  "id":  "carrots",
+                                  "store":  "Hy-Vee",
+                                  "old":  1.5,
+                                  "new":  0.995,
+                                  "item":  "Bunny Luv Organic Whole Carrots"
+                              },
+                              {
+                                  "id":  "curry-powder",
+                                  "store":  "Family Fare",
+                                  "old":  2.49,
+                                  "new":  1.395,
+                                  "item":  "Sugar N Spice Curry Powder Pp"
+                              },
+                              {
+                                  "id":  "enchilada-sauce",
+                                  "store":  "Baker\u0027s",
+                                  "old":  0.129,
+                                  "new":  0.0925,
+                                  "item":  "Kroger® Mild Red Enchilada Sauce 28 oz"
+                              },
+                              {
+                                  "id":  "enchilada-sauce",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.269,
+                                  "new":  0.1139,
+                                  "item":  "Las Palmas Mild Enchilada Sauce, 28 oz"
+                              },
+                              {
+                                  "id":  "hominy",
+                                  "store":  "Baker\u0027s",
+                                  "old":  0.1155,
+                                  "new":  0.0426,
+                                  "item":  "Juanita\u0027s Foods Mexican Style Hominy, 110 oz, Can 110 oz t"
+                              },
+                              {
+                                  "id":  "honey",
+                                  "store":  "Baker\u0027s",
+                                  "old":  0.3325,
+                                  "new":  0.2412,
+                                  "item":  "Smart Way Honey"
+                              },
+                              {
+                                  "id":  "honey",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.4167,
+                                  "new":  0.2141,
+                                  "item":  "Pillsbury Grands! Flaky Layers Honey Butter Big Biscuits, 8 count"
+                              },
+                              {
+                                  "id":  "ketchup",
+                                  "store":  "Family Fare",
+                                  "old":  0.19,
+                                  "new":  0.0995,
+                                  "item":  "Our Family Squeeze Bottle Ketchup"
+                              },
+                              {
+                                  "id":  "kidney-beans",
+                                  "store":  "Family Fare",
+                                  "old":  0.0639,
+                                  "new":  0.0927,
+                                  "item":  "Full Circle Market Kidney Beans, Low Sodium, Dark Red 15 Oz"
+                              },
+                              {
+                                  "id":  "paprika",
+                                  "store":  "Family Fare",
+                                  "old":  0.668,
+                                  "new":  0.8443,
+                                  "item":  "Paprika Our Family"
+                              },
+                              {
+                                  "id":  "paprika",
+                                  "store":  "Baker\u0027s",
+                                  "old":  1.14,
+                                  "new":  0.625,
+                                  "item":  "Smart Way Ground Paprika 2 oz"
+                              },
+                              {
+                                  "id":  "paprika",
+                                  "store":  "Hy-Vee",
+                                  "old":  1.41,
+                                  "new":  0.625,
+                                  "item":  "Thats Smart Paprika"
+                              },
+                              {
+                                  "id":  "peanut-butter",
+                                  "store":  "Aldi",
+                                  "old":  0.134,
+                                  "new":  0.0988,
+                                  "item":  "Peanut Delight Creamy Peanut Butter"
+                              },
+                              {
+                                  "id":  "peanut-butter",
+                                  "store":  "Baker\u0027s",
+                                  "old":  0.143,
+                                  "new":  0.0936,
+                                  "item":  "Kroger Peanut Butter Creamy (64 oz)"
+                              },
+                              {
+                                  "id":  "peanut-butter",
+                                  "store":  "Family Fare",
+                                  "old":  0.25,
+                                  "new":  0.1431,
+                                  "item":  "Creamy Peanut Butter Our Family"
+                              },
+                              {
+                                  "id":  "sesame-oil",
+                                  "store":  "Baker\u0027s",
+                                  "old":  1.24,
+                                  "new":  0.6378,
+                                  "item":  "Kroger Pure Sesame Oil"
+                              },
+                              {
+                                  "id":  "toasted-sesame-seeds",
+                                  "store":  "Walmart",
+                                  "old":  0.784,
+                                  "new":  0.5466,
+                                  "item":  "Terrasoul Superfoods Organic Black Sesame Seeds, 2 Lbs - Raw"
+                              },
+                              {
+                                  "id":  "toasted-sesame-seeds",
+                                  "store":  "Hy-Vee",
+                                  "old":  2.65,
+                                  "new":  0.2369,
+                                  "item":  "Ball Park Sesame Seed Burger Buns, 8 Count"
+                              },
+                              {
+                                  "id":  "toasted-sesame-seeds",
+                                  "store":  "Family Fare",
+                                  "old":  2.65,
+                                  "new":  0.2959,
+                                  "item":  "Pepperidge Farm® Soft White With Sesame Seeds Hoagie Rolls 14.500 Oz"
+                              },
+                              {
+                                  "id":  "tomato-paste",
+                                  "store":  "Family Fare",
+                                  "old":  0.215,
+                                  "new":  0.1575,
+                                  "item":  "Our Family Tomato Paste 12 Oz"
+                              },
+                              {
+                                  "id":  "white-vinegar",
+                                  "store":  "Sam\u0027s Club",
+                                  "old":  0.047,
+                                  "new":  0.0224,
+                                  "item":  "Member\u0027s Mark Distilled White Vinegar, 1 gal., 2 pk."
+                              },
+                              {
+                                  "id":  "white-vinegar",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.081,
+                                  "new":  0.0262,
+                                  "item":  "Hy Vee White Distilled Vinegar"
+                              },
+                              {
+                                  "id":  "ground-cumin",
+                                  "store":  "Family Fare",
+                                  "old":  1.745,
+                                  "new":  1.145,
+                                  "item":  "Sugar \u0027N Spice Cumin Ground Pp"
+                              },
+                              {
+                                  "id":  "hot-sauce",
+                                  "store":  "Family Fare",
+                                  "old":  0.3742,
+                                  "new":  0.1658,
+                                  "item":  "Valentina Hot Sauce, Mexican 12.5 Fl Oz"
+                              },
+                              {
+                                  "id":  "hot-sauce",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.3325,
+                                  "new":  0.2492,
+                                  "item":  "Franks Redhot Original Cayenne Pepper Hot Sauce"
+                              },
+                              {
+                                  "id":  "olive-oil",
+                                  "store":  "Family Fare",
+                                  "old":  0.3991,
+                                  "new":  0.2068,
+                                  "item":  "Violi Mediterranean Blend, Italian Sunflower \u0026 Extra Virgin Olive Oil 33.8 Oz"
+                              },
+                              {
+                                  "id":  "olive-oil",
+                                  "store":  "Baker\u0027s",
+                                  "old":  0.37,
+                                  "new":  0.2756,
+                                  "item":  "Kroger Extra Virgin Olive Oil"
+                              },
+                              {
+                                  "id":  "sun-dried-tomatoes",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.499,
+                                  "new":  0.3327,
+                                  "item":  "Mission Sun-Dried Tomato Basil Wraps 6Ct"
+                              },
+                              {
+                                  "id":  "teriyaki-sauce",
+                                  "store":  "Walmart",
+                                  "old":  0.165,
+                                  "new":  0.2649,
+                                  "item":  "Kikkoman Teriyaki BBQ Original 20.5 oz Glass Bottle"
+                              },
+                              {
+                                  "id":  "bay-leaves",
+                                  "store":  "Family Fare",
+                                  "old":  33.25,
+                                  "new":  15.3,
+                                  "item":  "Sugar \u0027N Spice Bay Leaves"
+                              },
+                              {
+                                  "id":  "bay-leaves",
+                                  "store":  "Walmart",
+                                  "old":  1.25,
+                                  "new":  3.995,
+                                  "item":  "Soeos Whole Bay Leaves 2oz, Dried Laurel, Non-GMO Verified,"
+                              },
+                              {
+                                  "id":  "garam-masala",
+                                  "store":  "Walmart",
+                                  "old":  0.994,
+                                  "new":  1.643,
+                                  "item":  "24 Mantra Organic Garam Masala"
+                              },
+                              {
+                                  "id":  "rice-vinegar",
+                                  "store":  "Walmart",
+                                  "old":  0.187,
+                                  "new":  0.2433,
+                                  "item":  "Mizkan Rice Vinegar for Cooking, 12 fl oz"
+                              },
+                              {
+                                  "id":  "dried-oregano",
+                                  "store":  "Family Fare",
+                                  "old":  2.92,
+                                  "new":  1.1067,
+                                  "item":  "Badia Spices Whole Oregano   2.5 Oz."
+                              },
+                              {
+                                  "id":  "salt",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.0345,
+                                  "new":  0.0608,
+                                  "item":  "Hy-Vee Iodized Salt"
+                              },
+                              {
+                                  "id":  "black-pepper",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.5814,
+                                  "new":  0.4167,
+                                  "item":  "Thats Smart Black Pepper"
+                              },
+                              {
+                                  "id":  "dried-parsley",
+                                  "store":  "Walmart",
+                                  "old":  1.44,
+                                  "new":  2.2111,
+                                  "item":  "Great Value Parsley Flakes, 2.7 oz"
+                              },
+                              {
+                                  "id":  "cayenne-pepper",
+                                  "store":  "Baker\u0027s",
+                                  "old":  1.18,
+                                  "new":  2.86,
+                                  "item":  "Kroger Ground Red Cayenne Pepper Shaker"
+                              },
+                              {
+                                  "id":  "ground-ginger",
+                                  "store":  "Walmart",
+                                  "old":  0.809,
+                                  "new":  3,
+                                  "item":  "McCormick Ground Ginger, 1.5 oz Bottle"
+                              },
+                              {
+                                  "id":  "ground-ginger",
+                                  "store":  "Hy-Vee",
+                                  "old":  1.495,
+                                  "new":  0.99,
+                                  "item":  "Hy-Vee Ground Ginger"
+                              },
+                              {
+                                  "id":  "ground-coriander",
+                                  "store":  "Family Fare",
+                                  "old":  3.2071,
+                                  "new":  1.045,
+                                  "item":  "Sugar \u0027N Spice Coriander Ground Pp"
+                              },
+                              {
+                                  "id":  "ground-coriander",
+                                  "store":  "Walmart",
+                                  "old":  1.96,
+                                  "new":  0.9964,
+                                  "item":  "Badia Coriander Ground"
+                              },
+                              {
+                                  "id":  "lemon-juice",
+                                  "store":  "Walmart",
+                                  "old":  0.035,
+                                  "new":  0.1116,
+                                  "item":  "ReaLemon 100% Lemon Juice, 32 fl oz bottle"
+                              },
+                              {
+                                  "id":  "lemon-juice",
+                                  "store":  "Sam\u0027s Club",
+                                  "old":  0.135,
+                                  "new":  0.0675,
+                                  "item":  "ReaLemon 100% Lemon Juice (2 pk)"
+                              },
+                              {
+                                  "id":  "ground-nutmeg",
+                                  "store":  "Hy-Vee",
+                                  "old":  1.1745,
+                                  "new":  1.8821,
+                                  "item":  "Hy-Vee Ground Nutmeg 2.12 oz"
+                              },
+                              {
+                                  "id":  "sugar",
+                                  "store":  "Family Fare",
+                                  "old":  0.0903,
+                                  "new":  0.0623,
+                                  "item":  "Our Family Sugar, Pure Granulated 64 Oz"
+                              },
+                              {
+                                  "id":  "fish-sauce",
+                                  "store":  "Baker\u0027s",
+                                  "old":  0.9601,
+                                  "new":  1.2692,
+                                  "item":  "Red Boat Fish Sauce"
+                              },
+                              {
+                                  "id":  "apple-cider-vinegar",
+                                  "store":  "Walmart",
+                                  "old":  0.052,
+                                  "new":  0.0738,
+                                  "item":  "Great Value Apple Cider Vinegar"
+                              },
+                              {
+                                  "id":  "dried-thyme",
+                                  "store":  "Walmart",
+                                  "old":  1.16,
+                                  "new":  1.9857,
+                                  "item":  "Great Value Ground Thyme, 1.4 oz"
+                              },
+                              {
+                                  "id":  "dried-thyme",
+                                  "store":  "Hy-Vee",
+                                  "old":  3.9867,
+                                  "new":  2.64,
+                                  "item":  "Hy-Vee Thyme"
+                              },
+                              {
+                                  "id":  "ground-turmeric",
+                                  "store":  "Family Fare",
+                                  "old":  1.345,
+                                  "new":  0.675,
+                                  "item":  "Sugar \u0027N Spice Turmeric Ground 2 Oz"
+                              },
+                              {
+                                  "id":  "red-pepper-flakes",
+                                  "store":  "Family Fare",
+                                  "old":  1.9933,
+                                  "new":  2.5267,
+                                  "item":  "Mc Cormick Crushed Red Pepper 1.5 Oz"
+                              },
+                              {
+                                  "id":  "frozen-peas",
+                                  "store":  "Hy-Vee",
+                                  "old":  0.128,
+                                  "new":  0.0817,
+                                  "item":  "That\u0027s Smart! Sweet Peas (Frozen)"
+                              },
+                              {
+                                  "id":  "ground-cinnamon",
+                                  "store":  "Family Fare",
+                                  "old":  0.676,
+                                  "new":  0.272,
+                                  "item":  "That\u0027s Smart! Ground Cinnamon 2.5 Oz"
+                              },
+                              {
+                                  "id":  "ground-cinnamon",
+                                  "store":  "Sam\u0027s Club",
+                                  "old":  0.4433,
+                                  "new":  0.141,
+                                  "item":  "Pillsbury Cinnamon Rolls with Cinnabon Icing 13 oz., 4 pk."
+                              }
+                          ]
+}

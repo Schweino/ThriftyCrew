@@ -138,3 +138,7 @@ if ($urlRows.Count) {
 }
 Write-Output ("fareway-regular-$asofS.json: $($deals.Count) commodities")
 $deals | ForEach-Object { "  {0,-20} {1,-8} {2}" -f $_.item.Substring(0,[Math]::Min(20,$_.item.Length)), $_.ad_price, $_.size }
+# 2026-07-23: a partial storefront pull must not shrink the board - carry items the previous capture had
+# and this one missed (as_of-stamped, 14-day cap). See carry-forward-regular.ps1 for why these stores
+# can't use the Walmart/Sam's union instead.
+& powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'carry-forward-regular.ps1') -Store fareway | Write-Output
