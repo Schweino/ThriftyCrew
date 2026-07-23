@@ -97,6 +97,16 @@ foreach ($st in @(
   } catch { Say ("  warn  could not run $($st.label) self-test: " + $_.Exception.Message) }
 }
 
+# ADVISORY, never blocks: the Walmart union survives a partial pull only while a COMPREHENSIVE capture sits
+# inside its 14-day window - and nothing else watches that (guard 9 sees file AGE, which daily partials keep
+# fresh; the Wednesday watchdog sees mtimes, which a partial refresh updates). audit-walmart-fullpull.ps1 is
+# the single copy of that logic; check-ad-cycles emails on it (deduped), this line just makes it visible in
+# every gate run. A real expiry still fails CLOSED via the coverage-regression guard above.
+try {
+  $wfp = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-walmart-fullpull.ps1') 2>$null
+  if ($LASTEXITCODE -eq 1) { [void]$warn.Add([string]$wfp) } else { Say ("  ok    " + [string]$wfp) }
+} catch { Say ("  warn  could not run audit-walmart-fullpull: " + $_.Exception.Message) }
+
 # ---------------------------------------------------------------- 1 + 2: delegate to the existing audits
 foreach ($g in @(
     @{ f='audit-price-mode.ps1';        n='price-mode (in-store pricing)' },

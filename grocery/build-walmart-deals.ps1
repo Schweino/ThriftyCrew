@@ -476,6 +476,12 @@ $outFile = Join-Path $outDir ("walmart-regular-$Date.json")
   price_type = 'everyday'
   source     = 'walmart.com in-page __NEXT_DATA__ priceDetails.priceLines (Omaha L St Supercenter 68137); built by build-walmart-deals.ps1, every row verified to reproduce Walmart''s own unitPrice through compare-deals'' real Get-UnitPrice.'
   captured   = $Date
+  # HOW COMPREHENSIVE was this pull? Distinct search terms in the raw capture. A full worklist pull runs ~400+
+  # terms (commodity-search.json holds 447); a PerimeterX-throttled partial runs ~50. Deal COUNT cannot tell
+  # them apart (the 2026-07-23 partial had 1329 deals vs the full pull's 886 - deep on few commodities), so the
+  # term count is the machine-readable partial/full marker that audit-walmart-fullpull.ps1 watches. Without it,
+  # a string of partials silently ages the last full capture toward the union window's 14-day cliff.
+  pull_terms = @($raw | Select-Object -ExpandProperty q -Unique).Count
   deals      = $ded
 } | ConvertTo-Json -Depth 6 | Set-Content $outFile -Encoding UTF8
 

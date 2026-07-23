@@ -95,6 +95,89 @@ carry-forward to them is the remaining hardening step; it is an availability imp
 correctness fix.
 
 ## Follow-ups
+- [x] A regression test that pins a partial + a prior full Walmart file and asserts compare-deals
+      keeps full coverage, so the union can never silently regress. (Shipped same day - see below.)
 - [ ] (optional) Extend carry-forward to Baker's/Aldi/Fareway everyday pulls.
-- [ ] (optional) A regression test that pins a partial + a prior full Walmart file and asserts
-      compare-deals keeps full coverage, so the union can never silently regress.
+
+---
+
+# Re-review (independent second pass, same day)
+
+A from-scratch adversarial review of the incident and every fix, done after the original work.
+
+## RCA correction
+The ~20 Gmail alerts came from **local** pipeline runs, not the cloud. The cloud job runs
+`check-ad-cycles.ps1 -NoAlert` and its only secret is GHOST_ADMIN_KEY - it has no Gmail token and
+cannot send these emails at all. Its email channel is GitHub's own workflow-failure notification,
+which the already-committed-today gate caps at one scheduled run (= one possible email) per day.
+The flood mechanics and fixes are unchanged; the source attribution in the timeline is corrected.
+
+## What the re-review verified
+- **Mechanics**: single definitions, correct function ordering ($root before the moved filter),
+  Add-Norm srcDate wiring matches the pre-existing Sam's pattern, self-test helpers defined before use.
+- **End-to-end negative proof**: with the union deliberately reverted to newest-file-wins, the FULL
+  guard gate (not just the self-test) exits 2 with
+  `HARD FAIL: partial-pull union (compare-deals) self-test regressed ... re-opens the flood`.
+  Restored; gate green again.
+- **Audit states**: all three states of the new aging watch (fresh-full ok / aging-full warn /
+  only-partials warn) verified against synthetic fixtures.
+- **Full negative suite**: test-guards.ps1 (every guard's sabotage case) run over the final code.
+
+## New gap found by the re-review - and closed
+**The union created a fresh blind spot: partial pulls keep every freshness signal green while the
+comprehensive capture silently ages toward the 14-day cliff.** Guard 9 watches file AGE (daily
+partials keep the newest file perpetually fresh); the Wednesday watchdog watches mtimes (a partial
+refresh updates them). Deal COUNT cannot detect partiality either - today's 50-term partial had
+1,329 deals vs the full pull's 886 (deep on few commodities). So a run of throttled weeks would
+surface only as a surprise coverage HOLD on day 15.
+
+Closed with a machine-readable partial/full marker plus a watcher:
+- `build-walmart-deals.ps1` now stamps `pull_terms` (distinct search terms in the raw capture; a
+  full worklist runs ~400+ of commodity-search.json's 447 terms, a throttled partial ~50).
+- `audit-walmart-fullpull.ps1` (single copy of the logic, on purpose): advisory exit 1 when the
+  newest comprehensive capture is >= 10 days old, or the window holds only partials.
+- `guards.ps1` surfaces it as a warn on every gate run; `check-ad-cycles.ps1` emails it (deduped to
+  once/day by send-alert, and even under -NoAlert - same precedent as the consistency-drift alert,
+  because only a local browser pull can fix it).
+- Arming delay, stated honestly: files predating the stamp are "unknown", and the watch stays silent
+  rather than cry wolf while an unknown outranks every stamped-full capture. It arms permanently at
+  the next full (stamped) Wednesday pull. In the interim the cliff is still covered by the
+  fail-closed coverage guard - safety is never dependent on this advisory.
+
+Also: send-alert now purges prior days' `alert-sent-*.txt` so the cloud's `git add -A` does not
+commit one new file to the repo every day forever.
+
+## Second gap found by the re-review - a silently dead negative test
+Running the full guard sabotage suite (test-guards.ps1) over the final code exposed that its
+"stale sale" case had gone silently ineffective: guard 8's rule honours an undated markdown ON its
+capture day (a markdown seen today IS live), and a weekly hygiene file `extra-deals-<today>.json`
+now exists - so the test's fixture landed in a today-dated file, read as live, the guard correctly
+stayed quiet, and the test failed while proving nothing. This is the THIRD occurrence of the
+rotating-data trap the test file itself documents twice. Fixed: the test now moves any today-dated
+extra-deals file aside so its fixture lands in a genuinely pre-today file (creating one if none
+remains), and restores everything after. Full suite re-run to 16/16 before shipping.
+Pre-existing, unrelated to the day's fixes - but it means guard 8's negative proof had a scheduled
+blind spot every week, which is precisely what a re-review exists to catch.
+
+## Accepted risks (deliberate, with bounds)
+1. **The builder's multipack filter duplicates guard 5's logic** (the "two copies of the same math"
+   trap this repo documents). Accepted because the failure is BOUNDED: if the copies drift, guard 5
+   still hard-blocks the publish - worst case is one held refresh day and one deduped email, never a
+   wrong price. The incident fixtures are pinned in the builder's self-test, so drift on the known
+   cases is caught in the gate.
+2. **The alert de-dup can suppress a second, DIFFERENT incident of the same type the same day**
+   (subjects are normalized per type/day). Accepted trade-off for a quiet inbox; every suppression
+   is written to alert-log.txt as SUPPRESSED, so nothing is invisible - and callers with finer
+   de-dup can pass -Force.
+3. **Baker's/Aldi/Fareway everyday pulls still lack carry-forward/union.** A partial pull there
+   HOLDS the board (safe) rather than backfilling - an availability gap, not a correctness one, and
+   the union is deliberately NOT extended to them: dating an ad-cycling store's everyday rows would
+   let the freshness ranker filter out a still-valid weekly sale (self-test case 13 pins this).
+
+## The layered "never again" model (final)
+1. Producer cannot emit the junk (builder filter, self-tested).
+2. Consumer cannot collapse on a partial (union, self-tested).
+3. A creeping partial streak warns at day 10, not day 15 (fullpull watch, state-tested).
+4. Gate hard-fails if 1 or 2 ever regress (guards invariant 0b, proven end-to-end).
+5. Nothing wrong can ship regardless (coverage-regression guard, proven in production today).
+6. One incident = a handful of emails, not twenty (per-type daily de-dup).

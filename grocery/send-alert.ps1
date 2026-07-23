@@ -35,6 +35,10 @@ $typeKey = ($Subject.ToLower() `
     -replace '\d+(\.\d+)?', '' `
     -replace '[^a-z]+', ' ').Trim()
 $sentFile = Join-Path $root ("alert-sent-$today.txt")
+# purge prior days' sent-files: yesterday's suppressions are irrelevant, and the cloud job's `git add -A`
+# would otherwise commit one new file to the repo every day forever
+Get-ChildItem (Join-Path $root 'alert-sent-*.txt') -ErrorAction SilentlyContinue |
+  Where-Object { $_.Name -ne ("alert-sent-$today.txt") } | Remove-Item -Force -ErrorAction SilentlyContinue
 if (-not $Force -and (Test-Path $sentFile) -and ((Get-Content $sentFile) -contains $typeKey)) {
   Log ("SUPPRESSED (already sent this type today) '$Subject' [type: $typeKey]")
   Write-Output ("alert suppressed - '$typeKey' already emailed today (use -Force to override)")

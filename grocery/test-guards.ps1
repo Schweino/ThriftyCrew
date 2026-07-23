@@ -130,9 +130,23 @@ if ($hv) {
   # The fixture must go into the NEWEST extra-deals file, because that is the only one guard 8 reads
   # (Sort-Object Name -Descending | Select -First 1). My first attempt wrote a fresh <today-2> file and the
   # test still failed - the real, EMPTY <yesterday> file outsorted it and the guard read that instead.
-  $exF = (Get-ChildItem (Join-Path $root 'out\extra-deals-*.json') | Sort-Object Name -Descending | Select-Object -First 1).FullName
-  $exBak = Get-Content $exF -Raw
-  $exD = $exBak | ConvertFrom-Json
+  #
+  # THIRD occurrence of the rotating-data trap (2026-07-23): a file dated TODAY defeats this test outright.
+  # Guard 8's rule honours an undated discount ON its capture day (a markdown seen today IS live), so when the
+  # weekly hygiene file extra-deals-<today>.json exists, the fixture lands in a today-dated file, reads as
+  # LIVE, the guard correctly stays quiet, and the test fails while proving nothing. Move any today-dated file
+  # ASIDE for the duration so the fixture lands in a genuinely PRE-today file (creating one if none remains).
+  $exTodayF = Join-Path $root ('out\extra-deals-' + (Get-Date -Format 'yyyy-MM-dd') + '.json')
+  $exTodayBak = $null
+  if (Test-Path $exTodayF) { $exTodayBak = Get-Content $exTodayF -Raw; Remove-Item $exTodayF -Force }
+  $exCreated = $false
+  $exNewest = Get-ChildItem (Join-Path $root 'out\extra-deals-*.json') | Sort-Object Name -Descending | Select-Object -First 1
+  if ($exNewest) { $exF = $exNewest.FullName; $exBak = Get-Content $exF -Raw; $exD = $exBak | ConvertFrom-Json }
+  else {
+    $exF = Join-Path $root ('out\extra-deals-' + (Get-Date).AddDays(-1).ToString('yyyy-MM-dd') + '.json')
+    $exBak = $null; $exCreated = $true
+    $exD = [pscustomobject]@{ price_type = 'sale'; deals = @() }
+  }
   # an UNDATED markdown (no sale_end) cheaper than its own regular - the exact shape of the sirloin bug
   $exD.deals = @(@($exD.deals) + ([pscustomobject]@{ store = 'Hy-Vee'; item = $stale; ad_price = '$6.99'; regular = 11.99; size = 'lb' }))
   ($exD | ConvertTo-Json -Depth 6) | Set-Content $exF -Encoding UTF8
@@ -144,7 +158,9 @@ if ($hv) {
   ($cmpD | ConvertTo-Json -Depth 8) | Set-Content $cmpF -Encoding UTF8
   Check 'stale sale: a 2-day-old undated markdown republished as a live sale' 2
   Set-Content $cmpF $cbak2 -Encoding UTF8 -NoNewline
-  Set-Content $exF $exBak -Encoding UTF8 -NoNewline
+  if ($exCreated) { Remove-Item $exF -Force -ErrorAction SilentlyContinue }
+  else { Set-Content $exF $exBak -Encoding UTF8 -NoNewline }
+  if ($null -ne $exTodayBak) { Set-Content $exTodayF $exTodayBak -Encoding UTF8 -NoNewline }
 } else {
   Write-Output '  SKIP  stale sale: no Hy-Vee sirloin cell to mutate'
 }

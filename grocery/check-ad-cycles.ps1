@@ -462,6 +462,22 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         else { Log "AUTO-PUBLISH ERROR (rc=$pubrc) - Ghost upsert or build failed; live page NOT updated"; $summary += 'ERROR     auto-publish failed (page NOT updated) - see ad-cycle-log.txt'; if (-not $NoAlert) { try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery publish FAILED (rc=$pubrc) - $asofS" -Body "publish-deals-page.ps1 returned $pubrc on $asofS (Ghost upsert or page build failed). The live page was NOT updated with today's price change. Check ad-cycle-log.txt." | Out-Null } catch {} } }
       }
 
+      # ---- Walmart full-capture aging watch (2026-07-23 incident follow-up). The union in compare-deals
+      # absorbs partial Walmart pulls only while a COMPREHENSIVE capture sits in its 14-day window. Daily
+      # partials keep every OTHER freshness signal green (guard 9 watches file age; the Wednesday watchdog
+      # watches mtimes), so this is the one condition with no early warning - it would surface only as a
+      # coverage HOLD on the day the window expires. audit-walmart-fullpull.ps1 owns the logic (one copy);
+      # exit 1 = advisory. Emails even under -NoAlert, same precedent as the consistency-drift alert: only a
+      # LOCAL browser pull can fix it, and send-alert's per-type daily gate caps it at one email per day.
+      # Non-fatal by construction.
+      try {
+        $wfpOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-walmart-fullpull.ps1') 2>$null
+        if ($LASTEXITCODE -eq 1) {
+          Log ('walmart-fullpull ADVISORY: ' + [string]$wfpOut)
+          try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Grocery: Walmart full capture aging - $asofS" -Body ("Early warning, nothing is broken yet: " + [string]$wfpOut + " When the last comprehensive capture leaves the 14-day union window, the coverage guard will HOLD the board (safe, but that day's Walmart refresh is lost). Run the full-worklist Walmart browser pull to reset the clock.") | Out-Null } catch {}
+        } else { Log ('walmart-fullpull: ' + [string]$wfpOut) }
+      } catch { Log ('walmart-fullpull audit threw: ' + $_.Exception.Message) }
+
       # ---- Friday digest: the weekly board email the capture CTAs promise. Only when guards passed (never
       # email prices the gates would not publish), Fridays only, idempotent inside the script. Non-fatal.
       if (-not $guardsBlocked) {
