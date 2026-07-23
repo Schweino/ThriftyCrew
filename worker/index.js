@@ -7,9 +7,10 @@
 //   Optional var: NOTIFY_TO (defaults to contact@thriftycrew.com)
 //   Optional field: email (requester wants to be notified when the item is added; included in
 //   the notification body + set as Reply-To so Brad can just hit Reply when it goes live)
-// - POST /alert: price-alert signup {email, item, weekly} -> Ghost member gets label alert-<item>
-//   (member created as FREE member if new; subscribed to the "Price Alerts" newsletter, plus the
-//   default newsletter when weekly=true). The daily pipeline emails label segments on record lows.
+// - POST /alert: price-alert signup {email, item, weekly} -> EXISTING PAID/comped Ghost member gets
+//   label alert-<item> + the "Price Alerts" newsletter (plus the default newsletter when weekly=true).
+//   NEVER creates a member and refuses free/non-members server-side - hitting the endpoint directly
+//   must not grant the paid feature. The daily pipeline emails label segments on record lows.
 //   Extra secret required: GHOST_ADMIN_KEY (same id:hexsecret Admin API key the pipeline uses)
 
 const ALLOWED_ORIGINS = [
@@ -363,9 +364,7 @@ export default {
 
       if (store === "Other") store = storeOther;
       if (!store) return json({ ok: false, error: "Please choose a store." }, 400, origin);
-      if (store !== "Other" && !STORES.includes(store) && !storeOther && !data.storeOther) {
-        // allow any store text when 'Other' path used; otherwise store must be from the list or a provided name
-      }
+      // any store text is accepted by design ("Other" is a free-text path); the 120-char cap below bounds it
       if (!item) return json({ ok: false, error: "Item name is required." }, 400, origin);
       if (!itemUrl || !/^https?:\/\/.+/i.test(itemUrl)) {
         return json({ ok: false, error: "A valid item URL (starting with http) is required." }, 400, origin);
