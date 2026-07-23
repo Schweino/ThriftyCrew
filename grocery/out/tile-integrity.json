@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-07-23 09:51",
-    "board":  "comparison-2026-07-22.json",
-    "total_tiles":  2275,
+    "generated":  "2026-07-23 10:02",
+    "board":  "comparison-2026-07-23.json",
+    "total_tiles":  2245,
     "violations":  189,
     "by_store":  {
                      "Walmart":  {
@@ -15,12 +15,12 @@
                                      "violations":  0
                                  },
                      "Family Fare":  {
-                                         "coverage":  10,
+                                         "coverage":  9,
                                          "tiles":  232,
-                                         "violations":  14
+                                         "violations":  13
                                      },
                      "Hy-Vee":  {
-                                    "coverage":  38,
+                                    "coverage":  39,
                                     "tiles":  403,
                                     "violations":  41
                                 },
@@ -35,9 +35,9 @@
                                   "violations":  16
                               },
                      "Baker\u0027s":  {
-                                          "coverage":  17,
+                                          "coverage":  18,
                                           "tiles":  258,
-                                          "violations":  18
+                                          "violations":  19
                                       }
                  },
     "rows":  [
@@ -87,6 +87,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Pampers Baby Wipes",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "baked-beans",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Van Camp\u0027s Pork and Beans",
                      "link":  ""
                  },
                  {
@@ -466,14 +474,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "ground-cloves",
-                     "store":  "Family Fare",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Spice Supreme Spice Ground Cloves",
-                     "link":  ""
-                 },
-                 {
                      "id":  "coffee",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -623,6 +623,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Simply Done Fresh Scent Dish Soap",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "sponges",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Heavy Duty Scrubber Sponges",
                      "link":  ""
                  },
                  {
@@ -992,14 +1000,6 @@
                      "detail":  "board $0.0747 vs link $0.083  (10% off)",
                      "board":  "Welch\u0027s Concord Grape Jelly, 30 oz., 2 pk.",
                      "link":  "Welch\u0027s Concord Grape Jelly, 30 oz., 2 pk."
-                 },
-                 {
-                     "id":  "ketchup",
-                     "store":  "Hy-Vee",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.0784 vs link $0.0655  (19.6% off)",
-                     "board":  "Hy-Vee Thick \u0026 Rich Tomato Ketchup",
-                     "link":  "Hy-Vee Thick \u0026 Rich Tomato Ketchup"
                  },
                  {
                      "id":  "eggs",
@@ -1555,5 +1555,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  172
+    "coverage_violations":  173
 }

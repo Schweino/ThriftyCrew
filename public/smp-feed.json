@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-23T09:51:15",
-    "week_of":  "2026-07-22",
+    "generated":  "2026-07-23T10:02:23",
+    "week_of":  "2026-07-23",
     "ingredient_count":  504,
     "recipe_count":  213,
     "ingredients":  {
@@ -149,12 +149,13 @@
                                               "store":  "Family Fare",
                                               "type":  "everyday",
                                               "url":  "https://www.shopfamilyfare.com/shop/household/food_storage/food_wraps/our_family_aluminum_foil_25_square_feet_1_ea/p/6787298",
-                                              "n":  4,
+                                              "n":  5,
                                               "stores":  {
                                                              "Family Fare":  1.99,
                                                              "Fareway":  2.99,
                                                              "Baker\u0027s":  3.79,
-                                                             "Aldi":  4.39
+                                                             "Aldi":  4.39,
+                                                             "Walmart":  4.83
                                                          }
                                           },
                         "apple-cider-vinegar":  {
@@ -386,7 +387,7 @@
                                               "store":  "Aldi",
                                               "type":  "everyday",
                                               "url":  "https://www.aldi.us/store/aldi/products/21236532-baker-s-corner-baking-powder-8-1-oz",
-                                              "n":  3,
+                                              "n":  4,
                                               "stores":  {
                                                              "Aldi":  0.2407,
                                                              "Walmart":  0.2494,
@@ -1496,10 +1497,11 @@
                                             "store":  "Fareway",
                                             "type":  "everyday",
                                             "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20562021-fareway-grade-a-fancy-cauliflower-14-oz",
-                                            "n":  3,
+                                            "n":  4,
                                             "stores":  {
                                                            "Fareway":  1.98,
                                                            "Aldi":  2.99,
+                                                           "Walmart":  3.97,
                                                            "Baker\u0027s":  4.49
                                                        }
                                         },
@@ -1537,17 +1539,17 @@
                                    },
                         "charcoal":  {
                                          "unit":  "lb",
-                                         "cheapest":  0.7494,
-                                         "store":  "Baker\u0027s",
-                                         "type":  "sale",
-                                         "url":  "",
-                                         "n":  3,
+                                         "cheapest":  0.6831,
+                                         "store":  "Walmart",
+                                         "type":  "everyday",
+                                         "url":  "https://www.walmart.com/ip/Kingsford-Original-Charcoal-Briquettes-BBQ-Charcoal-for-Grilling-16-Pounds/987796704",
+                                         "n":  4,
                                          "stores":  {
+                                                        "Walmart":  0.6831,
                                                         "Baker\u0027s":  0.7494,
                                                         "Hy-Vee":  0.8169,
                                                         "Fareway":  0.9925
-                                                    },
-                                         "sale_end":  "2026-07-28"
+                                                    }
                                      },
                         "cheese-crackers":  {
                                                 "unit":  "oz",
@@ -2018,12 +2020,13 @@
                                              },
                         "corn-dogs":  {
                                           "unit":  "each",
-                                          "cheapest":  0.8317,
-                                          "store":  "Hy-Vee",
+                                          "cheapest":  0.8067,
+                                          "store":  "Walmart",
                                           "type":  "everyday",
-                                          "url":  "https://www.hy-vee.com/aisles-online/p/20578/state-fair-classic-corn-dogs-6-ct",
-                                          "n":  3,
+                                          "url":  "https://www.walmart.com/ip/State-Fair-Classic-Corn-Dogs-with-Honey-Sweetened-Batter-16-oz-6-Count-Frozen/17352572",
+                                          "n":  4,
                                           "stores":  {
+                                                         "Walmart":  0.8067,
                                                          "Hy-Vee":  0.8317,
                                                          "Fareway":  0.8317,
                                                          "Family Fare":  1.49
@@ -2303,7 +2306,7 @@
                                                        "store":  "Family Fare",
                                                        "type":  "everyday",
                                                        "url":  "https://www.shopfamilyfare.com/shop/pantry/canned_goods/tomatoes/our_family_tomatoes_with_green_chiles_diced_14_5_oz/p/7081278",
-                                                       "n":  6,
+                                                       "n":  7,
                                                        "stores":  {
                                                                       "Family Fare":  0.0683,
                                                                       "Baker\u0027s":  0.069,
@@ -2513,11 +2516,12 @@
                         "egg-noodles":  {
                                             "unit":  "oz",
                                             "cheapest":  0.1088,
-                                            "store":  "Aldi",
+                                            "store":  "Walmart",
                                             "type":  "everyday",
-                                            "url":  "https://www.aldi.us/store/aldi/products/19646521-reggano-enriched-wide-egg-noodle-product-pastas-16-oz",
-                                            "n":  4,
+                                            "url":  "https://www.walmart.com/ip/Great-Value-Wide-Egg-Noodles-16-oz/10534093",
+                                            "n":  5,
                                             "stores":  {
+                                                           "Walmart":  0.1088,
                                                            "Aldi":  0.1088,
                                                            "Family Fare":  0.1825,
                                                            "Hy-Vee":  0.2056,
@@ -2723,11 +2727,12 @@
                                          "store":  "Aldi",
                                          "type":  "everyday",
                                          "url":  "https://www.aldi.us/store/aldi/products/20240796-baker-s-corner-vanilla-frosting-16-oz",
-                                         "n":  3,
+                                         "n":  4,
                                          "stores":  {
                                                         "Aldi":  0.1056,
-                                                        "Hy-Vee":  0.1244,
-                                                        "Fareway":  0.1244
+                                                        "Walmart":  0.1081,
+                                                        "Fareway":  0.1244,
+                                                        "Hy-Vee":  0.1244
                                                     }
                                      },
                         "breakfast-sandwiches":  {
@@ -4551,7 +4556,7 @@
                                              "store":  "Aldi",
                                              "type":  "everyday",
                                              "url":  "https://www.aldi.us/store/aldi/products/43070165-boulder-sheets-paper-towel-6-ct",
-                                             "n":  5,
+                                             "n":  6,
                                              "stores":  {
                                                             "Aldi":  0.8983,
                                                             "Hy-Vee":  0.9933,
@@ -4583,9 +4588,10 @@
                                                 "cheapest":  2.96,
                                                 "store":  "Walmart",
                                                 "type":  "everyday",
-                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/41458026-bright-essentials-parchment-paper-1-each",
-                                                "n":  1,
+                                                "url":  "https://www.walmart.com/ip/Great-Value-Unbleached-Parchment-Paper-Roll-50-Sq-ft/137567989",
+                                                "n":  2,
                                                 "stores":  {
+                                                               "Walmart":  2.96,
                                                                "Fareway":  2.99
                                                            }
                                             },
@@ -4643,7 +4649,7 @@
                                             "cheapest":  0.0658,
                                             "store":  "Hy-Vee",
                                             "type":  "everyday",
-                                            "url":  "https://www.hy-vee.com/aisles-online/p/6752/hunt-s-traditional-pasta-sauce",
+                                            "url":  "https://www.hy-vee.com/aisles-online/p/1351300/hy-vee-traditional-pasta-sauce",
                                             "n":  6,
                                             "stores":  {
                                                            "Hy-Vee":  0.0658,
@@ -4784,10 +4790,11 @@
                                           "store":  "Fareway",
                                           "type":  "everyday",
                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24068568-fareway-pineapple-chunk-20-oz",
-                                          "n":  4,
+                                          "n":  5,
                                           "stores":  {
                                                          "Fareway":  1.68,
                                                          "Aldi":  1.89,
+                                                         "Walmart":  1.98,
                                                          "Baker\u0027s":  3.49,
                                                          "Hy-Vee":  3.88
                                                      }
@@ -4827,8 +4834,8 @@
                                              "cheapest":  2.14,
                                              "store":  "Walmart",
                                              "type":  "everyday",
-                                             "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/72573-saran-premium-100-sq-ft",
-                                             "n":  2,
+                                             "url":  "https://www.walmart.com/ip/Great-Value-Plastic-Wrap-200-Sq-ft/184907101",
+                                             "n":  3,
                                              "stores":  {
                                                             "Walmart":  2.14,
                                                             "Fareway":  2.68,
@@ -5329,12 +5336,13 @@
                                          },
                         "rotisserie-chicken":  {
                                                    "unit":  "each",
-                                                   "cheapest":  5.99,
-                                                   "store":  "Hy-Vee",
+                                                   "cheapest":  5.97,
+                                                   "store":  "Walmart",
                                                    "type":  "everyday",
-                                                   "url":  "",
-                                                   "n":  3,
+                                                   "url":  "https://www.walmart.com/ip/Freshness-Guaranteed-Traditional-Rotisserie-Whole-36-oz-19g-of-Protein-per-3oz-serving-Hot/325918992",
+                                                   "n":  4,
                                                    "stores":  {
+                                                                  "Walmart":  5.97,
                                                                   "Hy-Vee":  5.99,
                                                                   "Family Fare":  7.99,
                                                                   "Baker\u0027s":  8.99
@@ -5397,9 +5405,10 @@
                                               "store":  "Aldi",
                                               "type":  "everyday",
                                               "url":  "https://www.aldi.us/store/aldi/products/115129-boulder-reclosable-sandwich-bags-100-ct",
-                                              "n":  2,
+                                              "n":  3,
                                               "stores":  {
                                                              "Aldi":  0.0225,
+                                                             "Walmart":  0.023,
                                                              "Hy-Vee":  0.034
                                                          }
                                           },
@@ -5483,8 +5492,8 @@
                                               "cheapest":  0.197,
                                               "store":  "Walmart",
                                               "type":  "everyday",
-                                              "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16409168-barbasol-shaving-cream-thick-rich-original-10-oz",
-                                              "n":  2,
+                                              "url":  "https://www.walmart.com/ip/Barbasol-Original-Thick-Rich-Shaving-Cream-for-Men-10-oz/17619759",
+                                              "n":  3,
                                               "stores":  {
                                                              "Walmart":  0.197,
                                                              "Fareway":  0.299,
@@ -5790,7 +5799,7 @@
                                                "store":  "Aldi",
                                                "type":  "everyday",
                                                "url":  "",
-                                               "n":  4,
+                                               "n":  5,
                                                "stores":  {
                                                               "Aldi":  1.05,
                                                               "Baker\u0027s":  1.33,
@@ -5905,12 +5914,13 @@
                                    },
                         "tampons":  {
                                         "unit":  "each",
-                                        "cheapest":  0.2827,
-                                        "store":  "Hy-Vee",
+                                        "cheapest":  0.2079,
+                                        "store":  "Walmart",
                                         "type":  "everyday",
-                                        "url":  "https://www.hy-vee.com/aisles-online/p/3155618/u-by-kotex-click-compact-tampons-multipack-regular-super-absorbency",
-                                        "n":  2,
+                                        "url":  "https://www.walmart.com/ip/Playtex-Sport-Multi-Pack-Regular-Super-Plastic-Applicator-Unscented-Tampons-48-Ct-Total/162594077",
+                                        "n":  3,
                                         "stores":  {
+                                                       "Walmart":  0.2079,
                                                        "Hy-Vee":  0.2827,
                                                        "Fareway":  0.305
                                                    }
@@ -5935,7 +5945,7 @@
                                            "store":  "Aldi",
                                            "type":  "everyday",
                                            "url":  "https://www.aldi.us/store/aldi/products/27426817-season-s-choice-crispy-tots-potato-puffs-32-oz",
-                                           "n":  3,
+                                           "n":  4,
                                            "stores":  {
                                                           "Aldi":  0.0903,
                                                           "Walmart":  0.092,
@@ -6016,13 +6026,13 @@
                         "toaster-pastries":  {
                                                  "unit":  "each",
                                                  "cheapest":  0.1883,
-                                                 "store":  "Walmart",
+                                                 "store":  "Aldi",
                                                  "type":  "everyday",
                                                  "url":  "https://www.aldi.us/store/aldi/products/46576509-millville-strawberry-toaster-tarts-12-ct",
-                                                 "n":  4,
+                                                 "n":  5,
                                                  "stores":  {
-                                                                "Walmart":  0.1883,
                                                                 "Aldi":  0.1883,
+                                                                "Walmart":  0.1883,
                                                                 "Family Fare":  0.2325,
                                                                 "Hy-Vee":  0.2492,
                                                                 "Fareway":  0.25
@@ -6050,7 +6060,7 @@
                                              "store":  "Fareway",
                                              "type":  "everyday",
                                              "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18481761-scott-comfortplus-toilet-paper-12-ea",
-                                             "n":  5,
+                                             "n":  6,
                                              "stores":  {
                                                             "Fareway":  0.4975,
                                                             "Baker\u0027s":  0.5825,
@@ -6114,8 +6124,8 @@
                                             "cheapest":  0.0688,
                                             "store":  "Walmart",
                                             "type":  "everyday",
-                                            "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24072624-fareway-soup-tomato-condensed-1075-oz",
-                                            "n":  3,
+                                            "url":  "https://www.walmart.com/ip/Great-Value-Tomato-Condensed-Soup-10-75-oz/10314957",
+                                            "n":  4,
                                             "stores":  {
                                                            "Walmart":  0.0688,
                                                            "Fareway":  0.0912,
@@ -6144,8 +6154,8 @@
                                              "cheapest":  0.1667,
                                              "store":  "Walmart",
                                              "type":  "everyday",
-                                             "url":  "https://www.aldi.us/store/aldi/products/51330689-premium-toothbrushes-medium",
-                                             "n":  3,
+                                             "url":  "https://www.walmart.com/ip/EQ-Manual-Toothbrush-6ct-Soft/15662806819",
+                                             "n":  4,
                                              "stores":  {
                                                             "Walmart":  0.1667,
                                                             "Aldi":  0.975,
@@ -6155,12 +6165,13 @@
                                          },
                         "toothpaste":  {
                                            "unit":  "oz",
-                                           "cheapest":  0.4368,
-                                           "store":  "Fareway",
+                                           "cheapest":  0.3283,
+                                           "store":  "Walmart",
                                            "type":  "everyday",
-                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20139351-crest-cavity-protection-toothpaste-regular-paste-5-7-oz",
-                                           "n":  3,
+                                           "url":  "https://www.walmart.com/ip/Colgate-Baking-Soda-and-Peroxide-Whitening-Toothpaste-Gel-Frosty-Mint-6-oz-Tube/49714958",
+                                           "n":  4,
                                            "stores":  {
+                                                          "Walmart":  0.3283,
                                                           "Fareway":  0.4368,
                                                           "Hy-Vee":  0.5817,
                                                           "Aldi":  0.763
@@ -6249,7 +6260,7 @@
                                                 "store":  "Aldi",
                                                 "type":  "everyday",
                                                 "url":  "https://www.aldi.us/store/aldi/products/18647903-stonemill-pure-vanilla-extract-vanilla-2-fl-oz",
-                                                "n":  3,
+                                                "n":  4,
                                                 "stores":  {
                                                                "Aldi":  1.745,
                                                                "Walmart":  3.24,
@@ -6383,13 +6394,13 @@
                         "watermelon":  {
                                            "unit":  "each",
                                            "cheapest":  4.65,
-                                           "store":  "Walmart",
+                                           "store":  "Aldi",
                                            "type":  "everyday",
                                            "url":  "https://www.aldi.us/store/aldi/products/3115037-seedless-watermelon-each",
-                                           "n":  4,
+                                           "n":  5,
                                            "stores":  {
-                                                          "Walmart":  4.65,
                                                           "Aldi":  4.65,
+                                                          "Walmart":  4.65,
                                                           "Hy-Vee":  4.99,
                                                           "Family Fare":  5.99,
                                                           "Baker\u0027s":  5.99
@@ -6398,11 +6409,12 @@
                         "worcestershire":  {
                                                "unit":  "floz",
                                                "cheapest":  0.1,
-                                               "store":  "Hy-Vee",
+                                               "store":  "Walmart",
                                                "type":  "everyday",
-                                               "url":  "https://www.hy-vee.com/aisles-online/p/2916225/that-s-smart-worcestershire-sauce",
-                                               "n":  2,
+                                               "url":  "https://www.walmart.com/ip/Great-Value-Worcestershire-Sauce-10-fl-oz-Regular/12157940",
+                                               "n":  3,
                                                "stores":  {
+                                                              "Walmart":  0.1,
                                                               "Hy-Vee":  0.1,
                                                               "Fareway":  0.1544
                                                           }

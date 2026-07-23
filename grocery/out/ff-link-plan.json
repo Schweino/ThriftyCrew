@@ -1,66 +1,72 @@
 ﻿{
     "resolved":  [
-
+                     {
+                         "id":  "ground-cloves",
+                         "fault":  "NO-LINK",
+                         "board":  "Spice Supreme Spice Ground Cloves",
+                         "board_pu":  36,
+                         "name":  "Spice Supreme Spice Ground Cloves",
+                         "url":  "https://www.shopfamilyfare.com/shop/seasonal_special_occasion/trial_sizes_store/spice_supreme_spice_ground_cloves/p/2400974",
+                         "price":  "$45",
+                         "size":  "1.25 oz",
+                         "score":  1
+                     }
                  ],
     "refused":  [
                     {
                         "id":  "applesauce",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
-                    },
-                    {
-                        "id":  "ground-cloves",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but per-unit disagrees: board $0.1454 vs link $0.8725 (83.3%)"
                     },
                     {
                         "id":  "ground-coriander",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "dried-dill",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "gelatin",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but its size \"3 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "ground-cumin",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but per-unit disagrees: board $1.145 vs link $1.295 (11.6%)"
                     },
                     {
                         "id":  "ground-turmeric",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "deli-ham",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but per-unit disagrees: board $0.6656 vs link $0.7767 (14.3%)"
                     },
                     {
                         "id":  "hamburger-buns",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"16 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "muffins",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"16 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "paper-towels",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but per-unit disagrees: board $1.3738 vs link $1.4988 (8.3%)"
                     },
                     {
                         "id":  "shower-cleaner",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "sloppy-joe-sauce",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but per-unit disagrees: board $0.1 vs link $0.1127 (11.2%)"
                     },
                     {
                         "id":  "tomatillos",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but per-unit disagrees: board $1.99 vs link $2.49 (20.1%)"
                     }
                 ],
     "worked":  14,
-    "generated":  "2026-07-23 13:26",
-    "board":  "comparison-2026-07-23.json"
+    "generated":  "2026-07-23 10:01",
+    "board":  "comparison-2026-07-22.json"
 }
