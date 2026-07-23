@@ -9,9 +9,13 @@ name: Daily grocery pipeline
 
 on:
   schedule:
-    - cron: '30 11 * * *'     # 11:30 UTC = 06:30 America/Chicago (CDT). Runs AFTER the ~6:00 local browser
-                              # agents push their fresh Baker's/Sam's/Walmart data, so the cloud recomputes
-                              # with current prices. GitHub cron ignores DST -> 05:30 Central in winter, fine.
+    # BACKUP SLOT (2026-07-23). The pipeline now runs LOCALLY first - the Windows task
+    # "SMP Grocery Daily Pipeline (local)" fires at 8:30am Central on Brad's PC (which is already awake for
+    # the browser agents) and commits as smp-pipeline-bot for free. This cloud run is the safety net for
+    # days the PC slept through it: 16:00 UTC = 11:00 CDT / 10:00 CST, hours after the local slot, and the
+    # gate below stands down (cheaply, before checkout) whenever a bot commit already landed. Rationale:
+    # ~39 min/day on a 2x-billed Windows runner was ~2,300 min/mo against a 2,000 free-tier cap.
+    - cron: '0 16 * * *'
   workflow_dispatch: {}        # manual "Run workflow" button for testing
 
 permissions:
@@ -25,42 +29,46 @@ jobs:
   run:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          # 0 = FULL history, on purpose. checkout's default is a depth-1 shallow clone, which is fine until the
-          # commit step has to `git rebase` onto a main that has moved - a shallow clone can be missing the merge
-          # base, and that rebase is the exact step that killed 2026-07-16. It also lets the gate below actually
-          # find the bot's last commit. Do not shallow this to save a few seconds on a job that runs for 25 min.
-          fetch-depth: 0
-
-      # ALREADY DONE TODAY? THEN A SCHEDULED RUN IS A DOUBLE-RUN.
-      # The day's work is once-daily by definition, so if smp-pipeline-bot has already committed today the
-      # schedule has nothing to add - it would just re-pull every store (Freshop throttles HARD on a second
-      # pass; its wipeout guard then refuses the partial and the run achieves exactly nothing) and burn another
-      # ~25 windows-runner minutes at 2x billing.
-      # This is what makes MANUAL TESTING SAFE: trigger a run whenever you like, and the schedule stands down
-      # for the rest of that day on its own. No "disable the workflow and remember to re-enable it" - a
-      # disabled workflow nobody switches back on is a worse outage than the bug it was hiding.
-      # It only ever stands down for a SUCCESS: if the manual run failed to commit, there is no commit to find,
-      # and the schedule runs normally. workflow_dispatch always runs - that is the override.
-      - name: Skip if the pipeline already committed today
+      # ALREADY RAN (locally or here)? THEN A SCHEDULED RUN IS A DOUBLE-RUN - STAND DOWN *BEFORE* CHECKOUT.
+      # The day's work is once-daily by definition. Since 2026-07-23 the LOCAL 8:30am task is the primary
+      # runner, so on a normal day this backup finds a fresh bot commit and stops. The check uses the commits
+      # API instead of git log precisely so it can run before the (multi-minute, full-history) checkout: a
+      # stand-down day now costs ~1 billed minute instead of ~10. A 16-hour window (not "today") is immune to
+      # cron drift and timezone math: the local run commits ~13:30-14:30 UTC, hours inside the window; a
+      # commit from yesterday's backup (~16:30 UTC) is ~24h old and correctly does NOT stand us down.
+      # It only ever stands down for a SUCCESS: a run that failed before committing leaves no commit to find.
+      # workflow_dispatch always proceeds - that is the manual override.
+      - name: Stand down if the pipeline already ran (API check, pre-checkout)
         id: gate
         shell: powershell
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if ($env:GITHUB_EVENT_NAME -ne 'schedule') {
             Write-Host "Manual run (workflow_dispatch) - always proceeds."
             "skip=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
             exit 0
           }
-          $today = (Get-Date -Format 'yyyy-MM-dd')
-          $last  = (git log --author="smp-pipeline-bot" -1 --format=%cd --date=format:'%Y-%m-%d' 2>$null)
-          Write-Host "today=$today  last smp-pipeline-bot commit=$last"
-          if ($last -eq $today) {
-            Write-Host "::notice::The pipeline already committed today ($last). Scheduled run standing down - a second pass would only re-throttle the stores and burn runner minutes."
+          $since = (Get-Date).ToUniversalTime().AddHours(-16).ToString("yyyy-MM-ddTHH:mm:ssZ")
+          $uri = "https://api.github.com/repos/$env:GITHUB_REPOSITORY/commits?author=actions@users.noreply.github.com&since=$since&per_page=1"
+          $recent = @()
+          try { $recent = @(Invoke-RestMethod -Uri $uri -Headers @{ Authorization = "Bearer $env:GH_TOKEN"; "User-Agent" = "smp-pipeline" }) } catch { Write-Host "gate API check failed ($($_.Exception.Message)) - failing OPEN (running) so an API blip can never stop the pipeline" }
+          if ($recent.Count -gt 0) {
+            Write-Host "::notice::The pipeline already committed within 16h (the local 8:30am run). Backup standing down - a second pass would only re-throttle the stores and burn runner minutes."
             "skip=true" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
           } else {
+            Write-Host "No bot commit in the last 16h - the local run was missed. Running as backup."
             "skip=false" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
           }
+
+      - uses: actions/checkout@v4
+        if: steps.gate.outputs.skip != 'true'
+        with:
+          # 0 = FULL history, on purpose. checkout's default is a depth-1 shallow clone, which is fine until the
+          # commit step has to `git rebase` onto a main that has moved - a shallow clone can be missing the merge
+          # base, and that rebase is the exact step that killed 2026-07-16. Do not shallow this to save a few
+          # seconds on a job that only reaches this step when it is genuinely going to do the day's work.
+          fetch-depth: 0
 
       - name: Run the daily pipeline
         if: steps.gate.outputs.skip != 'true'
