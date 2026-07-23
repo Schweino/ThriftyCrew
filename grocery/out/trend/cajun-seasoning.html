@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-19","07-20","07-21","07-22"],"s":{"Sam's Club":[0.1666,0.1666,0.1666,0.1666],"Baker's":[0.3222,0.3222,0.3222,0.3222],"Walmart":[0.3425,0.3425,0.3425,null],"Hy-Vee":[0.3738,0.3738,0.3738,0.3738],"Family Fare":[0.3738,0.3738,0.3738,0.3738],"Aldi":[0.4829,0.4829,0.4829,0.4829]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-19","07-20","07-21","07-22"],"s":{"Sam's Club":[0.1666,0.1666,0.1666,0.1666],"Baker's":[0.3222,0.3222,0.3222,0.3222],"Walmart":[0.3425,0.3425,0.3425,null],"Hy-Vee":[0.3738,0.3738,0.3738,0.3738],"Family Fare":[0.3738,0.3738,0.3738,0.3738],"Aldi":[0.4829,0.4829,0.4829,0.4829],"Fareway":[null,null,null,0.3113]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -142,6 +142,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Sam&#39;s Club</td><td>$0.1666 per oz</td><td><span class="tp-item">Tony Chachere&#39;s Original Creole Seasoning 32 oz.</span></td></tr>
+<tr><td>Fareway</td><td>$0.3113 per oz</td><td><span class="tp-item">Louisiana Fish Fry Products Original Cajun Seasoning</span></td></tr>
 <tr><td>Baker&#39;s</td><td>$0.3222 per oz</td><td><span class="tp-item">Smart Way Cajun Seasoning</span></td></tr>
 <tr><td>Family Fare</td><td>$0.3738 per oz</td><td><span class="tp-item">Louisiana Fish Fry Products Original Cajun Seasoning 8 Oz</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.3738 per oz</td><td><span class="tp-item">Louisiana Fish Fry Products Original Cajun Seasoning 8 oz</span></td></tr>

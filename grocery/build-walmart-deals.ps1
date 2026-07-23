@@ -388,6 +388,41 @@ if ($SelfTest) {
   if ($fail -eq 0) { Write-Output 'SELF-TEST PASS' ; exit 0 } else { Write-Output "SELF-TEST FAIL: $fail case(s)"; exit 1 }
 }
 
+# ---- multipack pre-filter: reject exactly what guards.ps1 guard 5 would reject, so the board never sees it ----
+# 2026-07-23: a broadened Walmart pull dragged in bulk multipacks ("(4 pack) Domino Sugar, 10 lb" = 40 lb) and
+# ice-cream novelties whose name states only the pack TOTAL. All 32 hard-failed guard 5 and blocked the whole
+# nightly publish, firing ~20 alert emails. These are never a normal shopper's single-buy unit, so they do not
+# belong on the board. Mirror guard 5's arithmetic EXACTLY (including its allowlist) so builder and guard stay
+# in lockstep - a row this rejects is a row the guard would have hard-failed, and vice versa.
+function BW-SizeIsPackTotal([string]$name, [double]$sizeVal) {
+  if ($sizeVal -le 0) { return $false }
+  $n = $name.ToLower(); $packs = @()
+  foreach ($m in [regex]::Matches($n, '(\d+)\s*(?:pk|pack)\b')) { $v = [int]$m.Groups[1].Value; if ($v -gt 1) { $packs += $v } }
+  if (-not $packs.Count) { return $false }
+  $cands = @($packs); if ($packs.Count -gt 1) { $p = 1; foreach ($x in $packs) { $p *= $x }; $cands += $p }
+  foreach ($wm in [regex]::Matches($n, '([\d.]+)\s*(?:fl\s?oz|oz|lb)\b')) {
+    $w = 0.0; if (-not [double]::TryParse($wm.Groups[1].Value, [ref]$w)) { continue }
+    foreach ($c in $cands) { $tot = $w * $c; if ($tot -gt 0 -and ([math]::Abs($tot - $sizeVal) / $tot) -le 0.03) { return $true } }
+  }
+  return $false
+}
+$bwAllowF = Join-Path $root 'multipack-allowlist.json'
+$bwAllow = @()
+if (Test-Path $bwAllowF) { $bwAllow = @((Get-Content $bwAllowF -Raw | ConvertFrom-Json).allow | ForEach-Object { $_.store + '|' + $_.item }) }
+function BW-IsMultipackReject($item, $size) {
+  $name = [string]$item; $sz = [string]$size
+  if (-not $name -or -not $sz) { return $false }
+  $pn = [regex]::Match($name.ToLower(), '(\d+)\s*(?:pk\b|pack\b)')
+  if (-not $pn.Success -or [int]$pn.Groups[1].Value -le 1) { return $false }
+  $ps = [regex]::Match($sz.ToLower(), '(\d+)\s*(?:x|pk\b|pack\b|ct\b|count\b)')
+  if ($ps.Success -and [int]$ps.Groups[1].Value -gt 1) { return $false }
+  if ($sz -notmatch '[\d.]+\s*(fl\s?oz|oz|lb|gal|qt|l|ml|g)\b') { return $false }
+  $sv = 0.0; [void][double]::TryParse(([regex]::Match($sz, '[\d.]+').Value), [ref]$sv)
+  if (BW-SizeIsPackTotal $name $sv) { return $false }
+  if ($bwAllow -contains ('Walmart|' + $name)) { return $false }
+  return $true
+}
+
 # ---------------------------------------------------------------- build
 if (-not $In -or -not (Test-Path $In)) { throw "build-sams-deals: -In not found: $In" }
 if (-not $Date) { $Date = (Get-Date).ToString('yyyy-MM-dd') }
@@ -401,6 +436,15 @@ foreach ($r in $raw) {
 # de-dupe identical products (the same SKU is returned by several search terms)
 $seen = @{}; $ded = New-Object System.Collections.Generic.List[object]
 foreach ($r in $rows) { $k = $r.item + '|' + $r.ad_price + '|' + $r.size; if (-not $seen.ContainsKey($k)) { $seen[$k]=$true; $ded.Add($r) } }
+
+# drop bulk multipacks / novelties the board should never carry (guard-5 lockstep, above)
+$kept = New-Object System.Collections.Generic.List[object]
+foreach ($r in $ded) {
+  if (BW-IsMultipackReject $r.item $r.size) {
+    $rejects.Add([pscustomobject]@{ name=$r.item; lp=$r.ad_price; up=$r.wm_unit_price; reason='multipack: pack priced as a single board unit (guard 5) - not a shopper single-buy unit' })
+  } else { $kept.Add($r) }
+}
+$ded = $kept
 
 $outDir = Join-Path $root 'out\regular'
 if (-not (Test-Path $outDir)) { New-Item -ItemType Directory -Path $outDir -Force | Out-Null }

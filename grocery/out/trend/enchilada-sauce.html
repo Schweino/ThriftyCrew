@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-14","07-17","07-18","07-19","07-20","07-21","07-22"],"s":{"Walmart":[0.1,0.1,0.1,0.1,0.1,0.1,0.1,null],"Hy-Vee":[0.1139,0.269,0.1139,0.1139,0.1139,0.1139,0.1139,0.1139],"Baker's":[0.129,0.129,0.0925,0.0925,0.0925,0.0925,0.0925,0.0925],"Family Fare":[0.339,0.339,null,null,null,null,null,null]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-14","07-17","07-18","07-19","07-20","07-21","07-22"],"s":{"Walmart":[0.1,0.1,0.1,0.1,0.1,0.1,0.1,null],"Hy-Vee":[0.1139,0.269,0.1139,0.1139,0.1139,0.1139,0.1139,0.1139],"Baker's":[0.129,0.129,0.0925,0.0925,0.0925,0.0925,0.0925,0.0925],"Family Fare":[0.339,0.339,null,null,null,null,null,null],"Fareway":[null,null,null,null,null,null,null,0.158]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -147,6 +147,7 @@ function tcChart(root, d){
 <tbody>
 <tr class="tp-low"><td>Baker&#39;s</td><td>$0.0925 per oz</td><td><span class="tp-item">Kroger® Mild Red Enchilada Sauce 28 oz</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.1139 per oz</td><td><span class="tp-item">Las Palmas Mild Enchilada Sauce, 28 oz</span></td></tr>
+<tr><td>Fareway</td><td>$0.158 per oz</td><td><span class="tp-item">Fareway Enchilada Sauce, Red, Mild</span></td></tr>
 </tbody></table>
 <p class="tp-links"><a href="/omaha-grocery-prices/?ref=trend">See the full live Omaha price board</a> &middot; <a href="/omaha-price-tracker/?ref=trend">All tracked staples</a></p>
 <p class="tp-foot">Tracked weekly across Hy-Vee, Baker&#39;s, Family Fare, Aldi, Sam&#39;s Club and Walmart in Omaha since June 2026. This page updates every week.</p>

@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-14","07-17","07-18","07-19","07-20","07-21","07-22"],"s":{"Walmart":[0.0507,0.0507,0.043,0.043,0.043,0.043,0.043,null],"Family Fare":[0.1031,0.1031,null,null,null,null,null,null],"Baker's":[0.1155,0.1155,0.0426,0.0426,0.0426,0.0426,0.0426,0.0426],"Hy-Vee":[0.1219,0.1219,0.1219,0.1219,0.1219,0.1219,0.1219,0.1219]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-14","07-17","07-18","07-19","07-20","07-21","07-22"],"s":{"Walmart":[0.0507,0.0507,0.043,0.043,0.043,0.043,0.043,null],"Family Fare":[0.1031,0.1031,null,null,null,null,null,null],"Baker's":[0.1155,0.1155,0.0426,0.0426,0.0426,0.0426,0.0426,0.0426],"Hy-Vee":[0.1219,0.1219,0.1219,0.1219,0.1219,0.1219,0.1219,0.1219],"Fareway":[null,null,null,null,null,null,null,0.0968]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -146,6 +146,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Baker&#39;s</td><td>$0.0426 per oz</td><td><span class="tp-item">Juanita&#39;s Foods Mexican Style Hominy, 110 oz, Can 110 oz t</span></td></tr>
+<tr><td>Fareway</td><td>$0.0968 per oz</td><td><span class="tp-item">Bush&#39;s Best White Hominy</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.1219 per oz</td><td><span class="tp-item">Bush&#39;s Best Golden Hominy 15.5 oz</span></td></tr>
 </tbody></table>
 <p class="tp-links"><a href="/omaha-grocery-prices/?ref=trend">See the full live Omaha price board</a> &middot; <a href="/omaha-price-tracker/?ref=trend">All tracked staples</a></p>

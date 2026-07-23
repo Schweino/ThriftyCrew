@@ -3,7 +3,7 @@
     "new_board":  "comparison-2026-07-22.json",
     "prev_board":  "comparison-2026-07-18.json",
     "rows_was":  424,
-    "rows_now":  421,
+    "rows_now":  424,
     "thresholds":  {
                        "max_drop_cells":  15,
                        "max_drop_pct":  10
@@ -66,12 +66,12 @@
                    {
                        "store":  "Walmart",
                        "was":  410,
-                       "now":  81,
-                       "drop":  329,
-                       "pct":  80.2,
-                       "regression":  true,
+                       "now":  411,
+                       "drop":  -1,
+                       "pct":  -0.2,
+                       "regression":  false,
                        "acked":  false
                    }
                ],
-    "fail_count":  1
+    "fail_count":  0
 }

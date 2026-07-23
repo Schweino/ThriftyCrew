@@ -19,6 +19,10 @@ param(
 # freshest one that covers a given commodity wins it. Warehouse "everyday" prices are stable enough for this;
 # tighten it if Sam's starts moving prices weekly.
 [int]$SamsMaxAgeDays = 14,
+  # Walmart's out\regular captures are unioned the same way (see the everyday-price loader): a partial daily
+  # refresh must not shrink the board, so every Walmart capture inside this window is loaded and the freshest
+  # one covering each commodity wins. Walmart is everyday-priced, so an older capture is only ever a gap-filler.
+  [int]$WalmartMaxAgeDays = 14,
   [string]$FarewayFile = "",
   [int]$MinStores = 2,
   [string]$OutDir = "",
@@ -469,10 +473,28 @@ if (Test-Path $regDir) {
   # named "family-fare-regular-2026-07-14.PARTIAL.json" therefore (a) matched, and (b) sorted AFTER the good
   # "...-07-14.json" (case-insensitively 'p' > 'j'), so -Descending picked the EMPTY file and Family Fare
   # contributed zero everyday rows to the board while every log said the pull had succeeded. Anchor the name.
+  # Newest-per-store, EXCEPT Walmart. Walmart is EVERYDAY-priced (no weekly ad cycle), and its browser capture
+  # can run as a partial daily refresh (e.g. a 50-item core-staple pull). "Newest file wins" then SHRINKS the
+  # board to whatever that partial covered - on 2026-07-23 a 50-term refresh cut Walmart from 410 cells to 80
+  # and the coverage guard (correctly) blocked the publish. So Walmart UNIONS its recent captures and tags each
+  # row with src_date; the freshness-per-commodity ranker (see "rank" below) then keeps today's price where it
+  # exists and the last full capture everywhere else - no stale-low, no coverage loss. This is the same
+  # multi-capture pattern Sam's already uses. Every OTHER store here can run weekly sales, so unioning old files
+  # would resurrect expired prices; they stay newest-only.
   $regFiles = Get-ChildItem (Join-Path $regDir '*-regular-*.json') -ErrorAction SilentlyContinue |
     Where-Object { $_.BaseName -match '^[a-z0-9-]+-regular-\d{4}-\d{2}-\d{2}$' } |
     Group-Object { ($_.BaseName -replace '-regular-.*$','') } |
-    ForEach-Object { $_.Group | Sort-Object Name -Descending | Select-Object -First 1 }
+    ForEach-Object {
+      $grp = $_.Group | Sort-Object Name -Descending
+      if ($_.Name -eq 'walmart') {
+        $grp | Where-Object {
+          $m = [regex]::Match($_.BaseName, '(\d{4}-\d{2}-\d{2})$')
+          $m.Success -and [math]::Abs(([datetime]$m.Groups[1].Value - [datetime]$today).TotalDays) -le $WalmartMaxAgeDays
+        }
+      } else {
+        $grp | Select-Object -First 1
+      }
+    }
   foreach ($rf in $regFiles) {
     $ex = Get-Content $rf.FullName -Raw | ConvertFrom-Json
     # PRICE-MODE GATE (2026-07-15): Aldi/Fareway are Instacart storefronts whose DELIVERY catalog is marked up
@@ -484,7 +506,11 @@ if (Test-Path $regDir) {
       continue
     }
     $pt = if ($ex.price_type) { [string]$ex.price_type } else { 'everyday' }
-    foreach ($d in $ex.deals) { Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt }
+    # Only Walmart's rows get a src_date (it unions multiple captures); everyone else loads one file and must
+    # stay date-less so the ranker never filters their single source out from under them.
+    $sd = ''
+    if ([string]$ex.store -eq 'Walmart') { $mm = [regex]::Match($rf.BaseName, '(\d{4}-\d{2}-\d{2})$'); if ($mm.Success) { $sd = $mm.Groups[1].Value } }
+    foreach ($d in $ex.deals) { Add-Norm $d.store $d.item $d.ad_price $d.size $d.regular $d.source_ad $pt $sd }
   }
 }
 

@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22"],"s":{"Sam's Club":[0.1078,0.1078,null,0.1331,0.1331,0.1331,0.1331,0.1331,0.1331],"Walmart":[0.1742,0.1742,0.1742,0.1742,0.1742,0.1742,0.1742,0.1742,null],"Hy-Vee":[0.25,0.25,0.279,0.279,0.279,0.279,0.1748,0.1748,0.1748],"Fareway":[0.329,0.329,0.329,0.329,0.329,0.329,0.329,0.329,0.329],"Baker's":[null,null,0.2268,0.2268,0.2268,0.2268,0.2268,0.2268,0.149]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22"],"s":{"Sam's Club":[0.1078,0.1078,null,0.1331,0.1331,0.1331,0.1331,0.1331,0.1331],"Walmart":[0.1742,0.1742,0.1742,0.1742,0.1742,0.1742,0.1742,0.1742,null],"Hy-Vee":[0.25,0.25,0.279,0.279,0.279,0.279,0.1748,0.1748,0.1748],"Fareway":[0.329,0.329,0.329,0.329,0.329,0.329,0.329,0.329,null],"Baker's":[null,null,0.2268,0.2268,0.2268,0.2268,0.2268,0.2268,null]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -147,9 +147,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Sam&#39;s Club</td><td>$0.1331 each</td><td><span class="tp-item">Mott&#39;s Assorted Fruit Flavored Snacks, 0.8 oz., 90 pk.</span></td></tr>
-<tr><td>Baker&#39;s</td><td>$0.149 each</td><td><span class="tp-item"></span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.1748 each</td><td><span class="tp-item">Hy-Vee fruit snacks, 40 ct., $6.99</span></td></tr>
-<tr><td>Fareway</td><td>$0.329 each</td><td><span class="tp-item">Welch&#39;s Strawberry Fruit Snacks</span></td></tr>
 </tbody></table>
 <p class="tp-links"><a href="/omaha-grocery-prices/?ref=trend">See the full live Omaha price board</a> &middot; <a href="/omaha-price-tracker/?ref=trend">All tracked staples</a></p>
 <p class="tp-foot">Tracked weekly across Hy-Vee, Baker&#39;s, Family Fare, Aldi, Sam&#39;s Club and Walmart in Omaha since June 2026. This page updates every week.</p>

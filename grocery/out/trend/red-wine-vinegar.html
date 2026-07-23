@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-14","07-17","07-18","07-19","07-20","07-21","07-22"],"s":{"Hy-Vee":[0.1473,0.1473,0.1869,0.1869,0.1869,0.1869,0.1869,0.1869],"Family Fare":[0.1556,0.1556,null,null,null,null,null,null],"Walmart":[0.1775,0.1775,0.1775,0.1775,0.1775,0.1775,0.1775,null],"Aldi":[0.1947,0.1947,0.1769,0.1769,0.1769,0.1769,0.1769,0.1769],"Baker's":[0.2039,0.2039,0.1681,0.1681,0.1681,0.1681,0.1681,0.1681]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-14","07-17","07-18","07-19","07-20","07-21","07-22"],"s":{"Hy-Vee":[0.1473,0.1473,0.1869,0.1869,0.1869,0.1869,0.1869,0.1869],"Family Fare":[0.1556,0.1556,null,null,null,null,null,null],"Walmart":[0.1775,0.1775,0.1775,0.1775,0.1775,0.1775,0.1775,null],"Aldi":[0.1947,0.1947,0.1769,0.1769,0.1769,0.1769,0.1769,0.1769],"Baker's":[0.2039,0.2039,0.1681,0.1681,0.1681,0.1681,0.1681,0.1681],"Fareway":[null,null,null,null,null,null,null,0.1704]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -146,6 +146,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Baker&#39;s</td><td>$0.1681 per fl oz</td><td><span class="tp-item">Pompeian® Gourmet Red Wine Vinegar 16 fl oz</span></td></tr>
+<tr><td>Fareway</td><td>$0.1704 per fl oz</td><td><span class="tp-item">Fareway Red Wine Vinegar</span></td></tr>
 <tr><td>Aldi</td><td>$0.1769 per fl oz</td><td><span class="tp-item">Priano Red Wine Vinegar16.9 fl oz</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.1869 per fl oz</td><td><span class="tp-item">Pompeian Gourmet Red Wine Vinegar</span></td></tr>
 </tbody></table>
