@@ -1,171 +1,66 @@
 ﻿{
     "resolved":  [
-                     {
-                         "id":  "ground-cloves",
-                         "fault":  "PRICE-MISMATCH",
-                         "board":  "Spice Supreme Spice Ground Cloves",
-                         "board_pu":  36,
-                         "name":  "Spice Supreme Spice Ground Cloves",
-                         "url":  "https://www.shopfamilyfare.com/shop/seasonal_special_occasion/trial_sizes_store/spice_supreme_spice_ground_cloves/p/2400974",
-                         "price":  "$45",
-                         "size":  "1.25 oz",
-                         "score":  1
-                     },
-                     {
-                         "id":  "lime-juice",
-                         "fault":  "NO-LINK",
-                         "board":  "Mc Cormick Mayonesa (Mayonnaise) With Lime Juice 28 Fl Oz",
-                         "board_pu":  0.2961,
-                         "name":  "Mc Cormick Mayonesa (Mayonnaise) With Lime Juice 28 Fl Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mayonnaise_sandwich_spreads/mc_cormick_mayonesa_mayonnaise_with_lime_juice_28_fl_oz/p/2371458",
-                         "price":  "$8.29",
-                         "size":  "28 fl oz",
-                         "score":  1
-                     },
-                     {
-                         "id":  "mayonnaise",
-                         "fault":  "NO-LINK",
-                         "board":  "Our Family Mayo, Real 30 Fl Oz",
-                         "board_pu":  0.133,
-                         "name":  "Our Family Mayo, Real 30 Fl Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mayonnaise_sandwich_spreads/our_family_mayo_real_30_fl_oz/p/1564405684713540401",
-                         "price":  "$3.99",
-                         "size":  "30 fl oz",
-                         "score":  1
-                     },
-                     {
-                         "id":  "miracle-whip",
-                         "fault":  "NO-LINK",
-                         "board":  "Miracle Whip Light Dressing 30 Fl Oz",
-                         "board_pu":  0.233,
-                         "name":  "Miracle Whip Light Dressing 30 Fl Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mayonnaise_sandwich_spreads/miracle_whip_light_dressing_30_fl_oz/p/2884",
-                         "price":  "$6.99",
-                         "size":  "30 oz",
-                         "score":  1
-                     },
-                     {
-                         "id":  "poppy-seeds",
-                         "fault":  "NO-LINK",
-                         "board":  "Poppy Seeds Sugar \u0027N Spice",
-                         "board_pu":  0.916,
-                         "name":  "Poppy Seeds Sugar \u0027N Spice",
-                         "url":  "https://www.shopfamilyfare.com/shop/pantry/dry_goods/whole_grains/poppy_seeds_sugar_n_spice/p/1564405684701719823",
-                         "price":  "$2.29",
-                         "size":  "2.5 oz",
-                         "score":  1
-                     },
-                     {
-                         "id":  "potato-gnocchi",
-                         "fault":  "NO-LINK",
-                         "board":  "De Lallo Potato Gnocchi 16 Oz",
-                         "board_pu":  0.3119,
-                         "name":  "De Lallo Potato Gnocchi 16 Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/pantry/pasta_sauces/other_pastas/de_lallo_potato_gnocchi_16_oz/p/3686",
-                         "price":  "$4.99",
-                         "size":  "16 oz",
-                         "score":  1
-                     },
-                     {
-                         "id":  "ranch-dressing",
-                         "fault":  "NO-LINK",
-                         "board":  "Our Family Buttermilk Ranch Dressing 16 Fl Oz",
-                         "board_pu":  0.1744,
-                         "name":  "Our Family Buttermilk Ranch Dressing 16 Fl Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_dressing/our_family_buttermilk_ranch_dressing_16_fl_oz/p/7081380",
-                         "price":  "$2.79",
-                         "size":  "16 fl oz",
-                         "score":  1
-                     },
-                     {
-                         "id":  "rice-noodles",
-                         "fault":  "NO-LINK",
-                         "board":  "Thai Kitchen Med Pad Thai Rice Noodle Cart 9.77 Oz",
-                         "board_pu":  0.869,
-                         "name":  "Thai Kitchen Med Pad Thai Rice Noodle Cart 9.77 Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/pantry/packaged_meals/thai_kitchen_med_pad_thai_rice_noodle_cart_9_77_oz/p/2449732",
-                         "price":  "$8.49",
-                         "size":  "9.77 oz",
-                         "score":  1
-                     },
-                     {
-                         "id":  "sesame-oil",
-                         "fault":  "NO-LINK",
-                         "board":  "Kikkoman Sesame Oil 5 Fl Oz",
-                         "board_pu":  1.078,
-                         "name":  "Kikkoman Sesame Oil 5 Fl Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/asian_sauce/kikkoman_sesame_oil_5_fl_oz/p/578088",
-                         "price":  "$5.39",
-                         "size":  "5 fl oz",
-                         "score":  1
-                     },
-                     {
-                         "id":  "mustard",
-                         "fault":  "NO-LINK",
-                         "board":  "Our Family Mustard, Yellow 20 Oz",
-                         "board_pu":  0.0995,
-                         "name":  "Our Family Mustard, Yellow 20 Oz",
-                         "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/our_family_mustard_yellow_20_oz/p/6787059",
-                         "price":  "$1.99",
-                         "size":  "20 oz",
-                         "score":  1
-                     }
+
                  ],
     "refused":  [
                     {
                         "id":  "applesauce",
-                        "why":  "match found but per-unit disagrees: board $0.1454 vs link $0.8725 (83.3%)"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                    },
+                    {
+                        "id":  "ground-cloves",
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "ground-coriander",
-                        "why":  "no confident match (best 0)"
-                    },
-                    {
-                        "id":  "tomatoes-green-chilies",
-                        "why":  "match found but per-unit disagrees: board $0.0683 vs link $0.119 (42.6%)"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "dried-dill",
-                        "why":  "no confident match (best 0)"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
                     },
                     {
                         "id":  "gelatin",
-                        "why":  "match found but its size \"3 oz\" gives no per-unit in each"
+                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                    },
+                    {
+                        "id":  "ground-cumin",
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "ground-turmeric",
-                        "why":  "no confident match (best 0)"
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "deli-ham",
-                        "why":  "match found but per-unit disagrees: board $0.6656 vs link $0.7767 (14.3%)"
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "hamburger-buns",
-                        "why":  "match found but its size \"16 oz\" gives no per-unit in each"
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "muffins",
-                        "why":  "match found but its size \"16 oz\" gives no per-unit in each"
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "paper-towels",
-                        "why":  "match found but per-unit disagrees: board $1.3738 vs link $1.4988 (8.3%)"
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "shower-cleaner",
-                        "why":  "no confident match (best 0)"
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "sloppy-joe-sauce",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "not attempted - circuit breaker tripped"
                     },
                     {
                         "id":  "tomatillos",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "not attempted - circuit breaker tripped"
                     }
                 ],
-    "worked":  23,
-    "generated":  "2026-07-23 07:39",
-    "board":  "comparison-2026-07-22.json"
+    "worked":  14,
+    "generated":  "2026-07-23 13:26",
+    "board":  "comparison-2026-07-23.json"
 }

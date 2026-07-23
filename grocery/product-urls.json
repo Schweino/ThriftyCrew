@@ -10455,7 +10455,7 @@
                                                         "price":  3.38,
                                                         "size":  "8 fl oz",
                                                         "name":  "Purell Hand Sanitizer 8 oz",
-                                                        "board_pu":  0.4225
+                                                        "verified":  "2026-07-23 Hy-Vee search API (storeId 1465)"
                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/13953261756",
@@ -11823,11 +11823,11 @@
                                   "Hy-Vee":  {
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/769638/hy-vee-thick-rich-tomato-ketchup",
                                                  "name":  "Hy-Vee Thick \u0026 Rich Tomato Ketchup",
-                                                 "price":  2.49,
-                                                 "size":  "38 oz",
-                                                 "verified":  "2026-07-16 DERIVED from the price row (same record the board priced)",
                                                  "board_pu":  0.0655,
-                                                 "recipe_pu":  0.0653
+                                                 "recipe_pu":  0.0653,
+                                                 "price":  2.98,
+                                                 "size":  "38 oz",
+                                                 "verified":  "2026-07-23 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                              },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/137350",
@@ -14121,12 +14121,11 @@
                                                       "name":  "Fareway Meat Flavored Pasta Sauce"
                                                   },
                                       "Hy-Vee":  {
-                                                     "url":  "https://www.hy-vee.com/aisles-online/p/6752/hunt-s-traditional-pasta-sauce",
-                                                     "name":  "Hunt\u0027s Traditional Pasta Sauce",
-                                                     "price":  1.84,
+                                                     "url":  "https://www.hy-vee.com/aisles-online/p/1351300/hy-vee-traditional-pasta-sauce",
+                                                     "name":  "Hy-Vee Traditional Pasta Sauce",
+                                                     "price":  "$1.58",
                                                      "size":  "24 oz",
-                                                     "verified":  "2026-07-16 DERIVED from the price row (same record the board priced)",
-                                                     "board_pu":  0.0767
+                                                     "verified":  "2026-07-23 DERIVED from the price row (same record the board priced)"
                                                  },
                                       "Sam\u0027s Club":  {
                                                               "url":  "https://www.samsclub.com/ip/3620001381",
@@ -17527,11 +17526,11 @@
                                                   "name":  "Scotch-Brite Ocelo Handy Sponge, Assorted Colors"
                                               },
                                   "Hy-Vee":  {
-                                                 "url":  "https://www.hy-vee.com/aisles-online/p/4209805/hy-vee-non-scratch-scrubber-sponges",
-                                                 "price":  2.99,
-                                                 "size":  "3 ct",
+                                                 "url":  "https://www.hy-vee.com/aisles-online/p/4209805/hy-vee-heavy-duty-scrubber-sponges",
                                                  "name":  "Hy-Vee Heavy Duty Scrubber Sponges",
-                                                 "verified":  "2026-07-23 Hy-Vee search API (storeId 1465)"
+                                                 "price":  "$2.99",
+                                                 "size":  "3 ct",
+                                                 "verified":  "2026-07-23 DERIVED from the price row (same record the board priced)"
                                              },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/13951713165",
@@ -18929,7 +18928,7 @@
                                                       "price":  1,
                                                       "size":  "1 ct",
                                                       "name":  "Colgate Plus Soft Toothbrush",
-                                                      "board_pu":  1
+                                                      "verified":  "2026-07-23 Hy-Vee search API (storeId 1465)"
                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/Oral-B-ProHealth-Advanced-Manual-Soft-Toothbrush-8-ct/13858651646",

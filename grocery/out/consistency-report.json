@@ -1,5 +1,5 @@
 ﻿{
-    "generated":  "2026-07-23 07:41",
+    "generated":  "2026-07-23 13:31",
     "tol":  0.3,
     "no_link_count":  311,
     "max_no_link":  0,
@@ -1279,7 +1279,7 @@
                         "store":  "Hy-Vee"
                     }
                 ],
-    "mismatch_count":  45,
+    "mismatch_count":  44,
     "mismatch":  [
                      {
                          "id":  "balsamic-vinegar",
@@ -1410,16 +1410,6 @@
                          "off_pct":  49,
                          "product":  "Pillsbury Grands! Flaky Layers Honey Butter Big Biscuits, 8 count",
                          "size":  "16.3 oz"
-                     },
-                     {
-                         "id":  "ketchup",
-                         "store":  "Hy-Vee",
-                         "unit":  "oz",
-                         "board":  0.1,
-                         "link":  0.0655,
-                         "off_pct":  34,
-                         "product":  "Hy-Vee Thick \u0026 Rich Tomato Ketchup",
-                         "size":  "38 oz"
                      },
                      {
                          "id":  "ketchup",

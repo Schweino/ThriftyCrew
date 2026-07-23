@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-23 07:36",
-    "gap_count":  387,
+    "generated":  "2026-07-23 13:23",
+    "gap_count":  393,
     "gaps":  [
                  {
                      "commodity":  "chicken-breast",
@@ -239,8 +239,18 @@
                  },
                  {
                      "commodity":  "paper-towels",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Kleenex Disposable Paper Hand Towels, 6 boxes, 60 towels/box"
+                 },
+                 {
+                     "commodity":  "paper-towels",
                      "store":  "Walmart",
                      "candidate":  "Scott Paper Towels Choose-A-Sheet 6 Double Rolls"
+                 },
+                 {
+                     "commodity":  "toilet-paper",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Marathon 2-Roll Jumbo Toilet Paper Dispenser, Smoke"
                  },
                  {
                      "commodity":  "toilet-paper",
@@ -491,6 +501,11 @@
                      "commodity":  "rotisserie-chicken",
                      "store":  "Fareway",
                      "candidate":  "Roasted Whole Chicken"
+                 },
+                 {
+                     "commodity":  "rotisserie-chicken",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Member\u0027s Mark Rotisserie Chicken Bites, 2 lbs."
                  },
                  {
                      "commodity":  "rotisserie-chicken",
@@ -781,6 +796,11 @@
                      "commodity":  "chicken-noodle-soup",
                      "store":  "Walmart",
                      "candidate":  "Campbell\u0027s Condensed Chicken Noodle Soup"
+                 },
+                 {
+                     "commodity":  "tomato-soup",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Member\u0027s Mark Tomato Basil Soup 32 oz. tubs, 2 pk."
                  },
                  {
                      "commodity":  "tomato-soup",
@@ -1193,6 +1213,11 @@
                      "candidate":  "Great Value Disinfectant Spray"
                  },
                  {
+                     "commodity":  "air-freshener",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Glad Small Twist-Tie White Trash Bags, Fresh Clean Scent with Febreze Freshness, 4 gal., 156 ct."
+                 },
+                 {
                      "commodity":  "batteries",
                      "store":  "Walmart",
                      "candidate":  "Great Value Alkaline AA Batteries"
@@ -1206,6 +1231,11 @@
                      "commodity":  "toothpaste",
                      "store":  "Baker\u0027s",
                      "candidate":  "Colgate Toothpaste"
+                 },
+                 {
+                     "commodity":  "toothpaste",
+                     "store":  "Sam\u0027s Club",
+                     "candidate":  "Colgate Cavity Protection Toothpaste with Fluoride, Regular Flavor, 8 oz., 5 pk."
                  },
                  {
                      "commodity":  "toothpaste",
