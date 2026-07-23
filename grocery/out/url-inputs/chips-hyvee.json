@@ -1,11 +1,11 @@
 ﻿[
     {
-        "id":  "applesauce",
-        "q":  "applesauce",
-        "match":  "Hy Vee Unsweetened Applesauce",
-        "size":  "48 oz",
-        "pu":  0.0767,
-        "unit":  "oz"
+        "id":  "apples",
+        "q":  "apples",
+        "match":  "Granny Smith apples, $1.68 lb.",
+        "size":  "",
+        "pu":  1.68,
+        "unit":  "lb"
     },
     {
         "id":  "black-pepper",
@@ -18,33 +18,33 @@
     {
         "id":  "blueberries",
         "q":  "blueberries",
-        "match":  "Driscoll\u0027s blueberries, 18 oz. pkg., $4.99",
-        "size":  "",
-        "pu":  0.2772,
+        "match":  "Fresh Blueberries, 1 Pint",
+        "size":  "1 pt",
+        "pu":  0.4455,
         "unit":  "oz"
     },
     {
         "id":  "chicken-breast",
         "q":  "boneless skinless chicken breast",
-        "match":  "Hy-Vee boneless skinless chicken breasts, sold in 2.5 lb. bag for $6.99 23g per 4 oz., $6.99",
+        "match":  "Hy-Vee fresh boneless skinless chicken breasts, 100% natural, value pack No antibiotics ever., $3.99 lb.",
         "size":  "",
-        "pu":  2.796,
+        "pu":  3.99,
         "unit":  "lb"
     },
     {
         "id":  "bottled-water",
         "q":  "purified water 24 pack",
-        "match":  "Hy-Vee purified drinking water, 40 pk. bottles 16.9 fl. oz., $4.99",
+        "match":  "Hy-Vee spring water, 24 pk. mini bottles 10 fl. oz., $3.99",
         "size":  "",
-        "pu":  0.1248,
+        "pu":  0.1662,
         "unit":  "each"
     },
     {
         "id":  "cereal",
         "q":  "cereal",
-        "match":  "That\u0027s Smart! cereal, 12 to 18 oz., $1.99",
-        "size":  "",
-        "pu":  0.1106,
+        "match":  "Hy Vee Whole Grain Raisin Bran",
+        "size":  "18 oz",
+        "pu":  0.1661,
         "unit":  "oz"
     },
     {
@@ -64,12 +64,20 @@
         "unit":  "lb"
     },
     {
-        "id":  "coffee",
-        "q":  "ground coffee",
-        "match":  "Maxwell House or Yuban coffee, 23.1 to 27.9 oz., $11.98",
-        "size":  "",
-        "pu":  0.4294,
+        "id":  "cottage-cheese",
+        "q":  "cottage cheese",
+        "match":  "Hy Vee 4 Small Curd Cottage Cheese",
+        "size":  "24 oz",
+        "pu":  0.1162,
         "unit":  "oz"
+    },
+    {
+        "id":  "cotton-swabs",
+        "q":  "cotton swabs",
+        "match":  "Q-Tips cotton swabs, 500 ct., $4.99",
+        "size":  "",
+        "pu":  0.01,
+        "unit":  "each"
     },
     {
         "id":  "dinner-rolls",
@@ -90,9 +98,9 @@
     {
         "id":  "dishwasher-detergent",
         "q":  "dishwasher detergent pacs",
-        "match":  "Hy-Vee dishwasher detergent, 60 ct., $9.99",
-        "size":  "",
-        "pu":  0.1665,
+        "match":  "Hy Vee Dishwasher Detergent 60 Packs",
+        "size":  "60 ct",
+        "pu":  0.1832,
         "unit":  "each"
     },
     {
@@ -114,9 +122,9 @@
     {
         "id":  "facial-tissues",
         "q":  "facial tissues",
-        "match":  "Hy-Vee facial tissue, 280 ct., $4.99",
+        "match":  "Hy-Vee facial tissue, 70 or 144 ct., $2.29",
         "size":  "",
-        "pu":  0.0178,
+        "pu":  0.0159,
         "unit":  "each"
     },
     {
@@ -146,9 +154,17 @@
     {
         "id":  "frozen-pizza",
         "q":  "frozen pizza",
-        "match":  "Jacks Pepperoni Pizza Thin Crust",
-        "size":  "each",
-        "pu":  3,
+        "match":  "Roma Original or Bellatoria personal pizza, 5.67 to 11.05 oz., $2.22 ea. with purchase of 4",
+        "size":  "",
+        "pu":  2.22,
+        "unit":  "each"
+    },
+    {
+        "id":  "fruit-snacks",
+        "q":  "fruit snacks",
+        "match":  "Hy-Vee fruit snacks, 40 ct., $6.99",
+        "size":  "",
+        "pu":  0.1748,
         "unit":  "each"
     },
     {
@@ -168,14 +184,6 @@
         "unit":  "each"
     },
     {
-        "id":  "granola-bars",
-        "q":  "chewy granola bars",
-        "match":  "Hy Vee Chewy Granola Bars Variety Pack 18Ct",
-        "size":  "18 ct",
-        "pu":  0.3328,
-        "unit":  "each"
-    },
-    {
         "id":  "hot-sauce",
         "q":  "hot sauce",
         "match":  "Franks Redhot Original Cayenne Pepper Hot Sauce",
@@ -184,28 +192,28 @@
         "unit":  "floz"
     },
     {
-        "id":  "italian-sausage",
-        "q":  "italian sausage",
-        "match":  "Hy Vee Midwest Pork Italian Pork Sausage",
-        "size":  "16 oz",
-        "pu":  4.88,
-        "unit":  "lb"
-    },
-    {
-        "id":  "mac-and-cheese",
-        "q":  "macaroni and cheese",
-        "match":  "Kraft Mac \u0026 cheese, 5.5 to 7.25 oz., 3/ $3.00 with purchase of 3",
+        "id":  "lettuce",
+        "q":  "iceberg lettuce",
+        "match":  "Dole spinach 8 oz. pkg., classic romaine 9 oz. pkg. or greener selection 11 oz. pkg., 2/ $5.00",
         "size":  "",
-        "pu":  1,
+        "pu":  2.5,
         "unit":  "each"
     },
     {
         "id":  "mangoes",
         "q":  "mango",
-        "match":  "Jumbo Ripe \u0026 Ready mangos, each, $1.99 each",
-        "size":  "",
-        "pu":  1.99,
+        "match":  "Mangoes",
+        "size":  "2 ct",
+        "pu":  2.5,
         "unit":  "each"
+    },
+    {
+        "id":  "marshmallows",
+        "q":  "marshmallows",
+        "match":  "Hy Vee Marshmallows",
+        "size":  "16 oz",
+        "pu":  0.1056,
+        "unit":  "oz"
     },
     {
         "id":  "microwave-popcorn",
@@ -216,12 +224,20 @@
         "unit":  "each"
     },
     {
-        "id":  "milk",
-        "q":  "milk gallon",
-        "match":  "Thats Smart 2 Reduced Fat Milk",
-        "size":  "gallon",
-        "pu":  3.06,
-        "unit":  "gallon"
+        "id":  "muffins",
+        "q":  "blueberry muffins",
+        "match":  "Entenmann\u0027s Little Bites muffins, 5 ct., $3.29",
+        "size":  "",
+        "pu":  0.658,
+        "unit":  "each"
+    },
+    {
+        "id":  "paper-napkins",
+        "q":  "paper napkins",
+        "match":  "Hy-Vee napkins, 250 ct., $2.88",
+        "size":  "",
+        "pu":  0.0115,
+        "unit":  "each"
     },
     {
         "id":  "paprika",
@@ -232,20 +248,12 @@
         "unit":  "oz"
     },
     {
-        "id":  "peaches",
-        "q":  "peaches",
-        "match":  "Yellow Flesh Peaches",
-        "size":  "lb",
-        "pu":  2.99,
-        "unit":  "lb"
-    },
-    {
-        "id":  "pork-chops",
-        "q":  "pork chops",
-        "match":  "Hy-Vee Midwest Pork bone-in assorted chops, $3.99 lb.",
+        "id":  "peanut-butter",
+        "q":  "peanut butter",
+        "match":  "Skippy peanut butter, 15 to 16.3 oz., $1.98",
         "size":  "",
-        "pu":  3.99,
-        "unit":  "lb"
+        "pu":  0.1215,
+        "unit":  "oz"
     },
     {
         "id":  "ramen",
@@ -264,12 +272,12 @@
         "unit":  "each"
     },
     {
-        "id":  "spinach",
-        "q":  "fresh spinach",
-        "match":  "Dole Spinach",
-        "size":  "10 oz",
-        "pu":  0.299,
-        "unit":  "oz"
+        "id":  "soda",
+        "q":  "cola 12 pack",
+        "match":  "Hy-Vee soda or mixer, 2 liter, 4/ $5.00",
+        "size":  "",
+        "pu":  0.0185,
+        "unit":  "floz"
     },
     {
         "id":  "tea-bags",
@@ -280,11 +288,11 @@
         "unit":  "each"
     },
     {
-        "id":  "tortillas",
-        "q":  "flour tortillas",
-        "match":  "Mission fajita tortillas, 20 ct., $2.99",
+        "id":  "toaster-pastries",
+        "q":  "toaster pastries",
+        "match":  "Pop-Tarts original 12 ct. or Protein Boostin\u0027 toaster pastries 8 ct., - .50 off with digital coupon, $2.99",
         "size":  "",
-        "pu":  0.1495,
+        "pu":  0.2492,
         "unit":  "each"
     },
     {

@@ -1,18 +1,18 @@
 ﻿[
     {
-        "id":  "bagels",
-        "q":  "plain bagels",
-        "match":  "Thomas\u0027 Plain Bagels, 12 pk.",
-        "size":  "36.737 oz",
-        "pu":  0.5817,
-        "unit":  "each"
-    },
-    {
         "id":  "bar-soap",
         "q":  "bar soap",
         "match":  "Irish Spring Bar Soap, Original  Clean, 4 oz., 20 ct.",
         "size":  "80 oz",
         "pu":  0.549,
+        "unit":  "each"
+    },
+    {
+        "id":  "bottled-water",
+        "q":  "purified water 24 pack",
+        "match":  "Member\u0027s Mark Purified Bottled Water 8 fl. oz., 80 pk.",
+        "size":  "640 fl oz",
+        "pu":  0.1122,
         "unit":  "each"
     },
     {
@@ -112,6 +112,14 @@
         "unit":  "oz"
     },
     {
+        "id":  "coffee-creamer",
+        "q":  "coffee creamer",
+        "match":  "Coffee mate Half \u0026 Half Liquid Creamer Singles, 0.3 fl. oz., 180 ct.",
+        "size":  "180 ct 0.3 fl oz",
+        "pu":  0.233,
+        "unit":  "floz"
+    },
+    {
         "id":  "cranberry-sauce",
         "q":  "cranberry sauce",
         "match":  "Ocean Spray Jellied Cranberry Sauce, 14 oz., 6 pk.",
@@ -176,6 +184,14 @@
         "unit":  "oz"
     },
     {
+        "id":  "grits",
+        "q":  "quick grits",
+        "match":  "Quaker Instant Grits, Variety Pack, .98 oz., 46 pk.",
+        "size":  "46 ct 98 oz",
+        "pu":  0.0023,
+        "unit":  "oz"
+    },
+    {
         "id":  "hamburger-buns",
         "q":  "hamburger buns",
         "match":  "Sara Lee Restaurant Style White Hamburger Buns, 16 ct.",
@@ -192,14 +208,6 @@
         "unit":  "each"
     },
     {
-        "id":  "hummus",
-        "q":  "hummus",
-        "match":  "Member\u0027s Mark Classic Hummus Singles 2.5 oz., 16 ct.",
-        "size":  "16 ct 2.5 oz",
-        "pu":  0.1395,
-        "unit":  "oz"
-    },
-    {
         "id":  "italian-seasoning",
         "q":  "italian seasoning",
         "match":  "Member\u0027s Mark Italian Seasoning, 6 oz.",
@@ -210,9 +218,9 @@
     {
         "id":  "eggs",
         "q":  "large eggs",
-        "match":  "Large Eggs 15 dozen",
-        "size":  "15 dozen",
-        "pu":  1.8447,
+        "match":  "Member\u0027s Mark Cage Free Grade A Large White Eggs, 2 dozen",
+        "size":  "2 dozen",
+        "pu":  2.31,
         "unit":  "dozen"
     },
     {
@@ -224,20 +232,12 @@
         "unit":  "floz"
     },
     {
-        "id":  "muffins",
-        "q":  "blueberry muffins",
-        "match":  "Otis Spunkmeyer Variety Pack Muffins, 4 oz., 15 pk.",
-        "size":  "60 oz",
-        "pu":  1.0293,
-        "unit":  "each"
-    },
-    {
-        "id":  "pasta",
-        "q":  "spaghetti",
-        "match":  "Barilla Penne Pasta 16 oz., 6 pk.",
-        "size":  "6 ct 16 oz",
-        "pu":  0.0888,
-        "unit":  "oz"
+        "id":  "orange-juice",
+        "q":  "orange juice",
+        "match":  "Tropicana Pure Premium Orange Juice No Pulp, 11 fl. oz., 12 pk.",
+        "size":  "12 ct 11 fl oz",
+        "pu":  0.1127,
+        "unit":  "floz"
     },
     {
         "id":  "pita-bread",
@@ -264,19 +264,11 @@
         "unit":  "oz"
     },
     {
-        "id":  "tomatoes",
-        "q":  "tomatoes on the vine",
-        "match":  "Tomatoes on the Vine, 3-Pound",
-        "size":  "3 lb",
-        "pu":  1.6567,
-        "unit":  "lb"
-    },
-    {
         "id":  "tortillas",
         "q":  "flour tortillas",
-        "match":  "Mission 6\" Fajita Flour Tortillas, 40 ct.",
-        "size":  "54.667 oz",
-        "pu":  0.123,
+        "match":  "La Banderita 9” Homestyle Soft Taco Flour Tortillas, 24 ct.",
+        "size":  "52.25 oz",
+        "pu":  0.1742,
         "unit":  "each"
     },
     {
@@ -286,14 +278,6 @@
         "size":  "3 ct 15 oz",
         "pu":  0.1771,
         "unit":  "oz"
-    },
-    {
-        "id":  "whole-chicken",
-        "q":  "whole chicken",
-        "match":  "Member\u0027s Mark Organic Whole Chicken",
-        "size":  "lb",
-        "pu":  2.47,
-        "unit":  "lb"
     },
     {
         "id":  "yogurt",

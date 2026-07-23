@@ -8,6 +8,38 @@
         "unit":  "oz"
     },
     {
+        "id":  "cajun-seasoning",
+        "q":  "cajun seasoning",
+        "match":  "Stonemill Cajun Seasoning",
+        "size":  "3.5 oz",
+        "pu":  0.4829,
+        "unit":  "oz"
+    },
+    {
+        "id":  "canned-green-chilies",
+        "q":  "diced green chiles",
+        "match":  "Pueblo Lindo Chopped Green Chiles",
+        "size":  "4 oz",
+        "pu":  0.2125,
+        "unit":  "oz"
+    },
+    {
+        "id":  "cantaloupe",
+        "q":  "cantaloupe",
+        "match":  "Kandy Plus Cantaloupe",
+        "size":  "",
+        "pu":  1.99,
+        "unit":  "each"
+    },
+    {
+        "id":  "cheese-tortellini",
+        "q":  "cheese tortellini",
+        "match":  "Priano Cheese Tortelloni",
+        "size":  "8.8 oz",
+        "pu":  0.1693,
+        "unit":  "oz"
+    },
+    {
         "id":  "chicken-thighs",
         "q":  "chicken thighs",
         "match":  "Kirkwood Family Pack Bone-In Chicken Thighs, per lb",
@@ -16,19 +48,11 @@
         "unit":  "lb"
     },
     {
-        "id":  "chili-powder",
-        "q":  "chili powder",
-        "match":  "Stonemill Chili Powder 2.5 oz",
-        "size":  "2.5 oz",
-        "pu":  0.396,
-        "unit":  "oz"
-    },
-    {
-        "id":  "garlic-powder",
-        "q":  "garlic powder",
-        "match":  "Stonemill Garlic Powder 3.12 oz",
-        "size":  "3.12 oz",
-        "pu":  0.3173,
+        "id":  "corn-muffin-mix",
+        "q":  "corn muffin mix",
+        "match":  "Jiffy Corn Muffin Mix",
+        "size":  "8.5 oz",
+        "pu":  0.0847,
         "unit":  "oz"
     },
     {
@@ -48,36 +72,20 @@
         "unit":  "each"
     },
     {
-        "id":  "italian-seasoning",
-        "q":  "italian seasoning",
-        "match":  "Stonemill Italian Seasoning 0.75 oz",
-        "size":  "0.75 oz",
-        "pu":  1.32,
+        "id":  "potato-gnocchi",
+        "q":  "gnocchi",
+        "match":  "Priano Gnocchi",
+        "size":  "17.6 oz",
+        "pu":  0.1074,
         "unit":  "oz"
     },
     {
-        "id":  "kidney-beans",
-        "q":  "kidney beans",
-        "match":  "Dakota\u0027s Pride Dark Red Kidney Beans",
-        "size":  "15.5 oz",
-        "pu":  0.0548,
+        "id":  "ranch-seasoning-mix",
+        "q":  "ranch seasoning mix",
+        "match":  "Tuscan Garden Ranch Salad Dressing and Seasoning Mix",
+        "size":  "1 oz",
+        "pu":  0.55,
         "unit":  "oz"
-    },
-    {
-        "id":  "onion-powder",
-        "q":  "onion powder",
-        "match":  "Stonemill Onion Powder 2.62 oz",
-        "size":  "2.62 oz",
-        "pu":  0.3779,
-        "unit":  "oz"
-    },
-    {
-        "id":  "pineapple",
-        "q":  "whole pineapple",
-        "match":  "Pineapple",
-        "size":  "each",
-        "pu":  1.89,
-        "unit":  "each"
     },
     {
         "id":  "ribeye-steak",
@@ -88,11 +96,35 @@
         "unit":  "lb"
     },
     {
+        "id":  "sun-dried-tomatoes",
+        "q":  "sun dried tomatoes",
+        "match":  "Tuscan Garden Sundried Tomatoes",
+        "size":  "8 oz",
+        "pu":  0.4988,
+        "unit":  "oz"
+    },
+    {
         "id":  "sweet-potatoes",
         "q":  "sweet potatoes",
         "match":  "Sweet Potatoes",
         "size":  "lb",
         "pu":  1.05,
         "unit":  "lb"
+    },
+    {
+        "id":  "taco-seasoning",
+        "q":  "taco seasoning",
+        "match":  "Casa Mamita Taco Seasoning Mix",
+        "size":  "1 oz",
+        "pu":  0.46,
+        "unit":  "oz"
+    },
+    {
+        "id":  "walnuts",
+        "q":  "chopped walnuts",
+        "match":  "Southern Grove Chopped Walnuts",
+        "size":  "8 oz",
+        "pu":  0.3488,
+        "unit":  "oz"
     }
 ]

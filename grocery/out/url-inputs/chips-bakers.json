@@ -16,11 +16,19 @@
         "unit":  "lb"
     },
     {
+        "id":  "ground-allspice",
+        "q":  "ground allspice",
+        "match":  "Simple Truth Organic Ground Allspice Shaker",
+        "size":  "1.76 oz",
+        "pu":  2.267,
+        "unit":  "oz"
+    },
+    {
         "id":  "almond-milk",
         "q":  "unsweetened almond milk",
-        "match":  "Almond Breeze Almond Milk",
-        "size":  "96 fl oz",
-        "pu":  0.052,
+        "match":  "Simple Truth Almondmilk",
+        "size":  "64 fl oz",
+        "pu":  0.0358,
         "unit":  "floz"
     },
     {
@@ -32,6 +40,14 @@
         "unit":  "lb"
     },
     {
+        "id":  "baby-wipes",
+        "q":  "baby wipes",
+        "match":  "Pampers Baby Wipes",
+        "size":  "72 ct",
+        "pu":  0.0276,
+        "unit":  "each"
+    },
+    {
         "id":  "baked-beans",
         "q":  "baked beans",
         "match":  "Van Camp\u0027s Pork and Beans",
@@ -40,27 +56,27 @@
         "unit":  "oz"
     },
     {
-        "id":  "bar-soap",
-        "q":  "bar soap",
-        "match":  "Dove Bar Soap",
-        "size":  "4 ct",
-        "pu":  1.7475,
-        "unit":  "each"
+        "id":  "dried-basil",
+        "q":  "dried basil",
+        "match":  "Kroger Basil Leaves Shaker",
+        "size":  "0.43 oz",
+        "pu":  4.6279,
+        "unit":  "oz"
     },
     {
-        "id":  "body-wash",
-        "q":  "body wash",
-        "match":  "Dove Body Wash",
-        "size":  "20 fl oz",
-        "pu":  0.3495,
-        "unit":  "floz"
+        "id":  "bay-leaves",
+        "q":  "bay leaves",
+        "match":  "Simple Truth Organic Bay Leaves",
+        "size":  "0.42 oz",
+        "pu":  5.9286,
+        "unit":  "oz"
     },
     {
         "id":  "chicken-breast",
         "q":  "boneless skinless chicken breast",
-        "match":  "Fresh Tyson Boneless Chicken Breasts",
+        "match":  "Fresh Heritage Farm Boneless Chicken Breasts",
         "size":  "lb",
-        "pu":  2.495,
+        "pu":  2.29,
         "unit":  "lb"
     },
     {
@@ -70,6 +86,14 @@
         "size":  "each",
         "pu":  1.19,
         "unit":  "each"
+    },
+    {
+        "id":  "cajun-seasoning",
+        "q":  "cajun seasoning",
+        "match":  "Smart Way Cajun Seasoning",
+        "size":  "3.88 oz",
+        "pu":  0.3222,
+        "unit":  "oz"
     },
     {
         "id":  "fruit-cocktail",
@@ -88,60 +112,116 @@
         "unit":  "lb"
     },
     {
-        "id":  "cat-food",
-        "q":  "dry cat food",
-        "match":  "Iams Dry Cat Food",
-        "size":  "6-7 lb",
-        "pu":  2.4271,
+        "id":  "cayenne-pepper",
+        "q":  "cayenne pepper",
+        "match":  "Kroger Ground Red Cayenne Pepper Shaker",
+        "size":  "1.5 oz",
+        "pu":  2.86,
+        "unit":  "oz"
+    },
+    {
+        "id":  "charcoal",
+        "q":  "charcoal briquets",
+        "match":  "Kingsford or Match Light Charcoal",
+        "size":  "16 lb",
+        "pu":  0.7494,
         "unit":  "lb"
     },
     {
-        "id":  "cheese-crackers",
-        "q":  "cheese crackers",
-        "match":  "Pepperidge Farm Goldfish",
-        "size":  "26.7-27.3 oz",
-        "pu":  0.2194,
+        "id":  "cheese-tortellini",
+        "q":  "cheese tortellini",
+        "match":  "Kroger Cheese Tortellini",
+        "size":  "19 oz",
+        "pu":  0.2468,
+        "unit":  "oz"
+    },
+    {
+        "id":  "chili-crisp",
+        "q":  "chili crisp",
+        "match":  "Private Selection Chili Crisp",
+        "size":  "3.88 oz",
+        "pu":  1.1572,
+        "unit":  "oz"
+    },
+    {
+        "id":  "five-spice-powder",
+        "q":  "five spice powder",
+        "match":  "Private Selection Chinese Five Spice Blend Shaker",
+        "size":  "1.65 oz",
+        "pu":  3.6303,
+        "unit":  "oz"
+    },
+    {
+        "id":  "chipotle-adobo",
+        "q":  "chipotle peppers in adobo",
+        "match":  "Kroger Gluten Free Whole Chipotle Peppers in Adobo Sauce",
+        "size":  "7 oz",
+        "pu":  0.2129,
+        "unit":  "oz"
+    },
+    {
+        "id":  "ground-cloves",
+        "q":  "ground cloves",
+        "match":  "Kroger Ground Cloves Shaker",
+        "size":  "1.70 oz",
+        "pu":  2.6412,
         "unit":  "oz"
     },
     {
         "id":  "coffee",
         "q":  "ground coffee",
-        "match":  "Folgers Coffee",
-        "size":  "22.6-25.9 oz",
-        "pu":  0.3857,
+        "match":  "Kroger Classic Blend Ground Coffee",
+        "size":  "29 oz",
+        "pu":  0.3962,
         "unit":  "oz"
     },
     {
-        "id":  "coffee-pods",
-        "q":  "coffee k cups",
-        "match":  "Kroger Coffee Pods",
-        "size":  "120 ct",
-        "pu":  0.2666,
-        "unit":  "each"
+        "id":  "ground-coriander",
+        "q":  "ground coriander",
+        "match":  "Simple Truth Organic Ground Coriander",
+        "size":  "1.49 oz",
+        "pu":  2.6779,
+        "unit":  "oz"
     },
     {
-        "id":  "crackers",
-        "q":  "saltine crackers",
-        "match":  "Nabisco Snack Crackers or Ritz",
-        "size":  "11.5-14 oz",
-        "pu":  0.3207,
+        "id":  "corn-muffin-mix",
+        "q":  "corn muffin mix",
+        "match":  "Corn Muffin Mix",
+        "size":  "8.5 oz",
+        "pu":  0.0929,
         "unit":  "oz"
     },
     {
         "id":  "croissants",
         "q":  "croissants",
-        "match":  "Private Selection Fresh Baked Butter Croissants",
+        "match":  "Private Selection Butter Croissants",
         "size":  "4 ct",
         "pu":  1.25,
         "unit":  "each"
     },
     {
-        "id":  "dryer-sheets",
-        "q":  "dryer sheets",
-        "match":  "Snuggle Dryer Sheets",
-        "size":  "105-120 ct",
-        "pu":  0.0291,
-        "unit":  "each"
+        "id":  "curry-powder",
+        "q":  "curry powder",
+        "match":  "Simple Truth Organic Ground Curry Powder Shaker",
+        "size":  "1.66 oz",
+        "pu":  2.4036,
+        "unit":  "oz"
+    },
+    {
+        "id":  "dried-dill",
+        "q":  "dill weed",
+        "match":  "Tampico Dill Weed",
+        "size":  "0.37 oz",
+        "pu":  5.9189,
+        "unit":  "oz"
+    },
+    {
+        "id":  "fish-sauce",
+        "q":  "fish sauce",
+        "match":  "Red Boat Fish Sauce",
+        "size":  "3.38 fl oz",
+        "pu":  1.2692,
+        "unit":  "floz"
     },
     {
         "id":  "frozen-pizza",
@@ -152,12 +232,28 @@
         "unit":  "each"
     },
     {
-        "id":  "fruit-snacks",
-        "q":  "fruit snacks",
-        "match":  "Betty Crocker Fruit Snacks",
-        "size":  "22 ct",
-        "pu":  0.2268,
-        "unit":  "each"
+        "id":  "garam-masala",
+        "q":  "garam masala",
+        "match":  "Private Selection Garam Masala Blend Shaker",
+        "size":  "1.94 oz",
+        "pu":  3.0876,
+        "unit":  "oz"
+    },
+    {
+        "id":  "ground-ginger",
+        "q":  "ground ginger",
+        "match":  "Simple Truth Organic Ground Ginger Shaker",
+        "size":  "1.41 oz",
+        "pu":  2.8298,
+        "unit":  "oz"
+    },
+    {
+        "id":  "gochujang",
+        "q":  "gochujang",
+        "match":  "Sempio Gochujang Korean Hot Pepper Paste",
+        "size":  "17.63 oz",
+        "pu":  0.4248,
+        "unit":  "oz"
     },
     {
         "id":  "sugar",
@@ -168,11 +264,43 @@
         "unit":  "lb"
     },
     {
-        "id":  "conditioner",
-        "q":  "hair conditioner",
-        "match":  "Dove Conditioner",
-        "size":  "12 fl oz",
-        "pu":  0.2908,
+        "id":  "grits",
+        "q":  "quick grits",
+        "match":  "Quaker Quick 5 Minute Grits",
+        "size":  "24 oz",
+        "pu":  0.1662,
+        "unit":  "oz"
+    },
+    {
+        "id":  "hoisin-sauce",
+        "q":  "hoisin sauce",
+        "match":  "Kroger Hoisin Sauce",
+        "size":  "15.3 oz",
+        "pu":  0.3261,
+        "unit":  "floz"
+    },
+    {
+        "id":  "japanese-curry-roux",
+        "q":  "golden curry",
+        "match":  "S\u0026B Golden Curry Mild Sauce Mix",
+        "size":  "3.2 oz",
+        "pu":  1.2469,
+        "unit":  "oz"
+    },
+    {
+        "id":  "lemongrass-paste",
+        "q":  "lemongrass paste",
+        "match":  "Gourmet Garden Lemongrass Stir-In Paste",
+        "size":  "4 oz",
+        "pu":  1.1975,
+        "unit":  "oz"
+    },
+    {
+        "id":  "mirin",
+        "q":  "mirin",
+        "match":  "Kikkoman Manjo Aji Mirin Cooking Rice Wine",
+        "size":  "10 fl oz",
+        "pu":  0.549,
         "unit":  "floz"
     },
     {
@@ -184,44 +312,84 @@
         "unit":  "oz"
     },
     {
-        "id":  "oat-milk",
-        "q":  "oat milk",
-        "match":  "Oatly Oat Milk",
-        "size":  "64 fl oz",
-        "pu":  0.0702,
+        "id":  "ground-nutmeg",
+        "q":  "ground nutmeg",
+        "match":  "Kroger Ground Nutmeg",
+        "size":  "1.85 oz",
+        "pu":  2.3189,
+        "unit":  "oz"
+    },
+    {
+        "id":  "oyster-sauce",
+        "q":  "oyster sauce",
+        "match":  "Lee Kum Kee Panda Oyster Sauce",
+        "size":  "9 fl oz",
+        "pu":  0.4433,
         "unit":  "floz"
     },
     {
-        "id":  "paper-plates",
-        "q":  "paper plates",
-        "match":  "Dixie Paper Plates",
-        "size":  "86-154 ct",
-        "pu":  0.0584,
-        "unit":  "each"
+        "id":  "pepperoni",
+        "q":  "sliced pepperoni",
+        "match":  "Hormel Pepperoni",
+        "size":  "6 oz",
+        "pu":  0.7483,
+        "unit":  "oz"
     },
     {
         "id":  "pineapple",
         "q":  "whole pineapple",
-        "match":  "Dole Pineapple",
-        "size":  "8 oz",
-        "pu":  1,
+        "match":  "Private Selection Super Sweet Gold Island Pineapple",
+        "size":  "1 ct",
+        "pu":  3.49,
         "unit":  "each"
     },
     {
-        "id":  "pretzels",
-        "q":  "pretzel twists",
-        "match":  "Kroger Pretzels",
-        "size":  "8-15 oz",
-        "pu":  0.1667,
+        "id":  "poblano-peppers",
+        "q":  "poblano peppers",
+        "match":  "Fresh Poblano Peppers",
+        "size":  "lb",
+        "pu":  3.49,
+        "unit":  "lb"
+    },
+    {
+        "id":  "poppy-seeds",
+        "q":  "poppy seeds",
+        "match":  "Kroger Poppy Seeds Shaker",
+        "size":  "2.12 oz",
+        "pu":  1.7877,
         "unit":  "oz"
     },
     {
-        "id":  "protein-bars",
-        "q":  "protein bars",
-        "match":  "Aloha Protein Bars",
-        "size":  "5 ct",
-        "pu":  1.998,
-        "unit":  "each"
+        "id":  "potato-gnocchi",
+        "q":  "gnocchi",
+        "match":  "Private Selection Italian Gnocchi with Potato",
+        "size":  "16 oz",
+        "pu":  0.1869,
+        "unit":  "oz"
+    },
+    {
+        "id":  "ranch-seasoning-mix",
+        "q":  "ranch seasoning mix",
+        "match":  "Kroger Ranch Salad Dressing and Seasoning Mix Packet",
+        "size":  "1 oz",
+        "pu":  0.79,
+        "unit":  "oz"
+    },
+    {
+        "id":  "refrigerated-biscuits",
+        "q":  "refrigerated biscuits",
+        "match":  "Kroger Buttermilk Jumbo Biscuits",
+        "size":  "8 ct / 16 oz",
+        "pu":  0.0155,
+        "unit":  "oz"
+    },
+    {
+        "id":  "rice-noodles",
+        "q":  "rice noodles",
+        "match":  "A Taste of Thai Rice Noodles",
+        "size":  "16 oz",
+        "pu":  0.2806,
+        "unit":  "oz"
     },
     {
         "id":  "russet-potatoes",
@@ -232,12 +400,20 @@
         "unit":  "lb"
     },
     {
-        "id":  "shampoo",
-        "q":  "shampoo",
-        "match":  "Dove Shampoo",
-        "size":  "12 fl oz",
-        "pu":  0.2908,
+        "id":  "sesame-oil",
+        "q":  "sesame oil",
+        "match":  "Kroger Pure Sesame Oil",
+        "size":  "7.5 fl oz",
+        "pu":  0.6653,
         "unit":  "floz"
+    },
+    {
+        "id":  "toasted-sesame-seeds",
+        "q":  "sesame seeds",
+        "match":  "Kroger Sesame Seed Shaker",
+        "size":  "2.12 oz",
+        "pu":  1.5519,
+        "unit":  "oz"
     },
     {
         "id":  "sloppy-joe-sauce",
@@ -248,12 +424,52 @@
         "unit":  "oz"
     },
     {
-        "id":  "sparkling-water",
-        "q":  "sparkling water",
-        "match":  "Liquid Death Sparkling Water",
-        "size":  "6-pack 12 fl oz",
-        "pu":  0.0971,
+        "id":  "sports-drinks",
+        "q":  "gatorade",
+        "match":  "Gatorade 12-Pack",
+        "size":  "12 pk 12 fl oz",
+        "pu":  0.0485,
         "unit":  "floz"
+    },
+    {
+        "id":  "taco-seasoning",
+        "q":  "taco seasoning",
+        "match":  "Kroger Original Taco Seasoning",
+        "size":  "1 oz",
+        "pu":  0.5,
+        "unit":  "oz"
+    },
+    {
+        "id":  "tahini",
+        "q":  "tahini",
+        "match":  "Simple Truth Organic Tahini",
+        "size":  "16 oz",
+        "pu":  0.4556,
+        "unit":  "oz"
+    },
+    {
+        "id":  "red-curry-paste",
+        "q":  "red curry paste",
+        "match":  "Private Selection Thai Style Red Curry Paste",
+        "size":  "4.5 oz",
+        "pu":  0.7756,
+        "unit":  "oz"
+    },
+    {
+        "id":  "dried-thyme",
+        "q":  "dried thyme",
+        "match":  "Private Selection Thyme Leaves Shaker",
+        "size":  "0.68 oz",
+        "pu":  5.5735,
+        "unit":  "oz"
+    },
+    {
+        "id":  "tomatillos",
+        "q":  "tomatillos",
+        "match":  "Fresh Tomatillo",
+        "size":  "lb",
+        "pu":  2.99,
+        "unit":  "lb"
     },
     {
         "id":  "tomato-sauce",
@@ -264,11 +480,11 @@
         "unit":  "oz"
     },
     {
-        "id":  "turkey-bacon",
-        "q":  "turkey bacon",
-        "match":  "Wellshire Turkey Bacon",
+        "id":  "walnuts",
+        "q":  "chopped walnuts",
+        "match":  "Simple Truth Halves \u0026 Pieces Walnuts",
         "size":  "12 oz",
-        "pu":  0.3329,
+        "pu":  0.5825,
         "unit":  "oz"
     },
     {
@@ -282,9 +498,9 @@
     {
         "id":  "yogurt",
         "q":  "yogurt",
-        "match":  "Yoplait Yogurt",
-        "size":  "6 oz",
-        "pu":  0.0833,
+        "match":  "Kroger Blended Vanilla Low Fat Yogurt",
+        "size":  "32 oz",
+        "pu":  0.0934,
         "unit":  "oz"
     }
 ]

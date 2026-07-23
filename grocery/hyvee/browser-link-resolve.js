@@ -48,8 +48,12 @@ const BLR = (() => {
       // shell contains zero product cards. Render the search for real in a hidden same-origin iframe, scroll
       // to trigger the lazy grid, and poll until the tile count is stable. Cards print their own unit price
       // ("$0.22/oz"). Parse via anchor-climb, not a card class - .ProductCard is the selector that died.
+      // 2026-07-23: the iframe MUST be ON-SCREEN. bakersplus' React grid gates hydration on visibility
+      // (IntersectionObserver), so an off-screen `left:-9999px` frame stayed a 1.4KB shell and every chip
+      // MISSED. A near-transparent top-left frame renders for real. Keep it pointer-events:none so it can't
+      // eat clicks on the host page.
       const f = document.createElement('iframe');
-      f.style.cssText = 'position:fixed;left:-9999px;top:0;width:1200px;height:900px';
+      f.style.cssText = 'position:fixed;left:0;top:0;width:520px;height:520px;z-index:2147483647;opacity:0.01;pointer-events:none';
       document.body.appendChild(f);
       try {
         f.src = '/search?query=' + encodeURIComponent(q) + '&searchType=default_search';
@@ -67,16 +71,20 @@ const BLR = (() => {
         const seen = new Set(), out = [];
         for (const a of doc.querySelectorAll('a[href*="/p/"]')) {
           let path = null; try { path = new URL(a.getAttribute('href'), 'https://www.bakersplus.com').pathname; } catch (e) {}
-          const m = path && path.match(/\/p\/[^/]+\/(\d+)/);
+          const m = path && path.match(/\/p\/([^/]+)\/(\d+)/);
           if (!m || seen.has(path)) continue;
-          let el = a, card = null;
-          for (let i = 0; i < 7 && el; i++) { el = el.parentElement; if (el && /\$\d/.test(el.innerText || '') && (el.innerText || '').length < 700) { card = el; break; } }
-          if (!card) continue;
           seen.add(path);
-          const t = card.innerText;
+          // NAME + SIZE come from the URL SLUG, not the card text. 2026-07-23: the card's last text line is now
+          // the "Sign In to Add" CTA, so t.split(...).pop() matched THAT for every product and nothing ever
+          // scored. The slug ("kroger-80-20-ground-beef-roll-1-lb") is the reliable product identity and
+          // carries the size too. Card text is still read only for the (optional) per-unit price + sponsored.
+          const slug = m[1].replace(/-/g, ' ');
+          let el = a, card = null;
+          for (let i = 0; i < 7 && el; i++) { el = el.parentElement; if (el && /\$\d/.test(el.innerText || '') && (el.innerText || '').length < 800) { card = el; break; } }
+          const t = card ? card.innerText : '';
           const pum = t.match(/\$(\d+(?:\.\d+)?)\s*\/\s*(fl\s*oz|oz|lb|ea|ct)/i);
-          const szm = t.match(/(\d+(?:\.\d+)?)\s*(fl\s*oz|oz|lb|ct|ea)\b/i);
-          out.push({ url: 'https://www.bakersplus.com' + path, upc: m[1], name: t.split('\n').filter(x => /[a-z]{4}/i.test(x)).pop() || '', perunit: pum ? parseFloat(pum[1]) : null, sizeText: szm ? szm[0] : '', sponsored: /^\s*sponsored/i.test(t) });
+          const szm = slug.match(/(\d+(?:\.\d+)?)\s*(fl\s*oz|oz|lb|ct|ea)\b/i);
+          out.push({ url: 'https://www.bakersplus.com' + path, upc: m[2], name: slug, perunit: pum ? parseFloat(pum[1]) : null, sizeText: szm ? szm[0] : '', sponsored: /^\s*sponsored/i.test(t) });
         }
         return out;
       } finally { f.remove(); }

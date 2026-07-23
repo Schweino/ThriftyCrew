@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-07-23 13:31",
-    "board":  "comparison-2026-07-23.json",
-    "total_tiles":  1915,
-    "violations":  183,
+    "generated":  "2026-07-23 09:51",
+    "board":  "comparison-2026-07-22.json",
+    "total_tiles":  2275,
+    "violations":  189,
     "by_store":  {
                      "Walmart":  {
                                      "coverage":  55,
@@ -22,7 +22,7 @@
                      "Hy-Vee":  {
                                     "coverage":  38,
                                     "tiles":  403,
-                                    "violations":  40
+                                    "violations":  41
                                 },
                      "Sam\u0027s Club":  {
                                              "coverage":  36,
@@ -35,20 +35,12 @@
                                   "violations":  16
                               },
                      "Baker\u0027s":  {
-                                          "coverage":  63,
+                                          "coverage":  17,
                                           "tiles":  258,
-                                          "violations":  64
+                                          "violations":  18
                                       }
                  },
     "rows":  [
-                 {
-                     "id":  "ground-beef-8020",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger 80/20 Ground Beef Roll 3 LB",
-                     "link":  ""
-                 },
                  {
                      "id":  "achiote-paste",
                      "store":  "Walmart",
@@ -58,35 +50,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "flour",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Bleached All Purpose Enriched Flour (10 lb)",
-                     "link":  ""
-                 },
-                 {
                      "id":  "ground-allspice",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Great Value Ground Allspice, 2 oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "ground-allspice",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Simple Truth Organic Ground Allspice Shaker",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "almond-milk",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Simple Truth Almondmilk",
                      "link":  ""
                  },
                  {
@@ -119,14 +87,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Pampers Baby Wipes",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "baked-beans",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Van Camp\u0027s Pork and Beans",
                      "link":  ""
                  },
                  {
@@ -219,14 +179,6 @@
                  },
                  {
                      "id":  "chicken-breast",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Fresh Heritage Farm Boneless Chicken Breasts",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "chicken-breast",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -247,14 +199,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy-Vee spring water, 24 pk. mini bottles 10 fl. oz., $3.99",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "bread",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Smart Way Enriched White Bread",
                      "link":  ""
                  },
                  {
@@ -370,14 +314,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "fruit-cocktail",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger® Canned Fruit Cocktail in Heavy Syrup 30 oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "canned-mushrooms",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -450,22 +386,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "cayenne-pepper",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Ground Red Cayenne Pepper Shaker",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "charcoal",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kingsford or Match Light Charcoal",
-                     "link":  ""
-                 },
-                 {
                      "id":  "cheese-tortellini",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
@@ -479,14 +399,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Great Value Family Size Cheese Tortellini, Pasta, 36 oz Bag",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "cheese-tortellini",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Cheese Tortellini",
                      "link":  ""
                  },
                  {
@@ -522,35 +434,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "chili-crisp",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Private Selection Chili Crisp",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "five-spice-powder",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Private Selection Chinese Five Spice Blend Shaker",
-                     "link":  ""
-                 },
-                 {
                      "id":  "five-spice-powder",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "McCormick Gourmet Kosher Chinese Five Spice Blend, 1.75 oz B",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "chipotle-adobo",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Gluten Free Whole Chipotle Peppers in Adobo Sauce",
                      "link":  ""
                  },
                  {
@@ -575,14 +463,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Great Value Ground Cloves, 2 oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "ground-cloves",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Ground Cloves Shaker",
                      "link":  ""
                  },
                  {
@@ -650,14 +530,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "corn-muffin-mix",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Corn Muffin Mix",
-                     "link":  ""
-                 },
-                 {
                      "id":  "cottage-cheese",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -714,14 +586,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "curry-powder",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Simple Truth Organic Ground Curry Powder Shaker",
-                     "link":  ""
-                 },
-                 {
                      "id":  "tomatoes-green-chilies",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -743,14 +607,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Sugar \u0027N Spice Dill Weed Pp",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "dried-dill",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Tampico Dill Weed",
                      "link":  ""
                  },
                  {
@@ -834,14 +690,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "fish-sauce",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Red Boat Fish Sauce",
-                     "link":  ""
-                 },
-                 {
                      "id":  "storage-bags",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -922,14 +770,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "garam-masala",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Private Selection Garam Masala Blend Shaker",
-                     "link":  ""
-                 },
-                 {
                      "id":  "garlic-powder",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -955,14 +795,6 @@
                  },
                  {
                      "id":  "ground-ginger",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Simple Truth Organic Ground Ginger Shaker",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "ground-ginger",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -975,22 +807,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "bettergoods Gochujang Sauce, 12.5 oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "gochujang",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Sempio Gochujang Korean Hot Pepper Paste",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "sugar",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Smart Way Granulated Sugar (4 lb)",
                      "link":  ""
                  },
                  {
@@ -1007,14 +823,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Quaker Old Fashioned Grits, 24 oz Canister",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "grits",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Quaker Quick 5 Minute Grits",
                      "link":  ""
                  },
                  {
@@ -1114,14 +922,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "hoisin-sauce",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Hoisin Sauce",
-                     "link":  ""
-                 },
-                 {
                      "id":  "hot-dog-buns",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
@@ -1186,20 +986,20 @@
                      "link":  ""
                  },
                  {
-                     "id":  "japanese-curry-roux",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "S\u0026B Golden Curry Mild Sauce Mix",
-                     "link":  ""
-                 },
-                 {
                      "id":  "jelly",
                      "store":  "Sam\u0027s Club",
                      "fault":  "PRICE-DRIFT",
                      "detail":  "board $0.0747 vs link $0.083  (10% off)",
                      "board":  "Welch\u0027s Concord Grape Jelly, 30 oz., 2 pk.",
                      "link":  "Welch\u0027s Concord Grape Jelly, 30 oz., 2 pk."
+                 },
+                 {
+                     "id":  "ketchup",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-DRIFT",
+                     "detail":  "board $0.0784 vs link $0.0655  (19.6% off)",
+                     "board":  "Hy-Vee Thick \u0026 Rich Tomato Ketchup",
+                     "link":  "Hy-Vee Thick \u0026 Rich Tomato Ketchup"
                  },
                  {
                      "id":  "eggs",
@@ -1215,14 +1015,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Member\u0027s Mark Cage Free Grade A Large White Eggs, 2 dozen",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "lemongrass-paste",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Gourmet Garden Lemongrass Stir-In Paste",
                      "link":  ""
                  },
                  {
@@ -1282,14 +1074,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "mirin",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kikkoman Manjo Aji Mirin Cooking Rice Wine",
-                     "link":  ""
-                 },
-                 {
                      "id":  "muffins",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -1346,14 +1130,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "oyster-sauce",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Lee Kum Kee Panda Oyster Sauce",
-                     "link":  ""
-                 },
-                 {
                      "id":  "paper-napkins",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -1402,14 +1178,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "pepperoni",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Hormel Pepperoni",
-                     "link":  ""
-                 },
-                 {
                      "id":  "pineapple",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -1434,14 +1202,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "poblano-peppers",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Fresh Poblano Peppers",
-                     "link":  ""
-                 },
-                 {
                      "id":  "pomegranate-molasses",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -1458,14 +1218,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "poppy-seeds",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Poppy Seeds Shaker",
-                     "link":  ""
-                 },
-                 {
                      "id":  "potato-gnocchi",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
@@ -1479,14 +1231,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Giovanni Rana Skillet Gnocchi 12 oz. Bag, Refrigerated",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "potato-gnocchi",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Private Selection Italian Gnocchi with Potato",
                      "link":  ""
                  },
                  {
@@ -1511,14 +1255,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Tuscan Garden Ranch Salad Dressing and Seasoning Mix",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "ranch-seasoning-mix",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Ranch Salad Dressing and Seasoning Mix Packet",
                      "link":  ""
                  },
                  {
@@ -1610,14 +1346,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "sesame-oil",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Pure Sesame Oil",
-                     "link":  ""
-                 },
-                 {
                      "id":  "toasted-sesame-seeds",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -1626,27 +1354,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "toasted-sesame-seeds",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Sesame Seed Shaker",
-                     "link":  ""
-                 },
-                 {
                      "id":  "shower-cleaner",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Lysol Mango \u0026 Hibiscus Bathroom Cleaner 32 Fl Oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "sloppy-joe-sauce",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Manwich Sloppy Joe Sauce Bold Flavor Canned Sauce 16 OZ ti",
                      "link":  ""
                  },
                  {
@@ -1663,14 +1375,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy-Vee soda or mixer, 2 liter, 4/ $5.00",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "sports-drinks",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Gatorade 12-Pack",
                      "link":  ""
                  },
                  {
@@ -1722,27 +1426,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "taco-seasoning",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Original Taco Seasoning",
-                     "link":  ""
-                 },
-                 {
                      "id":  "tahini",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Krinos Tahini Spread with Velvety Texture 16oz Jar - Premium",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "tahini",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Simple Truth Organic Tahini",
                      "link":  ""
                  },
                  {
@@ -1762,27 +1450,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "red-curry-paste",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Private Selection Thai Style Red Curry Paste",
-                     "link":  ""
-                 },
-                 {
                      "id":  "dried-thyme",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Great Value Ground Thyme, 1.4 oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "dried-thyme",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Private Selection Thyme Leaves Shaker",
                      "link":  ""
                  },
                  {
@@ -1803,26 +1475,10 @@
                  },
                  {
                      "id":  "tomatillos",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Fresh Tomatillo",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "tomatillos",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Fresh Tomatillos Milpero, 16 oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "tomato-sauce",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Tomato Sauce 29 oz",
                      "link":  ""
                  },
                  {
@@ -1859,14 +1515,6 @@
                  },
                  {
                      "id":  "walnuts",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Simple Truth Halves \u0026 Pieces Walnuts",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "walnuts",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -1890,14 +1538,6 @@
                      "link":  "(3 pack) Supreme Rice White Long Grain, 5.0 LB"
                  },
                  {
-                     "id":  "white-vinegar",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Distilled White Vinegar 64 fl oz",
-                     "link":  ""
-                 },
-                 {
                      "id":  "yogurt",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -1915,5 +1555,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  218
+    "coverage_violations":  172
 }
