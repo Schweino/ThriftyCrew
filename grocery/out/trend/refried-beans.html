@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Hy-Vee":[0.0625,0.0625,0.0625,0.0625,0.0625,0.0625,0.0625,0.0625,0.0625,0.0625],"Walmart":[0.0625,0.0625,0.0631,0.0631,0.0631,0.0631,0.0631,0.0631,null,null],"Aldi":[0.0681,0.0619,0.0619,0.0619,0.0619,0.0619,0.0619,0.0619,0.0619,0.0619],"Fareway":[0.0738,0.0738,0.0738,0.0738,0.0738,0.0738,0.0738,0.0738,0.0738,0.0738],"Sam's Club":[0.0806,0.0806,null,0.0806,0.0806,0.0806,0.0806,0.0806,0.0806,0.0806]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Hy-Vee":[0.0625,0.0625,0.0625,0.0625,0.0625,0.0625,0.0625,0.0625,0.0625,0.0625],"Walmart":[0.0625,0.0625,0.0631,0.0631,0.0631,0.0631,0.0631,0.0631,null,0.0631],"Aldi":[0.0681,0.0619,0.0619,0.0619,0.0619,0.0619,0.0619,0.0619,0.0619,0.0619],"Fareway":[0.0738,0.0738,0.0738,0.0738,0.0738,0.0738,0.0738,0.0738,0.0738,0.0738],"Sam's Club":[0.0806,0.0806,null,0.0806,0.0806,0.0806,0.0806,0.0806,0.0806,0.0806]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -149,6 +149,7 @@ function tcChart(root, d){
 <tbody>
 <tr class="tp-low"><td>Aldi</td><td>$0.0619 per oz</td><td><span class="tp-item">Casa Mamita Traditional Refried Beans</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.0625 per oz</td><td><span class="tp-item">That&#39;s Smart! Traditional Refried Beans 16 oz</span></td></tr>
+<tr><td>Walmart</td><td>$0.0631 per oz</td><td><span class="tp-item">Great Value Traditional Refried Beans</span></td></tr>
 <tr><td>Fareway</td><td>$0.0738 per oz</td><td><span class="tp-item">Fareway Fat Free Refried Beans</span></td></tr>
 <tr><td>Sam&#39;s Club</td><td>$0.0806 per oz</td><td><span class="tp-item">Old El Paso Traditional Refried Beans 16 oz., 6 pk.</span></td></tr>
 </tbody></table>

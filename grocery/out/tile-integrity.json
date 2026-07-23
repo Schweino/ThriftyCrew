@@ -1,13 +1,13 @@
 ﻿{
-    "generated":  "2026-07-23 10:02",
+    "generated":  "2026-07-23 17:04",
     "board":  "comparison-2026-07-23.json",
     "total_tiles":  2245,
-    "violations":  189,
+    "violations":  187,
     "by_store":  {
                      "Walmart":  {
                                      "coverage":  55,
                                      "tiles":  411,
-                                     "violations":  60
+                                     "violations":  59
                                  },
                      "Fareway":  {
                                      "coverage":  0,
@@ -20,9 +20,9 @@
                                          "violations":  13
                                      },
                      "Hy-Vee":  {
-                                    "coverage":  39,
+                                    "coverage":  38,
                                     "tiles":  403,
-                                    "violations":  41
+                                    "violations":  40
                                 },
                      "Sam\u0027s Club":  {
                                              "coverage":  36,
@@ -623,14 +623,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Simply Done Fresh Scent Dish Soap",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "sponges",
-                     "store":  "Hy-Vee",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Hy-Vee Heavy Duty Scrubber Sponges",
                      "link":  ""
                  },
                  {
@@ -1530,14 +1522,6 @@
                      "link":  ""
                  },
                  {
-                     "id":  "rice",
-                     "store":  "Walmart",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.56 vs link $0.544  (2.9% off)",
-                     "board":  "(3 pack) Doguet\u0027s Extra Fancy Enriched Long Grain Rice, 48 oz",
-                     "link":  "(3 pack) Supreme Rice White Long Grain, 5.0 LB"
-                 },
-                 {
                      "id":  "yogurt",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -1555,5 +1539,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  173
+    "coverage_violations":  172
 }

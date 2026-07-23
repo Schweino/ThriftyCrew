@@ -6,10 +6,10 @@
     "source":  "Hy-Vee Aisles Online GraphQL storeProducts.price - the CURRENT shelf price at storeId 1465 (Omaha #01). NOT basePrice (the regular price) and NOT ssrPricing (a different store).",
     "size_policy":  "sizes are OUR verified ones, not Hy-Vee\u0027s - their size field mixes totals, single units of a multipack, and mislabelled units",
     "deal_count":  1367,
-    "refreshed_today":  1002,
-    "marked_down":  179,
+    "refreshed_today":  1008,
+    "marked_down":  180,
     "newly_priced":  0,
-    "not_reverified":  365,
+    "not_reverified":  359,
     "failed":  0,
     "deals":  [
                   {
@@ -15390,9 +15390,11 @@
                       "ad_price":  "$3.49",
                       "size":  "16.3 oz",
                       "regular":  3.49,
+                      "current_price":  3.49,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
-                      "as_of":  "2026-07-22",
-                      "not_reverified":  true
+                      "as_of":  "2026-07-23",
+                      "product_id":  5183,
+                      "base_price":  3.49
                   },
                   {
                       "store":  "Hy-Vee",
@@ -15480,9 +15482,11 @@
                       "ad_price":  "$7.99",
                       "size":  "42 oz",
                       "regular":  7.99,
+                      "current_price":  7.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
-                      "as_of":  "2026-07-22",
-                      "not_reverified":  true
+                      "as_of":  "2026-07-23",
+                      "product_id":  1334638,
+                      "base_price":  7.99
                   },
                   {
                       "store":  "Hy-Vee",
@@ -15580,9 +15584,12 @@
                       "ad_price":  "$1.97",
                       "size":  "16 oz",
                       "regular":  1.97,
+                      "current_price":  1.97,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
-                      "as_of":  "2026-07-22",
-                      "not_reverified":  true
+                      "as_of":  "2026-07-23",
+                      "product_id":  835070,
+                      "base_price":  2.99,
+                      "marked_down":  true
                   },
                   {
                       "store":  "Hy-Vee",
@@ -15680,9 +15687,11 @@
                       "ad_price":  "$5.99",
                       "size":  "16 oz",
                       "regular":  5.99,
+                      "current_price":  5.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
-                      "as_of":  "2026-07-22",
-                      "not_reverified":  true
+                      "as_of":  "2026-07-23",
+                      "product_id":  18776,
+                      "base_price":  5.99
                   },
                   {
                       "store":  "Hy-Vee",
@@ -15810,9 +15819,11 @@
                       "ad_price":  "$4.99",
                       "size":  "15 oz",
                       "regular":  4.99,
+                      "current_price":  4.99,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
-                      "as_of":  "2026-07-22",
-                      "not_reverified":  true
+                      "as_of":  "2026-07-23",
+                      "product_id":  1603,
+                      "base_price":  4.99
                   },
                   {
                       "store":  "Hy-Vee",
@@ -15840,9 +15851,11 @@
                       "ad_price":  "$3.29",
                       "size":  "7 oz",
                       "regular":  3.29,
+                      "current_price":  3.29,
                       "source_ad":  "Aisles Online current shelf price (storeId 1465, Omaha #01)",
-                      "as_of":  "2026-07-22",
-                      "not_reverified":  true
+                      "as_of":  "2026-07-23",
+                      "product_id":  64253,
+                      "base_price":  3.29
                   },
                   {
                       "store":  "Hy-Vee",

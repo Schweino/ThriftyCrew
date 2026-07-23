@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Baker's":[0.0716,0.0716,0.0716,0.0716,0.0716,0.0716,0.0716],"Walmart":[0.091,0.091,0.091,0.091,0.091,null,null],"Hy-Vee":[0.091,0.091,0.091,0.091,0.091,0.091,0.091],"Fareway":[null,null,null,null,null,0.1028,0.1028]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Baker's":[0.0716,0.0716,0.0716,0.0716,0.0716,0.0716,0.0716],"Walmart":[0.091,0.091,0.091,0.091,0.091,null,0.091],"Hy-Vee":[0.091,0.091,0.091,0.091,0.091,0.091,0.091],"Fareway":[null,null,null,null,null,0.1028,0.1028]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -146,6 +146,7 @@ function tcChart(root, d){
 <tbody>
 <tr class="tp-low"><td>Baker&#39;s</td><td>$0.0716 per oz</td><td><span class="tp-item">Kroger® Shredded Sauerkraut 32 oz</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.091 per oz</td><td><span class="tp-item">That&#39;s Smart Shredded Sauerkraut</span></td></tr>
+<tr><td>Walmart</td><td>$0.091 per oz</td><td><span class="tp-item">Great Value Sauerkraut, 14.5 oz</span></td></tr>
 <tr><td>Fareway</td><td>$0.1028 per oz</td><td><span class="tp-item">Fareway Sauerkraut</span></td></tr>
 </tbody></table>
 <p class="tp-links"><a href="/omaha-grocery-prices/?ref=trend">See the full live Omaha price board</a> &middot; <a href="/omaha-price-tracker/?ref=trend">All tracked staples</a></p>

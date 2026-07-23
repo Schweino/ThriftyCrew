@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Aldi":[0.0602,0.0545,0.0545,0.0545,0.0545,0.0545,0.0545,0.0545,0.0545,0.0545],"Walmart":[0.065,0.065,0.065,0.065,0.065,0.065,0.065,0.065,null,null],"Fareway":[0.0669,0.0669,0.0669,0.0669,0.0669,0.0669,0.0669,0.0669,0.0669,0.0669],"Hy-Vee":[0.0767,0.0767,0.0767,0.0767,0.0767,0.0767,0.0767,0.0767,0.0767,0.0767],"Baker's":[null,null,0.0702,0.0702,0.0702,0.0702,0.0702,0.0702,null,null]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Aldi":[0.0602,0.0545,0.0545,0.0545,0.0545,0.0545,0.0545,0.0545,0.0545,0.0545],"Walmart":[0.065,0.065,0.065,0.065,0.065,0.065,0.065,0.065,null,0.065],"Fareway":[0.0669,0.0669,0.0669,0.0669,0.0669,0.0669,0.0669,0.0669,0.0669,0.0669],"Hy-Vee":[0.0767,0.0767,0.0767,0.0767,0.0767,0.0767,0.0767,0.0767,0.0767,0.0767],"Baker's":[null,null,0.0702,0.0702,0.0702,0.0702,0.0702,0.0702,null,null]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -148,6 +148,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Aldi</td><td>$0.0545 per fl oz</td><td><span class="tp-item">Friendly Farms Original Oatmilk</span></td></tr>
+<tr><td>Walmart</td><td>$0.065 per fl oz</td><td><span class="tp-item">Planet Oat Original Oatmilk</span></td></tr>
 <tr><td>Fareway</td><td>$0.0669 per fl oz</td><td><span class="tp-item">Planet Oat Vanilla Oatmilk</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.0767 per fl oz</td><td><span class="tp-item">Planet Oat Original Oatmilk, 52 oz</span></td></tr>
 </tbody></table>

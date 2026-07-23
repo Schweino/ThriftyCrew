@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-19","07-20","07-21","07-22","07-23"],"s":{"Hy-Vee":[0.3245,0.3245,0.3245,0.3245,0.3245],"Walmart":[0.6716,0.6716,0.6716,null,null],"Baker's":[1.1572,1.1572,1.1572,1.1572,1.1572],"Family Fare":[1.1862,1.1862,1.1862,1.1862,1.1862],"Fareway":[1.3482,1.3482,1.3482,1.0891,1.0891]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-19","07-20","07-21","07-22","07-23"],"s":{"Hy-Vee":[0.3245,0.3245,0.3245,0.3245,0.3245],"Walmart":[0.6716,0.6716,0.6716,null,0.6716],"Baker's":[1.1572,1.1572,1.1572,1.1572,1.1572],"Family Fare":[1.1862,1.1862,1.1862,1.1862,1.1862],"Fareway":[1.3482,1.3482,1.3482,1.0891,1.0891]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -143,6 +143,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Hy-Vee</td><td>$0.3245 per oz</td><td><span class="tp-item">Lee Kum Kee Chili Crisp Hot Honey Sauce</span></td></tr>
+<tr><td>Walmart</td><td>$0.6716 per oz</td><td><span class="tp-item">Laoganma Spicy Chili Crisp Sauce, 7.41 Fl Oz</span></td></tr>
 <tr><td>Fareway</td><td>$1.09 per oz</td><td><span class="tp-item">Dynasty Hot Chili Oil, Spicy</span></td></tr>
 <tr><td>Baker&#39;s</td><td>$1.16 per oz</td><td><span class="tp-item">Private Selection Chili Crisp</span></td></tr>
 <tr><td>Family Fare</td><td>$1.19 per oz</td><td><span class="tp-item">Cholula Chiles &amp; Pepitas Chili Crisp Sauce 8 Oz</span></td></tr>

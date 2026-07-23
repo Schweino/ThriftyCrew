@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Sam's Club":[0.1952,0.1952,null,0.1952,0.1952,0.1952,0.1952,0.1952,0.1952,0.1952],"Walmart":[0.37,0.37,0.37,0.37,0.37,0.37,0.37,0.37,null,null],"Aldi":[0.4107,0.3707,0.3707,0.3707,0.3707,0.3707,0.3707,0.3707,0.3707,0.3707],"Hy-Vee":[0.6421,0.6421,0.6421,0.6421,0.6421,0.6421,0.6421,0.6421,0.6421,0.6421],"Fareway":[null,null,null,null,null,null,null,null,0.5327,0.5327]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Sam's Club":[0.1952,0.1952,null,0.1952,0.1952,0.1952,0.1952,0.1952,0.1952,0.1952],"Walmart":[0.37,0.37,0.37,0.37,0.37,0.37,0.37,0.37,null,0.37],"Aldi":[0.4107,0.3707,0.3707,0.3707,0.3707,0.3707,0.3707,0.3707,0.3707,0.3707],"Hy-Vee":[0.6421,0.6421,0.6421,0.6421,0.6421,0.6421,0.6421,0.6421,0.6421,0.6421],"Fareway":[null,null,null,null,null,null,null,null,0.5327,0.5327]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -148,6 +148,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Sam&#39;s Club</td><td>$0.1952 per oz</td><td><span class="tp-item">Carrington Farms Refined Coconut Oil, 128 fl. oz.</span></td></tr>
+<tr><td>Walmart</td><td>$0.37 per oz</td><td><span class="tp-item">LouAna 100% Pure Coconut Oil</span></td></tr>
 <tr><td>Aldi</td><td>$0.3707 per oz</td><td><span class="tp-item">Simply Nature Organic Coconut Oil</span></td></tr>
 <tr><td>Fareway</td><td>$0.5327 per oz</td><td><span class="tp-item">Fareway Organic Coconut Oil</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.6421 per oz</td><td><span class="tp-item">Hy-Vee Virgin Coconut Oil</span></td></tr>

@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[0.545,0.545,0.545,0.545,0.545,0.545,0.545,0.545,null,null],"Aldi":[0.5833,0.53,0.53,0.53,0.53,0.53,0.53,0.53,0.53,0.53],"Fareway":[0.62,0.62,0.62,0.62,0.62,0.62,0.62,0.62,0.62,0.62],"Sam's Club":[0.6238,0.6238,null,0.895,0.895,0.895,0.895,0.895,0.895,0.895],"Hy-Vee":[0.9967,0.9967,0.9967,0.9967,0.9967,0.9967,0.9967,0.9967,0.9967,0.9967]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[0.545,0.545,0.545,0.545,0.545,0.545,0.545,0.545,null,0.545],"Aldi":[0.5833,0.53,0.53,0.53,0.53,0.53,0.53,0.53,0.53,0.53],"Fareway":[0.62,0.62,0.62,0.62,0.62,0.62,0.62,0.62,0.62,0.62],"Sam's Club":[0.6238,0.6238,null,0.895,0.895,0.895,0.895,0.895,0.895,0.895],"Hy-Vee":[0.9967,0.9967,0.9967,0.9967,0.9967,0.9967,0.9967,0.9967,0.9967,0.9967]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -148,6 +148,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Aldi</td><td>$0.53 each</td><td><span class="tp-item">Power Force Non Scratch Scrub Sponges</span></td></tr>
+<tr><td>Walmart</td><td>$0.545 each</td><td><span class="tp-item">Great Value Non-Scratch Scrub Sponges</span></td></tr>
 <tr><td>Fareway</td><td>$0.62 each</td><td><span class="tp-item">Scotch-Brite Ocelo Handy Sponge, Assorted Colors</span></td></tr>
 <tr><td>Sam&#39;s Club</td><td>$0.895 each</td><td><span class="tp-item">O-Cedar Multi-Use No-Scratch Scrunge Sponge, 24 ct.</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.9967 each</td><td><span class="tp-item">Hy-Vee Heavy Duty Scrubber Sponges</span></td></tr>

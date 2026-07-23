@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[0.1612,0.1612,0.1612,0.1612,0.1612,0.1612,0.1612,0.1612,null,null],"Sam's Club":[0.165,0.165,0.21,0.165,0.165,0.165,0.165,0.165,0.1733,0.1733],"Fareway":[0.1869,0.1869,0.1869,0.1869,0.1869,0.1869,0.1869,0.1869,0.1854,0.1854],"Hy-Vee":[0.1869,0.1869,0.2175,0.2175,0.2175,0.2175,0.2175,0.2175,0.2175,0.2175],"Aldi":[null,0.1431,0.1431,0.1431,0.1431,0.1431,0.1431,0.1431,0.1431,0.1431],"Family Fare":[null,null,0.1869,0.1869,0.1869,0.1869,0.1869,0.1869,0.1869,0.1869]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[0.1612,0.1612,0.1612,0.1612,0.1612,0.1612,0.1612,0.1612,null,0.1612],"Sam's Club":[0.165,0.165,0.21,0.165,0.165,0.165,0.165,0.165,0.1733,0.1733],"Fareway":[0.1869,0.1869,0.1869,0.1869,0.1869,0.1869,0.1869,0.1869,0.1854,0.1854],"Hy-Vee":[0.1869,0.1869,0.2175,0.2175,0.2175,0.2175,0.2175,0.2175,0.2175,0.2175],"Aldi":[null,0.1431,0.1431,0.1431,0.1431,0.1431,0.1431,0.1431,0.1431,0.1431],"Family Fare":[null,null,0.1869,0.1869,0.1869,0.1869,0.1869,0.1869,0.1869,0.1869]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -148,6 +148,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Aldi</td><td>$0.1431 per oz</td><td><span class="tp-item">Southern Grove Dry Roasted Peanuts with Sea Salt</span></td></tr>
+<tr><td>Walmart</td><td>$0.1612 per oz</td><td><span class="tp-item">Great Value Dry Roasted Peanuts</span></td></tr>
 <tr><td>Sam&#39;s Club</td><td>$0.1733 per oz</td><td><span class="tp-item">Member&#39;s Mark Extra Large Virginia Peanuts, 34.5 oz.</span></td></tr>
 <tr><td>Fareway</td><td>$0.1854 per oz</td><td><span class="tp-item">Fareway Dry Roasted Salted Peanuts</span></td></tr>
 <tr><td>Family Fare</td><td>$0.1869 per oz</td><td><span class="tp-item">Our Family Peanuts, Dry Roasted 16 Oz</span></td></tr>

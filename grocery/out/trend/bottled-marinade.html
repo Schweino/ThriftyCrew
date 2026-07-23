@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[0.1856,0.1856,0.1856,0.1856,0.1856,null,null],"Hy-Vee":[0.1869,0.1869,0.1869,0.1869,0.1869,0.1869,0.1869],"Baker's":[0.2908,0.2908,0.2908,0.2908,0.2908,0.2908,0.2908],"Fareway":[null,null,null,null,null,0.1731,0.1731]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[0.1856,0.1856,0.1856,0.1856,0.1856,null,0.1856],"Hy-Vee":[0.1869,0.1869,0.1869,0.1869,0.1869,0.1869,0.1869],"Baker's":[0.2908,0.2908,0.2908,0.2908,0.2908,0.2908,0.2908],"Fareway":[null,null,null,null,null,0.1731,0.1731]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -145,6 +145,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Fareway</td><td>$0.1731 per fl oz</td><td><span class="tp-item">A.1. Chicago Steakhouse Marinade</span></td></tr>
+<tr><td>Walmart</td><td>$0.1856 per fl oz</td><td><span class="tp-item">KC Masterpiece Classic Steakhouse Marinade, 16 fl oz Bottle</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.1869 per fl oz</td><td><span class="tp-item">A.1. CHICAGO STEAKHOUSE Marinades 16 fl oz.</span></td></tr>
 <tr><td>Baker&#39;s</td><td>$0.2908 per fl oz</td><td><span class="tp-item">Lawry&#39;s Steak &amp; Chop Marinade, 12.0 fl oz 12 fl oz</span></td></tr>
 </tbody></table>

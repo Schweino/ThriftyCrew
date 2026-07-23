@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-14","07-17","07-19","07-20","07-21","07-22","07-23"],"s":{"Hy-Vee":[1.1745,1.1745,1.1745,1.8821,1.8821,1.8821,1.8821,1.8821],"Walmart":[1.64,1.64,1.64,1.64,1.64,1.64,null,null],"Baker's":[2.3189,2.3189,2.3189,2.3189,2.3189,2.3189,2.3189,2.3189],"Family Fare":[3.0613,3.0613,3.0613,3.0613,3.0613,3.0613,3.0613,3.0613],"Fareway":[null,null,null,4.5364,4.5364,4.5364,0.84,0.84]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-14","07-17","07-19","07-20","07-21","07-22","07-23"],"s":{"Hy-Vee":[1.1745,1.1745,1.1745,1.8821,1.8821,1.8821,1.8821,1.8821],"Walmart":[1.64,1.64,1.64,1.64,1.64,1.64,null,1.64],"Baker's":[2.3189,2.3189,2.3189,2.3189,2.3189,2.3189,2.3189,2.3189],"Family Fare":[3.0613,3.0613,3.0613,3.0613,3.0613,3.0613,3.0613,3.0613],"Fareway":[null,null,null,4.5364,4.5364,4.5364,0.84,0.84]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -146,6 +146,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Fareway</td><td>$0.84 per oz</td><td><span class="tp-item">Badia Spices Nutmeg, Ground</span></td></tr>
+<tr><td>Walmart</td><td>$1.64 per oz</td><td><span class="tp-item">Great Value Ground Nutmeg, 1.5 oz</span></td></tr>
 <tr><td>Hy-Vee</td><td>$1.88 per oz</td><td><span class="tp-item">Hy-Vee Ground Nutmeg 2.12 oz</span></td></tr>
 <tr><td>Baker&#39;s</td><td>$2.32 per oz</td><td><span class="tp-item">Kroger Ground Nutmeg</span></td></tr>
 <tr><td>Family Fare</td><td>$3.06 per oz</td><td><span class="tp-item">Our Family Nutmeg, Ground 2.12 Oz</span></td></tr>

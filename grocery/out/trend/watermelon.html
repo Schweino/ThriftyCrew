@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-05","07-06","07-08","07-09","07-10","07-11","07-12","07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Hy-Vee":[4.48,6.99,6.99,6.99,6.99,6.99,6.99,6.99,6.99,4.99,4.99,4.99,4.99,4.99,4.99,4.99,4.99],"Walmart":[4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,null,null],"Aldi":[4.65,4.65,5.15,5.15,5.15,5.15,5.15,5.15,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65],"Sam's Club":[4.97,4.97,6.97,6.97,6.97,6.97,6.97,6.97,6.97,6.97,6.97,6.97,6.97,6.97,6.97,6.97,null],"Baker's":[4.99,4.99,2.99,2.99,2.99,2.99,2.99,2.99,2.99,5.99,5.99,5.99,5.99,5.99,5.99,5.99,5.99],"Family Fare":[5.99,5.99,null,null,null,5.99,5.99,5.99,5.99,5.99,5.99,5.99,5.99,5.99,5.99,5.99,5.99],"Fareway":[null,null,null,null,null,null,5.99,5.99,5.99,5.99,5.99,5.99,5.99,5.99,5.99,null,null]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-05","07-06","07-08","07-09","07-10","07-11","07-12","07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Hy-Vee":[4.48,6.99,6.99,6.99,6.99,6.99,6.99,6.99,6.99,4.99,4.99,4.99,4.99,4.99,4.99,4.99,4.99],"Walmart":[4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,null,4.65],"Aldi":[4.65,4.65,5.15,5.15,5.15,5.15,5.15,5.15,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65,4.65],"Sam's Club":[4.97,4.97,6.97,6.97,6.97,6.97,6.97,6.97,6.97,6.97,6.97,6.97,6.97,6.97,6.97,6.97,null],"Baker's":[4.99,4.99,2.99,2.99,2.99,2.99,2.99,2.99,2.99,5.99,5.99,5.99,5.99,5.99,5.99,5.99,5.99],"Family Fare":[5.99,5.99,null,null,null,5.99,5.99,5.99,5.99,5.99,5.99,5.99,5.99,5.99,5.99,5.99,5.99],"Fareway":[null,null,null,null,null,null,5.99,5.99,5.99,5.99,5.99,5.99,5.99,5.99,5.99,null,null]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -155,6 +155,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Aldi</td><td>$4.65 each</td><td><span class="tp-item">Seedless Watermelon, Each</span></td></tr>
+<tr><td>Walmart</td><td>$4.65 each</td><td><span class="tp-item">Fresh Seedless Watermelon</span></td></tr>
 <tr><td>Hy-Vee</td><td>$4.99 each</td><td><span class="tp-item">Whole Seedless Watermelon</span></td></tr>
 <tr><td>Baker&#39;s</td><td>$5.99 each</td><td><span class="tp-item">Seedless Whole Watermelon</span></td></tr>
 <tr><td>Family Fare</td><td>$5.99 each</td><td><span class="tp-item">Watermelon Mini Seedless</span></td></tr>

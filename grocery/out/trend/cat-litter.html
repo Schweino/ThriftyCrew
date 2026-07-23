@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Hy-Vee":[0.3196,0.3196,0.3196,0.3196,0.3196,0.3196,0.2796,0.2796,0.2796,0.2796],"Walmart":[0.393,0.393,0.406,0.406,0.406,0.406,0.406,0.406,null,null],"Fareway":[0.398,0.398,0.398,0.398,0.398,0.398,0.398,0.398,0.398,0.398],"Sam's Club":[0.4495,0.4495,null,0.4495,0.4495,0.4495,0.4495,0.4495,0.4495,0.4495],"Aldi":[0.4893,0.4421,0.4421,0.4421,0.4421,0.4421,0.4421,0.4421,0.4421,0.4421]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Hy-Vee":[0.3196,0.3196,0.3196,0.3196,0.3196,0.3196,0.2796,0.2796,0.2796,0.2796],"Walmart":[0.393,0.393,0.406,0.406,0.406,0.406,0.406,0.406,null,0.406],"Fareway":[0.398,0.398,0.398,0.398,0.398,0.398,0.398,0.398,0.398,0.398],"Sam's Club":[0.4495,0.4495,null,0.4495,0.4495,0.4495,0.4495,0.4495,0.4495,0.4495],"Aldi":[0.4893,0.4421,0.4421,0.4421,0.4421,0.4421,0.4421,0.4421,0.4421,0.4421]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -149,6 +149,7 @@ function tcChart(root, d){
 <tbody>
 <tr class="tp-low"><td>Hy-Vee</td><td>$0.2796 per lb</td><td><span class="tp-item">Hy-Vee Scented Clumping Cat Litter</span></td></tr>
 <tr><td>Fareway</td><td>$0.398 per lb</td><td><span class="tp-item">Purina Tidy Cats Instant Action Non Clumping, Low Tracking Cat Litter</span></td></tr>
+<tr><td>Walmart</td><td>$0.406 per lb</td><td><span class="tp-item">Special Kitty Scoopable Tight Clumping Cat Litter</span></td></tr>
 <tr><td>Aldi</td><td>$0.4421 per lb</td><td><span class="tp-item">Heart to Tail Scoopable Cat Litter with Baking Soda</span></td></tr>
 <tr><td>Sam&#39;s Club</td><td>$0.4495 per lb</td><td><span class="tp-item">Purina Tidy Cats Multi-Cat Clumping Litter, Clear Springs Scent, 40 lbs.</span></td></tr>
 </tbody></table>

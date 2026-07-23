@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[0.052,0.0738,0.0738,0.0741,0.0741,0.0741,0.0741,0.0741,0.0741,null,null],"Hy-Vee":[0.0934,0.1369,null,null,null,null,null,null,null,null,null],"Baker's":[0.1056,null,null,0.1056,0.1056,0.1056,0.1056,0.1056,0.1056,0.1056,0.1056],"Family Fare":[0.1119,null,null,0.1153,0.1153,0.1153,0.1153,0.1153,0.1153,0.1153,0.1153],"Sam's Club":[0.1327,0.1327,0.1327,null,0.1327,0.1327,0.1327,0.1327,0.1327,0.1327,0.1327],"Aldi":[0.1465,0.1464,0.1328,0.1328,0.1328,0.1328,0.1328,0.1328,0.1328,0.1328,0.1328],"Fareway":[null,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.0507,0.0507]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[0.052,0.0738,0.0738,0.0741,0.0741,0.0741,0.0741,0.0741,0.0741,null,0.0741],"Hy-Vee":[0.0934,0.1369,null,null,null,null,null,null,null,null,null],"Baker's":[0.1056,null,null,0.1056,0.1056,0.1056,0.1056,0.1056,0.1056,0.1056,0.1056],"Family Fare":[0.1119,null,null,0.1153,0.1153,0.1153,0.1153,0.1153,0.1153,0.1153,0.1153],"Sam's Club":[0.1327,0.1327,0.1327,null,0.1327,0.1327,0.1327,0.1327,0.1327,0.1327,0.1327],"Aldi":[0.1465,0.1464,0.1328,0.1328,0.1328,0.1328,0.1328,0.1328,0.1328,0.1328,0.1328],"Fareway":[null,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.0507,0.0507]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -149,6 +149,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Fareway</td><td>$0.0507 per fl oz</td><td><span class="tp-item">Fareway Apple Cider Vinegar</span></td></tr>
+<tr><td>Walmart</td><td>$0.0741 per fl oz</td><td><span class="tp-item">Great Value Apple Cider Vinegar</span></td></tr>
 <tr><td>Baker&#39;s</td><td>$0.1056 per fl oz</td><td><span class="tp-item">Kroger® 5% Apple Cider Vinegar</span></td></tr>
 <tr><td>Family Fare</td><td>$0.1153 per fl oz</td><td><span class="tp-item">Apple Cider Vinegar Our Family</span></td></tr>
 <tr><td>Sam&#39;s Club</td><td>$0.1327 per fl oz</td><td><span class="tp-item">Bragg Organic Raw Unfiltered Apple Cider Vinegar, 128 fl. oz.</span></td></tr>

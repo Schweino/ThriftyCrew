@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Sam's Club":[1.1225,1.1225,null,1.1225,1.1225,1.1225,1.1225,1.1225,1.1225,null],"Aldi":[1.925,1.745,1.745,1.745,1.745,1.745,1.745,1.745,1.745,1.745],"Walmart":[3.24,3.24,3.24,3.24,3.24,3.24,3.24,3.24,null,null],"Fareway":[4.49,4.49,4.49,4.49,4.49,4.49,4.49,4.49,3.2475,3.2475],"Hy-Vee":[4.88,4.88,4.88,3.395,3.395,3.395,3.395,3.395,3.395,3.395]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Sam's Club":[1.1225,1.1225,null,1.1225,1.1225,1.1225,1.1225,1.1225,1.1225,null],"Aldi":[1.925,1.745,1.745,1.745,1.745,1.745,1.745,1.745,1.745,1.745],"Walmart":[3.24,3.24,3.24,3.24,3.24,3.24,3.24,3.24,null,3.24],"Fareway":[4.49,4.49,4.49,4.49,4.49,4.49,4.49,4.49,3.2475,3.2475],"Hy-Vee":[4.88,4.88,4.88,3.395,3.395,3.395,3.395,3.395,3.395,3.395]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -148,6 +148,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Aldi</td><td>$1.75 per fl oz</td><td><span class="tp-item">Stonemill Pure Vanilla Extract</span></td></tr>
+<tr><td>Walmart</td><td>$3.24 per fl oz</td><td><span class="tp-item">Great Value Pure Vanilla Extract</span></td></tr>
 <tr><td>Fareway</td><td>$3.25 per fl oz</td><td><span class="tp-item">McCormick All Natural Pure Vanilla Extract</span></td></tr>
 <tr><td>Hy-Vee</td><td>$3.40 per fl oz</td><td><span class="tp-item">Hy Vee Pure Vanilla Extract</span></td></tr>
 </tbody></table>

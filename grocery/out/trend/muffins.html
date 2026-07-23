@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Fareway":[0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99],"Walmart":[0.995,0.995,0.995,0.995,0.995,0.995,0.995,0.995,null,null],"Aldi":[1.0725,null,null,null,null,null,null,null,null,null],"Sam's Club":[1.1233,1.1233,null,1.0293,1.0293,1.0293,1.0293,1.0293,1.1233,1.1233],"Hy-Vee":[1.2475,1.2475,1.2475,1.2475,1.2475,1.2475,0.658,0.658,0.658,0.658],"Family Fare":[1.4975,null,1.4975,1.4975,1.4975,1.4975,1.4975,1.4975,1.4975,1.4975]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Fareway":[0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99],"Walmart":[0.995,0.995,0.995,0.995,0.995,0.995,0.995,0.995,null,0.995],"Aldi":[1.0725,null,null,null,null,null,null,null,null,null],"Sam's Club":[1.1233,1.1233,null,1.0293,1.0293,1.0293,1.0293,1.0293,1.1233,1.1233],"Hy-Vee":[1.2475,1.2475,1.2475,1.2475,1.2475,1.2475,0.658,0.658,0.658,0.658],"Family Fare":[1.4975,null,1.4975,1.4975,1.4975,1.4975,1.4975,1.4975,1.4975,1.4975]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -149,6 +149,7 @@ function tcChart(root, d){
 <tbody>
 <tr class="tp-low"><td>Hy-Vee</td><td>$0.658 each</td><td><span class="tp-item">Entenmann&#39;s Little Bites muffins, 5 ct., $3.29</span></td></tr>
 <tr><td>Fareway</td><td>$0.99 each</td><td><span class="tp-item">Otis Spunkmeyer Muffin, Wild Blueberry</span></td></tr>
+<tr><td>Walmart</td><td>$0.995 each</td><td><span class="tp-item">Marketside Baked Blueberry Muffins</span></td></tr>
 <tr><td>Sam&#39;s Club</td><td>$1.12 each</td><td><span class="tp-item">Member&#39;s Mark Banana Nut Muffin, 6 ct.</span></td></tr>
 <tr><td>Family Fare</td><td>$1.50 each</td><td><span class="tp-item">4 Ct Blueberry Muffins</span></td></tr>
 </tbody></table>

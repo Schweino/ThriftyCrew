@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-14","07-17","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[1.96,1.96,1.96,0.9964,0.9964,0.9964,null,null],"Baker's":[2.6779,2.6779,2.6779,2.6779,2.6779,2.6779,2.6779,2.6779],"Family Fare":[3.2071,3.2071,3.2071,1.045,1.045,1.045,1.045,1.045],"Hy-Vee":[3.98,3.98,3.98,2.66,3.98,3.98,3.98,3.98],"Fareway":[null,null,null,2.6157,2.6157,2.6157,0.96,0.96]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-12","07-14","07-17","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[1.96,1.96,1.96,0.9964,0.9964,0.9964,null,0.9964],"Baker's":[2.6779,2.6779,2.6779,2.6779,2.6779,2.6779,2.6779,2.6779],"Family Fare":[3.2071,3.2071,3.2071,1.045,1.045,1.045,1.045,1.045],"Hy-Vee":[3.98,3.98,3.98,2.66,3.98,3.98,3.98,3.98],"Fareway":[null,null,null,2.6157,2.6157,2.6157,0.96,0.96]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -146,6 +146,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Fareway</td><td>$0.96 per oz</td><td><span class="tp-item">Badia Spices Coriander, Ground</span></td></tr>
+<tr><td>Walmart</td><td>$0.9964 per oz</td><td><span class="tp-item">Badia Coriander Ground</span></td></tr>
 <tr><td>Family Fare</td><td>$1.05 per oz</td><td><span class="tp-item">Sugar &#39;N Spice Coriander Ground Pp</span></td></tr>
 <tr><td>Baker&#39;s</td><td>$2.68 per oz</td><td><span class="tp-item">Simple Truth Organic Ground Coriander</span></td></tr>
 <tr><td>Hy-Vee</td><td>$3.98 per oz</td><td><span class="tp-item">Hy-Vee Coriander Seed</span></td></tr>

@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[0.2262,0.2262,0.2262,0.2262,0.2262,0.2262,0.2262,0.2262,null,null],"Fareway":[0.2292,0.2292,0.2292,0.2292,0.2292,0.2292,0.2292,0.2292,0.1947,0.1947],"Sam's Club":[0.2704,0.2704,null,0.2704,0.2704,0.2704,0.2704,0.2704,0.2704,0.2704],"Hy-Vee":[0.2908,0.2908,0.2908,0.2908,0.2908,0.2908,0.2908,0.2908,0.2908,0.2908],"Aldi":[null,0.3625,0.3625,0.3625,0.3625,0.3625,0.3625,0.3625,0.3625,0.3625]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[0.2262,0.2262,0.2262,0.2262,0.2262,0.2262,0.2262,0.2262,null,0.2262],"Fareway":[0.2292,0.2292,0.2292,0.2292,0.2292,0.2292,0.2292,0.2292,0.1947,0.1947],"Sam's Club":[0.2704,0.2704,null,0.2704,0.2704,0.2704,0.2704,0.2704,0.2704,0.2704],"Hy-Vee":[0.2908,0.2908,0.2908,0.2908,0.2908,0.2908,0.2908,0.2908,0.2908,0.2908],"Aldi":[null,0.3625,0.3625,0.3625,0.3625,0.3625,0.3625,0.3625,0.3625,0.3625]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -148,6 +148,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Fareway</td><td>$0.1947 per oz</td><td><span class="tp-item">Fareway Pieces &amp; Stems Mushrooms</span></td></tr>
+<tr><td>Walmart</td><td>$0.2262 per oz</td><td><span class="tp-item">Great Value White Mushrooms Pieces and Stems</span></td></tr>
 <tr><td>Sam&#39;s Club</td><td>$0.2704 per oz</td><td><span class="tp-item">Giorgio Mushroom Pieces and Stems, 4 oz., 12 ct.</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.2908 per oz</td><td><span class="tp-item">Hy-Vee Mushrooms Stems &amp; Pieces</span></td></tr>
 <tr><td>Aldi</td><td>$0.3625 per oz</td><td><span class="tp-item">Happy Harvest Mushrooms Pieces &amp; Stems</span></td></tr>

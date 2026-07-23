@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Aldi":[0.285,0.259,0.259,0.259,0.259,0.259,0.259,0.259,0.259,0.259],"Walmart":[0.287,0.287,0.287,0.287,0.287,0.287,0.287,0.287,null,null],"Hy-Vee":[0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3],"Fareway":[0.3738,0.3738,0.3738,0.3738,0.3738,0.3738,0.3738,0.3738,0.3738,0.3738],"Sam's Club":[null,0.14,null,0.1395,0.1395,0.1395,0.1395,0.1395,0.14,0.14],"Family Fare":[null,null,0.449,0.449,0.449,0.449,0.449,0.449,0.449,0.449]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Aldi":[0.285,0.259,0.259,0.259,0.259,0.259,0.259,0.259,0.259,0.259],"Walmart":[0.287,0.287,0.287,0.287,0.287,0.287,0.287,0.287,null,0.287],"Hy-Vee":[0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3],"Fareway":[0.3738,0.3738,0.3738,0.3738,0.3738,0.3738,0.3738,0.3738,0.3738,0.3738],"Sam's Club":[null,0.14,null,0.1395,0.1395,0.1395,0.1395,0.1395,0.14,0.14],"Family Fare":[null,null,0.449,0.449,0.449,0.449,0.449,0.449,0.449,0.449]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -149,6 +149,7 @@ function tcChart(root, d){
 <tbody>
 <tr class="tp-low"><td>Sam&#39;s Club</td><td>$0.14 per oz</td><td><span class="tp-item">Member&#39;s Mark Roasted Red Pepper Hummus, 32 oz.</span></td></tr>
 <tr><td>Aldi</td><td>$0.259 per oz</td><td><span class="tp-item">Park Street Deli Classic Hummus</span></td></tr>
+<tr><td>Walmart</td><td>$0.287 per oz</td><td><span class="tp-item">Marketside Classic Hummus</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.30 per oz</td><td><span class="tp-item">Hy-Vee hummus, 10 oz., 2/ $6.00</span></td></tr>
 <tr><td>Fareway</td><td>$0.3738 per oz</td><td><span class="tp-item">Sabra Hummus Garlic</span></td></tr>
 <tr><td>Family Fare</td><td>$0.449 per oz</td><td><span class="tp-item">Fresh &amp; Finest By Our Family Garlic Hummus 10 Oz</span></td></tr>

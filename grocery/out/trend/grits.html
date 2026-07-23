@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-19","07-20","07-21","07-22","07-23"],"s":{"Sam's Club":[0.0023,0.0023,0.0023,0.0023,0.0023],"Walmart":[0.1321,0.1321,0.1321,null,null],"Hy-Vee":[0.1662,0.1662,0.1662,0.1662,0.1662],"Baker's":[0.1662,0.1662,0.1662,0.1662,0.1662],"Family Fare":[0.1871,0.1871,0.1871,0.1871,0.1871],"Fareway":[0.1871,0.1871,0.1871,0.1246,0.1246]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-19","07-20","07-21","07-22","07-23"],"s":{"Sam's Club":[0.0023,0.0023,0.0023,0.0023,0.0023],"Walmart":[0.1321,0.1321,0.1321,null,0.1321],"Hy-Vee":[0.1662,0.1662,0.1662,0.1662,0.1662],"Baker's":[0.1662,0.1662,0.1662,0.1662,0.1662],"Family Fare":[0.1871,0.1871,0.1871,0.1871,0.1871],"Fareway":[0.1871,0.1871,0.1871,0.1246,0.1246]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -144,6 +144,7 @@ function tcChart(root, d){
 <tbody>
 <tr class="tp-low"><td>Sam&#39;s Club</td><td>$0.0023 per oz</td><td><span class="tp-item">Quaker Instant Grits, Variety Pack, .98 oz., 46 pk.</span></td></tr>
 <tr><td>Fareway</td><td>$0.1246 per oz</td><td><span class="tp-item">Quaker Grits, Quick 5-Minute</span></td></tr>
+<tr><td>Walmart</td><td>$0.1321 per oz</td><td><span class="tp-item">Quaker Old Fashioned Grits, 24 oz Canister</span></td></tr>
 <tr><td>Baker&#39;s</td><td>$0.1662 per oz</td><td><span class="tp-item">Quaker Quick 5 Minute Grits</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.1662 per oz</td><td><span class="tp-item">Quaker Quick Enriched White Hominy Grits</span></td></tr>
 <tr><td>Family Fare</td><td>$0.1871 per oz</td><td><span class="tp-item">Quaker Quick 5 Minute Grits 24 Oz</span></td></tr>

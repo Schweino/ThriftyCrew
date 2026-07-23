@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Hy-Vee":[0.0667,0.0667,0.0667,0.0667,0.0667,0.0667,0.0667,0.0667,0.0667,0.0667],"Walmart":[0.0705,0.0705,0.0705,0.0705,0.0705,0.0705,0.0705,0.0705,null,null],"Aldi":[0.081,0.0695,0.0695,0.0695,0.0695,0.0695,0.0695,0.0695,0.0695,0.0695],"Fareway":[0.0933,0.0933,0.0933,0.0933,0.0933,0.0933,0.0933,0.0933,0.0933,0.0933],"Sam's Club":[0.1069,0.1069,null,0.1069,0.1069,0.1069,0.1069,0.1069,0.1069,0.1069]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Hy-Vee":[0.0667,0.0667,0.0667,0.0667,0.0667,0.0667,0.0667,0.0667,0.0667,0.0667],"Walmart":[0.0705,0.0705,0.0705,0.0705,0.0705,0.0705,0.0705,0.0705,null,0.0705],"Aldi":[0.081,0.0695,0.0695,0.0695,0.0695,0.0695,0.0695,0.0695,0.0695,0.0695],"Fareway":[0.0933,0.0933,0.0933,0.0933,0.0933,0.0933,0.0933,0.0933,0.0933,0.0933],"Sam's Club":[0.1069,0.1069,null,0.1069,0.1069,0.1069,0.1069,0.1069,0.1069,0.1069]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -149,6 +149,7 @@ function tcChart(root, d){
 <tbody>
 <tr class="tp-low"><td>Hy-Vee</td><td>$0.0667 per oz</td><td><span class="tp-item">That&#39;s Smart! Cream of Mushroom Condensed Soup</span></td></tr>
 <tr><td>Aldi</td><td>$0.0695 per oz</td><td><span class="tp-item">Chef&#39;s Cupboard Condensed Cream of Mushroom Soup</span></td></tr>
+<tr><td>Walmart</td><td>$0.0705 per oz</td><td><span class="tp-item">Great Value Cream of Mushroom Condensed Soup</span></td></tr>
 <tr><td>Fareway</td><td>$0.0933 per oz</td><td><span class="tp-item">Fareway Condensed Cream of Mushroom Soup</span></td></tr>
 <tr><td>Sam&#39;s Club</td><td>$0.1069 per oz</td><td><span class="tp-item">Campbell&#39;s Cream of Mushroom Soup 10.5 oz., 8 pk.</span></td></tr>
 </tbody></table>

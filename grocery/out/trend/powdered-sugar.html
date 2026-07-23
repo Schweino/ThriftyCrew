@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Hy-Vee":[0.94,0.94,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99],"Walmart":[0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99,null,null],"Sam's Club":[0.9971,0.9971,null,0.9971,0.9971,0.9971,0.9971,0.9971,0.9971,0.9971],"Aldi":[1.025,0.925,0.925,0.925,0.925,0.925,0.925,0.925,0.925,0.925],"Fareway":[2.99,2.99,2.99,2.99,2.99,2.99,2.99,2.99,2.99,2.99]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Hy-Vee":[0.94,0.94,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99],"Walmart":[0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99,null,0.99],"Sam's Club":[0.9971,0.9971,null,0.9971,0.9971,0.9971,0.9971,0.9971,0.9971,0.9971],"Aldi":[1.025,0.925,0.925,0.925,0.925,0.925,0.925,0.925,0.925,0.925],"Fareway":[2.99,2.99,2.99,2.99,2.99,2.99,2.99,2.99,2.99,2.99]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -149,6 +149,7 @@ function tcChart(root, d){
 <tbody>
 <tr class="tp-low"><td>Aldi</td><td>$0.925 per lb</td><td><span class="tp-item">Baker&#39;s Corner Powdered Sugar</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.99 per lb</td><td><span class="tp-item">Thats Smart Powdered Sugar</span></td></tr>
+<tr><td>Walmart</td><td>$0.99 per lb</td><td><span class="tp-item">Great Value Confectioners Powdered Sugar</span></td></tr>
 <tr><td>Sam&#39;s Club</td><td>$0.9971 per lb</td><td><span class="tp-item">Member&#39;s Mark Powdered Sugar, 7 lbs.</span></td></tr>
 <tr><td>Fareway</td><td>$2.99 per lb</td><td><span class="tp-item">C&amp;H Premium Cane Powdered Sugar</span></td></tr>
 </tbody></table>

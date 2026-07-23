@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[0.1407,0.1407,0.1407,0.1407,0.1407,0.1407,0.1407,0.1407,null,null],"Aldi":[0.1536,0.1393,0.1393,0.1393,0.1393,0.1393,0.1393,0.1393,0.1393,0.1393],"Sam's Club":[0.1693,0.1693,null,0.1426,0.1426,0.1426,0.1426,0.1426,0.1426,0.1426],"Fareway":[0.1921,0.1921,0.1921,0.1921,0.1921,0.1921,0.1921,0.1921,0.1921,0.1921],"Hy-Vee":[0.1993,0.1993,0.1993,0.1993,0.1993,0.1993,0.1993,0.1993,0.1993,0.1993]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[0.1407,0.1407,0.1407,0.1407,0.1407,0.1407,0.1407,0.1407,null,0.1407],"Aldi":[0.1536,0.1393,0.1393,0.1393,0.1393,0.1393,0.1393,0.1393,0.1393,0.1393],"Sam's Club":[0.1693,0.1693,null,0.1426,0.1426,0.1426,0.1426,0.1426,0.1426,0.1426],"Fareway":[0.1921,0.1921,0.1921,0.1921,0.1921,0.1921,0.1921,0.1921,0.1921,0.1921],"Hy-Vee":[0.1993,0.1993,0.1993,0.1993,0.1993,0.1993,0.1993,0.1993,0.1993,0.1993]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -148,6 +148,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Aldi</td><td>$0.1393 per oz</td><td><span class="tp-item">Baker&#39;s Corner Sweetened Condensed Milk</span></td></tr>
+<tr><td>Walmart</td><td>$0.1407 per oz</td><td><span class="tp-item">Great Value Sweetened Condensed Milk</span></td></tr>
 <tr><td>Sam&#39;s Club</td><td>$0.1426 per oz</td><td><span class="tp-item">Magnolia Sweetened Condensed Milk, 14 oz., 6 pk.</span></td></tr>
 <tr><td>Fareway</td><td>$0.1921 per oz</td><td><span class="tp-item">Fareway Sweetened Condensed Milk</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.1993 per oz</td><td><span class="tp-item">Hy-Vee Sweetened Condensed Milk</span></td></tr>

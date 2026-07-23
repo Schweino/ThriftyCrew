@@ -1,32 +1,28 @@
 ﻿{
-    "generated":  "2026-07-23 13:31",
+    "generated":  "2026-07-23 17:12",
     "tol":  0.3,
-    "no_link_count":  311,
+    "no_link_count":  254,
     "max_no_link":  0,
     "no_link_by_store":  [
                              {
-                                 "store":  "Baker\u0027s",
-                                 "count":  91
+                                 "store":  "Walmart",
+                                 "count":  90
                              },
                              {
                                  "store":  "Hy-Vee",
                                  "count":  56
                              },
                              {
-                                 "store":  "Walmart",
+                                 "store":  "Sam\u0027s Club",
                                  "count":  42
                              },
                              {
-                                 "store":  "Sam\u0027s Club",
-                                 "count":  40
+                                 "store":  "Baker\u0027s",
+                                 "count":  28
                              },
                              {
                                  "store":  "Family Fare",
-                                 "count":  33
-                             },
-                             {
-                                 "store":  "Fareway",
-                                 "count":  30
+                                 "count":  19
                              },
                              {
                                  "store":  "Aldi",
@@ -36,19 +32,11 @@
     "no_link":  [
                     {
                         "id":  "chicken-breast",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "chicken-breast",
                         "store":  "Hy-Vee"
                     },
                     {
                         "id":  "chicken-thighs",
                         "store":  "Aldi"
-                    },
-                    {
-                        "id":  "ground-beef-8020",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "shrimp",
@@ -69,10 +57,6 @@
                     {
                         "id":  "canned-salmon",
                         "store":  "Sam\u0027s Club"
-                    },
-                    {
-                        "id":  "pepperoni",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "eggs",
@@ -99,10 +83,6 @@
                         "store":  "Sam\u0027s Club"
                     },
                     {
-                        "id":  "almond-milk",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "string-cheese",
                         "store":  "Sam\u0027s Club"
                     },
@@ -117,6 +97,14 @@
                     {
                         "id":  "coffee-creamer",
                         "store":  "Sam\u0027s Club"
+                    },
+                    {
+                        "id":  "refrigerated-biscuits",
+                        "store":  "Baker\u0027s"
+                    },
+                    {
+                        "id":  "refrigerated-biscuits",
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "blueberries",
@@ -175,32 +163,20 @@
                         "store":  "Aldi"
                     },
                     {
-                        "id":  "lemongrass-paste",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "tomatillos",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "tomatillos",
-                        "store":  "Baker\u0027s"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "poblano-peppers",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "poblano-peppers",
-                        "store":  "Fareway"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "fresh-basil",
-                        "store":  "Fareway"
+                        "store":  "Walmart"
                     },
                     {
-                        "id":  "bread",
-                        "store":  "Baker\u0027s"
+                        "id":  "fresh-mint",
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "bread",
@@ -259,6 +235,10 @@
                         "store":  "Sam\u0027s Club"
                     },
                     {
+                        "id":  "pita-bread",
+                        "store":  "Sam\u0027s Club"
+                    },
+                    {
                         "id":  "baked-beans",
                         "store":  "Baker\u0027s"
                     },
@@ -303,10 +283,6 @@
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "tomato-sauce",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "beef-stew",
                         "store":  "Sam\u0027s Club"
                     },
@@ -319,16 +295,8 @@
                         "store":  "Sam\u0027s Club"
                     },
                     {
-                        "id":  "fruit-cocktail",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "canned-pears",
                         "store":  "Sam\u0027s Club"
-                    },
-                    {
-                        "id":  "tomatoes-green-chilies",
-                        "store":  "Family Fare"
                     },
                     {
                         "id":  "tomatoes-green-chilies",
@@ -337,10 +305,6 @@
                     {
                         "id":  "canned-green-chilies",
                         "store":  "Aldi"
-                    },
-                    {
-                        "id":  "canned-green-chilies",
-                        "store":  "Fareway"
                     },
                     {
                         "id":  "coconut-milk-canned",
@@ -351,12 +315,12 @@
                         "store":  "Aldi"
                     },
                     {
-                        "id":  "chipotle-adobo",
-                        "store":  "Baker\u0027s"
+                        "id":  "sun-dried-tomatoes",
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "chipotle-adobo",
-                        "store":  "Fareway"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "hot-sauce",
@@ -367,116 +331,60 @@
                         "store":  "Walmart"
                     },
                     {
-                        "id":  "mustard",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "mayonnaise",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "ranch-dressing",
-                        "store":  "Family Fare"
-                    },
-                    {
                         "id":  "queso",
                         "store":  "Hy-Vee"
                     },
                     {
-                        "id":  "white-vinegar",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "miracle-whip",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "miracle-whip",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "sloppy-joe-sauce",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "sloppy-joe-sauce",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "lime-juice",
-                        "store":  "Family Fare"
-                    },
-                    {
                         "id":  "fish-sauce",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "fish-sauce",
-                        "store":  "Baker\u0027s"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "oyster-sauce",
-                        "store":  "Baker\u0027s"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "hoisin-sauce",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "hoisin-sauce",
-                        "store":  "Fareway"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "gochujang",
-                        "store":  "Baker\u0027s"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "mirin",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "mirin",
-                        "store":  "Baker\u0027s"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "tahini",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "tahini",
-                        "store":  "Fareway"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "chili-crisp",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "chili-crisp",
-                        "store":  "Fareway"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "red-curry-paste",
-                        "store":  "Baker\u0027s"
+                        "store":  "Walmart"
                     },
                     {
-                        "id":  "red-curry-paste",
-                        "store":  "Fareway"
+                        "id":  "harissa-paste",
+                        "store":  "Walmart"
+                    },
+                    {
+                        "id":  "achiote-paste",
+                        "store":  "Walmart"
+                    },
+                    {
+                        "id":  "pomegranate-molasses",
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "japanese-curry-roux",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "flour",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "sugar",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "yeast",
-                        "store":  "Fareway"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "marshmallows",
@@ -491,8 +399,20 @@
                         "store":  "Hy-Vee"
                     },
                     {
+                        "id":  "dried-parsley",
+                        "store":  "Walmart"
+                    },
+                    {
                         "id":  "ground-turmeric",
                         "store":  "Family Fare"
+                    },
+                    {
+                        "id":  "ground-turmeric",
+                        "store":  "Walmart"
+                    },
+                    {
+                        "id":  "red-pepper-flakes",
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "garlic-powder",
@@ -500,19 +420,27 @@
                     },
                     {
                         "id":  "italian-seasoning",
+                        "store":  "Walmart"
+                    },
+                    {
+                        "id":  "italian-seasoning",
                         "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "toasted-sesame-seeds",
-                        "store":  "Baker\u0027s"
+                        "store":  "Walmart"
                     },
                     {
-                        "id":  "toasted-sesame-seeds",
-                        "store":  "Fareway"
+                        "id":  "berbere-seasoning",
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "cajun-seasoning",
                         "store":  "Baker\u0027s"
+                    },
+                    {
+                        "id":  "cajun-seasoning",
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "cajun-seasoning",
@@ -527,56 +455,36 @@
                         "store":  "Aldi"
                     },
                     {
-                        "id":  "taco-seasoning",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "taco-seasoning",
-                        "store":  "Fareway"
+                        "id":  "ranch-seasoning-mix",
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "ranch-seasoning-mix",
                         "store":  "Aldi"
                     },
                     {
-                        "id":  "ranch-seasoning-mix",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "ranch-seasoning-mix",
-                        "store":  "Fareway"
-                    },
-                    {
                         "id":  "curry-powder",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "curry-powder",
-                        "store":  "Fareway"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "garam-masala",
-                        "store":  "Baker\u0027s"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "five-spice-powder",
-                        "store":  "Baker\u0027s"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "cayenne-pepper",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "cayenne-pepper",
-                        "store":  "Baker\u0027s"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "dried-thyme",
-                        "store":  "Baker\u0027s"
+                        "store":  "Walmart"
                     },
                     {
-                        "id":  "dried-thyme",
-                        "store":  "Fareway"
+                        "id":  "dried-basil",
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "dried-basil",
@@ -584,15 +492,15 @@
                     },
                     {
                         "id":  "dried-dill",
+                        "store":  "Walmart"
+                    },
+                    {
+                        "id":  "dried-dill",
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "dried-dill",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "dried-dill",
-                        "store":  "Fareway"
+                        "id":  "bay-leaves",
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "bay-leaves",
@@ -600,15 +508,11 @@
                     },
                     {
                         "id":  "ground-cloves",
-                        "store":  "Baker\u0027s"
+                        "store":  "Walmart"
                     },
                     {
-                        "id":  "ground-cloves",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "ground-cloves",
-                        "store":  "Family Fare"
+                        "id":  "ground-coriander",
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "ground-coriander",
@@ -616,43 +520,27 @@
                     },
                     {
                         "id":  "ground-coriander",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "ground-coriander",
                         "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "ground-allspice",
-                        "store":  "Baker\u0027s"
+                        "store":  "Walmart"
                     },
                     {
-                        "id":  "ground-allspice",
-                        "store":  "Fareway"
+                        "id":  "ground-nutmeg",
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "ground-nutmeg",
                         "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "ground-nutmeg",
-                        "store":  "Fareway"
                     },
                     {
                         "id":  "ground-ginger",
-                        "store":  "Baker\u0027s"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "poppy-seeds",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "poppy-seeds",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "poppy-seeds",
-                        "store":  "Fareway"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "corn-muffin-mix",
@@ -660,7 +548,7 @@
                     },
                     {
                         "id":  "corn-muffin-mix",
-                        "store":  "Baker\u0027s"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "egg-noodles",
@@ -676,11 +564,11 @@
                     },
                     {
                         "id":  "grits",
-                        "store":  "Baker\u0027s"
+                        "store":  "Sam\u0027s Club"
                     },
                     {
                         "id":  "grits",
-                        "store":  "Fareway"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "cheese-tortellini",
@@ -688,11 +576,7 @@
                     },
                     {
                         "id":  "cheese-tortellini",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "cheese-tortellini",
-                        "store":  "Fareway"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "potato-gnocchi",
@@ -700,15 +584,7 @@
                     },
                     {
                         "id":  "potato-gnocchi",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "potato-gnocchi",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "potato-gnocchi",
-                        "store":  "Family Fare"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "rice-noodles",
@@ -716,11 +592,7 @@
                     },
                     {
                         "id":  "rice-noodles",
-                        "store":  "Fareway"
-                    },
-                    {
-                        "id":  "rice-noodles",
-                        "store":  "Family Fare"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "vegetable-oil",
@@ -740,11 +612,7 @@
                     },
                     {
                         "id":  "sesame-oil",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "sesame-oil",
-                        "store":  "Family Fare"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "walnuts",
@@ -752,11 +620,7 @@
                     },
                     {
                         "id":  "walnuts",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "walnuts",
-                        "store":  "Fareway"
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "soda",
@@ -795,24 +659,20 @@
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "sports-drinks",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "tea-bags",
                         "store":  "Hy-Vee"
                     },
                     {
                         "id":  "frozen-pizza",
-                        "store":  "Walmart"
-                    },
-                    {
-                        "id":  "frozen-pizza",
                         "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "frozen-pizza",
                         "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "frozen-pizza",
+                        "store":  "Walmart"
                     },
                     {
                         "id":  "chicken-nuggets",
@@ -845,10 +705,6 @@
                     {
                         "id":  "disinfectant-spray",
                         "store":  "Sam\u0027s Club"
-                    },
-                    {
-                        "id":  "charcoal",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "shower-cleaner",
@@ -891,18 +747,6 @@
                         "store":  "Walmart"
                     },
                     {
-                        "id":  "poblano-peppers",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "potato",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "tomatillos",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "tomatillos",
                         "store":  "Walmart"
                     },
@@ -919,16 +763,8 @@
                         "store":  "Walmart"
                     },
                     {
-                        "id":  "gochujang",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "hoisin-sauce",
                         "store":  "Walmart"
-                    },
-                    {
-                        "id":  "hoisin-sauce",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "honey",
@@ -943,24 +779,8 @@
                         "store":  "Walmart"
                     },
                     {
-                        "id":  "sesame-oil",
-                        "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "sesame-oil",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "tahini",
                         "store":  "Walmart"
-                    },
-                    {
-                        "id":  "tahini",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
-                        "id":  "white-vinegar",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "hot-sauce",
@@ -1035,20 +855,12 @@
                         "store":  "Walmart"
                     },
                     {
-                        "id":  "curry-powder",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "paprika",
                         "store":  "Hy-Vee"
                     },
                     {
                         "id":  "toasted-sesame-seeds",
                         "store":  "Walmart"
-                    },
-                    {
-                        "id":  "toasted-sesame-seeds",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "toasted-sesame-seeds",
@@ -1079,16 +891,8 @@
                         "store":  "Aldi"
                     },
                     {
-                        "id":  "ranch-seasoning-mix",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "taco-seasoning",
                         "store":  "Walmart"
-                    },
-                    {
-                        "id":  "taco-seasoning",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "taco-seasoning",
@@ -1101,10 +905,6 @@
                     {
                         "id":  "garam-masala",
                         "store":  "Walmart"
-                    },
-                    {
-                        "id":  "garam-masala",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "salt",
@@ -1143,10 +943,6 @@
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "dried-dill",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "dried-basil",
                         "store":  "Walmart"
                     },
@@ -1155,16 +951,8 @@
                         "store":  "Baker\u0027s"
                     },
                     {
-                        "id":  "dried-basil",
-                        "store":  "Family Fare"
-                    },
-                    {
                         "id":  "ground-ginger",
                         "store":  "Walmart"
-                    },
-                    {
-                        "id":  "ground-ginger",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "ground-coriander",
@@ -1191,16 +979,8 @@
                         "store":  "Baker\u0027s"
                     },
                     {
-                        "id":  "sugar",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "ground-allspice",
                         "store":  "Walmart"
-                    },
-                    {
-                        "id":  "ground-allspice",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "dried-thyme",
@@ -1209,10 +989,6 @@
                     {
                         "id":  "dried-thyme",
                         "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "dried-thyme",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "ground-turmeric",
@@ -1235,16 +1011,8 @@
                         "store":  "Family Fare"
                     },
                     {
-                        "id":  "five-spice-powder",
-                        "store":  "Baker\u0027s"
-                    },
-                    {
                         "id":  "kidney-beans",
                         "store":  "Family Fare"
-                    },
-                    {
-                        "id":  "tomato-sauce",
-                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "diced-tomatoes",
@@ -1279,7 +1047,7 @@
                         "store":  "Hy-Vee"
                     }
                 ],
-    "mismatch_count":  44,
+    "mismatch_count":  47,
     "mismatch":  [
                      {
                          "id":  "balsamic-vinegar",
@@ -1472,6 +1240,16 @@
                          "size":  "16 oz"
                      },
                      {
+                         "id":  "sesame-oil",
+                         "store":  "Baker\u0027s",
+                         "unit":  "oz",
+                         "board":  1.24,
+                         "link":  0.6653,
+                         "off_pct":  46,
+                         "product":  "kroger pure sesame oil",
+                         "size":  "7.5 fl oz"
+                     },
+                     {
                          "id":  "toasted-sesame-seeds",
                          "store":  "Family Fare",
                          "unit":  "oz",
@@ -1622,6 +1400,16 @@
                          "size":  "23.5 oz"
                      },
                      {
+                         "id":  "cayenne-pepper",
+                         "store":  "Baker\u0027s",
+                         "unit":  "oz",
+                         "board":  1.18,
+                         "link":  2.86,
+                         "off_pct":  142,
+                         "product":  "kroger ground red cayenne pepper shaker",
+                         "size":  "1.5 oz"
+                     },
+                     {
                          "id":  "ground-ginger",
                          "store":  "Hy-Vee",
                          "unit":  "oz",
@@ -1660,6 +1448,16 @@
                          "off_pct":  31,
                          "product":  "Our Family Sugar, Pure Granulated 64 Oz",
                          "size":  "64 oz"
+                     },
+                     {
+                         "id":  "fish-sauce",
+                         "store":  "Baker\u0027s",
+                         "unit":  "floz",
+                         "board":  0.9601,
+                         "link":  1.2692,
+                         "off_pct":  32,
+                         "product":  "thai kitchen gluten free premium fish sauce",
+                         "size":  "3.38 fl oz"
                      },
                      {
                          "id":  "apple-cider-vinegar",

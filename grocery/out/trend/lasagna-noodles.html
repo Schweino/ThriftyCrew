@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Aldi":[0.0825,0.0742,0.0742,0.0742,0.0742,0.0742,0.0742,0.0742,0.0742,0.0742],"Walmart":[0.115,0.115,0.115,0.115,0.115,0.115,0.115,0.115,null,null],"Hy-Vee":[0.2067,0.2067,0.2067,0.2067,0.2067,0.2067,0.2067,0.2067,0.2067,0.2067],"Fareway":[0.2658,0.2658,0.2658,0.2658,0.2658,0.2658,0.2658,0.2658,0.2658,0.2658]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Aldi":[0.0825,0.0742,0.0742,0.0742,0.0742,0.0742,0.0742,0.0742,0.0742,0.0742],"Walmart":[0.115,0.115,0.115,0.115,0.115,0.115,0.115,0.115,null,0.115],"Hy-Vee":[0.2067,0.2067,0.2067,0.2067,0.2067,0.2067,0.2067,0.2067,0.2067,0.2067],"Fareway":[0.2658,0.2658,0.2658,0.2658,0.2658,0.2658,0.2658,0.2658,0.2658,0.2658]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -148,6 +148,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Aldi</td><td>$0.0742 per oz</td><td><span class="tp-item">Reggano Oven Ready Lasagna Noodles</span></td></tr>
+<tr><td>Walmart</td><td>$0.115 per oz</td><td><span class="tp-item">Great Value Lasagna Pasta</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.2067 per oz</td><td><span class="tp-item">Hy-Vee Oven Ready No Boil Lasagna</span></td></tr>
 <tr><td>Fareway</td><td>$0.2658 per oz</td><td><span class="tp-item">Fareway Oven Ready Lasagna</span></td></tr>
 </tbody></table>

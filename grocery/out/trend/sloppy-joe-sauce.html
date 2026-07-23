@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Hy-Vee":[0.066,0.066,0.066,0.066,0.066,0.066,0.066],"Walmart":[0.0931,0.0931,0.0931,0.0931,0.0931,null,null],"Baker's":[0.0994,0.0994,0.0994,0.0994,0.0994,0.0994,0.0994],"Family Fare":[null,null,0.1,0.1,0.1,0.1,0.1],"Fareway":[null,null,null,null,null,0.1019,0.1019]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Hy-Vee":[0.066,0.066,0.066,0.066,0.066,0.066,0.066],"Walmart":[0.0931,0.0931,0.0931,0.0931,0.0931,null,0.0931],"Baker's":[0.0994,0.0994,0.0994,0.0994,0.0994,0.0994,0.0994],"Family Fare":[null,null,0.1,0.1,0.1,0.1,0.1],"Fareway":[null,null,null,null,null,0.1019,0.1019]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -145,6 +145,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Hy-Vee</td><td>$0.066 per oz</td><td><span class="tp-item">Hy-Vee Sloppy Joe Sauce</span></td></tr>
+<tr><td>Walmart</td><td>$0.0931 per oz</td><td><span class="tp-item">Manwich Sloppy Joe Sauce, Bold Flavor, Canned Sauce, 16 oz.</span></td></tr>
 <tr><td>Baker&#39;s</td><td>$0.0994 per oz</td><td><span class="tp-item">Manwich Sloppy Joe Sauce Bold Flavor Canned Sauce 16 OZ ti</span></td></tr>
 <tr><td>Family Fare</td><td>$0.10 per oz</td><td><span class="tp-item">Manwich Sloppy Joe Sauce, Original 15 Oz</span></td></tr>
 <tr><td>Fareway</td><td>$0.1019 per oz</td><td><span class="tp-item">Manwich Sloppy Joe Sauce, Thick and Chunky, Canned Sauce</span></td></tr>

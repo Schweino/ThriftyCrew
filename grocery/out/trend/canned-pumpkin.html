@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Sam's Club":[0.0871,0.0871,0.0871,0.0871,0.0871,0.0871,0.0871],"Walmart":[0.12,0.12,0.12,0.12,0.12,null,null],"Fareway":[0.1372,0.1372,0.1372,0.1372,0.1372,0.1372,0.1372],"Baker's":[0.146,0.146,0.146,0.146,0.146,0.146,0.146]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Sam's Club":[0.0871,0.0871,0.0871,0.0871,0.0871,0.0871,0.0871],"Walmart":[0.12,0.12,0.12,0.12,0.12,null,0.12],"Fareway":[0.1372,0.1372,0.1372,0.1372,0.1372,0.1372,0.1372],"Baker's":[0.146,0.146,0.146,0.146,0.146,0.146,0.146]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -145,6 +145,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Sam&#39;s Club</td><td>$0.0871 per oz</td><td><span class="tp-item">Libby&#39;s 100% Pure Pumpkin, 29 oz., 3 pk.</span></td></tr>
+<tr><td>Walmart</td><td>$0.12 per oz</td><td><span class="tp-item">Libby&#39;s 100% Pure Pumpkin Puree, All Natural Gluten Free Can</span></td></tr>
 <tr><td>Fareway</td><td>$0.1372 per oz</td><td><span class="tp-item">Libby&#39;s Pumpkin 100% Pure Pumpkin</span></td></tr>
 <tr><td>Baker&#39;s</td><td>$0.146 per oz</td><td><span class="tp-item">Kroger® 100% Pure Pumpkin 15 oz</span></td></tr>
 </tbody></table>

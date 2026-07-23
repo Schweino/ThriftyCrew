@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Hy-Vee":[0.0959,0.0959,0.0959,0.0959,0.0959,0.0959,0.0959],"Walmart":[0.0959,0.0959,0.0959,0.0959,0.0959,null,null],"Sam's Club":[0.1248,0.1248,0.1248,0.1248,0.1248,0.1248,0.1248],"Baker's":[0.1303,0.1303,0.1303,0.1303,0.1303,0.1303,0.1303],"Fareway":[null,null,null,null,null,0.1,0.1]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Hy-Vee":[0.0959,0.0959,0.0959,0.0959,0.0959,0.0959,0.0959],"Walmart":[0.0959,0.0959,0.0959,0.0959,0.0959,null,0.0959],"Sam's Club":[0.1248,0.1248,0.1248,0.1248,0.1248,0.1248,0.1248],"Baker's":[0.1303,0.1303,0.1303,0.1303,0.1303,0.1303,0.1303],"Fareway":[null,null,null,null,null,0.1,0.1]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -145,6 +145,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Hy-Vee</td><td>$0.0959 per oz</td><td><span class="tp-item">That&#39;s Smart! In Light Syrup Bartlett Bartlett Pear Halves 29 oz</span></td></tr>
+<tr><td>Walmart</td><td>$0.0959 per oz</td><td><span class="tp-item">Great Value Canned Pear Halves in Heavy Syrup, 29 oz Can</span></td></tr>
 <tr><td>Fareway</td><td>$0.10 per oz</td><td><span class="tp-item">Fareway Sliced Pears in Pear Juice</span></td></tr>
 <tr><td>Sam&#39;s Club</td><td>$0.1248 per oz</td><td><span class="tp-item">Del Monte Lite Pear Halves, 15 oz., 8 pk.</span></td></tr>
 <tr><td>Baker&#39;s</td><td>$0.1303 per oz</td><td><span class="tp-item">Kroger® Canned Pear Halves in Pear Juice 14.5 oz</span></td></tr>

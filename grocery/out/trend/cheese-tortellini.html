@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-19","07-20","07-21","07-22","07-23"],"s":{"Aldi":[0.1693,0.1693,0.1693,0.1693,0.1693],"Walmart":[0.1881,0.1881,0.1881,null,null],"Hy-Vee":[0.1902,0.1388,0.1388,0.1388,0.1388],"Sam's Club":[0.2194,0.2194,0.2194,0.2194,0.2194],"Baker's":[0.2468,0.2468,0.2468,0.2468,0.2468],"Family Fare":[0.2995,0.2995,0.2995,0.2995,0.2995],"Fareway":[0.3495,0.3495,0.3495,0.2621,0.2621]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-19","07-20","07-21","07-22","07-23"],"s":{"Aldi":[0.1693,0.1693,0.1693,0.1693,0.1693],"Walmart":[0.1881,0.1881,0.1881,null,0.1881],"Hy-Vee":[0.1902,0.1388,0.1388,0.1388,0.1388],"Sam's Club":[0.2194,0.2194,0.2194,0.2194,0.2194],"Baker's":[0.2468,0.2468,0.2468,0.2468,0.2468],"Family Fare":[0.2995,0.2995,0.2995,0.2995,0.2995],"Fareway":[0.3495,0.3495,0.3495,0.2621,0.2621]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -144,6 +144,7 @@ function tcChart(root, d){
 <tbody>
 <tr class="tp-low"><td>Hy-Vee</td><td>$0.1388 per oz</td><td><span class="tp-item">Hy-Vee Select ravioli or tortellini, 19 to 25 oz., $3.47</span></td></tr>
 <tr><td>Aldi</td><td>$0.1693 per oz</td><td><span class="tp-item">Priano Cheese Tortelloni</span></td></tr>
+<tr><td>Walmart</td><td>$0.1881 per oz</td><td><span class="tp-item">Great Value Family Size Cheese Tortellini, Pasta, 36 oz Bag</span></td></tr>
 <tr><td>Sam&#39;s Club</td><td>$0.2194 per oz</td><td><span class="tp-item">Member&#39;s Mark Five Cheese Tortellini (24 oz., 2 pk.)</span></td></tr>
 <tr><td>Baker&#39;s</td><td>$0.2468 per oz</td><td><span class="tp-item">Kroger Cheese Tortellini</span></td></tr>
 <tr><td>Fareway</td><td>$0.2621 per oz</td><td><span class="tp-item">Louisa Four Cheese Tortellini</span></td></tr>

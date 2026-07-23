@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Aldi":[0.79,0.79,0.79,0.79,0.79,0.79,0.79,0.79,0.79,0.79],"Walmart":[0.85,0.85,0.85,0.85,0.85,0.85,0.85,0.85,null,null],"Hy-Vee":[0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.89],"Fareway":[0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99],"Baker's":[0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Aldi":[0.79,0.79,0.79,0.79,0.79,0.79,0.79,0.79,0.79,0.79],"Walmart":[0.85,0.85,0.85,0.85,0.85,0.85,0.85,0.85,null,0.85],"Hy-Vee":[0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.89,0.89],"Fareway":[0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99],"Baker's":[0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -148,6 +148,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Aldi</td><td>$0.79 per lb</td><td><span class="tp-item">Cabbage, per lb</span></td></tr>
+<tr><td>Walmart</td><td>$0.85 per lb</td><td><span class="tp-item">Fresh Green Cabbage</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.89 per lb</td><td><span class="tp-item">Green Cabbage</span></td></tr>
 <tr><td>Baker&#39;s</td><td>$0.99 per lb</td><td><span class="tp-item">Green Cabbage</span></td></tr>
 <tr><td>Fareway</td><td>$0.99 per lb</td><td><span class="tp-item">Green Cabbage</span></td></tr>

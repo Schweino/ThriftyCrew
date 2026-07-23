@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-19","07-20","07-21","07-22","07-23"],"s":{"Baker's":[0.0155,0.0155,0.0155,0.0155,0.0155],"Walmart":[0.1233,0.1233,0.1233,null,null],"Hy-Vee":[0.172,0.172,0.172,0.172,0.172],"Family Fare":[0.2141,0.2141,0.2141,0.2141,0.2141],"Fareway":[null,null,null,0.1822,0.1822]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-19","07-20","07-21","07-22","07-23"],"s":{"Baker's":[0.0155,0.0155,0.0155,0.0155,0.0155],"Walmart":[0.1233,0.1233,0.1233,null,0.1233],"Hy-Vee":[0.172,0.172,0.172,0.172,0.172],"Family Fare":[0.2141,0.2141,0.2141,0.2141,0.2141],"Fareway":[null,null,null,0.1822,0.1822]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -143,6 +143,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Baker&#39;s</td><td>$0.0155 per oz</td><td><span class="tp-item">Kroger Buttermilk Jumbo Biscuits</span></td></tr>
+<tr><td>Walmart</td><td>$0.1233 per oz</td><td><span class="tp-item">Great Value Butter Flavor Flaky Jumbo Biscuits, 16 oz, 8 Cou</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.172 per oz</td><td><span class="tp-item">Hy-Vee Buttermilk Biscuits 10ct</span></td></tr>
 <tr><td>Fareway</td><td>$0.1822 per oz</td><td><span class="tp-item">Pillsbury Grands! Southern Homestyle Original Biscuits</span></td></tr>
 <tr><td>Family Fare</td><td>$0.2141 per oz</td><td><span class="tp-item">Pillsbury Southern Homestyle Buttermilk Biscuits 8 Ea</span></td></tr>

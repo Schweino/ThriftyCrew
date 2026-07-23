@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[0.134,0.134,0.165,0.165,0.165,null,null],"Sam's Club":[0.1538,0.1538,0.1538,0.1538,0.1538,0.1538,0.1538],"Baker's":[0.1745,0.1745,0.1745,0.1745,0.1745,0.1745,0.1745],"Hy-Vee":[0.1839,0.1839,0.1839,0.1839,0.1839,0.1839,0.1839],"Fareway":[0.198,0.198,0.198,0.198,0.198,0.198,0.198]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[0.134,0.134,0.165,0.165,0.165,null,0.165],"Sam's Club":[0.1538,0.1538,0.1538,0.1538,0.1538,0.1538,0.1538],"Baker's":[0.1745,0.1745,0.1745,0.1745,0.1745,0.1745,0.1745],"Hy-Vee":[0.1839,0.1839,0.1839,0.1839,0.1839,0.1839,0.1839],"Fareway":[0.198,0.198,0.198,0.198,0.198,0.198,0.198]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -145,6 +145,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Sam&#39;s Club</td><td>$0.1538 per oz</td><td><span class="tp-item">Dinty Moore Beef Stew, 15 oz., 6 pk.</span></td></tr>
+<tr><td>Walmart</td><td>$0.165 per oz</td><td><span class="tp-item">DINTY MOORE Beef Stew, Shelf-Stable, Steel Can 38 oz</span></td></tr>
 <tr><td>Baker&#39;s</td><td>$0.1745 per oz</td><td><span class="tp-item">Kroger® Beef Stew 20 oz</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.1839 per oz</td><td><span class="tp-item">Dinty Moore Beef Stew</span></td></tr>
 <tr><td>Fareway</td><td>$0.198 per oz</td><td><span class="tp-item">DINTY MOORE Beef Stew With Potatoes &amp; Carrots, 15 Oz Can</span></td></tr>

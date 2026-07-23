@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[0.1075,0.1075,0.1081,0.1081,0.1081,0.1081,0.1081,0.1081,null,null],"Aldi":[0.1181,0.1056,0.1056,0.1056,0.1056,0.1056,0.1056,0.1056,0.1056,0.1056],"Fareway":[0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244],"Hy-Vee":[0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244],"Sam's Club":[null,null,null,0.1368,0.1368,0.1368,0.1368,0.1368,0.1368,null]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[0.1075,0.1075,0.1081,0.1081,0.1081,0.1081,0.1081,0.1081,null,0.1081],"Aldi":[0.1181,0.1056,0.1056,0.1056,0.1056,0.1056,0.1056,0.1056,0.1056,0.1056],"Fareway":[0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244],"Hy-Vee":[0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244,0.1244],"Sam's Club":[null,null,null,0.1368,0.1368,0.1368,0.1368,0.1368,0.1368,null]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -148,6 +148,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Aldi</td><td>$0.1056 per oz</td><td><span class="tp-item">Baker&#39;s Corner Vanilla Frosting</span></td></tr>
+<tr><td>Walmart</td><td>$0.1081 per oz</td><td><span class="tp-item">Great Value Vanilla Frosting Tub White</span></td></tr>
 <tr><td>Fareway</td><td>$0.1244 per oz</td><td><span class="tp-item">Pillsbury Creamy Supreme Vanilla Frosting, 16 Oz Tub</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.1244 per oz</td><td><span class="tp-item">Pillsbury Creamy Supreme Vanilla Frosting</span></td></tr>
 </tbody></table>

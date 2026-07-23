@@ -125,7 +125,7 @@ function tcChart(root, d){
   render();
 }
 
-(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[0.0044,0.0044,0.0044,0.0044,0.0044,0.0044,0.0044,0.0044,null,null],"Aldi":[0.0048,0.0043,0.0043,0.0043,0.0043,0.0043,0.0043,0.0043,0.0043,0.0043],"Sam's Club":[0.0053,0.0053,null,0.01,0.0053,0.0053,0.0053,0.0053,0.0053,0.0053],"Hy-Vee":[0.0133,0.0133,0.0133,0.0133,0.0133,0.0133,0.01,0.01,0.01,0.01],"Fareway":[0.0146,0.0146,0.0146,0.0146,0.0146,0.0146,0.0146,0.0146,0.0146,0.0146]}}); })();
+(function(){ var el = document.getElementById("tp-chart"); if (el && typeof tcChart === "function") tcChart(el, {"u":"","w":["07-13","07-14","07-15","07-17","07-18","07-19","07-20","07-21","07-22","07-23"],"s":{"Walmart":[0.0044,0.0044,0.0044,0.0044,0.0044,0.0044,0.0044,0.0044,null,0.0044],"Aldi":[0.0048,0.0043,0.0043,0.0043,0.0043,0.0043,0.0043,0.0043,0.0043,0.0043],"Sam's Club":[0.0053,0.0053,null,0.01,0.0053,0.0053,0.0053,0.0053,0.0053,0.0053],"Hy-Vee":[0.0133,0.0133,0.0133,0.0133,0.0133,0.0133,0.01,0.01,0.01,0.01],"Fareway":[0.0146,0.0146,0.0146,0.0146,0.0146,0.0146,0.0146,0.0146,0.0146,0.0146]}}); })();
 </script>
 <p class="tp-note">Each line is one store. Tap a store below the chart to hide or show it; tap a dot for the exact price. Daily points for the last three weeks, weekly before that.</p>
 <h2>Week by week</h2>
@@ -148,6 +148,7 @@ function tcChart(root, d){
 <thead><tr><th>Store</th><th>Price</th><th>Item</th></tr></thead>
 <tbody>
 <tr class="tp-low"><td>Aldi</td><td>$0.0043 each</td><td><span class="tp-item">Welby Cotton Swabs</span></td></tr>
+<tr><td>Walmart</td><td>$0.0044 each</td><td><span class="tp-item">Equate 100% Pure Cotton Swabs</span></td></tr>
 <tr><td>Sam&#39;s Club</td><td>$0.0053 each</td><td><span class="tp-item">Q-tips Cotton Swabs, 1750 ct., 3 pk.</span></td></tr>
 <tr><td>Hy-Vee</td><td>$0.01 each</td><td><span class="tp-item">Q-Tips cotton swabs, 500 ct., $4.99</span></td></tr>
 <tr><td>Fareway</td><td>$0.0146 each</td><td><span class="tp-item">Q-tips Cotton Swabs</span></td></tr>
