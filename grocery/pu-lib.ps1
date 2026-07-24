@@ -63,6 +63,21 @@ function Get-LinkPerUnit {
       $un = ($mp.Groups[3].Value -replace '\s','') -replace 'fl','' -replace '^gallon$','gal' -replace '^quart$','qt' -replace '^pound$','lb' -replace '^(ltr|liters?|litres?)$','l'
       $mpDone = $true
     }
+  } elseif ($unit -in @('each','dozen')) {
+    # PACK-FIRST on a COUNT commodity: "N pk X oz" is N items (each) / N-of-12 (dozen). For 'each' the
+    # generic match below already lands on the same answer (un='pk' -> price/N); 'dozen' had NO pk handling
+    # at all, so eggs shaped "12 pk 2 oz" (the Kroger-API canonical multipack form, 2026-07-24) returned
+    # null and the cell went unpriced. Resolved here, in the one block that owns pack-first semantics.
+    # The trailing weight is REQUIRED by the regex, so a bare "2 pk" (two CARTONS, count-per-carton unknown)
+    # can never match - that shape stays with the generic rules exactly as before.
+    $mp = [regex]::Match($s, '([0-9]+)\s*(?:pk|pack|x|×)\s*([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|floz|oz|lbs?|pound|gal|gallon|qt|quart|ml|ltr|liters?|litres?|l)\b')
+    if ($mp.Success) {
+      $cnt = [double]$mp.Groups[1].Value
+      if ($cnt -gt 0) {
+        if ($unit -eq 'each') { return $price / $cnt }
+        return $price / ($cnt / 12.0)
+      }
+    }
   }
 
   if (-not $mpDone) {

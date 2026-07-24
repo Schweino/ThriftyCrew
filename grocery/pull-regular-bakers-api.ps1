@@ -29,25 +29,31 @@
   filter, the same division of labour the other pullers use. Picking a "best" item here would duplicate
   matching logic in a second place, which is how the two-copies-of-the-same-math blind spot got created.
 
-  *** STATUS 2026-07-24: EVALUATED, WORKS, NOT WIRED INTO THE PIPELINE. ONE BLOCKER. ***
-  The pull itself is sound (443/447 terms, 4,804 products, store-scoped, guard-10 contract clean, 97 of 116
-  comparable cells agreed with the browser-captured board within 2%). It is BLOCKED on one thing:
+  *** THE SIZE-BASIS RESOLVER (2026-07-24, v2 - what unblocked this puller). ***
+  Kroger's "N ct / M unit" size string carries BOTH conventions in live data, proven store-side:
+      "4 ct / 16 oz"   Kerrygold butter  netWeight 1.0 lb  -> 16 oz is the TOTAL   (per-item 4 oz)
+      "12 ct / 1 oz"   string cheese     netWeight 0.75 lb -> 1 oz is PER-ITEM     (total 12 oz)
+  Same shape, opposite meanings, no unit-price field to arbitrate - a string-only reading published
+  Kerrygold at $2.50/lb (4x under) and the butter band never blinked; guard 4 caught it. So v2 resolves the
+  basis from DATA, refusing when it cannot prove it:
 
-    KROGER'S "N ct / M unit" SIZE IS AMBIGUOUS AND THE ENGINE GUESSES WRONG.
-      "4 ct / 16 oz"  Kerrygold butter $9.99  -> 16 oz is the TOTAL     -> $9.99/lb
-      "6 ct / 8 fl oz" Horizon milk   $8.49   -> 8 fl oz is EACH box    -> 48 fl oz total
-    Same string shape, opposite meanings, and no unit-price field exists in the API response to arbitrate.
-    Our per-unit engine read the Kerrygold as 4 x 16 oz = 4 lb and published $2.50/lb - a 4x UNDERPRICE that
-    sailed straight through the butter price band (1.80-9.00) because it looks perfectly ordinary. Guard 4
-    (board vs verified link) is what caught it, along with ~30 more of the same class (chicken thighs came
-    out $0.699/lb against a $1.99 link). Guards exit 2; nothing shipped.
-
-  BEFORE THIS CAN FEED THE BOARD, resolve the basis from data rather than the string. The response carries
-  the two fields that can do it: items[].soldBy ("UNIT" vs by-weight) and itemInformation.netWeight
-  ("0.5 [lb_av]" on the 8 oz butter - authoritative). Rule to build and TEST: for a weight/volume commodity
-  prefer netWeight; fall back to the size string only when the shape is unambiguous (single quantity, no
-  "N ct /" prefix); refuse otherwise rather than guess. Also worth taking: productPageURI is the REAL product
-  URL ("/p/<slug>/<upc>"), which is what a link_url should be built from - never from productId alone.
+    1. soldBy=WEIGHT + size "1 lb" -> per-POUND price, size 'lb'. Its netWeight is the random tray/case
+       weight (Tyson breast reads 22.56 lb on a per-lb card) and MUST be ignored. Any other size with
+       soldBy=WEIGHT is refused - per-lb pricing with a not-per-lb label is a contradiction we don't guess at.
+    2. Single-quantity labels ("8 oz", "3 lb", "1 gal", "12 ct", "15.2 fl oz") are unambiguous: trust them.
+    3. Compound "N ct|pk / M oz|fl oz|lb": test BOTH hypotheses (M=total vs M=per-item) against
+       itemInformation.netWeight in log space; accept the nearer only if it is inside tolerance AND clearly
+       separated from the loser (a dead heat is a refusal - Kroger's own netWeight is sometimes wrong: a
+       Dr Pepper 12-pack carries a 24-pack's 19.53 lb, and that row must die, not ship). Weight units get a
+       tight tolerance; fl oz gets a wider one because netWeight is mass and density varies.
+    4. Resolved compounds emit "N pk X oz|fl oz" (per-item form) - the ONE shape our engine prices correctly
+       on every commodity axis: weight/volume commodities multiply to the total, each/dozen commodities read
+       N items (that split is pinned in test-pu-lib). Emitting the bare total would orphan eggs (dozen needs
+       the count); emitting the bare count would orphan butter (lb needs the weight).
+    5. No netWeight + compound shape, bare numbers that netWeight cannot corroborate, and every other
+       unparseable shape -> REFUSED, counted, and listed in out\kroger-api-eval\refused-<date>.json.
+       A refused row is a gap the coverage machinery can see; a guessed row is a lie nothing can.
+  Links come from productPageURI (the store's own /p/<slug>/<upc>), never guessed from productId.
 
   USAGE
     -Verify           compare against the current board and WRITE NOTHING (review before trusting)
@@ -57,8 +63,9 @@
 #>
 param(
   [switch]$Verify,
+  [switch]$SelfTest,
   [int]$Limit = 0,
-  [int]$ResultsPerTerm = 15,
+  [int]$ResultsPerTerm = 25,   # 15 missed real staples behind promo churn (vegetable oil, fresh cauliflower)
   [string]$LocationId = '61500319',   # Baker's - Saddlecreek, 888 S Saddle Creek Rd, Omaha 68106
   [int]$PaceMs = 180
 )
@@ -99,6 +106,148 @@ function Get-KrogerJson([string]$url) {
   return ([Text.Encoding]::UTF8.GetString($bytes) | ConvertFrom-Json)
 }
 
+function Get-NetOz([string]$netWeightRaw) {
+  # itemInformation.netWeight arrives as "0.5 [lb_av]" / "12 [oz_av]" / "1.2 [kg]". Returns ounces, or $null.
+  if (-not $netWeightRaw) { return $null }
+  $m = [regex]::Match($netWeightRaw, '([0-9]+(?:\.[0-9]+)?)\s*\[\s*(lb_av|oz_av|kg|g)\s*\]')
+  if (-not $m.Success) { return $null }
+  $v = [double]$m.Groups[1].Value
+  switch ($m.Groups[2].Value) {
+    'lb_av' { return $v * 16 }
+    'oz_av' { return $v }
+    'kg'    { return $v * 35.274 }
+    'g'     { return $v * 0.035274 }
+  }
+  return $null
+}
+
+function Resolve-KrogerSize([string]$sizeRaw, [string]$soldBy, [string]$netWeightRaw, [string]$name = '') {
+  # Returns @{ size = <canonical engine-parseable string> ; basis = <how it was proven> }
+  # or      @{ size = $null ; basis = 'refused: <reason>' }.  NEVER guesses - see the header.
+  $s = ([string]$sizeRaw).Trim()
+  $sl = $s.ToLower()
+  # normalize Kroger's spelled-out / shorthand unit words to the tokens every rule below expects
+  $sl = $sl -replace 'fluid\s+ounces?', 'fl oz'
+  $sl = $sl -replace '\bounces?\b', 'oz'
+  $sl = $sl -replace '\bfo\b', 'fl oz'          # Kroger prints "30 FO" for fluid ounces
+  $sl = $sl -replace '^net\s*wt\.?\s*', ''      # "net wt 15 oz (425g)" -> "15 oz (425g)"
+  $sl = ($sl -replace '\([^)]*\)', ' ')         # drop parentheticals: "(425g)", "(8.5 in)"
+  $sl = ($sl -replace '\s{2,}', ' ').Trim()
+
+  # (1) by-weight pricing: the price IS per pound; netWeight is the incidental tray/case weight - ignore it.
+  if ($soldBy -eq 'WEIGHT') {
+    if ($sl -match '^1\s*lbs?\.?$') { return @{ size = 'lb'; basis = 'soldby-weight' } }
+    return @{ size = $null; basis = 'refused: soldBy=WEIGHT with non-per-lb label [' + $s + ']' }
+  }
+
+  $netOz = Get-NetOz $netWeightRaw
+
+  # (2) compound "N <count-word> / M unit" - the ambiguous shape. Resolve M=total vs M=per-item via
+  # netWeight. The count word can be a NOUN ("8 biscuits / 16.3 oz", "4 sticks / 16 oz") - the shape,
+  # not the word, is what makes it a count-plus-weight compound.
+  $cm = [regex]::Match($sl, '^([0-9]+)\s*(?:ct|count|pk|packs?|biscuits?|sticks?|rolls?|bars?|cans?|bottles?|pouch(?:es)?|cups?|slices?|links?|patties|packets?|pods?|loaves|loaf|buns?|muffins?|bagels?|tortillas?|shells?|pieces?|ea|each)\s*/\s*([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|floz|oz|lbs?)(\s*each)?\b')
+  if ($cm.Success) {
+    $n = [double]$cm.Groups[1].Value
+    $mv = [double]$cm.Groups[2].Value
+    $mu = ($cm.Groups[3].Value -replace '\s','')
+    $isFl = ($mu -match 'fl|floz'); if ($mu -match '^lbs?$') { $mv = $mv * 16; $mu = 'oz' }
+    $declaredEach = [bool]$cm.Groups[4].Value
+    if ($n -le 0 -or $mv -le 0) { return @{ size = $null; basis = 'refused: degenerate compound [' + $s + ']' } }
+    if ($n -eq 1) { $tot = $mv }        # 1-count: both hypotheses coincide
+    else {
+      if ($null -eq $netOz -or $netOz -le 0) {
+        if ($declaredEach) { $tot = $n * $mv }   # "12 ct / 1 oz each" declares per-item explicitly
+        else { return @{ size = $null; basis = 'refused: compound [' + $s + '] with no netWeight to arbitrate' } }
+      } else {
+        # fl oz vs a MASS netWeight: assume ~water density (1 fl oz ~ 1.04 oz) and widen the tolerance.
+        $dens = 1.0; $tolWin = 1.30; if ($isFl) { $dens = 1.04; $tolWin = 1.50 }
+        $eTot  = [math]::Abs([math]::Log(($mv * $dens) / $netOz))
+        $eEach = [math]::Abs([math]::Log(($n * $mv * $dens) / $netOz))
+        $win = [math]::Min($eTot, $eEach); $lose = [math]::Max($eTot, $eEach)
+        if ($win -gt [math]::Log($tolWin)) { return @{ size = $null; basis = ('refused: compound [' + $s + '] matches neither reading (netWt ' + [math]::Round($netOz,1) + ' oz)') } }
+        if (($lose - $win) -lt [math]::Log(1.6)) { return @{ size = $null; basis = ('refused: compound [' + $s + '] readings too close to call (netWt ' + [math]::Round($netOz,1) + ' oz)') } }
+        $tot = if ($eTot -lt $eEach) { $mv } else { $n * $mv }
+        if ($declaredEach -and $eEach -gt $eTot) { return @{ size = $null; basis = ('refused: [' + $s + '] declares per-item but netWeight says total') } }
+      }
+    }
+    # Emit per-item multipack form: total AND count survive, so lb/oz/floz commodities price the total
+    # while each/dozen commodities price the count (the each-vs-weight split pinned in test-pu-lib).
+    $per = [math]::Round($tot / $n, 2)
+    $u = 'oz'; if ($isFl) { $u = 'fl oz' }
+    return @{ size = ([string][int]$n + ' pk ' + $per + ' ' + $u); basis = $(if ($n -eq 1) { 'label' } else { 'netweight' }) }
+  }
+
+  # (3) single-quantity weight/volume labels. Normally unambiguous - EXCEPT when the product NAME declares a
+  # pack count ("StarKist ... 3pk" with size "5 oz": is 5 oz the total or one can?). Both live conventions
+  # exist: Land O Lakes "2 Pack" size "2 lb" is the TOTAL, StarKist "3pk" size "5 oz" is PER-CAN. netWeight
+  # arbitrates exactly as it does for compounds; without it a name-counted single label is a refusal.
+  # Resolved rows emit the "N pk X oz" pack form so guard 5's name-count reconciliation holds by construction.
+  $nameCnt = 0
+  if ($name) {
+    $ncm = [regex]::Match($name.ToLower(), '\b([0-9]+)\s*(?:-\s*)?(?:pk|pack|count|ct)\b')
+    if ($ncm.Success) { $nc = [int]$ncm.Groups[1].Value; if ($nc -ge 2 -and $nc -le 48) { $nameCnt = $nc } }
+  }
+  $sq = [regex]::Match($sl, '^([0-9]+(?:\.[0-9]+)?)\s*(fl\s*oz|floz|oz|lbs?)\.?$')
+  if ($sq.Success -and $nameCnt -gt 1) {
+    $v = [double]$sq.Groups[1].Value
+    $u = ($sq.Groups[2].Value -replace '\s','') -replace 'floz','floz'
+    $isFl = ($u -match 'fl'); $inOz = $v; if ($u -match '^lbs?$') { $inOz = $v * 16 }
+    if ($null -eq $netOz -or $netOz -le 0) { return @{ size = $null; basis = ('refused: name declares ' + $nameCnt + '-pack but single label [' + $s + '] has no netWeight to arbitrate') } }
+    $dens = 1.0; $tolWin = 1.30; if ($isFl) { $dens = 1.04; $tolWin = 1.50 }
+    $eTot  = [math]::Abs([math]::Log(($inOz * $dens) / $netOz))            # label IS the pack total
+    $eEach = [math]::Abs([math]::Log(($nameCnt * $inOz * $dens) / $netOz)) # label is one item of the pack
+    $win = [math]::Min($eTot, $eEach); $lose = [math]::Max($eTot, $eEach)
+    if ($win -gt [math]::Log($tolWin) -or (($lose - $win) -lt [math]::Log(1.6))) {
+      return @{ size = $null; basis = ('refused: name ' + $nameCnt + '-pack vs label [' + $s + '] - netWeight ' + [math]::Round($netOz,1) + ' oz proves neither reading') }
+    }
+    $totOz = if ($eTot -lt $eEach) { $inOz } else { $nameCnt * $inOz }   # everything in oz - a lb label already converted
+    $per = [math]::Round($totOz / $nameCnt, 2)
+    $uu = 'oz'; if ($isFl) { $uu = 'fl oz' }
+    return @{ size = ([string]$nameCnt + ' pk ' + $per + ' ' + $uu); basis = 'netweight-namecount' }
+  }
+  # truly single (no name-declared count) - trust the label.
+  if ($sl -match '^1\s*lbs?\.?$')                        { return @{ size = 'lb'; basis = 'label' } }
+  if ($sl -match '^([0-9]+(?:\.[0-9]+)?)\s*lbs?\.?$')    { return @{ size = ($sl -replace 'lbs\b','lb'); basis = 'label' } }
+  if ($sl -match '^[0-9]+(?:\.[0-9]+)?\s*(fl\s*oz|floz|oz)\.?$') { return @{ size = ($sl -replace 'floz','fl oz'); basis = 'label' } }
+  if ($sl -match '^([0-9]+)\s*(ct|count|ea|each)(\s*\(.*\))?$') {
+    $mm = [regex]::Match($sl, '^([0-9]+)')
+    return @{ size = ($mm.Groups[1].Value + ' ct'); basis = 'label' }   # "(8.5 in)" plate-diameter suffix dropped
+  }
+  if ($sl -match '^([0-9]+)\s*(rolls?|sheets?)\b')       { $mm = [regex]::Match($sl, '^([0-9]+)'); return @{ size = ($mm.Groups[1].Value + ' ct'); basis = 'label' } }
+  if ($sl -match '^([0-9]+(?:\.[0-9]+)?|[0-9]+/[0-9]+)\s*(gal|gallon)s?\.?$') { return @{ size = ($sl -replace 'gallons?\b','gal'); basis = 'label' } }
+  if ($sl -match '^([0-9]+(?:\.[0-9]+)?)\s*(l|liter|litre)s?\.?$') {
+    $mm = [regex]::Match($sl, '^([0-9]+(?:\.[0-9]+)?)')
+    return @{ size = ([string][math]::Round([double]$mm.Groups[1].Value * 33.814, 1) + ' fl oz'); basis = 'label' }
+  }
+  if ($sl -match '^([0-9]+(?:\.[0-9]+)?)\s*ml\.?$') {
+    $mm = [regex]::Match($sl, '^([0-9]+(?:\.[0-9]+)?)')
+    return @{ size = ([string][math]::Round([double]$mm.Groups[1].Value / 29.5735, 1) + ' fl oz'); basis = 'label' }
+  }
+  if ($sl -match '^(dozen|1\s*doz)$')                    { return @{ size = '12 ct'; basis = 'label' } }
+  if ($sl -match '^(each|1\s*ea)$')                      { return @{ size = 'each'; basis = 'label' } }
+  # pt/qt pass through UNCONVERTED: berries sold by the "pint" are dry-volume clamshells, and the engine's
+  # commodity-declared pint_oz machinery owns that translation - converting to fl oz here would bypass it.
+  if ($sl -match '^[0-9]+(?:\.[0-9]+)?\s*(pt|pints?|qt|quarts?)\.?$') { return @{ size = $sl; basis = 'label' } }
+  # bare "N pk" is N items, same as "N ct": count-commodities divide by it, weight commodities correctly
+  # cannot price it (a pack count carries no weight).
+  if ($sl -match '^([0-9]+)\s*(?:pk|packs?)$') { $mm = [regex]::Match($sl, '^([0-9]+)'); return @{ size = ($mm.Groups[1].Value + ' ct'); basis = 'label' } }
+  # area-sized rolls (foil "75 sq ft", wax paper): ONE roll = one each. The commodity is priced per box on
+  # the board (cheapest roll wins), exactly how the browser rows always recorded these.
+  if ($sl -match '^[0-9]+(?:\.[0-9]+)?\s*(sq\s*\.?\s*(ft|feet)|sf)$') { return @{ size = 'each'; basis = 'label' } }
+
+  # (4) bare number ("8" on the Kerrygold foil = 8 oz): only when netWeight corroborates the oz reading.
+  if ($sl -match '^([0-9]+(?:\.[0-9]+)?)$') {
+    $v = [double]$sl
+    if ($null -ne $netOz -and $netOz -gt 0 -and $v -gt 0) {
+      $e = [math]::Abs([math]::Log($v / $netOz))
+      if ($e -le [math]::Log(1.2)) { return @{ size = ([string]$v + ' oz'); basis = 'netweight' } }
+    }
+    return @{ size = $null; basis = 'refused: bare number [' + $s + '] netWeight cannot corroborate' }
+  }
+
+  return @{ size = $null; basis = 'refused: unrecognized shape [' + $s + ']' }
+}
+
 function Clean-Name([string]$s) {
   # Brand glyphs only: (R), (TM), the replacement char, and a curly apostrophe -> straight. Never touch words,
   # sizes or numbers - the matcher and the per-unit engine both read this string.
@@ -115,6 +264,70 @@ function Clean-Name([string]$s) {
   return (($t -replace '\s{2,}', ' ').Trim())
 }
 
+# ---------------------------------------------------------------- self-test (no credentials, no network)
+# Fixtures are REAL rows read off the Saddlecreek store on 2026-07-24 - every case is a known answer, and
+# several are the exact products that produced the 4x Kerrygold underprice this resolver exists to prevent.
+if ($SelfTest) {
+  $fail = 0
+  function T([string]$label, $got, [string]$want) {
+    $g = if ($null -eq $got) { '<refused>' } else { [string]$got }
+    if ($g -eq $want) { Write-Output ("ok    " + $label + "  -> " + $g) }
+    else { Write-Output ("FAIL  " + $label + "  got [" + $g + "] want [" + $want + "]"); $script:fail++ }
+  }
+  # the two live conventions of the SAME compound shape, both proven by netWeight
+  T 'Kerrygold "4 ct / 16 oz" nw 1.0 lb (M=TOTAL)'    (Resolve-KrogerSize '4 ct / 16 oz' 'UNIT' '1.0 [lb_av]').size    '4 pk 4 oz'
+  T 'string cheese "12 ct / 1 oz" nw 0.75 lb (M=EACH)' (Resolve-KrogerSize '12 ct / 1 oz' 'UNIT' '0.75 [lb_av]').size  '12 pk 1 oz'
+  T 'eggs "12 ct / 24 oz" nw 1.5 lb (M=TOTAL)'         (Resolve-KrogerSize '12 ct / 24 oz' 'UNIT' '1.5 [lb_av]').size  '12 pk 2 oz'
+  # fl oz packs: netWeight is MASS; density assumption only has to split hypotheses a factor of N apart
+  T 'Horizon "6 ct / 8 fl oz" nw 3.29 lb (M=EACH)'     (Resolve-KrogerSize '6 ct / 8 fl oz' 'UNIT' '3.29 [lb_av]').size '6 pk 8 fl oz'
+  T 'Sprite "12 pk / 12 fl oz" nw 9.9 lb (M=EACH)'     (Resolve-KrogerSize '12 pk / 12 fl oz' 'UNIT' '9.9 [lb_av]').size '12 pk 12 fl oz'
+  # Kroger's own netWeight can be wrong (a 12-pack wearing a 24-pack's 19.53 lb) - MUST refuse, not guess
+  T 'Dr Pepper bad netWeight -> refuse'                (Resolve-KrogerSize '12 pk / 12 fl oz' 'UNIT' '19.53 [lb_av]').size '<refused>'
+  T 'compound with NO netWeight -> refuse'             (Resolve-KrogerSize '4 ct / 16 oz' 'UNIT' '').size               '<refused>'
+  # explicit "each" suffix declares per-item even without netWeight
+  T 'Sargento "12 ct / 1 oz each" no nw'               (Resolve-KrogerSize '12 ct / 1 oz each' 'UNIT' '').size          '12 pk 1 oz'
+  # by-weight pricing: per-lb, and the tray/case netWeight (Tyson 22.56 lb!) must be IGNORED
+  T 'Heritage breast "1 lb" WEIGHT nw 4.63 lb'         (Resolve-KrogerSize '1 lb' 'WEIGHT' '4.63 [lb_av]').size         'lb'
+  T 'Tyson "1 lb" WEIGHT nw 22.56 lb'                  (Resolve-KrogerSize '1 lb' 'WEIGHT' '22.56 [lb_av]').size        'lb'
+  T 'WEIGHT with non-1-lb label -> refuse'             (Resolve-KrogerSize '10 lb' 'WEIGHT' '10 [lb_av]').size          '<refused>'
+  # unambiguous single-quantity labels pass through
+  T 'fixed 1.25 lb tray, soldBy UNIT'                  (Resolve-KrogerSize '1.25 lb' 'UNIT' '1.25 [lb_av]').size        '1.25 lb'
+  T '"32 oz" single'                                   (Resolve-KrogerSize '32 oz' 'UNIT' '2.0 [lb_av]').size           '32 oz'
+  T '"1 gal" single'                                   (Resolve-KrogerSize '1 gal' 'UNIT' '8.6 [lb_av]').size           '1 gal'
+  T '"1/2 gal" fraction'                               (Resolve-KrogerSize '1/2 gal' 'UNIT' '').size                    '1/2 gal'
+  T '"15.2 fl oz" single'                              (Resolve-KrogerSize '15.2 fl oz' 'UNIT' '').size                 '15.2 fl oz'
+  T 'plates "48 ct (8.5 in)" -> count, suffix dropped' (Resolve-KrogerSize '48 ct (8.5 in)' 'UNIT' '1.3 [lb_av]').size  '48 ct'
+  T '"12 rolls" -> 12 ct'                              (Resolve-KrogerSize '12 rolls' 'UNIT' '').size                   '12 ct'
+  T '"2 l" -> fl oz'                                   (Resolve-KrogerSize '2 l' 'UNIT' '').size                        '67.6 fl oz'
+  # bare number: only a corroborating netWeight licenses the oz reading
+  T 'Kerrygold foil "8" nw 0.5 lb'                     (Resolve-KrogerSize '8' 'UNIT' '0.5 [lb_av]').size               '8 oz'
+  T 'bare "8" no netWeight -> refuse'                  (Resolve-KrogerSize '8' 'UNIT' '').size                          '<refused>'
+  # long-tail shapes from the first live sweep (369 refusals triaged 2026-07-24)
+  T 'butter "4 sticks / 16 oz" nw 1 lb (word count)'   (Resolve-KrogerSize '4 sticks / 16 oz' 'UNIT' '1.0 [lb_av]').size '4 pk 4 oz'
+  T 'biscuits "8 biscuits / 16.3 oz" nw 1.02 lb'       (Resolve-KrogerSize '8 biscuits / 16.3 oz' 'UNIT' '1.02 [lb_av]').size '8 pk 2.04 oz'
+  T '"12 ounces" spelled out'                          (Resolve-KrogerSize '12 ounces' 'UNIT' '').size                  '12 oz'
+  T '"64 fluid ounces" spelled out'                    (Resolve-KrogerSize '64 fluid ounces' 'UNIT' '').size            '64 fl oz'
+  T '"30 fo" Kroger fluid-oz shorthand'                (Resolve-KrogerSize '30 fo' 'UNIT' '').size                      '30 fl oz'
+  T '"net wt 15 oz (425g)" prefix+parenthetical'       (Resolve-KrogerSize 'net wt 15 oz (425g)' 'UNIT' '').size        '15 oz'
+  T '"1 pt" passes through (pint_oz machinery owns it)' (Resolve-KrogerSize '1 pt' 'UNIT' '').size                      '1 pt'
+  T '"1 qt" passes through'                            (Resolve-KrogerSize '1 qt' 'UNIT' '').size                       '1 qt'
+  T 'bare "2 pk" -> 2 ct (count only, no weight)'      (Resolve-KrogerSize '2 pk' 'UNIT' '').size                       '2 ct'
+  T 'foil "75 sq ft" -> each (one roll)'               (Resolve-KrogerSize '75 sq ft' 'UNIT' '1.1 [lb_av]').size        'each'
+  T 'foil "75 sf" shorthand -> each'                   (Resolve-KrogerSize '75 sf' 'UNIT' '').size                      'each'
+  # single label + NAME-declared pack count: netWeight arbitrates total-vs-per-item (guard 5's class)
+  T 'StarKist "5 oz" name 3pk nw 0.94 lb (per-CAN)'    (Resolve-KrogerSize '5 oz' 'UNIT' '0.94 [lb_av]' 'StarKist Chunk Light Tuna 3pk Can').size '3 pk 5 oz'
+  T 'LandOLakes "2 lb" name 2 Pack nw 2.0 lb (TOTAL)'  (Resolve-KrogerSize '2 lb' 'UNIT' '2.0 [lb_av]' 'Land O Lakes Butter Sticks 2 Pack').size '2 pk 16 oz'
+  T 'name-pack single label, no netWeight -> refuse'   (Resolve-KrogerSize '10.5 oz' 'UNIT' '' 'Bobos PB&J 5 Pack Sleeve').size '<refused>'
+  T 'Bobos "10.5 oz" 5 Pack nw 10.5 oz (TOTAL)'        (Resolve-KrogerSize '10.5 oz' 'UNIT' '0.66 [lb_av]' 'Bobos PB&J 5 Pack Sleeve').size '5 pk 2.1 oz'
+  T 'name-count does NOT fire on count labels'         (Resolve-KrogerSize '12 ct' 'UNIT' '1.0 [lb_av]' 'Eggo Waffles 12 ct').size '12 ct'
+  # the emitted multipack form must price correctly on BOTH commodity axes (this is why we emit "N pk X oz")
+  . (Join-Path $root 'pu-lib.ps1')
+  T 'engine: "4 pk 4 oz" on an oz commodity'   ('{0:N4}' -f (Get-LinkPerUnit '4 pk 4 oz' 'oz' 9.99 'Kerrygold Butter Sticks'))   ('{0:N4}' -f 0.6244)
+  T 'engine: "12 pk 2 oz" on a dozen commodity' ('{0:N4}' -f (Get-LinkPerUnit '12 pk 2 oz' 'dozen' 3.99 'Eggs'))                 ('{0:N4}' -f 3.99)
+  T 'engine: "12 pk 12 fl oz" on a floz commodity' ('{0:N4}' -f (Get-LinkPerUnit '12 pk 12 fl oz' 'floz' 11.99 'Sprite Cans'))   ('{0:N4}' -f 0.0833)
+  if ($fail -eq 0) { Write-Output 'SELF-TEST PASS'; exit 0 } else { Write-Output ("SELF-TEST FAIL: " + $fail + " case(s)"); exit 1 }
+}
+
 # ---------------------------------------------------------------- pull
 $terms = (Get-Content (Join-Path $root 'commodity-search.json') -Raw | ConvertFrom-Json).terms
 $termList = @($terms.PSObject.Properties)
@@ -123,8 +336,8 @@ Write-Output ("bakers-api: {0} term(s), store {1}, {2} results/term" -f $termLis
 
 $deals = New-Object System.Collections.Generic.List[object]
 $seen = @{}          # keyed by productId: a product legitimately answers several terms
-$stats = [ordered]@{ terms=0; fail=0; products=0; promo=0; nopriced=0 }
-$ambiguous = New-Object System.Collections.Generic.List[object]
+$stats = [ordered]@{ terms=0; fail=0; products=0; promo=0; nopriced=0; refused=0 }
+$refusals = New-Object System.Collections.Generic.List[object]
 
 foreach ($tp in $termList) {
   $id = $tp.Name; $term = [string]$tp.Value
@@ -147,37 +360,46 @@ foreach ($tp in $termList) {
     if ($seen.ContainsKey($prodId)) { continue }
     $seen[$prodId] = $true
     $name = Clean-Name ([string]$p.description)
-    $size = ([string]$it.size).Trim()
-    if ($size -match '^\s*1\s*lb\s*$') { $size = 'lb' }   # our per-lb convention; identical math, canonical shape
+    $nwRaw = ''; if ($p.itemInformation -and $p.itemInformation.netWeight) { $nwRaw = [string]$p.itemInformation.netWeight }
+    $res = Resolve-KrogerSize ([string]$it.size) ([string]$it.soldBy) $nwRaw $name
+    if ($null -eq $res.size) {
+      $stats.refused++
+      $refusals.Add([pscustomobject]@{ item=$name; size_raw=[string]$it.size; soldBy=[string]$it.soldBy; netWeight=$nwRaw; price=$cur; reason=[string]$res.basis; product_id=$prodId })
+      continue
+    }
+    # real product URL from the store's own page URI (strip the API-attribution query); never guessed
+    $link = ''
+    if ($p.productPageURI) { $link = 'https://www.bakersplus.com' + (([string]$p.productPageURI) -split '\?')[0] }
     $row = [ordered]@{
       store       = "Baker's"
       item        = $name
       ad_price    = ('$' + $cur.ToString('0.00'))
-      size        = $size
+      size        = [string]$res.size
       regular     = $null
       source_ad   = 'kroger-api'
       as_of       = $today
       current_price = $cur          # guard-10 contract: what the store charges, recorded independently
       product_id  = $prodId
-      # NO link_url on purpose. Baker's product pages are /p/<slug>/<upc>, and a URL built from productId
-      # alone is a GUESS - shipping an unverified link would put a possibly-404 "See item" on a tile, which
-      # is worse than the honest store-search fallback the page already uses. product_id is recorded so a
-      # later pass can resolve real URLs and prove them before any of them reach a tile.
+      size_raw    = [string]$it.size
+      size_basis  = [string]$res.basis
       stock_level = [string]$it.inventory.stockLevel
     }
+    if ($link) { $row['link_url'] = $link }
     if ($promo -gt 0 -and $reg -gt $promo) { $row['base_price'] = $reg; $row['marked_down'] = $true; $stats.promo++ }
     $deals.Add([pscustomobject]$row)
     $stats.products++
-    # flag the one genuinely ambiguous size shape for human eyes (package price vs per-lb)
-    if ($size -match '^\s*[\d.]+\s*lb\s*$' -and $size -ne 'lb') { $ambiguous.Add(($name + ' | ' + $size + ' | $' + $cur)) }
   }
   Start-Sleep -Milliseconds $PaceMs
 }
 
-Write-Output ("bakers-api: terms ok={0} failed={1} | products={2} (promo/sale={3}, skipped-unpriced={4})" -f $stats.terms, $stats.fail, $stats.products, $stats.promo, $stats.nopriced)
-if ($ambiguous.Count -gt 0) {
-  Write-Output ("bakers-api: {0} row(s) carry a multi-pound pack size (price could be pack or per-lb - the band + ranker bound this, listing for eyes):" -f $ambiguous.Count)
-  $ambiguous | Select-Object -First 8 | ForEach-Object { Write-Output ('    ' + $_) }
+Write-Output ("bakers-api: terms ok={0} failed={1} | rows={2} (promo/sale={3}, unpriced={4}, size-REFUSED={5})" -f $stats.terms, $stats.fail, $stats.products, $stats.promo, $stats.nopriced, $stats.refused)
+if ($refusals.Count -gt 0) {
+  $refDir = Join-Path $out 'kroger-api-eval'
+  if (-not (Test-Path $refDir)) { New-Item -ItemType Directory -Path $refDir -Force | Out-Null }
+  $refFile = Join-Path $refDir ('refused-' + $today + '.json')
+  ([ordered]@{ date=$today; count=$refusals.Count; note='rows the size-basis resolver REFUSED to price (see pull-regular-bakers-api.ps1 header) - each is a coverage gap, never a guessed price'; rows=$refusals.ToArray() } | ConvertTo-Json -Depth 4) | Set-Content $refFile -Encoding UTF8
+  Write-Output ("bakers-api: {0} refusal(s) listed in {1} - top reasons:" -f $refusals.Count, (Split-Path $refFile -Leaf))
+  $refusals | Group-Object { ($_.reason -split '\[')[0] } | Sort-Object Count -Descending | Select-Object -First 5 | ForEach-Object { Write-Output ('    ' + $_.Count + 'x  ' + $_.Name) }
 }
 
 # ---------------------------------------------------------------- verify mode: compare, write nothing

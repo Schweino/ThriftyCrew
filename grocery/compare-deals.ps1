@@ -156,6 +156,14 @@ function Get-SizeAmount([string]$sizeText, [string]$unit) {
     $per = Convert-ToUnit $each $tok $unit
     if ($per -ne $null) { return $cnt * $per }
   }
+  # Same pack-first shape on a COUNT commodity: "12 pk 2 oz" is 12 ITEMS (1 dozen), the per-item weight is
+  # incidental. 'each' already got here via the first-number scan (pk is in its count class); 'dozen' did NOT
+  # (Convert-ToUnit dozen has no pk), so eggs in the Kroger-API canonical form went unpriced (2026-07-24).
+  # The regex REQUIRES the trailing weight, so a bare "2 pk" (2 cartons, count unknown) can never match here.
+  if ($mm.Success -and ($unit -eq 'each' -or $unit -eq 'dozen')) {
+    $cnt = [double]$mm.Groups[1].Value
+    if ($cnt -gt 0) { if ($unit -eq 'each') { return $cnt } else { return $cnt / 12.0 } }
+  }
   # size RANGE like "4 to 6 oz" / "9 or 12 oz": in grocery ads this means CHOOSE YOUR SIZE at one price, so
   # the LARGER size is genuinely purchasable and its per-unit is the honest achievable price (a shopper picks
   # the 12 oz at $3.99). Using the smaller end would inflate per-units and band-drop real deals - the frozen

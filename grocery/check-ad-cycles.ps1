@@ -107,6 +107,19 @@ if ($serverDue) {
     # cookie), so it runs headless right here, every day, like Family Fare's. Non-fatal: a bad run keeps the
     # last good file (throttle-wipeout guard) and the price guards still gate the publish.
     try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'pull-regular-hyvee.ps1') | Out-Null; Log 'Hy-Vee everyday refreshed (current shelf price, Omaha #01)' } catch { Log ('Hy-Vee pull threw: ' + $_.Exception.Message) }
+    # Baker's via Kroger's sanctioned public API (2026-07-24): daily headless current+promo prices for the
+    # Saddlecreek store, replacing the browser scan that needed the Claude app awake. Credentials are the
+    # gitignored grocery\.krogerkey locally (env vars in CI); WHERE THE KEY IS ABSENT (the cloud backup
+    # runner, unless Brad adds the secrets) the pull throws, we log it, and the newest committed capture
+    # keeps serving - same graceful degradation as any other store having an off day. The link snapshots
+    # refresh from the SAME pull (the Hy-Vee lesson) so guard 4 compares like against like.
+    try {
+      & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'pull-regular-bakers-api.ps1') | Out-Null
+      if ($LASTEXITCODE -eq 0) {
+        & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'refresh-bakers-links.ps1') | Out-Null
+        Log "Baker's everyday+promo refreshed via Kroger API (Saddlecreek) + link snapshots synced"
+      } else { Log ("Baker's API pull rc=$LASTEXITCODE (thin or failed) - keeping newest existing capture") }
+    } catch { Log ("Baker's API pull threw: " + $_.Exception.Message + ' - keeping newest existing capture') }
     # and re-point Hy-Vee's stored link snapshots at those same fresh numbers, so the board and its "See item"
     # link quote one number. Skip this and yesterday's snapshots become override pins that drag the board back.
     try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'refresh-hyvee-links.ps1') | Out-Null; Log 'Hy-Vee link snapshots refreshed' } catch { Log ('Hy-Vee link refresh threw: ' + $_.Exception.Message) }

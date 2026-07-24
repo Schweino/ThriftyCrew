@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-07-24 07:09",
+    "generated":  "2026-07-24 08:08",
     "board":  "comparison-2026-07-23.json",
-    "total_tiles":  2294,
-    "violations":  266,
+    "total_tiles":  2438,
+    "violations":  504,
     "by_store":  {
                      "Walmart":  {
                                      "coverage":  59,
@@ -35,18 +35,58 @@
                                   "violations":  17
                               },
                      "Baker\u0027s":  {
-                                          "coverage":  21,
-                                          "tiles":  258,
-                                          "violations":  21
+                                          "coverage":  259,
+                                          "tiles":  402,
+                                          "violations":  259
                                       }
                  },
     "rows":  [
+                 {
+                     "id":  "ground-beef-8020",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger 80/20 Ground Beef Packs 3 LB BIG DEAL!",
+                     "link":  ""
+                 },
                  {
                      "id":  "achiote-paste",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Chef Merito Achiote Seasoning Paste, 3.5 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "air-freshener",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Glade Soft Mist Odor Fighting Aerosol Air Freshener, Lavender, 7.3 oz, 1 count",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "alfredo-sauce",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Traditional Alfredo Sauce",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "all-purpose-cleaner",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Mercado Lavender Scented Multi-Purpose Cleaner",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "flour",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Bleached All Purpose Enriched Flour",
                      "link":  ""
                  },
                  {
@@ -66,11 +106,43 @@
                      "link":  ""
                  },
                  {
+                     "id":  "ground-allspice",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Tampico Allspice Ground",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "almonds",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Whole Almonds",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "apple-cider-vinegar",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Apple Cider Vinegar",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "apple-juice",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Smart Way Apple Juice",
+                     "link":  ""
+                 },
+                 {
                      "id":  "apples",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Granny Smith Apples 3 Pound Bag",
+                     "board":  "Kroger Pink Lady Apples 5 Pound Bag BIG DEAL!",
                      "link":  ""
                  },
                  {
@@ -91,10 +163,26 @@
                  },
                  {
                      "id":  "applesauce",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Tree Top No Sugar Added Apple Sauce",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "applesauce",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Mott\u0027s Apple Sauce 6 Ea",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "asparagus",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Cut Asparagus Spears",
                      "link":  ""
                  },
                  {
@@ -106,11 +194,43 @@
                      "link":  ""
                  },
                  {
+                     "id":  "avocados",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Fresh Hass Avocados Bag",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "baby-food",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Comforts Stage 2 Baby Food Puree Pouches Variety Pack BIG DEAL!",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "baby-formula",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Comforts Infant Premium Immune Blend 6 Non GMO Baby Formula with Iron BIG DEAL!",
+                     "link":  ""
+                 },
+                 {
                      "id":  "baby-wipes",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Pampers Baby Wipes",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bacon",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Private Selection Gruyere and Bacon White Cheddar Macaroni and Cheese",
                      "link":  ""
                  },
                  {
@@ -130,6 +250,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "baking-powder",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Baking Powder",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "baking-soda",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Pure Baking Soda",
+                     "link":  ""
+                 },
+                 {
                      "id":  "bananas",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -143,6 +279,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Irish Spring Bar Soap, Original  Clean, 4 oz., 20 ct.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bar-soap",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Irish Spring Bar Soap Original Scent",
                      "link":  ""
                  },
                  {
@@ -163,10 +307,26 @@
                  },
                  {
                      "id":  "fresh-basil",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Gotham Greens Fresh Basil",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fresh-basil",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Fresh Basil, 0.5 oz Clamshell",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "batteries",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Alkaline AA Batteries Value Pack",
                      "link":  ""
                  },
                  {
@@ -182,7 +342,23 @@
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Simple Truth Organic Bay Leaves",
+                     "board":  "Tampico Bay Leaves Whole",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bbq-sauce",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kraft Sweet Honey Slow-Simmered BBQ Sauce",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "beef-jerky",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Original Smokehouse Beef Jerky",
                      "link":  ""
                  },
                  {
@@ -195,10 +371,26 @@
                  },
                  {
                      "id":  "black-pepper",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Simple Truth Protein Black Pepper Lentils Brown Rice and Ancient Grains Whole Grain Blend",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "black-pepper",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Thats Smart Black Pepper",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "blue-cheese-dressing",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Chunky Blue Cheese Salad Dressing",
                      "link":  ""
                  },
                  {
@@ -207,6 +399,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Blueberries",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "blueberries",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh Blueberries - 18 OZ - Clamshell",
                      "link":  ""
                  },
                  {
@@ -223,6 +423,22 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Emergency Essentials Freeze-Dried Whole Blueberries, 10 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "lotion",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Cocoa Butter Lotion",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "body-wash",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Suave Essentials Cocoa Butter \u0026 Shea Body Wash",
                      "link":  ""
                  },
                  {
@@ -251,6 +467,14 @@
                  },
                  {
                      "id":  "bottled-water",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Purified Mini Bottled Water",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bottled-water",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -263,6 +487,22 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy-Vee spring water, 24 pk. mini bottles 10 fl. oz., $3.99",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bouillon",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Knorr Chicken Cube Bouillon",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bread",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "The Cheesecake Factory At Home Brown Bread Wheat Dinner Rolls",
                      "link":  ""
                  },
                  {
@@ -282,11 +522,43 @@
                      "link":  ""
                  },
                  {
+                     "id":  "bread-crumbs",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Plain Bread Crumbs",
+                     "link":  ""
+                 },
+                 {
                      "id":  "cereal",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy Vee Whole Grain Raisin Bran",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "brown-rice",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Long Grain Brown Rice",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "buttermilk",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Cultured 1% Lowfat Buttermilk Half Gallon",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "caesar-dressing",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Ken\u0027s Steak House Creamy Caesar Salad Dressing",
                      "link":  ""
                  },
                  {
@@ -362,11 +634,27 @@
                      "link":  ""
                  },
                  {
+                     "id":  "canned-chili",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Original Chili With Beans",
+                     "link":  ""
+                 },
+                 {
                      "id":  "coconut-milk-canned",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Thai Kitchen Unsweetened Coconut Milk 13.66 fl. oz. cans, 6 pk.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-corn",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Smart Way Whole Kernel Sweet Golden Corn",
                      "link":  ""
                  },
                  {
@@ -402,6 +690,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "fruit-cocktail",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Canned Fruit Cocktail in Heavy Syrup",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-green-beans",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Smart Way Cut Green Beans",
+                     "link":  ""
+                 },
+                 {
                      "id":  "canned-mushrooms",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -410,11 +714,27 @@
                      "link":  ""
                  },
                  {
+                     "id":  "canned-mushrooms",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Del Monte Mushroom Stems and Pieces",
+                     "link":  ""
+                 },
+                 {
                      "id":  "canned-pasta",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Chef Boyardee Beef Ravioli 15 oz., 12 pk.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-peaches",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Canned Yellow Cling Sliced Peaches in Heavy Syrup",
                      "link":  ""
                  },
                  {
@@ -435,10 +755,34 @@
                  },
                  {
                      "id":  "canned-peas",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Smart Way Sweet Peas",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-peas",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Le Sueur Very Young Small Sweet Peas, 15 oz., 8 ct.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-pineapple",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Canned Crushed Pineapple in Pineapple Juice",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-pinto-beans",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Pinto Beans BIG DEALl!",
                      "link":  ""
                  },
                  {
@@ -450,11 +794,27 @@
                      "link":  ""
                  },
                  {
+                     "id":  "canned-salmon",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Chicken of the Sea Wild Caught Alaskan Pink Salmon, Traditional Style",
+                     "link":  ""
+                 },
+                 {
                      "id":  "cantaloupe",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kandy Plus Cantaloupe",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cantaloupe",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Athena Cantaloupe",
                      "link":  ""
                  },
                  {
@@ -470,7 +830,7 @@
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Whole Carrots (5 lb)",
+                     "board":  "Kroger Whole Carrots",
                      "link":  ""
                  },
                  {
@@ -482,6 +842,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "cat-food",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Purina Friskies Gravy Swirlers With Flavors of Chicken, Salmon and Gravy Dry Cat Food",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cat-litter",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Smart Way Fresh Scent Non Clumping Clay Multi Cat Litter",
+                     "link":  ""
+                 },
+                 {
                      "id":  "cayenne-pepper",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -490,11 +866,35 @@
                      "link":  ""
                  },
                  {
+                     "id":  "cayenne-pepper",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Ground Red Cayenne Pepper Shaker",
+                     "link":  ""
+                 },
+                 {
                      "id":  "celery",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Celery",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "charcoal",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Ridged Charcoal Briquettes - Original 15.4 LB",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cheese-crackers",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Baked Cheesy Bitz Cheddar Cheese Crackers",
                      "link":  ""
                  },
                  {
@@ -507,10 +907,26 @@
                  },
                  {
                      "id":  "cheese-tortellini",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Cheese Tortellini BIG DEAL!",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cheese-tortellini",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Great Value Family Size Cheese Tortellini, Pasta, 36 oz Bag",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cherries",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Mezzetta Mild Sweet Cherry Peppers",
                      "link":  ""
                  },
                  {
@@ -523,10 +939,26 @@
                  },
                  {
                      "id":  "chicken-noodle-soup",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Condensed Chicken Noodle Soup",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "chicken-noodle-soup",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Progresso Traditional Chicken Noodle Soup, 19 oz., 6 pk.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "chicken-thighs",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Heritage Farm Bone In Skin On Chicken Leg Quarters",
                      "link":  ""
                  },
                  {
@@ -546,11 +978,27 @@
                      "link":  ""
                  },
                  {
+                     "id":  "chili-beans",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Chili Beans Each",
+                     "link":  ""
+                 },
+                 {
                      "id":  "chili-crisp",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Laoganma Spicy Chili Crisp Sauce, 7.41 Fl Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "chili-crisp",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "SUMM! Pork Gyoza with Chili Crisp Oil 8.11 oz",
                      "link":  ""
                  },
                  {
@@ -570,6 +1018,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "chocolate-chips",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Semi Sweet Chocolate Baking Chips",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "chocolate-milk",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger 1% Lowfat Chocolate Milk Gallon",
+                     "link":  ""
+                 },
+                 {
                      "id":  "clam-chowder",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -582,7 +1046,7 @@
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Seedless Mandarin Clementine Oranges 5lb Bag",
+                     "board":  "Seedless Mandarin Clementine Oranges in 5lb Bag",
                      "link":  ""
                  },
                  {
@@ -602,6 +1066,30 @@
                      "link":  ""
                  },
                  {
+                     "id":  "cocoa-powder",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "HERSHEY\u0027S Natural Unsweetened Cocoa Powder Can",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "coconut-oil",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Pure Refined Coconut Oil",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cod",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Pacific Cod Fillet Wild Caught (sustainably sourced)",
+                     "link":  ""
+                 },
+                 {
                      "id":  "coffee",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -615,6 +1103,30 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Coffee mate Half \u0026 Half Liquid Creamer Singles, 0.3 fl. oz., 180 ct.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "coffee-pods",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Donut Shop Medium Roast K-Cup Coffee Pods",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cookies",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Smart Way Chocolate Chip Cookies",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cooking-spray",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Nonstick Vegetable Oil Cooking Spray Twin Pack",
                      "link":  ""
                  },
                  {
@@ -638,15 +1150,23 @@
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Simple Truth Organic Ground Coriander",
+                     "board":  "Tampico Coriander Ground",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "corn-dogs",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Classic Corn Dogs",
                      "link":  ""
                  },
                  {
                      "id":  "corn-muffin-mix",
-                     "store":  "Walmart",
+                     "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "\"JIFFY\" Corn Muffin Mix, 8.5 oz Box",
+                     "board":  "Jiffy Corn Muffin Mix Multipack",
                      "link":  ""
                  },
                  {
@@ -658,11 +1178,11 @@
                      "link":  ""
                  },
                  {
-                     "id":  "cottage-cheese",
-                     "store":  "Baker\u0027s",
+                     "id":  "corn-muffin-mix",
+                     "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger 2% Low Fat Small Curd Cottage Cheese",
+                     "board":  "\"JIFFY\" Corn Muffin Mix, 8.5 oz Box",
                      "link":  ""
                  },
                  {
@@ -674,11 +1194,43 @@
                      "link":  ""
                  },
                  {
+                     "id":  "cottage-cheese",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger 4% Milkfat Small Curd Cottage Cheese BIG DEAL!",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cotton-swabs",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Flexible Paper Cotton Swabs",
+                     "link":  ""
+                 },
+                 {
                      "id":  "cotton-swabs",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Q-Tips cotton swabs, 500 ct., $4.99",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "crackers",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Smart Way Saltines Crackers",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cranberry-juice",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Zero Sugar Cranberry Juice Cocktail",
                      "link":  ""
                  },
                  {
@@ -691,10 +1243,26 @@
                  },
                  {
                      "id":  "cream-of-chicken-soup",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Condensed Cream of Chicken Soup",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cream-of-chicken-soup",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Campbell\u0027s Condensed Cream of Chicken Soup 10.5 oz., 8 pk.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cream-of-mushroom-soup",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Condensed Cream of Mushroom Soup",
                      "link":  ""
                  },
                  {
@@ -710,7 +1278,7 @@
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Private Selection Butter Croissants",
+                     "board":  "St Pierre All Butter Mini Croissants",
                      "link":  ""
                  },
                  {
@@ -738,11 +1306,43 @@
                      "link":  ""
                  },
                  {
+                     "id":  "curry-powder",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Tampico Curry Powder",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "deodorant",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Arm \u0026 Hammer Ultra Max Fresh Antiperspirant Deodorant Stick",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "diapers",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Comforts Day or Night Baby Diapers Size 4 (22-37 lbs) Super Value Box",
+                     "link":  ""
+                 },
+                 {
                      "id":  "diapers",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Luvs Platinum Protection Baby Diapers, Size 5",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "tomatoes-green-chilies",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Diced Tomatoes with Green Chilies Original",
                      "link":  ""
                  },
                  {
@@ -778,6 +1378,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "dinner-rolls",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Private Selection Brioche Dinner Rolls",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "dish-soap",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Ultra Concentrated Liquid Dish Soap Clean Scent",
+                     "link":  ""
+                 },
+                 {
                      "id":  "dish-soap",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -803,6 +1419,14 @@
                  },
                  {
                      "id":  "disinfectant-spray",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Scrubbing Bubbles Disinfectant Bathroom Grime Fighter Spray, Petal Paradise, 32 fl oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "disinfectant-spray",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -811,10 +1435,42 @@
                  },
                  {
                      "id":  "disinfecting-wipes",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Fresh Scent Disinfecting Wipes",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "disinfecting-wipes",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Lysol wipes or disinfectant spray, 80 ct. or 12.5 oz., $5.99",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "dog-food",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Pet Pride Steak and Vegetable Dry Dog Food",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "dog-treats",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Pet Pride Small Biscuits Dog Treats 5 Flavors",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "donuts",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Krispy Kreme Original Glazed Doughnut Dots",
                      "link":  ""
                  },
                  {
@@ -834,11 +1490,35 @@
                      "link":  ""
                  },
                  {
+                     "id":  "dryer-sheets",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Blissful Dreams Dryer Sheets",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "egg-noodles",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Medium Egg Noodles",
+                     "link":  ""
+                 },
+                 {
                      "id":  "egg-noodles",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy Vee Wide Egg Noodles",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "energy-drinks",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "V8 Energy Strawberry Banana Energy Drink Cans",
                      "link":  ""
                  },
                  {
@@ -851,10 +1531,42 @@
                  },
                  {
                      "id":  "english-muffins",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger 100% Whole Wheat English Muffins",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "english-muffins",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Fareway Pre-Split Original English Muffins",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "evaporated-milk",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Regular Evaporated Milk",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fabric-softener",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Suavitel Liquid Fabric Conditioner Laundry Fabric Softener Soothing Lavender Scent",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "facial-tissues",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Facial Tissue",
                      "link":  ""
                  },
                  {
@@ -874,6 +1586,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "feminine-pads",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Stayfree Maxi Pads Super Absorbency Unscented",
+                     "link":  ""
+                 },
+                 {
                      "id":  "feta",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -882,11 +1602,27 @@
                      "link":  ""
                  },
                  {
+                     "id":  "feta",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "President Feta Crumbles",
+                     "link":  ""
+                 },
+                 {
                      "id":  "fish-sauce",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kikkoman Glutenâ€‘Free Fish Sauce, 6.8 fl oz Glass Bottle",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fish-sticks",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Trident Seafoods The Ultimate Fish Stick",
                      "link":  ""
                  },
                  {
@@ -914,6 +1650,54 @@
                      "link":  ""
                  },
                  {
+                     "id":  "french-bread",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Private Selection French Baguette Sliced",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "frosting",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Pillsbury Creamy Supreme Vanilla Frosting, 16 oz Tub",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "breakfast-sandwiches",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Jimmy Dean Frozen Bacon Egg and Cheese Croissant Breakfast Sandwiches",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "frozen-broccoli",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Frozen Broccoli Florets",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "frozen-burritos",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "El Monterey Value Pack Bean \u0026 Cheese Frozen Burritos",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "chicken-nuggets",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Frozen Fully Cooked Crispy Chicken Nuggets BIG DEAL!",
+                     "link":  ""
+                 },
+                 {
                      "id":  "chicken-nuggets",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -930,6 +1714,46 @@
                      "link":  ""
                  },
                  {
+                     "id":  "frozen-corn",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Traditional Favorites Frozen Sweet Corn BIG DEAL!",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "frozen-fries",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Crinkle-Cut Frozen French Fries BIG Deal!",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "frozen-fruit",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Frozen Blueberries BIG DEAL!",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "hash-browns",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Southern Style Frozen Hash Browns",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "frozen-lasagna",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "On-Cor Lasagna with Meat Sauce",
+                     "link":  ""
+                 },
+                 {
                      "id":  "frozen-lasagna",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -938,11 +1762,35 @@
                      "link":  ""
                  },
                  {
+                     "id":  "frozen-meatballs",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Armour Meatball, 6/4 lb, Frozen",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "frozen-vegetables",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Frozen Mixed Vegetables",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "frozen-peas",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Traditional Favorites Frozen Green Peas BIG DEAL!",
+                     "link":  ""
+                 },
+                 {
                      "id":  "frozen-pizza",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Totino\u0027s Party Pizza Pepperoni Thin Crust",
+                     "board":  "Totino\u0027s Party Pizza Multipack Pepperoni 17g Protein Thin Crust Frozen Pizza",
                      "link":  ""
                  },
                  {
@@ -970,6 +1818,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "frozen-waffles",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Homestyle Waffles",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fruit-cups",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Mandarin Orange Cups in 100% Juice BIG DEAL!",
+                     "link":  ""
+                 },
+                 {
                      "id":  "fruit-cups",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -983,6 +1847,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hawaiian Punch Fruit Juicy Red",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fruit-punch",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hawaiian Punch Fruit Juicy Red Juice Drink Bottle",
                      "link":  ""
                  },
                  {
@@ -1003,6 +1875,14 @@
                  },
                  {
                      "id":  "fruit-snacks",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Welch\u0027s Fruit Snacks, Mixed Fruit",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fruit-snacks",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -1018,11 +1898,35 @@
                      "link":  ""
                  },
                  {
+                     "id":  "furniture-polish",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Murphy Oil Soap Wood Cleaner Original",
+                     "link":  ""
+                 },
+                 {
                      "id":  "garam-masala",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "24 Mantra Organic Garam Masala",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "garam-masala",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Nomad Blends Garam Masala Seasoning",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "garlic",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Whole Garlic Bulbs",
                      "link":  ""
                  },
                  {
@@ -1034,11 +1938,27 @@
                      "link":  ""
                  },
                  {
+                     "id":  "garlic-bread",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "New York Bakery Gluten Free Texas Toast with Real Garlic",
+                     "link":  ""
+                 },
+                 {
                      "id":  "garlic-powder",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Thats Smart Garlic Powder",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "garlic-powder",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Garlic Powder Shaker",
                      "link":  ""
                  },
                  {
@@ -1082,6 +2002,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "glass-cleaner",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Glass Cleaner",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "gochujang",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kikkoman Gochujang Spicy Miso Teriyaki Sauce",
+                     "link":  ""
+                 },
+                 {
                      "id":  "gochujang",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -1090,11 +2026,51 @@
                      "link":  ""
                  },
                  {
+                     "id":  "graham-crackers",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Smart Way Graham Crackers",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "granola",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger French Vanilla Almond Granola",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "granola-bars",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Cookies \u0026 Cr me Chewy Granola Bars",
+                     "link":  ""
+                 },
+                 {
                      "id":  "granola-bars",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Quaker Granola Bars, Chocolate Chip",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "sugar",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Smart Way Granulated Sugar",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "grape-juice",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger 100% White Grape Juice",
                      "link":  ""
                  },
                  {
@@ -1111,6 +2087,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Red Grapefruit",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "green-olives",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Early California Pimiento Stuffed Manzanilla Green Olives",
                      "link":  ""
                  },
                  {
@@ -1138,11 +2122,27 @@
                      "link":  ""
                  },
                  {
+                     "id":  "ground-cinnamon",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Annie\u0027s Organic Cinnamon Rolls with Icing",
+                     "link":  ""
+                 },
+                 {
                      "id":  "ground-cumin",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Sugar \u0027N Spice Cumin Ground Pp",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-cumin",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Tampico Cumin Ground",
                      "link":  ""
                  },
                  {
@@ -1159,6 +2159,22 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Badia Ground Turmeric, 16 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "conditioner",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "VO5 Strawberries \u0026 Cream Moisturizing Conditioner",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "half-and-half",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Half and Half Half Gallon",
                      "link":  ""
                  },
                  {
@@ -1218,6 +2234,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "hand-sanitizer",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Original Scent Hand Sanitizer",
+                     "link":  ""
+                 },
+                 {
                      "id":  "hand-soap",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -1250,6 +2274,38 @@
                      "link":  ""
                  },
                  {
+                     "id":  "hoisin-sauce",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Lee Kum Kee Hoisin Sauce",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "honey",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Rich N Honey Hot Dog Buns",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "honey-mustard",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Honey Mustard Salad Dressing",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "hot-cocoa",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Swiss Miss Hot Cocoa Mix with Marshmallows Multipack",
+                     "link":  ""
+                 },
+                 {
                      "id":  "hot-dog-buns",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
@@ -1263,6 +2319,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Corner Store Hot Dog Buns, White",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "hot-dog-buns",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Smart Way Hot Dog Buns",
                      "link":  ""
                  },
                  {
@@ -1282,6 +2346,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "hot-dogs",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Nathan\u0027s Beef Franks",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "hot-sauce",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Valentina Mexican Hot Sauce",
+                     "link":  ""
+                 },
+                 {
                      "id":  "hot-sauce",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -1298,11 +2378,67 @@
                      "link":  ""
                  },
                  {
+                     "id":  "hummus",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Simple Truth Organic Original Hummus BIG DEAL!",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "iced-tea",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Zero Sugar Decaffeinated Sweet Tea",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "insect-spray",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hot Shot Ant Roach \u0026 Spider Fragrance-free Killer Spray Twin Pack",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "instant-coffee",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Smart Way Instant Coffee",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "instant-mashed-potatoes",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Betty Crocker Instant Mashed Potatoes",
+                     "link":  ""
+                 },
+                 {
                      "id":  "instant-mashed-potatoes",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Idahoan Buttery Homestyle Mashed Potatoes",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "italian-dressing",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Zesty Italian Salad Dressing BIG DEAL!",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "italian-sausage",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Sweet Italian Sausage",
                      "link":  ""
                  },
                  {
@@ -1323,6 +2459,14 @@
                  },
                  {
                      "id":  "jalapenos",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "La Costena Whole Jalapeno Peppers",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "jalapenos",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -1335,6 +2479,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "S\u0026B Golden Curry Mild Japanese Curry Mix, 3.2 oz, 1 count Bo",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "jarred-gravy",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Heinz HomeStyle Turkey Gravy, Jar",
                      "link":  ""
                  },
                  {
@@ -1351,6 +2503,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kale",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "kidney-beans",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Dark Red Kidney Beans BIG DEAL!",
                      "link":  ""
                  },
                  {
@@ -1378,11 +2538,51 @@
                      "link":  ""
                  },
                  {
+                     "id":  "laundry-detergent",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "ARM \u0026 HAMMER Plus OxiClean with Odor Blasters Liquid Detergent Fresh Burst Scent",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "laundry-pods",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Tide Pods Spring Meadow Laundry Detergent Pods",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "stain-remover",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Laundry Stain Remover",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "lemonade",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Minute Maid Lemonade Bottle",
+                     "link":  ""
+                 },
+                 {
                      "id":  "lemons",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Lemon",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "lettuce",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Private Selection Artisan Romaine Lettuce",
                      "link":  ""
                  },
                  {
@@ -1402,6 +2602,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "lime-juice",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger 100% Lime Juice",
+                     "link":  ""
+                 },
+                 {
                      "id":  "limes",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -1415,6 +2623,22 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Member\u0027s Mark Liquid Egg Whites 16 oz., 6 pk.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "egg-whites",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Cage-Free Liquid Egg Whites",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "mac-and-cheese",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kraft Original Mac N Cheese Macaroni and Cheese Dinner",
                      "link":  ""
                  },
                  {
@@ -1442,6 +2666,30 @@
                      "link":  ""
                  },
                  {
+                     "id":  "marshmallows",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Regular Marshmallows",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bottled-marinade",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Caribbean Jerk Marinade",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "microwave-popcorn",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Movie Theater Butter Microwave Popcorn",
+                     "link":  ""
+                 },
+                 {
                      "id":  "microwave-popcorn",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -1455,6 +2703,22 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Fareway 3 Pack Butter Movie Theater Microwave Popcorn Bags",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "minced-garlic",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Spice World Organic Minced Garlic 8 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fresh-mint",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Therabreath Deep Clean Oral Rinse Fresh Mint",
                      "link":  ""
                  },
                  {
@@ -1483,10 +2747,26 @@
                  },
                  {
                      "id":  "mixed-nuts",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Salted with Sea Salt Mixed Nuts",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "mixed-nuts",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Fareway Mixed Nuts, Roasted and Salted",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "mouthwash",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Mouthwash Classic Mint",
                      "link":  ""
                  },
                  {
@@ -1495,6 +2775,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Entenmann\u0027s Little Bites muffins, 5 ct., $3.29",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "muffins",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Thomas\u0027 Blueberry Oat Muffin Tops",
                      "link":  ""
                  },
                  {
@@ -1510,7 +2798,7 @@
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Whole White Mushrooms (24 oz)",
+                     "board":  "Kroger Sliced White Mushrooms BIG DEAL!",
                      "link":  ""
                  },
                  {
@@ -1526,7 +2814,31 @@
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Ground Nutmeg",
+                     "board":  "Ground Nutmeg - Kroger - 1.85 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "oat-milk",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Simple Truth Dairy Free Shelf Stable Original Oat Milk Quart",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "olive-oil",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Pompeian Robust Extra Virgin Olive Oil",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "orange-juice",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger 100% Orange Juice Pulp Free",
                      "link":  ""
                  },
                  {
@@ -1546,6 +2858,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "pancake-mix",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Complete Buttermilk Pancake \u0026 Waffle Mix",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "paper-napkins",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Smart Way Paper Napkins",
+                     "link":  ""
+                 },
+                 {
                      "id":  "paper-napkins",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -1554,11 +2882,27 @@
                      "link":  ""
                  },
                  {
+                     "id":  "paper-plates",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Everyday Paper Plates BIG DEAL!",
+                     "link":  ""
+                 },
+                 {
                      "id":  "paper-towels",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Scott One-Ply Choose-A-Sheet Fast Absorbing Double Rolls Paper Towels",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "paper-towels",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Rugged + Reliable Paper Towels Giant Rolls",
                      "link":  ""
                  },
                  {
@@ -1575,6 +2919,22 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Thats Smart Paprika",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "parchment-paper",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Reynolds Kitchens Unbleached Parchment Paper Roll",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "parmesan",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Idahoan Baby Reds with Roasted Garlic \u0026 Parmesan Mashed Potatoes",
                      "link":  ""
                  },
                  {
@@ -1602,6 +2962,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "pasta",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "American Beauty Thin Spaghetti",
+                     "link":  ""
+                 },
+                 {
                      "id":  "peaches",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -1619,6 +2987,14 @@
                  },
                  {
                      "id":  "peanut-butter",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Peanut Butter Creamy BIG Deal!",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "peanut-butter",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -1626,11 +3002,51 @@
                      "link":  ""
                  },
                  {
-                     "id":  "pineapple",
+                     "id":  "peanuts",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Private Selection Super Sweet Gold Island Pineapple",
+                     "board":  "Kroger Dry Roasted Unsalted Peanuts",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pears",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Del Monte Sliced Bartlett Pears in Heavy Syrup",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pepperoni",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Sliced Pepperoni BIG DEAL!",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pesto",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Eathos Potato Gnocchi + Pesto",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pickled-jalapenos",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Ranch Style Beans with Sliced Jalapeno Peppers",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pickles",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Smart Way Dill Pickle Spears",
                      "link":  ""
                  },
                  {
@@ -1639,6 +3055,38 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Stacy\u0027s Pita Thins, Variety Pack, 1 oz., 30 pk.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pita-bread",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Joseph\u0027s Flax Oat Bran \u0026 Whole Wheat Pita Bread",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pizza-sauce",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Spicy Red Pepper Pizza Sauce",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "plastic-wrap",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Tight Seal Cling Wrap",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "plums",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh Kroger Plums in 3lb Clamshell",
                      "link":  ""
                  },
                  {
@@ -1674,11 +3122,43 @@
                      "link":  ""
                  },
                  {
+                     "id":  "popsicles",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Fruity Ice Pops Variety Pack",
+                     "link":  ""
+                 },
+                 {
                      "id":  "pork-chops",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Center Cut Pork Chops",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pork-chops",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Pork Loin Assorted End Chop Bone",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pork-shoulder",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Fresh Natural Pork Shoulder Butt Bone In",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "potato-chips",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Classic Potato Chips Family Size",
                      "link":  ""
                  },
                  {
@@ -1698,6 +3178,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "powdered-sugar",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Confectioners Powdered Sugar",
+                     "link":  ""
+                 },
+                 {
                      "id":  "horseradish",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -1706,11 +3194,59 @@
                      "link":  ""
                  },
                  {
+                     "id":  "pretzels",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Pretzel Mini Twists",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "protein-bars",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Perfect Bar Mini Dark Chocolate Chip Peanut Butter Protein Bar Organic 8 Count",
+                     "link":  ""
+                 },
+                 {
                      "id":  "protein-bars",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "CLIF BAR Energy Protein Bars, Chocolate Chip, Non-Gmo 12 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pudding-cups",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Jell-O Chocolate Vanilla Swirls Sugar Free Pudding Cups Snack Value Pack",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "queso",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Medium Salsa Con Queso Cheese Dip",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "raisins",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Smart Way Seedless Raisins",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ramen",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Maruchan Souper 6 Ramen Noodle Soup, Roast Chicken",
                      "link":  ""
                  },
                  {
@@ -1746,11 +3282,43 @@
                      "link":  ""
                  },
                  {
+                     "id":  "ranch-seasoning-mix",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Ranch Salad Dressing \u0026 Seasoning Mix Packet",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "raspberries",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Pure Silk Raspberry Mist Moisturizing Shave Cream",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "razors",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Disposable Twin Blade Pivoting Razors for Men BIG DEAL!",
+                     "link":  ""
+                 },
+                 {
                      "id":  "red-pepper-flakes",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Great Value Crushed Red Pepper, 12 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "refried-beans",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Vegetarian Refried Beans",
                      "link":  ""
                  },
                  {
@@ -1763,18 +3331,18 @@
                  },
                  {
                      "id":  "refrigerated-biscuits",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Buttermilk Jumbo Biscuits",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "refrigerated-biscuits",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Great Value Butter Flavor Flaky Jumbo Biscuits, 16 oz, 8 Cou",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "refrigerated-biscuits",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Buttermilk Jumbo Biscuits",
                      "link":  ""
                  },
                  {
@@ -1787,6 +3355,14 @@
                  },
                  {
                      "id":  "ribeye-steak",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Select Boneless Beef Ribeye",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ribeye-steak",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -1794,11 +3370,19 @@
                      "link":  ""
                  },
                  {
+                     "id":  "rice-cakes",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Caramel Rice Cakes",
+                     "link":  ""
+                 },
+                 {
                      "id":  "rice-noodles",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "A Taste of Thai Rice Noodles",
+                     "board":  "Butterfly Brand Pad Thai Noodle",
                      "link":  ""
                  },
                  {
@@ -1830,7 +3414,7 @@
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Russet Potatoes Bag (10 lb)",
+                     "board":  "Kroger Russet Potatoes Bag BIG DEAL!",
                      "link":  ""
                  },
                  {
@@ -1850,11 +3434,43 @@
                      "link":  ""
                  },
                  {
+                     "id":  "salsa",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Pace Chunky Mild Salsa",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "sandwich-bags",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Fold Top Expandable Pleat Sandwich Bags",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "sandwich-cookies",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Smart Way Vanilla Sandwich Cookies",
+                     "link":  ""
+                 },
+                 {
                      "id":  "sesame-oil",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Oi! Toasted Pure Sesame Oil 250 ml",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "toasted-sesame-seeds",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Pepperidge Farm White Hoagie Rolls with Sesame Seeds",
                      "link":  ""
                  },
                  {
@@ -1866,6 +3482,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "shampoo",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "VO5 Strawberries \u0026 Cream Moisturizing Shampoo",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "shaving-cream",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Barbasol Thick \u0026 Rich Original Shaving Cream",
+                     "link":  ""
+                 },
+                 {
                      "id":  "shower-cleaner",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
@@ -1874,11 +3506,27 @@
                      "link":  ""
                  },
                  {
+                     "id":  "shower-cleaner",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Clean Shower Fresh Clean Scent Daily Shower Cleaner",
+                     "link":  ""
+                 },
+                 {
                      "id":  "sirloin-steak",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "USDA Choice Sirloin Tip Steak",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "sliced-cheese",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Singles American Sliced Cheese BIG DEAL!",
                      "link":  ""
                  },
                  {
@@ -1906,6 +3554,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "soy-sauce",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Brewed Soy Sauce BIG DEAL!",
+                     "link":  ""
+                 },
+                 {
                      "id":  "sparkling-water",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -1914,11 +3570,43 @@
                      "link":  ""
                  },
                  {
+                     "id":  "sparkling-water",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Zero Sugar Lemon Lime Sparkling Water",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "strawberries",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Strawberry Applesauce",
+                     "link":  ""
+                 },
+                 {
                      "id":  "string-cheese",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Frigo Cheese Heads String Cheese 1 oz. pkg., 48 ct.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "string-cheese",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Mozzarella String Cheese BIG DEAL!",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "stuffing-mix",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Cornbread Flavored Stuffing Mix",
                      "link":  ""
                  },
                  {
@@ -1946,6 +3634,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "sun-dried-tomatoes",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "California Sun Dry Sun-Dried Tomato Spread",
+                     "link":  ""
+                 },
+                 {
                      "id":  "sweet-potatoes",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
@@ -1962,11 +3658,51 @@
                      "link":  ""
                  },
                  {
+                     "id":  "relish",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Sweet Pickle Relish",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "condensed-milk",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Fat Free Sweetened Condensed Milk",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "maple-syrup",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Smart Way Original Pancake Syrup",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "taco-sauce",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Ortega Original Thick and Smooth Mild Taco Sauce, Kosher, 16 oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "taco-seasoning",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Taco Bell Original Taco Seasoning Mix Shaker, for Weeknight Dinners and Mexican-Inspired Dishes, 1 Canister, Original Taco Flavor, 6X More Seasoning than Individual Packets, 6.25 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "taco-seasoning",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Taco Seasoning",
                      "link":  ""
                  },
                  {
@@ -1986,11 +3722,35 @@
                      "link":  ""
                  },
                  {
+                     "id":  "tampons",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Tampons Super Unscented",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "tea-bags",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger British Blend Black Tea Bags",
+                     "link":  ""
+                 },
+                 {
                      "id":  "tea-bags",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy Vee Black Tea Bags",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "teriyaki-sauce",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Lawry\u0027s Honey Teriyaki Marinade",
                      "link":  ""
                  },
                  {
@@ -2010,11 +3770,43 @@
                      "link":  ""
                  },
                  {
+                     "id":  "dried-thyme",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Ground Thyme Shaker",
+                     "link":  ""
+                 },
+                 {
                      "id":  "toaster-pastries",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Pop-Tarts original 12 ct. or Protein Boostin\u0027 toaster pastries 8 ct., - .50 off with digital coupon, $2.99",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "toaster-pastries",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Pop-Tarts Frosted Brown Sugar Cinnamon Toaster Pastries",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "toilet-bowl-cleaner",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Fresh Scent Toilet Bowl Cleaner with Bleach Value Pack",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "toilet-paper",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Simple Truth Toilet Paper 100% Recycled Double Roll",
                      "link":  ""
                  },
                  {
@@ -2042,11 +3834,35 @@
                      "link":  ""
                  },
                  {
+                     "id":  "tomato-soup",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Tomato Condensed Soup",
+                     "link":  ""
+                 },
+                 {
                      "id":  "tomatoes",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Roma Tomato",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "toothbrushes",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Colgate Extra Clean Toothbrush Full Head Value Pack Medium",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "toothpaste",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Crest Cavity \u0026 Tartar Protection Whitening Baking Soda \u0026 Peroxide Toothpaste",
                      "link":  ""
                  },
                  {
@@ -2067,6 +3883,14 @@
                  },
                  {
                      "id":  "tortillas",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "La Banderita Street Taco Thin Flour Tortilla 16 Ct",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "tortillas",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -2079,6 +3903,30 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Bright Essentials Trash Bags, Tall Kitchen, Drawstring, Unscented",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "turkey-lunchmeat",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Turkey Breast Oven Roasted Deli Thin Sliced Family Size",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "turkey-bacon",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Butterball Turkey Bacon, Lower Sodium, Smoke-Cured, Chopped and Formed, 12 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "vanilla-extract",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Private Selection Pure Vanilla Extract",
                      "link":  ""
                  },
                  {
@@ -2106,6 +3954,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "walnuts",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Walnut Halves \u0026 Pieces",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "whipped-cream",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Original Whipped Topping",
+                     "link":  ""
+                 },
+                 {
                      "id":  "whipped-cream",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -2122,6 +3986,30 @@
                      "link":  ""
                  },
                  {
+                     "id":  "rice",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Enriched Long Grain White Rice",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "white-vinegar",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Distilled White Vinegar",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "watermelon",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Mini Seedless Whole Watermelon",
+                     "link":  ""
+                 },
+                 {
                      "id":  "watermelon",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -2130,11 +4018,27 @@
                      "link":  ""
                  },
                  {
+                     "id":  "worcestershire",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Worcestershire Sauce",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "yeast",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fleischmann\u0027s Active Dry Yeast",
+                     "link":  ""
+                 },
+                 {
                      "id":  "onions",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger Yellow Onions bag",
+                     "board":  "Jumbo Sweet Onions",
                      "link":  ""
                  },
                  {
@@ -2171,5 +4075,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  266
+    "coverage_violations":  504
 }
