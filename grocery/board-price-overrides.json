@@ -1,6 +1,6 @@
 ﻿{
     "readme":  "DERIVED by generate-board-overrides.ps1 - do not hand-edit. Per-cell EVERYDAY per-unit corrections: when a board price disagrees \u003e30% with the verified product its See-item link opens (and name-drift confirms the link is the right product), the board number is stale and is pinned here to the link\u0027s per-unit so price==link==shelf. build-deals-page applies these to EVERYDAY cells only (a live sale always wins) and survives daily regeneration. Sales, wrong-product links (name-drift), and ids present in both the staple+recipe board are intentionally excluded.",
-    "updated":  "2026-07-23",
+    "updated":  "2026-07-24",
     "tol":  0.3,
     "count":  11,
     "cells":  [
@@ -11,7 +11,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  7.19,
                       "link_name":  "Chicken Thighs, Boneless Gold N Plump",
-                      "set":  "2026-07-23"
+                      "set":  "2026-07-24"
                   },
                   {
                       "id":  "ginger",
@@ -20,7 +20,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  4.49,
                       "link_name":  "Melissa Ginger Root",
-                      "set":  "2026-07-23"
+                      "set":  "2026-07-24"
                   },
                   {
                       "id":  "honey-dijon-mustard",
@@ -29,7 +29,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.2075,
                       "link_name":  "Hy-Vee Stone Ground Honey Dijon Mustard",
-                      "set":  "2026-07-23"
+                      "set":  "2026-07-24"
                   },
                   {
                       "id":  "light-sour-cream",
@@ -38,7 +38,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.18,
                       "link_name":  "Daisy Sour Cream, 48 oz",
-                      "set":  "2026-07-23"
+                      "set":  "2026-07-24"
                   },
                   {
                       "id":  "red-bell-pepper",
@@ -47,7 +47,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.83,
                       "link_name":  "Multi Bell Sweet Peppers",
-                      "set":  "2026-07-23"
+                      "set":  "2026-07-24"
                   },
                   {
                       "id":  "red-bell-pepper",
@@ -56,7 +56,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  2.5,
                       "link_name":  "Fresh Sweet Bell Pepper, Red Organic",
-                      "set":  "2026-07-23"
+                      "set":  "2026-07-24"
                   },
                   {
                       "id":  "feta-cheese",
@@ -65,7 +65,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.8113,
                       "link_name":  "Athenos Feta Traditional Cheese Crumbles 4 Oz",
-                      "set":  "2026-07-23"
+                      "set":  "2026-07-24"
                   },
                   {
                       "id":  "dried-rosemary",
@@ -74,7 +74,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  3.9867,
                       "link_name":  "Hy-Vee Rosemary Leaves",
-                      "set":  "2026-07-23"
+                      "set":  "2026-07-24"
                   },
                   {
                       "id":  "sweet-chili-sauce",
@@ -83,7 +83,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.2752,
                       "link_name":  "Hy-Vee Thai Sweet Chili Sauce",
-                      "set":  "2026-07-23"
+                      "set":  "2026-07-24"
                   },
                   {
                       "id":  "swiss-cheese",
@@ -92,7 +92,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.3125,
                       "link_name":  "Hy-Vee Sliced Swiss Cheese 10Ct",
-                      "set":  "2026-07-23"
+                      "set":  "2026-07-24"
                   },
                   {
                       "id":  "white-wine-vinegar",
@@ -101,7 +101,7 @@
                       "source":  "derived: verified product-urls link (board was stale)",
                       "board_was":  0.1473,
                       "link_name":  "Gustare Vita White Wine Vinegar",
-                      "set":  "2026-07-23"
+                      "set":  "2026-07-24"
                   }
               ]
 }
