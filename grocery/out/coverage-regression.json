@@ -1,7 +1,7 @@
 ﻿{
-    "checked":  "2026-07-23",
-    "new_board":  "comparison-2026-07-23.json",
-    "prev_board":  "comparison-2026-07-22.json",
+    "checked":  "2026-07-24",
+    "new_board":  "comparison-2026-07-24.json",
+    "prev_board":  "comparison-2026-07-23.json",
     "rows_was":  424,
     "rows_now":  424,
     "thresholds":  {
@@ -11,19 +11,19 @@
     "stores":  [
                    {
                        "store":  "Aldi",
-                       "was":  298,
+                       "was":  299,
                        "now":  299,
-                       "drop":  -1,
-                       "pct":  -0.3,
+                       "drop":  0,
+                       "pct":  0,
                        "regression":  false,
                        "acked":  false
                    },
                    {
                        "store":  "Baker\u0027s",
-                       "was":  258,
-                       "now":  402,
-                       "drop":  -144,
-                       "pct":  -55.8,
+                       "was":  402,
+                       "now":  399,
+                       "drop":  3,
+                       "pct":  0.7,
                        "regression":  false,
                        "acked":  false
                    },
@@ -38,10 +38,10 @@
                    },
                    {
                        "store":  "Fareway",
-                       "was":  345,
+                       "was":  393,
                        "now":  393,
-                       "drop":  -48,
-                       "pct":  -13.9,
+                       "drop":  0,
+                       "pct":  0,
                        "regression":  false,
                        "acked":  false
                    },
@@ -56,10 +56,10 @@
                    },
                    {
                        "store":  "Sam\u0027s Club",
-                       "was":  328,
+                       "was":  298,
                        "now":  298,
-                       "drop":  30,
-                       "pct":  9.1,
+                       "drop":  0,
+                       "pct":  0,
                        "regression":  false,
                        "acked":  false
                    },

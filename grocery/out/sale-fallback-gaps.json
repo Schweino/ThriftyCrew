@@ -1,22 +1,7 @@
 ﻿{
-    "generated":  "2026-07-23 16:50",
-    "gap_count":  13,
+    "generated":  "2026-07-24 09:10",
+    "gap_count":  6,
     "gaps":  [
-                 {
-                     "commodity":  "almond-milk",
-                     "store":  "Baker\u0027s",
-                     "sale_per_unit":  0.0358
-                 },
-                 {
-                     "commodity":  "baby-wipes",
-                     "store":  "Baker\u0027s",
-                     "sale_per_unit":  0.0276
-                 },
-                 {
-                     "commodity":  "baked-beans",
-                     "store":  "Baker\u0027s",
-                     "sale_per_unit":  0.0667
-                 },
                  {
                      "commodity":  "bell-peppers",
                      "store":  "Family Fare",
@@ -28,24 +13,9 @@
                      "sale_per_unit":  1.99
                  },
                  {
-                     "commodity":  "charcoal",
-                     "store":  "Baker\u0027s",
-                     "sale_per_unit":  0.7494
-                 },
-                 {
                      "commodity":  "cherries",
                      "store":  "Family Fare",
                      "sale_per_unit":  2.77
-                 },
-                 {
-                     "commodity":  "croissants",
-                     "store":  "Baker\u0027s",
-                     "sale_per_unit":  1.25
-                 },
-                 {
-                     "commodity":  "pepperoni",
-                     "store":  "Baker\u0027s",
-                     "sale_per_unit":  0.7483
                  },
                  {
                      "commodity":  "plums",
@@ -61,11 +31,6 @@
                      "commodity":  "sloppy-joe-sauce",
                      "store":  "Family Fare",
                      "sale_per_unit":  0.1
-                 },
-                 {
-                     "commodity":  "sports-drinks",
-                     "store":  "Baker\u0027s",
-                     "sale_per_unit":  0.0485
                  }
              ]
 }

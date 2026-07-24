@@ -1,1 +1,1 @@
-﻿almond-milk|Baker's;baby-wipes|Baker's;baked-beans|Baker's;bell-peppers|Family Fare;cantaloupe|Aldi;charcoal|Baker's;cherries|Family Fare;croissants|Baker's;pepperoni|Baker's;plums|Family Fare;pork-shoulder|Family Fare;sloppy-joe-sauce|Family Fare;sports-drinks|Baker's
+﻿bell-peppers|Family Fare;cantaloupe|Aldi;cherries|Family Fare;plums|Family Fare;pork-shoulder|Family Fare;sloppy-joe-sauce|Family Fare
