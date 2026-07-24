@@ -425,6 +425,10 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
         }
       } catch { Log ('WARN ad-url check skipped: ' + $_.Exception.Message) }
 
+      # Pins are minted HERE, before guards, so every number the build can apply passes the gate first.
+      # (Until 2026-07-23 publish-deals-page regenerated them post-gate; a carried-row day minted 37
+      # wrong-basis pins the guards never saw. Publish now only APPLIES the pins file.)
+      try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'generate-board-overrides.ps1') | ForEach-Object { Log ('pins: ' + $_) } } catch { Log ('WARN generate-board-overrides threw: ' + $_.Exception.Message) }
       $guardsRc = 0
       try {
         & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') | ForEach-Object { Log ('guards: ' + $_) }
@@ -525,7 +529,9 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
               # gap. Heal-only (never overwrites a healthy link, so guard 4 keeps checking those independently).
               & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'sync-browser-links.ps1') | Out-Null
               # This repair path used to publish DIRECTLY, which would have bypassed the invariant gate.
-              # Re-run guards (the links just changed) and only ship if they still hold.
+              # Links just changed, so pins derived from them must be re-minted BEFORE guards re-check
+              # (same publish-never-mints rule as the main gate above).
+              try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'generate-board-overrides.ps1') | Out-Null } catch {}
               & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'guards.ps1') -Quiet | Out-Null
               if ($LASTEXITCODE -eq 0) {
                 & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'publish-deals-page.ps1')   | Out-Null

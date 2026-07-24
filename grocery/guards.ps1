@@ -108,6 +108,16 @@ try {
   if ($LASTEXITCODE -eq 1) { [void]$warn.Add([string]$wfp) } else { Say ("  ok    " + [string]$wfp) }
 } catch { Say ("  warn  could not run audit-walmart-fullpull: " + $_.Exception.Message) }
 
+# ADVISORY, never blocks: per-CELL drop detector (Brad caught Fareway's chicken breast missing by eye on
+# 2026-07-23 - the coverage guard's 5% tolerance had let 7 real cells slip). Lists every EVERYDAY cell that
+# was priced ~5 days ago and is gone today, excluding the two classes that drop by design (ended sales,
+# Sam's 14-day slices). With carry-forward now walking the whole window this should read zero; anything it
+# names is a real, new leak.
+try {
+  $cdOut = & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'audit-cell-drops.ps1') 2>$null
+  if ($LASTEXITCODE -eq 1) { [void]$warn.Add((@($cdOut) -join ' | ')) } else { Say ("  ok    " + (@($cdOut) | Select-Object -First 1)) }
+} catch { Say ("  warn  could not run audit-cell-drops: " + $_.Exception.Message) }
+
 # ADVISORY, never blocks: allowlists rot. An entry in multipack-allowlist / coverage-gap-allowlist was
 # reviewed against the store ONCE and then trusted forever - but the store's packaging and naming move, so
 # an entry without a `reviewed` date, or one past 120 days, deserves fresh eyes. Warn with the count; the

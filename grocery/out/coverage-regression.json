@@ -12,9 +12,9 @@
                    {
                        "store":  "Aldi",
                        "was":  298,
-                       "now":  298,
-                       "drop":  0,
-                       "pct":  0,
+                       "now":  299,
+                       "drop":  -1,
+                       "pct":  -0.3,
                        "regression":  false,
                        "acked":  false
                    },
@@ -39,9 +39,9 @@
                    {
                        "store":  "Fareway",
                        "was":  345,
-                       "now":  345,
-                       "drop":  0,
-                       "pct":  0,
+                       "now":  387,
+                       "drop":  -42,
+                       "pct":  -12.2,
                        "regression":  false,
                        "acked":  false
                    },

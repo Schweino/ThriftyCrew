@@ -94,7 +94,7 @@ foreach ($d in (Get-Content $ndF -Raw | ConvertFrom-Json).flags) { $drift[([stri
 if ($drift.Count -eq 0) { Write-Warning 'generate-board-overrides: name-drift flagged NOTHING - verify that is real before trusting these pins.' }
 
 $cells = New-Object System.Collections.Generic.List[object]
-$skip  = [ordered]@{ collision=0; sale=0; namedrift=0; nolink=0; badprice=0; agree=0 }
+$skip  = [ordered]@{ collision=0; sale=0; namedrift=0; nolink=0; badprice=0; agree=0; basisgap=0 }
 $now = (Get-Date -Format 'yyyy-MM-dd')
 
 foreach ($it in ($staple + $recipe)) {
@@ -111,6 +111,12 @@ foreach ($it in ($staple + $recipe)) {
     if ($null -eq $lpu -or $lpu -le 0) { $skip.badprice++; continue }
     $off = [math]::Abs($lpu - $board) / $board
     if ($off -le $Tol) { $skip.agree++; continue }
+    # RATIO CAP (2026-07-23): a genuinely stale board price drifts by percents; a 2x+ gap means the LINK
+    # side is the broken one (pack price parsed as per-item: bottled water 24x, dryer sheets 120x, facial
+    # tissues 107x all minted as "corrections" tonight). Never pin across a basis-sized gap - leave the
+    # disagreement for prune-bad-links to drop, which is honest (search link) instead of wrong (bad price).
+    $ratio = $lpu / $board
+    if ($ratio -gt 2.0 -or $ratio -lt 0.5) { $skip.basisgap++; Write-Output ("  basis-gap SKIPPED (not pinned): {0} / {1}  board={2} link={3}  ({4:0.0}x)" -f $id, $st, $board, [math]::Round($lpu,4), $ratio); continue }
     $cells.Add([ordered]@{ id=$id; store=$st; per_unit=[math]::Round($lpu,4); source='derived: verified product-urls link (board was stale)'; board_was=[math]::Round($board,4); link_name=[string]$e.name; set=$now })
   }
 }
@@ -123,6 +129,6 @@ $obj = [ordered]@{
   cells = $cells
 }
 $obj | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $root 'board-price-overrides.json') -Encoding UTF8
-Write-Output ("board-overrides: wrote $($cells.Count) corrections  (skipped: sale=$($skip.sale) collision=$($skip.collision) name-drift=$($skip.namedrift) no-link=$($skip.nolink) bad-price=$($skip.badprice) already-agree=$($skip.agree))")
+Write-Output ("board-overrides: wrote $($cells.Count) corrections  (skipped: sale=$($skip.sale) collision=$($skip.collision) name-drift=$($skip.namedrift) no-link=$($skip.nolink) bad-price=$($skip.badprice) already-agree=$($skip.agree) basis-gap=$($skip.basisgap))")
 
 

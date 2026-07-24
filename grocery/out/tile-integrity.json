@@ -1,43 +1,43 @@
 ﻿{
-    "generated":  "2026-07-23 12:32",
+    "generated":  "2026-07-23 19:21",
     "board":  "comparison-2026-07-23.json",
-    "total_tiles":  2245,
-    "violations":  187,
+    "total_tiles":  2288,
+    "violations":  265,
     "by_store":  {
                      "Walmart":  {
-                                     "coverage":  55,
+                                     "coverage":  59,
                                      "tiles":  411,
                                      "violations":  59
                                  },
                      "Fareway":  {
-                                     "coverage":  0,
-                                     "tiles":  345,
-                                     "violations":  0
+                                     "coverage":  75,
+                                     "tiles":  387,
+                                     "violations":  75
                                  },
                      "Family Fare":  {
-                                         "coverage":  9,
+                                         "coverage":  13,
                                          "tiles":  232,
                                          "violations":  13
                                      },
                      "Hy-Vee":  {
-                                    "coverage":  38,
+                                    "coverage":  40,
                                     "tiles":  403,
                                     "violations":  40
                                 },
                      "Sam\u0027s Club":  {
-                                             "coverage":  36,
+                                             "coverage":  40,
                                              "tiles":  298,
                                              "violations":  40
                                          },
                      "Aldi":  {
-                                  "coverage":  16,
-                                  "tiles":  298,
-                                  "violations":  16
+                                  "coverage":  17,
+                                  "tiles":  299,
+                                  "violations":  17
                               },
                      "Baker\u0027s":  {
-                                          "coverage":  18,
+                                          "coverage":  21,
                                           "tiles":  258,
-                                          "violations":  19
+                                          "violations":  21
                                       }
                  },
     "rows":  [
@@ -47,6 +47,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Chef Merito Achiote Seasoning Paste, 3.5 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "flour",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fareway Flour, All Purpose",
                      "link":  ""
                  },
                  {
@@ -67,6 +75,14 @@
                  },
                  {
                      "id":  "apples",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Golden Delicious Apple",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "apples",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -79,6 +95,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Mott\u0027s Apple Sauce 6 Ea",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "asparagus",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Asparagus",
                      "link":  ""
                  },
                  {
@@ -95,6 +119,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Van Camp\u0027s Pork and Beans",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bananas",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Bananas Sold individually",
                      "link":  ""
                  },
                  {
@@ -194,6 +226,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "chicken-breast",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Boneless Skinless Chicken Breast",
+                     "link":  ""
+                 },
+                 {
                      "id":  "bottled-water",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -203,10 +243,26 @@
                  },
                  {
                      "id":  "bottled-water",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fareway 24 Pack Purified Drinking Water",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bottled-water",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy-Vee spring water, 24 pk. mini bottles 10 fl. oz., $3.99",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bread",
+                     "store":  "Aldi",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "L\u0027oven Fresh White Bread (20 oz)",
                      "link":  ""
                  },
                  {
@@ -250,6 +306,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "cake-mix",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Jiffy Golden Yellow Cake Mix",
+                     "link":  ""
+                 },
+                 {
                      "id":  "beef-stew",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -260,10 +324,10 @@
                  {
                      "id":  "beef-stew",
                      "store":  "Walmart",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.165 vs link $0.134  (23.1% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "DINTY MOORE Beef Stew, Shelf-Stable, Steel Can 38 oz",
-                     "link":  "(4 pack) Armour Star Classic Homestyle Beef Stew, 13g Protei"
+                     "link":  ""
                  },
                  {
                      "id":  "canned-chicken",
@@ -271,6 +335,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy Vee Premium Chunk Chicken Breast With Rib Meat",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-chicken",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fareway Premium Chunk Chicken Breast",
                      "link":  ""
                  },
                  {
@@ -308,10 +380,10 @@
                  {
                      "id":  "canned-green-chilies",
                      "store":  "Walmart",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.3671 vs link $0.4175  (12.1% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Ortega Mild Fire Roasted Diced Green Chiles, Kosher, 7 oz Ca",
-                     "link":  "Ortega Fire Roasted Mild Diced Green Chiles, Kosher, 4 oz"
+                     "link":  ""
                  },
                  {
                      "id":  "diced-tomatoes",
@@ -343,6 +415,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Del Monte Lite Pear Halves, 15 oz., 8 pk.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "canned-peas",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fareway Sweet Peas",
                      "link":  ""
                  },
                  {
@@ -386,11 +466,27 @@
                      "link":  ""
                  },
                  {
+                     "id":  "carrots",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Carrot",
+                     "link":  ""
+                 },
+                 {
                      "id":  "cayenne-pepper",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Great Value Ground Cayenne Red Pepper, 5.2 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "celery",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Celery",
                      "link":  ""
                  },
                  {
@@ -407,6 +503,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Great Value Family Size Cheese Tortellini, Pasta, 36 oz Bag",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cherries",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Red Cherries",
                      "link":  ""
                  },
                  {
@@ -428,10 +532,10 @@
                  {
                      "id":  "chicken-thighs",
                      "store":  "Hy-Vee",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $1.77 vs link $2.29  (22.7% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Hy Vee 100 Natural Chicken Thighs Value Pack",
-                     "link":  "Hy-Vee 100% Natural Chicken Thighs Value Pack"
+                     "link":  ""
                  },
                  {
                      "id":  "chili-crisp",
@@ -458,12 +562,28 @@
                      "link":  ""
                  },
                  {
+                     "id":  "clam-chowder",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Campbell\u0027s New England Clam Chowder18.8 fl oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "clementines",
                      "store":  "Baker\u0027s",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $1.598 vs link $1.6633  (3.9% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Seedless Mandarin Clementine Oranges 5lb Bag",
-                     "link":  "Seedless Mandarin Clementine Oranges in 3-Pound Bag"
+                     "link":  ""
+                 },
+                 {
+                     "id":  "clementines",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Mandarin Clementine",
+                     "link":  ""
                  },
                  {
                      "id":  "ground-cloves",
@@ -531,6 +651,14 @@
                  },
                  {
                      "id":  "cottage-cheese",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger 2% Low Fat Small Curd Cottage Cheese",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cottage-cheese",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -578,11 +706,35 @@
                      "link":  ""
                  },
                  {
+                     "id":  "croissants",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Bakery Fresh Croissants",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cucumbers",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Cucumber",
+                     "link":  ""
+                 },
+                 {
                      "id":  "curry-powder",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Great Value Curry Powder, 2 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "diapers",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Luvs Platinum Protection Baby Diapers, Size 5",
                      "link":  ""
                  },
                  {
@@ -627,6 +779,14 @@
                  },
                  {
                      "id":  "dishwasher-detergent",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Bright Essentials Dishwasher Pacs, Fresh Scent, Triple Action",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "dishwasher-detergent",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -658,6 +818,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "dryer-sheets",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Bright Essentials Dryer Sheets, Fresh Scent, Wrinkle Reducing",
+                     "link":  ""
+                 },
+                 {
                      "id":  "egg-noodles",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
@@ -666,11 +834,35 @@
                      "link":  ""
                  },
                  {
+                     "id":  "energy-drinks",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Alani Nu Cotton Candy Energy Drink Can",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "english-muffins",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fareway Pre-Split Original English Muffins",
+                     "link":  ""
+                 },
+                 {
                      "id":  "facial-tissues",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy-Vee facial tissue, 70 or 144 ct., $2.29",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "facial-tissues",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kleenex Trusted Care Facial Tissues Flat Box 2 Ply",
                      "link":  ""
                  },
                  {
@@ -698,11 +890,43 @@
                      "link":  ""
                  },
                  {
+                     "id":  "storage-bags",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Bright Essentials Freezer Bags, Double Zipper, Gallon Size",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "french-bread",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Bakery Fresh French Baguette",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "chicken-nuggets",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Tyson Frozen Chicken Nuggets Family Pack, 4-Pound",
+                     "link":  ""
+                 },
+                 {
                      "id":  "chicken-nuggets",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy Vee Chicken Nuggets",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "frozen-lasagna",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Michelina\u0027s Lasagna with Meat Sauce Meal",
                      "link":  ""
                  },
                  {
@@ -723,6 +947,14 @@
                  },
                  {
                      "id":  "frozen-pizza",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Jack\u0027s Original Thin Cheese Pizza",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "frozen-pizza",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -732,10 +964,18 @@
                  {
                      "id":  "fruit-cups",
                      "store":  "Walmart",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.7783 vs link $0.6642  (17.2% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Dole Fruit Bowls No Sugar Added Variety Pack, 4 oz Cups (12 Pack)",
-                     "link":  "Great Value Mixed Fruits Variety Pack Cups"
+                     "link":  ""
+                 },
+                 {
+                     "id":  "fruit-punch",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hawaiian Punch Fruit Juicy Red",
+                     "link":  ""
                  },
                  {
                      "id":  "fruit-snacks",
@@ -754,6 +994,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "fruit-snacks",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Welch\u0027s Strawberry Fruit Snacks",
+                     "link":  ""
+                 },
+                 {
                      "id":  "furniture-polish",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -767,6 +1015,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "24 Mantra Organic Garam Masala",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "garlic",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Spice World Fresh Garlic",
                      "link":  ""
                  },
                  {
@@ -787,6 +1043,14 @@
                  },
                  {
                      "id":  "gelatin",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fareway Orange Gelatin Dessert",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "gelatin",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -802,11 +1066,43 @@
                      "link":  ""
                  },
                  {
+                     "id":  "fresh-ginger",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Ginger Root",
+                     "link":  ""
+                 },
+                 {
                      "id":  "gochujang",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "bettergoods Gochujang Sauce, 12.5 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "granola-bars",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Quaker Granola Bars, Chocolate Chip",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "grape-juice",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Old Orchard 100% Juice, Grape",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "grapefruit",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Red Grapefruit",
                      "link":  ""
                  },
                  {
@@ -828,18 +1124,18 @@
                  {
                      "id":  "ground-cinnamon",
                      "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.141 vs link $0.1698  (17% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Pillsbury Cinnamon Rolls with Cinnabon Icing 13 oz., 4 pk.",
-                     "link":  "Pillsbury Cinnamon Rolls with Cinnabon Icing 13 oz., 4 pk."
+                     "link":  ""
                  },
                  {
                      "id":  "ground-cumin",
                      "store":  "Family Fare",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $1.145 vs link $1.295  (11.6% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Sugar \u0027N Spice Cumin Ground Pp",
-                     "link":  "Sugar \u0027N Spice Smoked Cumin Ground Pp"
+                     "link":  ""
                  },
                  {
                      "id":  "ground-turmeric",
@@ -859,11 +1155,27 @@
                  },
                  {
                      "id":  "deli-ham",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Cedar Hollow Foods Cherry Wood Ham",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "deli-ham",
                      "store":  "Family Fare",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.6656 vs link $0.7767  (14.3% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Hillshire Farm Ultra Thin Sliced Brown Sugar Ham Sandwich Meat 9 Oz",
-                     "link":  "Hillshire Farm Ultra Thin Sliced Brown Sugar Ham Sandwich Meat 9 Oz"
+                     "link":  ""
+                 },
+                 {
+                     "id":  "hamburger-buns",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fareway Premium Hamburger Buns",
+                     "link":  ""
                  },
                  {
                      "id":  "hamburger-buns",
@@ -898,6 +1210,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "hand-soap",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Softsoap Aquarium Liquid Hand Soap Refill",
+                     "link":  ""
+                 },
+                 {
                      "id":  "harissa-paste",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -908,10 +1228,10 @@
                  {
                      "id":  "heavy-cream",
                      "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.1162 vs link $0.11  (5.6% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Member\u0027s Mark Heavy Whipping Cream, 32 fl. oz.",
-                     "link":  "Member\u0027s Mark Heavy Whipping Cream, 32 fl. oz."
+                     "link":  ""
                  },
                  {
                      "id":  "hoisin-sauce",
@@ -931,6 +1251,14 @@
                  },
                  {
                      "id":  "hot-dog-buns",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Corner Store Hot Dog Buns, White",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "hot-dog-buns",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -940,10 +1268,10 @@
                  {
                      "id":  "hot-dogs",
                      "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.2262 vs link $0.155  (46% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Member\u0027s Mark Beef Hot Dogs, 2 oz., 24 ct.",
-                     "link":  "Ball Park Classic Original Length Hot Dogs, 24 ct."
+                     "link":  ""
                  },
                  {
                      "id":  "hot-sauce",
@@ -959,6 +1287,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Fairbury Fully Cooked Skinless, Red Hot Dogs, Vacuum Sealed, Refrigerated, Plastic Pouch, 32 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "instant-mashed-potatoes",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Idahoan Buttery Homestyle Mashed Potatoes",
                      "link":  ""
                  },
                  {
@@ -978,6 +1314,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "jalapenos",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Jalapeno Pepper",
+                     "link":  ""
+                 },
+                 {
                      "id":  "japanese-curry-roux",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -988,10 +1332,18 @@
                  {
                      "id":  "jelly",
                      "store":  "Sam\u0027s Club",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.0747 vs link $0.083  (10% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Welch\u0027s Concord Grape Jelly, 30 oz., 2 pk.",
-                     "link":  "Welch\u0027s Concord Grape Jelly, 30 oz., 2 pk."
+                     "link":  ""
+                 },
+                 {
+                     "id":  "kale",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kale",
+                     "link":  ""
                  },
                  {
                      "id":  "eggs",
@@ -1003,10 +1355,34 @@
                  },
                  {
                      "id":  "eggs",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Country Daybreak Large White Eggs",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "eggs",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Member\u0027s Mark Cage Free Grade A Large White Eggs, 2 dozen",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "lemons",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Lemon",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "lettuce",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Iceberg Lettuce",
                      "link":  ""
                  },
                  {
@@ -1018,11 +1394,27 @@
                      "link":  ""
                  },
                  {
+                     "id":  "limes",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Limes",
+                     "link":  ""
+                 },
+                 {
                      "id":  "egg-whites",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Member\u0027s Mark Liquid Egg Whites 16 oz., 6 pk.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "mangoes",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Red Mango",
                      "link":  ""
                  },
                  {
@@ -1050,6 +1442,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "microwave-popcorn",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fareway 3 Pack Butter Movie Theater Microwave Popcorn Bags",
+                     "link":  ""
+                 },
+                 {
                      "id":  "fresh-mint",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -1063,6 +1463,22 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Mizkan Mirin Sweet Cooking Seasoning, 12 fl oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "mirin",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kikkoman Sweet Cooking Rice Seasoning (Aji-Mirin)",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "mixed-nuts",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fareway Mixed Nuts, Roasted and Salted",
                      "link":  ""
                  },
                  {
@@ -1131,11 +1547,19 @@
                  },
                  {
                      "id":  "paper-towels",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Scott One-Ply Choose-A-Sheet Fast Absorbing Double Rolls Paper Towels",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "paper-towels",
                      "store":  "Family Fare",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $1.3738 vs link $1.4988  (8.3% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Sparkle Pick A Size Modern White 2 Ply Paper Towels 8 Ea",
-                     "link":  "Sparkle Pick A Size Modern White 2 Ply Paper Towels 8 Ea"
+                     "link":  ""
                  },
                  {
                      "id":  "paprika",
@@ -1154,12 +1578,36 @@
                      "link":  ""
                  },
                  {
+                     "id":  "dried-parsley",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "McCormick Parsley Flakes 0.25 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pasta",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fareway Long Spaghetti",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "peaches",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Peach",
+                     "link":  ""
+                 },
+                 {
                      "id":  "peaches",
                      "store":  "Hy-Vee",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $2.99 vs link $2.7489  (8.8% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Yellow Flesh Peaches",
-                     "link":  "Del Monte Sliced Yellow Cling Peaches In Heavy Syrup"
+                     "link":  ""
                  },
                  {
                      "id":  "peanut-butter",
@@ -1210,6 +1658,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "poppy-seeds",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "McCormick Poppy Seed",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "pork-chops",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Center Cut Pork Chops",
+                     "link":  ""
+                 },
+                 {
                      "id":  "potato-gnocchi",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
@@ -1226,11 +1690,35 @@
                      "link":  ""
                  },
                  {
+                     "id":  "horseradish",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Inglehoffer Thick-n-Creamy Horseradish3.75 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "protein-bars",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "CLIF BAR Energy Protein Bars, Chocolate Chip, Non-Gmo 12 oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "ramen",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Maruchan Chicken Flavor Ramen Noodle Soup 12 Count",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ramen",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Maruchan Ramen Noodle Soup, Chicken",
                      "link":  ""
                  },
                  {
@@ -1290,6 +1778,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "ribeye-steak",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "USDA Choice Thick Cut Ribeye Steak",
+                     "link":  ""
+                 },
+                 {
                      "id":  "rice-noodles",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -1314,6 +1810,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "rotisserie-chicken",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Roasted Whole Chicken",
+                     "link":  ""
+                 },
+                 {
                      "id":  "russet-potatoes",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
@@ -1324,10 +1828,18 @@
                  {
                      "id":  "russet-potatoes",
                      "store":  "Walmart",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $0.568 vs link $0.548  (3.6% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Fresh Whole Russet Potatoes , 5 lb Bag",
-                     "link":  "Fresh Whole Russet Potatoes, 5 lb Bag"
+                     "link":  ""
+                 },
+                 {
+                     "id":  "russet-potatoes",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Russet Potato Bag",
+                     "link":  ""
                  },
                  {
                      "id":  "sesame-oil",
@@ -1354,6 +1866,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "sirloin-steak",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "USDA Choice Sirloin Tip Steak",
+                     "link":  ""
+                 },
+                 {
                      "id":  "sloppy-joe-sauce",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
@@ -1370,11 +1890,35 @@
                      "link":  ""
                  },
                  {
+                     "id":  "soda",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Shasta Cola",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "sparkling-water",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Clear Frost Sparkling Water, Black Cherry",
+                     "link":  ""
+                 },
+                 {
                      "id":  "string-cheese",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Frigo Cheese Heads String Cheese 1 oz. pkg., 48 ct.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "stuffing-mix",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fareway Cornbread Stuffing Mix",
                      "link":  ""
                  },
                  {
@@ -1399,6 +1943,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Sweet Potatoes",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "sweet-potatoes",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Sweet Potato (Yam)",
                      "link":  ""
                  },
                  {
@@ -1460,10 +2012,18 @@
                  {
                      "id":  "tomatillos",
                      "store":  "Family Fare",
-                     "fault":  "PRICE-DRIFT",
-                     "detail":  "board $1.99 vs link $2.49  (20.1% off)",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
                      "board":  "Tomatillos",
-                     "link":  "Tomatillos"
+                     "link":  ""
+                 },
+                 {
+                     "id":  "tomatillos",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Tomatillo",
+                     "link":  ""
                  },
                  {
                      "id":  "tomatillos",
@@ -1471,6 +2031,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Fresh Tomatillos Milpero, 16 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "tomatoes",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Roma Tomato",
                      "link":  ""
                  },
                  {
@@ -1483,10 +2051,26 @@
                  },
                  {
                      "id":  "tortillas",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Frescados Flour Taco Style Tortillas",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "tortillas",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "La Banderita 9” Homestyle Soft Taco Flour Tortillas, 24 ct.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "trash-bags",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Bright Essentials Trash Bags, Tall Kitchen, Drawstring, Unscented",
                      "link":  ""
                  },
                  {
@@ -1522,11 +2106,51 @@
                      "link":  ""
                  },
                  {
+                     "id":  "rice",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "ParExcellence Premium Long Grain Rice",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "watermelon",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Seedless Watermelon",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "onions",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger Yellow Onions bag",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "onions",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Yellow Onions",
+                     "link":  ""
+                 },
+                 {
                      "id":  "yogurt",
                      "store":  "Baker\u0027s",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kroger Blended Vanilla Low Fat Yogurt",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "yogurt",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fareway Nonfat Plain Greek Yogurt",
                      "link":  ""
                  },
                  {
@@ -1539,5 +2163,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  172
+    "coverage_violations":  265
 }

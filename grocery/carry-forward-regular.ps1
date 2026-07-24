@@ -35,29 +35,40 @@ function Invoke-CarryForward([string]$prefix, [string]$dir, [int]$maxDays) {
     Where-Object { $_.BaseName -match ('^' + [regex]::Escape($prefix) + '-regular-\d{4}-\d{2}-\d{2}$') } |
     Sort-Object Name -Descending)
   if ($files.Count -lt 2) { return "carry-forward [$prefix]: fewer than 2 dated captures - nothing to carry from" }
-  $newF = $files[0]; $prevF = $files[1]
-  $newDate  = [datetime]([regex]::Match($newF.BaseName,  '(\d{4}-\d{2}-\d{2})$').Groups[1].Value)
-  $prevDate = [datetime]([regex]::Match($prevF.BaseName, '(\d{4}-\d{2}-\d{2})$').Groups[1].Value)
-  $new  = Get-Content $newF.FullName  -Raw | ConvertFrom-Json
-  $prev = Get-Content $prevF.FullName -Raw | ConvertFrom-Json
+  $newF = $files[0]
+  $newDate = [datetime]([regex]::Match($newF.BaseName, '(\d{4}-\d{2}-\d{2})$').Groups[1].Value)
+  $new = Get-Content $newF.FullName -Raw | ConvertFrom-Json
   $have = @{}
   foreach ($d in @($new.deals)) { $have[([string]$d.item).ToLower().Trim()] = $true }
   $carried = 0; $expired = 0
   $outDeals = New-Object System.Collections.Generic.List[object]
   foreach ($d in @($new.deals)) { $outDeals.Add($d) }
-  foreach ($d in @($prev.deals)) {
-    $k = ([string]$d.item).ToLower().Trim()
-    if (-not $k -or $have.ContainsKey($k)) { continue }
-    # true capture date: a row already carried once keeps its original as_of
-    $asOf = $prevDate
-    if ($d.PSObject.Properties['as_of'] -and $d.as_of) { try { $asOf = [datetime]$d.as_of } catch {} }
-    if (($newDate - $asOf).TotalDays -gt $maxDays) { $expired++; continue }
-    $row = $d | Select-Object *   # shallow copy so we never mutate the prev doc
-    if (-not $row.PSObject.Properties['as_of']) { $row | Add-Member -NotePropertyName as_of -NotePropertyValue $asOf.ToString('yyyy-MM-dd') }
-    else { $row.as_of = $asOf.ToString('yyyy-MM-dd') }
-    $outDeals.Add($row); $carried++
+  # WALK EVERY prior capture inside the window, newest first (2026-07-23 lesson: one-file-back missed items
+  # that last appeared two pulls ago - Fareway bar-soap/cantaloupe/honeydew survived in the 07-15 file but not
+  # 07-18, so a single-hop carry lost them). Newest occurrence of an item wins; the age cap still counts from
+  # each row's ORIGINAL as_of, so walking further back can never resurrect anything past the policy window.
+  $carrySrc = @()
+  foreach ($prevF in ($files | Select-Object -Skip 1)) {
+    $prevDate = [datetime]([regex]::Match($prevF.BaseName, '(\d{4}-\d{2}-\d{2})$').Groups[1].Value)
+    if (($newDate - $prevDate).TotalDays -gt $maxDays) { break }   # files sorted newest-first; older = all out
+    $prev = Get-Content $prevF.FullName -Raw | ConvertFrom-Json
+    foreach ($d in @($prev.deals)) {
+      $k = ([string]$d.item).ToLower().Trim()
+      if (-not $k -or $have.ContainsKey($k)) { continue }
+      $have[$k] = $true    # newest-first walk: first sighting wins, older sightings skipped
+      # true capture date: a row already carried once keeps its original as_of
+      $asOf = $prevDate
+      if ($d.PSObject.Properties['as_of'] -and $d.as_of) { try { $asOf = [datetime]$d.as_of } catch {} }
+      if (($newDate - $asOf).TotalDays -gt $maxDays) { $expired++; continue }
+      $row = $d | Select-Object *   # shallow copy so we never mutate the prev doc
+      if (-not $row.PSObject.Properties['as_of']) { $row | Add-Member -NotePropertyName as_of -NotePropertyValue $asOf.ToString('yyyy-MM-dd') }
+      else { $row.as_of = $asOf.ToString('yyyy-MM-dd') }
+      $outDeals.Add($row); $carried++
+    }
+    $carrySrc += $prevF.Name
   }
-  if ($carried -eq 0 -and $expired -eq 0) { return "carry-forward [$prefix]: newest capture already covers everything in $($prevF.Name) - nothing carried" }
+  $prevF = [pscustomobject]@{ Name = ($carrySrc -join ' + ') }   # for the note below
+  if ($carried -eq 0 -and $expired -eq 0) { return "carry-forward [$prefix]: newest capture already covers everything in the window - nothing carried" }
   $new.deals = $outDeals
   # note the operation in the envelope without disturbing other fields (price_mode etc. must survive)
   $note = ("carry-forward: +{0} item(s) from {1} (absent from this pull; as_of-stamped, {2}-day cap), {3} expired" -f $carried, $prevF.Name, $maxDays, $expired)

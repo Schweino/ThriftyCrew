@@ -5083,7 +5083,265 @@
                       "size":  "17.63 oz",
                       "regular":  7.49,
                       "source_ad":  "bakersplus.com Pickup Saddlecreek Omaha (r100 capture 2026-07-18)"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "KikkomanÂ® Panko Japanese Style Bread Crumbs",
+                      "ad_price":  "$2.49",
+                      "size":  "8 oz",
+                      "regular":  null,
+                      "source_ad":  "promoted from verified recipe pricing (Panko Breadcrumbs)",
+                      "as_of":  "2026-07-14"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "KrogerÂ® Oregano Leaves Shaker",
+                      "ad_price":  "$3.29",
+                      "size":  "1.94 oz",
+                      "regular":  3.29,
+                      "source_ad":  "bakersplus.com search card price/unit price (Saddlecreek, Omaha) - the price the store charges today",
+                      "as_of":  "2026-07-14",
+                      "current_price":  3.29,
+                      "upc":  "0001111001996"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Simple Truth OrganicÂ® Ground Turmeric Shaker",
+                      "ad_price":  "$3.99",
+                      "size":  "2.04 oz",
+                      "regular":  null,
+                      "source_ad":  "promoted from verified recipe pricing (Ground Turmeric)",
+                      "as_of":  "2026-07-14"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "KrogerÂ® 100% Lemon Juice",
+                      "ad_price":  "$3.29",
+                      "size":  "32 fl oz",
+                      "regular":  3.29,
+                      "source_ad":  "bakersplus.com search card price/unit price (Saddlecreek, Omaha) - the price the store charges today",
+                      "as_of":  "2026-07-14",
+                      "current_price":  3.29,
+                      "base_price":  3.49,
+                      "marked_down":  true,
+                      "upc":  "0001111070207"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "KrogerÂ® 5% Apple Cider Vinegar",
+                      "ad_price":  "$1.69",
+                      "size":  "16 fl oz",
+                      "regular":  1.69,
+                      "source_ad":  "bakersplus.com search card price/unit price (Saddlecreek, Omaha) - the price the store charges today",
+                      "as_of":  "2026-07-14",
+                      "restored":  "verified Baker\u0027s product (product-urls.json, live URL) that the catalogue pull did not return",
+                      "restored_for":  "apple-cider-vinegar",
+                      "current_price":  1.69,
+                      "upc":  "0001111086200"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "KrogerÂ® Half and Half Half Gallon",
+                      "ad_price":  "$4.99",
+                      "size":  "64 fl oz",
+                      "regular":  4.99,
+                      "source_ad":  "bakersplus.com search card price/unit price (Saddlecreek, Omaha) - the price the store charges today",
+                      "as_of":  "2026-07-14",
+                      "restored":  "verified Baker\u0027s product (product-urls.json, live URL) that the catalogue pull did not return",
+                      "restored_for":  "half-and-half",
+                      "current_price":  4.99,
+                      "upc":  "0001111050074"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger 80/20 Ground Beef Roll",
+                      "ad_price":  "$5.99",
+                      "size":  "lb",
+                      "regular":  "7.49",
+                      "source_ad":  "everyday shelf price (on sale, from $7.49)",
+                      "as_of":  "2026-07-07"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger 85/15 Fresh Ground Turkey Tray",
+                      "ad_price":  "$4.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-07"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger 2% Low Fat Small Curd Cottage Cheese",
+                      "ad_price":  "$1.67",
+                      "size":  "16 oz",
+                      "regular":  "2.49",
+                      "source_ad":  "everyday shelf price (3 for $5.00, from $2.49)",
+                      "as_of":  "2026-07-07"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Original Cream Cheese 2 ct",
+                      "ad_price":  "$3.29",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-07"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Colby Jack Shredded Cheese",
+                      "ad_price":  "$3.69",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-07"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Blended Vanilla Low Fat Yogurt Tub",
+                      "ad_price":  "$2.99",
+                      "size":  "32 oz",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-07"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Fresh Strawberries Clamshell",
+                      "ad_price":  "$2.99",
+                      "size":  "1 lb",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-07"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Fresh Blueberries Clamshell",
+                      "ad_price":  "$5.99",
+                      "size":  "18 oz",
+                      "regular":  "6.49",
+                      "source_ad":  "everyday shelf price (from $6.49)",
+                      "as_of":  "2026-07-07"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Yellow Onions bag",
+                      "ad_price":  "$1.16",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-07"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Gala Apples bag",
+                      "ad_price":  "$1.50",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-07"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Fresh Seedless White Grapes",
+                      "ad_price":  "$1.99",
+                      "size":  "lb",
+                      "regular":  "2.79",
+                      "source_ad":  "everyday shelf price (sale)",
+                      "as_of":  "2026-07-07"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Creamy Peanut Butter",
+                      "ad_price":  "$4.49",
+                      "size":  "40 oz",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-07"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger 100% Orange Juice Pulp Free",
+                      "ad_price":  "$8.79",
+                      "size":  "128 fl oz",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-07"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Salted Butter Sticks (4 sticks)",
+                      "ad_price":  "$3.49",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-06"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Original Cream Cheese (2 ct / 8 oz)",
+                      "ad_price":  "$3.29",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-06"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger White Sandwich Bread (20 oz loaf)",
+                      "ad_price":  "$1.99",
+                      "size":  "each",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-06"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Fresh Bananas",
+                      "ad_price":  "$0.55",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-06"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Russet Potatoes (5 lb bag)",
+                      "ad_price":  "$0.60",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-06"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Yellow Onions (3 lb bag)",
+                      "ad_price":  "$1.16",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-06"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Gala Apples (3 lb bag)",
+                      "ad_price":  "$1.50",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-06"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger 80/20 Ground Beef Tray",
+                      "ad_price":  "$7.99",
+                      "size":  "lb",
+                      "regular":  null,
+                      "source_ad":  "everyday shelf price",
+                      "as_of":  "2026-07-06"
                   }
               ],
-    "deal_count":  550
+    "deal_count":  550,
+    "carry_note":  "carry-forward: +27 item(s) from bakers-regular-2026-07-15.json + bakers-regular-2026-07-14.json + bakers-regular-2026-07-12.json + bakers-regular-2026-07-08.json + bakers-regular-2026-07-07.json + bakers-regular-2026-07-06.json + bakers-regular-2026-07-05.json (absent from this pull; as_of-stamped, 14-day cap), 0 expired"
 }
