@@ -24,7 +24,11 @@ param(
   # one covering each commodity wins. Walmart is everyday-priced, so an older capture is only ever a gap-filler.
   [int]$WalmartMaxAgeDays = 14,
   [string]$FarewayFile = "",
-  [int]$MinStores = 2,
+  # DEFAULT 1, matching the daily pipeline (check-ad-cycles passes -MinStores 1 explicitly). It was 2 until
+  # 2026-07-23, when a MANUAL rerun during the Fareway incident silently dropped every single-store tail
+  # commodity (achiote-paste, berbere, onion-soup-mix...) from the board - the pipeline and a human running
+  # the same script must produce the same board.
+  [int]$MinStores = 1,
   [string]$OutDir = "",
   [string]$CommoditiesFile = "",
   [string]$OutName = "comparison",

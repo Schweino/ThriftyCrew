@@ -652,13 +652,6 @@
                                                      "size":  "lb",
                                                      "board_pu":  2.19
                                                  },
-                                 "Fareway":  {
-                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16516401-granny-smith-apple-1-lb",
-                                                 "price":  1.68,
-                                                 "size":  "lb",
-                                                 "name":  "Granny Smith Apple",
-                                                 "board_pu":  1.68
-                                             },
                                  "Sam\u0027s Club":  {
                                                          "url":  "https://www.samsclub.com/ip/13585869052",
                                                          "name":  "Envy Apples, 4 lbs.",
@@ -772,13 +765,6 @@
                                                          "name":  "Green Asparagus",
                                                          "board_pu":  3.49
                                                      },
-                                    "Fareway":  {
-                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/51144857-green-giant-extra-long-asparagus-spears",
-                                                    "price":  5.48,
-                                                    "size":  "15 oz",
-                                                    "name":  "Green Giant Extra Long Asparagus Spears",
-                                                    "board_pu":  5.8453
-                                                },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/37264/asparagus",
                                                    "price":  4.99,
@@ -1394,13 +1380,6 @@
                                                       "name":  "Yellow Bananas",
                                                       "board_pu":  0.65
                                                   },
-                                  "Fareway":  {
-                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17533153-banana-1-lb",
-                                                  "price":  0.57,
-                                                  "size":  "lb",
-                                                  "name":  "Banana",
-                                                  "board_pu":  0.57
-                                              },
                                   "Hy-Vee":  {
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/37178/fresh-chiquita-bananas",
                                                  "name":  "Fresh Chiquita Bananas",
@@ -1436,7 +1415,7 @@
                                    "Fareway":  {
                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/41206-irish-spring-deodorant-soap-original-bath-size-11-25-oz",
                                                    "price":  3.69,
-                                                   "size":  "each",
+                                                   "size":  "3 ct",
                                                    "name":  "Irish Spring Men\u0027s Bar Soap, Original Clean"
                                                },
                                    "Hy-Vee":  {
@@ -1467,7 +1446,7 @@
                                     "Fareway":  {
                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24721072-fareway-batteries-alkaline-aa-15-v-8-pack-8-each",
                                                     "price":  4.99,
-                                                    "size":  "each",
+                                                    "size":  "8 ct",
                                                     "name":  "Fareway 8 Pack 1.5 V AA Alkaline Batteries"
                                                 },
                                     "Hy-Vee":  {
@@ -1740,14 +1719,7 @@
                                                    "size":  "38 oz",
                                                    "name":  "Dinty Moore Beef Stew",
                                                    "verified":  "2026-07-23 Hy-Vee search API (storeId 1465)"
-                                               },
-                                    "Walmart":  {
-                                                    "url":  "https://www.walmart.com/ip/1454063903",
-                                                    "price":  10.72,
-                                                    "size":  "80 oz",
-                                                    "name":  "(4 pack) Armour Star Classic Homestyle Beef Stew, 13g Protei",
-                                                    "board_pu":  0.165
-                                                }
+                                               }
                                 },
                   "bell-peppers":  {
                                        "commodity":  "bell-peppers",
@@ -1774,7 +1746,7 @@
                                        "Fareway":  {
                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3256531-green-bell-pepper-each",
                                                        "price":  1.17,
-                                                       "size":  "each",
+                                                       "size":  "1 ct",
                                                        "name":  "Green Bell Pepper",
                                                        "board_pu":  1.17
                                                    },
@@ -2189,12 +2161,6 @@
                                                             "name":  "Purified Drinking Water Our Family (24 Ct   16.9 Oz)",
                                                             "board_pu":  0.1662
                                                         },
-                                        "Fareway":  {
-                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20544533-fareway-drinking-water-purified-24-each",
-                                                        "price":  3.87,
-                                                        "size":  "each",
-                                                        "name":  "Fareway Purified Drinking Water"
-                                                    },
                                         "Walmart":  {
                                                         "url":  "https://www.walmart.com/ip/Great-Value-Purified-Drinking-Water-16-9-fl-oz-24-Count/13448854",
                                                         "price":  3.68,
@@ -2290,12 +2256,6 @@
                                 },
                   "bread":  {
                                 "commodity":  "Bread (loaf)",
-                                "Aldi":  {
-                                             "url":  "https://www.aldi.us/store/aldi/products/20946160-l-oven-fresh-white-bread-20-oz",
-                                             "price":  1.45,
-                                             "size":  "loaf",
-                                             "name":  "L\u0027oven Fresh White Bread"
-                                         },
                                 "Baker\u0027s":  {
                                                      "url":  "https://www.bakersplus.com/p/smart-way-enriched-white-bread/0001111015125",
                                                      "price":  1.19,
@@ -2446,7 +2406,7 @@
                                                "Fareway":  {
                                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/42274-jimmy-dean-sausage-egg-cheese-croissant-breakfast-sandwiches-4-5-oz",
                                                                "price":  7.29,
-                                                               "size":  "each",
+                                                               "size":  "4 ct",
                                                                "name":  "Jimmy Dean Croissant Breakfast Sandwiches with Sausage, Egg, and Cheese, Frozen, 4 Count"
                                                            },
                                                "Hy-Vee":  {
@@ -3016,13 +2976,6 @@
                                                 "size":  "15.25 oz",
                                                 "name":  "Baker\u0027s Corner Yellow Cake Mix"
                                             },
-                                   "Fareway":  {
-                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/21855744-pillsbury-cake-mix-premium-yellow-15-25-oz",
-                                                   "price":  1.49,
-                                                   "size":  "each",
-                                                   "name":  "Pillsbury Moist Supreme Yellow Cake Mix, 15.25 oz Box",
-                                                   "board_pu":  1.49
-                                               },
                                    "Hy-Vee":  {
                                                   "url":  "https://www.hy-vee.com/aisles-online/p/2263913/hy-vee-extra-moist-classic-yellow-deluxe-cake-mix",
                                                   "name":  "Hy-Vee Extra Moist Classic Yellow Deluxe Cake Mix",
@@ -3132,12 +3085,6 @@
                                                       "name":  "Brookdale Chunk Chicken Breast",
                                                       "board_pu":  0.1992
                                                   },
-                                         "Fareway":  {
-                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22158769-fareway-chicken-breast-125-oz",
-                                                         "price":  3.34,
-                                                         "size":  "12.5 oz",
-                                                         "name":  "Fareway Premium Chunk Chicken Breast in Water"
-                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/7874219619",
                                                                  "name":  "Member\u0027s Mark Premium Chunk Chicken Breast, 12.5 oz., 6 ct.",
@@ -3301,14 +3248,7 @@
                                                               "name":  "Hy-Vee Mild Green Chiles Diced",
                                                               "verified":  "2026-07-16 Hy-Vee search API (storeId 1465)",
                                                               "board_pu":  0.3557
-                                                          },
-                                               "Walmart":  {
-                                                               "url":  "https://www.walmart.com/ip/10320500",
-                                                               "price":  1.67,
-                                                               "size":  "4 oz",
-                                                               "name":  "Ortega Fire Roasted Mild Diced Green Chiles, Kosher, 4 oz",
-                                                               "board_pu":  0.3671
-                                                           }
+                                                          }
                                            },
                   "canned-mixed-vegetables":  {
                                                   "commodity":  "Canned Mixed Vegetables",
@@ -3496,13 +3436,6 @@
                                                    "name":  "Happy Harvest Medium Sweet Peas",
                                                    "board_pu":  0.052
                                                },
-                                      "Fareway":  {
-                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84388013-peas",
-                                                      "price":  0.78,
-                                                      "size":  "15 oz",
-                                                      "name":  "Sweet Peas",
-                                                      "board_pu":  0.052
-                                                  },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/2936860/that-s-smart-sweet-peas",
                                                      "name":  "That\u0027s Smart! Sweet Peas",
@@ -3932,7 +3865,7 @@
                                      "Fareway":  {
                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16606119-cantaloupe-melon-1-lb",
                                                      "price":  0.88,
-                                                     "size":  "each",
+                                                     "size":  "lb",
                                                      "name":  "Cantaloupe Melon"
                                                  },
                                      "Hy-Vee":  {
@@ -3978,13 +3911,6 @@
                                                       "board_pu":  1.145,
                                                       "recipe_pu":  1.15
                                                   },
-                                  "Fareway":  {
-                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1528164-dole-mini-cut-carrots-16-oz",
-                                                  "price":  1.49,
-                                                  "size":  "16 oz",
-                                                  "name":  "Carrots, Mini Cut",
-                                                  "board_pu":  1.49
-                                              },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/13585974324",
                                                           "name":  "Organic Tender Sweet Carrots, 5 lbs.",
@@ -4247,13 +4173,6 @@
                                                      "board_pu":  2.49,
                                                      "recipe_pu":  2.49
                                                  },
-                                 "Fareway":  {
-                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3078796-dole-organic-celery-16-0-oz",
-                                                 "price":  3.99,
-                                                 "size":  "each",
-                                                 "name":  "Dole Celery Hearts",
-                                                 "board_pu":  3.99
-                                             },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/8653/celery",
                                                 "name":  "Celery",
@@ -4587,13 +4506,6 @@
                                                        "size":  "lb",
                                                        "name":  "Regular/Red/Black Cherries"
                                                    },
-                                   "Fareway":  {
-                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25841971-fareway-cherries-dark-sweet-unsweetened-pitted-12-oz",
-                                                   "price":  4.49,
-                                                   "size":  "12 oz",
-                                                   "name":  "Fareway Unsweetened \u0026 Pitted Dark Sweet Cherries",
-                                                   "board_pu":  5.9867
-                                               },
                                    "Hy-Vee":  {
                                                   "url":  "https://www.hy-vee.com/aisles-online/p/8641/fresh-red-cherries",
                                                   "name":  "Fresh Red Cherries",
@@ -4640,12 +4552,6 @@
                                                              "name":  "Boneless Skinless Chicken Breasts",
                                                              "board_pu":  2.99
                                                          },
-                                         "Fareway":  {
-                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/92522-tyson-grilled-and-ready-diced-oven-roasted-frozen-chicken-breast-22-oz",
-                                                         "price":  7.76,
-                                                         "size":  "22 oz",
-                                                         "name":  "Tyson Tyson Frozen Oven Roasted Diced Chicken Breast, 22 oz"
-                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/13588173694",
                                                                  "name":  "Member\u0027s Mark Boneless and Skinless Chicken Breast, priced per pound",
@@ -4779,13 +4685,6 @@
                                                               "name":  "Tyson Frozen Chicken Nuggets Family Pack 4 Lb",
                                                               "board_pu":  0.2498
                                                           },
-                                          "Fareway":  {
-                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/57039742-tyson-chicken-nuggets-29-00-oz",
-                                                          "price":  7.49,
-                                                          "size":  "29 oz",
-                                                          "name":  "Tyson Frozen Chicken Nuggets, 29 oz",
-                                                          "board_pu":  0.2583
-                                                      },
                                           "Sam\u0027s Club":  {
                                                                   "url":  "https://www.samsclub.com/ip/13589400339",
                                                                   "name":  "Tyson Breaded Chicken Nuggets, Frozen, 5 lbs.",
@@ -4825,14 +4724,6 @@
                                                          "name":  "Bone-In Chicken Thighs",
                                                          "board_pu":  1.99
                                                      },
-                                         "Hy-Vee":  {
-                                                        "url":  "https://www.hy-vee.com/aisles-online/p/31783/hy-vee-100-natural-chicken-thighs-value-pack",
-                                                        "name":  "Hy-Vee 100% Natural Chicken Thighs Value Pack",
-                                                        "board_pu":  1.77,
-                                                        "price":  2.29,
-                                                        "size":  "lb",
-                                                        "verified":  "2026-07-20 Hy-Vee GraphQL (storeId 1465, current shelf price)"
-                                                    },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/13608013618",
                                                                  "name":  "Member\u0027s Mark Bone-In Chicken Thighs, priced per pound",
@@ -5295,7 +5186,7 @@
                                    "Fareway":  {
                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3177720-cilantro-each",
                                                    "price":  1.49,
-                                                   "size":  "each",
+                                                   "size":  "1 ct",
                                                    "name":  "Cilantro",
                                                    "board_pu":  1.49
                                                },
@@ -5324,12 +5215,6 @@
                                                             "verified":  "2026-07-16 Baker\u0027s warm-browser board-match; card unit price reconciles to the board",
                                                             "board_pu":  0.159
                                                         },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25806503-fareway-soup-clam-chowder-new-england-style-188-oz",
-                                                       "price":  1.88,
-                                                       "size":  "18.8 oz",
-                                                       "name":  "Fareway New England Style Chunky-Style Clam Chowder Soup"
-                                                   },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/3965169/progresso-reduced-sodium-new-england-clam-chowder",
                                                       "name":  "Progresso Reduced Sodium, New England Clam Chowder",
@@ -5349,20 +5234,6 @@
                                                    "verified":  "2026-07-16 Aldi warm-browser board-match, per-unit verified against the board",
                                                    "board_pu":  1.33
                                                },
-                                      "Baker\u0027s":  {
-                                                           "url":  "https://www.bakersplus.com/p/seedless-mandarin-clementine-oranges-in-3lb-bag/0003338314616",
-                                                           "price":  4.99,
-                                                           "size":  "3 lb",
-                                                           "name":  "Seedless Mandarin Clementine Oranges in 3-Pound Bag",
-                                                           "board_pu":  0.998
-                                                       },
-                                      "Fareway":  {
-                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/25858077-fareway-mandarin-oranges-15-oz",
-                                                      "price":  1.94,
-                                                      "size":  "15 oz",
-                                                      "name":  "Fareway Mandarin Oranges",
-                                                      "board_pu":  2.0693
-                                                  },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/2587392/kings-river-poppies-mandarins",
                                                      "name":  "Kings River Poppies Mandarins",
@@ -6177,13 +6048,6 @@
                                                       "name":  "Friendly Farms Cottage Cheese",
                                                       "board_pu":  0.1188
                                                   },
-                                         "Baker\u0027s":  {
-                                                              "url":  "https://www.bakersplus.com/p/kroger-4-milkfat-small-curd-cottage-cheese-big-deal-/0001111044217",
-                                                              "price":  5.79,
-                                                              "size":  "48 oz",
-                                                              "name":  "Kroger 4% Milkfat Small Curd Cottage Cheese BIG DEAL! 48 oz",
-                                                              "board_pu":  0.1206
-                                                          },
                                          "Family Fare":  {
                                                              "url":  "https://www.shopfamilyfare.com/shop/dairy/cheese/ricotta_cottage_cheese/our_family_cottage_cheese_large_curd_4_milkfat_minimum_24_oz/p/1564405684702751833",
                                                              "price":  3.69,
@@ -6492,12 +6356,6 @@
                                                   "name":  "Bake Shop Large Croissants",
                                                   "board_pu":  0.465
                                               },
-                                     "Fareway":  {
-                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386686-fareway-all-butter-croissants-3-ct",
-                                                     "price":  5.99,
-                                                     "size":  "each",
-                                                     "name":  "Fareway All Butter Croissants"
-                                                 },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/74585/croissants-6-count",
                                                     "price":  5.99,
@@ -6648,12 +6506,6 @@
                                                         "size":  "1 ea",
                                                         "board_pu":  0.89
                                                     },
-                                    "Fareway":  {
-                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/20219256-cutecumber-poppers-snack-sized-cucumber-9-oz",
-                                                    "price":  2.88,
-                                                    "size":  "each",
-                                                    "name":  "Mucci Farms Cucumbers, Snack-Sized, CuteCumber Poppers"
-                                                },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/8648/cucumber",
                                                    "price":  0.99,
@@ -6733,19 +6585,6 @@
                                                         "name":  "Land O\u0027 Frost Premium Sliced Honey Ham",
                                                         "board_pu":  0.3744
                                                     },
-                                   "Family Fare":  {
-                                                       "url":  "https://www.shopfamilyfare.com/shop/deli/lunch_meat/pre_packaged_ham/hillshire_farm_ultra_thin_sliced_brown_sugar_ham_sandwich_meat_9_oz/p/2363811",
-                                                       "price":  6.99,
-                                                       "size":  "9 oz",
-                                                       "name":  "Hillshire Farm Ultra Thin Sliced Brown Sugar Ham Sandwich Meat 9 Oz"
-                                                   },
-                                   "Fareway":  {
-                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/73433-hormel-natural-choice-honey-deli-ham-8-oz",
-                                                   "price":  3.99,
-                                                   "size":  "8 oz",
-                                                   "name":  "NATURAL CHOICE Honey Deli Ham",
-                                                   "board_pu":  0.4988
-                                               },
                                    "Hy-Vee":  {
                                                   "url":  "https://www.hy-vee.com/aisles-online/p/73880/smithfield-sliced-deli-ham",
                                                   "price":  4.99,
@@ -6826,13 +6665,6 @@
                                                "name":  "Little Journey Club Pack Diapers Size 4",
                                                "board_pu":  0.1499
                                            },
-                                  "Fareway":  {
-                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/49863426-luvs-diapers-pltn-ptct-baby-jmb-sz6",
-                                                  "price":  7.47,
-                                                  "size":  "20 ct",
-                                                  "name":  "Luvs Platinum Protection Baby Diapers, Size 6",
-                                                  "board_pu":  0.3735
-                                              },
                                   "Hy-Vee":  {
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/3943814/luvs-platinum-protection-diapers-bluey-size-4-22-37-pound",
                                                  "name":  "Luvs Platinum Protection Diapers, Bluey, Size 4 (22-37-Pound)",
@@ -7097,13 +6929,6 @@
                                                                    "size":  "43 ea",
                                                                    "board_pu":  0.2788
                                                                },
-                                               "Fareway":  {
-                                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/95570163-cascade-complete-dishwasher-detergent-pods-with-dawn-fresh-16-ct",
-                                                               "price":  6.49,
-                                                               "size":  "16 ct",
-                                                               "name":  "Cascade Complete Dishwasher Detergent Fresh",
-                                                               "board_pu":  0.4056
-                                                           },
                                                "Sam\u0027s Club":  {
                                                                        "url":  "https://www.samsclub.com/ip/18766722402",
                                                                        "name":  "Member\u0027s Mark Platinum Clean Automatic Dishwasher Pacs, Fresh Clean, 110 ct.",
@@ -7473,12 +7298,6 @@
                                                             "board_pu":  5.58,
                                                             "recipe_pu":  5.58
                                                         },
-                                        "Fareway":  {
-                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/258008-badia-spices-parsley-flakes-1-0-oz",
-                                                        "price":  3.99,
-                                                        "size":  "1 g",
-                                                        "name":  "Badia Spices Parsley Flakes"
-                                                    },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/2922965/hy-vee-parsley-flakes",
                                                        "name":  "Hy-Vee Parsley Flakes",
@@ -7571,12 +7390,6 @@
                                                     "name":  "Tandil Original Fresh Fabric Softener Sheets",
                                                     "board_pu":  0.0299
                                                 },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/26952710-bright-essentials-dryer-sheets-wrinkle-reducing-unscented-120-each",
-                                                       "price":  3.94,
-                                                       "size":  "each",
-                                                       "name":  "Bright Essentials Dryer Sheets, Wrinkle Reducing, Unscented"
-                                                   },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/4209829/hy-vee-island-scent-fabric-softener-sheets",
                                                       "price":  2.99,
@@ -7661,13 +7474,6 @@
                                                    "name":  "Medium Grade A Eggs Our Family",
                                                    "board_pu":  1.85
                                                },
-                               "Fareway":  {
-                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2915637-dutch-farms-18-grade-a-large-eggs-18-ct",
-                                               "price":  2.17,
-                                               "size":  "dozen",
-                                               "name":  "Dutch Farms 18 Grade A Large Eggs",
-                                               "board_pu":  2.17
-                                           },
                                "Hy-Vee":  {
                                               "url":  "https://www.hy-vee.com/aisles-online/p/4143167/that-s-smart-large-eggs",
                                               "name":  "That\u0027s Smart! Large Eggs",
@@ -7763,13 +7569,6 @@
                                                             "name":  "Zoa White Peach Energy Drink 12 Fl Oz",
                                                             "board_pu":  0.1825
                                                         },
-                                        "Fareway":  {
-                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/61130528-red-bull-pink-editon-wild-brry",
-                                                        "price":  3.49,
-                                                        "size":  "12 fl oz",
-                                                        "name":  "Red Bull Pink Edition Energy Drink Can",
-                                                        "board_pu":  0.2908
-                                                    },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/3973295/ghost-zero-sugar-energy-drink-welch-s-grape-16-fl-oz-can",
                                                        "name":  "Ghost Zero Sugar Energy Drink, Welch\u0027s Grape, 16 fl oz can",
@@ -7803,12 +7602,6 @@
                                                        "size":  "12 oz",
                                                        "name":  "L\u0027oven Fresh Plain English Muffins"
                                                    },
-                                          "Fareway":  {
-                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/121682-bays-original-english-muffins-12-oz",
-                                                          "price":  3.99,
-                                                          "size":  "each",
-                                                          "name":  "Bays 6 ct, Original, English Muffins, Kosher, 12 oz"
-                                                      },
                                           "Hy-Vee":  {
                                                          "url":  "https://www.hy-vee.com/aisles-online/p/23555/hy-vee-pre-sliced-original-english-muffins-6-muffins",
                                                          "name":  "Hy-Vee Pre-Sliced Original English Muffins - 6 Muffins",
@@ -7921,12 +7714,6 @@
                                                       "name":  "Willow 2 Ply Facial Tissue",
                                                       "board_pu":  0.0097
                                                   },
-                                         "Fareway":  {
-                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18059378-puffs-non-lotion-facial-tissue-48-0-ct",
-                                                         "price":  1.99,
-                                                         "size":  "1 ct",
-                                                         "name":  "Puffs Ultra Soft Facial Tissues"
-                                                     },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/7874205758",
                                                                  "name":  "Member\u0027s Mark Ultra Soft 3-Ply Facial Tissues, 12 Cube Boxes, 80 tissues/box",
@@ -8269,13 +8056,6 @@
                                                     "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)",
                                                     "board_pu":  0.5596
                                                 },
-                                "Fareway":  {
-                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24215312-fareway-flour-unbleached-5-lb",
-                                                "price":  2.64,
-                                                "size":  "5 lb",
-                                                "name":  "Fareway Flour, Unbleached",
-                                                "board_pu":  0.528
-                                            },
                                 "Hy-Vee":  {
                                                "url":  "https://www.hy-vee.com/aisles-online/p/2970327/that-s-smart-bleached-enriched-all-purpose-flour",
                                                "name":  "That\u0027s Smart! Bleached Enriched All-Purpose Flour",
@@ -8309,13 +8089,6 @@
                                                     "size":  "18.5 oz",
                                                     "name":  "Specially Selected French Bread"
                                                 },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/22243430-fareway-french-bread-sliced-16-oz",
-                                                       "price":  2.49,
-                                                       "size":  "each",
-                                                       "name":  "Fareway Sliced French Bread",
-                                                       "board_pu":  2.49
-                                                   },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/98948/baking-stone-french-bread",
                                                       "price":  2.99,
@@ -8416,12 +8189,6 @@
                                                             "name":  "Organic Ginger Root",
                                                             "board_pu":  3.99
                                                         },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/111646051-organic-ginger",
-                                                       "price":  2.5,
-                                                       "size":  "1.73 oz",
-                                                       "name":  "Truly Yours Organic Ginger"
-                                                   },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/37354/melissa-ginger-root",
                                                       "name":  "Melissa Ginger Root",
@@ -8972,13 +8739,6 @@
                                                       "name":  "Bremer Lasagna with Meat Sauce",
                                                       "board_pu":  0.1576
                                                   },
-                                         "Fareway":  {
-                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/77006-stouffer-s-large-family-size-lasagna-with-meat-sauce-57-oz",
-                                                         "price":  13.48,
-                                                         "size":  "57 oz",
-                                                         "name":  "Stouffer\u0027s Classic Lasagna With Meat \u0026 Sauce Large Family Size Frozen Dinners",
-                                                         "board_pu":  0.2365
-                                                     },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/3785089/healthy-choice-cafe-steamers-turkey-sausage-lasagna-bowl-frozen-meal-10-oz-bowl",
                                                         "price":  2.98,
@@ -9104,13 +8864,6 @@
                                                            "name":  "Jack\u0027s Original Thin Sausage Pizza 14.9 Oz",
                                                            "board_pu":  3.6667
                                                        },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2759335-brew-pub-pizza-brew-pub-sausage-and-pepperoni-pizza-26-45-oz",
-                                                       "price":  5.99,
-                                                       "size":  "each",
-                                                       "name":  "Brew Pub Pizza Brew Pub Sausage and Pepperoni Pizza",
-                                                       "board_pu":  5.99
-                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/13591813543",
                                                                "name":  "Red Baron Pepperoni Classic Crust Frozen Pizza, 61.81 oz., 3 pk.",
@@ -9281,14 +9034,7 @@
                                                              "size":  "24 ct 4 oz",
                                                              "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                              "board_pu":  0.4575
-                                                         },
-                                     "Walmart":  {
-                                                     "url":  "https://www.walmart.com/ip/Great-Value-Diced-Peaches-Mandarin-Segments-Cherry-Mixed-Fruits-Variety-Pack-4-oz-12-Pack/5329046728",
-                                                     "price":  7.97,
-                                                     "size":  "12 ct",
-                                                     "name":  "Great Value Mixed Fruits Variety Pack Cups",
-                                                     "board_pu":  0.6642
-                                                 }
+                                                         }
                                  },
                   "fruit-punch":  {
                                       "commodity":  "fruit-punch",
@@ -9299,12 +9045,6 @@
                                                    "name":  "Nature\u0027s Nectar Fruit Punch",
                                                    "board_pu":  0.0303
                                                },
-                                      "Fareway":  {
-                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/34483-hawaiian-punch-polar-blast-juice-drink-1-gal",
-                                                      "price":  3.48,
-                                                      "size":  "512 fl oz",
-                                                      "name":  "Hawaiian Punch Multi-serve Polar Blast Juice Drink"
-                                                  },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/41153/minute-maid-fruit-punch-juice-drink-carton",
                                                      "name":  "Minute Maid Fruit Punch Juice Drink Carton",
@@ -9329,12 +9069,6 @@
                                                     "size":  "17.6 oz",
                                                     "name":  "Lunch Buddies Mixed Berry Fruit Snacks"
                                                 },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1418472-mott-s-medleys-assorted-fruit-snacks-gluten-free-32-000-oz",
-                                                       "price":  8.77,
-                                                       "size":  "each",
-                                                       "name":  "Mottâ€™s Gluten Free Assorted Fruit Flavored Snacks"
-                                                   },
                                        "Walmart":  {
                                                        "url":  "https://www.walmart.com/ip/Mott-s-Fruit-Flavored-Snacks-Easter-Basket-Stuffers-Family-Pack-40-Ct-32-oz/45733406",
                                                        "price":  6.97,
@@ -9427,13 +9161,6 @@
                                                      "board_pu":  0.79,
                                                      "recipe_pu":  0.79
                                                  },
-                                 "Fareway":  {
-                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/3253298-garlic-lb",
-                                                 "price":  0.99,
-                                                 "size":  "each",
-                                                 "name":  "Garlic",
-                                                 "board_pu":  0.99
-                                             },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/8812/jumbo-garlic",
                                                 "price":  0.79,
@@ -9554,13 +9281,6 @@
                                                "name":  "Baker\u0027s Corner Strawberry Gelatin 3 oz",
                                                "board_pu":  0.98
                                            },
-                                  "Fareway":  {
-                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/43202-jell-o-original-orange-ready-to-eat-jello-cups-gelatin-snack-3-375-oz",
-                                                  "price":  2.5,
-                                                  "size":  "each",
-                                                  "name":  "Jell-O Orange Refrigerated Gelatin",
-                                                  "board_pu":  2.5
-                                              },
                                   "Walmart":  {
                                                   "url":  "https://www.walmart.com/ip/Jell-O-Strawberry-Artificially-Flavored-Gelatin-Dessert-Mix-3-oz-Box/13812769",
                                                   "price":  1.62,
@@ -9819,12 +9539,6 @@
                                                            "size":  "10 ea",
                                                            "board_pu":  0.359
                                                        },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/89865-sunbelt-bakery-granola-bars-peanut-butter-chip-chewy-10-ea",
-                                                       "price":  3,
-                                                       "size":  "each",
-                                                       "name":  "Sunbelt Bakery Peanut Butter Chip Chewy Granola Bars"
-                                                   },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/8157/quaker-chewy-chocolate-chip-granola-bars-8-0-84-oz-bars",
                                                       "name":  "Quaker Chewy Chocolate Chip Granola Bars 8-0.84 oz Bars",
@@ -9858,12 +9572,6 @@
                                                           "name":  "Fresh Large Ruby Red Grapefruit",
                                                           "board_pu":  1.5
                                                       },
-                                     "Fareway":  {
-                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/89763-del-monte-red-grapefruit-in-extra-light-syrup-15-oz",
-                                                     "price":  2.62,
-                                                     "size":  "each",
-                                                     "name":  "Del Monte Red Grapefruit in Extra Light Syrup"
-                                                 },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/87141/red-grapefruit",
                                                     "name":  "Red Grapefruit",
@@ -9895,12 +9603,6 @@
                                                           "name":  "Our Family Grape Juice 64 Fl Oz",
                                                           "board_pu":  0.0623
                                                       },
-                                      "Fareway":  {
-                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/69576-old-orchard-diet-grape-juice-cocktail-64-oz",
-                                                      "price":  2.99,
-                                                      "size":  "64 fl oz",
-                                                      "name":  "Old Orchard Diet Grape Juice Cocktail"
-                                                  },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/58034/hy-vee-100-concord-grape-juice-no-sugar-added",
                                                      "price":  4.29,
@@ -10384,15 +10086,6 @@
                                                          "name":  "That\u0027s Smart Ground Cinnamon",
                                                          "verified":  "2026-07-23 Hy-Vee search API (storeId 1465)"
                                                      },
-                                          "Sam\u0027s Club":  {
-                                                                  "url":  "https://www.samsclub.com/ip/13599663121",
-                                                                  "name":  "Pillsbury Cinnamon Rolls with Cinnabon Icing 13 oz., 4 pk.",
-                                                                  "price":  8.83,
-                                                                  "size":  "52 oz",
-                                                                  "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
-                                                                  "board_pu":  0.1698,
-                                                                  "recipe_pu":  0.4433
-                                                              },
                                           "Walmart":  {
                                                           "url":  "https://www.walmart.com/ip/533272737",
                                                           "name":  "Great Value Kosher Ground Cinnamon, 2.5 oz",
@@ -10470,12 +10163,6 @@
                                                             "board_pu":  1.495,
                                                             "recipe_pu":  1.5
                                                         },
-                                       "Family Fare":  {
-                                                           "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_mixes_toppings/sugar_n_spice_smoked_cumin_ground_pp/p/1564405684701720922",
-                                                           "price":  2.59,
-                                                           "size":  "2 oz",
-                                                           "name":  "Sugar \u0027N Spice Smoked Cumin Ground Pp"
-                                                       },
                                        "Fareway":  {
                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/246269-badia-spices-cumin-ground-2-oz",
                                                        "price":  1.68,
@@ -10796,12 +10483,6 @@
                                                               "name":  "Smart Way Hamburger Buns",
                                                               "board_pu":  0.1862
                                                           },
-                                         "Fareway":  {
-                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386545-sesame-yellow-hamburger-buns",
-                                                         "price":  3.88,
-                                                         "size":  "each",
-                                                         "name":  "Fareway Yellow Sesame Hamburger Buns"
-                                                     },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/77056/hy-vee-white-hamburger-buns-8-count",
                                                         "name":  "Hy-Vee White Hamburger Buns 8 Count",
@@ -10866,12 +10547,6 @@
                                                         "size":  "50 fl oz",
                                                         "board_pu":  0.0998
                                                     },
-                                    "Fareway":  {
-                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17105464-softsoap-hand-soap-fresh-breeze-7-5-oz",
-                                                    "price":  1.99,
-                                                    "size":  "221 fl oz",
-                                                    "name":  "Softsoap Liquid Hand Soap Pump, Fresh Breeze"
-                                                },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/4196260/hy-vee-clear-hands-soap",
                                                    "price":  5.99,
@@ -10977,14 +10652,6 @@
                                                      "verified":  "2026-07-20 Hy-Vee GraphQL (storeId 1465, current shelf price)",
                                                      "board_pu":  0.1559
                                                  },
-                                      "Sam\u0027s Club":  {
-                                                              "url":  "https://www.samsclub.com/ip/13607413640",
-                                                              "name":  "Member\u0027s Mark Heavy Whipping Cream, 32 fl. oz.",
-                                                              "price":  3.52,
-                                                              "size":  "32 fl oz",
-                                                              "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
-                                                              "board_pu":  0.1162
-                                                          },
                                       "Walmart":  {
                                                       "url":  "https://www.walmart.com/ip/Great-Value-Heavy-Whipping-Cream-16-oz-Carton-Refrigerated/10450339",
                                                       "price":  2.96,
@@ -11175,7 +10842,7 @@
                                    "Fareway":  {
                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17668522-honeydew-melon-1-lb",
                                                    "price":  0.88,
-                                                   "size":  "each",
+                                                   "size":  "lb",
                                                    "name":  "Honeydew Melon"
                                                },
                                    "Hy-Vee":  {
@@ -11280,12 +10947,6 @@
                                                            "name":  "Silver Spring® Coarse Cut Prepared Horseradish 8 oz",
                                                            "board_pu":  0.3738
                                                        },
-                                      "Fareway":  {
-                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/71192-woeber-s-horseradish-sauce-16-oz",
-                                                      "price":  2.99,
-                                                      "size":  "16 oz",
-                                                      "name":  "Woeber\u0027s Horseradish Sauce"
-                                                  },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/12819/silver-spring-horseradish-8-oz",
                                                      "price":  3.99,
@@ -11349,12 +11010,6 @@
                                                            "size":  "8 ct",
                                                            "board_pu":  0.5362
                                                        },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18529104-rotella-s-hot-dog-buns-12-4-oz",
-                                                       "price":  2.5,
-                                                       "size":  "each",
-                                                       "name":  "Rotella\u0027s Italian Bakery Hot Dog Buns"
-                                                   },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/89633/hy-vee-hot-dog-buns-8-count",
                                                       "name":  "Hy-Vee Hot Dog Buns 8 Count",
@@ -11409,14 +11064,6 @@
                                                   "size":  "12 oz",
                                                   "verified":  "2026-07-20 Hy-Vee GraphQL (storeId 1465, current shelf price)"
                                               },
-                                   "Sam\u0027s Club":  {
-                                                           "url":  "https://www.samsclub.com/ip/13863200809",
-                                                           "name":  "Ball Park Classic Original Length Hot Dogs, 24 ct.",
-                                                           "price":  6.98,
-                                                           "size":  "2.815 lb",
-                                                           "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
-                                                           "board_pu":  0.155
-                                                       },
                                    "Walmart":  {
                                                    "url":  "https://www.walmart.com/ip/10290749",
                                                    "name":  "Bar-S Classic Franks, 8-Count, 12 oz",
@@ -11769,12 +11416,6 @@
                                                                "name":  "Chef\u0027s Cupboard Homestyle Butter Mashed Potatoes",
                                                                "board_pu":  0.2475
                                                            },
-                                                  "Fareway":  {
-                                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18581926-idahoan-buttery-homestyle-mashed-potatoes-6-oz",
-                                                                  "price":  4.99,
-                                                                  "size":  "",
-                                                                  "name":  "IdahoanÂ® Buttery Homestyle Mashed Potatoes"
-                                                              },
                                                   "Hy-Vee":  {
                                                                  "url":  "https://www.hy-vee.com/aisles-online/p/43867/idahoan-four-cheese-mashed-potatoes",
                                                                  "name":  "Idahoan Four Cheese Mashed Potatoes",
@@ -11975,12 +11616,6 @@
                                                          "name":  "Fresh Jalapeno Peppers",
                                                          "board_pu":  1.99
                                                      },
-                                    "Fareway":  {
-                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/96477-mt-olive-diced-jalapeno-fresh-pack-peppers-355-0-ml",
-                                                    "price":  3.49,
-                                                    "size":  "12 fl oz",
-                                                    "name":  "Mt. Olive Diced Jalapeno Peppers"
-                                                },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/8832/jalapeno-pepper",
                                                    "price":  2.99,
@@ -12129,14 +11764,6 @@
                                                "verified":  "2026-07-16 DERIVED from the price row (same record the board priced)",
                                                "board_pu":  0.0819
                                            },
-                                "Sam\u0027s Club":  {
-                                                        "url":  "https://www.samsclub.com/ip/13612962795",
-                                                        "name":  "Welch\u0027s Concord Grape Jelly, 30 oz., 2 pk.",
-                                                        "price":  4.98,
-                                                        "size":  "60 oz",
-                                                        "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
-                                                        "board_pu":  0.0747
-                                                    },
                                 "Walmart":  {
                                                 "url":  "https://www.walmart.com/ip/Great-Value-Concord-Grape-Jelly-30-oz/364924551",
                                                 "name":  "Great Value Concord Grape Jelly",
@@ -12178,13 +11805,6 @@
                                                     "name":  "Kale Lettuce Bunch",
                                                     "board_pu":  1.99
                                                 },
-                               "Fareway":  {
-                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16865351-organic-baby-kale-salad-4-oz",
-                                               "price":  3.48,
-                                               "size":  "each",
-                                               "name":  "Organic Girl Baby Kale",
-                                               "board_pu":  3.48
-                                           },
                                "Hy-Vee":  {
                                               "url":  "https://www.hy-vee.com/aisles-online/p/8818/kale",
                                               "price":  1.99,
@@ -12380,7 +12000,7 @@
                                "Fareway":  {
                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19179710-kiwifruit-each",
                                                "price":  0.79,
-                                               "size":  "each",
+                                               "size":  "1 ct",
                                                "name":  "Kiwi Fruit",
                                                "board_pu":  0.79
                                            },
@@ -12660,12 +12280,6 @@
                                                      "size":  "1 ct",
                                                      "board_pu":  0.79
                                                  },
-                                 "Fareway":  {
-                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/1366070-whole-lemons-16-oz",
-                                                 "price":  2.48,
-                                                 "size":  "each",
-                                                 "name":  "Whole Lemons"
-                                             },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/37192/lemons",
                                                 "name":  "Lemons",
@@ -12704,13 +12318,6 @@
                                                        "name":  "Wrapped Iceberg Lettuce",
                                                        "board_pu":  2.29
                                                    },
-                                  "Fareway":  {
-                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/41740-dole-classic-romaine-9-oz",
-                                                  "price":  3.49,
-                                                  "size":  "each",
-                                                  "name":  "Dole Classic Romaine",
-                                                  "board_pu":  3.49
-                                              },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/13725751832",
                                                           "name":  "Iceberg Lettuce, 2 heads",
@@ -12844,12 +12451,6 @@
                                                     "board_pu":  0.79,
                                                     "recipe_pu":  0.79
                                                 },
-                                "Fareway":  {
-                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/71329922-capital-city-fruit-lime-1-lb",
-                                                "price":  2.48,
-                                                "size":  "each",
-                                                "name":  "Fresh Limes"
-                                            },
                                 "Hy-Vee":  {
                                                "url":  "https://www.hy-vee.com/aisles-online/p/37191/limes",
                                                "name":  "Limes",
@@ -13046,12 +12647,6 @@
                                                       "size":  "1 ct",
                                                       "board_pu":  1.79
                                                   },
-                                  "Fareway":  {
-                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19376323-quick-easy-mango-sliced-12-oz",
-                                                  "price":  5.99,
-                                                  "size":  "each",
-                                                  "name":  "Crazy Fresh Sliced Mango"
-                                              },
                                   "Walmart":  {
                                                   "url":  "https://www.walmart.com/ip/Fresh-Mangoes-Each-Sweet/994998279",
                                                   "price":  0.75,
@@ -13247,12 +12842,6 @@
                                                                 "size":  "6 ct",
                                                                 "board_pu":  0.865
                                                             },
-                                            "Fareway":  {
-                                                            "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/2714689-orville-redenbacher-s-movie-theater-butter-classic-bag-19-74-oz",
-                                                            "price":  5.49,
-                                                            "size":  "each",
-                                                            "name":  "Orville Redenbacher Movie Theater Butter Popcorn, Microwave Popcorn"
-                                                        },
                                             "Sam\u0027s Club":  {
                                                                     "url":  "https://www.samsclub.com/ip/13627121756",
                                                                     "name":  "Orville Redenbacher\u0027s Movie Butter Microwave Popcorn, Mini Bags, 1.5 oz., 36 pk.",
@@ -13439,13 +13028,6 @@
                                                          "name":  "Regal Health Foods Deluxe Mixed Nuts",
                                                          "board_pu":  0.75
                                                      },
-                                     "Fareway":  {
-                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/75232-planters-mixed-nuts-less-than-50-peanuts-with-peanuts-almonds-cashews-hazelnuts-pecans-10-3-oz",
-                                                     "price":  6.99,
-                                                     "size":  "10.3 oz",
-                                                     "name":  "Planters Salted Mixed Nuts",
-                                                     "board_pu":  0.6786
-                                                 },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/24375/hy-vee-deluxe-lightly-salted-mixed-nuts",
                                                     "name":  "Hy-Vee Deluxe Lightly Salted Mixed Nuts",
@@ -13929,13 +13511,6 @@
                                               "name":  "Yellow Onions, 3 lb Bag",
                                               "board_pu":  0.7967
                                           },
-                                 "Baker\u0027s":  {
-                                                      "url":  "https://www.bakersplus.com/p/jumbo-yellow-onions/0000000004093",
-                                                      "price":  1.29,
-                                                      "size":  "lb",
-                                                      "name":  "Jumbo Yellow Onions",
-                                                      "board_pu":  1.29
-                                                  },
                                  "Family Fare":  {
                                                      "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/our_family_onion_yellow/p/1764405684715786064",
                                                      "name":  "Our Family Onion Yellow",
@@ -13944,12 +13519,6 @@
                                                      "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)",
                                                      "board_pu":  0.998
                                                  },
-                                 "Fareway":  {
-                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19267864-crazy-fresh-diced-yellow-onions-each",
-                                                 "price":  2.99,
-                                                 "size":  "6 oz",
-                                                 "name":  "Crazy Fresh Yellow Diced Onion"
-                                             },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/46166/yellow-onions-3-pound-bag",
                                                 "name":  "Yellow Onions 3-Pound Bag",
@@ -14215,7 +13784,7 @@
                                         "Fareway":  {
                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387419-everyday-napkins",
                                                         "price":  1.99,
-                                                        "size":  "each",
+                                                        "size":  "100 ct",
                                                         "name":  "Bright Essentials 2-Ply Everyday Napkins"
                                                     },
                                         "Sam\u0027s Club":  {
@@ -14246,7 +13815,7 @@
                                        "Fareway":  {
                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84387953-designer-7-paper-plates",
                                                        "price":  2.99,
-                                                       "size":  "each",
+                                                       "size":  "48 ct",
                                                        "name":  "Bright Essentials Heavy-Duty Designer 7 Inch Paper Plates"
                                                    },
                                        "Hy-Vee":  {
@@ -14289,20 +13858,6 @@
                                                             "name":  "Kroger Glimmer Select-A-Sheet Paper Towels Double Rolls",
                                                             "board_pu":  1.495
                                                         },
-                                       "Family Fare":  {
-                                                           "url":  "https://www.shopfamilyfare.com/shop/household/paper_towels/sparkle_pick_a_size_modern_white_2_ply_paper_towels_8_ea/p/1564405684704683873",
-                                                           "price":  11.99,
-                                                           "size":  "8 ea",
-                                                           "name":  "Sparkle Pick A Size Modern White 2 Ply Paper Towels 8 Ea",
-                                                           "board_pu":  1.3738
-                                                       },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39625112-bnty-essnt-sas-wht-4dbr",
-                                                       "price":  6.98,
-                                                       "size":  "4 ct",
-                                                       "name":  "Bounty Essentials Paper Towels Select-A-Size , 4 Count",
-                                                       "board_pu":  1.745
-                                                   },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/4008790/that-s-smart-paper-towels-2-ply",
                                                       "name":  "That\u0027s Smart! Paper Towels, 2-Ply",
@@ -14384,7 +13939,7 @@
                                           "Fareway":  {
                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/41458026-bright-essentials-parchment-paper-1-each",
                                                           "price":  2.99,
-                                                          "size":  "each",
+                                                          "size":  "1 ct",
                                                           "name":  "Bright Essentials Parchment Paper",
                                                           "board_pu":  2.99
                                                       },
@@ -14529,13 +14084,6 @@
                                                     "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)",
                                                     "board_pu":  0.0778
                                                 },
-                                "Fareway":  {
-                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39253-barilla-classic-blue-box-pasta-spaghetti-2-lb",
-                                                "price":  3.48,
-                                                "size":  "32 oz",
-                                                "name":  "Barilla Spaghetti - Non-GMO Pasta Made with Durum Wheat Semolina \u0026 Kosher Certified",
-                                                "board_pu":  0.1088
-                                            },
                                 "Hy-Vee":  {
                                                "url":  "https://www.hy-vee.com/aisles-online/p/3771493/hy-vee-spaghetti",
                                                "price":  1.19,
@@ -14636,19 +14184,6 @@
                                                       "name":  "Fresh Peaches",
                                                       "board_pu":  2.99
                                                   },
-                                  "Fareway":  {
-                                                  "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/34650-dole-yellow-cling-sliced-peaches-in-100-fruit-juice-23-5-oz",
-                                                  "price":  4.99,
-                                                  "size":  "23.5 oz",
-                                                  "name":  "Dole Peach Slices, in 100% Fruit Juice"
-                                              },
-                                  "Hy-Vee":  {
-                                                 "url":  "https://www.hy-vee.com/aisles-online/p/9269/del-monte-sliced-yellow-cling-peaches-in-heavy-syrup",
-                                                 "price":  2.62,
-                                                 "size":  "15.25 oz",
-                                                 "name":  "Del Monte Sliced Yellow Cling Peaches In Heavy Syrup",
-                                                 "board_pu":  2.99
-                                             },
                                   "Sam\u0027s Club":  {
                                                           "url":  "https://www.samsclub.com/ip/13602068113",
                                                           "name":  "White Peaches, 4 lbs.",
@@ -15348,12 +14883,6 @@
                                                           "size":  "2.5 oz",
                                                           "name":  "Poppy Seeds Sugar \u0027N Spice"
                                                       },
-                                      "Fareway":  {
-                                                      "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/132051-pepperidge-farm-bakery-classics-onion-with-poppy-seeds-hamburger-buns-8-oz",
-                                                      "price":  2.99,
-                                                      "size":  "8 ct",
-                                                      "name":  "Pepperidge Farm Onion with Poppy Seeds Hamburger Buns"
-                                                  },
                                       "Hy-Vee":  {
                                                      "url":  "https://www.hy-vee.com/aisles-online/p/292438/lemon-poppy-seed-dessert-loaf",
                                                      "name":  "Lemon Poppy Seed Dessert Loaf",
@@ -15434,13 +14963,6 @@
                                                          "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)",
                                                          "board_pu":  4.79
                                                      },
-                                     "Fareway":  {
-                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84389055-boneless-pork-chop",
-                                                     "price":  2.5,
-                                                     "size":  "8 oz",
-                                                     "name":  "Boneless Pork Chop",
-                                                     "board_pu":  5
-                                                 },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/32133/midwest-pork-mini-assorted-chops",
                                                     "name":  "Midwest Pork Mini Assorted Chops",
@@ -15842,12 +15364,6 @@
                                                     "name":  "Millville Peanut Butter Dark Chocolate Protein Chewy Bars",
                                                     "board_pu":  0.578
                                                 },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/19208397-one-protein-bar-birthday-cake-flavored-4-ea",
-                                                       "price":  7.99,
-                                                       "size":  "4 ct",
-                                                       "name":  "ONE Protein Bar, Birthday Cake, 20g Protein"
-                                                   },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/365725/hy-vee-chewy-protein-bars-peanut-butter-dark-chocolate-5-1-42-oz-bars",
                                                       "name":  "Hy-Vee Chewy Protein Bars Peanut Butter \u0026 Dark Chocolate 5-1.42 oz Bars",
@@ -16104,13 +15620,6 @@
                                                     "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)",
                                                     "board_pu":  0.3742
                                                 },
-                                "Fareway":  {
-                                                "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/16697906-maruchan-beef-flavor-ramen-noodle-soup-85-0-g",
-                                                "price":  0.47,
-                                                "size":  "each",
-                                                "name":  "Maruchan Ramen Noodle Soup, Beef",
-                                                "board_pu":  0.47
-                                            },
                                 "Sam\u0027s Club":  {
                                                         "url":  "https://www.samsclub.com/ip/18239212180",
                                                         "name":  "Nissin Top Ramen, Chicken, 24 pk.",
@@ -16655,13 +16164,6 @@
                                                             "name":  "Kroger Thin Sliced Beef Ribeye Steak",
                                                             "board_pu":  19.99
                                                         },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84386676-usda-choice-boneless-ribeye-steak",
-                                                       "price":  12.99,
-                                                       "size":  "8 oz",
-                                                       "name":  "USDA Choice Boneless Ribeye Steak",
-                                                       "board_pu":  25.98
-                                                   },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2538738/beef-ribeye-steak-thin",
                                                       "price":  14.99,
@@ -16708,13 +16210,6 @@
                                                    "name":  "Pampa Rice, White, Long Grain 16 Oz",
                                                    "board_pu":  1.19
                                                },
-                               "Fareway":  {
-                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/36376-mahatma-extra-long-grain-enriched-rice-16-oz",
-                                               "price":  1.99,
-                                               "size":  "16 oz",
-                                               "name":  "Mahatma Extra Long Grain Enriched Rice",
-                                               "board_pu":  1.99
-                                           },
                                "Hy-Vee":  {
                                               "url":  "https://www.hy-vee.com/aisles-online/p/254671/hy-vee-enriched-long-grain-white-rice",
                                               "price":  4.69,
@@ -16936,12 +16431,6 @@
                                                                  "name":  "Whole Rotisserie Chicken (No Pick Up/Delivery Before 11am)",
                                                                  "board_pu":  7.99
                                                              },
-                                             "Fareway":  {
-                                                             "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/35899-oscar-mayer-deli-fresh-rotisserie-seasoned-chicken-breast-9-oz",
-                                                             "price":  3.76,
-                                                             "size":  "each",
-                                                             "name":  "Oscar Mayer Rotisserie Seasoned Chicken Breast Sliced Lunch Meat, for a Low Carb Lifestyle"
-                                                         },
                                              "Sam\u0027s Club":  {
                                                                      "url":  "https://www.samsclub.com/ip/Member-s-Mark-Seasoned-Rotisserie-Chicken/13820153808",
                                                                      "price":  4.98,
@@ -16973,13 +16462,6 @@
                                                               "size":  "5 lb",
                                                               "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)"
                                                           },
-                                          "Fareway":  {
-                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/17602498-russet-potato-1-lb",
-                                                          "price":  1.49,
-                                                          "size":  "lb",
-                                                          "name":  "Russet Potato",
-                                                          "board_pu":  1.49
-                                                      },
                                           "Hy-Vee":  {
                                                          "url":  "https://www.hy-vee.com/aisles-online/p/24042/hy-vee-one-step-russet-potatoes",
                                                          "price":  2.47,
@@ -16994,14 +16476,7 @@
                                                                   "size":  "10 lb",
                                                                   "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
                                                                   "board_pu":  0.456
-                                                              },
-                                          "Walmart":  {
-                                                          "url":  "https://www.walmart.com/ip/10447837",
-                                                          "price":  2.74,
-                                                          "size":  "5 lb",
-                                                          "name":  "Fresh Whole Russet Potatoes, 5 lb Bag",
-                                                          "board_pu":  0.568
-                                                      }
+                                                              }
                                       },
                   "salmon":  {
                                  "commodity":  "salmon",
@@ -17220,7 +16695,7 @@
                                         "Fareway":  {
                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/34288284-bright-essentials-sandwich-bags-double-zipper-sandwich-size-50-each",
                                                         "price":  2.28,
-                                                        "size":  "each",
+                                                        "size":  "50 ct",
                                                         "name":  "Bright Essentials Sandwich Bags, Double Zipper, Sandwich Size"
                                                     },
                                         "Hy-Vee":  {
@@ -17677,13 +17152,6 @@
                                                             "name":  "Fresh Usda Choice Whole Sirloin Tip",
                                                             "board_pu":  5.49
                                                         },
-                                        "Fareway":  {
-                                                        "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/74010426-qs-thin-slcd-sirloin-beef",
-                                                        "price":  8.49,
-                                                        "size":  "10.8 oz",
-                                                        "name":  "Gary\u0027s Quick Steak Thinly Sliced Sirloin Beef",
-                                                        "board_pu":  12.5778
-                                                    },
                                         "Hy-Vee":  {
                                                        "url":  "https://www.hy-vee.com/aisles-online/p/31803/hy-vee-angus-reserve-beef-loin-boneless-sirloin-steak",
                                                        "name":  "Hy-Vee Angus Reserve Beef Loin Boneless Sirloin Steak",
@@ -17853,12 +17321,6 @@
                                                    "verified":  "2026-07-18 DERIVED from the price row (same record the board priced)",
                                                    "board_pu":  0.0516
                                                },
-                               "Fareway":  {
-                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/250947-shasta-cola-diet-12-fl-oz",
-                                               "price":  4.98,
-                                               "size":  "",
-                                               "name":  "Shasta Cola, Diet"
-                                           },
                                "Sam\u0027s Club":  {
                                                        "url":  "https://www.samsclub.com/ip/19968520174",
                                                        "name":  "Coca-Cola Cherry Soda Variety Pack 12 fl. oz., 36 pk.",
@@ -18004,12 +17466,6 @@
                                                               "name":  "Sparkling Ice Zero Sugar Lemon Lime Sparkling Water 17 Fl Oz",
                                                               "board_pu":  0.0818
                                                           },
-                                          "Fareway":  {
-                                                          "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/91707062-bubblr-fruit-punchr-6-pack",
-                                                          "price":  5.99,
-                                                          "size":  "",
-                                                          "name":  "BUBBLâ€™R Antioxidant Sparkling Water, fruit punch\u0027r"
-                                                      },
                                           "Hy-Vee":  {
                                                          "url":  "https://www.hy-vee.com/aisles-online/p/135218/lacroix-lime-sparkling-water-12-pack",
                                                          "name":  "LaCroix Lime Sparkling Water 12 Pack",
@@ -18288,12 +17744,6 @@
                                                            "name":  "Our Family Freezer Bags, Resealable, Gallon Size 30 Ea",
                                                            "board_pu":  0.113
                                                        },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39736208-bright-essentials-storage-bags-double-zipper-20-gallon-20-each",
-                                                       "price":  2.28,
-                                                       "size":  "each",
-                                                       "name":  "Bright Essentials Storage Bags, Double Zipper, 20 Gallon"
-                                                   },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/2570070423",
                                                                "name":  "Ziploc Brand Gallon \u0026 Quart  Storage Bags, Stay Open Design, Easy to Fill, 204 ct.",
@@ -18386,7 +17836,7 @@
                                         "Fareway":  {
                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/103051939-fareway-string-cheese-10-oz",
                                                         "price":  3.49,
-                                                        "size":  "",
+                                                        "size":  "12 oz",
                                                         "name":  "Fareway Low-Moisture Part-Skim Sticks Mozzarella String Cheese"
                                                     },
                                         "Hy-Vee":  {
@@ -18421,13 +17871,6 @@
                                                            "name":  "Stove Top Stuffing Mix For Turkey 6 Oz",
                                                            "board_pu":  0.4983
                                                        },
-                                       "Fareway":  {
-                                                       "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/72709-kraft-stove-top-everyday-stuffing-mix-for-chicken-12-oz",
-                                                       "price":  4.99,
-                                                       "size":  "12 oz",
-                                                       "name":  "Kraft Stove Top Everyday Stuffing Mix for Chicken",
-                                                       "board_pu":  0.4158
-                                                   },
                                        "Hy-Vee":  {
                                                       "url":  "https://www.hy-vee.com/aisles-online/p/2919762/that-s-smart-chicken-stuffing-mix",
                                                       "name":  "That\u0027s Smart Chicken Stuffing Mix",
@@ -18702,12 +18145,6 @@
                                                              "name":  "Red/Orangy Red Flesh Sweet Potato/Yam/Kumara, Small",
                                                              "board_pu":  1.79
                                                          },
-                                         "Fareway":  {
-                                                         "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/18583597-pictsweet-farms-sweet-potatoes-18-oz",
-                                                         "price":  3.48,
-                                                         "size":  "18 oz",
-                                                         "name":  "Pictsweet Farms Sweet Potatoes"
-                                                     },
                                          "Hy-Vee":  {
                                                         "url":  "https://www.hy-vee.com/aisles-online/p/37466/golden-sweet-potato",
                                                         "price":  1.49,
@@ -19286,12 +18723,6 @@
                                                           "size":  "lb",
                                                           "name":  "fresh tomatillo"
                                                       },
-                                     "Family Fare":  {
-                                                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/other_vegetables/tomatillos/p/12573",
-                                                         "price":  2.49,
-                                                         "size":  "lb",
-                                                         "name":  "Tomatillos"
-                                                     },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/37464/tomatillos",
                                                     "name":  "Tomatillos",
@@ -19333,12 +18764,6 @@
                                                        "size":  "lb",
                                                        "name":  "Fresh Tomato On The Vine (Sold Individually, Not By Bunch)"
                                                    },
-                                   "Fareway":  {
-                                                   "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/28263754-red-cherry-tomatoes-on-the-vine-12-oz",
-                                                   "price":  3.99,
-                                                   "size":  "12 oz",
-                                                   "name":  "Red Cherry Tomatoes on the Vine"
-                                               },
                                    "Hy-Vee":  {
                                                   "url":  "https://www.hy-vee.com/aisles-online/p/8657/roma-tomatoes",
                                                   "name":  "Roma Tomatoes",
@@ -19712,12 +19137,6 @@
                                                         "size":  "12 ea",
                                                         "board_pu":  0.1825
                                                     },
-                                    "Fareway":  {
-                                                    "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/128790-mission-super-soft-fajita-flour-tortillas-23-0-oz",
-                                                    "price":  3.99,
-                                                    "size":  "each",
-                                                    "name":  "Mission Super Soft Fajita Flour Tortillas"
-                                                },
                                     "Hy-Vee":  {
                                                    "url":  "https://www.hy-vee.com/aisles-online/p/2968238/mission-super-soft-flour-fajita-tortillas-20ct",
                                                    "name":  "Mission Super Soft Flour Fajita Tortillas 20Ct",
@@ -19781,12 +19200,6 @@
                                                           "name":  "Kroger Tall Kitchen Drawstring 13 Gallon Trash Bags",
                                                           "board_pu":  0.1499
                                                       },
-                                     "Fareway":  {
-                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/39667951-bright-essentials-trash-bags-black-drawstring-unscented-large-28-each",
-                                                     "price":  7.88,
-                                                     "size":  "each",
-                                                     "name":  "Bright Essentials Trash Bags, Black, Drawstring, Unscented, Large"
-                                                 },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/2913522/tall-kitchen-bags-with-twist-ties",
                                                     "name":  "Tall Kitchen Bags With Twist Ties",
@@ -20130,12 +19543,6 @@
                                                          "name":  "Watermelon Mini Seedless",
                                                          "board_pu":  5.99
                                                      },
-                                     "Fareway":  {
-                                                     "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/89322267-watermelon-seedless-half",
-                                                     "price":  1.49,
-                                                     "size":  "each",
-                                                     "name":  "Half Seedless Watermelon"
-                                                 },
                                      "Hy-Vee":  {
                                                     "url":  "https://www.hy-vee.com/aisles-online/p/37187/whole-seedless-watermelon",
                                                     "name":  "Whole Seedless Watermelon",
@@ -20501,13 +19908,6 @@
                                                      "verified":  "2026-07-19 DERIVED from the price row (same record the board priced)",
                                                      "board_pu":  0.1483
                                                  },
-                                 "Fareway":  {
-                                                 "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/7260-chobani-non-fat-greek-yogurt-plain-5-3-oz",
-                                                 "price":  1.38,
-                                                 "size":  "5.3 oz",
-                                                 "name":  "Chobani Plain Nonfat Greek Yogurt",
-                                                 "board_pu":  0.2604
-                                             },
                                  "Hy-Vee":  {
                                                 "url":  "https://www.hy-vee.com/aisles-online/p/27004/yoplait-original-low-fat-yogurt",
                                                 "name":  "Yoplait Original Low Fat Yogurt",

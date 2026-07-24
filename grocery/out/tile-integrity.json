@@ -1,8 +1,8 @@
 ﻿{
-    "generated":  "2026-07-23 19:21",
+    "generated":  "2026-07-23 19:40",
     "board":  "comparison-2026-07-23.json",
-    "total_tiles":  2288,
-    "violations":  265,
+    "total_tiles":  2294,
+    "violations":  266,
     "by_store":  {
                      "Walmart":  {
                                      "coverage":  59,
@@ -10,9 +10,9 @@
                                      "violations":  59
                                  },
                      "Fareway":  {
-                                     "coverage":  75,
-                                     "tiles":  387,
-                                     "violations":  75
+                                     "coverage":  76,
+                                     "tiles":  393,
+                                     "violations":  76
                                  },
                      "Family Fare":  {
                                          "coverage":  13,
@@ -111,6 +111,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Pampers Baby Wipes",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bagels",
+                     "store":  "Fareway",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fareway Pre-Sliced Original Bagels",
                      "link":  ""
                  },
                  {
@@ -2163,5 +2171,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  265
+    "coverage_violations":  266
 }

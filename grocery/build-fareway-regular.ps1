@@ -48,6 +48,12 @@ foreach ($f in $In) {
     } elseif ($per -eq 'pound') { $adp = '$' + $price; $sz = 'lb' }
       elseif ($per -eq 'each')  { $adp = '$' + $price; $sz = 'each' }
       else { $adp = '$' + $price; $sz = $size }
+    # SLUG BASIS OVERRIDE (2026-07-23): Fareway's catalog slug names the sell basis for by-weight
+    # produce - ".../products/16606119-cantaloupe-melon-1-lb" is priced PER POUND even when the tile's
+    # DOM says "each". Trusting the DOM published $0.88 as the price of a WHOLE melon (real price
+    # ~3x that); the band caught it and Fareway just vanished from the row. The slug is the catalog's
+    # own statement of basis, so it outranks the tile text.
+    if ($r.url -and "$($r.url)" -match '(?i)-1-lb(?:-|$)' -and $sz -eq 'each') { $sz = 'lb' }
     # canonical-unit fixups so the engine can price the item in the commodity's unit
     $cu = if ($unitMap.ContainsKey($id)) { $unitMap[$id] } else { '' }
     if ($cu -eq 'each') {
@@ -142,3 +148,8 @@ $deals | ForEach-Object { "  {0,-20} {1,-8} {2}" -f $_.item.Substring(0,[Math]::
 # and this one missed (as_of-stamped, 14-day cap). See carry-forward-regular.ps1 for why these stores
 # can't use the Walmart/Sam's union instead.
 & powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'carry-forward-regular.ps1') -Store fareway | Write-Output
+# 2026-07-23: a shallow pull can also DEGRADE rows it does return - same item, same shelf price, but the
+# pack count gone from the size field ("48 ct" -> "each"). The per-unit engine then computes a per-item
+# price 48x too high and the band drops the store from the row. Re-adopt the prior capture's size when
+# item AND price are identical. See heal-degraded-sizes.ps1.
+& powershell -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'heal-degraded-sizes.ps1') -Store fareway | Write-Output
