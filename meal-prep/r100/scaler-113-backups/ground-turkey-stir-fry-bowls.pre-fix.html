@@ -1,0 +1,216 @@
+﻿
+
+
+
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"ground-turkey-stir-fry-bowls","base":14,"cost":53.13,"ing":[{"item":"93/7 Ground Turkey","grams":3300,"buy":"8 lb","bid":"93-7-ground-turkey","gpu":453.592},{"item":"Rice","grams":900,"buy":"1 lb","bid":"jasmine-rice","gpu":28.350},{"item":"Zucchini","grams":620,"buy":"4 zucchinis","bid":"zucchini","gpu":453.592},{"item":"Green Bell Peppers","grams":360,"buy":"3 peppers","bid":"green-bell-pepper","gpu":120.000},{"item":"Teriyaki Sauce","grams":180,"buy":"1 bottle","bid":"teriyaki-sauce","gpu":34.000},{"item":"Honey","grams":42,"buy":"1 bottle","bid":"honey","gpu":28.350},{"item":"Hot Sauce","grams":30,"buy":"1 bottle","bid":"hot-sauce","gpu":29.570},{"item":"Olive Oil","grams":27,"buy":"1 bottle","bid":"olive-oil","gpu":28.000},{"item":"Yellow Onion","grams":385,"buy":"1 medium sweet onion, diced","bid":"onions","gpu":453.592},{"item":"Celery","grams":280,"buy":"2 sticks, finely diced","bid":"celery","gpu":450.000},{"item":"Garlic","grams":42,"buy":"2-3 cloves, minced","bid":"garlic","gpu":50.000},{"item":"Green Onions","grams":90,"buy":"3, green parts sliced","bid":"green-onions","gpu":100.000},{"item":"Sesame Oil","grams":35,"buy":"2 tsp toasted","bid":"sesame-oil","gpu":28.350},{"item":"Rice Vinegar","grams":52,"buy":"1 tbsp vinegar","bid":"rice-vinegar","gpu":29.570}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p><em>Adapted from <a href="https://healthyfitnessmeals.com/ground-turkey-stir-fry/" rel="nofollow">Healthy Fitness Meals</a>.</em></p>
+
+<p><strong>Makes 14 servings &middot; ~638 cal &middot; 51g protein &middot; 57g carbs &middot; 19g fat &middot; ~$3.14 per serving.</strong></p>
+
+<p>A fast, saucy stir fry that skips the takeout price tag entirely. You get 51 grams of protein per bowl for about $3.42 a serving. Fourteen servings from one skillet, and it comes together in one go.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>93/7 Ground Turkey (Jennie-O):</strong> 3,300 g (7.3 lb)</li>
+<li><strong>Rice (Member's Mark):</strong> 900 g (4.5 cups)</li>
+<li><strong>Zucchini:</strong> 620 g (5.0 cups)</li>
+<li><strong>Green Bell Peppers:</strong> 360 g (3 medium pepper)</li>
+<li><strong>Teriyaki Sauce (Kikkoman):</strong> 180 g (10 tbsp)</li>
+<li><strong>Honey (Great Value):</strong> 42 g (2 tbsp)</li>
+<li><strong>Hot Sauce (Frank's RedHot):</strong> 30 g (6 tsp)</li>
+<li><strong>Olive Oil:</strong> 27 g (2 tbsp)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Walmart and Sam's Club prices (2026). They still swing by region and by what is on sale.</em></p>
+<ul>
+<li>93/7 Ground Turkey, 7.3 lb (~$4.55/lb): ~$33.10. <strong>Buy 8 lb: $36.40.</strong></li>
+<li>Rice, ~2.0 lbs (~$1.45 per lb): ~$2.88. <strong>Buy a big bag of rice (it lasts many batches).</strong></li>
+<li>Zucchini, ~3.1 zucchinis (~$0.63 per zucchini): ~$1.95. <strong>Buy 4 zucchinis: $2.52.</strong></li>
+<li>Green Bell Peppers, ~3.0 peppers (~$1.07 per pepper): ~$3.24. <strong>Buy 3 peppers: $3.21.</strong></li>
+<li>Teriyaki Sauce, ~0.3 bottles (~$5.98 per bottle): ~$1.82. <strong>Buy 1 bottle (lasts several batches).</strong></li>
+<li>Honey, ~0.1 bottles (~$2.48 per bottle): ~$0.31. <strong>Buy 1 bottle (lasts several batches).</strong></li>
+<li>Hot Sauce, ~0.1 bottles (~$3.97 per bottle): ~$0.34. <strong>Buy 1 bottle (lasts several batches).</strong></li>
+<li>Olive Oil, ~0.0 bottles (~$9.12 per bottle): ~$0.34. <strong>Buy 1 bottle (lasts several batches).</strong></li>
+<li><strong>Batch total: about $43.97 across 14 servings, so roughly $3.14 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $47.81 across 14 servings, roughly $3.42 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li><li><strong>Starting with an empty pantry? Add about $18.50 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $66.31. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$3.42 a bowl</strong> for a high-protein dinner that beats takeout on price and macros.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>Buy the <strong>8 lb ground turkey pack</strong> to get the best per-pound price on the biggest line item.</li>
+<li>A <strong>single bottle of teriyaki sauce covers several batches</strong>, so it is not the budget-buster it looks like.</li>
+<li>Fresh <strong>zucchini runs under a dollar apiece</strong> and bulks out the pan without much cost.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Heat a little olive oil in a large skillet and brown the ground turkey.</li>
+<li>Add the sliced zucchini and green peppers and stir fry until they are just tender.</li>
+<li>Stir in the minced garlic, teriyaki sauce, honey, and a dash of hot sauce.</li>
+<li>Let it bubble a couple minutes so the sauce coats everything and thickens slightly.</li>
+<li>Serve it hot over cooked white rice.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Each of the 14 bowls gives you 51 grams of protein and about 638 calories.</p>
+
+<hr>
+<p><em>Faster than delivery, cheaper than delivery, and it reheats better too. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

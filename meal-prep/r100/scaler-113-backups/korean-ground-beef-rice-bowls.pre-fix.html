@@ -1,0 +1,217 @@
+﻿
+
+
+
+<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
+.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row b{color:#16263F;font-size:1.5rem}
+.smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
+.smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
+.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
+.smp-sc-list{margin:0;padding:0;list-style:none}
+.smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
+.smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
+.smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
+.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
+.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
+.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
+.smp-sc-live{margin:0;padding:0;list-style:none}
+.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
+.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+<script>
+(function(){
+if(window.__smpScaler)return; window.__smpScaler=1;
+// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
+function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
+function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function init(box){
+  var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
+  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
+  function render(){
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
+    var f=n/data.base, html='';
+    data.ing.forEach(function(it){
+      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
+      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
+    });
+    list.innerHTML=html;
+    var tot=data.cost*f;
+    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
+    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
+  num.addEventListener('change',render);
+  render();
+  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
+  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
+  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
+  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+  var feedData=null;
+  function renderCheapest(){
+    var cp=document.querySelector('.smp-cp'); if(!cp) return;
+    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
+    var f=feedData;
+    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
+    var fac=n/data.base;
+    var html='', live=0, sum=0, summed=0;
+    data.ing.forEach(function(it){
+      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
+      var sale='';
+      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
+        var e=f.ingredients[it.bid];
+        live++;
+        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
+        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        var tot='';
+        if(it.gpu>0 && it.grams>0){
+          var c=e.cheapest*(it.grams*fac/it.gpu);
+          sum+=c; summed++;
+          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
+        }
+        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
+        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
+      } else if(it.bid){
+        right='<span class="smp-cp-un">live price unavailable right now</span>';
+      }
+      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+    });
+    if(summed>0){
+      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
+      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    }
+    ul.innerHTML=html;
+    var subEl=cp.querySelector('.smp-sc-livesub');
+    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+  }
+  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+}
+function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
+if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
+})();
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"korean-ground-beef-rice-bowls","base":14,"cost":49.43,"ing":[{"item":"93/7 Ground Beef","grams":2680,"buy":"6 lb","bid":"93-7-ground-beef","gpu":453.592},{"item":"Rice","grams":861,"buy":"1 lb","bid":"jasmine-rice","gpu":28.350},{"item":"Broccoli Florets","grams":1000,"buy":"3 bags","bid":"frozen-broccoli-florets","gpu":28.350},{"item":"Gochujang","grams":210,"buy":"1 tub","bid":"gochujang","gpu":28.350},{"item":"Soy Sauce","grams":110,"buy":"1 bottle","bid":"soy-sauce","gpu":28.350},{"item":"Sesame Oil","grams":40,"buy":"1 bottle","bid":"sesame-oil","gpu":28.350},{"item":"Brown Sugar","grams":60,"buy":"1 bag","bid":"brown-sugar","gpu":28.350},{"item":"Garlic","grams":30,"buy":"1 bulb","bid":"garlic","gpu":50.000},{"item":"Roasted Red Peppers","grams":300,"buy":"3 oz, from a jar","bid":"roasted-red-peppers","gpu":28.350},{"item":"Red Pepper Flakes","grams":8,"buy":"1 tsp","bid":"red-pepper-flakes","gpu":28.350}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<p><em>Adapted from <a href="https://masonfit.com/healthy-korean-ground-beef/" rel="nofollow">Mason Fit</a>.</em></p>
+
+<p><strong>Makes 14 servings &middot; ~615 cal &middot; 50g protein &middot; 64g carbs &middot; 17g fat &middot; ~$3.31 per serving.</strong></p>
+
+<p>Gochujang gives these Korean ground beef bowls a deep, savory heat that tastes like you fussed for hours. Lean beef browns and simmers in a spicy sweet sauce, then goes over rice with broccoli. It runs a bit higher at around three thirty a serving, but you still get a big 50 grams of protein across 14 bowls.</p>
+
+<h2>Ingredients</h2>
+<ul>
+<li><strong>93/7 Ground Beef (Member's Mark):</strong> 2,680 g (5.9 lb)</li>
+<li><strong>Rice (Member's Mark):</strong> 861 g (4.3 cups)</li>
+<li><strong>Broccoli Florets (Great Value):</strong> 1,000 g (11.8 cups)</li>
+<li><strong>Gochujang:</strong> 210 g (210 g)</li>
+<li><strong>Soy Sauce:</strong> 110 g (110 g)</li>
+<li><strong>Sesame Oil:</strong> 40 g (40 g)</li>
+<li><strong>Brown Sugar:</strong> 60 g (60 g)</li>
+<li><strong>Garlic:</strong> 30 g (10 clove)</li>
+</ul>
+
+<h2>Estimated Everyday Cost</h2>
+<p><em>Real Walmart and Sam's Club prices (2026). They still swing by region and by what is on sale.</em></p>
+<ul>
+<li>93/7 Ground Beef, 5.9 lb (~$6.17/lb): ~$36.45. <strong>Buy 6 lb: $37.02.</strong></li>
+<li>Rice, ~1.9 lbs (~$1.45 per lb): ~$2.75. <strong>Buy a big bag of rice (it lasts many batches).</strong></li>
+<li>Broccoli Florets, ~2.9 bags (~$1.24 per bag): ~$3.65. <strong>Buy 3 bags: $3.72.</strong></li>
+<li>Gochujang, ~0.4 tubs (~$3.98 per tub): ~$1.67. <strong>Buy 1 tub (lasts several batches).</strong></li>
+<li>Soy Sauce, ~0.2 bottles (~$1.98 per bottle): ~$0.49. <strong>Buy 1 bottle (lasts several batches).</strong></li>
+<li>Sesame Oil, ~0.3 bottles (~$3.48 per bottle): ~$0.94. <strong>Buy 1 bottle (lasts several batches).</strong></li>
+<li>Brown Sugar, ~0.1 bags (~$2.28 per bag): ~$0.15. <strong>Buy 1 bag (lasts several batches).</strong></li>
+<li>Garlic, ~0.3 bulbs (~$0.72 per bulb): ~$0.24. <strong>Buy 1 bulb (lasts several batches).</strong></li>
+<li><strong>Batch total: about $46.35 across 14 servings, so roughly $3.31 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
+<li><strong>True shopping cost: about $46.99 across 14 servings, roughly $3.36 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li><li><strong>Starting with an empty pantry? Add about $8.58 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.57. Those containers then feed this batch and many more after it.</li>
+</ul>
+<p>About <strong>$3.36 a bowl</strong> for a high-protein dinner that beats takeout on price and macros.</p>
+
+<h2>Shop Smart</h2>
+<ul>
+<li>A tub of gochujang seasons batch after batch. <strong>Buy one tub of gochujang</strong> and it will carry you through months of meals.</li>
+<li>Sesame oil is strong, so a little goes a long way. <strong>One small bottle of sesame oil</strong> lasts a very long time.</li>
+<li>Lean ground beef is the big cost here. <strong>Watch for ground beef sales</strong> and buy extra to freeze when the price is right.</li>
+</ul>
+
+<h2>Make It</h2>
+<ol>
+<li>Brown the ground beef in a large skillet, breaking it apart, then drain the grease.</li>
+<li>Stir in the minced garlic and cook until fragrant.</li>
+<li>Add the gochujang, soy sauce, sesame oil, and brown sugar and stir into a glossy sauce.</li>
+<li>Toss in the broccoli florets and cook until just tender.</li>
+<li>Cook the rice while the skillet simmers.</li>
+<li>Pile the beef and broccoli over the rice and serve.</li>
+</ol>
+
+<h2>Portion It</h2>
+<p>Each bowl brings 50 grams of protein and 615 calories across all 14 servings.</p>
+
+<hr>
+<p><em>One tub of gochujang unlocks a whole world of cheap, punchy dinners, and this is a great place to start. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

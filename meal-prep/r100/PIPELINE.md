@@ -199,3 +199,22 @@ everything. Retrofit visible credit onto the existing 113 AFTER the new 100 ship
   from CURRENT board; first run anchored to each card's PRINTED true cost so eras never mix
   inside a number; Ranch map-unit override each->oz; fajita pilot-variant handled; add=0 cards
   get copy-only). Dry 113/113.
+
+## 2026-07-25: SCALER PAYLOAD unit reconciliation (FIX 2 finished on the WIDGET side)
+FIX 2 corrected the COST engine, but the live cards' SCALER payloads (smp-sc-data, what the widget
+prices against feed units at view time) still carried raw map-era gpu. Found by the r300 toolchain
+port (r300\build-specs.ps1 delta #3). Swept BOTH generations:
+- r100 (100 cards): patch-scaler-gpu.ps1 reconciles specs\*.json scaler gpu in place (specs carry
+  merged prose, so build-specs must NEVER re-run - header now says so). 28 specs / 34 entries fixed:
+  Brown Sugar oz->lb 16x (11), Soy Sauce oz->floz (20), White Vinegar oz->floz (3). Rebuilt 28 via
+  build-card, republished via publish-r100 (28/28 OK), full byte-sweep via NEW sweep-live-bytes.ps1:
+  100/100 byte-identical.
+- old 113: audit-scaler-113.ps1 (read-only, extracts live smp-sc-data, checks every priced entry
+  against merged-map calibration rescaled to live feed/board unit) found 37 cards / 66 entries:
+  soy/vinegars/hoisin/sesame oz-era->floz 4%, brown sugar + sugar 16x, Ranch 35.44->28.3495 (packet
+  era vs per-oz row, see retrofit override), Fresh Mint 20->28.3495. fix-scaler-113.ps1 patched ONLY
+  the flagged gpu numbers inside the payload (targeted regex, parse + refetch verified, pre-fix html
+  backed up in scaler-113-backups\), lexical-card PUT. Re-audit: 113/113 clean, 0 bugs.
+- gen-planner-data.ps1 already reconciles (post-lesson); planner unaffected.
+- AUDIT RULE stands: any payload that stores gpu must be reconciled against the unit of the live
+  price source THE CONSUMER reads, at build time; audit-scaler-113.ps1 is the reusable checker.

@@ -3,6 +3,12 @@
 # Numeric/display/cost/scaler fields are MACHINE-BUILT here; prose fields (intro_html, shop_smart,
 # make_it, portion_html, credit_tail, head.description/keywords/steps, prep/cook times) are left as
 # "" / [] for the prose wave to fill. spec-guards.ps1 later enforces consistency before any build.
+#
+# RETIRED - DO NOT RE-RUN (2026-07-25). Two reasons:
+#  1. It overwrites specs\<slug>.json, and the shipped specs carry MERGED PROSE this script would wipe.
+#  2. It writes the RAW map gpu into the scaler payload with NO unit reconciliation (the 2026-07-19
+#     brown-sugar 16x lesson). The shipped specs were corrected by patch-scaler-gpu.ps1; the fixed
+#     generator pattern (Resolve-ScalerGpu) lives in r300\build-specs.ps1 - port from there.
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $computed = Get-Content (Join-Path $here 'recipes-computed.json') -Raw | ConvertFrom-Json
