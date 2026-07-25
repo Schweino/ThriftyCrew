@@ -66,19 +66,18 @@ try { $wk = [string]((Get-Content (Join-Path $gout 'recipe-board.json') -Raw | C
 # DINNER filter (Brad 2026-07-08): rank only servings over 500 calories - small portions are always
 # cheapest per serving, but they are snacks, not dinners. The full costed list still lands in the json.
 $dinners = @($ranked | Where-Object { $_.calories -gt 500 })
-# protein detection: the recipe's heaviest meat ingredient decides its tab (sausage/ham/bacon count as pork)
+# protein: recipes-db.protein, stamped by normalize-recipe-ids.ps1 from the heaviest protein ingredient
+# BY CANONICAL ID (2026-07-25). The old inline name-regex disagreed with it at the edges (chicken BROTH
+# voted chicken), and this tab set must be IDENTICAL to the free-rotation set - both sides now read the
+# same field so "everything in this box is free" can be true by construction.
 $byId2 = @{}; foreach ($r in $db) { $byId2[[string]$r.slug] = $r }
 function ProteinOf($slug) {
-  $r = $byId2[$slug]; $best = ''; $bg = 0
-  foreach ($i in $r.ingredients) {
-    $n = ([string]$i.item).ToLower(); $g = [double]$i.grams; $p = ''
-    if ($n -match 'chicken') { $p = 'Chicken' }
-    elseif ($n -match 'turkey') { $p = 'Turkey' }
-    elseif ($n -match 'beef|steak') { $p = 'Beef' }
-    elseif ($n -match 'pork|ham\b|sausage|bacon|carnitas') { $p = 'Pork' }
-    if ($p -and $g -gt $bg) { $best = $p; $bg = $g }
+  $r = $byId2[$slug]
+  if ($r -and $r.PSObject.Properties['protein'] -and $r.protein) {
+    $p = [string]$r.protein
+    return ($p.Substring(0,1).ToUpper() + $p.Substring(1))
   }
-  return $best
+  return ''
 }
 $tabs = [ordered]@{}
 foreach ($pn in @('Pork','Chicken','Beef','Turkey')) {
@@ -93,6 +92,18 @@ if ($NoPublish) { exit 0 }
 $sec = "<!--SMP-TOP5--><div class='smp-top5' style='margin:0 0 3rem;padding:2rem 2.2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px'>"
 $sec += "<h2 style='font-family:Georgia,serif;color:#16263F;font-size:2.4rem;margin:0 0 .4rem'>Top 5 cheapest dinners this week (over 500 calories)</h2>"
 $sec += "<p style='color:#64748b;font-size:1.4rem;margin:0 0 1.2rem'>Pick your protein. Real dinner-sized servings only, re-costed from this week's verified grocery prices at six Omaha stores.</p>"
+# FREE line (Brad 2026-07-25): the free-dinner rotation frees EXACTLY this box's recipes (same protein
+# field, same >500-cal dinner filter, same top-5 rank). The claim is only printed when the rotation state
+# file confirms the sets actually match - if they ever drift, the line silently drops and we warn, because
+# a "free" promise that hits a paywall is worse than no promise.
+try {
+  $rotState = Get-Content (Join-Path $root 'free-rotation.json') -Raw | ConvertFrom-Json
+  $freeSlugs = @($rotState.free | ForEach-Object { [string]$_.slug }) | Sort-Object
+  $boxSlugs = @($tabs.Values | ForEach-Object { $_ } | ForEach-Object { [string]$_.slug }) | Sort-Object
+  if (($freeSlugs -join ',') -eq ($boxSlugs -join ',')) {
+    $sec += "<p style='color:#2e7d43;font-size:1.35rem;font-weight:600;margin:0 0 1.2rem'>Every dinner in this box is free to read right now. When prices re-rank the list, they return to members and the new cheapest take their place - members keep all " + $db.Count + " recipes every week.</p>"
+  } else { Write-Output 'WARN: free-rotation set does not match the box - free line omitted (run rotate-free-dinners.ps1)' }
+} catch { Write-Output ('WARN: could not read free-rotation state - free line omitted: ' + $_.Exception.Message) }
 $sec += "<div style='display:flex;gap:8px;flex-wrap:wrap;margin:0 0 1.2rem'>"
 $first = $true
 foreach ($pn in $tabs.Keys) {

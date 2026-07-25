@@ -57,7 +57,9 @@ foreach ($c in $costs.recipes) { $costBySlug[[string]$c.slug] = $c }
 
 $target = New-Object System.Collections.Generic.List[object]
 foreach ($prot in @('chicken','turkey','beef','pork')) {
-  $ranked = @($byProt[$prot].Keys | Where-Object { $costBySlug.ContainsKey($_) } |
+  # DINNER filter (>500 cal) matches top5-weekly exactly - the hub box claims everything it shows is
+  # free, which is only true if this selection and the box's tabs are computed identically.
+  $ranked = @($byProt[$prot].Keys | Where-Object { $costBySlug.ContainsKey($_) -and [double]$costBySlug[$_].calories -gt 500 } |
     Sort-Object { [double]$costBySlug[$_].per_serving } | Select-Object -First 5)
   $rank = 0
   foreach ($slug in $ranked) {

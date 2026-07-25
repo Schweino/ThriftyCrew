@@ -1,7 +1,7 @@
 ﻿{
     "readme":  "State of the free-dinner rotation (rotate-free-dinners.ps1). Only slugs listed here are ever reverted to paid by the rotation.",
     "week_of":  "2026-07-25",
-    "rotated_at":  "2026-07-25T11:15:04",
+    "rotated_at":  "2026-07-25T11:25:51",
     "free":  [
                  {
                      "slug":  "baked-sweet-and-sour-chicken-rice-bowls",
@@ -11,67 +11,67 @@
                      "per_serving":  1.29
                  },
                  {
-                     "slug":  "hot-honey-chicken-bowls",
-                     "protein":  "chicken",
-                     "rank":  2,
-                     "name":  "Hot Honey Chicken and Broccoli Bowls",
-                     "per_serving":  1.4
-                 },
-                 {
-                     "slug":  "bbq-chicken-rice-bowls",
-                     "protein":  "chicken",
-                     "rank":  3,
-                     "name":  "Lean BBQ Chicken and Rice Bowls",
-                     "per_serving":  1.47
-                 },
-                 {
                      "slug":  "filipino-chicken-inasal-bowls",
                      "protein":  "chicken",
-                     "rank":  4,
+                     "rank":  2,
                      "name":  "Filipino Chicken Inasal Bowls",
                      "per_serving":  1.56
                  },
                  {
                      "slug":  "cajun-chicken-and-sausage-jambalaya",
                      "protein":  "chicken",
-                     "rank":  5,
+                     "rank":  3,
                      "name":  "Cajun Chicken and Sausage Jambalaya",
                      "per_serving":  1.68
                  },
                  {
-                     "slug":  "pizza-pasta-bowls",
-                     "protein":  "turkey",
-                     "rank":  1,
-                     "name":  "Pizza Pasta Bowls",
-                     "per_serving":  1.52
+                     "slug":  "poppy-seed-chicken-and-rice-casserole",
+                     "protein":  "chicken",
+                     "rank":  4,
+                     "name":  "Poppy Seed Chicken and Rice Casserole",
+                     "per_serving":  1.75
                  },
                  {
-                     "slug":  "turkey-bolognese-penne",
-                     "protein":  "turkey",
-                     "rank":  2,
-                     "name":  "Turkey Bolognese Penne",
-                     "per_serving":  2.52
+                     "slug":  "buffalo-chicken-pasta-bake",
+                     "protein":  "chicken",
+                     "rank":  5,
+                     "name":  "Buffalo Chicken Pasta Bake",
+                     "per_serving":  1.83
                  },
                  {
                      "slug":  "turkey-keema-curry-with-peas",
                      "protein":  "turkey",
-                     "rank":  3,
+                     "rank":  1,
                      "name":  "Turkey Keema Curry with Peas",
                      "per_serving":  2.71
                  },
                  {
                      "slug":  "highprotein-turkey-burger-bowl",
                      "protein":  "turkey",
-                     "rank":  4,
+                     "rank":  2,
                      "name":  "High-Protein Turkey Burger Bowl",
                      "per_serving":  2.78
                  },
                  {
-                     "slug":  "turkey-taco-rice-skillet",
+                     "slug":  "greek-ground-turkey-lemon-rice-bowls",
+                     "protein":  "turkey",
+                     "rank":  3,
+                     "name":  "Greek Ground Turkey Lemon Rice Bowls",
+                     "per_serving":  2.82
+                 },
+                 {
+                     "slug":  "baked-ziti-with-ground-turkey-and-ricotta",
+                     "protein":  "turkey",
+                     "rank":  4,
+                     "name":  "Baked Ziti with Ground Turkey and Ricotta",
+                     "per_serving":  2.84
+                 },
+                 {
+                     "slug":  "creamy-ground-turkey-shell-pasta",
                      "protein":  "turkey",
                      "rank":  5,
-                     "name":  "Turkey Taco Rice Skillet",
-                     "per_serving":  2.8
+                     "name":  "Creamy Ground Turkey Shell Pasta",
+                     "per_serving":  2.89
                  },
                  {
                      "slug":  "lebanese-hashweh",
@@ -81,32 +81,32 @@
                      "per_serving":  2.21
                  },
                  {
-                     "slug":  "cheesy-beef-broccoli-bowls",
-                     "protein":  "beef",
-                     "rank":  2,
-                     "name":  "Cheesy Beef and Broccoli Rice Bowls",
-                     "per_serving":  2.25
-                 },
-                 {
                      "slug":  "million-dollar-baked-spaghetti",
                      "protein":  "beef",
-                     "rank":  3,
+                     "rank":  2,
                      "name":  "Million Dollar Baked Spaghetti",
                      "per_serving":  2.44
                  },
                  {
-                     "slug":  "cheeseburger-pasta",
+                     "slug":  "beef-keema-curry-rice-bowls",
                      "protein":  "beef",
-                     "rank":  4,
-                     "name":  "High-Protein Cheeseburger Pasta",
-                     "per_serving":  2.5
+                     "rank":  3,
+                     "name":  "Beef Keema Curry Rice Bowls",
+                     "per_serving":  2.55
                  },
                  {
-                     "slug":  "beef-chili-rice-bowls",
+                     "slug":  "john-wayne-casserole",
+                     "protein":  "beef",
+                     "rank":  4,
+                     "name":  "John Wayne Casserole",
+                     "per_serving":  2.69
+                 },
+                 {
+                     "slug":  "cheesy-beef-and-shells-casserole",
                      "protein":  "beef",
                      "rank":  5,
-                     "name":  "Beef Chili Rice Bowls",
-                     "per_serving":  2.51
+                     "name":  "Cheesy Beef and Shells Casserole",
+                     "per_serving":  2.7
                  },
                  {
                      "slug":  "brazilianstyle-pork-ribs-bowls",
@@ -130,18 +130,18 @@
                      "per_serving":  1.64
                  },
                  {
-                     "slug":  "italian-sausage-penne",
+                     "slug":  "slow-cooker-pork-tinga-bowls",
                      "protein":  "pork",
                      "rank":  4,
-                     "name":  "Italian Sausage Penne with Peppers",
+                     "name":  "Slow Cooker Pork Tinga Bowls",
                      "per_serving":  1.7
                  },
                  {
-                     "slug":  "slow-cooker-pork-tinga-bowls",
+                     "slug":  "slow-cooker-honey-garlic-pork-bowls",
                      "protein":  "pork",
                      "rank":  5,
-                     "name":  "Slow Cooker Pork Tinga Bowls",
-                     "per_serving":  1.7
+                     "name":  "Slow Cooker Honey Garlic Pork Bowls",
+                     "per_serving":  1.77
                  }
              ]
 }
