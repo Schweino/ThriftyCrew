@@ -131,40 +131,9 @@ $dbDoc | ConvertTo-Json -Depth 8 | Set-Content (Join-Path $root 'recipes-db.json
 } | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $pubDir 'free-dinners.json') -Encoding UTF8
 Write-Output ("rotation: $flips flip(s), $errors error(s); state + recipes-db + public/free-dinners.json written")
 
-# ---------------------------------------------------------------- hub section (SMP-FREEWEEK markers)
-$protLabel = @{ chicken='Chicken'; turkey='Turkey'; beef='Beef'; pork='Pork' }
-$sec = "<!--SMP-FREEWEEK--><div class='smp-freeweek' style='margin:0 0 3rem;padding:2rem 2.2rem;background:#EAF4EC;border:1px solid #cfe3d4;border-radius:12px'>"
-$sec += "<h2 style='margin:0 0 .35rem;font-size:1.5rem'>Free this week: the 5 cheapest dinners per protein</h2>"
-$sec += "<p style='margin:0 0 1.2rem;color:#4a5a4e'>Our live Omaha price board re-costs every recipe weekly. The five cheapest dinners in each protein are free for everyone until prices re-rank them, then they go back to members and a new set opens up. Members keep all " + @($dbDoc.recipes).Count + " recipes all the time.</p>"
-$sec += "<div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.1rem'>"
-foreach ($prot in @('chicken','turkey','beef','pork')) {
-  $sec += "<div><h3 style='margin:0 0 .4rem;font-size:1.05rem'>" + $protLabel[$prot] + "</h3><ol style='margin:0;padding-left:1.2rem'>"
-  foreach ($t in ($target | Where-Object { $_.protein -eq $prot } | Sort-Object rank)) {
-    $nm = ($t.name -replace '&','&amp;' -replace '<','&lt;')
-    $sec += "<li style='margin:0 0 .3rem'><a href='/" + $t.slug + "/'>" + $nm + "</a> <span style='white-space:nowrap;color:#2e7d43;font-weight:600'>$" + $t.per_serving.ToString('0.00') + "/serving</span></li>"
-  }
-  $sec += "</ol></div>"
-}
-$sec += "</div><p style='margin:1.2rem 0 0;font-size:.95rem;color:#4a5a4e'>Want them all, every week? <a href='#/portal/signup'>Join the Crew for " + [char]36 + "1/month</a>.</p></div><!--/SMP-FREEWEEK-->"
-
-$jwt = New-GhostJWT
-$g = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/pages/slug/meal-prep-recipes/?formats=html" -Headers @{Authorization="Ghost $jwt"}
-$page = $g.pages[0]
-$html = [string]$page.html
-$si = $html.IndexOf('<!--SMP-FREEWEEK-->'); $ei = $html.IndexOf('<!--/SMP-FREEWEEK-->')
-if ($si -ge 0 -and $ei -gt $si) {
-  $new = $html.Substring(0, $si) + $sec + $html.Substring($ei + '<!--/SMP-FREEWEEK-->'.Length)
-} else {
-  # first run: place directly after the TOP5 block if present, else prepend
-  $ti = $html.IndexOf('<!--/SMP-TOP5-->')
-  if ($ti -ge 0) { $ins = $ti + '<!--/SMP-TOP5-->'.Length; $new = $html.Substring(0, $ins) + $sec + $html.Substring($ins) }
-  else { $new = $sec + $html }
-}
-if ($new -ne $html) {
-  $lex = '{"root":{"children":[{"type":"html","version":1,"html":' + ($new | ConvertTo-Json) + '}],"direction":null,"format":"","indent":0,"type":"root","version":1}}'
-  $body = @{ pages = @(@{ lexical = $lex; updated_at = [string]$page.updated_at }) } | ConvertTo-Json -Depth 6
-  $jwt = New-GhostJWT
-  [void](Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/pages/$($page.id)/" -Method Put -Headers @{Authorization="Ghost $jwt"} -ContentType 'application/json' -Body $body)
-  Write-Output 'hub: SMP-FREEWEEK section published on /meal-prep-recipes/'
-} else { Write-Output 'hub: section unchanged' }
+# HUB SECTION REMOVED (Brad, 2026-07-25 - he preferred the original SMP-TOP5 box, which top5-weekly
+# renders; the green SMP-FREEWEEK grid was deleted from the live page the same day). The rotation is
+# DISPLAY-SILENT: flips, state, recipes-db sync and public\free-dinners.json all still happen above.
+# If a free-week surface is ever wanted again, build it from free-dinners.json - do not re-add a second
+# hub box next to SMP-TOP5.
 if ($errors -gt 0) { exit 1 }
