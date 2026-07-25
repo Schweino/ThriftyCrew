@@ -17,13 +17,15 @@ No seafood recipes: seafood is expensive per serving and nobody has asked (Brad,
 | 5. Prose + card assembly (fan out slices) | **recipe-writer** (N in parallel) | **opus** | volume; numbers are transcribed, never computed |
 | 6. Pre-publish batch audit | **recipe-batch-auditor** | **fable** | adversarial full-batch review; GO / NO-GO |
 | 7. Publish + verify live + push + memory | main session | any | scripted, verified |
+| 8. POST-publish independent review | **post-publish-reviewer** | **fable** | trusts artifacts not summaries; fixes via gates or files needs-brad; CLEAN / FIXED / NEEDS-BRAD verdict |
 
 ## How to start a run
 
 Tell the session: "start a recipe run for N recipes" (optionally: theme/constraints). The session follows
 this playbook, reuses the r100 pipeline in meal-prep\r100\ (see recipe-r100-expansion memory for the
 engine gotchas: $Matches clobber, rule order), and dispatches stages 3/5/6 to the pinned agents by name.
-Stage 6's NO-GO blocks publish, full stop.
+Stage 6's NO-GO blocks publish, full stop. Stage 8 runs UNCONDITIONALLY after every publish of the run
+(and is reusable after any other site publish, not just recipes).
 
 After ANY batch lands in recipes-db: run meal-prep\normalize-recipe-ids.ps1 (stamps item_id + protein;
 the free-dinner rotation and the hub Top 5 read the protein field and must stay set-identical).
