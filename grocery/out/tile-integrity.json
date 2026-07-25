@@ -1,13 +1,13 @@
 ﻿{
-    "generated":  "2026-07-25 09:21",
+    "generated":  "2026-07-25 09:36",
     "board":  "comparison-2026-07-25.json",
     "total_tiles":  2439,
-    "violations":  244,
+    "violations":  252,
     "by_store":  {
                      "Walmart":  {
-                                     "coverage":  58,
+                                     "coverage":  59,
                                      "tiles":  411,
-                                     "violations":  58
+                                     "violations":  59
                                  },
                      "Fareway":  {
                                      "coverage":  76,
@@ -15,19 +15,19 @@
                                      "violations":  76
                                  },
                      "Family Fare":  {
-                                         "coverage":  13,
+                                         "coverage":  14,
                                          "tiles":  232,
-                                         "violations":  13
+                                         "violations":  14
                                      },
                      "Hy-Vee":  {
-                                    "coverage":  40,
+                                    "coverage":  41,
                                     "tiles":  404,
-                                    "violations":  40
+                                    "violations":  41
                                 },
                      "Sam\u0027s Club":  {
-                                             "coverage":  37,
+                                             "coverage":  39,
                                              "tiles":  298,
-                                             "violations":  37
+                                             "violations":  39
                                          },
                      "Aldi":  {
                                   "coverage":  17,
@@ -35,9 +35,9 @@
                                   "violations":  17
                               },
                      "Baker\u0027s":  {
-                                          "coverage":  3,
+                                          "coverage":  6,
                                           "tiles":  402,
-                                          "violations":  3
+                                          "violations":  6
                                       }
                  },
     "rows":  [
@@ -499,10 +499,26 @@
                  },
                  {
                      "id":  "chicken-thighs",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Tyson All Natural, Fresh Chicken Thighs, Family Pack, 3.25 - 6.75 lb Tray",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "chicken-thighs",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy Vee 100 Natural Chicken Thighs Value Pack",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "chicken-thighs",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Heritage Farm Bone In Skin On Chicken Thighs",
                      "link":  ""
                  },
                  {
@@ -647,6 +663,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Bakery Fresh Croissants",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "cucumbers",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Seedless English Cucumbers, 3 ct.",
                      "link":  ""
                  },
                  {
@@ -1019,6 +1043,14 @@
                  },
                  {
                      "id":  "grape-juice",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kroger 100% White Grape Juice",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "grape-juice",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -1038,7 +1070,7 @@
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Quaker Instant Grits, Variety Pack, .98 oz., 46 pk.",
+                     "board":  "Quaker Quick 5-Minute Grits 5 lb., 3 pk.",
                      "link":  ""
                  },
                  {
@@ -1047,6 +1079,30 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Quaker Old Fashioned Grits, 24 oz Canister",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-cinnamon",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "That\u0027s Smart! Ground Cinnamon 2.5 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-cinnamon",
+                     "store":  "Sam\u0027s Club",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Member\u0027s Mark Ground Cinnamon",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-cinnamon",
+                     "store":  "Baker\u0027s",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Smart Way Ground Cinnamon",
                      "link":  ""
                  },
                  {
@@ -1539,6 +1595,14 @@
                  },
                  {
                      "id":  "poppy-seeds",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee Poppy Seed",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "poppy-seeds",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -1803,18 +1867,18 @@
                  },
                  {
                      "id":  "taco-seasoning",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Taco Bell Original Taco Seasoning Mix Shaker, for Weeknight Dinners and Mexican-Inspired Dishes, 1 Canister, Original Taco Flavor, 6X More Seasoning than Individual Packets, 6.25 oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "taco-seasoning",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Casa Mamita Taco Seasoning Mix",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "taco-seasoning",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value Taco Seasoning Mix, Original, 1 oz",
                      "link":  ""
                  },
                  {
@@ -1995,5 +2059,5 @@
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  244
+    "coverage_violations":  252
 }

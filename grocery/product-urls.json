@@ -4969,13 +4969,6 @@
                                       },
                   "chicken-thighs":  {
                                          "commodity":  "Chicken Thighs / Drumsticks",
-                                         "Baker\u0027s":  {
-                                                              "url":  "https://www.bakersplus.com/p/heritage-farm-bone-in-skin-on-chicken-leg-quarters/0001111063604",
-                                                              "name":  "Heritage Farm Bone In Skin On Chicken Leg Quarters",
-                                                              "price":  6.99,
-                                                              "size":  "10 lb",
-                                                              "verified":  "2026-07-25"
-                                                          },
                                          "Family Fare":  {
                                                              "url":  "https://www.shopfamilyfare.com/shop/meat/chicken/fresh_chicken/chicken_thighs_family_pack_gold_n_plump/p/1564405684714631523",
                                                              "price":  1.99,
@@ -4997,15 +4990,7 @@
                                                                  "size":  "lb",
                                                                  "verified":  "2026-07-23 DERIVED from the price row (same record the board priced)",
                                                                  "board_pu":  1.28
-                                                             },
-                                         "Walmart":  {
-                                                         "url":  "https://www.walmart.com/ip/734939013",
-                                                         "name":  "Freshness Guaranteed Chicken Leg Quarters, 2.75 - 7.0 lb Tray",
-                                                         "price":  "6.21",
-                                                         "size":  "4.5 lb",
-                                                         "verified":  "2026-07-23 DERIVED from the price row (same record the board priced)",
-                                                         "board_pu":  1.38
-                                                     }
+                                                             }
                                      },
                   "chicken-wings":  {
                                         "commodity":  "chicken-wings",
@@ -6916,14 +6901,6 @@
                                                    "name":  "Cucumber",
                                                    "board_pu":  0.99
                                                },
-                                    "Sam\u0027s Club":  {
-                                                            "url":  "https://www.samsclub.com/ip/13624559685",
-                                                            "name":  "Member\u0027s Mark by FujiSan Cucumber Avocado Roll, 15 pcs.",
-                                                            "price":  5.74,
-                                                            "size":  "15 ct",
-                                                            "verified":  "2026-07-17 DERIVED from the price row (same record the board priced)",
-                                                            "board_pu":  0.3827
-                                                        },
                                     "Walmart":  {
                                                     "url":  "https://www.walmart.com/ip/Fresh-Cucumber-Each/44390954",
                                                     "price":  0.76,
@@ -10299,13 +10276,6 @@
                                                    "name":  "Nature\u0027s Nectar 100% Grape Juice",
                                                    "board_pu":  0.0461
                                                },
-                                      "Baker\u0027s":  {
-                                                           "url":  "https://www.bakersplus.com/p/hawaiian-punch-cowabunga-grape-juice-drink-bottle/0001480000795",
-                                                           "name":  "Hawaiian Punch Cowabunga Grape Juice Drink Bottle",
-                                                           "price":  "$3.49",
-                                                           "size":  "1 gal",
-                                                           "verified":  "2026-07-25 DERIVED from the price row (same record the board priced)"
-                                                       },
                                       "Family Fare":  {
                                                           "url":  "https://www.shopfamilyfare.com/shop/beverages/fruit_vegetable_beverages/grape_juice/our_family_grape_juice_64_fl_oz/p/6786895",
                                                           "price":  3.99,
@@ -10783,19 +10753,6 @@
                                                        "board_pu":  0.4177,
                                                        "recipe_pu":  0.4599
                                                    },
-                                          "Baker\u0027s":  {
-                                                               "url":  "https://www.bakersplus.com/p/annie-s-organic-cinnamon-rolls-with-icing/0001356247292",
-                                                               "name":  "Annie\u0027s Organic Cinnamon Rolls with Icing",
-                                                               "price":  9.49,
-                                                               "size":  "5 pk 3.5 oz",
-                                                               "verified":  "2026-07-25"
-                                                           },
-                                          "Family Fare":  {
-                                                              "url":  "https://www.shopfamilyfare.com/shop/bakery/danishes_coffee_cakes_sweet_rolls/bakery_fresh_white_iced_cinnamon_rolls_4_ct/p/1564405684713023284",
-                                                              "price":  5.99,
-                                                              "size":  "18 oz",
-                                                              "name":  "Bakery Fresh White Iced Cinnamon Rolls (4 Ct)"
-                                                          },
                                           "Fareway":  {
                                                           "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/72896-mccormick-ground-cinnamon-4-12-oz",
                                                           "price":  3.99,
@@ -10810,13 +10767,6 @@
                                                          "name":  "That\u0027s Smart Ground Cinnamon",
                                                          "verified":  "2026-07-25 Hy-Vee search API (storeId 1465)"
                                                      },
-                                          "Sam\u0027s Club":  {
-                                                                  "url":  "https://www.samsclub.com/ip/13599663121",
-                                                                  "name":  "Pillsbury Cinnamon Rolls with Cinnabon Icing 13 oz., 4 pk.",
-                                                                  "price":  "$7.33",
-                                                                  "size":  "52 oz",
-                                                                  "verified":  "2026-07-24 DERIVED from the price row (same record the board priced)"
-                                                              },
                                           "Walmart":  {
                                                           "url":  "https://www.walmart.com/ip/533272737",
                                                           "name":  "Great Value Kosher Ground Cinnamon, 2.5 oz",
@@ -15906,14 +15856,7 @@
                                                           "price":  2.29,
                                                           "size":  "2.5 oz",
                                                           "name":  "Poppy Seeds Sugar \u0027N Spice"
-                                                      },
-                                      "Hy-Vee":  {
-                                                     "url":  "https://www.hy-vee.com/aisles-online/p/292438/lemon-poppy-seed-dessert-loaf",
-                                                     "price":  2.99,
-                                                     "size":  "7 oz",
-                                                     "name":  "Lemon Poppy Seed Dessert Loaf",
-                                                     "verified":  "2026-07-24 Hy-Vee search API (storeId 1465)"
-                                                 }
+                                                      }
                                   },
                   "popsicles":  {
                                     "commodity":  "popsicles",

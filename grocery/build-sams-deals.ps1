@@ -1,4 +1,4 @@
-<#
+﻿<#
   build-sams-deals.ps1 - turn a RAW Sam's browser capture into out\sams\sams-deals-<date>.json.
 
   Input CSV (pipe-delimited, from the in-page pull): q|n|lp|up|id
@@ -114,9 +114,12 @@ function Get-NameQtyCandidates([string]$name, [string]$tok) {
 
   $fam = $script:UnitFamily[$tok]
   if (-not $fam) { return $out }
-  foreach ($mm in [regex]::Matches($n, '(\d[\d.]*)\s*-?\s*(fl\.?\s*oz|floz|ounces?|oz|lbs?|pounds?|gallons?|gal|quarts?|qt|pints?|pt|liters?|l|ml|kg|grams?|g|dozen|doz|dz)\b')) {
+  # (\d[\d.]*|\.\d+): Sam's prints leading-dot decimals ("Variety Pack, .98 oz., 46 pk.") and a
+  # leading-digit-only pattern reads ".98" as "98" - which turned a 45-oz grits case into a 4,508-oz one
+  # and published $0.0023/oz (caught by the sanity band 2026-07-25).
+  foreach ($mm in [regex]::Matches($n, '(\d[\d.]*|\.\d+)\s*-?\s*(fl\.?\s*oz|floz|ounces?|oz|lbs?|pounds?|gallons?|gal|quarts?|qt|pints?|pt|liters?|l|ml|kg|grams?|g|dozen|doz|dz)\b')) {
     $qtxt = ($mm.Groups[1].Value).TrimEnd('.')
-    if ($qtxt -notmatch '^\d+(\.\d+)?$') { continue }
+    if ($qtxt -notmatch '^(\d+(\.\d+)?|\.\d+)$') { continue }   # ".98" is a valid quantity too
     $nu = ($mm.Groups[2].Value -replace '\.','' -replace '\s+',' ')   # "fl. oz." -> "fl oz"
     if (-not $fam.ContainsKey($nu)) { continue }                       # a unit from another family - ignore
     $each = [double]$qtxt * [double]$fam[$nu]
@@ -156,8 +159,8 @@ function Get-NamePack([string]$name) {
   # a digit in between means the two figures belong to different facts. The contents-unit restriction above,
   # not the gap width, is what keeps a bag CAPACITY from being paired.
   foreach ($pat in @(
-    "(\d[\d.]*)\s*-?\s*$unit\b[^\d]{0,14}(\d+)\s*-?\s*$cnt\b",   # "3.2 oz., 32 ct."  /  "13.66 fl. oz. cans, 6 pk."
-    "(\d+)\s*-?\s*$cnt\b[^\d]{0,14}(\d[\d.]*)\s*-?\s*$unit\b"    # "4 ct., 32.4 oz."
+    "(\d[\d.]*|\.\d+)\s*-?\s*$unit\b[^\d]{0,14}(\d+)\s*-?\s*$cnt\b",   # "3.2 oz., 32 ct."  /  "13.66 fl. oz. cans, 6 pk."
+    "(\d+)\s*-?\s*$cnt\b[^\d]{0,14}(\d[\d.]*|\.\d+)\s*-?\s*$unit\b"    # "4 ct., 32.4 oz."
   )) {
     $m = [regex]::Match($n, $pat)
     if (-not $m.Success) { continue }

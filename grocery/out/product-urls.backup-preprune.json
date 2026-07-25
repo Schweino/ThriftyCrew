@@ -3003,7 +3003,14 @@
                                                      "board_pu":  0.0609,
                                                      "price":  1.95,
                                                      "size":  "32 fl oz"
-                                                 }
+                                                 },
+                                     "Baker\u0027s":  {
+                                                          "url":  "https://www.bakersplus.com/p/kroger-cultured-1-lowfat-buttermilk-half-gallon/0001111042701",
+                                                          "price":  "19.97",
+                                                          "size":  "1/2 gal",
+                                                          "name":  "Kroger Cultured 1% Lowfat Buttermilk Half Gallon",
+                                                          "verified":  "2026-07-25 price-pull self-capture"
+                                                      }
                                  },
                   "cabbage":  {
                                   "commodity":  "cabbage",
@@ -6413,13 +6420,6 @@
                                                          "name":  "Fareway 4% Min Small Curd Cottage Cheese",
                                                          "board_pu":  0.1642
                                                      },
-                                         "Hy-Vee":  {
-                                                        "url":  "https://www.hy-vee.com/aisles-online/p/57274/hy-vee-4-small-curd-cottage-cheese",
-                                                        "price":  3.99,
-                                                        "size":  "24 oz",
-                                                        "name":  "Hy Vee 4 Small Curd Cottage Cheese",
-                                                        "verified":  "2026-07-25 Hy-Vee search API (storeId 1465)"
-                                                    },
                                          "Sam\u0027s Club":  {
                                                                  "url":  "https://www.samsclub.com/ip/15337355019",
                                                                  "name":  "Darigold Cottage Cheese, 3 lbs.",
@@ -11211,7 +11211,14 @@
                                                         "name":  "Great Value Half \u0026 Half",
                                                         "board_pu":  0.08,
                                                         "recipe_pu":  0.078
-                                                    }
+                                                    },
+                                        "Baker\u0027s":  {
+                                                             "url":  "https://www.bakersplus.com/p/kroger-half-and-half-half-gallon/0001111050074",
+                                                             "price":  "19.97",
+                                                             "size":  "1/2 gal",
+                                                             "name":  "Kroger Half and Half Half Gallon",
+                                                             "verified":  "2026-07-25 price-pull self-capture"
+                                                         }
                                     },
                   "hamburger-buns":  {
                                          "commodity":  "hamburger-buns",
@@ -13632,13 +13639,6 @@
                                                        "name":  "Fireside Marshmallows",
                                                        "board_pu":  0.1244
                                                    },
-                                       "Hy-Vee":  {
-                                                      "url":  "https://www.hy-vee.com/aisles-online/p/23532/hy-vee-marshmallows",
-                                                      "price":  2.49,
-                                                      "size":  "16 oz",
-                                                      "name":  "Hy Vee Marshmallows",
-                                                      "verified":  "2026-07-25 Hy-Vee search API (storeId 1465)"
-                                                  },
                                        "Sam\u0027s Club":  {
                                                                "url":  "https://www.samsclub.com/ip/1600043819",
                                                                "name":  "Lucky Charms with Marshmallows, 46 oz.",

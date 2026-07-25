@@ -193,7 +193,8 @@
                         "\\bmouthwash\\b",
                         "hand\\s+soap",
                         "body\\s+spray",
-                        "\\bsunscreen\\b"
+                        "\\bsunscreen\\b",
+                        "leg\\s+quarters?"
                     ]
     },
     {
@@ -2802,7 +2803,8 @@
                         "hand\\s+soap",
                         "body\\s+spray",
                         "\\bsunscreen\\b",
-                        "\\brhodes\\b"
+                        "\\brhodes\\b",
+                        "\\brolls?\\b"
                     ]
     },
     {
@@ -5223,7 +5225,10 @@
                         "fruit\\s+pops?",
                         "ice\\s+bars?",
                         "\\bhelados\\b",
-                        "\\boutshine\\b"
+                        "\\boutshine\\b",
+                        "\\brolls?\\b",
+                        "sushi",
+                        "avocado"
                     ]
     },
     {
@@ -20645,7 +20650,10 @@
                         "\\bmouthwash\\b",
                         "hand\\s+soap",
                         "body\\s+spray",
-                        "\\bsunscreen\\b"
+                        "\\bsunscreen\\b",
+                        "\\bpunch\\b",
+                        "juice\\s+drink",
+                        "\\bcocktail\\b"
                     ]
     },
     {
@@ -23960,7 +23968,10 @@
                         "\\bmouthwash\\b",
                         "hand\\s+soap",
                         "body\\s+spray",
-                        "\\bsunscreen\\b"
+                        "\\bsunscreen\\b",
+                        "\\brolls?\\b",
+                        "\\bicing\\b",
+                        "\\bdough\\b"
                     ]
     },
     {
@@ -31228,7 +31239,11 @@
                         "\\bmouthwash\\b",
                         "hand\\s+soap",
                         "body\\s+spray",
-                        "\\bsunscreen\\b"
+                        "\\bsunscreen\\b",
+                        "\\bloaf\\b",
+                        "\\bdessert\\b",
+                        "\\bcake\\b",
+                        "\\bbread\\b"
                     ]
     },
     {
