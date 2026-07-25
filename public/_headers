@@ -3,6 +3,14 @@
   Cache-Control: public, max-age=1800
   Content-Type: application/json; charset=utf-8
 
+# This week's free-dinner rotation (rotate-free-dinners.ps1). The join interstitial on every recipe page
+# fetches it to decide whether THIS page is one of the free ones - without CORS the fetch fails silently
+# and free pages fall back to the returning-visitors-only behavior (exactly the bug on launch day).
+/free-dinners.json
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=900
+  Content-Type: application/json; charset=utf-8
+
 # Per-item weekly price history for the board's "history" modal. Served here instead of embedded in the
 # board post: it was a 252 KB inline blob shipped to EVERY visitor (on mobile) to support an occasional
 # click, and it pushed the post payload past Ghost's upsert timeout (503). Fetched lazily on first open.
