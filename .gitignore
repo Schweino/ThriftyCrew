@@ -33,6 +33,9 @@
 /grocery/out/recipe-board-everyday.bak-*.json
 # per-item sale-window log (sale price + start/end dates): derived from the board daily, self-heals, not tracked
 /grocery/sale-windows.json
+# local ops-alert triage queue + its drain state: machine-local by design (the cloud runner's copy would be
+# ephemeral anyway, and tracking it would rebase-conflict every day). Cloud failures reach Brad via /ops-alert.
+/grocery/triage-queue.json
 # Kroger-API evaluation captures: raw pulls kept for analysis, deliberately NOT board inputs (the
 # "N ct / M oz" size ambiguity underprices some cells; see pull-regular-bakers-api.ps1 header)
 /grocery/out/kroger-api-eval/

@@ -39,6 +39,36 @@ $sentFile = Join-Path $root ("alert-sent-$today.txt")
 # would otherwise commit one new file to the repo every day forever
 Get-ChildItem (Join-Path $root 'alert-sent-*.txt') -ErrorAction SilentlyContinue |
   Where-Object { $_.Name -ne ("alert-sent-$today.txt") } | Remove-Item -Force -ErrorAction SilentlyContinue
+
+# ---- TRIAGE QUEUE (2026-07-25, Brad's rule: an issue email must never wait for a human) -----------------
+# EVERY alert - suppressed-duplicate or not - lands one durable entry in triage-queue.json BEFORE any email
+# logic runs. The grocery-alert-triage scheduled agent drains this queue whenever the Claude app is open:
+# it investigates, fixes what the data/rules/builders need, addresses the root cause, and marks the entry
+# resolved with notes. The email to Brad stays (visibility), but the email is no longer the response system.
+# One entry per type per day (same typeKey as the email gate) so a 3-run morning queues 1 item, not 20.
+try {
+  $qFile = Join-Path $root 'triage-queue.json'
+  $q = if (Test-Path $qFile) { Get-Content $qFile -Raw | ConvertFrom-Json } else { [pscustomobject]@{ readme = 'Durable ops-alert queue. Written by send-alert.ps1 on EVERY alert (even inbox-suppressed dupes). Drained by the grocery-alert-triage scheduled agent: investigate -> fix -> fix the ROOT cause -> status=resolved + notes. Do not hand-edit except to force a re-triage (set status back to open).'; items = @() } }
+  $items = @($q.items)
+  $dupe = $items | Where-Object { $_.type -eq $typeKey -and $_.date -eq $today }
+  if ($dupe) {
+    foreach ($d in $dupe) { $d.count = [int]$d.count + 1 }
+  } else {
+    $items += [pscustomobject]@{
+      id = ($today + '-' + [guid]::NewGuid().ToString('N').Substring(0,6))
+      date = $today; ts = (Get-Date).ToString('s')
+      type = $typeKey; subject = $Subject
+      body = $(if ($Body.Length -gt 1500) { $Body.Substring(0,1500) + ' ...[truncated - full context in ad-cycle-log.txt / the source audit json]' } else { $Body })
+      status = 'open'; count = 1; resolved_ts = $null; notes = $null
+    }
+  }
+  # keep resolved history 30 days so triage can see recurrences; open items never age out
+  $cut = (Get-Date).AddDays(-30)
+  $items = @($items | Where-Object { $_.status -eq 'open' -or ([datetime]$_.ts) -ge $cut })
+  $q.items = $items
+  $q | ConvertTo-Json -Depth 4 | Set-Content $qFile -Encoding UTF8
+} catch { Log ("triage-queue write failed (email still goes out): " + $_.Exception.Message) }
+
 if (-not $Force -and (Test-Path $sentFile) -and ((Get-Content $sentFile) -contains $typeKey)) {
   Log ("SUPPRESSED (already sent this type today) '$Subject' [type: $typeKey]")
   Write-Output ("alert suppressed - '$typeKey' already emailed today (use -Force to override)")
