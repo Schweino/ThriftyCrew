@@ -42,6 +42,11 @@ if ((Get-Date).Day -eq 1) {
   try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'ghost-export.ps1') 2>&1 | ForEach-Object { Log ("ghost-export: " + $_) } } catch { Log ("ghost-export threw: " + $_.Exception.Message) }
 }
 
+# Did the CLOUD side fail? Cloud workflow failures email Brad via the Worker relay, which bypasses the local
+# triage queue - this check routes them through send-alert so the triage agent owns them too (2026-07-25,
+# "no issue email waits for a human"). Non-fatal and fails open: no credential / no network just logs.
+try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'check-cloud-runs.ps1') 2>&1 | ForEach-Object { Log ("cloud-runs: " + $_) } } catch { Log ("check-cloud-runs threw: " + $_.Exception.Message) }
+
 # ---- LOCK: never two of these at once (StartWhenAvailable + a manual run could overlap) ----------
 $lock = Join-Path $env:LOCALAPPDATA 'smp-daily-local.lock'
 if (Test-Path $lock) {
