@@ -328,7 +328,10 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # TODAY's recipe board, not yesterday's. Non-fatal - only runs once the recipe rule-set exists.
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'recipe-overlay.ps1') | Out-Null; Log 'recipe-overlay applied' } catch { Log ('recipe-overlay threw: ' + $_.Exception.Message) }
       # re-cost the 113 recipes from today's board + refresh the hub's Top 5 (only publishes on change). Non-fatal.
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\top5-weekly.ps1') | Out-Null; Log 'top5-weekly refreshed' } catch { Log ('top5-weekly threw: ' + $_.Exception.Message) }
+      # -NoPublish since 2026-07-25: top5-weekly still RE-COSTS all 213 recipes daily (recipe-costs.json
+      # feeds the feed, the planner and the free rotation) but no longer renders its own hub section - the
+      # free-rotation SMP-FREEWEEK block below IS the top-5-per-protein display now (Brad: one box, not two).
+      try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\top5-weekly.ps1') -NoPublish | Out-Null; Log 'top5-weekly re-costed (display retired - free rotation owns the hub section)' } catch { Log ('top5-weekly threw: ' + $_.Exception.Message) }
       # Free-dinner rotation (Brad, 2026-07-25): top 5 cheapest dinners per protein go FREE for the board
       # week; they revert to members-only when the week re-ranks them. Runs daily right after re-costing but
       # no-ops until the board week (or the set) changes, so flips happen on the ad flip. Non-fatal.
