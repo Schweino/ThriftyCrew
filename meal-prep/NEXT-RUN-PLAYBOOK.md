@@ -1,4 +1,4 @@
-# Recipe expansion run playbook (model-routed, zero /model flips)
+﻿# Recipe expansion run playbook (model-routed, zero /model flips)
 
 Brad's requirement (2026-07-25): he should never have to remember to flip models mid-run. The routing
 lives in the AGENT definitions (C:\Codex\.claude\agents\), each pinned to its model. Whatever model the
@@ -10,7 +10,7 @@ No seafood recipes: seafood is expensive per serving and nobody has asked (Brad,
 
 | Stage | Who runs it | Model | Why |
 |---|---|---|---|
-| 1. Source + select candidates (variety mix, no-seafood rule) | main session or general agents | whatever is active | breadth work, gates downstream |
+| 1. Source candidates from the internet (fan out N slices by cuisine/protein/method) | **recipe-sourcer** (parallel) | **opus** | breadth research; returns structured candidates + source URLs; selector culls |
 | 2. Normalize ingredients -> canonical worklist | scripts + main session | any | mechanical (normalize-recipe-ids.ps1 is idempotent) |
 | 3. NEW ingredient mapping + food-DB entries | **recipe-ingredient-mapper** | **fable** | accuracy-critical; evidence-gate judgment; label transcription |
 | 4. Scale to 14 servings, macros, 550 gate, pricing | scripts (r100 pipeline) | any | the gates do the checking |
