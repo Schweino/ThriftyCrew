@@ -1,0 +1,147 @@
+﻿{
+    "week_of":  "2026-07-25",
+    "updated":  "2026-07-25T11:15:04",
+    "note":  "This week free because they are the cheapest dinners per protein on the live Omaha board. They revert to members-only when prices re-rank.",
+    "free":  [
+                 {
+                     "slug":  "baked-sweet-and-sour-chicken-rice-bowls",
+                     "protein":  "chicken",
+                     "rank":  1,
+                     "name":  "Baked Sweet and Sour Chicken Rice Bowls",
+                     "per_serving":  1.29
+                 },
+                 {
+                     "slug":  "hot-honey-chicken-bowls",
+                     "protein":  "chicken",
+                     "rank":  2,
+                     "name":  "Hot Honey Chicken and Broccoli Bowls",
+                     "per_serving":  1.4
+                 },
+                 {
+                     "slug":  "bbq-chicken-rice-bowls",
+                     "protein":  "chicken",
+                     "rank":  3,
+                     "name":  "Lean BBQ Chicken and Rice Bowls",
+                     "per_serving":  1.47
+                 },
+                 {
+                     "slug":  "filipino-chicken-inasal-bowls",
+                     "protein":  "chicken",
+                     "rank":  4,
+                     "name":  "Filipino Chicken Inasal Bowls",
+                     "per_serving":  1.56
+                 },
+                 {
+                     "slug":  "cajun-chicken-and-sausage-jambalaya",
+                     "protein":  "chicken",
+                     "rank":  5,
+                     "name":  "Cajun Chicken and Sausage Jambalaya",
+                     "per_serving":  1.68
+                 },
+                 {
+                     "slug":  "pizza-pasta-bowls",
+                     "protein":  "turkey",
+                     "rank":  1,
+                     "name":  "Pizza Pasta Bowls",
+                     "per_serving":  1.52
+                 },
+                 {
+                     "slug":  "turkey-bolognese-penne",
+                     "protein":  "turkey",
+                     "rank":  2,
+                     "name":  "Turkey Bolognese Penne",
+                     "per_serving":  2.52
+                 },
+                 {
+                     "slug":  "turkey-keema-curry-with-peas",
+                     "protein":  "turkey",
+                     "rank":  3,
+                     "name":  "Turkey Keema Curry with Peas",
+                     "per_serving":  2.71
+                 },
+                 {
+                     "slug":  "highprotein-turkey-burger-bowl",
+                     "protein":  "turkey",
+                     "rank":  4,
+                     "name":  "High-Protein Turkey Burger Bowl",
+                     "per_serving":  2.78
+                 },
+                 {
+                     "slug":  "turkey-taco-rice-skillet",
+                     "protein":  "turkey",
+                     "rank":  5,
+                     "name":  "Turkey Taco Rice Skillet",
+                     "per_serving":  2.8
+                 },
+                 {
+                     "slug":  "lebanese-hashweh",
+                     "protein":  "beef",
+                     "rank":  1,
+                     "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
+                     "per_serving":  2.21
+                 },
+                 {
+                     "slug":  "cheesy-beef-broccoli-bowls",
+                     "protein":  "beef",
+                     "rank":  2,
+                     "name":  "Cheesy Beef and Broccoli Rice Bowls",
+                     "per_serving":  2.25
+                 },
+                 {
+                     "slug":  "million-dollar-baked-spaghetti",
+                     "protein":  "beef",
+                     "rank":  3,
+                     "name":  "Million Dollar Baked Spaghetti",
+                     "per_serving":  2.44
+                 },
+                 {
+                     "slug":  "cheeseburger-pasta",
+                     "protein":  "beef",
+                     "rank":  4,
+                     "name":  "High-Protein Cheeseburger Pasta",
+                     "per_serving":  2.5
+                 },
+                 {
+                     "slug":  "beef-chili-rice-bowls",
+                     "protein":  "beef",
+                     "rank":  5,
+                     "name":  "Beef Chili Rice Bowls",
+                     "per_serving":  2.51
+                 },
+                 {
+                     "slug":  "brazilianstyle-pork-ribs-bowls",
+                     "protein":  "pork",
+                     "rank":  1,
+                     "name":  "Brazilian-Style Pork Ribs Bowls",
+                     "per_serving":  1.28
+                 },
+                 {
+                     "slug":  "slow-cooker-kalua-pork-bowls",
+                     "protein":  "pork",
+                     "rank":  2,
+                     "name":  "Slow Cooker Kalua Pork Bowls",
+                     "per_serving":  1.54
+                 },
+                 {
+                     "slug":  "braised-pork-ragu-over-pappardelle",
+                     "protein":  "pork",
+                     "rank":  3,
+                     "name":  "Braised Pork Ragu over Pappardelle",
+                     "per_serving":  1.64
+                 },
+                 {
+                     "slug":  "italian-sausage-penne",
+                     "protein":  "pork",
+                     "rank":  4,
+                     "name":  "Italian Sausage Penne with Peppers",
+                     "per_serving":  1.7
+                 },
+                 {
+                     "slug":  "slow-cooker-pork-tinga-bowls",
+                     "protein":  "pork",
+                     "rank":  5,
+                     "name":  "Slow Cooker Pork Tinga Bowls",
+                     "per_serving":  1.7
+                 }
+             ]
+}
