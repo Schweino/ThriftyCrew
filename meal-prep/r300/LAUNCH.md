@@ -1,4 +1,4 @@
-# R300 LAUNCH CARD - execute immediately when Brad says go/continue after app restart
+﻿# R300 LAUNCH CARD - execute immediately when Brad says go/continue after app restart
 
 Brad approved (2026-07-25): full 300-recipe run, all stages, publish included, no questions except
 CAPTCHA walls or genuine judgment calls (those go to the triage queue / one specific ask).
@@ -29,7 +29,9 @@ Write JSON to C:\Codex\income\meal-prep\r300\candidates\<SLICE>.json with schema
 | C2 | 45 chicken | underrepresented cuisines: African peanut/mafe stews, piri piri, paprikash, Caribbean jerk/curry, new Indian/Thai; dedupe against all 69 name by name |
 
 ## After sourcing completes (notifications arrive):
-Stage 2: merge candidates, cull to 300 per targets (turkey 90, pork 78, beef 73, chicken 59),
+Stage 2: dispatch recipe-dedup-selector (opus 4.8) on the merged pool: it kills catalog-dupes AND
+pool-dupes (judging the dish, not the name - Brad's explicit rule), then selects the final 300 per
+targets (turkey 90, pork 78, beef 73, chicken 59) writing r300\selected.json. Then
 build normalized ingredient worklist -> then stage 3 mapper (fable), stages 4-8 per
 meal-prep\NEXT-RUN-PLAYBOOK.md. Batch publishes (~50-75 at a time); auditor GO gates each batch;
 post-publish-reviewer after every publish. Update RUN-STATE.md as stages complete + commit/push
