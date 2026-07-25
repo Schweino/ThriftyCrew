@@ -5,7 +5,9 @@
   mid-cycle can't be seen by the headless daily job. This decides whether the tiny daily Chrome agent needs
   to run at all. It prints ONE line; the agent reads the FIRST token:
     FRESH   - Baker's already refreshed today (weekly Wed agent, a prior run, or manual) -> STOP, nothing to do.
-    IDLE    - nothing due: no ad flip and no Baker's sale starts or rolls off today -> STOP (skip the scan).
+    IDLE    - no ADVERTISED boundary today. Since 2026-07-25 this is INFORMATIONAL ONLY - the 6am agent
+              runs the headless API scan every day regardless, because unadvertised promos (the Heritage
+              Farm $1.99 morning) are invisible to this window log by definition. Only FRESH skips.
     DUE     - a Baker's sale boundary is due today (a sale ends+reverts, or a new sale starts) -> run the scan.
     DUE ... ADFLIP - the weekly ad has rolled (today >= next_pull) -> also pull the flyer (step B), not just the scan.
 
@@ -70,5 +72,5 @@ if ($fresh -and $adflip -and (-not $flyerFresh)) {
 } elseif ($boundary) {
   Write-Output ("DUE  Baker's sale boundary today (" + $bReason + ") - re-check the everyday prices")
 } else {
-  Write-Output "IDLE  no ad flip and no Baker's sale starts/reverts today - skip the scan (event-driven)"
+  Write-Output "IDLE  no ADVERTISED Baker's boundary today (informational - the API scan runs anyway; unadvertised promos are exactly what it catches)"
 }
