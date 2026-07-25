@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-07-24 09:23",
-    "board":  "comparison-2026-07-24.json",
-    "total_tiles":  2435,
+    "generated":  "2026-07-25 09:21",
+    "board":  "comparison-2026-07-25.json",
+    "total_tiles":  2439,
     "violations":  244,
     "by_store":  {
                      "Walmart":  {
@@ -21,7 +21,7 @@
                                      },
                      "Hy-Vee":  {
                                     "coverage":  40,
-                                    "tiles":  403,
+                                    "tiles":  404,
                                     "violations":  40
                                 },
                      "Sam\u0027s Club":  {
@@ -36,7 +36,7 @@
                               },
                      "Baker\u0027s":  {
                                           "coverage":  3,
-                                          "tiles":  399,
+                                          "tiles":  402,
                                           "violations":  3
                                       }
                  },
@@ -219,6 +219,14 @@
                  },
                  {
                      "id":  "bottled-water",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Hy-Vee purified drinking water, 24 pk. bottles 16.9 fl. oz., $2.48",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "bottled-water",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -231,14 +239,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Fareway 24 Pack Purified Drinking Water",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "bottled-water",
-                     "store":  "Hy-Vee",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Hy-Vee spring water, 24 pk. mini bottles 10 fl. oz., $3.99",
                      "link":  ""
                  },
                  {

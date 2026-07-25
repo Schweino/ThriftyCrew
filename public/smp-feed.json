@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-24T09:10:14",
-    "week_of":  "2026-07-24",
+    "generated":  "2026-07-25T09:09:30",
+    "week_of":  "2026-07-25",
     "ingredient_count":  504,
     "recipe_count":  213,
     "ingredients":  {
@@ -42,8 +42,8 @@
                                               "stores":  {
                                                              "Fareway":  0.2027,
                                                              "Hy-Vee":  0.2178,
-                                                             "Baker\u0027s":  0.2452,
-                                                             "Aldi":  0.4247
+                                                             "Aldi":  0.4247,
+                                                             "Baker\u0027s":  0.5543
                                                          }
                                           },
                         "alfredo-sauce":  {
@@ -296,7 +296,7 @@
                                           "cheapest":  0.1873,
                                           "store":  "Baker\u0027s",
                                           "type":  "everyday",
-                                          "url":  "",
+                                          "url":  "https://www.bakersplus.com/p/comforts-stage-2-baby-food-puree-pouches-variety-pack-big-deal-/0004126000401",
                                           "n":  7,
                                           "stores":  {
                                                          "Baker\u0027s":  0.1873,
@@ -314,9 +314,10 @@
                                              "store":  "Sam\u0027s Club",
                                              "type":  "everyday",
                                              "url":  "https://www.samsclub.com/ip/13929969897",
-                                             "n":  4,
+                                             "n":  5,
                                              "stores":  {
                                                             "Sam\u0027s Club":  0.8017,
+                                                            "Baker\u0027s":  0.9409,
                                                             "Hy-Vee":  1.6776,
                                                             "Walmart":  1.68,
                                                             "Fareway":  1.7734
@@ -501,7 +502,7 @@
                                             "cheapest":  3.192,
                                             "store":  "Baker\u0027s",
                                             "type":  "everyday",
-                                            "url":  "",
+                                            "url":  "https://www.bakersplus.com/p/gotham-greens-fresh-basil/0085392700300",
                                             "n":  5,
                                             "stores":  {
                                                            "Baker\u0027s":  3.192,
@@ -553,8 +554,8 @@
                                           "stores":  {
                                                          "Sam\u0027s Club":  0.07,
                                                          "Aldi":  0.0939,
+                                                         "Baker\u0027s":  0.1061,
                                                          "Fareway":  0.1068,
-                                                         "Baker\u0027s":  0.1106,
                                                          "Walmart":  0.1239,
                                                          "Hy-Vee":  0.1267,
                                                          "Family Fare":  0.1439
@@ -639,7 +640,7 @@
                                              "cheapest":  0.3398,
                                              "store":  "Baker\u0027s",
                                              "type":  "everyday",
-                                             "url":  "",
+                                             "url":  "https://www.bakersplus.com/p/simple-truth-protein-black-pepper-lentils-brown-rice-and-ancient-grains-whole-grain-blend/0001111002281",
                                              "n":  7,
                                              "stores":  {
                                                             "Baker\u0027s":  0.3398,
@@ -689,7 +690,7 @@
                                                      "cheapest":  0.125,
                                                      "store":  "Baker\u0027s",
                                                      "type":  "everyday",
-                                                     "url":  "",
+                                                     "url":  "https://www.bakersplus.com/p/kroger-chunky-blue-cheese-salad-dressing/0001111003634",
                                                      "n":  4,
                                                      "stores":  {
                                                                     "Baker\u0027s":  0.125,
@@ -720,7 +721,7 @@
                                        "cheapest":  0.2113,
                                        "store":  "Baker\u0027s",
                                        "type":  "everyday",
-                                       "url":  "",
+                                       "url":  "https://www.bakersplus.com/p/kroger-cocoa-butter-lotion/0004126002319",
                                        "n":  6,
                                        "stores":  {
                                                       "Baker\u0027s":  0.2113,
@@ -750,13 +751,13 @@
                                       },
                         "chicken-breast":  {
                                                "unit":  "lb",
-                                               "cheapest":  2.29,
+                                               "cheapest":  1.99,
                                                "store":  "Baker\u0027s",
                                                "type":  "everyday",
                                                "url":  "https://www.bakersplus.com/p/heritage-farm-boneless-skinless-chicken-breasts/0028334900000",
                                                "n":  7,
                                                "stores":  {
-                                                              "Baker\u0027s":  2.29,
+                                                              "Baker\u0027s":  1.99,
                                                               "Aldi":  2.29,
                                                               "Sam\u0027s Club":  2.48,
                                                               "Family Fare":  2.99,
@@ -767,20 +768,21 @@
                                            },
                         "bottled-water":  {
                                               "unit":  "each",
-                                              "cheapest":  0.1122,
-                                              "store":  "Sam\u0027s Club",
-                                              "type":  "everyday",
+                                              "cheapest":  0.1033,
+                                              "store":  "Hy-Vee",
+                                              "type":  "sale",
                                               "url":  "",
                                               "n":  7,
                                               "stores":  {
+                                                             "Hy-Vee":  0.1033,
                                                              "Sam\u0027s Club":  0.1122,
                                                              "Aldi":  0.1329,
                                                              "Baker\u0027s":  0.1458,
                                                              "Walmart":  0.1533,
                                                              "Fareway":  0.1612,
-                                                             "Hy-Vee":  0.1662,
                                                              "Family Fare":  0.1662
-                                                         }
+                                                         },
+                                              "sale_end":  "2026-07-26"
                                           },
                         "bouillon":  {
                                          "unit":  "oz",
@@ -817,7 +819,7 @@
                                       "cheapest":  0.7488,
                                       "store":  "Baker\u0027s",
                                       "type":  "everyday",
-                                      "url":  "",
+                                      "url":  "https://www.bakersplus.com/p/the-cheesecake-factory-at-home-brown-bread-wheat-dinner-rolls/0003967737730",
                                       "n":  6,
                                       "stores":  {
                                                      "Baker\u0027s":  0.7488,
@@ -937,7 +939,7 @@
                                             "n":  3,
                                             "stores":  {
                                                            "Fareway":  1.68,
-                                                           "Hy-Vee":  1.72,
+                                                           "Hy-Vee":  1.78,
                                                            "Sam\u0027s Club":  2.745
                                                        }
                                         },
@@ -1279,7 +1281,7 @@
                                              "cheapest":  0.0667,
                                              "store":  "Baker\u0027s",
                                              "type":  "everyday",
-                                             "url":  "https://www.bakersplus.com/p/chef-boyardee-beefaroni-15-oz/0006414404302",
+                                             "url":  "https://www.bakersplus.com/p/chef-boyardee-beef-ravioli-15-oz/0006414404315",
                                              "n":  4,
                                              "stores":  {
                                                             "Baker\u0027s":  0.0667,
@@ -1406,7 +1408,7 @@
                                                              "Sam\u0027s Club":  0.2176,
                                                              "Aldi":  0.2298,
                                                              "Baker\u0027s":  0.3044,
-                                                             "Hy-Vee":  0.458,
+                                                             "Hy-Vee":  0.494,
                                                              "Fareway":  0.496,
                                                              "Walmart":  0.712
                                                          }
@@ -1518,7 +1520,7 @@
                                            "n":  6,
                                            "stores":  {
                                                           "Hy-Vee":  0.2796,
-                                                          "Baker\u0027s":  0.2995,
+                                                          "Baker\u0027s":  0.3645,
                                                           "Fareway":  0.398,
                                                           "Walmart":  0.406,
                                                           "Aldi":  0.4421,
@@ -1575,7 +1577,7 @@
                                          "cheapest":  0.5838,
                                          "store":  "Baker\u0027s",
                                          "type":  "everyday",
-                                         "url":  "",
+                                         "url":  "https://www.bakersplus.com/p/kroger-ridged-charcoal-briquettes-original-15-4-lb/0004126037327",
                                          "n":  4,
                                          "stores":  {
                                                         "Baker\u0027s":  0.5838,
@@ -1621,17 +1623,17 @@
                                               },
                         "cherries":  {
                                          "unit":  "lb",
-                                         "cheapest":  2.49,
-                                         "store":  "Aldi",
+                                         "cheapest":  1.99,
+                                         "store":  "Baker\u0027s",
                                          "type":  "everyday",
-                                         "url":  "https://www.aldi.us/store/aldi/products/20151060-red-cherries-bag-1-lb",
+                                         "url":  "https://www.bakersplus.com/p/mezzetta-mild-sweet-cherry-peppers/0007321400115",
                                          "n":  7,
                                          "stores":  {
+                                                        "Baker\u0027s":  1.99,
                                                         "Aldi":  2.49,
                                                         "Walmart":  2.5,
                                                         "Family Fare":  2.77,
                                                         "Sam\u0027s Club":  2.94,
-                                                        "Baker\u0027s":  2.99,
                                                         "Fareway":  4.99,
                                                         "Hy-Vee":  5.99
                                                     }
@@ -1658,7 +1660,7 @@
                                                     "cheapest":  0.0752,
                                                     "store":  "Baker\u0027s",
                                                     "type":  "everyday",
-                                                    "url":  "",
+                                                    "url":  "https://www.bakersplus.com/p/kroger-condensed-chicken-noodle-soup/0001111016039",
                                                     "n":  6,
                                                     "stores":  {
                                                                    "Baker\u0027s":  0.0752,
@@ -1674,7 +1676,7 @@
                                                "cheapest":  0.699,
                                                "store":  "Baker\u0027s",
                                                "type":  "everyday",
-                                               "url":  "",
+                                               "url":  "https://www.bakersplus.com/p/heritage-farm-bone-in-skin-on-chicken-leg-quarters/0001111063604",
                                                "n":  7,
                                                "stores":  {
                                                               "Baker\u0027s":  0.699,
@@ -1688,13 +1690,13 @@
                                            },
                         "chicken-wings":  {
                                               "unit":  "lb",
-                                              "cheapest":  2.29,
+                                              "cheapest":  1.59,
                                               "store":  "Baker\u0027s",
                                               "type":  "everyday",
                                               "url":  "https://www.bakersplus.com/p/heritage-farm-bone-in-skin-on-chicken-wings/0025313500000",
                                               "n":  6,
                                               "stores":  {
-                                                             "Baker\u0027s":  2.29,
+                                                             "Baker\u0027s":  1.59,
                                                              "Aldi":  2.49,
                                                              "Sam\u0027s Club":  2.77,
                                                              "Fareway":  2.99,
@@ -1873,7 +1875,7 @@
                                             "cheapest":  1.198,
                                             "store":  "Baker\u0027s",
                                             "type":  "everyday",
-                                            "url":  "",
+                                            "url":  "https://www.bakersplus.com/p/seedless-mandarin-clementine-oranges-in-5lb-bag/0003338314606",
                                             "n":  6,
                                             "stores":  {
                                                            "Baker\u0027s":  1.198,
@@ -1950,7 +1952,7 @@
                                     "cheapest":  6.99,
                                     "store":  "Baker\u0027s",
                                     "type":  "everyday",
-                                    "url":  "",
+                                    "url":  "https://www.bakersplus.com/p/pacific-cod-fillet-wild-caught-sustainably-sourced-/0026812840000",
                                     "n":  6,
                                     "stores":  {
                                                    "Baker\u0027s":  6.99,
@@ -1998,16 +2000,16 @@
                                            },
                         "coffee-pods":  {
                                             "unit":  "each",
-                                            "cheapest":  0.2666,
-                                            "store":  "Baker\u0027s",
+                                            "cheapest":  0.3125,
+                                            "store":  "Aldi",
                                             "type":  "everyday",
-                                            "url":  "",
+                                            "url":  "https://www.aldi.us/store/aldi/products/39977793-36-ct-donut-cups",
                                             "n":  6,
                                             "stores":  {
-                                                           "Baker\u0027s":  0.2666,
                                                            "Aldi":  0.3125,
                                                            "Sam\u0027s Club":  0.3298,
                                                            "Walmart":  0.3431,
+                                                           "Baker\u0027s":  0.3644,
                                                            "Hy-Vee":  0.949,
                                                            "Fareway":  0.999
                                                        }
@@ -2017,7 +2019,7 @@
                                         "cheapest":  0.1492,
                                         "store":  "Baker\u0027s",
                                         "type":  "everyday",
-                                        "url":  "",
+                                        "url":  "https://www.bakersplus.com/p/smart-way-chocolate-chip-cookies/0001111011635",
                                         "n":  7,
                                         "stores":  {
                                                        "Baker\u0027s":  0.1492,
@@ -2066,7 +2068,7 @@
                                           "cheapest":  0.4994,
                                           "store":  "Baker\u0027s",
                                           "type":  "everyday",
-                                          "url":  "",
+                                          "url":  "https://www.bakersplus.com/p/kroger-classic-corn-dogs/0001111001762",
                                           "n":  5,
                                           "stores":  {
                                                          "Baker\u0027s":  0.4994,
@@ -2362,12 +2364,12 @@
                                                        "n":  7,
                                                        "stores":  {
                                                                       "Family Fare":  0.0683,
-                                                                      "Baker\u0027s":  0.069,
                                                                       "Fareway":  0.0786,
                                                                       "Hy-Vee":  0.0821,
                                                                       "Aldi":  0.095,
                                                                       "Walmart":  0.0971,
-                                                                      "Sam\u0027s Club":  0.0998
+                                                                      "Sam\u0027s Club":  0.0998,
+                                                                      "Baker\u0027s":  0.1
                                                                   }
                                                    },
                         "dijon-mustard":  {
@@ -2470,7 +2472,7 @@
                                                    "cheapest":  0.1559,
                                                    "store":  "Baker\u0027s",
                                                    "type":  "everyday",
-                                                   "url":  "",
+                                                   "url":  "https://www.bakersplus.com/p/scrubbing-bubbles-disinfectant-bathroom-grime-fighter-spray-petal-paradise-32-fl-oz/0002570000615",
                                                    "n":  5,
                                                    "stores":  {
                                                                   "Baker\u0027s":  0.1559,
@@ -2522,8 +2524,8 @@
                                            "n":  6,
                                            "stores":  {
                                                           "Sam\u0027s Club":  0.0749,
-                                                          "Baker\u0027s":  0.1121,
                                                           "Walmart":  0.2756,
+                                                          "Baker\u0027s":  0.2778,
                                                           "Fareway":  0.2778,
                                                           "Aldi":  0.5255,
                                                           "Hy-Vee":  0.8
@@ -2534,7 +2536,7 @@
                                        "cheapest":  0.3992,
                                        "store":  "Baker\u0027s",
                                        "type":  "everyday",
-                                       "url":  "",
+                                       "url":  "https://www.bakersplus.com/p/krispy-kreme-original-glazed-doughnut-dots/0007247000577",
                                        "n":  3,
                                        "stores":  {
                                                       "Baker\u0027s":  0.3992,
@@ -2800,12 +2802,13 @@
                                          "store":  "Aldi",
                                          "type":  "everyday",
                                          "url":  "https://www.aldi.us/store/aldi/products/20240796-baker-s-corner-vanilla-frosting-16-oz",
-                                         "n":  4,
+                                         "n":  5,
                                          "stores":  {
                                                         "Aldi":  0.1056,
                                                         "Walmart":  0.1081,
                                                         "Fareway":  0.1244,
-                                                        "Hy-Vee":  0.1244
+                                                        "Hy-Vee":  0.1244,
+                                                        "Baker\u0027s":  0.1244
                                                     }
                                      },
                         "breakfast-sandwiches":  {
@@ -2926,10 +2929,11 @@
                                             "store":  "Fareway",
                                             "type":  "everyday",
                                             "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/24454427-fareway-hash-browns-diced-southern-style-32-oz",
-                                            "n":  5,
+                                            "n":  6,
                                             "stores":  {
                                                            "Fareway":  0.0934,
                                                            "Sam\u0027s Club":  0.0984,
+                                                           "Baker\u0027s":  0.1184,
                                                            "Aldi":  0.123,
                                                            "Walmart":  0.1319,
                                                            "Hy-Vee":  0.1493
@@ -2940,7 +2944,7 @@
                                                "cheapest":  0.1532,
                                                "store":  "Baker\u0027s",
                                                "type":  "everyday",
-                                               "url":  "",
+                                               "url":  "https://www.bakersplus.com/p/on-cor-lasagna-with-meat-sauce/0007057504022",
                                                "n":  6,
                                                "stores":  {
                                                               "Baker\u0027s":  0.1532,
@@ -2956,7 +2960,7 @@
                                                  "cheapest":  0.1875,
                                                  "store":  "Baker\u0027s",
                                                  "type":  "everyday",
-                                                 "url":  "",
+                                                 "url":  "https://www.bakersplus.com/p/armour-meatball-6-4-lb-frozen/0002781500165",
                                                  "n":  6,
                                                  "stores":  {
                                                                 "Baker\u0027s":  0.1875,
@@ -3001,20 +3005,21 @@
                                         },
                         "frozen-pizza":  {
                                              "unit":  "each",
-                                             "cheapest":  1.7475,
-                                             "store":  "Baker\u0027s",
-                                             "type":  "everyday",
+                                             "cheapest":  2.22,
+                                             "store":  "Hy-Vee",
+                                             "type":  "sale",
                                              "url":  "",
                                              "n":  7,
                                              "stores":  {
-                                                            "Baker\u0027s":  1.7475,
                                                             "Hy-Vee":  2.22,
                                                             "Aldi":  2.99,
                                                             "Fareway":  3.33,
+                                                            "Baker\u0027s":  3.3333,
                                                             "Family Fare":  3.6667,
                                                             "Sam\u0027s Club":  3.9933,
                                                             "Walmart":  4.82
-                                                        }
+                                                        },
+                                             "sale_end":  "2026-07-26"
                                          },
                         "frozen-waffles":  {
                                                "unit":  "each",
@@ -3026,7 +3031,7 @@
                                                "stores":  {
                                                               "Sam\u0027s Club":  0.1649,
                                                               "Baker\u0027s":  0.1788,
-                                                              "Hy-Vee":  0.2,
+                                                              "Hy-Vee":  0.199,
                                                               "Aldi":  0.215,
                                                               "Family Fare":  0.259,
                                                               "Fareway":  0.277,
@@ -3075,7 +3080,7 @@
                                                             "Sam\u0027s Club":  0.1331,
                                                             "Walmart":  0.1742,
                                                             "Hy-Vee":  0.1748,
-                                                            "Baker\u0027s":  0.1968,
+                                                            "Baker\u0027s":  0.1998,
                                                             "Fareway":  0.329
                                                         }
                                          },
@@ -3088,9 +3093,9 @@
                                                  "n":  5,
                                                  "stores":  {
                                                                 "Sam\u0027s Club":  0.1439,
-                                                                "Baker\u0027s":  0.1559,
                                                                 "Fareway":  0.2392,
                                                                 "Walmart":  0.499,
+                                                                "Baker\u0027s":  0.566,
                                                                 "Hy-Vee":  0.7206
                                                             }
                                              },
@@ -3113,7 +3118,7 @@
                                        "cheapest":  0.498,
                                        "store":  "Baker\u0027s",
                                        "type":  "everyday",
-                                       "url":  "",
+                                       "url":  "https://www.bakersplus.com/p/kroger-whole-garlic-bulbs/0001111002824",
                                        "n":  6,
                                        "stores":  {
                                                       "Baker\u0027s":  0.498,
@@ -3129,7 +3134,7 @@
                                              "cheapest":  1.165,
                                              "store":  "Baker\u0027s",
                                              "type":  "everyday",
-                                             "url":  "",
+                                             "url":  "https://www.bakersplus.com/p/new-york-bakery-gluten-free-texas-toast-with-real-garlic/0007045985119",
                                              "n":  2,
                                              "stores":  {
                                                             "Baker\u0027s":  1.165,
@@ -3220,7 +3225,7 @@
                                           "cheapest":  0.2321,
                                           "store":  "Baker\u0027s",
                                           "type":  "everyday",
-                                          "url":  "",
+                                          "url":  "https://www.bakersplus.com/p/kikkoman-gochujang-spicy-miso-teriyaki-sauce/0004139001456",
                                           "n":  3,
                                           "stores":  {
                                                          "Baker\u0027s":  0.2321,
@@ -3297,14 +3302,14 @@
                                   },
                         "grape-juice":  {
                                             "unit":  "floz",
-                                            "cheapest":  0.0461,
-                                            "store":  "Aldi",
+                                            "cheapest":  0.0273,
+                                            "store":  "Baker\u0027s",
                                             "type":  "everyday",
-                                            "url":  "https://www.aldi.us/store/aldi/products/19673951-nature-s-nectar-100-grape-juice-64-fl-oz",
+                                            "url":  "https://www.bakersplus.com/p/kroger-100-white-grape-juice/0001111003973",
                                             "n":  6,
                                             "stores":  {
+                                                           "Baker\u0027s":  0.0273,
                                                            "Aldi":  0.0461,
-                                                           "Baker\u0027s":  0.0514,
                                                            "Walmart":  0.0591,
                                                            "Fareway":  0.0622,
                                                            "Family Fare":  0.0623,
@@ -3409,7 +3414,7 @@
                                                 "cheapest":  0.141,
                                                 "store":  "Sam\u0027s Club",
                                                 "type":  "everyday",
-                                                "url":  "",
+                                                "url":  "https://www.samsclub.com/ip/13599663121",
                                                 "n":  7,
                                                 "stores":  {
                                                                "Sam\u0027s Club":  0.141,
@@ -3606,7 +3611,7 @@
                                             "cheapest":  0.1162,
                                             "store":  "Sam\u0027s Club",
                                             "type":  "everyday",
-                                            "url":  "",
+                                            "url":  "https://www.samsclub.com/ip/13607413640",
                                             "n":  6,
                                             "stores":  {
                                                            "Sam\u0027s Club":  0.1162,
@@ -3637,7 +3642,7 @@
                                       "cheapest":  0.1244,
                                       "store":  "Baker\u0027s",
                                       "type":  "everyday",
-                                      "url":  "",
+                                      "url":  "https://www.bakersplus.com/p/kroger-rich-n-honey-hot-dog-buns/0001111011536",
                                       "n":  7,
                                       "stores":  {
                                                      "Baker\u0027s":  0.1244,
@@ -3729,7 +3734,7 @@
                                           "cheapest":  0.1085,
                                           "store":  "Baker\u0027s",
                                           "type":  "everyday",
-                                          "url":  "",
+                                          "url":  "https://www.bakersplus.com/p/valentina-mexican-hot-sauce/0009733900003",
                                           "n":  7,
                                           "stores":  {
                                                          "Baker\u0027s":  0.1085,
@@ -3780,7 +3785,7 @@
                                          "cheapest":  0.0257,
                                          "store":  "Baker\u0027s",
                                          "type":  "everyday",
-                                         "url":  "",
+                                         "url":  "https://www.bakersplus.com/p/kroger-zero-sugar-decaffeinated-sweet-tea/0001111013438",
                                          "n":  6,
                                          "stores":  {
                                                         "Baker\u0027s":  0.0257,
@@ -3796,7 +3801,7 @@
                                              "cheapest":  0.2654,
                                              "store":  "Baker\u0027s",
                                              "type":  "everyday",
-                                             "url":  "",
+                                             "url":  "https://www.bakersplus.com/p/hot-shot-ant-roach-spider-fragrance-free-killer-spray-twin-pack/0007112126780",
                                              "n":  4,
                                              "stores":  {
                                                             "Baker\u0027s":  0.2654,
@@ -3810,7 +3815,7 @@
                                                "cheapest":  0.7129,
                                                "store":  "Baker\u0027s",
                                                "type":  "everyday",
-                                               "url":  "",
+                                               "url":  "https://www.bakersplus.com/p/smart-way-instant-coffee/0001111011789",
                                                "n":  5,
                                                "stores":  {
                                                               "Baker\u0027s":  0.7129,
@@ -3890,7 +3895,7 @@
                                           "cheapest":  1.2246,
                                           "store":  "Baker\u0027s",
                                           "type":  "everyday",
-                                          "url":  "",
+                                          "url":  "https://www.bakersplus.com/p/la-costena-whole-jalapeno-peppers/0007639700128",
                                           "n":  5,
                                           "stores":  {
                                                          "Baker\u0027s":  1.2246,
@@ -3932,7 +3937,7 @@
                                       "cheapest":  0.0747,
                                       "store":  "Sam\u0027s Club",
                                       "type":  "everyday",
-                                      "url":  "",
+                                      "url":  "https://www.samsclub.com/ip/13612962795",
                                       "n":  7,
                                       "stores":  {
                                                      "Sam\u0027s Club":  0.0747,
@@ -4029,8 +4034,8 @@
                                      "n":  7,
                                      "stores":  {
                                                     "Walmart":  1.426,
-                                                    "Hy-Vee":  1.45,
                                                     "Aldi":  1.46,
+                                                    "Hy-Vee":  1.47,
                                                     "Fareway":  1.47,
                                                     "Baker\u0027s":  1.578,
                                                     "Family Fare":  1.85,
@@ -4056,7 +4061,7 @@
                                                   "cheapest":  0.0874,
                                                   "store":  "Baker\u0027s",
                                                   "type":  "everyday",
-                                                  "url":  "",
+                                                  "url":  "https://www.bakersplus.com/p/arm-hammer-plus-oxiclean-with-odor-blasters-liquid-detergent-fresh-burst-scent/0003320000399",
                                                   "n":  5,
                                                   "stores":  {
                                                                  "Baker\u0027s":  0.0874,
@@ -4088,7 +4093,7 @@
                                               "cheapest":  0.1065,
                                               "store":  "Baker\u0027s",
                                               "type":  "everyday",
-                                              "url":  "",
+                                              "url":  "https://www.bakersplus.com/p/kroger-laundry-stain-remover/0001111088335",
                                               "n":  6,
                                               "stores":  {
                                                              "Baker\u0027s":  0.1065,
@@ -4181,7 +4186,7 @@
                                            "cheapest":  0.1193,
                                            "store":  "Baker\u0027s",
                                            "type":  "everyday",
-                                           "url":  "",
+                                           "url":  "https://www.bakersplus.com/p/kroger-100-lime-juice/0001111072822",
                                            "n":  6,
                                            "stores":  {
                                                           "Baker\u0027s":  0.1193,
@@ -4232,9 +4237,9 @@
                                                "n":  6,
                                                "stores":  {
                                                               "Fareway":  0.68,
+                                                              "Baker\u0027s":  0.758,
                                                               "Hy-Vee":  0.798,
                                                               "Sam\u0027s Club":  0.8311,
-                                                              "Baker\u0027s":  0.898,
                                                               "Walmart":  0.976,
                                                               "Family Fare":  2.995
                                                           }
@@ -4299,7 +4304,7 @@
                                                                 "Fareway":  0.1731,
                                                                 "Walmart":  0.1856,
                                                                 "Hy-Vee":  0.1869,
-                                                                "Baker\u0027s":  0.1992
+                                                                "Baker\u0027s":  0.2252
                                                             }
                                              },
                         "microwave-popcorn":  {
@@ -4312,8 +4317,8 @@
                                                   "stores":  {
                                                                  "Sam\u0027s Club":  0.2633,
                                                                  "Aldi":  0.3742,
+                                                                 "Baker\u0027s":  0.3883,
                                                                  "Walmart":  0.4142,
-                                                                 "Baker\u0027s":  0.4158,
                                                                  "Hy-Vee":  0.615,
                                                                  "Family Fare":  0.865,
                                                                  "Fareway":  0.9967
@@ -4347,7 +4352,7 @@
                                                              "Sam\u0027s Club":  0.1183,
                                                              "Hy-Vee":  0.2809,
                                                              "Walmart":  0.405,
-                                                             "Baker\u0027s":  0.5612,
+                                                             "Baker\u0027s":  0.5253,
                                                              "Family Fare":  0.6988,
                                                              "Fareway":  1.4975
                                                          }
@@ -4357,7 +4362,7 @@
                                            "cheapest":  0.5321,
                                            "store":  "Baker\u0027s",
                                            "type":  "everyday",
-                                           "url":  "",
+                                           "url":  "https://www.bakersplus.com/p/therabreath-deep-clean-oral-rinse-fresh-mint/0069702999402",
                                            "n":  5,
                                            "stores":  {
                                                           "Baker\u0027s":  0.5321,
@@ -4417,7 +4422,7 @@
                                           "cheapest":  0.0766,
                                           "store":  "Baker\u0027s",
                                           "type":  "everyday",
-                                          "url":  "",
+                                          "url":  "https://www.bakersplus.com/p/kroger-mouthwash-classic-mint/0001111035007",
                                           "n":  6,
                                           "stores":  {
                                                          "Baker\u0027s":  0.0766,
@@ -4734,7 +4739,7 @@
                                          "cheapest":  0.3049,
                                          "store":  "Baker\u0027s",
                                          "type":  "everyday",
-                                         "url":  "",
+                                         "url":  "https://www.bakersplus.com/p/idahoan-baby-reds-with-roasted-garlic-parmesan-mashed-potatoes/0002970000139",
                                          "n":  7,
                                          "stores":  {
                                                         "Baker\u0027s":  0.3049,
@@ -4899,7 +4904,7 @@
                                                   "cheapest":  0.0667,
                                                   "store":  "Baker\u0027s",
                                                   "type":  "everyday",
-                                                  "url":  "",
+                                                  "url":  "https://www.bakersplus.com/p/ranch-style-beans-with-sliced-jalapeno-peppers/0004690000113",
                                                   "n":  5,
                                                   "stores":  {
                                                                  "Baker\u0027s":  0.0667,
@@ -5069,9 +5074,9 @@
                                                           "Sam\u0027s Club":  2.52,
                                                           "Aldi":  2.69,
                                                           "Walmart":  3.27,
-                                                          "Hy-Vee":  3.99,
-                                                          "Fareway":  3.99,
+                                                          "Hy-Vee":  3.96,
                                                           "Baker\u0027s":  3.99,
+                                                          "Fareway":  3.99,
                                                           "Family Fare":  4.79
                                                       }
                                        },
@@ -5271,7 +5276,7 @@
                                       "cheapest":  0.2783,
                                       "store":  "Baker\u0027s",
                                       "type":  "everyday",
-                                      "url":  "",
+                                      "url":  "https://www.bakersplus.com/p/maruchan-souper-6-ramen-noodle-soup-roast-chicken/0004178900657",
                                       "n":  7,
                                       "stores":  {
                                                      "Baker\u0027s":  0.2783,
@@ -5319,18 +5324,18 @@
                                                 },
                         "raspberries":  {
                                             "unit":  "oz",
-                                            "cheapest":  0.4167,
+                                            "cheapest":  0.3159,
                                             "store":  "Baker\u0027s",
                                             "type":  "everyday",
-                                            "url":  "",
+                                            "url":  "https://www.bakersplus.com/p/fresh-red-raspberries-6-oz-clamshell/0003338321000",
                                             "n":  6,
                                             "stores":  {
-                                                           "Baker\u0027s":  0.4167,
+                                                           "Baker\u0027s":  0.3159,
                                                            "Aldi":  0.4483,
                                                            "Walmart":  0.495,
+                                                           "Hy-Vee":  0.4983,
                                                            "Sam\u0027s Club":  0.5517,
-                                                           "Fareway":  0.5733,
-                                                           "Hy-Vee":  0.8317
+                                                           "Fareway":  0.5733
                                                        }
                                         },
                         "razors":  {
@@ -5339,11 +5344,10 @@
                                        "store":  "Walmart",
                                        "type":  "everyday",
                                        "url":  "https://www.walmart.com/ip/Equate-The-Essential-2-Blade-Disposable-Razors-12-Count/569909250",
-                                       "n":  6,
+                                       "n":  5,
                                        "stores":  {
                                                       "Walmart":  0.1633,
                                                       "Sam\u0027s Club":  0.1821,
-                                                      "Baker\u0027s":  0.2245,
                                                       "Aldi":  0.7475,
                                                       "Hy-Vee":  1.9975,
                                                       "Fareway":  2.33
@@ -5466,7 +5470,7 @@
                                              "cheapest":  0.235,
                                              "store":  "Baker\u0027s",
                                              "type":  "everyday",
-                                             "url":  "",
+                                             "url":  "https://www.bakersplus.com/p/butterfly-brand-pad-thai-noodle/0001341202172",
                                              "n":  5,
                                              "stores":  {
                                                             "Baker\u0027s":  0.235,
@@ -5559,7 +5563,7 @@
                                               "cheapest":  0.0119,
                                               "store":  "Baker\u0027s",
                                               "type":  "everyday",
-                                              "url":  "",
+                                              "url":  "https://www.bakersplus.com/p/kroger-fold-top-expandable-pleat-sandwich-bags/0001111086852",
                                               "n":  5,
                                               "stores":  {
                                                              "Baker\u0027s":  0.0119,
@@ -5652,9 +5656,10 @@
                                               "store":  "Walmart",
                                               "type":  "everyday",
                                               "url":  "https://www.walmart.com/ip/Barbasol-Original-Thick-Rich-Shaving-Cream-for-Men-10-oz/17619759",
-                                              "n":  3,
+                                              "n":  4,
                                               "stores":  {
                                                              "Walmart":  0.197,
+                                                             "Baker\u0027s":  0.279,
                                                              "Fareway":  0.299,
                                                              "Hy-Vee":  0.3131
                                                          }
@@ -5878,7 +5883,7 @@
                                              "cheapest":  0.0833,
                                              "store":  "Baker\u0027s",
                                              "type":  "everyday",
-                                             "url":  "",
+                                             "url":  "https://www.bakersplus.com/p/kroger-strawberry-applesauce/0001111015511",
                                              "n":  7,
                                              "stores":  {
                                                             "Baker\u0027s":  0.0833,
@@ -6009,7 +6014,7 @@
                                             "cheapest":  0.0912,
                                             "store":  "Baker\u0027s",
                                             "type":  "everyday",
-                                            "url":  "",
+                                            "url":  "https://www.bakersplus.com/p/smart-way-original-pancake-syrup/0001111014892",
                                             "n":  6,
                                             "stores":  {
                                                            "Baker\u0027s":  0.0912,
@@ -6062,8 +6067,8 @@
                                                               "Sam\u0027s Club":  0.3035,
                                                               "Baker\u0027s":  0.4439,
                                                               "Aldi":  0.46,
+                                                              "Hy-Vee":  0.6096,
                                                               "Fareway":  0.6384,
-                                                              "Hy-Vee":  0.792,
                                                               "Family Fare":  0.9753
                                                           }
                                            },
@@ -6086,7 +6091,7 @@
                                         "cheapest":  0.1886,
                                         "store":  "Baker\u0027s",
                                         "type":  "everyday",
-                                        "url":  "",
+                                        "url":  "https://www.bakersplus.com/p/kroger-tampons-super-unscented/0004126037606",
                                         "n":  4,
                                         "stores":  {
                                                        "Baker\u0027s":  0.1886,
@@ -6132,7 +6137,7 @@
                                          "n":  5,
                                          "stores":  {
                                                         "Walmart":  0.0218,
-                                                        "Baker\u0027s":  0.0311,
+                                                        "Baker\u0027s":  0.0329,
                                                         "Sam\u0027s Club":  0.0376,
                                                         "Hy-Vee":  0.0449,
                                                         "Fareway":  0.0598
@@ -6182,18 +6187,20 @@
                                         },
                         "tilapia":  {
                                         "unit":  "lb",
-                                        "cheapest":  4.425,
-                                        "store":  "Aldi",
-                                        "type":  "everyday",
-                                        "url":  "https://www.aldi.us/store/aldi/products/29709493-fremont-fish-market-tilapia-value-pack-32-oz",
-                                        "n":  5,
+                                        "cheapest":  3.99,
+                                        "store":  "Hy-Vee",
+                                        "type":  "sale",
+                                        "url":  "https://www.hy-vee.com/aisles-online/p/28253/fish-market-tilapia-fillets",
+                                        "n":  6,
                                         "stores":  {
+                                                       "Hy-Vee":  3.99,
                                                        "Aldi":  4.425,
                                                        "Baker\u0027s":  5,
                                                        "Sam\u0027s Club":  7.26,
                                                        "Fareway":  7.49,
                                                        "Walmart":  7.98
-                                                   }
+                                                   },
+                                        "sale_end":  "2026-07-26"
                                     },
                         "toaster-pastries":  {
                                                  "unit":  "each",
@@ -6346,7 +6353,7 @@
                                            "cheapest":  0.3094,
                                            "store":  "Baker\u0027s",
                                            "type":  "everyday",
-                                           "url":  "",
+                                           "url":  "https://www.bakersplus.com/p/crest-cavity-tartar-protection-whitening-baking-soda-peroxide-toothpaste/0003700012220",
                                            "n":  5,
                                            "stores":  {
                                                           "Baker\u0027s":  0.3094,
@@ -6361,7 +6368,7 @@
                                                "cheapest":  0.1494,
                                                "store":  "Baker\u0027s",
                                                "type":  "everyday",
-                                               "url":  "https://www.bakersplus.com/p/kroger-white-corn-restaurant-style-tortilla-chips/0001111010996",
+                                               "url":  "https://www.bakersplus.com/p/kroger-white-corn-restaurant-style-tortilla-chips-family-size/0001111008657",
                                                "n":  7,
                                                "stores":  {
                                                               "Baker\u0027s":  0.1494,
@@ -6410,7 +6417,7 @@
                                                  "cheapest":  0.3431,
                                                  "store":  "Baker\u0027s",
                                                  "type":  "everyday",
-                                                 "url":  "",
+                                                 "url":  "https://www.bakersplus.com/p/kroger-turkey-breast-oven-roasted-deli-thin-sliced-family-size/0001111097415",
                                                  "n":  6,
                                                  "stores":  {
                                                                 "Baker\u0027s":  0.3431,
@@ -6426,7 +6433,7 @@
                                              "cheapest":  0.2908,
                                              "store":  "Baker\u0027s",
                                              "type":  "everyday",
-                                             "url":  "",
+                                             "url":  "https://www.bakersplus.com/p/butterball-turkey-bacon-lower-sodium-smoke-cured-chopped-and-formed-12-oz/0002265530044",
                                              "n":  6,
                                              "stores":  {
                                                             "Baker\u0027s":  0.2908,
@@ -6442,7 +6449,7 @@
                                                 "cheapest":  1.4994,
                                                 "store":  "Baker\u0027s",
                                                 "type":  "everyday",
-                                                "url":  "",
+                                                "url":  "https://www.bakersplus.com/p/private-selection-pure-vanilla-extract/0001111007150",
                                                 "n":  5,
                                                 "stores":  {
                                                                "Baker\u0027s":  1.4994,
@@ -6516,7 +6523,7 @@
                                               "cheapest":  0.1556,
                                               "store":  "Baker\u0027s",
                                               "type":  "everyday",
-                                              "url":  "",
+                                              "url":  "https://www.bakersplus.com/p/kroger-original-whipped-topping/0001111004768",
                                               "n":  5,
                                               "stores":  {
                                                              "Baker\u0027s":  0.1556,
