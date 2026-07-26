@@ -28,19 +28,14 @@ $utf8 = New-Object Text.UTF8Encoding($false)
 
 # ---------- package model from the costed lines ----------
 $costed = Get-Content $CostedFile -Raw | ConvertFrom-Json
+function Slugify([string]$s){ (($s.ToLower() -replace "[^a-z0-9]+","-").Trim('-')) }
 $cr = $costed | Where-Object { ($_.PSObject.Properties.Name -contains 'slug' -and $_.slug -eq $spec.slug) -or $_.proposed_name -eq $spec.name }
+# Fallback: display title can drift from the pipeline name (e.g. "...Bowls" vs "...Rice Bowl"); the slug
+# is stable, so match on slugify(costed proposed_name) == spec.slug.
+if(-not $cr){ $cr = $costed | Where-Object { (Slugify $_.proposed_name) -eq $spec.slug } }
+if(($cr | Measure-Object).Count -gt 1){ throw ("ambiguous costed match for $($spec.slug): $((@($cr).Count)) entries") }
 if(-not $cr){ throw "no costed entry for $($spec.slug) / $($spec.name)" }
 $clines = @{}; foreach($l in $cr.lines){ $clines[$l.item] = $l }
-
-function PkgGrams([string]$label,[double]$gpu){
-  # package label -> grams. floz BEFORE oz (32floz must not match the oz rule).
-  if($label -match '(\d+(?:\.\d+)?)\s*floz'){ return [math]::Round([double]$Matches[1]*29.5735,2) }
-  if($label -match '(\d+(?:\.\d+)?)\s*oz'){ return [math]::Round([double]$Matches[1]*28.3495,2) }
-  if($label -match '(\d+(?:\.\d+)?)\s*lb'){ return [math]::Round([double]$Matches[1]*453.592,2) }
-  if($label -eq 'lb'){ return 453.592 }
-  if($label -match 'head|each|ct pack|can|packet'){ if($gpu -gt 0){ return $gpu } }
-  return 0
-}
 
 # display names (with brand) come from ingredients_display, which build-specs emits in the SAME order
 # as scaler.ing - the payload carries them so the JS can rewrite the Ingredients section when scaling.
@@ -60,16 +55,16 @@ foreach($ing in $spec.scaler.ing){
   $key = if($ing.PSObject.Properties.Name -contains 'canon' -and $ing.canon){ $ing.canon } else { $ing.item }
   $cl = $clines[$key]
   if(-not $cl){ throw ("no costed line for scaler item '{0}' (slug {1})" -f $key, $spec.slug) }
+  # package size + price come straight from the cost engine (pkg_g is the exact grams the engine rounds
+  # on, drained-adjusted; NOT parsed from the freeform label). Buy item -> buy_*; bulk staple -> starter_*.
   $n = if($cl.buy_n){ [int]$cl.buy_n } else { [int]$cl.starter_n }
   $c = if($cl.buy_cost){ [double]$cl.buy_cost } else { [double]$cl.starter_cost }
   $lbl = if($cl.pkg){ [string]$cl.pkg } else { [string]$cl.starter_pkg }
-  if($n -lt 1 -or $c -le 0 -or -not $lbl){ throw ("no whole-package data for '{0}' (slug {1})" -f $key, $spec.slug) }
-  $gpu = 0.0; if($ing.PSObject.Properties.Name -contains 'gpu' -and $ing.gpu){ $gpu = [double]$ing.gpu }
-  $pkgG = PkgGrams $lbl $gpu
-  if($pkgG -le 0){ throw ("cannot derive package grams for '{0}' label '{1}'" -f $key, $lbl) }
-  # self-test: the ceil model must reproduce the engine's package count at base servings
-  $chk = [math]::Max(1,[math]::Ceiling([double]$ing.grams / $pkgG))
-  if($chk -ne $n){ Write-Warning ("{0}: ceil({1}g/{2}g)={3} but engine bought {4} x {5} - using engine count basis" -f $key,$ing.grams,$pkgG,$chk,$n,$lbl) }
+  $pkgG = if($cl.pkg_g){ [double]$cl.pkg_g } else { [double]$cl.starter_pkg_g }
+  if($n -lt 1 -or $c -le 0 -or -not $lbl -or $null -eq $pkgG -or $pkgG -le 0){ throw ("no whole-package data for '{0}' (slug {1}): n=$n c=$c lbl='$lbl' pkg_g=$pkgG" -f $key, $spec.slug) }
+  # self-test: mirror the engine's own ceil(-0.02) - it must reproduce the engine's package count at base
+  $chk = [math]::Max(1,[math]::Ceiling([double]$ing.grams / $pkgG - 0.02))
+  if($chk -ne $n){ throw ("{0} ({1}): ceil({2}g/{3}g)={4} != engine {5} - pkg_g/buy_n disagree" -f $key,$spec.slug,$ing.grams,$pkgG,$chk,$n) }
   $pkgP = [math]::Round($c / $n, 4)
   $p = '{"item":"' + ($ing.item -replace '"','\"') + '","disp":"' + ($dispNames[$di] -replace '"','\"') + '","grams":' + [int]$ing.grams + ',"buy":"' + ($ing.buy -replace '"','\"') + '"'
   if($ing.PSObject.Properties.Name -contains 'bid' -and $ing.bid){ $p += ',"bid":"' + $ing.bid + '","gpu":' + $ing.gpu }

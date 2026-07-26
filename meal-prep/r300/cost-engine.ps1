@@ -301,7 +301,7 @@ foreach($r in $computed){
     $util = [Math]::Round($g*$ppg,2)
     $batch += $util
     $isBulk = $BULK -contains $ing.item
-    $buyN=$null; $buyCost=$null; $pkgLabel=$null; $stN=$null; $stCost=$null; $stPkg=$null
+    $buyN=$null; $buyCost=$null; $pkgLabel=$null; $stN=$null; $stCost=$null; $stPkg=$null; $pkgG=$null; $stPkgG=$null
     if($isBulk){
       $trueCost += $util
       # empty-pantry starter: whole container(s) of this staple at the same price basis
@@ -310,7 +310,7 @@ foreach($r in $computed){
         $stN=[Math]::Ceiling(($g/$pp.g) - 0.02); if($stN -lt 1){ $stN=1 }
         $stCost=[Math]::Round($stN*$pp.g*$ppg,2)
         if($stCost -lt $util){ $stCost=$util }
-        $stPkg=$pp.label
+        $stPkg=$pp.label; $stPkgG=[double]$pp.g
         $bulkUtil += $util; $starterOutlay += $stCost
       } else {
         # never guess: a bulk item without a pantry package is a hard flag, counted at util
@@ -327,6 +327,7 @@ foreach($r in $computed){
         # must be figured on that yield or the shopper is sent home with too few cans
         $pgG = [double]$pg.g
         if($DRAINED.ContainsKey($ing.item)){ $pgG = $DRAINED[$ing.item].drained }
+        $pkgG = $pgG   # emit the EXACT package grams the engine rounds on (drained-adjusted) - the card widget re-scales on this
         $pkgPrice = $pgG*$ppg
         $buyN = [Math]::Ceiling(($g/$pgG) - 0.02)   # 2% tolerance for rounding noise
         if($buyN -lt 1){ $buyN = 1 }
@@ -339,7 +340,7 @@ foreach($r in $computed){
         $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: no package def, counted at util in true cost'))
       }
     }
-    $lines += [pscustomobject]@{ item=$ing.item; grams=$g; util_cost=$util; basis=$basis; bulk=$isBulk; buy_n=$buyN; buy_cost=$buyCost; pkg=$pkgLabel; starter_n=$stN; starter_cost=$stCost; starter_pkg=$stPkg }
+    $lines += [pscustomobject]@{ item=$ing.item; grams=$g; util_cost=$util; basis=$basis; bulk=$isBulk; buy_n=$buyN; buy_cost=$buyCost; pkg=$pkgLabel; pkg_g=$pkgG; starter_n=$stN; starter_cost=$stCost; starter_pkg=$stPkg; starter_pkg_g=$stPkgG }
   }
   $batch=[Math]::Round($batch,2); $trueCost=[Math]::Round($trueCost,2)
   # empty-pantry math (exact): first run = true cost with each pantry staple upgraded from

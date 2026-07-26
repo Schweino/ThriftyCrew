@@ -56,7 +56,7 @@ function init(box){
   // WHOLE-PACKAGE MODEL: you cannot buy 7.5 tbsp of vinegar. Packages needed = ceil of what the batch
   // uses over the package size, never less than one. Every tab prices whole packages; only the price
   // source differs (everyday shelf price vs this week's cheapest verified store).
-  function pkgs(it,nn){ return Math.max(1,Math.ceil(it.grams*(nn/data.base)/it.pkg_g)); }
+  function pkgs(it,nn){ return Math.max(1,Math.ceil(it.grams*(nn/data.base)/it.pkg_g - 0.02)); }
   function pkgLabel(it,k){ if(it.pkg_l==='lb'){return k+' lb';} if(it.pkg_l==='head'){return k+(k>1?' heads':' head');} if(k===1){return '1 '+it.pkg_l;} return k+' × '+it.pkg_l; }
   function price(it,nn,basis){
     var k=pkgs(it,nn), ev=k*it.pkg_p;
