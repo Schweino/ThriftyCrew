@@ -59,7 +59,7 @@ foreach ($r in $db) {
   $wc = [math]::Round($base + $delta, 2)
   $costed.Add([pscustomobject]@{ slug=$r.slug; name=$r.name; calories=[int]$r.per_serving.calories; week_cost=$wc; per_serving=[math]::Round($wc/[int]$r.servings, 2); delta=[math]::Round($delta,2); sale_items=@($saleItems | Select-Object -Unique) })
 }
-$ranked = @($costed | Sort-Object per_serving, week_cost)
+$ranked = @($costed | Sort-Object per_serving, week_cost, slug)   # final slug key = deterministic tie-break so the free rotation (same 3-key sort) picks the identical top-5 on true double-ties
 $wk = ''
 try { $wk = [string]((Get-Content (Join-Path $gout 'recipe-board.json') -Raw | ConvertFrom-Json).week_of) } catch {}
 ([pscustomobject]@{ computed_at=(Get-Date).ToString('s'); week_of=$wk; recipes=$ranked } | ConvertTo-Json -Depth 5) | Set-Content (Join-Path $gout 'recipe-costs.json') -Encoding UTF8
@@ -139,10 +139,34 @@ $sec += "<p style='color:#8a94a6;font-size:1.15rem;margin:1.2rem 0 0'>Tap any di
 $sec += "<script>(function(){if(window.__smpT5)return;window.__smpT5=1;document.addEventListener('click',function(e){var b=e.target.closest('.smp-t5-tab');if(b){var p=b.getAttribute('data-p');document.querySelectorAll('.smp-t5-tab').forEach(function(x){var on=x===b;x.style.background=on?'#16263F':'#fff';x.style.color=on?'#fff':'#16263F';});document.querySelectorAll('.smp-t5-card').forEach(function(c){c.style.display=(c.getAttribute('data-p')===p)?'':'none';});return;}var row=e.target.closest('.smp-t5-row');if(row){var det=row.parentNode.querySelector('.smp-t5-det');var open=det.style.display!=='none';det.style.display=open?'none':'';var car=row.querySelector('.smp-t5-car');if(car)car.textContent=open?'+':'-';}});})();</script>"
 $sec += "</div><!--/SMP-TOP5-->"
 
+# ---- recipe-count banner (Brad 2026-07-25): show the catalog size up front, ABOVE the Top 5 box.
+# Auto-counts from recipes-db so it grows with every run - no hard-coded number to go stale. Its own
+# SMP-COUNT markers = independent idempotent upsert, inserted immediately before the Top 5 block.
+$recipeCount = @($db).Count
+$cntSec = "<!--SMP-COUNT--><div class='smp-count' style='margin:0 0 1.6rem;padding:1.8rem 2.2rem;background:#16263F;border-radius:12px;text-align:center;color:#fff'>"
+$cntSec += "<div style='font-family:Georgia,serif;font-size:4.2rem;line-height:1;font-weight:700;color:#E2A43C'>" + $recipeCount + "</div>"
+$cntSec += "<div style='font-size:1.5rem;font-weight:700;margin:.5rem 0 0;letter-spacing:.01em'>budget high-protein recipes, and counting</div>"
+$cntSec += "<div style='font-size:1.25rem;color:#b9c4d4;margin:.35rem 0 0'>Every one re-costed weekly from real Omaha grocery prices. Members get them all for \$1/month.</div>"
+$cntSec += "</div><!--/SMP-COUNT-->"
+
 $jwt = New-GhostJWT
 $g = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/pages/slug/meal-prep-recipes/?formats=html" -Headers @{Authorization="Ghost $jwt"}
 $page = $g.pages[0]
 $html = [string]$page.html
+$changed = $false
+
+# COUNT block: replace in place if present, else insert directly before the Top 5 block (or prepend).
+$ci = $html.IndexOf('<!--SMP-COUNT-->'); $cei = $html.IndexOf('<!--/SMP-COUNT-->')
+if ($ci -ge 0 -and $cei -gt $ci) {
+  $cEnd = '<!--/SMP-COUNT-->'.Length
+  $cOld = $html.Substring($ci, $cei - $ci + $cEnd)
+  if ($cOld -ne $cntSec) { $html = $html.Substring(0, $ci) + $cntSec + $html.Substring($cei + $cEnd); $changed = $true }
+} else {
+  $t5 = $html.IndexOf('<!--SMP-TOP5-->')
+  if ($t5 -ge 0) { $html = $html.Substring(0, $t5) + $cntSec + $html.Substring($t5) } else { $html = $cntSec + $html }
+  $changed = $true
+}
+
 # Replace IN PLACE between the markers so the section keeps its position in the redesigned page
 # (the 2026-07-11 landing redesign put the Top-5 slot after the hero; the old remove-then-PREPEND
 # behavior would shove it back above the hero every morning). Prepend only when no marker block exists.
@@ -151,11 +175,11 @@ $ei = $html.IndexOf('<!--/SMP-TOP5-->')
 if ($si -ge 0 -and $ei -gt $si) {
   $endLen = '<!--/SMP-TOP5-->'.Length
   $old = $html.Substring($si, $ei - $si + $endLen)
-  if ($old -eq $sec) { Write-Output "hub section unchanged - no publish"; exit 0 }
-  $html = $html.Substring(0, $si) + $sec + $html.Substring($ei + $endLen)
+  if ($old -ne $sec) { $html = $html.Substring(0, $si) + $sec + $html.Substring($ei + $endLen); $changed = $true }
 } else {
-  $html = $sec + $html
+  $html = $sec + $html; $changed = $true
 }
+if (-not $changed) { Write-Output "hub sections unchanged - no publish"; exit 0 }
 $lexObj = @{root=[ordered]@{children=@([ordered]@{type='html';version=1;html=$html});direction=$null;format='';indent=0;type='root';version=1}}
 $lex = ConvertTo-Json $lexObj -Depth 12 -Compress
 $body = [Text.Encoding]::UTF8.GetBytes((ConvertTo-Json @{pages=@(@{lexical=$lex;updated_at=$page.updated_at})} -Depth 6))

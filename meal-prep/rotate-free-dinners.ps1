@@ -60,7 +60,11 @@ foreach ($prot in @('chicken','turkey','beef','pork')) {
   # DINNER filter (>500 cal) matches top5-weekly exactly - the hub box claims everything it shows is
   # free, which is only true if this selection and the box's tabs are computed identically.
   $ranked = @($byProt[$prot].Keys | Where-Object { $costBySlug.ContainsKey($_) -and [double]$costBySlug[$_].calories -gt 500 } |
-    Sort-Object { [double]$costBySlug[$_].per_serving } | Select-Object -First 5)
+    Sort-Object @{e={[double]$costBySlug[$_].per_serving}}, @{e={[double]$costBySlug[$_].week_cost}}, @{e={$_}} | Select-Object -First 5)
+    # tie-break MUST match top5-weekly's "Sort-Object per_serving, week_cost, slug" exactly, or the free set
+    # and the box's top-5 diverge on the 5th slot and the "every dinner in this box is free" line silently
+    # drops. per_serving ties are common at 513+ recipes; some tie on week_cost TOO (gyudon vs the Peruvian
+    # tallarines - true double-tie), so the final slug key is what makes both sides deterministic + identical.
   $rank = 0
   foreach ($slug in $ranked) {
     $rank++
