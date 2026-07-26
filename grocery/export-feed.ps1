@@ -121,7 +121,11 @@ $feed = [ordered]@{
 }
 # Write to the repo-root public\ dir - this is the ONLY folder Cloudflare Pages serves, so nothing else
 # in the repo is exposed. _headers there sets CORS + cache. Keep a copy in out\ for local inspection.
-$json = $feed | ConvertTo-Json -Depth 8
+# -Compress (2026-07-26 scale hardening): the feed is fetched client-side by EVERY recipe card widget.
+# Pretty-printing bloated it ~4x (973 KB raw for ~236 KB of data); at 1500 recipes that is a ~2.3 MB
+# raw file JSON.parse'd on every mobile page view. Compact keeps the wire small (worker still gzips) and
+# the on-device parse cheap. No consumer depends on whitespace.
+$json = $feed | ConvertTo-Json -Depth 8 -Compress
 $json | Set-Content (Join-Path $out 'smp-feed.json') -Encoding UTF8
 $pub = Join-Path (Split-Path $root -Parent) 'public'
 if (-not (Test-Path $pub)) { New-Item -ItemType Directory -Force -Path $pub | Out-Null }
