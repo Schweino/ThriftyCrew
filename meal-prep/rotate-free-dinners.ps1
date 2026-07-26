@@ -79,12 +79,12 @@ if ($DryRun) { Write-Output 'DRY RUN - no flips, no state change.'; exit 0 }
 # ---------------------------------------------------------------- flip visibility in Ghost
 function Set-PostVisibility([string]$slug, [string]$vis) {
   $jwt = New-GhostJWT
-  $g = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/" -Headers @{Authorization="Ghost $jwt"}
+  $g = Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/slug/$slug/" -Headers @{Authorization="Ghost $jwt"}
   $p = $g.posts[0]
   if ([string]$p.visibility -eq $vis) { return 'already-' + $vis }
   $body = @{ posts = @(@{ visibility = $vis; updated_at = [string]$p.updated_at }) } | ConvertTo-Json -Depth 4
   $jwt = New-GhostJWT
-  [void](Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/$($p.id)/" -Method Put -Headers @{Authorization="Ghost $jwt"} -ContentType 'application/json' -Body $body)
+  [void](Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/$($p.id)/" -Method Put -Headers @{Authorization="Ghost $jwt";'Content-Type'='application/json'} -Body $body)
   return 'flipped-to-' + $vis
 }
 

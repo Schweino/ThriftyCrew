@@ -43,7 +43,7 @@ $status = if ($Draft) { 'draft' } else { 'published' }
 
 $jwt = New-GhostJWT $adminKey
 $existing = $null
-try { $existing = (Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/posts/slug/$Slug/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).posts[0] } catch {}
+try { $existing = (Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/posts/slug/$Slug/?fields=id,updated_at" -Headers @{Authorization="Ghost $jwt";'Accept-Version'='v5.0'}).posts[0] } catch {}
 
 $lexObj = @{ root = [ordered]@{ children=@([ordered]@{ type='html'; version=1; html=[string]$html }); direction=$null; format=''; indent=0; type='root'; version=1 } }
 $lex = ConvertTo-Json $lexObj -Depth 12 -Compress

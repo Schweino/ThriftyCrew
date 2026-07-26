@@ -15,6 +15,7 @@
 
 $ErrorActionPreference = 'Stop'
 $here    = Split-Path -Parent $MyInvocation.MyCommand.Path
+. (Join-Path $here '..\lib\ghost-lib.ps1')   # Invoke-GhostApi: timeout+retry on the public feed GET (was a hang-class bare Invoke-WebRequest)
 $dbPath  = Join-Path $here 'food-macros-db.json'
 $mapPath = Join-Path $here 'ingredient-map.json'
 $outPath = Join-Path $here 'protein-data.generated.js'
@@ -23,7 +24,7 @@ $feedUrl = 'https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json'
 $db  = (Get-Content -Raw $dbPath)  | ConvertFrom-Json
 $map = (Get-Content -Raw $mapPath) | ConvertFrom-Json
 
-$raw  = (Invoke-WebRequest -UseBasicParsing $feedUrl).Content
+$raw  = (Invoke-GhostApi -Uri $feedUrl -Web -BasicParsing -TimeoutSec 30).Content
 $raw  = $raw.TrimStart([char]0xFEFF)   # feed starts with a BOM
 $feed = $raw | ConvertFrom-Json
 

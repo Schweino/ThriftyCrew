@@ -91,7 +91,7 @@ function Get-KrogerToken {
   $b64 = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($cid + ':' + $csec))
   $r = Invoke-RestMethod -Method Post -Uri 'https://api.kroger.com/v1/connect/oauth2/token' `
         -Headers @{ Authorization = 'Basic ' + $b64; 'Content-Type' = 'application/x-www-form-urlencoded' } `
-        -Body 'grant_type=client_credentials&scope=product.compact'
+        -Body 'grant_type=client_credentials&scope=product.compact' -TimeoutSec 30
   $script:Token = [string]$r.access_token; $script:TokenAt = [datetime]::Now
   return $script:Token
 }

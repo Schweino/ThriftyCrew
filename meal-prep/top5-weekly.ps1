@@ -165,7 +165,7 @@ $cntSec += "<div style='font-size:1.25rem;color:#b9c4d4;margin:.35rem 0 0'>Every
 $cntSec += "</div><!--/SMP-COUNT-->"
 
 $jwt = New-GhostJWT
-$g = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/pages/slug/meal-prep-recipes/?formats=html" -Headers @{Authorization="Ghost $jwt"}
+$g = Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/pages/slug/meal-prep-recipes/?formats=html" -Headers @{Authorization="Ghost $jwt"}
 $page = $g.pages[0]
 $html = [string]$page.html
 $changed = $false
@@ -199,5 +199,5 @@ $lexObj = @{root=[ordered]@{children=@([ordered]@{type='html';version=1;html=$ht
 $lex = ConvertTo-Json $lexObj -Depth 12 -Compress
 $body = [Text.Encoding]::UTF8.GetBytes((ConvertTo-Json @{pages=@(@{lexical=$lex;updated_at=$page.updated_at})} -Depth 6))
 $jwt = New-GhostJWT
-$r2 = Invoke-RestMethod -Uri "$apiUrl/ghost/api/admin/pages/$($page.id)/" -Method Put -Headers @{Authorization="Ghost $jwt"} -ContentType 'application/json' -Body $body
+$r2 = Invoke-GhostApi -Uri "$apiUrl/ghost/api/admin/pages/$($page.id)/" -Method Put -Headers @{Authorization="Ghost $jwt";'Content-Type'='application/json'} -Body $body
 Write-Output "hub Top 5 section published"
