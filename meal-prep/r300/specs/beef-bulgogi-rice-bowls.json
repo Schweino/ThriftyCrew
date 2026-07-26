@@ -27,7 +27,7 @@
                  "fat":  16,
                  "cost_ps":  "2.46"
              },
-    "intro_html":  "Bulgogi is defined by its marinade, not its cut. Soy sauce, sesame oil, garlic, and grated fruit, which is the part most people skip and the part that actually matters, because the enzymes in the apple tenderize the beef while the sugars help it caramelize in the pan. This build uses ground beef to keep the price honest, so you get all of that flavor without paying steak money. Each bowl lands at 564 calories and \u003cstrong\u003e30 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.46 a serving\u003c/strong\u003e.",
+    "intro_html":  "Bulgogi is defined by its marinade, not its cut. Soy sauce, sesame oil, garlic, and grated fruit, which is the part most people skip and the part that actually matters, because the enzymes in the apple tenderize the beef while the sugars help it caramelize in the pan. This build uses thin-sliced sirloin, the cut that gives bulgogi its real chew, and slicing a budget cut like sirloin or flank keeps the price honest without ever turning it into ground meat. Each bowl lands at 564 calories and \u003cstrong\u003e30 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$2.46 a serving\u003c/strong\u003e.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 3 lb (1400 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 2.75 tbsp (39 g)",
@@ -71,7 +71,7 @@
                    ],
     "cost_closing_html":  "About \u003cstrong\u003e$2.46 a bowl\u003c/strong\u003e for Korean beef, rice, and vegetables. That is less than the drink at the counter where they would sell you the same thing, and yours has more beef in it.",
     "shop_smart":  [
-                       "Ground beef is the whole budget line here, and it is also why this dish costs a third of what a sliced bulgogi would. If you want to splurge, thin sliced sirloin works in the same marinade, but the ground version is the reason the number is what it is.",
+                       "Thin-sliced sirloin is the whole budget line here, and that is the trick. Slicing a budget cut like sirloin or flank thin against the grain gives you the real bulgogi chew without paying ribeye money. Grate the apple into the marinade and its enzymes do the rest of the tenderizing for free.",
                        "One apple in the marinade is doing real chemical work. Grate it, do not chop it, so the juice gets into the meat instead of sitting in chunks on top.",
                        "Sesame oil, mirin, rice vinegar, and soy sauce are all one-bottle purchases that carry across dozens of Asian recipes. Buy them once and the marginal cost of every Korean dinner after that drops sharply.",
                        "Frozen spinach and a couple of carrots are the cheapest vegetables you can put in a rice bowl. Buy the box of frozen spinach, use what you need, and keep the rest in the freezer indefinitely."
@@ -79,9 +79,9 @@
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Grate the apple and the onion into a bowl and whisk in the soy sauce, sesame oil, mirin, brown sugar, rice vinegar, garlic, ginger, and black pepper. That is your bulgogi marinade and it should smell sweet, salty, and toasty all at once.",
-                    "Mix about two thirds of the marinade into the ground beef and let it sit at least 30 minutes in the fridge. Hold the rest back for finishing.",
+                    "Toss about two thirds of the marinade through the thin-sliced beef and let it sit at least 30 minutes in the fridge. Hold the rest back for finishing.",
                     "Start the rice so it is ready when the beef is.",
-                    "Heat the vegetable oil in a large skillet over medium-high and cook the beef in two batches, breaking it up as it goes. Let each batch sit undisturbed for a minute at a time so it browns instead of steaming. Browning is where the caramel notes come from.",
+                    "Heat the vegetable oil in a large skillet over medium-high and sear the beef in two batches, spread out in a single layer. Let each batch sit undisturbed for a minute at a time so it browns instead of steaming. Browning is where the caramel notes come from.",
                     "Pour the reserved marinade into the skillet with all the beef and let it bubble down for 2 to 3 minutes until it glazes the meat.",
                     "Warm the frozen spinach and the shredded carrots briefly in a separate pan so they keep their color, then season lightly with salt.",
                     "Sprinkle the toasted sesame seeds and sliced green onions over everything just before packing."
@@ -246,14 +246,14 @@
                },
     "head":  {
                  "description":  "Beef bulgogi rice bowls with a soy, sesame, and grated apple marinade plus spinach and carrots, built for 14 meal prep servings at about $2.46 a bowl.",
-                 "keywords":  "beef bulgogi, korean beef rice bowl, bulgogi marinade, korean meal prep, budget beef bowls, high protein meal prep, ground beef recipe",
-                 "image":  "",
+                 "keywords":  "beef bulgogi, korean beef rice bowl, bulgogi marinade, korean meal prep, budget beef bowls, high protein meal prep, thin sliced beef recipe",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",
                  "cookTime":  "PT30M",
                  "totalTime":  "PT55M",
                  "costPerServing":  2.46,
                  "recipeIngredient":  [
-                                          "3 lb 93/7 ground beef",
+                                          "3 lb thin-sliced beef sirloin",
                                           "0.7 apples, grated",
                                           "0.5 cups yellow onion",
                                           "0.75 cups soy sauce",
@@ -269,9 +269,9 @@
                                       ],
                  "steps":  [
                                "Whisk grated apple and onion with soy sauce, sesame oil, mirin, brown sugar, vinegar, garlic, and ginger.",
-                               "Marinate the ground beef in most of the mixture for at least 30 minutes.",
+                               "Marinate the thin-sliced beef in most of the mixture for at least 30 minutes.",
                                "Cook the rice.",
-                               "Brown the beef in batches in a hot skillet, then add the reserved marinade and reduce to a glaze.",
+                               "Sear the beef in batches in a hot skillet, then add the reserved marinade and reduce to a glaze.",
                                "Warm the spinach and carrots separately, then top everything with sesame seeds and green onion.",
                                "Weigh rice and beef into 14 containers."
                            ]

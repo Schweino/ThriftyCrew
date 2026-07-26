@@ -30,9 +30,18 @@ function Parse-WMSize([string]$unitStr, [double]$total) {
   return ("$qty $u")
 }
 
+# Raw row format (~~-delimited): name~~linePrice~~unitPrice~~usItemId[~~sellerName~~fulfillmentType]
+# The last two fields are OPTIONAL and were added 2026-07-26 after the R300 run had to hand-verify ~30
+# sellers: a 3P MARKETPLACE listing is NOT a Bellevue shelf price and violates the in-store rule (a
+# pool-cue shop was the "Walmart price" for Goya pigeon peas). When seller/fulfillment ARE present we
+# DROP any row that is not first-party Walmart. When they are ABSENT (older captures) we keep the row
+# but warn, so the gap is visible rather than silent. Update the browser reducer to emit them:
+#   ...+'~~'+(p.sellerName||'')+'~~'+(((p.fulfillmentType)||'').toUpperCase())
 $lines = Get-Content (Join-Path $root $Raw)
 $rows = New-Object System.Collections.ArrayList
 $ids = @{}
+$dropped3P = New-Object System.Collections.ArrayList
+$noSellerData = 0
 foreach ($ln in $lines) {
   if (-not ($ln -match "`t")) { continue }
   $prodStr = ($ln -split "`t", 2)[1]
@@ -44,12 +53,23 @@ foreach ($ln in $lines) {
     $unitStr = [string]$f[2]
     $itemId = ''; if ($f.Count -ge 4) { $itemId = ($f[3]).Trim() }
     if ($price -le 0 -or -not $nm) { continue }
+    # marketplace filter (only when the capture supplied seller/fulfillment)
+    if ($f.Count -ge 6) {
+      $seller = ($f[4]).Trim(); $fulfill = ($f[5]).Trim().ToUpper()
+      $firstParty = ($fulfill -eq 'STORE' -or $fulfill -eq 'FC' -or $fulfill -eq 'SHIP') -and
+                    ($seller -eq '' -or $seller -match '(?i)^walmart(\.com)?$')
+      if ($fulfill -eq 'MARKETPLACE' -or -not $firstParty) {
+        [void]$dropped3P.Add(("{0}  [seller={1}, fulfill={2}]" -f $nm, $seller, $fulfill)); continue
+      }
+    } else { $noSellerData++ }
     $size = Parse-WMSize $unitStr $price
     if (-not $size) { continue }
     [void]$rows.Add([ordered]@{ store = 'Walmart'; item = $nm; ad_price = ('$' + $price); size = $size; regular = $price; current_price = $price; source_ad = 'Walmart Bellevue 68123 shelf price (batch capture)'; as_of = $today })
     if ($itemId) { $ids[$nm] = $itemId }
   }
 }
+if ($dropped3P.Count -gt 0) { Write-Output ("Walmart: DROPPED {0} third-party/marketplace row(s) (in-store rule):" -f $dropped3P.Count); $dropped3P | ForEach-Object { Write-Output ('  - ' + $_) } }
+if ($noSellerData -gt 0) { Write-Warning ("Walmart: {0} row(s) had no seller/fulfillment field - marketplace filter could NOT run on them. Re-capture with the 6-field reducer to close this." -f $noSellerData) }
 
 # ADD-only merge into today's walmart-regular
 $prefix = 'walmart-regular'

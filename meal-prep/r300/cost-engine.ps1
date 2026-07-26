@@ -256,6 +256,12 @@ if($DRAINED.Count -gt 0){
   Write-Output ("drained-basis items (priced + packed on drained yield): " + (($DRAINED.GetEnumerator() | Sort-Object Name | ForEach-Object { $_.Key + ' ' + $_.Value.drained + '/' + $_.Value.net + 'g' }) -join '; '))
 }
 
+# allowlist of bids with no first-party Omaha board price (priced via register-estimate label; see
+# no-board-price-ok.json). Suppresses the MAPPED-BID-NOT-ON-BOARD advisory for exactly these.
+$noBoardOk=@{}
+$nbFile = Join-Path $here 'no-board-price-ok.json'
+if(Test-Path $nbFile){ foreach($b in (Get-Content $nbFile -Raw | ConvertFrom-Json).bids){ $noBoardOk[[string]$b]=1 } }
+$script:registerEst=0
 $out=@(); $costFlags=New-Object System.Collections.Generic.List[string]
 foreach($r in $computed){
   $lines=@(); $batch=0.0; $trueCost=0.0; $bulkUtil=0.0; $starterOutlay=0.0
@@ -275,6 +281,7 @@ foreach($r in $computed){
         if($eg -le 0){ $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: UNIT MISMATCH ' + $b.unit + ' vs feed ' + $feedMap[$b.bid].unit)); continue }
         $ppg = $feedMap[$b.bid].per_unit / $eg; $basis=('feed:'+$b.bid)
       }
+      elseif($noBoardOk.ContainsKey($b.bid)){ $script:registerEst++ }  # known no-Omaha-price; label fallback (below) prices it, no false alarm
       else { $costFlags.Add(($r.proposed_name + ' :: ' + $ing.item + ' :: MAPPED BID NOT ON ANY BOARD (' + $b.bid + ', map ' + $b.src + ')')) }
     }
     if($null -eq $ppg -and $labels.ContainsKey($ing.item)){
@@ -356,6 +363,7 @@ $cps = $out | ForEach-Object { $_.cost_per_serving }
 # numbers. Backtick-escaped so the range actually prints. Display only - no computed value changes.
 Write-Output ("costed {0} recipes; flags {1}; per-serving range `${2}-`${3} avg `${4}" -f $out.Count, $costFlags.Count, (($cps|Measure-Object -Minimum).Minimum), (($cps|Measure-Object -Maximum).Maximum), ([Math]::Round(($cps|Measure-Object -Average).Average,2)))
 Write-Output ("unpriced ingredient lines: {0} across {1} recipes" -f (($out|Measure-Object lines_unpriced -Sum).Sum), (@($out|Where-Object{$_.lines_unpriced -gt 0}).Count))
+if($script:registerEst -gt 0){ Write-Output ("register-estimate lines (known no-Omaha-price, allowlisted, not flagged): {0}" -f $script:registerEst) }
 $bad = @($out | Where-Object { $_.cost_batch_true -lt $_.cost_batch })
 Write-Output ("true<batch violations: " + $bad.Count)
 $bad2 = @($out | Where-Object { $_.cost_first_run -lt $_.cost_batch_true })

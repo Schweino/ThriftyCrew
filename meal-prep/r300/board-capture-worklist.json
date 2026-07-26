@@ -3,6 +3,7 @@
     "batch":  "r300 (21 recipe-item commodities) + batch-8 (8 proxy-debt commodities) = 29",
     "readme":  "Walled-store capture worklist. These stores are captured through the owner Chrome (Walmart/Sams = __NEXT_DATA__ fetch; Aldi/Fareway = Instacart offscreen-iframe, IN-STORE fulfillment mode REQUIRED - the Pickup/Delivery price is marked up and violates the in-store rule). A new commodity gets ZERO coverage from their scheduled pulls, so every id below needs a human-driven capture. After importing: compare-deals -\u003e diff-board vs out\\comparison-\u003cdate\u003e.json -\u003e any EXISTING cell that moves is a collision to fix, not noise.",
     "price_mode_rule":  "in-store shelf price ONLY (audit-price-mode.ps1 enforces it for Aldi/Fareway).",
+    "walmart_reducer_emit":  "The Walmart __NEXT_DATA__ reducer MUST now emit 6 ~~-fields per product: name~~linePrice~~unitPrice~~usItemId~~sellerName~~fulfillmentType. Append to the row string: +'~~'+(p.sellerName||'')+'~~'+((p.fulfillmentType||'').toUpperCase()). import-walmart-batch.ps1 DROPS any MARKETPLACE / non-first-party-seller row (in-store rule; a 3P pool-cue shop was once the 'Walmart price' for Goya beans). 4-field legacy captures still import but warn that the filter could not run.",
     "importers":  {
                       "walmart":  "grocery\\import-walmart-batch.ps1",
                       "sams":  "grocery\\import-sams-prices.ps1 / build-sams-deals.ps1",

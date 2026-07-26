@@ -179,6 +179,30 @@ foreach($sf in $specs){
   }
   foreach($ig in $spec.ingredients_grams){ if([int]$ig.grams -le 0){ Fail $slug ('zero-gram ingredient row: ' + $ig.item) } }
 
+  # ---------- prose-ingredient drift (recipeIngredient must name only real meats) ----------
+  # An ingredient SWAP can leave the old meat's name in the writer's prose while the machine ingredient
+  # list is correct - the cassoulet Italian-sausage bug, plus 5 breast->thigh / ground->sliced swaps
+  # that shipped stale. The numeric auto-sync re-anchors cal/protein/cost but NEVER ingredient names.
+  # head.recipeIngredient is the reader-facing + JSON-LD ingredient list, so every specific meat/cut it
+  # names must actually be in the dish. Scoped to recipeIngredient ONLY on purpose: intro/description
+  # legitimately carry substitution framing ("the classic version uses pork belly, but shoulder...")
+  # and title echoes, which must NOT trip this. (Verified: this scope catches every real drift in the
+  # 300 and false-positives on zero of the intentional cases.)
+  if($spec.head.recipeIngredient){
+    $PROTEIN_MARKERS = @('italian sausage','pork sausage','andouille','kielbasa','bratwurst','chorizo',
+      'ground beef','ground turkey','ground pork','ground chicken','chicken thigh','chicken breast',
+      'chicken drumstick','turkey breast','pork shoulder','pork loin','pork tenderloin','pork chop',
+      'pork belly','corned beef','chuck roast','beef chuck','sirloin','flank','beef brisket','diced ham')
+    $ingBlob = ((@($spec.ingredients_grams | ForEach-Object { [string]$_.item }) + @($spec.scaler.ing | ForEach-Object { [string]$_.item })) -join ' | ').ToLower()
+    $riBlob = (@($spec.head.recipeIngredient) -join ' ').ToLower()
+    foreach($mk in $PROTEIN_MARKERS){
+      $core = $mk.TrimEnd('s')
+      if($riBlob -match [regex]::Escape($mk) -and -not $ingBlob.Contains($core)){
+        Fail $slug ("recipeIngredient names '$mk' but no such ingredient in the dish (stale prose after an ingredient swap?)")
+      }
+    }
+  }
+
   # ---------- cost lines: printed numbers must reconcile EXACTLY ----------
   $bl = $spec.cost_lines | Where-Object { $_ -match '^<strong>Batch total' } | Select-Object -First 1
   $tl = $spec.cost_lines | Where-Object { $_ -match '^<strong>True shopping cost' } | Select-Object -First 1
