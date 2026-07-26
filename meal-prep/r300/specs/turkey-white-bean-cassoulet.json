@@ -2,35 +2,38 @@
     "name":  "Turkey and White Bean Cassoulet",
     "slug":  "turkey-white-bean-cassoulet",
     "cuisine":  "french",
-    "protein":  "pork",
+    "protein":  "turkey",
     "servings":  14,
     "visibility":  "paid",
     "source_url":  "https://www.healthy-delicious.com/cassoulet-with-white-beans-sausage-turkey/",
     "source_site":  "healthy-delicious.com",
     "manual_balance":  false,
     "tuning":  [
-                   "added Rice base 200g (src scale)"
+                   "added Rice base 200g (src scale)",
+                   "base +15% (Rice)"
                ],
     "writer_notes":  [
                          "SELECTOR: Verified 4 servings, 424 cal, 38g protein. French is a cuisine the catalog barely touches and white beans plus sausage is a cheap, filling build. Slow, low bake that holds at 14 servings. Needs a small portion bump for 500 cal. | HARVEST: Source typo \u0027springs fresh thyme\u0027 preserved verbatim.",
                          "SOURCE YIELD: 4 servings, rebuilt to 14.",
                          "TUNING: added Rice base 200g (src scale)",
-                         "OVERRIDE Diced Tomatoes: WAVE-4: \u00276 plum tomatoes\u0027 are FRESH (~60 g each), not 6 cans (bare-count-\u003ecan misfire drove an 8.6 kg batch line)"
+                         "TUNING: base +15% (Rice)",
+                         "OVERRIDE Diced Tomatoes: WAVE-4: \u00276 plum tomatoes\u0027 are FRESH (~60 g each), not 6 cans (bare-count-\u003ecan misfire drove an 8.6 kg batch line)",
+                         "OVERRIDE Smoked Turkey Sausage: REFORMULATION (Brad\u0027s call): canon Hot Italian Sausage -\u003e Smoked Turkey Sausage so the turkey-titled cassoulet IS turkey. Explicit grams because STS\u0027s authored \u0027each\u0027 is the 368 g rope - \u00273 links\u0027 would misparse as 3 ropes. 270 g = the exact mass of the pork sausage it replaces (3 x 90 g links), keeping the dish sausage-forward; tuner rebalances the leaner calories"
                      ],
     "forbidden_prose_terms":  [
 
                               ],
     "stat":  {
-                 "cal":  599,
-                 "protein":  34,
-                 "carbs":  65,
-                 "fat":  21,
-                 "cost_ps":  "1.60"
+                 "cal":  565,
+                 "protein":  30,
+                 "carbs":  76,
+                 "fat":  15,
+                 "cost_ps":  "1.84"
              },
-    "intro_html":  "Cassoulet is the great slow bean bake of southwest France, and the traditional version takes three days and a duck. This is the version a working person can actually make. Italian sausage, bacon, turkey breast and white beans go into one pot with tomato and herbs, then bake low and slow until the top forms a crust and the beans underneath go completely creamy. French technique, American grocery budget.",
+    "intro_html":  "Cassoulet is the great slow bean bake of southwest France, and the traditional version takes three days and a duck. This is the version a working person can actually make. smoked turkey sausage, bacon, turkey breast and white beans go into one pot with tomato and herbs, then bake low and slow until the top forms a crust and the beans underneath go completely creamy. French technique, American grocery budget.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 3.5 tbsp (47 g)",
-                                "\u003cstrong\u003eHot Italian Sausage (Johnsonville):\u003c/strong\u003e 2 lb (945 g)",
+                                "\u003cstrong\u003eSmoked Turkey Sausage (Butterball):\u003c/strong\u003e 2 lb (945 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 (245 g)",
                                 "\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 0.25 lb (99 g)",
@@ -38,12 +41,12 @@
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3 cans (1260 g)",
                                 "\u003cstrong\u003eCannellini Beans (generic):\u003c/strong\u003e 3.5 cans (892 g)",
                                 "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 1 lb (490 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 3.75 cups dry (700 g)"
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.5 cups dry (810 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Olive Oil, 3.5 tbsp: ~$0.66. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
-                       "Hot Italian Sausage, 2 lb: ~$5.21. \u003cstrong\u003eBuy 3 lbs: $7.50.\u003c/strong\u003e",
+                       "Smoked Turkey Sausage, 2 lb: ~$8.44. \u003cstrong\u003eBuy 3 13oz ropes: $9.86.\u003c/strong\u003e",
                        "Garlic, 8.25 tbsp: ~$1.01. \u003cstrong\u003eBuy 2 heads: $1.15.\u003c/strong\u003e",
                        "Yellow Onion, 2: ~$0.62. \u003cstrong\u003eBuy 1 lb: $1.14.\u003c/strong\u003e",
                        "Hickory Smoked Bacon, 0.25 lb: ~$0.86. \u003cstrong\u003eBuy 1 lb: $3.96.\u003c/strong\u003e",
@@ -51,13 +54,13 @@
                        "Diced Tomatoes, 3 cans: ~$2.94. \u003cstrong\u003eBuy 4 cans: $3.84.\u003c/strong\u003e",
                        "Cannellini Beans, 3.5 cans: ~$2.88. \u003cstrong\u003eBuy 4 cans: $3.30.\u003c/strong\u003e",
                        "Turkey Breast, 1 lb: ~$5.20. \u003cstrong\u003eBuy 1 3lb frozen roast: $14.44.\u003c/strong\u003e",
-                       "Rice, 3.75 cups dry: ~$0.86. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
+                       "Rice, 4.5 cups dry: ~$1.00. \u003cstrong\u003eBuy 1 (lasts several batches).\u003c/strong\u003e",
                        "Pantry seasonings (italian seasoning, dried thyme, red pepper flakes, salt, black pepper): ~$1.23. \u003cstrong\u003eFrom jars you keep on hand.\u003c/strong\u003e",
-                       "\u003cstrong\u003eBatch total: about $22.37 across 14 servings, so roughly $1.60 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
-                       "\u003cstrong\u003eTrue shopping cost: about $39.03 across 14 servings, roughly $2.79 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
-                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.33 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $55.36. Those containers then feed this batch and many more after it."
+                       "\u003cstrong\u003eBatch total: about $25.74 across 14 servings, so roughly $1.84 per bowl.\u003c/strong\u003e This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.",
+                       "\u003cstrong\u003eTrue shopping cost: about $41.53 across 14 servings, roughly $2.97 per bowl.\u003c/strong\u003e What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.",
+                       "\u003cstrong\u003eStarting with an empty pantry? Add about $16.19 one time.\u003c/strong\u003e That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $57.72. Those containers then feed this batch and many more after it."
                    ],
-    "cost_closing_html":  "About \u003cstrong\u003e$1.60 a bowl\u003c/strong\u003e for a dish that reads like a special occasion. The beans are the cheapest thing in the pot and they are also the reason it works.",
+    "cost_closing_html":  "About \u003cstrong\u003e$1.84 a bowl\u003c/strong\u003e for a dish that reads like a special occasion. The beans are the cheapest thing in the pot and they are also the reason it works.",
     "shop_smart":  [
                        "\u003cstrong\u003eBeans are the soul of a cassoulet, and beans are cheap.\u003c/strong\u003e Canned cannellini save you the overnight soak for very little extra money, and they hold their shape through a long bake.",
                        "\u003cstrong\u003eSausage and bacon are seasonings here.\u003c/strong\u003e Between them they flavor the entire pot, so you do not need much of either. Buy the larger packs and freeze the balance in portions.",
@@ -67,23 +70,23 @@
     "make_it":  [
                     "Weigh your empty mixing pot and write the number down for portioning later.",
                     "Cook the rice separately per the package and set it aside. It goes under the cassoulet in the containers.",
-                    "Brown the sliced hot Italian sausage and the chopped bacon in the olive oil in a heavy oven-safe pot, then set the meat aside and leave the fat.",
+                    "Brown the sliced smoked turkey sausage and the chopped bacon in the olive oil in a heavy oven-safe pot, then set the meat aside and leave the fat.",
                     "Cook the diced onion and sliced carrots in that fat until soft, then stir in the minced garlic, Italian seasoning, dried thyme and red pepper flakes.",
                     "Add the diced tomatoes with their juice, the drained cannellini beans, the browned sausage and bacon, and the shredded turkey breast. Season with salt and black pepper.",
                     "Bring it to a simmer on the stove, cover, and bake at 325F for about 90 minutes.",
                     "Uncover for the last 30 minutes so a crust forms on top, breaking that crust and stirring it under once or twice as it bakes."
                 ],
-    "portion_html":  "Spread the cooked rice into your 14 containers, then set the pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight over the rice. Every serving lands near 599 calories with 34 grams of protein. This is one of the few dishes that genuinely tastes better on day three.",
+    "portion_html":  "Spread the cooked rice into your 14 containers, then set the pot on your scale, subtract the empty pot weight from Step 1, divide by 14, and spoon that exact weight over the rice. Every serving lands near 565 calories with 30 grams of protein. This is one of the few dishes that genuinely tastes better on day three.",
     "credit_html":  "Recipe adapted from \u003ca href=\"https://www.healthy-delicious.com/cassoulet-with-white-beans-sausage-turkey/\" target=\"_blank\" rel=\"noopener\"\u003ehealthy-delicious.com\u003c/a\u003e, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.",
-    "upsell_html":  "\u003cem\u003eFrench bean bake on a grocery store budget, about $1.60 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
-    "cost_batch":  22.37,
-    "cost_batch_true":  39.03,
-    "cost_per_serving":  1.6,
-    "cost_per_serving_true":  2.79,
-    "cost_pantry_add":  16.33,
-    "cost_first_run":  55.36,
+    "upsell_html":  "\u003cem\u003eFrench bean bake on a grocery store budget, about $1.84 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.\u003c/em\u003e",
+    "cost_batch":  25.74,
+    "cost_batch_true":  41.53,
+    "cost_per_serving":  1.84,
+    "cost_per_serving_true":  2.97,
+    "cost_pantry_add":  16.19,
+    "cost_first_run":  57.72,
     "scaler":  {
-                   "cost":  "39.03",
+                   "cost":  "41.53",
                    "ing":  [
                                {
                                    "item":  "Olive Oil",
@@ -94,11 +97,11 @@
                                    "gpu":  "28.000"
                                },
                                {
-                                   "item":  "Hot Italian Sausage",
-                                   "canon":  "Hot Italian Sausage",
+                                   "item":  "Smoked Turkey Sausage",
+                                   "canon":  "Smoked Turkey Sausage",
                                    "grams":  945,
                                    "buy":  "2 lb",
-                                   "bid":  "italian-sausage",
+                                   "bid":  "smoked-turkey-sausage",
                                    "gpu":  "453.592"
                                },
                                {
@@ -200,23 +203,23 @@
                                {
                                    "item":  "Rice",
                                    "canon":  "Rice",
-                                   "grams":  700,
-                                   "buy":  "3.75 cups dry",
+                                   "grams":  810,
+                                   "buy":  "4.5 cups dry",
                                    "bid":  "rice",
                                    "gpu":  "453.592"
                                }
                            ]
                },
     "head":  {
-                 "description":  "Italian sausage, bacon, turkey breast and white beans baked low and slow with tomato and herbs. A 14 serving cassoulet built for budget meal prep.",
+                 "description":  "smoked turkey sausage, bacon, turkey breast and white beans baked low and slow with tomato and herbs. A 14 serving cassoulet built for budget meal prep.",
                  "keywords":  "turkey white bean cassoulet, cassoulet recipe, sausage and bean bake, french comfort food, budget meal prep, cheap dinner ideas",
-                 "image":  "",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",
                  "cookTime":  "PT1H45M",
                  "totalTime":  "PT2H10M",
-                 "costPerServing":  1.6,
+                 "costPerServing":  1.84,
                  "recipeIngredient":  [
-                                          "Hot Italian Sausage",
+                                          "Smoked Turkey Sausage",
                                           "Hickory Smoked Bacon",
                                           "Turkey Breast",
                                           "Cannellini Beans",
@@ -229,7 +232,7 @@
                                       ],
                  "steps":  [
                                "Cook the rice separately and set it aside.",
-                               "Brown the Italian sausage and bacon in an oven-safe pot, then set aside.",
+                               "Brown the smoked turkey sausage and bacon in an oven-safe pot, then set aside.",
                                "Cook the onion and carrots in the fat, then add garlic and herbs.",
                                "Add the tomatoes, cannellini beans, browned meats and turkey breast, then simmer.",
                                "Cover and bake at 325F for 90 minutes, uncovering for the last 30 to form a crust."
@@ -241,7 +244,7 @@
                                   "grams":  47
                               },
                               {
-                                  "item":  "Hot Italian Sausage",
+                                  "item":  "Smoked Turkey Sausage",
                                   "grams":  945
                               },
                               {
@@ -294,7 +297,7 @@
                               },
                               {
                                   "item":  "Rice",
-                                  "grams":  700
+                                  "grams":  810
                               }
                           ]
 }

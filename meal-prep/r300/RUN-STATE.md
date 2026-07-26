@@ -1,6 +1,14 @@
 # R300 run state (started 2026-07-25)
 
-## FIX-EVERYTHING PASS (2026-07-25 late) - Brad's order after run completion
+## FIX-EVERYTHING PASS: COMPLETE 2026-07-25 (commit 2075506) - see recipe-r300-open-items memory
+Round 2 additions: batch8 proxy commodities LIVE (board 453), 46 db rows re-pointed to true ids,
+43 cards + map-extensions + r300-board-map re-pointed, planner precedence r300-first, IN-STORE RULE
+enforced on Walmart (15 hand-verified 3P marketplace rows stripped incl a pool-cue shop selling Goya
+beans; 8 board cells dropped surgically; 3 register-estimate labels added; 18 recipes recost by
+pennies + republished), feed 530 ingredients, planner 6982/6999 feed-priced, all guards green,
+everything pushed. Remaining items -> recipe-r300-open-items memory (9 items, 2 need Brad).
+
+## FIX-EVERYTHING PASS (original scope, 2026-07-25 late) - Brad's order after run completion
 DONE: agent-registry ROOT CAUSE found+fixed (UTF-8 BOM on 5 of 6 .claude\agents files broke frontmatter
 parsing - exactly the 5 that failed to register; BOMs stripped, registry loads next app start).
 All 6 agent defs updated with r300 lessons (sourcer capture-at-verify + search fallback + 403 list;

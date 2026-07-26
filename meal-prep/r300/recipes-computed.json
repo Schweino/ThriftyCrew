@@ -11256,7 +11256,7 @@
     {
         "proposed_name":  "Turkey and White Bean Cassoulet",
         "slug":  "turkey-white-bean-cassoulet",
-        "protein":  "pork",
+        "protein":  "turkey",
         "cuisine":  "french",
         "format":  "oven bake (oven-proof skillet)",
         "source_url":  "https://www.healthy-delicious.com/cassoulet-with-white-beans-sausage-turkey/",
@@ -11265,7 +11265,8 @@
         "scale_factor":  3.5,
         "portion_factor":  1,
         "tuning":  [
-                       "added Rice base 200g (src scale)"
+                       "added Rice base 200g (src scale)",
+                       "base +15% (Rice)"
                    ],
         "ingredients":  [
                             {
@@ -11276,11 +11277,9 @@
                                           ]
                             },
                             {
-                                "item":  "Hot Italian Sausage",
+                                "item":  "Smoked Turkey Sausage",
                                 "grams":  945,
-                                "flags":  [
-
-                                          ]
+                                "flags":  "manual-override"
                             },
                             {
                                 "item":  "Garlic",
@@ -11366,17 +11365,17 @@
                             },
                             {
                                 "item":  "Rice",
-                                "grams":  700,
+                                "grams":  810,
                                 "flags":  [
                                               "tuner-added-base"
                                           ]
                             }
                         ],
         "per_serving":  {
-                            "calories":  599,
-                            "carbs_g":  65.4,
-                            "fat_g":  21.2,
-                            "protein_g":  33.8
+                            "calories":  565,
+                            "carbs_g":  75.6,
+                            "fat_g":  14.9,
+                            "protein_g":  30.3
                         },
         "missing_db_items":  [
 
