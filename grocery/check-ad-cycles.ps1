@@ -342,6 +342,24 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
       # basis. Feed path = the local smp-feed (regenerated later in this same sequence; one-day lag on
       # feed-only movements, same as the retired per-run flow). Non-fatal.
       try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\engine\cost-recipes.ps1') | Out-Null; Log 'engine cost-recipes refreshed db\costed' } catch { Log ('engine cost-recipes threw: ' + $_.Exception.Message) }
+      # COST-FLAG ALERT (2026-07-26 scale hardening): an unpriced ingredient line silently makes a recipe
+      # look CHEAPER (the line is dropped from the batch cost). cost-recipes records these to db\cost-flags.txt
+      # but nothing read it. Alert on a NEW flag-set (signature de-dup so a persistent flag does not spam).
+      try {
+        $cfFile = Join-Path (Split-Path $root -Parent) 'meal-prep\db\cost-flags.txt'
+        $cf = if (Test-Path $cfFile) { (Get-Content $cfFile -Raw).Trim() } else { '' }
+        if ($cf) {
+          $cfLines = @($cf -split "`n" | Where-Object { $_.Trim() })
+          Log ("cost-flags: $($cfLines.Count) unpriced recipe line(s) - a recipe is priced too cheap; see db\cost-flags.txt")
+          $summary += "REVIEW    cost-flags: $($cfLines.Count) unpriced recipe line(s) - a bid lost its price; recipe reads too cheap (db\cost-flags.txt)"
+          $cfSig = [BitConverter]::ToString([Security.Cryptography.MD5]::Create().ComputeHash([Text.Encoding]::UTF8.GetBytes(($cfLines | Sort-Object) -join ';'))) -replace '-',''
+          $cfSigF = Join-Path $OutDir 'cost-flags-alert.sig'
+          $cfPrev = if (Test-Path $cfSigF) { (Get-Content $cfSigF -Raw).Trim() } else { '' }
+          if ($cfSig -ne $cfPrev -and (-not $NoAlert)) {
+            try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Recipe pricing: $($cfLines.Count) unpriced ingredient line(s)" -Body ("engine\cost-recipes.ps1 could not price some recipe ingredient lines this run - each dropped line makes that recipe's cost read LOWER than reality (usually a bid pointing at a renamed/removed board commodity). Fix the bid in db\ingredients.json or register the commodity. Lines: " + (($cfLines | Select-Object -First 15) -join ' | ')) | Out-Null; if ($LASTEXITCODE -eq 0) { Set-Content $cfSigF -Value $cfSig -Encoding ASCII } } catch {}
+          }
+        } elseif (Test-Path (Join-Path $OutDir 'cost-flags-alert.sig')) { Remove-Item (Join-Path $OutDir 'cost-flags-alert.sig') -ErrorAction SilentlyContinue }
+      } catch { Log ('cost-flag alert threw: ' + $_.Exception.Message) }
       # drift guard: recipes-db index vs db\recipes specs vs db\ingredients (2026-07-26). Non-fatal; alerts.
       try {
         & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\engine\audit-db-agreement.ps1') | Out-Null
@@ -350,7 +368,18 @@ if ($serverDue -and (-not $NoDownstream) -and (-not $hardFail)) {
           try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Recipe db drift (index vs specs)" -Body "meal-prep\engine\audit-db-agreement.ps1 found drift between recipes-db.json and db\recipes specs (or missing db\ingredients items). Run it for the list; fix the lagging side." | Out-Null } catch {}
         } else { Log 'db-agreement guard: clean' }
       } catch { Log ('db-agreement guard threw: ' + $_.Exception.Message) }
-      try { & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\compute-v2-perserving.ps1') -FeedPath (Join-Path $OutDir 'smp-feed.json') | Out-Null; Log 'v2 per-serving manifest recomputed' } catch { Log ('compute-v2-perserving threw: ' + $_.Exception.Message) }
+      # compute-v2 now SKIPS bad recipes and exits 1 with the list (was: throw -> whole manifest stale,
+      # and a child exit-1 does NOT raise in this parent, so the old code logged success falsely). Check
+      # the exit code explicitly and alert on any skipped recipe.
+      try {
+        $cv2 = & powershell -ExecutionPolicy Bypass -File (Join-Path (Split-Path $root -Parent) 'meal-prep\pipeline\compute-v2-perserving.ps1') -FeedPath (Join-Path $OutDir 'smp-feed.json') 2>&1
+        if ($LASTEXITCODE -ne 0) {
+          $cv2Bad = @($cv2 | Where-Object { $_ -match '^\s+\S' -or $_ -match 'SKIPPED' })
+          Log ('compute-v2 SKIPPED recipe(s) with bad cost data: ' + (($cv2Bad | Select-Object -First 6) -join ' | '))
+          $summary += 'REVIEW    v2 per-serving manifest skipped recipe(s) with bad cost data - top5/rotation may be stale for them (see compute-v2 output)'
+          if (-not $NoAlert) { try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'send-alert.ps1') -Subject "Recipe per-serving manifest: skipped recipe(s)" -Body ("compute-v2-perserving.ps1 could not compute per-serving cost for some recipes and skipped them (the rest still updated). Their top5/rotation/site numbers are stale until fixed. Detail: " + (($cv2Bad | Select-Object -First 15) -join ' | ')) | Out-Null } catch {} }
+        } else { Log 'v2 per-serving manifest recomputed' }
+      } catch { Log ('compute-v2-perserving threw: ' + $_.Exception.Message) }
       # re-cost the recipes from today's board + refresh the hub's Top 5 (only publishes on change). Non-fatal.
       # Brad's final call 2026-07-25: the ORIGINAL SMP-TOP5 hub section stays (he preferred it over the
       # green free-week grid, which was removed same day). The free ROTATION still runs below - it just

@@ -23,7 +23,22 @@ foreach($s in $specSlugs.Keys){ if(-not $idxBySlug.ContainsKey($s)){ $issues.Add
 
 $items=@{}
 foreach($row in (Get-Content (Join-Path $mp 'db\ingredients.json') -Raw | ConvertFrom-Json)){ $items[[string]$row.item]=$row }
-$bidMiss=0
+
+# CHEAPEST-FALLBACK guard (2026-07-26 scale hardening): the live card widget + compute-v2 price the
+# "current cheapest" number by looking each ingredient's scaler BID up in the public feed. A bid that is
+# NOT a feed key silently falls back to the everyday price - the recipe shows cheapest == everyday and
+# nobody notices. Harmless for the handful of exotic ingredients we deliberately do not board-price
+# (db\no-board-price-ok.json), but a mass import that ships an UNMAPPED bid would silently mis-price on
+# cheapest. This catches exactly that. Feed is optional (skip if not built yet) so the guard never fails
+# a machine that has not run the grocery pull.
+$feedKeys=@{}; $feedLoaded=$false
+$feedPath = Join-Path (Split-Path $mp -Parent) 'grocery\out\smp-feed.json'
+if(Test-Path $feedPath){ try { $fj=(Get-Content $feedPath -Raw -Encoding utf8 | ConvertFrom-Json).ingredients; foreach($p in $fj.PSObject.Properties){ $feedKeys[$p.Name]=1 }; $feedLoaded=$true } catch {} }
+$noPriceOk=@{}
+$npF = Join-Path $mp 'db\no-board-price-ok.json'
+if(Test-Path $npF){ try { $npObj=(Get-Content $npF -Raw|ConvertFrom-Json); $npList=if($npObj.PSObject.Properties.Name -contains 'bids'){ $npObj.bids } else { $npObj }; foreach($x in $npList){ $noPriceOk[[string]$x]=1 } } catch {} }
+
+$bidMiss=0; $fallback=@()
 foreach($s in $specSlugs.Keys){
   if(-not $idxBySlug.ContainsKey($s)){ continue }
   $spec = Get-Content $specs[$s] -Raw | ConvertFrom-Json
@@ -37,9 +52,19 @@ foreach($s in $specSlugs.Keys){
   foreach($ing in $spec.scaler.ing){
     $key = if($ing.PSObject.Properties.Name -contains 'canon' -and $ing.canon){ [string]$ing.canon } else { [string]$ing.item }
     if(-not $items.ContainsKey($key)){ $bidMiss++; if($bidMiss -le 8){ $issues.Add("NO-DB-ITEM: $s ingredient '$key' missing from db\ingredients.json") } }
+    if($feedLoaded){
+      $b = if($ing.PSObject.Properties.Name -contains 'bid'){ [string]$ing.bid } else { '' }
+      if($b -and (-not $feedKeys.ContainsKey($b)) -and (-not $noPriceOk.ContainsKey($b)) -and (-not $noPriceOk.ContainsKey($key))){
+        $fallback += ("$s : '$key' bid '$b' not on feed (cheapest silently = everyday)")
+      }
+    }
   }
 }
 if($bidMiss -gt 8){ $issues.Add("... plus $($bidMiss-8) more missing-item lines") }
+if($fallback.Count){
+  foreach($f in ($fallback | Select-Object -First 8)){ $issues.Add("CHEAPEST-FALLBACK: $f") }
+  if($fallback.Count -gt 8){ $issues.Add("... plus $($fallback.Count-8) more cheapest-fallback lines (unmapped bid -> add to no-board-price-ok.json if intentional, else fix the bid)") }
+}
 
 if($issues.Count -eq 0){ Write-Output ("db-agreement: CLEAN ({0} recipes, index==specs)" -f $specSlugs.Count); exit 0 }
 Write-Output ("db-agreement: {0} drift issue(s)" -f $issues.Count)
