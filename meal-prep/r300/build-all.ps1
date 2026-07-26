@@ -14,7 +14,7 @@ foreach($slug in $ready){
   $sf = Join-Path $here ("specs\$slug.json")
   $spec = Get-Content $sf -Raw | ConvertFrom-Json
   if(-not $spec.head.image){ $spec.head.image = $TC_OG; $spec | ConvertTo-Json -Depth 8 | Out-File $sf -Encoding utf8 }
-  & (Join-Path $here 'build-card.ps1') -SpecFile $sf -OutDir $outDir | Out-Null
+  & (Join-Path $here '..\pipeline\build-card.ps1') -SpecFile $sf -OutDir $outDir | Out-Null   # promoted 2026-07-26: build-card + tpls are run-agnostic, shared in pipeline/
   $n++
 }
 Write-Output ("built $n cards -> built\")

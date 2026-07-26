@@ -126,6 +126,36 @@ TOOLING GOTCHAS (cost real time on r300)
     post-publish reviewer for an early batch may still be running when later batches land - tell it which
     slugs are its scope and that later publishes landing mid-review are the pipeline, not corruption.
 
+## Shared pipeline (promoted 2026-07-26) - reference, do not re-port
+
+The stable, run-agnostic toolchain now lives OUTSIDE the run folder so it compounds instead of being
+re-copied (and drifting) each run. The next run REFERENCES these; it does not copy them:
+- meal-prep\lib\json-db-io.ps1 - Save-JsonArray (top-level array always, defeats the PS5.1 wrap +
+  1-element-collapse traps), Read-JsonArrayFile, Remove-RecipeRow (db-row surgery). Dot-source it.
+- meal-prep\pipeline\build-card.ps1 + tpl-scaler-prefix/suffix.html - the byte-exact card generator
+  (proven byte-identical after the move). build-all references ..\pipeline\build-card.ps1.
+- meal-prep\pipeline\guard-lib.ps1 - reusable guard predicates: Get-ProseIngredientDrift (recipeIngredient
+  must name only real meats - catches swap-drift) + Get-StaleSuperlativeClaims (only protein rank-#1 may
+  claim batch primacy). spec-guards dot-sources it.
+- meal-prep\pipeline\test-guards.ps1 - regression tests for the two guard predicates (13 assertions).
+- meal-prep\pipeline\merge-protein-selections.ps1 - the parallel-dedup merge pass (below).
+
+STAYS RUN-LOCAL (copy the PROVEN r300 versions, NOT r100's - r300 carries every fix): parse-compute.ps1,
+cost-engine.ps1, build-specs.ps1, spec-guards.ps1, update-recipes-db.ps1, publish-r300.ps1, and the run
+data (canon rules, manual-overrides, densities, pantry-packages, labels, board map). These have
+run-specific tuning and are not cleanly parameterized yet - promoting them needs a real second run to
+test against, so it was deliberately deferred (do NOT move them blind).
+ENGINES support -Slugs (targeted recompute-and-splice) so a one-off fix does not rewrite all 300.
+update-recipes-db supports -Replace <slugs> (Remove-RecipeRow then re-add) for single-recipe replacement.
+
+## Parallel-by-protein dedup runbook (the ~40-min serial selector -> ~1/4)
+1. Dispatch FOUR recipe-dedup-selector agents in one message, each given ONE protein's slices + the full
+   live catalog + that protein's target. Each writes <RunDir>\selected-<protein>.json.
+2. Run pipeline\merge-protein-selections.ps1 -RunDir <RunDir>: concatenates the four into selected.json
+   and prints the candidate-vs-candidate CROSS-PROTEIN TWINS (a turkey chili vs a beef chili candidate).
+3. Main session resolves those twins by the run's "max 2 protein-variants per dish" rule, editing
+   selected.json. (Cross-protein twins vs the LIVE catalog are already each selector's job.)
+
 ## How to start a run
 
 Tell the session: "start a recipe run for N recipes" (optionally: theme/constraints). The session follows

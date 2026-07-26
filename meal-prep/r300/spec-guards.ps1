@@ -25,6 +25,7 @@
 param([switch]$Skeleton,[switch]$WriteReady)
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
+. (Join-Path $here '..\pipeline\guard-lib.ps1')   # shared, reusable guard predicates (prose-ingredient drift, stale superlative)
 $specDir = Join-Path $here 'specs'
 $proseDir = Join-Path $specDir 'prose'
 $db = (Get-Content (Join-Path $here '..\food-macros-db.json') -Raw | ConvertFrom-Json).items
@@ -191,17 +192,9 @@ foreach($sf in $specs){
   # and title echoes, which must NOT trip this. (Verified: this scope catches every real drift in the
   # 300 and false-positives on zero of the intentional cases.)
   if($spec.head.recipeIngredient){
-    $PROTEIN_MARKERS = @('italian sausage','pork sausage','andouille','kielbasa','bratwurst','chorizo',
-      'ground beef','ground turkey','ground pork','ground chicken','chicken thigh','chicken breast',
-      'chicken drumstick','turkey breast','pork shoulder','pork loin','pork tenderloin','pork chop',
-      'pork belly','corned beef','chuck roast','beef chuck','sirloin','flank','beef brisket','diced ham')
-    $ingBlob = ((@($spec.ingredients_grams | ForEach-Object { [string]$_.item }) + @($spec.scaler.ing | ForEach-Object { [string]$_.item })) -join ' | ').ToLower()
-    $riBlob = (@($spec.head.recipeIngredient) -join ' ').ToLower()
-    foreach($mk in $PROTEIN_MARKERS){
-      $core = $mk.TrimEnd('s')
-      if($riBlob -match [regex]::Escape($mk) -and -not $ingBlob.Contains($core)){
-        Fail $slug ("recipeIngredient names '$mk' but no such ingredient in the dish (stale prose after an ingredient swap?)")
-      }
+    $ingNames = @($spec.ingredients_grams | ForEach-Object { [string]$_.item }) + @($spec.scaler.ing | ForEach-Object { [string]$_.item })
+    foreach($mk in (Get-ProseIngredientDrift -RecipeIngredientLines @($spec.head.recipeIngredient) -IngredientNames $ingNames)){
+      Fail $slug ("recipeIngredient names '$mk' but no such ingredient in the dish (stale prose after an ingredient swap?)")
     }
   }
 
@@ -338,17 +331,9 @@ foreach($sf in $specs){
   # claiming it at rank #58). Only the actual protein rank-#1 recipe may assert unscoped batch-primacy.
   # Scoped claims ("highest protein SOUP", "in the BEEF half") are exempt - a subset noun in the gap
   # means it is a subset claim, which the guard cannot verify and does not police.
-  if(-not $Skeleton -and $slug -ne $rank1Slug){
-    # absolute-primacy only: "the/second highest protein ... batch". The softened TRUE forms
-    # ("one of the highest", "among the highest") are allowed via negative lookbehind.
-    $primacyRx = '(?i)(?<!one of )(?<!among )\b(?:the|second)\s+(?:highest|most|biggest)\s+protein\b[^.<"]{0,28}?\b(?:batch|collection|page|group|lineup|library|section)\b'
-    $subsetRx  = '(?i)\b(?:soup|stew|chili|bowl|bake|casserole|skillet|noodle|beef|chicken|pork|turkey|half)\b'
-    foreach($s in $readerStr){
-      if(-not $s){ continue }
-      foreach($mm in [regex]::Matches([string]$s, $primacyRx)){
-        if($mm.Value -match $subsetRx){ continue }
-        Fail $slug ("stale superlative: '" + $mm.Value.Trim() + "' but this is not the batch protein rank #1 (" + $rank1Slug + ")")
-      }
+  if(-not $Skeleton){
+    foreach($claim in (Get-StaleSuperlativeClaims -ReaderStrings $readerStr -IsRank1 ($slug -eq $rank1Slug))){
+      Fail $slug ("stale superlative: '$claim' but this is not the batch protein rank #1 ($rank1Slug)")
     }
   }
 
