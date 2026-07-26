@@ -14,11 +14,13 @@ $feed=(Get-Content (Join-Path $here '..\grocery\out\smp-feed.json') -Raw | Conve
 $feedUnit=@{}
 foreach($p in $feed.PSObject.Properties){ $feedUnit[$p.Name]=[string]$p.Value.unit }
 
-# item -> bid+gpu+unit (r100 map first: calibrated this week; then the 90-run map)
+# item -> bid+gpu+unit (r100 map first: calibrated this week; then the r300 map; then the 90-run map)
 $mapNew=(Get-Content (Join-Path $here 'r100\r100-board-map.json') -Raw | ConvertFrom-Json).map
+$mapR300=(Get-Content (Join-Path $here 'r300\r300-board-map.json') -Raw | ConvertFrom-Json).map   # 2026-07-25 close-out: r300 names (Turkey Breast, Pork Shoulder, ...) were feed-unpriced without it
 $mapOld=(Get-Content (Join-Path $here 'ingredient-map.json') -Raw | ConvertFrom-Json).mappings
 $item=@{}
 foreach($p in $mapNew.PSObject.Properties){ $item[$p.Name]=@{bid=$p.Value.bid;gpu=[double]$p.Value.gpu;unit=[string]$p.Value.unit} }
+foreach($p in $mapR300.PSObject.Properties){ if(-not $item.ContainsKey($p.Name)){ $item[$p.Name]=@{bid=$p.Value.bid;gpu=[double]$p.Value.gpu;unit=[string]$p.Value.unit} } }
 foreach($m in $mapOld){ if(-not $item.ContainsKey($m.item)){ $item[$m.item]=@{bid=$m.board_id;gpu=[double]$m.grams_per_unit;unit=[string]$m.unit} } }
 $UNIT_G=@{ lb=453.592; oz=28.3495; floz=29.57; kg=1000.0; g=1.0 }
 

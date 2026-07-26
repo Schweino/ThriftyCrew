@@ -1,0 +1,230 @@
+{
+    "readme":  "item NAME -\u003e {bid,gpu,unit} for r300 recipe ingredients, same shape as r100-board-map.json. Built by build-r300-board-map.ps1 from recipes-db item_ids (audited board ids) + the built scaler payloads\u0027 unit-reconciled gpu. gen-planner-data loads it after the r100 map, before ingredient-map.",
+    "map":  {
+                "Aji Amarillo Paste":  {
+                                           "bid":  "aji-amarillo-paste",
+                                           "gpu":  28.3495,
+                                           "unit":  "oz"
+                                       },
+                "Alfredo Sauce":  {
+                                      "bid":  "alfredo-sauce",
+                                      "gpu":  28.3495,
+                                      "unit":  "oz"
+                                  },
+                "Almonds":  {
+                                "bid":  "almonds",
+                                "gpu":  28.3495,
+                                "unit":  "oz"
+                            },
+                "Apple Juice":  {
+                                    "bid":  "apple-juice",
+                                    "gpu":  29.57,
+                                    "unit":  "floz"
+                                },
+                "Artichoke Hearts":  {
+                                         "bid":  "artichoke-hearts",
+                                         "gpu":  28.3495,
+                                         "unit":  "oz"
+                                     },
+                "Baked Beans":  {
+                                    "bid":  "baked-beans",
+                                    "gpu":  28.3495,
+                                    "unit":  "oz"
+                                },
+                "Baking Powder":  {
+                                      "bid":  "baking-powder",
+                                      "gpu":  28.3495,
+                                      "unit":  "oz"
+                                  },
+                "Baking Soda":  {
+                                    "bid":  "baking-soda",
+                                    "gpu":  28.3495,
+                                    "unit":  "oz"
+                                },
+                "Basil Pesto":  {
+                                    "bid":  "pesto",
+                                    "gpu":  28.3495,
+                                    "unit":  "oz"
+                                },
+                "Beef Flank/Sirloin Steak":  {
+                                                 "bid":  "sirloin-steak",
+                                                 "gpu":  453.592,
+                                                 "unit":  "lb"
+                                             },
+                "Blackberries":  {
+                                     "bid":  "blackberries",
+                                     "gpu":  28.3495,
+                                     "unit":  "oz"
+                                 },
+                "Bratwurst":  {
+                                  "bid":  "bratwurst",
+                                  "gpu":  453.592,
+                                  "unit":  "lb"
+                              },
+                "Brown Gravy Mix":  {
+                                        "bid":  "brown-gravy-mix",
+                                        "gpu":  28.3495,
+                                        "unit":  "oz"
+                                    },
+                "Brussels Sprouts":  {
+                                         "bid":  "brussels-sprouts",
+                                         "gpu":  453.592,
+                                         "unit":  "lb"
+                                     },
+                "Caraway Seeds":  {
+                                      "bid":  "caraway-seeds",
+                                      "gpu":  28.3495,
+                                      "unit":  "oz"
+                                  },
+                "Chicken Livers":  {
+                                       "bid":  "chicken-livers",
+                                       "gpu":  453.592,
+                                       "unit":  "lb"
+                                   },
+                "Cocoa Powder":  {
+                                     "bid":  "cocoa-powder",
+                                     "gpu":  28.3495,
+                                     "unit":  "oz"
+                                 },
+                "Cream of Chicken Soup":  {
+                                              "bid":  "cream-of-chicken-soup",
+                                              "gpu":  28.3495,
+                                              "unit":  "oz"
+                                          },
+                "Cream of Mushroom Soup":  {
+                                               "bid":  "cream-of-mushroom-soup",
+                                               "gpu":  28.3495,
+                                               "unit":  "oz"
+                                           },
+                "Diced Ham":  {
+                                  "bid":  "diced-ham",
+                                  "gpu":  28.3495,
+                                  "unit":  "oz"
+                              },
+                "Doubanjiang":  {
+                                    "bid":  "doubanjiang",
+                                    "gpu":  28.3495,
+                                    "unit":  "oz"
+                                },
+                "Dried Ancho Chiles":  {
+                                           "bid":  "dried-ancho-chiles",
+                                           "gpu":  28.3495,
+                                           "unit":  "oz"
+                                       },
+                "Dried Arbol Chiles":  {
+                                           "bid":  "dried-arbol-chiles",
+                                           "gpu":  28.3495,
+                                           "unit":  "oz"
+                                       },
+                "Dried Guajillo Chiles":  {
+                                              "bid":  "dried-guajillo-chiles",
+                                              "gpu":  28.3495,
+                                              "unit":  "oz"
+                                          },
+                "Eggplant":  {
+                                 "bid":  "eggplant",
+                                 "gpu":  548,
+                                 "unit":  "each"
+                             },
+                "Gingersnap Cookies":  {
+                                           "bid":  "cookies",
+                                           "gpu":  28.3495,
+                                           "unit":  "oz"
+                                       },
+                "Ground Fennel":  {
+                                      "bid":  "ground-fennel",
+                                      "gpu":  28.3495,
+                                      "unit":  "oz"
+                                  },
+                "Horseradish Sauce":  {
+                                          "bid":  "horseradish-sauce",
+                                          "gpu":  28.3495,
+                                          "unit":  "oz"
+                                      },
+                "Kale":  {
+                             "bid":  "kale",
+                             "gpu":  250,
+                             "unit":  "each"
+                         },
+                "Onion Soup Mix":  {
+                                       "bid":  "onion-soup-mix",
+                                       "gpu":  28.3495,
+                                       "unit":  "oz"
+                                   },
+                "Pigeon Peas":  {
+                                    "bid":  "pigeon-peas",
+                                    "gpu":  28.3495,
+                                    "unit":  "oz"
+                                },
+                "Pork Shoulder":  {
+                                      "bid":  "pork-shoulder",
+                                      "gpu":  453.592,
+                                      "unit":  "lb"
+                                  },
+                "Poultry Seasoning":  {
+                                          "bid":  "poultry-seasoning",
+                                          "gpu":  28.3495,
+                                          "unit":  "oz"
+                                      },
+                "Pumpkin Puree":  {
+                                      "bid":  "canned-pumpkin",
+                                      "gpu":  28.3495,
+                                      "unit":  "oz"
+                                  },
+                "Rye Bread":  {
+                                  "bid":  "rye-bread",
+                                  "gpu":  28.3495,
+                                  "unit":  "oz"
+                              },
+                "Sandwich Bread":  {
+                                       "bid":  "bread",
+                                       "gpu":  567,
+                                       "unit":  "each"
+                                   },
+                "Sauerkraut":  {
+                                   "bid":  "sauerkraut",
+                                   "gpu":  28.3495,
+                                   "unit":  "oz"
+                               },
+                "Sazon Seasoning":  {
+                                        "bid":  "sazon-seasoning",
+                                        "gpu":  28.3495,
+                                        "unit":  "oz"
+                                    },
+                "Snow Peas":  {
+                                  "bid":  "snow-peas",
+                                  "gpu":  28.3495,
+                                  "unit":  "oz"
+                              },
+                "Stuffing Mix":  {
+                                     "bid":  "stuffing-mix",
+                                     "gpu":  28.3495,
+                                     "unit":  "oz"
+                                 },
+                "Sweet Soy Sauce":  {
+                                        "bid":  "sweet-soy-sauce",
+                                        "gpu":  29.57,
+                                        "unit":  "floz"
+                                    },
+                "Tater Tots":  {
+                                   "bid":  "tater-tots",
+                                   "gpu":  28.3495,
+                                   "unit":  "oz"
+                               },
+                "Tortilla":  {
+                                 "bid":  "tortillas",
+                                 "gpu":  45,
+                                 "unit":  "each"
+                             },
+                "Turkey Breast":  {
+                                      "bid":  "turkey-breast",
+                                      "gpu":  453.592,
+                                      "unit":  "lb"
+                                  },
+                "Wild Rice":  {
+                                  "bid":  "wild-rice",
+                                  "gpu":  28.3495,
+                                  "unit":  "oz"
+                              }
+            }
+}
