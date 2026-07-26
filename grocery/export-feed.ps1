@@ -103,11 +103,19 @@ if (Test-Path $rcF) {
   }
 }
 
+# board_item_count: distinct commodities on the WEEKLY board (the "N items at seven stores" claim on
+# the homepage). Served in the feed so the tc-ic site markers stay current without any page edits.
+$boardItemCount = 0
+try {
+  $cmpF = Get-ChildItem (Join-Path $PSScriptRoot 'out\comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
+  if($cmpF){ $boardItemCount = @(((Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison)).Count }
+} catch {}
 $feed = [ordered]@{
   generated   = (Get-Date).ToString('s')
   week_of     = $weekOf
   ingredient_count = $ing.Count
   recipe_count     = $rec.Count
+  board_item_count = $boardItemCount
   ingredients = $ing
   recipes     = $rec
 }

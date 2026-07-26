@@ -104,7 +104,16 @@ if ($NoPublish) { exit 0 }
 # ---- render + upsert the hub section ----
 $sec = "<!--SMP-TOP5--><div class='smp-top5' style='margin:0 0 3rem;padding:2rem 2.2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px'>"
 $sec += "<h2 style='font-family:Georgia,serif;color:#16263F;font-size:2.4rem;margin:0 0 .4rem'>Top 5 cheapest dinners this week (over 500 calories)</h2>"
-$sec += "<p style='color:#64748b;font-size:1.4rem;margin:0 0 1.2rem'>Pick your protein. Real dinner-sized servings only, re-costed from this week's verified grocery prices at six Omaha stores.</p>"
+# store count DERIVED from the WEEKLY comparison board (the "we price-check every morning" claim is
+# about the weekly board's store set - the recipe board only carries 6 and would undercount).
+$storeWords=@{5='five';6='six';7='seven';8='eight';9='nine'}
+$storeCt=7
+try {
+  $cmpF = Get-ChildItem (Join-Path $gout 'comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
+  $storeCt=@(((Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison | ForEach-Object { $_.stores } | ForEach-Object { [string]$_.store }) | Sort-Object -Unique).Count
+} catch {}
+$storeWord=$(if($storeWords.ContainsKey($storeCt)){ $storeWords[$storeCt] } else { [string]$storeCt })
+$sec += "<p style='color:#64748b;font-size:1.4rem;margin:0 0 1.2rem'>Pick your protein. Real dinner-sized servings only, re-costed from this week's verified grocery prices at $storeWord Omaha stores.</p>"
 # FREE line (Brad 2026-07-25): the free-dinner rotation frees EXACTLY this box's recipes (same protein
 # field, same >500-cal dinner filter, same top-5 rank). The claim is only printed when the rotation state
 # file confirms the sets actually match - if they ever drift, the line silently drops and we warn, because

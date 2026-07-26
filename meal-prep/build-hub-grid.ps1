@@ -56,6 +56,11 @@ if($Validate){
 }
 
 # --- build all cards, cost ascending ---
+# 2026-07-26: card cost chips read the CURRENT-CHEAPEST whole-package per-serving from the v2 manifest
+# (same basis as the recipe pages + top5 + rotation). recipes-db.cost_per_serving is the legacy
+# utilization basis and only a fallback.
+$cheapPs=@{}
+try { (Get-Content (Join-Path $root 'pipeline\v2-perserving.json') -Raw | ConvertFrom-Json) | ForEach-Object { $cheapPs[[string]$_.slug]=[double]$_.cheapest_ps } } catch { Write-Warning 'v2-perserving.json unreadable - falling back to legacy cost_per_serving' }
 $rows=@()
 foreach($r in $recipes){
   # 2026-07-26: recipes-db.protein (stamped by normalize-recipe-ids, used by rotation + top5) is the
@@ -69,7 +74,7 @@ foreach($r in $recipes){
     slug=$r.slug; name=(Enc $r.name); cuisine=(Enc $r.cuisine); cat=$cat
     cal=[int]$r.per_serving.calories; pro=[int]$r.per_serving.protein_g
     carb=[int]$r.per_serving.carbs_g; fat=[int]$r.per_serving.fat_g
-    cost=[double]$r.cost_per_serving
+    cost=$(if($cheapPs.ContainsKey([string]$r.slug)){ $cheapPs[[string]$r.slug] } else { [double]$r.cost_per_serving })
   }
 }
 $rows=$rows | Sort-Object cost, name
@@ -119,6 +124,16 @@ $rcSpan = '<span class="tc-rc">' + $total + '</span>'
 $html=$html -replace '(?:<span class="tc-rc">)?\d+(?:</span>)?( high-protein meal prep dinners\.)', ($rcSpan + '$1')
 $html=$html -replace 'All (?:<span class="tc-rc">)?\d+(?:</span>)?( recipes with full instructions)', ('All ' + $rcSpan + '$1')
 $html=$html -replace '(?:<span class="tc-rc">)?\d+(?:</span>)?( high-protein dinners, macros from real)', ($rcSpan + '$1')
+# store-count words in the static copy, DERIVED from the recipe board ("six" went stale at seven stores)
+try {
+  $storeWords=@{5='five';6='six';7='seven';8='eight';9='nine'}
+  $cmpF = Get-ChildItem (Join-Path (Split-Path $root -Parent) 'grocery\out\comparison-*.json') | Where-Object { $_.BaseName -match '^comparison-\d{4}-\d{2}-\d{2}$' } | Sort-Object Name -Descending | Select-Object -First 1
+  $rbCt=@(((Get-Content $cmpF.FullName -Raw | ConvertFrom-Json).comparison | ForEach-Object { $_.stores } | ForEach-Object { [string]$_.store }) | Sort-Object -Unique).Count
+  if($rbCt -ge 5){
+    $sw=$(if($storeWords.ContainsKey($rbCt)){ $storeWords[$rbCt] } else { [string]$rbCt })
+    $html=$html -replace '\b(five|six|seven|eight|nine)( Omaha (?:grocery )?stores)', ($sw + '$2')
+  }
+} catch { Write-Warning 'store-count derivation skipped (recipe-board unreadable)' }
 
 # 4) members-only recipe-suggestion form (idempotent; inserted UP TOP, just above the filter
 #    bar / grid so members see it without scrolling past all 213 cards)
