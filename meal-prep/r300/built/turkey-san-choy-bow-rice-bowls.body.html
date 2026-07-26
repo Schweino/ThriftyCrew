@@ -1,105 +1,160 @@
-<!--SMP-SCALER--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+<p class="smp-credit"><span class="smp-credit-eyebrow">Source</span> Recipe adapted from <a href="https://www.sugarsaltmagic.com/turkey-san-choy-bow/" target="_blank" rel="noopener">sugarsaltmagic.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</p>
+
+<!--SMP-SCALER2--><style>.smp-sc{margin:1.6rem 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px;text-align:center}
 .smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
 .smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
-.smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
+.smp-sc-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
 .smp-sc-row b{color:#16263F;font-size:1.5rem}
 .smp-sc-btn{width:40px;height:40px;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.8rem;font-weight:700;cursor:pointer;line-height:1}
 .smp-sc-num{width:70px;text-align:center;font-size:1.7rem;font-weight:700;color:#16263F;border:1.5px solid #d8dee8;border-radius:8px;padding:6px 4px}
-.smp-sc-cost{font-size:1.5rem;color:#16263F;margin:0 0 1rem}.smp-sc-cost b{color:#0c5c3b}
 .smp-sc-list{margin:0;padding:0;list-style:none}
 .smp-sc-list li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.42rem;color:#3a4658}
 .smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
 .smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
-.smp-cp{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#fff;border:1px solid #e5dcc8;border-radius:12px}
-.smp-cp h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
-.smp-sc-livesub{color:#64748b;font-size:1.25rem;margin:0 0 1rem}
-.smp-sc-live{margin:0;padding:0;list-style:none}
-.smp-sc-live li{display:flex;justify-content:space-between;gap:14px;padding:.55rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
-.smp-sc-live li span.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b}
-.smp-sc-live li a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.25rem;white-space:nowrap}
-.smp-cp-un{color:#8a94a6;font-size:1.2rem;font-style:italic}
-.smp-cp-tot{color:#0c5c3b;font-size:1.45rem}
+.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}
+.smp-credit{background:#f8f6f0;border-left:4px solid #e2a43c;border-radius:0 8px 8px 0;padding:1rem 1.3rem;margin:0 0 1.8rem;font-size:1.38rem;line-height:1.55;color:#3a4658}
+.smp-credit a{color:#16263F;font-weight:600}
+.smp-credit-eyebrow{display:block;font-size:1.05rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#8a6d1f;margin-bottom:.3rem}
+.smp-ct{margin:2.8rem 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-ct h2{margin:0 0 .8rem}
+.smp-ct-why{margin:0 0 1.4rem}
+.smp-ct-list{margin-top:.4rem}
+.smp-ct-btns{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 1.2rem}
+.smp-ct-btn{flex:1 1 auto;min-width:110px;padding:.7rem .9rem;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.32rem;font-weight:700;cursor:pointer;line-height:1.2}
+.smp-ct-btn.on{background:#16263F;color:#fff}
+.smp-ct-sub{color:#4a5568;font-size:1.3rem;margin:0 0 1rem;line-height:1.55}
+.smp-ct-sub b{color:#16263F}
+.smp-ct-list{margin:0;padding:0;list-style:none}
+.smp-ct-list li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:.6rem 0;border-bottom:1px dotted #d8d0bc;font-size:1.38rem;color:#3a4658;flex-wrap:wrap}
+.smp-ct-list li.smp-ct-off{opacity:.45}
+.smp-ct-list li.smp-ct-off .smp-ct-r b{text-decoration:line-through}
+.smp-ct-ck{display:flex;align-items:center;gap:9px;cursor:pointer;margin:0}
+.smp-ct-ck input{width:19px;height:19px;accent-color:#16263F;cursor:pointer;margin:0;flex:none}
+.smp-ct-r{text-align:right}
+.smp-ct-qty{color:#8a94a6;font-size:1.2rem;margin-right:6px}
+.smp-ct-r a{color:#8a6d1f;font-weight:600;text-decoration:underline;font-size:1.22rem;white-space:nowrap}
+.smp-cp-un{color:#8a94a6;font-size:1.18rem;font-style:italic}
+.smp-cp-tot{color:#0c5c3b;font-size:1.42rem}
+.smp-sc-lp{white-space:nowrap;font-weight:700;color:#0c5c3b;font-size:1.24rem}
 .smp-cp-total{border-top:2px solid #16263F !important;border-bottom:none !important;padding-top:.9rem !important;margin-top:.3rem}
-.smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}</style>
+@media (max-width:480px){.smp-sc,.smp-ct{padding:1.4rem 1.2rem}.smp-ct-btn{min-width:100%;flex:1 1 100%}.smp-ct-list li{flex-direction:column;align-items:flex-start;gap:4px}.smp-ct-r{text-align:left}}</style>
 <script>
 (function(){
-if(window.__smpScaler)return; window.__smpScaler=1;
-// live price feed (Cloudflare). Fetched once per page; baseline cost shows instantly if this is slow/down.
-var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null;
+if(window.__smpScaler2)return; window.__smpScaler2=1;
+// live price feed (Cloudflare). Fetched once per page; everyday package prices show instantly if slow/down.
+var SMPFEED='https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json',smpFeedP=null,feedData=null;
 function smpGetFeed(){ if(!smpFeedP){ smpFeedP=fetch(SMPFEED).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}); } return smpFeedP; }
 function fmtQty(v){ if(v>=10)return String(Math.round(v)); if(v>=1){var r=Math.round(v*4)/4; return (r%1===0)?String(r):r.toFixed(2).replace(/\.?0+$/,'');} return String(Math.round(v*100)/100); }
 function scaleBuy(buy,f){ return buy.replace(/\d+(?:\.\d+)?/g,function(m){ return fmtQty(parseFloat(m)*f); }); }
+function esc(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
+function money(v){ return '$'+v.toFixed(2); }
 function init(box){
   var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
-  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list'), cost=box.querySelector('.smp-sc-cost');
-  function render(){
-    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base)); num.value=n;
-    var f=n/data.base, html='';
-    data.ing.forEach(function(it){
-      var amt=scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'');
-      html+='<li><span>'+it.item+'</span><span>'+amt+'</span></li>';
-    });
-    list.innerHTML=html;
-    var tot=data.cost*f;
-    cost.innerHTML='Estimated everyday cost for '+n+' servings: <b>$'+tot.toFixed(2)+'</b> (about $'+(tot/n).toFixed(2)+' a serving)';
-    if(feedData){ renderCheapest(); }   // keep the cheapest-pricing totals in sync with the chosen servings
+  var num=box.querySelector('.smp-sc-num');
+  var ct=document.querySelector('.smp-ct');
+  var ingUl=document.querySelector('.smp-ing');   // the Ingredients section list - rewritten in place when servings change
+  var removed={}, tab='custom';
+  function nServ(){ return Math.max(2,Math.min(42,parseInt(num.value)||data.base)); }
+  // WHOLE-PACKAGE MODEL: you cannot buy 7.5 tbsp of vinegar. Packages needed = ceil of what the batch
+  // uses over the package size, never less than one. Every tab prices whole packages; only the price
+  // source differs (everyday shelf price vs this week's cheapest verified store).
+  function pkgs(it,nn){ return Math.max(1,Math.ceil(it.grams*(nn/data.base)/it.pkg_g - 0.02)); }
+  function pkgLabel(it,k){ if(it.pkg_l==='lb'){return k+' lb';} if(it.pkg_l==='head'){return k+(k>1?' heads':' head');} if(k===1){return '1 '+it.pkg_l;} return k+' × '+it.pkg_l; }
+  function price(it,nn,basis){
+    var k=pkgs(it,nn), ev=k*it.pkg_p;
+    if(basis==='everyday'){ return {cost:ev,live:false,k:k}; }
+    var e=(feedData&&feedData.ingredients&&it.bid)?feedData.ingredients[it.bid]:null;
+    if(e&&e.cheapest>0&&it.gpu>0){ return {cost:k*(it.pkg_g/it.gpu)*e.cheapest,live:true,k:k,store:e.store,url:e.url,unit:e.unit,up:e.cheapest,sale:e.type==='sale',cn:e.n}; }
+    return {cost:ev,live:false,k:k,fallback:true};
   }
-  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); render(); }); });
-  num.addEventListener('change',render);
-  render();
-  // CURRENT CHEAPEST PRICING: standalone section listing ALL ingredients. Tracked rows show the live
-  // per-unit price + store + link AND the ingredient's TOTAL cost for the CHOSEN serving count
-  // (per-unit price x amount needed); a total row sums them. Re-renders when servings change.
-  function escT(s){ var d=document.createElement('span'); d.textContent=s; return d.innerHTML; }
-  var feedData=null;
-  function renderCheapest(){
-    var cp=document.querySelector('.smp-cp'); if(!cp) return;
-    var ul=cp.querySelector('.smp-sc-live'); if(!ul) return;
-    var f=feedData;
-    var n=Math.max(2,Math.min(42,parseInt(num.value)||data.base));
-    var fac=n/data.base;
-    var html='', live=0, sum=0, summed=0;
-    data.ing.forEach(function(it){
-      var right='<span class="smp-cp-un">not price-tracked &middot; included in the everyday cost</span>';
-      var sale='';
-      if(it.bid && f && f.ingredients && f.ingredients[it.bid] && f.ingredients[it.bid].cheapest>0){
-        var e=f.ingredients[it.bid];
-        live++;
-        if(e.type==='sale'){ sale='<span class="smp-sc-saletag">sale</span>'; }
-        var link=e.url?(' <a href="'+escT(e.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
-        var tot='';
-        if(it.gpu>0 && it.grams>0){
-          var c=e.cheapest*(it.grams*fac/it.gpu);
-          sum+=c; summed++;
-          tot='<b class="smp-cp-tot">$'+c.toFixed(2)+'</b> &middot; ';
-        }
-        var covN=(e.n>0 && e.n<6)?(' <span class="smp-cp-un">(checked at '+e.n+' of 6 stores)</span>'):'';
-        right=tot+'<span class="smp-sc-lp">$'+e.cheapest.toFixed(2)+'/'+e.unit+' at '+escT(e.store)+'</span>'+covN+link;
-      } else if(it.bid){
-        right='<span class="smp-cp-un">live price unavailable right now</span>';
+  function renderIngredients(){
+    // No duplicate list in the scaler box: the recipe's own Ingredients section IS the scaled view.
+    if(!ingUl) return;
+    var nn=nServ(), f=nn/data.base, html='';
+    data.ing.forEach(function(it){ html+='<li><strong>'+esc(it.disp||it.item)+':</strong> '+scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'')+'</li>'; });
+    ingUl.innerHTML=html;
+  }
+  function renderTabs(){
+    if(!ct) return;
+    var nn=nServ(), html='', tot=0;
+    var basis=(tab==='everyday')?'everyday':'cheapest';
+    data.ing.forEach(function(it,i){
+      var p=price(it,nn,basis);
+      var inc=!(tab==='custom'&&removed[i]);
+      if(inc){ tot+=p.cost; }
+      var left, right, qty='<span class="smp-ct-qty">'+pkgLabel(it,p.k)+'</span> ';
+      if(tab==='custom'){ left='<label class="smp-ct-ck"><input type="checkbox" data-i="'+i+'"'+(inc?' checked':'')+'> <span>'+esc(it.item)+(p.sale?'<span class="smp-sc-saletag">sale</span>':'')+'</span></label>'; }
+      else{ left='<span>'+esc(it.item)+(p.sale?'<span class="smp-sc-saletag">sale</span>':'')+'</span>'; }
+      if(tab==='cheapest'&&p.live){
+        var covN=(p.cn>0&&p.cn<6)?(' <span class="smp-cp-un">(checked at '+p.cn+' of 6 stores)</span>'):'';
+        var link=p.url?(' <a href="'+esc(p.url)+'" target="_blank" rel="nofollow noopener">See item &rarr;</a>'):'';
+        right=qty+'<b class="smp-cp-tot">'+money(p.cost)+'</b> <span class="smp-sc-lp">'+money(p.up)+'/'+p.unit+' at '+esc(p.store)+'</span>'+covN+link;
+      } else if(tab==='cheapest'){
+        right=qty+'<b class="smp-cp-tot">'+money(p.cost)+'</b> <span class="smp-cp-un">everyday price (no live price this week)</span>';
+      } else if(tab==='custom'&&p.live){
+        right=qty+'<b class="smp-cp-tot">'+money(p.cost)+'</b> <span class="smp-cp-un">at '+esc(p.store)+'</span>';
+      } else {
+        right=qty+'<b class="smp-cp-tot">'+money(p.cost)+'</b>';
       }
-      html+='<li><span>'+escT(it.item)+sale+'</span><span>'+right+'</span></li>';
+      html+='<li'+((tab==='custom'&&!inc)?' class="smp-ct-off"':'')+'>'+left+'<span class="smp-ct-r">'+right+'</span></li>';
     });
-    if(summed>0){
-      var cover=(summed<data.ing.length)?(' <span class="smp-cp-un">(covers '+summed+' of '+data.ing.length+' ingredients)</span>'):'';
-      html+='<li class="smp-cp-total"><span><b>Total at the cheapest stores, '+n+' servings</b>'+cover+'</span><span><b class="smp-cp-tot">$'+sum.toFixed(2)+'</b> <span class="smp-cp-un">about $'+(sum/n).toFixed(2)+' a serving</span></span></li>';
+    var lbl = (tab==='custom')?'Your shopping total':((tab==='everyday')?'Everyday register total':'Register total at the cheapest stores');
+    html+='<li class="smp-cp-total"><span><b>'+lbl+', '+nn+' servings</b></span><span class="smp-ct-r"><b class="smp-cp-tot">'+money(tot)+'</b> <span class="smp-cp-un">about '+money(nn>0?tot/nn:0)+' a serving</span></span></li>';
+    ct.querySelector('.smp-ct-list').innerHTML=html;
+    var sub=ct.querySelector('.smp-ct-sub');
+    if(sub){
+      if(tab==='custom'){ sub.innerHTML='Your real register trip. Every ingredient is priced as the <b>whole package</b> you would buy, at this week&rsquo;s cheapest verified store (everyday price where we don&rsquo;t have a live one). <b>Already have something at home? Uncheck it</b> and the total becomes what you still need to spend.'; }
+      else if(tab==='everyday'){ sub.innerHTML='Typical Omaha shelf prices on a normal week, whole packages, no sales. This is the number to beat.'; }
+      else { sub.innerHTML='This week&rsquo;s cheapest verified price for each package across the stores we track. Links go to the exact item.'; }
     }
-    ul.innerHTML=html;
-    var subEl=cp.querySelector('.smp-sc-livesub');
-    if(subEl){ subEl.textContent = live>0 ? 'This week\'s cheapest verified price per ingredient, and what your '+n+'-serving batch costs at those prices. Totals assume you buy just what the recipe uses; register totals vary by package size.' : 'Live prices are unavailable right now; the everyday cost above still applies.'; }
+    ct.querySelectorAll('.smp-ct-ck input').forEach(function(cb){ cb.addEventListener('change',function(){ removed[cb.getAttribute('data-i')]=!cb.checked; renderTabs(); }); });
   }
-  smpGetFeed().then(function(f){ feedData=f; renderCheapest(); });
+  function updateStats(){
+    // The blue stat rectangle follows the scaler: servings shows the chosen count, and per-serving
+    // is the current-cheapest whole-package total at that count (everyday fallback pre-feed/untracked).
+    try{
+      var bar=document.querySelector('.mts-recipe-stats'); if(!bar) return;
+      var nn=nServ(), t=0;
+      data.ing.forEach(function(it){ t+=price(it,nn,'cheapest').cost; });
+      bar.querySelectorAll('.stat').forEach(function(s){
+        var lEl=s.querySelector('.lbl'), b=s.querySelector('b');
+        if(!lEl||!b) return;
+        var l=lEl.textContent.trim();
+        if(/per serving/i.test(l) && t>0){ b.textContent='$'+(t/nn).toFixed(2); }
+        else if(/^servings$/i.test(l)){ b.textContent=String(nn); }
+      });
+    }catch(e){}
+    // The bold "Makes N servings ... per serving (at everyday cost)" line and the Portion It
+    // "divide by N" instruction follow the scaler too (idempotent regex rewrites of the numbers).
+    try{
+      var nn2=nServ(), tev=0;
+      data.ing.forEach(function(it){ tev+=price(it,nn2,'everyday').cost; });
+      var stat=document.querySelector('.smp-stat');
+      if(stat){ stat.innerHTML=stat.innerHTML
+        .replace(/Makes \d+ servings/,'Makes '+nn2+' servings')
+        .replace(/~\$\d+(?:\.\d+)? per serving/,'~$'+(tev/nn2).toFixed(2)+' per serving'); }
+      var por=document.querySelector('.smp-portion');
+      if(por){ por.innerHTML=por.innerHTML.replace(/divide by \d+/,'divide by '+nn2); }
+    }catch(e){}
+  }
+  function renderAll(){ renderIngredients(); renderTabs(); updateStats(); }
+  box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); renderAll(); }); });
+  num.addEventListener('change',renderAll);
+  if(ct){ ct.querySelectorAll('.smp-ct-btn').forEach(function(b){ b.addEventListener('click',function(){ tab=b.getAttribute('data-t'); ct.querySelectorAll('.smp-ct-btn').forEach(function(x){ x.classList.toggle('on',x===b); }); renderTabs(); }); }); }
+  renderAll();
+  smpGetFeed().then(function(f){ feedData=f; renderTabs(); updateStats(); });
 }
 function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
 if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
 })();
-</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-cost"></p><ul class="smp-sc-list"></ul><p class="smp-sc-note">Costs scale proportionally and assume you use part of each package; your register total may differ. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"turkey-san-choy-bow-rice-bowls","base":14,"cost":34.14,"ing":[{"item":"Oyster Sauce","grams":252,"buy":"1 cups","bid":"oyster-sauce","gpu":29.570},{"item":"Soy Sauce","grams":140,"buy":"0.5 cups","bid":"soy-sauce","gpu":29.570},{"item":"Chicken Broth","grams":112,"buy":"0.5 cups","bid":"chicken-broth","gpu":29.570},{"item":"Sesame Oil","grams":32,"buy":"2.25 tbsp","bid":"sesame-oil","gpu":29.570},{"item":"Honey","grams":37,"buy":"1.75 tbsp","bid":"honey","gpu":28.350},{"item":"Peanuts","grams":94,"buy":"10.5 tbsp","bid":"peanuts","gpu":28.350},{"item":"Green Onions","grams":158,"buy":"3.25 cups","bid":"green-onions","gpu":90.000},{"item":"Celery","grams":385,"buy":"7","bid":"celery","gpu":450.000},{"item":"Garlic","grams":35,"buy":"4 tbsp","bid":"garlic","gpu":50.000},{"item":"Ginger","grams":21,"buy":"3.5 tbsp","bid":"fresh-ginger","gpu":453.592},{"item":"93/7 Ground Turkey","grams":1750,"buy":"3.75 lb","bid":"ground-turkey","gpu":453.592},{"item":"White Mushrooms","grams":122,"buy":"4.25 oz","bid":"mushrooms","gpu":28.350},{"item":"Carrots","grams":214,"buy":"3.5","bid":"carrots","gpu":453.592},{"item":"Jalapeno","grams":49,"buy":"5.5 tbsp","bid":"jalapenos","gpu":453.592},{"item":"Salt","grams":20,"buy":"1 tbsp","bid":"salt","gpu":28.350},{"item":"Black Pepper","grams":4,"buy":"0.5 tbsp","bid":"black-pepper","gpu":28.350},{"item":"Rice","grams":985,"buy":"5.25 cups dry","bid":"rice","gpu":453.592}]}</script></div><div class="smp-cp"><h3>Current cheapest pricing</h3><p class="smp-sc-livesub">Checking this week&#39;s prices&hellip;</p><ul class="smp-sc-live"></ul></div><!--/SMP-SCALER-->
-<p><strong>Makes 14 servings &middot; ~564 cal &middot; 32g protein &middot; 70g carbs &middot; 15g fat &middot; ~$1.94 per serving.</strong></p>
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">Enter the # of servings and the recipe adapts.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-note">The ingredient list and every cost below update as you change it. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">{"slug":"turkey-san-choy-bow-rice-bowls","base":14,"ing":[{"item":"Oyster Sauce","disp":"Oyster Sauce (Lee Kum Kee)","grams":252,"buy":"1 cups","bid":"oyster-sauce","gpu":29.570,"pkg_g":255,"pkg_p":2.23,"pkg_l":"9oz bottle"},{"item":"Soy Sauce","disp":"Soy Sauce (generic)","grams":140,"buy":"0.5 cups","bid":"soy-sauce","gpu":29.570,"pkg_g":444,"pkg_p":1.68,"pkg_l":"15floz bottle"},{"item":"Chicken Broth","disp":"Chicken Broth (Swanson)","grams":112,"buy":"0.5 cups","bid":"chicken-broth","gpu":29.570,"pkg_g":907,"pkg_p":1.22,"pkg_l":"32oz carton"},{"item":"Sesame Oil","disp":"Sesame Oil (generic)","grams":32,"buy":"2.25 tbsp","bid":"sesame-oil","gpu":29.570,"pkg_g":136,"pkg_p":2.86,"pkg_l":"5floz bottle"},{"item":"Honey","disp":"Honey (Great Value)","grams":37,"buy":"1.75 tbsp","bid":"honey","gpu":28.350,"pkg_g":340,"pkg_p":6.46,"pkg_l":"12oz bottle"},{"item":"Peanuts","disp":"Peanuts (Great Value)","grams":94,"buy":"10.5 tbsp","bid":"peanuts","gpu":28.350,"pkg_g":454,"pkg_p":2.58,"pkg_l":"16oz jar"},{"item":"Green Onions","disp":"Green Onions","grams":158,"buy":"3.25 cups","bid":"green-onions","gpu":90.000,"pkg_g":90,"pkg_p":1.07,"pkg_l":"bunch"},{"item":"Celery","disp":"Celery","grams":385,"buy":"7","bid":"celery","gpu":450.000,"pkg_g":450,"pkg_p":2.37,"pkg_l":"bunch"},{"item":"Garlic","disp":"Garlic","grams":35,"buy":"4 tbsp","bid":"garlic","gpu":50.000,"pkg_g":40,"pkg_p":0.58,"pkg_l":"head"},{"item":"Ginger","disp":"Ginger (generic)","grams":21,"buy":"3.5 tbsp","bid":"fresh-ginger","gpu":453.592,"pkg_g":100,"pkg_p":0.88,"pkg_l":"piece"},{"item":"93/7 Ground Turkey","disp":"93/7 Ground Turkey (Jennie-O)","grams":1750,"buy":"3.75 lb","bid":"ground-turkey","gpu":453.592,"pkg_g":453.592,"pkg_p":3.8225,"pkg_l":"lb"},{"item":"White Mushrooms","disp":"White Mushrooms","grams":122,"buy":"4.25 oz","bid":"mushrooms","gpu":28.350,"pkg_g":227,"pkg_p":1.89,"pkg_l":"8oz pack"},{"item":"Carrots","disp":"Carrots (generic)","grams":214,"buy":"3.5","bid":"carrots","gpu":453.592,"pkg_g":453.592,"pkg_p":0.95,"pkg_l":"lb"},{"item":"Jalapeno","disp":"Jalapeno","grams":49,"buy":"5.5 tbsp","bid":"jalapenos","gpu":453.592,"pkg_g":453.592,"pkg_p":1.76,"pkg_l":"lb"},{"item":"Salt","disp":"Salt (Morton)","grams":20,"buy":"1 tbsp","bid":"salt","gpu":28.350,"pkg_g":737,"pkg_p":2.15,"pkg_l":"26oz canister"},{"item":"Black Pepper","disp":"Black Pepper (Great Value)","grams":4,"buy":"0.5 tbsp","bid":"black-pepper","gpu":28.350,"pkg_g":85,"pkg_p":3.57,"pkg_l":"3oz shaker"},{"item":"Rice","disp":"Rice (Member's Mark)","grams":985,"buy":"5.25 cups dry","bid":"rice","gpu":453.592,"pkg_g":907,"pkg_p":1.12,"pkg_l":"2lb bag"}]}</script></div><!--/SMP-SCALER2-->
 
-<p>San choy bow is the Cantonese mince that usually gets scooped into lettuce cups at the start of a meal. Turned onto rice it becomes an actual dinner, and it keeps every good thing about the original: oyster sauce depth, crunchy celery and carrot, peanuts on top. Each bowl runs <strong>564 calories and 32 grams of protein</strong> for about <strong>$1.94</strong>.</p>
+<p class="smp-stat"><strong>Makes 14 servings &middot; ~564 cal &middot; 32g protein &middot; 70g carbs &middot; 15g fat &middot; ~$3.63 per serving (at everyday cost).</strong></p>
+
+<p>San choy bow is the Cantonese mince that usually gets scooped into lettuce cups at the start of a meal. Turned onto rice it becomes an actual dinner, and it keeps every good thing about the original: oyster sauce depth, crunchy celery and carrot, peanuts on top. Each bowl runs <strong>564 calories and 32 grams of protein</strong> for about <strong>$3.63</strong> (at everyday cost).</p>
 
 <h2>Ingredients</h2>
-<ul>
+<ul class="smp-ing">
 <li><strong>Oyster Sauce (Lee Kum Kee):</strong> 1 cups (252 g)</li>
 <li><strong>Soy Sauce (generic):</strong> 0.5 cups (140 g)</li>
 <li><strong>Chicken Broth (Swanson):</strong> 0.5 cups (112 g)</li>
@@ -119,30 +174,13 @@ if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded
 <li><strong>Rice (Member's Mark):</strong> 5.25 cups dry (985 g)</li>
 </ul>
 
-<h2>Estimated Everyday Cost</h2>
-<p><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
-<ul>
-<li>Oyster Sauce, 1 cups: ~$2.20. <strong>Buy 1 (lasts several batches).</strong></li>
-<li>Soy Sauce, 0.5 cups: ~$0.53. <strong>Buy 1 (lasts several batches).</strong></li>
-<li>Chicken Broth, 0.5 cups: ~$0.15. <strong>Buy 1 (lasts several batches).</strong></li>
-<li>Sesame Oil, 2.25 tbsp: ~$0.67. <strong>Buy 1 (lasts several batches).</strong></li>
-<li>Honey, 1.75 tbsp: ~$0.70. <strong>Buy 1 (lasts several batches).</strong></li>
-<li>Peanuts, 10.5 tbsp: ~$0.53. <strong>Buy 1 16oz jar: $2.58.</strong></li>
-<li>Green Onions, 3.25 cups: ~$1.88. <strong>Buy 2 bunches: $2.14.</strong></li>
-<li>Celery, 7: ~$2.03. <strong>Buy 1 bunch: $2.37.</strong></li>
-<li>Garlic, 4 tbsp: ~$0.50. <strong>Buy 1 head: $0.58.</strong></li>
-<li>Ginger, 3.5 tbsp: ~$0.18. <strong>Buy 1 piece: $0.88.</strong></li>
-<li>93/7 Ground Turkey, 3.75 lb: ~$14.74. <strong>Buy 4 lbs: $15.29.</strong></li>
-<li>White Mushrooms, 4.25 oz: ~$1.02. <strong>Buy 1 8oz pack: $1.89.</strong></li>
-<li>Carrots, 3.5: ~$0.45. <strong>Buy 1 lb: $0.95.</strong></li>
-<li>Jalapeno, 5.5 tbsp: ~$0.19. <strong>Buy 1 lb: $1.76.</strong></li>
-<li>Rice, 5.25 cups dry: ~$1.22. <strong>Pantry staple; this batch alone uses about 2 2lb bags.</strong></li>
-<li>Pantry seasonings (salt, black pepper): ~$0.23. <strong>From jars you keep on hand.</strong></li>
-<li><strong>Batch total: about $27.22 across 14 servings, so roughly $1.94 per bowl.</strong> This counts only the amounts this batch actually uses from each package, so it is the cost of the food in the containers, not a register receipt.</li>
-<li><strong>True shopping cost: about $34.14 across 14 servings, roughly $2.44 per bowl.</strong> What the register trip looks like if your pantry is already stocked. Meat, produce, and packaged items are counted as the whole packages you have to buy, since you cannot grab a partial box, can, or jar. Pantry staples you already own (rice, seasonings, oils, and long-lasting sauces) are counted at only what this batch uses.</li>
-<li><strong>Starting with an empty pantry? Add about $16.71 one time.</strong> That is the extra cost of buying full containers of every pantry staple in this recipe instead of just the amounts used, which puts a first shopping trip near $50.85. Those containers then feed this batch and many more after it.</li>
-</ul>
-<p>About <strong>$1.94</strong> a bowl. Restaurants charge appetizer prices for four small lettuce cups of this. You are getting fourteen dinners for what two of those cost.</p>
+<div class="smp-ct"><h2>What This Batch Costs</h2>
+<p class="smp-ct-why"><em>Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.</em></p>
+<div class="smp-ct-btns"><button type="button" class="smp-ct-btn on" data-t="custom">Customized pricing</button><button type="button" class="smp-ct-btn" data-t="everyday">Everyday cost</button><button type="button" class="smp-ct-btn" data-t="cheapest">Current cheapest pricing</button></div>
+<p class="smp-ct-sub"></p>
+<ul class="smp-ct-list"></ul>
+<p class="smp-sc-note">Totals price whole packages, cans, and jars, because that is how the register works. Change the servings in Make It Your Size above and these totals follow.</p></div>
+<p>About <strong>$3.63</strong> a bowl (at everyday cost). Restaurants charge appetizer prices for four small lettuce cups of this. You are getting fourteen dinners for what two of those cost.</p>
 
 <h2>Shop Smart</h2>
 <ul>
@@ -165,9 +203,7 @@ if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded
 </ol>
 
 <h2>Portion It</h2>
-<p>Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the rice bed for each container. Divide the mince evenly across all 14, then scatter the chopped peanuts and remaining green onion on top so they stay crunchy instead of going soft in the sauce. Each bowl lands at <strong>564 calories and 32 grams of protein</strong>.</p>
-
-<p><em>Recipe adapted from <a href="https://www.sugarsaltmagic.com/turkey-san-choy-bow/" target="_blank" rel="noopener">sugarsaltmagic.com</a>, rebuilt for 14-serving budget meal prep with weighed portions and Omaha pricing.</em></p>
+<p class="smp-portion">Set the pot of rice on the scale, subtract the empty-pot weight you wrote down, and divide by 14. That is the rice bed for each container. Divide the mince evenly across all 14, then scatter the chopped peanuts and remaining green onion on top so they stay crunchy instead of going soft in the sauce. Each bowl lands at <strong>564 calories and 32 grams of protein</strong>.</p>
 
 <hr>
-<p><em>Cantonese san choy bow for about <strong>$1.94</strong> a bowl. This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>
+<p><em>Cantonese san choy bow for about <strong>$3.63</strong> a bowl (at everyday cost). This is one of hundreds. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.</em></p>
