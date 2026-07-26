@@ -1,0 +1,217 @@
+<div id="tccd">
+<style>
+#tccd{--navy:#16263f;--gold:#e2a43c;--gold-d:#8a6d1f;--ink:#3a4658;--line:#e2e8f0;--green:#1f7a4d;--red:#b23b2e;--soft:#fbfcfe;
+  max-width:760px;margin:0 auto;font-size:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);}
+#tccd *{box-sizing:border-box;}
+#tccd .tb-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:1.6em 1.4em;margin:0 0 1.5em;box-shadow:0 6px 24px rgba(22,38,63,.06);}
+#tccd h2{font-size:1.3em;color:var(--navy);margin:0 0 .3em;}
+#tccd .tb-sub{font-size:.95em;margin:.2em 0 1.1em;line-height:1.5;}
+#tccd .cd-hero{text-align:center;padding:2em 1.4em 1.8em;}
+#tccd .cd-hero-label{font-size:1.05em;color:var(--navy);font-weight:700;margin:0 0 .2em;line-height:1.45;}
+#tccd .cd-num{font-size:3.4em;font-weight:800;color:var(--green);line-height:1.1;margin:.1em 0;letter-spacing:-.02em;}
+#tccd .cd-hero-sub{font-size:.92em;color:#68748a;margin:.5em auto 0;max-width:34em;line-height:1.5;}
+#tccd .cd-fresh{text-align:center;font-size:.82em;color:#8a94a6;margin:.8em 0 0;}
+#tccd table.cd-menu{width:100%;border-collapse:collapse;font-size:.92em;}
+#tccd .cd-menu th{text-align:left;font-size:.78em;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-d);padding:.45em .5em;border-bottom:2px solid var(--line);}
+#tccd .cd-menu td{padding:.55em .5em;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.4;}
+#tccd .cd-menu td.cd-r,#tccd .cd-menu th.cd-r{text-align:right;white-space:nowrap;}
+#tccd .cd-menu .cd-food{font-weight:700;color:var(--navy);}
+#tccd .cd-menu .cd-amt{color:#68748a;font-size:.92em;display:block;}
+#tccd .cd-menu tr.cd-tot td{border-bottom:none;border-top:2px solid var(--navy);font-weight:800;color:var(--navy);}
+#tccd .cd-menu .cd-cost{color:var(--green);font-weight:700;}
+#tccd .cd-store{font-size:.85em;color:#68748a;}
+#tccd .cd-note{font-size:.82em;color:#8a94a6;margin:.8em 0 0;line-height:1.5;}
+#tccd .cd-rules{margin:.4em 0 0;padding:0 0 0 1.2em;line-height:1.6;font-size:.95em;}
+#tccd .cd-rules li{margin:0 0 .5em;}
+#tccd .cd-rules b{color:var(--navy);}
+#tccd .cd-caveat{background:#fdf8ec;border:1px solid #eee3c8;}
+#tccd .cd-cite{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:.9em 1.1em;font-size:.92em;line-height:1.55;margin:1.1em 0 0;}
+#tccd .cd-cite b{color:var(--navy);}
+@media (max-width:560px){
+  #tccd .tb-card{padding:1.2em 1em;}
+  #tccd .cd-num{font-size:2.6em;}
+  #tccd table.cd-menu{font-size:.85em;}
+  #tccd .cd-menu th,#tccd .cd-menu td{padding:.45em .3em;}
+  #tccd .cd-store{display:block;}
+}
+</style>
+
+<p style="font-size:1.05em;line-height:1.6;margin:0 0 1.2em;">Every week we check grocery prices across Omaha stores. This page uses those prices to answer one plain question: what is the least a person can spend today and still get a full day of real food? Not a diet plan, and not a stunt. A floor, computed honestly, updated as prices move.</p>
+
+<div class="tb-card cd-hero">
+  <p class="cd-hero-label">Today, a full day of food in Omaha costs</p>
+  <div class="cd-num" id="cd-num">&nbsp;</div>
+  <p class="cd-hero-sub">That buys about 2,000 calories with at least 50 grams of protein, built from ordinary groceries at each item's cheapest Omaha store this week, under the realism rules explained below.</p>
+  <p class="cd-fresh" id="cd-fresh"></p>
+</div>
+
+<div class="tb-card">
+  <h2>The day, item by item</h2>
+  <p class="tb-sub">This is the exact basket behind the number. The computer builds it fresh from current prices every time this page loads.</p>
+  <div style="overflow-x:auto;"><table class="cd-menu">
+    <thead><tr><th>Food</th><th class="cd-r">Calories</th><th class="cd-r">Protein</th><th class="cd-r">Cost</th></tr></thead>
+    <tbody id="cd-rows"></tbody>
+  </table></div>
+  <p class="cd-note" id="cd-rawnote"></p>
+</div>
+
+<div class="tb-card">
+  <h2>How this number is computed</h2>
+  <p class="tb-sub">The rules are fixed and public, so the number means the same thing every day. The computer must build a day that satisfies all of these:</p>
+  <ul class="cd-rules">
+    <li><b>About 2,000 calories and at least 50 grams of protein.</b> A standard adult day, with enough protein to matter.</li>
+    <li><b>No single food over 400 calories.</b> That is a fifth of the day. It keeps the answer looking like a plate of food instead of a bucket of one thing.</li>
+    <li><b>Cooking fat capped at 200 calories.</b> About a tablespoon and a half of oil or butter. Enough to cook with. It is not treated as a food group.</li>
+    <li><b>At least 200 calories from fruit or vegetables.</b></li>
+    <li><b>At least 20 grams of protein from meat, eggs, or dairy.</b> Grains and beans carry protein too, but complete protein has to be anchored somewhere.</li>
+  </ul>
+  <p class="tb-sub" style="margin-top:1em;">Within those rules it works cheapest first: fruit or vegetable calories first, then the cheapest complete protein, then the cheapest remaining calories, and if protein still falls short it swaps in the cheapest protein until it is met. Calories and protein come from nutrition labels in our recipe database. Prices come from our weekly Omaha price check across Walmart, Baker's, Family Fare, Hy-Vee, Aldi, and Sam's Club, taking each item's cheapest store.</p>
+</div>
+
+<div class="tb-card cd-caveat">
+  <h2>Read this before you quote the number</h2>
+  <ul class="cd-rules">
+    <li><b>This is a floor, not a meal plan.</b> It proves what is mathematically possible at today's prices. A real week of eating needs more variety than any single cheapest day.</li>
+    <li><b>Meat is priced at raw weight.</b> Cooked portions weigh less.</li>
+    <li><b>Seasonings, cooking fuel, water, and equipment are not counted.</b> The number assumes a working kitchen.</li>
+    <li><b>It uses unit prices across multiple stores.</b> You cannot buy 4 tablespoons of peanut butter; you buy a jar. The per-day math is honest, but the checkout total on day one is higher, and getting the cheapest price on every item can mean more than one store.</li>
+    <li><b>Prices are this week's cheapest we found.</b> Your store, your week, and your shelf may differ.</li>
+    <li><b>This is not medical or dietary advice.</b> It is arithmetic about groceries.</li>
+  </ul>
+  <div class="cd-cite"><b>Food banks, caseworkers, reporters:</b> you are welcome to cite this number with a link back to this page. It recalculates from live Omaha price data, so quote it with the date shown above.</div>
+</div>
+
+<script>
+var CD={week:"2026-07-08",rows:[{"k":"rice","n":"Jasmine rice (dry)","b":"jasmine-rice","cat":"st","cpg":3.6,"ppg":0.08,"gpu":28.3495,"u":"oz","f":0.05,"fs":"Sam's Club","kd":66.7,"ku":"cup, cooked","r":false},{"k":"penne","n":"Penne pasta (dry)","b":"penne-pasta","cat":"st","cpg":3.392857,"ppg":0.178571,"gpu":28.3495,"u":"oz","f":0.078,"fs":"Walmart","kd":56,"ku":"cup, cooked","r":false},{"k":"pb","n":"Peanut butter","b":"peanut-butter","cat":"st","cpg":5.88,"ppg":0.25,"gpu":28.3495,"u":"oz","f":0.0995,"fs":"Walmart","kd":16,"ku":"tablespoon","r":false},{"k":"blkbeans","n":"Canned black beans","b":"seasoned-black-beans","cat":"st","cpg":1,"ppg":0.061538,"gpu":28.3495,"u":"oz","f":0.0993,"fs":"Hy-Vee","kd":130,"ku":"half cup","r":false},{"k":"kidney","n":"Canned kidney beans","b":"kidney-beans","cat":"st","cpg":1.27,"ppg":0.087,"gpu":28.3495,"u":"oz","f":0.055,"fs":"Walmart","kd":130,"ku":"half cup","r":false},{"k":"chickpea","n":"Canned chickpeas","b":"chickpeas","cat":"st","cpg":1.39,"ppg":0.076,"gpu":28.3495,"u":"oz","f":0.055,"fs":"Walmart","kd":130,"ku":"half cup","r":false},{"k":"eggs","n":"Eggs","b":"eggs","cat":"cp","cpg":1.44,"ppg":0.126,"gpu":600,"u":"dozen","f":1.47,"fs":"Walmart","kd":50,"ku":"large egg","r":false},{"k":"milk","n":"Milk","b":"milk","cat":"cp","cpg":0.358333,"ppg":0.033333,"gpu":3785,"u":"gallon","f":2.99,"fs":"Hy-Vee","kd":240,"ku":"cup","r":false},{"k":"yogurt","n":"Greek yogurt","b":"greek-yogurt","cat":"cp","cpg":0.588235,"ppg":0.1,"gpu":28.3495,"u":"oz","f":0.0872,"fs":"Aldi","kd":0,"ku":"","r":false},{"k":"cottage","n":"Cottage cheese","b":"cottage-cheese","cat":"cp","cpg":0.884956,"ppg":0.115044,"gpu":28.3495,"u":"oz","f":0.1196,"fs":"Walmart","kd":0,"ku":"","r":false},{"k":"chicken","n":"Chicken breast","b":"chicken-breast","cat":"cp","cpg":1.160714,"ppg":0.223214,"gpu":453.592,"u":"lb","f":2.29,"fs":"Baker's","kd":112,"ku":"4 oz portion","r":true},{"k":"thigh","n":"Chicken thighs","b":"boneless-skinless-chicken-thigh","cat":"cp","cpg":1.25,"ppg":0.196429,"gpu":453.592,"u":"lb","f":1.99,"fs":"Hy-Vee","kd":112,"ku":"4 oz portion","r":true},{"k":"porkloin","n":"Pork loin","b":"pork-loin","cat":"cp","cpg":1.383929,"ppg":0.205357,"gpu":453.592,"u":"lb","f":1.98,"fs":"Sam's Club","kd":112,"ku":"4 oz portion","r":true},{"k":"turkey","n":"93/7 ground turkey","b":"93-7-ground-turkey","cat":"cp","cpg":1.517857,"ppg":0.1875,"gpu":453.592,"u":"lb","f":4.33,"fs":"Sam's Club","kd":112,"ku":"4 oz portion","r":true},{"k":"potato","n":"Potatoes","b":"potato","cat":"fv","cpg":0.77,"ppg":0.02,"gpu":453.592,"u":"lb","f":0.44,"fs":"Aldi","kd":170,"ku":"medium potato","r":false},{"k":"banana","n":"Bananas","b":"bananas","cat":"fv","cpg":0.89,"ppg":0.0109,"gpu":453.592,"u":"lb","f":0.48,"fs":"Aldi","kd":118,"ku":"medium banana","r":false},{"k":"cabbage","n":"Green cabbage","b":"green-cabbage","cat":"fv","cpg":0.25,"ppg":0.013,"gpu":453.592,"u":"lb","f":0.79,"fs":"Aldi","kd":0,"ku":"","r":false},{"k":"onion","n":"Yellow onions","b":"onions","cat":"fv","cpg":0.4,"ppg":0.01125,"gpu":453.592,"u":"lb","f":0.74,"fs":"Sam's Club","kd":0,"ku":"","r":false},{"k":"peas","n":"Frozen green peas","b":"frozen-green-peas","cat":"fv","cpg":0.81,"ppg":0.054,"gpu":28.3495,"u":"oz","f":0.078,"fs":"Walmart","kd":0,"ku":"","r":false},{"k":"apple","n":"Apples","b":"apple","cat":"fv","cpg":0.52,"ppg":0.003,"gpu":175,"u":"each","f":0.39,"fs":"Walmart","kd":175,"ku":"medium apple","r":false},{"k":"butter","n":"Butter","b":"butter","cat":"fat","cpg":7.17,"ppg":0.0085,"gpu":453.592,"u":"lb","f":2.74,"fs":"Sam's Club","kd":14,"ku":"tablespoon","r":false},{"k":"vegoil","n":"Vegetable oil","b":"vegetable-oil","cat":"fat","cpg":8.84,"ppg":0,"gpu":28,"u":"floz","f":0.068,"fs":"Walmart","kd":14,"ku":"tablespoon","r":false}]};
+(function(){
+  var root = document.getElementById('tccd');
+  if (!root || typeof CD === 'undefined') return;
+  var FEED_URL = 'https://smp-feed.ancient-snow-93df.workers.dev/smp-feed.json';
+  var TOTAL = 2000, PROTMIN = 50, CAP = 400, FATCAP = 200, FVMIN = 200, CPMIN = 20;
+  var PLURAL = {'cup, cooked':'cups, cooked','tablespoon':'tablespoons','half cup':'half cups','large egg':'large eggs','cup':'cups','4 oz portion':'4 oz portions','medium potato':'medium potatoes','medium banana':'medium bananas','medium apple':'medium apples'};
+
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function money2(x){ return '$' + (Math.round(x*100)/100).toFixed(2); }
+
+  // Mirrors build-cheapday-data.ps1's documented solve, phase for phase.
+  function solve(prices){
+    var rows = [], i, r;
+    for (i = 0; i < CD.rows.length; i++){
+      var d = CD.rows[i];
+      var price = d.f, store = d.fs;
+      if (prices && prices[d.b] && prices[d.b].cheapest && prices[d.b].unit === d.u){
+        price = prices[d.b].cheapest; store = prices[d.b].store;
+      }
+      var pg = price / d.gpu;
+      rows.push({ k:d.k, n:d.n, cat:d.cat, cpg:d.cpg, ppg:d.ppg, pg:pg,
+        cpk: pg / d.cpg, cpp: (d.ppg > 0 ? pg / d.ppg : 1e9),
+        fs:store, kd:d.kd, ku:d.ku, raw:d.r, kcal:0 });
+    }
+    var fatUsed = 0;
+    function room(x){
+      var m = CAP - x.kcal;
+      if (x.cat === 'fat') m = Math.min(m, FATCAP - fatUsed);
+      return m > 0 ? m : 0;
+    }
+    function add(x, kc){ x.kcal += kc; if (x.cat === 'fat') fatUsed += kc; }
+    function byCpk(a,b){ return a.cpk - b.cpk || (a.k < b.k ? -1 : 1); }
+    function byCpp(a,b){ return a.cpp - b.cpp || (a.k < b.k ? -1 : 1); }
+    function tot(){ var s=0; for (var j=0;j<rows.length;j++) s+=rows[j].kcal; return s; }
+    function prot(){ var s=0; for (var j=0;j<rows.length;j++) s+=rows[j].kcal/rows[j].cpg*rows[j].ppg; return s; }
+
+    // 1) fruit/veg floor, cheapest calories first
+    var fv = [], j, take;
+    for (j=0;j<rows.length;j++) if (rows[j].cat==='fv') fv.push(rows[j]);
+    fv.sort(byCpk);
+    var need = FVMIN;
+    for (j=0;j<fv.length && need>0;j++){
+      take = Math.min(room(fv[j]), need);
+      if (take>0){ add(fv[j], take); need -= take; }
+    }
+    // 2) complete-protein floor, cheapest per gram of protein first
+    var cp = [];
+    for (j=0;j<rows.length;j++) if (rows[j].cat==='cp' && rows[j].ppg>0) cp.push(rows[j]);
+    cp.sort(byCpp);
+    var needP = CPMIN;
+    for (j=0;j<cp.length && needP>0;j++){
+      var kpp = cp[j].cpg / cp[j].ppg;
+      take = Math.min(room(cp[j]), needP * kpp);
+      if (take>0){ add(cp[j], take); needP -= take / kpp; }
+    }
+    // 3) fill to 2000 kcal, cheapest calories first
+    var all = rows.slice().sort(byCpk);
+    var rem = TOTAL - tot();
+    for (j=0;j<all.length && rem>0.000001;j++){
+      take = Math.min(room(all[j]), rem);
+      if (take>0){ add(all[j], take); rem -= take; }
+    }
+    // 4) protein repair: move calories from the weakest protein source to the cheapest one with room
+    var guard = 0;
+    while (prot() < PROTMIN && guard < 50){
+      guard++;
+      var deficit = PROTMIN - prot();
+      var recv = null, donor = null;
+      var cands = rows.slice().sort(byCpp);
+      for (j=0;j<cands.length;j++) if (room(cands[j])>0 && cands[j].ppg>0){ recv = cands[j]; break; }
+      if (!recv) break;
+      var rppk = recv.ppg / recv.cpg, best = null;
+      for (j=0;j<rows.length;j++){
+        r = rows[j];
+        if (r.kcal>0 && r.k!==recv.k && (r.ppg/r.cpg)<rppk){
+          if (!best || (r.ppg/r.cpg)<(best.ppg/best.cpg) || ((r.ppg/r.cpg)===(best.ppg/best.cpg) && r.k<best.k)) best = r;
+        }
+      }
+      donor = best;
+      if (!donor) break;
+      var move = Math.min(room(recv), donor.kcal, deficit / (rppk - donor.ppg/donor.cpg));
+      if (move<=0) break;
+      add(recv, move);
+      if (donor.cat==='fat') fatUsed -= move;
+      donor.kcal -= move;
+    }
+    var out = [];
+    for (j=0;j<rows.length;j++) if (rows[j].kcal > 0.01) out.push(rows[j]);
+    out.sort(function(a,b){ return b.kcal - a.kcal || (a.k < b.k ? -1 : 1); });
+    return { menu: out, kcal: tot(), protein: prot() };
+  }
+
+  function amount(r, grams){
+    var g = Math.round(grams);
+    if (!r.kd) return g + ' g';
+    var q = grams / r.kd;
+    q = q >= 10 ? Math.round(q) : Math.round(q*10)/10;
+    var unit = (q === 1) ? r.ku : (PLURAL[r.ku] || r.ku);
+    return 'about ' + q + ' ' + unit + ' (' + g + ' g)';
+  }
+
+  function render(res, weekOf, live){
+    var i, r, h = '', cost = 0, anyRaw = false;
+    for (i=0;i<res.menu.length;i++){
+      r = res.menu[i];
+      var grams = r.kcal / r.cpg;
+      var p = grams * r.ppg;
+      var c = grams * r.pg;
+      cost += c;
+      if (r.raw) anyRaw = true;
+      h += '<tr><td><span class="cd-food">'+esc(r.n)+(r.raw?'*':'')+'</span><span class="cd-amt">'+esc(amount(r, grams))+' <span class="cd-store">from '+esc(r.fs)+'</span></span></td>'+
+           '<td class="cd-r">'+Math.round(r.kcal)+'</td><td class="cd-r">'+(Math.round(p*10)/10)+' g</td><td class="cd-r cd-cost">'+money2(c)+'</td></tr>';
+    }
+    h += '<tr class="cd-tot"><td>The whole day</td><td class="cd-r">'+Math.round(res.kcal)+'</td><td class="cd-r">'+(Math.round(res.protein*10)/10)+' g</td><td class="cd-r">'+money2(cost)+'</td></tr>';
+    document.getElementById('cd-rows').innerHTML = h;
+    document.getElementById('cd-num').textContent = money2(cost);
+    document.getElementById('cd-rawnote').textContent = anyRaw ? '* Raw (uncooked) weight, which is how the store prices it.' : '';
+    document.getElementById('cd-fresh').textContent = live
+      ? ('Computed just now from live prices checked across Omaha stores for the week of ' + weekOf + '.')
+      : ('Computed from our saved Omaha price check for the week of ' + weekOf + '. Live prices did not load.');
+  }
+
+  render(solve(null), CD.week, false);
+
+  try {
+    fetch(FEED_URL).then(function(x){ return x.json(); }).then(function(f){
+      if (f && f.ingredients) render(solve(f.ingredients), f.week_of || CD.week, true);
+    }).catch(function(){});
+  } catch(e){}
+})();
+</script>
+</div>

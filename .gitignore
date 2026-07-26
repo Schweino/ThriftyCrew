@@ -31,6 +31,9 @@
 /grocery/out/url-worklist.json
 /grocery/out/smp-feed.json
 /grocery/out/recipe-board-everyday.bak-*.json
+# rolling local archive of aged out\ snapshots (run-daily-local.ps1 retention moves files in and later
+# deletes them; tracking it would make push-data's `git add -A` commit stale data and churn on every purge)
+/grocery/out/archive/
 # per-item sale-window log (sale price + start/end dates): derived from the board daily, self-heals, not tracked
 /grocery/sale-windows.json
 # local ops-alert triage queue + its drain state: machine-local by design (the cloud runner's copy would be

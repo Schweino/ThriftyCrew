@@ -37,6 +37,19 @@ if ((Get-Date).Day -eq 1) {
     $dst = Join-Path $arch ($lf -replace '\.txt$', "-$stamp.txt")
     if ((Test-Path $src) -and -not (Test-Path $dst)) { Move-Item $src $dst -Force -ErrorAction SilentlyContinue }
   }
+  # ---- OUT RETENTION: daily candidates-*.json snapshots pile up in out\ forever. Keep 30 days hot, ----
+  # park older ones in out\archive (gitignored), drop archived files after 120 days. Non-fatal by design.
+  try {
+    $outDir = Join-Path $root 'out'; $outArch = Join-Path $outDir 'archive'
+    if (-not (Test-Path $outArch)) { New-Item -ItemType Directory -Path $outArch -Force | Out-Null }
+    $aged = @(Get-ChildItem (Join-Path $outDir 'candidates-*.json') -ErrorAction SilentlyContinue |
+      Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-30) })
+    $aged | Move-Item -Destination $outArch -Force -ErrorAction SilentlyContinue
+    $old = @(Get-ChildItem $outArch -File -ErrorAction SilentlyContinue |
+      Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-120) })
+    $old | Remove-Item -Force -ErrorAction SilentlyContinue
+    Log ("out-retention: archived " + $aged.Count + ", purged " + $old.Count)
+  } catch { Log ("out-retention threw: " + $_.Exception.Message) }
   # monthly off-Ghost content backup (read-only; see ghost-export.ps1). Non-fatal: a backup hiccup must
   # never block the day's prices.
   try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'ghost-export.ps1') 2>&1 | ForEach-Object { Log ("ghost-export: " + $_) } } catch { Log ("ghost-export threw: " + $_.Exception.Message) }
