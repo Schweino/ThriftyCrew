@@ -159,8 +159,13 @@ update-recipes-db supports -Replace <slugs> (Remove-RecipeRow then re-add) for s
 ## How to start a run
 
 Tell the session: "start a recipe run for N recipes" (optionally: theme/constraints). The session follows
-this playbook, reuses the r100 pipeline in meal-prep\r100\ (see recipe-r100-expansion memory for the
-engine gotchas: $Matches clobber, rule order), and dispatches stages 3/5/6 to the pinned agents by name.
+this playbook. The BACK half (cost -> manifest -> card -> publish) is the promoted run-agnostic engine
+in meal-prep\engine\ + meal-prep\pipeline\ (takes -Slugs, any size; see recipe-engine memory). The
+FRONT-half stage 2.5-4 scripts (normalize-ingredients / build-final / parse-compute / build-specs /
+spec-guards / update-recipes-db) still live in meal-prep\archive\r300\ and are COPIED per run into the
+run dir until promoted (see recipe-r100/r300 memories for engine gotchas: $Matches clobber, rule order).
+Start every run by generating pipeline\catalog-digest.json (make-catalog-digest.ps1) for the sourcer +
+dedup-selector to read instead of the 3.9 MB recipes-db.json. Dispatch stages 3/5/6 to the pinned agents by name.
 Stage 6's NO-GO blocks publish, full stop. Stage 8 runs UNCONDITIONALLY after every publish of the run
 (and is reusable after any other site publish, not just recipes).
 
