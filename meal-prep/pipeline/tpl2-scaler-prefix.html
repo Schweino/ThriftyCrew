@@ -1,4 +1,4 @@
-<!--SMP-SCALER2--><style>.smp-sc{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+<!--SMP-SCALER2--><style>.smp-sc{margin:1.6rem 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
 .smp-sc h3{font-family:Georgia,serif;color:#16263F;font-size:2rem;margin:0 0 .4rem}
 .smp-sc-sub{color:#64748b;font-size:1.35rem;margin:0 0 1.2rem}
 .smp-sc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:1.2rem}
@@ -10,8 +10,10 @@
 .smp-sc-list li span:last-child{white-space:nowrap;font-weight:600;color:#16263F}
 .smp-sc-note{font-size:1.15rem;color:#8a94a6;margin:1.1rem 0 0;line-height:1.5}
 .smp-sc-saletag{color:#b23b2e;font-weight:700;font-size:1.1rem;text-transform:uppercase;margin-left:6px}
-.smp-ct{margin:0 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
-.smp-ct h2{margin-top:0}
+.smp-ct{margin:2.8rem 0 2.4rem;padding:1.8rem 2rem;background:#F6F1E7;border:1px solid #e5dcc8;border-radius:12px}
+.smp-ct h2{margin:0 0 .8rem}
+.smp-ct-why{margin:0 0 1.4rem}
+.smp-ct-list{margin-top:.4rem}
 .smp-ct-btns{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 1.2rem}
 .smp-ct-btn{flex:1 1 auto;min-width:110px;padding:.7rem .9rem;border-radius:999px;border:2px solid #16263F;background:#fff;color:#16263F;font-size:1.32rem;font-weight:700;cursor:pointer;line-height:1.2}
 .smp-ct-btn.on{background:#16263F;color:#fff}
@@ -43,8 +45,9 @@ function esc(s){ var d=document.createElement('span'); d.textContent=s; return d
 function money(v){ return '$'+v.toFixed(2); }
 function init(box){
   var data=JSON.parse(box.querySelector('.smp-sc-data').textContent);
-  var num=box.querySelector('.smp-sc-num'), list=box.querySelector('.smp-sc-list');
+  var num=box.querySelector('.smp-sc-num');
   var ct=document.querySelector('.smp-ct');
+  var ingUl=document.querySelector('.smp-ing');   // the Ingredients section list - rewritten in place when servings change
   var removed={}, tab='custom';
   function nServ(){ return Math.max(2,Math.min(42,parseInt(num.value)||data.base)); }
   // WHOLE-PACKAGE MODEL: you cannot buy 7.5 tbsp of vinegar. Packages needed = ceil of what the batch
@@ -59,10 +62,12 @@ function init(box){
     if(e&&e.cheapest>0&&it.gpu>0){ return {cost:k*(it.pkg_g/it.gpu)*e.cheapest,live:true,k:k,store:e.store,url:e.url,unit:e.unit,up:e.cheapest,sale:e.type==='sale',cn:e.n}; }
     return {cost:ev,live:false,k:k,fallback:true};
   }
-  function renderScaler(){
+  function renderIngredients(){
+    // No duplicate list in the scaler box: the recipe's own Ingredients section IS the scaled view.
+    if(!ingUl) return;
     var nn=nServ(), f=nn/data.base, html='';
-    data.ing.forEach(function(it){ html+='<li><span>'+esc(it.item)+'</span><span>'+scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'')+'</span></li>'; });
-    list.innerHTML=html;
+    data.ing.forEach(function(it){ html+='<li><strong>'+esc(it.disp||it.item)+':</strong> '+scaleBuy(it.buy,f)+(it.grams?' ('+Math.round(it.grams*f)+' g)':'')+'</li>'; });
+    ingUl.innerHTML=html;
   }
   function renderTabs(){
     if(!ct) return;
@@ -99,7 +104,7 @@ function init(box){
     }
     ct.querySelectorAll('.smp-ct-ck input').forEach(function(cb){ cb.addEventListener('change',function(){ removed[cb.getAttribute('data-i')]=!cb.checked; renderTabs(); }); });
   }
-  function renderAll(){ renderScaler(); renderTabs(); }
+  function renderAll(){ renderIngredients(); renderTabs(); }
   box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); renderAll(); }); });
   num.addEventListener('change',renderAll);
   if(ct){ ct.querySelectorAll('.smp-ct-btn').forEach(function(b){ b.addEventListener('click',function(){ tab=b.getAttribute('data-t'); ct.querySelectorAll('.smp-ct-btn').forEach(function(x){ x.classList.toggle('on',x===b); }); renderTabs(); }); }); }
@@ -113,4 +118,4 @@ function init(box){
 function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
 if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
 })();
-</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">This recipe is written for 14 servings. Change the number and every amount updates, including the cost section below.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><ul class="smp-sc-list"></ul><p class="smp-sc-note">Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">
+</script><div class="smp-sc"><h3>Make it your size</h3><p class="smp-sc-sub">Enter the # of servings and the recipe adapts.</p><div class="smp-sc-row"><b>Servings:</b><button type="button" class="smp-sc-btn" data-d="-1">&minus;</button><input class="smp-sc-num" type="number" min="2" max="42" value="14"><button type="button" class="smp-sc-btn" data-d="1">+</button></div><p class="smp-sc-note">The ingredient list and every cost below update as you change it. Per-serving macros do not change when you scale.</p><script type="application/json" class="smp-sc-data">

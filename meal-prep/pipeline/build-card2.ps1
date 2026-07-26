@@ -42,8 +42,21 @@ function PkgGrams([string]$label,[double]$gpu){
   return 0
 }
 
+# display names (with brand) come from ingredients_display, which build-specs emits in the SAME order
+# as scaler.ing - the payload carries them so the JS can rewrite the Ingredients section when scaling.
+if(@($spec.ingredients_display).Count -ne @($spec.scaler.ing).Count){
+  throw ("display/scaler count mismatch: {0} vs {1} ({2})" -f @($spec.ingredients_display).Count, @($spec.scaler.ing).Count, $spec.slug)
+}
+$dispNames = @()
+foreach($dl in $spec.ingredients_display){
+  $m = [regex]::Match($dl, '^<strong>(.+?):</strong>')
+  if(-not $m.Success){ throw ("cannot parse display name from '{0}' ({1})" -f $dl, $spec.slug) }
+  $dispNames += $m.Groups[1].Value
+}
 $ingParts = @()
+$di = -1
 foreach($ing in $spec.scaler.ing){
+  $di++
   $key = if($ing.PSObject.Properties.Name -contains 'canon' -and $ing.canon){ $ing.canon } else { $ing.item }
   $cl = $clines[$key]
   if(-not $cl){ throw ("no costed line for scaler item '{0}' (slug {1})" -f $key, $spec.slug) }
@@ -58,7 +71,7 @@ foreach($ing in $spec.scaler.ing){
   $chk = [math]::Max(1,[math]::Ceiling([double]$ing.grams / $pkgG))
   if($chk -ne $n){ Write-Warning ("{0}: ceil({1}g/{2}g)={3} but engine bought {4} x {5} - using engine count basis" -f $key,$ing.grams,$pkgG,$chk,$n,$lbl) }
   $pkgP = [math]::Round($c / $n, 4)
-  $p = '{"item":"' + ($ing.item -replace '"','\"') + '","grams":' + [int]$ing.grams + ',"buy":"' + ($ing.buy -replace '"','\"') + '"'
+  $p = '{"item":"' + ($ing.item -replace '"','\"') + '","disp":"' + ($dispNames[$di] -replace '"','\"') + '","grams":' + [int]$ing.grams + ',"buy":"' + ($ing.buy -replace '"','\"') + '"'
   if($ing.PSObject.Properties.Name -contains 'bid' -and $ing.bid){ $p += ',"bid":"' + $ing.bid + '","gpu":' + $ing.gpu }
   $p += ',"pkg_g":' + $pkgG + ',"pkg_p":' + $pkgP + ',"pkg_l":"' + ($lbl -replace '"','\"') + '"}'
   $ingParts += $p
@@ -77,18 +90,18 @@ if($spec.PSObject.Properties.Name -contains 'credit_html' -and $spec.credit_html
 }
 $L.Add($scalerBlock)
 $st = $spec.stat
-$L.Add(('<p><strong>Makes 14 servings &middot; ~{0} cal &middot; {1}g protein &middot; {2}g carbs &middot; {3}g fat &middot; ~${4} per serving.</strong></p>' -f $st.cal,$st.protein,$st.carbs,$st.fat,$st.cost_ps))
+$L.Add(('<p><strong>Makes 14 servings &middot; ~{0} cal &middot; {1}g protein &middot; {2}g carbs &middot; {3}g fat &middot; ~${4} per serving (at everyday cost).</strong></p>' -f $st.cal,$st.protein,$st.carbs,$st.fat,$st.cost_ps))
 $L.Add('')
 $L.Add('<p>' + $spec.intro_html + '</p>')
 $L.Add('')
 $L.Add('<h2>Ingredients</h2>')
-$L.Add('<ul>')
+$L.Add('<ul class="smp-ing">')
 foreach($li in $spec.ingredients_display){ $L.Add('<li>' + $li + '</li>') }
 $L.Add('</ul>')
 $L.Add('')
 # ---- combined cost section (the widget script in the scaler block fills it) ----
 $L.Add('<div class="smp-ct"><h2>What This Batch Costs</h2>')
-$L.Add('<p><em>' + $spec.cost_note_html + '</em></p>')
+$L.Add('<p class="smp-ct-why"><em>' + $spec.cost_note_html + '</em></p>')
 $L.Add('<div class="smp-ct-btns"><button type="button" class="smp-ct-btn on" data-t="custom">Customized pricing</button><button type="button" class="smp-ct-btn" data-t="everyday">Everyday cost</button><button type="button" class="smp-ct-btn" data-t="cheapest">Current cheapest pricing</button></div>')
 $L.Add('<p class="smp-ct-sub"></p>')
 $L.Add('<ul class="smp-ct-list"></ul>')
