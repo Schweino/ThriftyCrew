@@ -1,0 +1,18 @@
+{
+  "readme": "Registry of automations + critical outputs the health-heartbeat.ps1 watches for SILENT DEATH - an automation that stopped being scheduled (deleted/disabled), or an output that quietly went stale, WITHOUT a loud failure. Distinct from local-watchdog (browser-store staleness) and the GitHub Actions failure email (loud cloud failures). Add a new daily automation HERE when you create it. max_age_hours ~30 tolerates a late run + a weekend gap on a daily thing.",
+  "windows_tasks": [
+    { "name": "SMP Grocery Daily Pipeline (local)", "max_age_hours": 30, "why": "daily 8:30 board pull -> compute -> publish -> feed" },
+    { "name": "SMP Bakers Daily Scan",              "max_age_hours": 30, "why": "daily 6:00 Kroger reprice of Baker's", "allow_pending": true },
+    { "name": "SMP Grocery Failure Watchdog",       "max_age_hours": 30, "why": "watches the pipeline for loud failures" },
+    { "name": "SMP Wake For Grocery Agents",        "max_age_hours": 30, "why": "wakes the PC for the 6am browser agents" }
+  ],
+  "output_files": [
+    { "path": "grocery/out/smp-feed.json",             "max_age_hours": 30, "why": "public price feed every card fetches" },
+    { "path": "public/smp-feed.json",                  "max_age_hours": 30, "why": "the SERVED feed (Cloudflare)" },
+    { "path": "public/free-dinners.json",              "max_age_hours": 30, "why": "this week's free-dinner rotation" },
+    { "path": "meal-prep/pipeline/v2-perserving.json", "max_age_hours": 30, "why": "recipe per-serving manifest (top5/rotation read it)" }
+  ],
+  "output_globs": [
+    { "glob": "grocery/out/comparison-*.json", "max_age_hours": 30, "why": "the daily cross-store board" }
+  ]
+}

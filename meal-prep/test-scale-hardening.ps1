@@ -92,5 +92,22 @@ try {
 & powershell -NoProfile -ExecutionPolicy Bypass -File $sr | Out-Null
 Ok 'clean again after restore (exit 0)' ($LASTEXITCODE -eq 0)
 
+# ---- 5. health-heartbeat: healthy live + silent-death negative ----
+Write-Output 'health-heartbeat (silent-death detector):'
+$hb = Join-Path $root 'grocery\health-heartbeat.ps1'
+& powershell -NoProfile -ExecutionPolicy Bypass -File $hb | Out-Null
+Ok 'healthy on live estate (exit 0)' ($LASTEXITCODE -eq 0)
+$cfgF = Join-Path $root 'grocery\expected-automations.json'
+$cfgBak = Get-Content $cfgF -Raw
+try {
+  $c = $cfgBak | ConvertFrom-Json
+  $c.windows_tasks += [pscustomobject]@{ name='SMP Phantom Nonexistent Task'; max_age_hours=30; why='test fixture' }
+  ($c | ConvertTo-Json -Depth 6) | Set-Content $cfgF -Encoding UTF8
+  & powershell -NoProfile -ExecutionPolicy Bypass -File $hb | Out-Null
+  Ok 'flags a deleted/missing task (exit 2)' ($LASTEXITCODE -eq 2)
+} finally { [IO.File]::WriteAllText($cfgF, $cfgBak) }
+& powershell -NoProfile -ExecutionPolicy Bypass -File $hb | Out-Null
+Ok 'healthy again after restore (exit 0)' ($LASTEXITCODE -eq 0)
+
 Write-Output ("`n{0} passed, {1} failed" -f $pass, $fail)
 if ($fail) { exit 1 } else { exit 0 }

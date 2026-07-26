@@ -14,6 +14,12 @@
 $ErrorActionPreference = 'Continue'
 $root = if ($PSScriptRoot) { $PSScriptRoot } else { Split-Path -Parent $MyInvocation.MyCommand.Path }
 $out  = Join-Path $root 'out'
+
+# SILENT-DEATH HEARTBEAT (2026-07-26): run the automation/output health check FIRST, unconditionally, so it
+# fires on every watchdog invocation regardless of the browser-store outcome below (which exits early when
+# fresh). This watchdog has its own independent WakeToRun trigger, so it is the right place to run a check
+# that must not depend on the pipeline it watches. It self-alerts + de-dupes; we only surface a log line.
+try { & powershell -ExecutionPolicy Bypass -File (Join-Path $root 'health-heartbeat.ps1') -Alert | ForEach-Object { Write-Output ('heartbeat: ' + $_) } } catch { Write-Output ('heartbeat threw: ' + $_.Exception.Message) }
 function NewestAgeDays($globs) {
   $m = $null
   foreach ($g in $globs) {
