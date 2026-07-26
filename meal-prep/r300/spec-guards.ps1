@@ -31,6 +31,8 @@ $db = (Get-Content (Join-Path $here '..\food-macros-db.json') -Raw | ConvertFrom
 $dbm=@{}; foreach($i in $db){ $dbm[$i.item]=$i }
 $computed = Get-Content (Join-Path $here 'recipes-computed.json') -Raw | ConvertFrom-Json
 $compIdx=@{}; foreach($r in $computed){ $compIdx[[string]$r.slug]=$r }
+# the single recipe genuinely at protein rank #1 - the only one allowed an unscoped batch-primacy claim
+$rank1Slug = ($computed | Sort-Object { [double]$_.per_serving.protein_g } -Descending | Select-Object -First 1).slug
 $liveSlugs=@{}
 foreach($m in [regex]::Matches([IO.File]::ReadAllText((Join-Path $here '..\recipes-db.json')), '"slug"\s*:\s*"([^"]+)"')){ $liveSlugs[$m.Groups[1].Value]=1 }
 $runSlugs=@{}
@@ -327,6 +329,26 @@ foreach($sf in $specs){
     foreach($s in $readerStr){
       if(-not $s){ continue }
       if($s -match ('(?i)' + [regex]::Escape([string]$bad))){ Fail $slug ("forbidden term '" + $bad + "' present: " + $s.Substring(0,[Math]::Min(80,$s.Length))); break }
+    }
+  }
+
+  # ---------- stale superlative-protein claim ----------
+  # The fix-pass re-costing changed protein numbers; the auto-sync re-anchors NUMBERS but not CLAIMS,
+  # so a prose "the highest/most/biggest protein in the batch" can outlive its truth (turkey-taco was
+  # claiming it at rank #58). Only the actual protein rank-#1 recipe may assert unscoped batch-primacy.
+  # Scoped claims ("highest protein SOUP", "in the BEEF half") are exempt - a subset noun in the gap
+  # means it is a subset claim, which the guard cannot verify and does not police.
+  if(-not $Skeleton -and $slug -ne $rank1Slug){
+    # absolute-primacy only: "the/second highest protein ... batch". The softened TRUE forms
+    # ("one of the highest", "among the highest") are allowed via negative lookbehind.
+    $primacyRx = '(?i)(?<!one of )(?<!among )\b(?:the|second)\s+(?:highest|most|biggest)\s+protein\b[^.<"]{0,28}?\b(?:batch|collection|page|group|lineup|library|section)\b'
+    $subsetRx  = '(?i)\b(?:soup|stew|chili|bowl|bake|casserole|skillet|noodle|beef|chicken|pork|turkey|half)\b'
+    foreach($s in $readerStr){
+      if(-not $s){ continue }
+      foreach($mm in [regex]::Matches([string]$s, $primacyRx)){
+        if($mm.Value -match $subsetRx){ continue }
+        Fail $slug ("stale superlative: '" + $mm.Value.Trim() + "' but this is not the batch protein rank #1 (" + $rank1Slug + ")")
+      }
     }
   }
 
