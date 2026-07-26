@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-26T06:13:32",
-    "week_of":  "2026-07-25",
+    "generated":  "2026-07-26T09:12:20",
+    "week_of":  "2026-07-26",
     "ingredient_count":  530,
     "recipe_count":  513,
     "ingredients":  {
@@ -13,12 +13,12 @@
                                                  "n":  7,
                                                  "stores":  {
                                                                 "Sam\u0027s Club":  5.56,
-                                                                "Fareway":  5.99,
                                                                 "Aldi":  5.99,
+                                                                "Fareway":  5.99,
+                                                                "Family Fare":  6.49,
                                                                 "Walmart":  6.6325,
                                                                 "Baker\u0027s":  6.6667,
-                                                                "Hy-Vee":  6.99,
-                                                                "Family Fare":  7.33
+                                                                "Hy-Vee":  6.99
                                                             }
                                              },
                         "ground-beef-93-7":  {
@@ -285,8 +285,8 @@
                                                         "Walmart":  0.58,
                                                         "Aldi":  0.59,
                                                         "Baker\u0027s":  0.9975,
+                                                        "Family Fare":  1,
                                                         "Sam\u0027s Club":  1.026,
-                                                        "Family Fare":  1.39,
                                                         "Fareway":  1.5
                                                     }
                                      },
@@ -364,8 +364,8 @@
                                       "stores":  {
                                                      "Walmart":  3.96,
                                                      "Hy-Vee":  3.97,
-                                                     "Aldi":  3.99,
                                                      "Baker\u0027s":  3.99,
+                                                     "Aldi":  3.99,
                                                      "Sam\u0027s Club":  3.992,
                                                      "Fareway":  4.99,
                                                      "Family Fare":  5.495
@@ -491,10 +491,10 @@
                                          "n":  5,
                                          "stores":  {
                                                         "Sam\u0027s Club":  0.549,
-                                                        "Baker\u0027s":  0.5988,
                                                         "Hy-Vee":  1,
                                                         "Fareway":  1.23,
-                                                        "Walmart":  1.2425
+                                                        "Walmart":  1.2425,
+                                                        "Baker\u0027s":  2.43
                                                     }
                                      },
                         "dried-basil":  {
@@ -621,8 +621,8 @@
                                                             "Aldi":  0.83,
                                                             "Walmart":  0.86,
                                                             "Baker\u0027s":  0.99,
-                                                            "Fareway":  1.17,
-                                                            "Family Fare":  1.6667
+                                                            "Family Fare":  1,
+                                                            "Fareway":  1.17
                                                         }
                                          },
                         "berbere-seasoning":  {
@@ -716,20 +716,21 @@
                                                  },
                         "blueberries":  {
                                             "unit":  "oz",
-                                            "cheapest":  0.2312,
-                                            "store":  "Aldi",
-                                            "type":  "everyday",
-                                            "url":  "",
+                                            "cheapest":  0.1786,
+                                            "store":  "Family Fare",
+                                            "type":  "sale",
+                                            "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/berries/flavor_ripe_blueberries_18_oz/p/2341070",
                                             "n":  7,
                                             "stores":  {
+                                                           "Family Fare":  0.1786,
                                                            "Aldi":  0.2312,
                                                            "Sam\u0027s Club":  0.2594,
                                                            "Baker\u0027s":  0.2772,
                                                            "Fareway":  0.3123,
-                                                           "Family Fare":  0.3883,
                                                            "Hy-Vee":  0.4455,
                                                            "Walmart":  0.48
-                                                       }
+                                                       },
+                                            "sale_end":  "2026-08-01"
                                         },
                         "lotion":  {
                                        "unit":  "floz",
@@ -759,8 +760,8 @@
                                                          "Walmart":  0.165,
                                                          "Aldi":  0.1695,
                                                          "Sam\u0027s Club":  0.1827,
-                                                         "Baker\u0027s":  0.1828,
                                                          "Hy-Vee":  0.3106,
+                                                         "Baker\u0027s":  0.3283,
                                                          "Family Fare":  0.4995
                                                      }
                                       },
@@ -910,7 +911,7 @@
                                                         "Aldi":  2.15,
                                                         "Fareway":  2.2629,
                                                         "Baker\u0027s":  2.49,
-                                                        "Family Fare":  2.99
+                                                        "Family Fare":  3.69
                                                     }
                                      },
                         "brown-gravy-mix":  {
@@ -1316,7 +1317,7 @@
                                                             "Baker\u0027s":  0.0667,
                                                             "Sam\u0027s Club":  0.0708,
                                                             "Walmart":  0.079,
-                                                            "Hy-Vee":  0.0941
+                                                            "Hy-Vee":  0.0887
                                                         }
                                          },
                         "canned-peaches":  {
@@ -1455,8 +1456,8 @@
                                                            "Baker\u0027s":  0.1908,
                                                            "Walmart":  0.192,
                                                            "Fareway":  0.194,
-                                                           "Family Fare":  0.2,
-                                                           "Sam\u0027s Club":  0.3245
+                                                           "Sam\u0027s Club":  0.3245,
+                                                           "Family Fare":  0.598
                                                        }
                                         },
                         "canned-white-beans":  {
@@ -1501,7 +1502,7 @@
                                                           "Aldi":  1.99,
                                                           "Walmart":  2.69,
                                                           "Baker\u0027s":  3,
-                                                          "Family Fare":  3.99,
+                                                          "Family Fare":  4.99,
                                                           "Hy-Vee":  4.99
                                                       },
                                            "sale_end":  "2026-07-28"
@@ -1531,7 +1532,7 @@
                                                        "Hy-Vee":  0.995,
                                                        "Aldi":  0.995,
                                                        "Baker\u0027s":  0.998,
-                                                       "Family Fare":  1.145,
+                                                       "Family Fare":  1,
                                                        "Fareway":  1.245
                                                    }
                                     },
@@ -1615,14 +1616,14 @@
                                    },
                         "charcoal":  {
                                          "unit":  "lb",
-                                         "cheapest":  0.6831,
-                                         "store":  "Walmart",
+                                         "cheapest":  0.5838,
+                                         "store":  "Baker\u0027s",
                                          "type":  "everyday",
-                                         "url":  "https://www.walmart.com/ip/Kingsford-Original-Charcoal-Briquettes-BBQ-Charcoal-for-Grilling-16-Pounds/987796704",
+                                         "url":  "https://www.bakersplus.com/p/kroger-ridged-charcoal-briquettes-original-15-4-lb/0004126037327",
                                          "n":  4,
                                          "stores":  {
+                                                        "Baker\u0027s":  0.5838,
                                                         "Walmart":  0.6831,
-                                                        "Baker\u0027s":  0.7494,
                                                         "Hy-Vee":  0.8169,
                                                         "Fareway":  0.9925
                                                     }
@@ -1668,12 +1669,11 @@
                                          "store":  "Baker\u0027s",
                                          "type":  "everyday",
                                          "url":  "https://www.bakersplus.com/p/fresh-red-cherries-in-bag/0000000004045",
-                                         "n":  7,
+                                         "n":  6,
                                          "stores":  {
                                                         "Baker\u0027s":  1.99,
                                                         "Aldi":  2.49,
                                                         "Walmart":  2.5,
-                                                        "Family Fare":  2.77,
                                                         "Sam\u0027s Club":  2.94,
                                                         "Fareway":  4.99,
                                                         "Hy-Vee":  5.99
@@ -1904,12 +1904,12 @@
                                             "n":  7,
                                             "stores":  {
                                                            "Sam\u0027s Club":  6.64,
-                                                           "Family Fare":  7.3267,
                                                            "Walmart":  7.97,
                                                            "Aldi":  7.99,
                                                            "Fareway":  8.88,
                                                            "Hy-Vee":  8.99,
-                                                           "Baker\u0027s":  10.99
+                                                           "Baker\u0027s":  10.99,
+                                                           "Family Fare":  10.99
                                                        }
                                         },
                         "cilantro":  {
@@ -2063,7 +2063,7 @@
                                                               "Walmart":  0.0891,
                                                               "Fareway":  0.1212,
                                                               "Hy-Vee":  0.1244,
-                                                              "Family Fare":  0.125,
+                                                              "Family Fare":  0.1653,
                                                               "Sam\u0027s Club":  0.233
                                                           },
                                                "sale_end":  "2026-07-28"
@@ -2098,7 +2098,7 @@
                                                        "Aldi":  0.1992,
                                                        "Walmart":  0.2609,
                                                        "Hy-Vee":  0.2677,
-                                                       "Family Fare":  0.3069
+                                                       "Family Fare":  0.3071
                                                    }
                                     },
                         "cooking-spray":  {
@@ -2155,9 +2155,9 @@
                                           "n":  5,
                                           "stores":  {
                                                          "Baker\u0027s":  0.4994,
+                                                         "Hy-Vee":  0.8067,
                                                          "Walmart":  0.8067,
                                                          "Fareway":  0.8317,
-                                                         "Hy-Vee":  0.8317,
                                                          "Family Fare":  1.49
                                                      }
                                       },
@@ -2180,16 +2180,16 @@
                                             },
                         "corned-beef-brisket":  {
                                                     "unit":  "lb",
-                                                    "cheapest":  4.9968,
-                                                    "store":  "Walmart",
+                                                    "cheapest":  3.1544,
+                                                    "store":  "Hy-Vee",
                                                     "type":  "everyday",
                                                     "url":  "",
                                                     "n":  4,
                                                     "stores":  {
+                                                                   "Hy-Vee":  3.1544,
                                                                    "Walmart":  4.9968,
                                                                    "Baker\u0027s":  6.99,
-                                                                   "Family Fare":  7.49,
-                                                                   "Hy-Vee":  8.9895
+                                                                   "Family Fare":  7.49
                                                                }
                                                 },
                         "corned-beef-hash":  {
@@ -2314,10 +2314,10 @@
                                              "stores":  {
                                                             "Sam\u0027s Club":  0.1381,
                                                             "Walmart":  0.1856,
-                                                            "Fareway":  0.1862,
                                                             "Aldi":  0.1862,
+                                                            "Fareway":  0.1862,
                                                             "Baker\u0027s":  0.2056,
-                                                            "Family Fare":  0.2217,
+                                                            "Family Fare":  0.2494,
                                                             "Hy-Vee":  0.3113
                                                         }
                                          },
@@ -2428,11 +2428,11 @@
                                           "n":  7,
                                           "stores":  {
                                                          "Sam\u0027s Club":  0.9985,
-                                                         "Baker\u0027s":  1.15,
                                                          "Fareway":  1.3423,
                                                          "Aldi":  1.3533,
                                                          "Walmart":  1.65,
                                                          "Hy-Vee":  1.9192,
+                                                         "Baker\u0027s":  2.2475,
                                                          "Family Fare":  3.8423
                                                      }
                                       },
@@ -2966,8 +2966,8 @@
                                          "stores":  {
                                                         "Aldi":  0.1056,
                                                         "Walmart":  0.1081,
+                                                        "Hy-Vee":  0.1212,
                                                         "Fareway":  0.1244,
-                                                        "Hy-Vee":  0.1244,
                                                         "Baker\u0027s":  0.1244
                                                     }
                                      },
@@ -3047,7 +3047,7 @@
                                                            "Hy-Vee":  0.0817,
                                                            "Baker\u0027s":  0.0915,
                                                            "Fareway":  0.12,
-                                                           "Family Fare":  0.139
+                                                           "Family Fare":  0.125
                                                        }
                                         },
                         "frozen-fries":  {
@@ -3169,13 +3169,12 @@
                                              "store":  "Hy-Vee",
                                              "type":  "sale",
                                              "url":  "",
-                                             "n":  7,
+                                             "n":  6,
                                              "stores":  {
                                                             "Hy-Vee":  2.22,
                                                             "Aldi":  2.99,
                                                             "Fareway":  3.33,
                                                             "Baker\u0027s":  3.3333,
-                                                            "Family Fare":  3.6667,
                                                             "Sam\u0027s Club":  3.9933,
                                                             "Walmart":  4.82
                                                         },
@@ -3622,9 +3621,10 @@
                                             "store":  "Sam\u0027s Club",
                                             "type":  "everyday",
                                             "url":  "https://www.samsclub.com/ip/13709709989",
-                                            "n":  6,
+                                            "n":  7,
                                             "stores":  {
                                                            "Sam\u0027s Club":  2.98,
+                                                           "Baker\u0027s":  2.99,
                                                            "Fareway":  2.99,
                                                            "Aldi":  3.29,
                                                            "Walmart":  3.41,
@@ -4440,7 +4440,7 @@
                                                               "Sam\u0027s Club":  0.8311,
                                                               "Baker\u0027s":  0.898,
                                                               "Walmart":  0.976,
-                                                              "Family Fare":  2.995
+                                                              "Family Fare":  1
                                                           }
                                            },
                         "mangoes":  {
@@ -4662,8 +4662,8 @@
                                                          "Walmart":  0.2362,
                                                          "Fareway":  0.2488,
                                                          "Hy-Vee":  0.2488,
-                                                         "Family Fare":  0.25,
-                                                         "Baker\u0027s":  0.25
+                                                         "Baker\u0027s":  0.25,
+                                                         "Family Fare":  0.3113
                                                      }
                                       },
                         "ground-nutmeg":  {
@@ -4979,8 +4979,8 @@
                                                      "Aldi":  0.0591,
                                                      "Walmart":  0.0606,
                                                      "Fareway":  0.0619,
+                                                     "Family Fare":  0.0625,
                                                      "Baker\u0027s":  0.0625,
-                                                     "Family Fare":  0.0778,
                                                      "Hy-Vee":  0.0793
                                                  }
                                   },
@@ -5206,13 +5206,12 @@
                                       "store":  "Aldi",
                                       "type":  "everyday",
                                       "url":  "https://www.aldi.us/store/aldi/products/16631392-plum-bag-2-lbs",
-                                      "n":  6,
+                                      "n":  5,
                                       "stores":  {
                                                      "Aldi":  1.49,
                                                      "Sam\u0027s Club":  1.9886,
                                                      "Baker\u0027s":  2.6633,
                                                      "Walmart":  2.74,
-                                                     "Family Fare":  2.99,
                                                      "Hy-Vee":  2.99
                                                  }
                                   },
@@ -5283,11 +5282,11 @@
                                            "stores":  {
                                                           "Sam\u0027s Club":  2.52,
                                                           "Aldi":  2.69,
+                                                          "Family Fare":  2.995,
                                                           "Walmart":  3.27,
                                                           "Hy-Vee":  3.96,
                                                           "Baker\u0027s":  3.99,
-                                                          "Fareway":  3.99,
-                                                          "Family Fare":  4.79
+                                                          "Fareway":  3.99
                                                       }
                                        },
                         "pork-shoulder":  {
@@ -5296,14 +5295,13 @@
                                               "store":  "Fareway",
                                               "type":  "everyday",
                                               "url":  "https://shop.fareway.com/store/fareway-meat-grocery/products/84388665-whole-boston-butt-1-each",
-                                              "n":  7,
+                                              "n":  6,
                                               "stores":  {
                                                              "Fareway":  1.88,
                                                              "Sam\u0027s Club":  1.98,
                                                              "Baker\u0027s":  1.99,
                                                              "Hy-Vee":  1.99,
                                                              "Aldi":  2.99,
-                                                             "Family Fare":  3.3267,
                                                              "Walmart":  3.57
                                                          }
                                           },
@@ -5365,8 +5363,8 @@
                                                   "stores":  {
                                                                  "Walmart":  1.3133,
                                                                  "Family Fare":  2.2029,
-                                                                 "Baker\u0027s":  3.1038,
-                                                                 "Hy-Vee":  4.7571
+                                                                 "Hy-Vee":  2.7667,
+                                                                 "Baker\u0027s":  3.1038
                                                              }
                                               },
                         "powdered-sugar":  {
@@ -5580,15 +5578,15 @@
                                    },
                         "red-onion":  {
                                           "unit":  "lb",
-                                          "cheapest":  1.2824,
-                                          "store":  "Hy-Vee",
+                                          "cheapest":  1.33,
+                                          "store":  "Baker\u0027s",
                                           "type":  "everyday",
                                           "url":  "",
                                           "n":  4,
                                           "stores":  {
-                                                         "Hy-Vee":  1.2824,
                                                          "Baker\u0027s":  1.33,
                                                          "Walmart":  1.34,
+                                                         "Hy-Vee":  1.5059,
                                                          "Family Fare":  1.99
                                                      }
                                       },
@@ -5770,8 +5768,8 @@
                                                                "Aldi":  0.399,
                                                                "Sam\u0027s Club":  0.456,
                                                                "Hy-Vee":  0.49,
-                                                               "Family Fare":  0.498,
                                                                "Baker\u0027s":  0.5,
+                                                               "Family Fare":  0.549,
                                                                "Walmart":  0.568,
                                                                "Fareway":  0.598
                                                            }
@@ -5845,12 +5843,13 @@
                                                  "store":  "Aldi",
                                                  "type":  "everyday",
                                                  "url":  "https://www.aldi.us/store/aldi/products/20114967-benton-s-vanilla-sandwich-creme-cookies-25-oz",
-                                                 "n":  5,
+                                                 "n":  6,
                                                  "stores":  {
                                                                 "Aldi":  0.11,
                                                                 "Fareway":  0.1112,
                                                                 "Baker\u0027s":  0.1116,
                                                                 "Walmart":  0.2656,
+                                                                "Family Fare":  0.2795,
                                                                 "Hy-Vee":  0.3325
                                                             }
                                              },
@@ -6032,12 +6031,11 @@
                                                  "store":  "Hy-Vee",
                                                  "type":  "everyday",
                                                  "url":  "https://www.hy-vee.com/aisles-online/p/444508/hy-vee-sloppy-joe-sauce",
-                                                 "n":  5,
+                                                 "n":  4,
                                                  "stores":  {
                                                                 "Hy-Vee":  0.066,
                                                                 "Walmart":  0.0931,
                                                                 "Baker\u0027s":  0.0994,
-                                                                "Family Fare":  0.1,
                                                                 "Fareway":  0.1019
                                                             }
                                              },
@@ -6077,11 +6075,11 @@
                                      "n":  7,
                                      "stores":  {
                                                     "Hy-Vee":  0.0185,
+                                                    "Family Fare":  0.0237,
                                                     "Aldi":  0.0263,
                                                     "Baker\u0027s":  0.0312,
                                                     "Fareway":  0.0345,
                                                     "Sam\u0027s Club":  0.0439,
-                                                    "Family Fare":  0.0516,
                                                     "Walmart":  0.0521
                                                 },
                                      "sale_end":  "2026-07-26"
@@ -6163,7 +6161,7 @@
                                               "n":  7,
                                               "stores":  {
                                                              "Sam\u0027s Club":  0.0333,
-                                                             "Family Fare":  0.0374,
+                                                             "Family Fare":  0.0357,
                                                              "Baker\u0027s":  0.0485,
                                                              "Walmart":  0.0485,
                                                              "Aldi":  0.0493,
@@ -6195,7 +6193,7 @@
                                                             "Aldi":  0.1181,
                                                             "Walmart":  0.1475,
                                                             "Fareway":  0.1869,
-                                                            "Family Fare":  0.1875,
+                                                            "Family Fare":  0.2494,
                                                             "Hy-Vee":  0.2494
                                                         }
                                          },
@@ -6646,7 +6644,7 @@
                                                         "Baker\u0027s":  1.49,
                                                         "Sam\u0027s Club":  1.6567,
                                                         "Walmart":  1.9694,
-                                                        "Family Fare":  1.99
+                                                        "Family Fare":  2.29
                                                     }
                                      },
                         "toothbrushes":  {
@@ -6906,7 +6904,7 @@
                                               "stores":  {
                                                              "Walmart":  1.32,
                                                              "Baker\u0027s":  1.49,
-                                                             "Family Fare":  1.79,
+                                                             "Family Fare":  1.69,
                                                              "Aldi":  1.8107,
                                                              "Hy-Vee":  2.19,
                                                              "Fareway":  2.49
@@ -6915,13 +6913,13 @@
                         "watermelon":  {
                                            "unit":  "each",
                                            "cheapest":  4.65,
-                                           "store":  "Aldi",
+                                           "store":  "Walmart",
                                            "type":  "everyday",
-                                           "url":  "https://www.aldi.us/store/aldi/products/3115037-seedless-watermelon-each",
+                                           "url":  "https://www.walmart.com/ip/Fresh-Seedless-Watermelon-Each/44391101",
                                            "n":  6,
                                            "stores":  {
-                                                          "Aldi":  4.65,
                                                           "Walmart":  4.65,
+                                                          "Aldi":  4.65,
                                                           "Hy-Vee":  4.99,
                                                           "Baker\u0027s":  4.99,
                                                           "Family Fare":  5.99,
@@ -7029,10 +7027,10 @@
                                          "stores":  {
                                                         "Aldi":  1.39,
                                                         "Walmart":  1.52,
-                                                        "Family Fare":  1.79,
                                                         "Baker\u0027s":  1.79,
-                                                        "Fareway":  1.99,
-                                                        "Hy-Vee":  1.99
+                                                        "Family Fare":  1.99,
+                                                        "Hy-Vee":  1.99,
+                                                        "Fareway":  1.99
                                                     }
                                      },
                         "93-7-ground-turkey":  {
@@ -7238,7 +7236,7 @@
                                                             "Baker\u0027s":  0.1341,
                                                             "Sam\u0027s Club":  0.1556,
                                                             "Hy-Vee":  0.1838,
-                                                            "Family Fare":  0.3566
+                                                            "Family Fare":  0.1887
                                                         }
                                          },
                         "green-beans":  {
@@ -7284,7 +7282,7 @@
                                                                     "Aldi":  4.59,
                                                                     "Hy-Vee":  4.99,
                                                                     "Baker\u0027s":  7.9867,
-                                                                    "Family Fare":  6.6533
+                                                                    "Family Fare":  7.99
                                                                 }
                                                  },
                         "honey-dijon-mustard":  {
@@ -7375,9 +7373,9 @@
                                                       "Aldi":  0.44,
                                                       "Sam\u0027s Club":  0.45,
                                                       "Hy-Vee":  0.49,
-                                                      "Family Fare":  0.498,
                                                       "Baker\u0027s":  0.6,
-                                                      "Walmart":  0.88
+                                                      "Walmart":  0.88,
+                                                      "Family Fare":  0.99
                                                   }
                                    },
                         "provolone-cheese":  {
@@ -7480,8 +7478,8 @@
                                                                "Sam\u0027s Club":  0.17,
                                                                "Aldi":  0.22,
                                                                "Walmart":  0.236,
-                                                               "Family Fare":  0.25,
                                                                "Baker\u0027s":  0.25,
+                                                               "Family Fare":  0.32,
                                                                "Hy-Vee":  0.54
                                                            }
                                             },

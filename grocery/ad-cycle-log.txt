@@ -1254,3 +1254,141 @@
 [2026-07-25T09:27:51] store-coverage OK - every staple commodity shows all 7 stores
 [2026-07-25T09:27:51] notify-item-added: notify-item-added: no new commodities, empty queue - nothing to do
 [2026-07-25T09:27:51] run complete; flips=0
+[2026-07-26T08:31:04] pull attempt 1 ok=True
+[2026-07-26T08:40:06] FF everyday refreshed
+[2026-07-26T08:54:08] Hy-Vee everyday refreshed (current shelf price, Omaha #01)
+[2026-07-26T09:03:01] Baker's everyday+promo refreshed via Kroger API (Saddlecreek) + link snapshots synced
+[2026-07-26T09:03:02] Hy-Vee link snapshots refreshed
+[2026-07-26T09:06:15] NEW AD Family Fare 2026-07-26..2026-08-01
+[2026-07-26T09:06:15] DUE-CHROME Fareway
+[2026-07-26T09:11:22] coverage-gaps: 37 store(s) carry an item but are off the board - bread @ Family Fare; paper-towels @ Sam's Club; toilet-paper @ Sam's Club; cantaloupe @ Fareway; honeydew @ Fareway; pineapple @ Baker's; cauliflower @ Baker's; jalapenos @ Family Fare; pork-tenderloin @ Baker's; rotisserie-chicken @ Baker's; rotisserie-chicken @ Sam's Club; canned-chicken @ Baker's; egg-whites @ Family Fare; chocolate-milk @ Family Fare; cake-mix @ Baker's; brownie-mix @ Baker's; pickles @ Family Fare; tomato-soup @ Sam's Club; breakfast-sandwiches @ Hy-Vee; tater-tots @ Baker's; garlic-bread @ Hy-Vee; sponges @ Baker's; air-freshener @ Sam's Club; toothpaste @ Sam's Club; mouthwash @ Family Fare; cranberry-sauce @ Fareway; mandarin-oranges @ Sam's Club; onion-soup-mix @ Fareway; five-spice-powder @ Baker's; refrigerated-biscuits @ Aldi; poblano-peppers @ Family Fare; eggplant @ Hy-Vee; doubanjiang @ Hy-Vee; doubanjiang @ Fareway; doubanjiang @ Baker's; doubanjiang @ Walmart; snow-peas @ Family Fare
+[2026-07-26T09:11:24] coverage-gap alert sent
+[2026-07-26T09:11:56] match-soundness: match-soundness: MOVED=10  DROPPED=11  new-contested=22  drift-vs-engine=0
+[2026-07-26T09:11:56] match-soundness:   DROPPED  tomatoes-green-chilies  ->  <unmatched>   'Buns, Hamburger Rotella's Italian Bakery'
+[2026-07-26T09:11:56] match-soundness:   DROPPED  tomatoes-green-chilies  ->  <unmatched>   'Rotella's Italian Brat Buns'
+[2026-07-26T09:11:56] match-soundness:   DROPPED  tomatoes  ->  <unmatched>   'Fresh Grape Tomato, 10 oz Package'
+[2026-07-26T09:11:56] match-soundness:   DROPPED  tomatoes  ->  <unmatched>   'Bushel Boy Cherry On The Vine Tomatoes'
+[2026-07-26T09:11:56] match-soundness:   DROPPED  salsa  ->  <unmatched>   'Fresh Salsa Hatch Pepper Avocado'
+[2026-07-26T09:11:56] match-soundness:   DROPPED  salsa  ->  <unmatched>   'Fresh & Finest By Our Family Salsa Avocado'
+[2026-07-26T09:11:56] match-soundness:   DROPPED  salsa  ->  <unmatched>   'Herdez Guacamole Salsa Mild'
+[2026-07-26T09:11:56] match-soundness:   DROPPED  salsa  ->  <unmatched>   'Fresh & Finest By Our Family Salsa, Avocado Dragon, Medium 10 Oz'
+[2026-07-26T09:11:56] match-soundness:   DROPPED  tomatoes-green-chilies  ->  <unmatched>   'Buns, Hot Dog Rotella's Italian Bakery'
+[2026-07-26T09:11:56] match-soundness:   DROPPED  salsa  ->  <unmatched>   'WHOLLY Guacamole Avocado Verde Salsa 10 oz'
+[2026-07-26T09:11:56] match-soundness:   DROPPED  tomatoes-green-chilies  ->  <unmatched>   'Rotella's Italian Bakery Hoagies Buns'
+[2026-07-26T09:11:56] match-soundness:   MOVED    tomatoes -> cherry-tomatoes   'Red Cherry Tomatoes on the Vine'
+[2026-07-26T09:11:56] match-soundness:   MOVED    tomatoes -> cherry-tomatoes   'Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.'
+[2026-07-26T09:11:56] match-soundness:   MOVED    tomatoes -> cherry-tomatoes   'Grape Tomatoes Our Family'
+[2026-07-26T09:11:56] match-soundness:   MOVED    tomatoes -> cherry-tomatoes   'NatureSweet Cherubs Fresh Heavenly Salad Grape Tomatoes, 10 oz'
+[2026-07-26T09:11:56] match-soundness:   MOVED    tomatoes -> cherry-tomatoes   'Sunset Flavor Rocks Grape Tomatoes On The Vine 12 Oz'
+[2026-07-26T09:11:56] match-soundness:   MOVED    bread -> rye-bread   'S. Rosen's Party Entertainers Caraway Rye Bread'
+[2026-07-26T09:11:56] match-soundness:   MOVED    tomatoes -> cherry-tomatoes   'Private Selection Platinum Rows Cherry Tomatoes on the Vine'
+[2026-07-26T09:11:56] match-soundness:   MOVED    tomatoes -> cherry-tomatoes   'Private Selection Ruby Rows Fresh Cherry Tomatoes on the Vine'
+[2026-07-26T09:11:56] match-soundness:   MOVED    soy-sauce -> sweet-soy-sauce   'Kikkoman Gluten-Free Sweet Soy Sauce for Rice'
+[2026-07-26T09:11:56] match-soundness:   MOVED    tomatoes -> cherry-tomatoes   'Kroger Fresh Grape Tomatoes'
+[2026-07-26T09:11:56] match-soundness:   new-contested (order-dependence to review): Applegate Naturals Chicken Sausage, Red Pepper, Onions and Spinach Frittata Bites, 19g of Protein | BelGioioso Ricotta Con Latte Whole Milk | Birds Eye Mixed Vegetables 10 Oz | Colorado Premium's Fresh Corned Beef Brisket Flat, 2.0- 4.25 lb | Fresh Orange Bell Pepper | Genova Premium Yellowfin Tuna in Olive Oil | Inglehoffer Cream Style Horseradish 9.5 oz | Inglehoffer Thick-n-Creamy Horseradish3.75 oz | Kraft Monterey Jack Caramelized Onion Mac & Cheese Macaroni and Cheese Dinner, Box | Kraft Parmesan Pesto Mac & Cheese Macaroni and Cheese Dinner, Box | Kroger Herb and Garlic Marinade | Kroger No Sugar Added Assorted Strawberry Applesauce Pouches | Lay's Honey Barbecue Potato Chips | OREO CHIPS AHOY! Nutter Butter RITZ Bits Cookies & Crackers Variety Pack | Pacific Foods Organic Chicken Bone Broth With Sea Salt | Private Selection Black Forest Ham Egg and Cheddar Cheese Everything Bagel Breakfast Sandwich | Private Selection Lemon Herb Chicken Thigh | ROTEL Hot Diced Tomatoes with Habaneros | Spinach Ricotta Chicken Griller | Swiss Miss Milk Chocolate Hot Cocoa K-Cup 10 CT | Tasty Bite Sauteed Eggplant & Tomatoes 10oz Eggplant and Tomato Curry | Traeger Grills Pork and Poultry Rub with Apple & Honey
+[2026-07-26T09:11:58] category-coverage: category-coverage: OK  all 453 commodities are in exactly one of 16 categories
+[2026-07-26T09:11:59] sale-fallback: 3 on-sale cell(s) with no everyday fallback - bell-peppers @ Family Fare; cantaloupe @ Aldi; sandwich-cookies @ Family Fare
+[2026-07-26T09:12:00] sale-fallback alert sent
+[2026-07-26T09:12:01] sale-windows refreshed
+[2026-07-26T09:12:05] recipe-overlay applied
+[2026-07-26T09:12:08] top5-weekly refreshed
+[2026-07-26T09:12:09] free-rotation: rotation: board-week=2026-07-26  target free set = 20 recipe(s)
+[2026-07-26T09:12:09] free-rotation:   chicken #1  $1.33/srv  chicken-bulgogi-rice-bowls
+[2026-07-26T09:12:09] free-rotation:   chicken #2  $1.53/srv  claypot-chicken-mushroom-rice
+[2026-07-26T09:12:09] free-rotation:   chicken #3  $1.61/srv  nigerian-chicken-suya-bowls
+[2026-07-26T09:12:09] free-rotation:   chicken #4  $1.64/srv  vietnamese-ginger-chicken-ga-kho-gung
+[2026-07-26T09:12:09] free-rotation:   chicken #5  $1.68/srv  chicken-40-cloves-garlic
+[2026-07-26T09:12:09] free-rotation:   turkey  #1  $1.73/srv  red-beans-turkey-sausage-and-rice
+[2026-07-26T09:12:09] free-rotation:   turkey  #2  $1.76/srv  turkey-maqluba-upside-down-rice-bake
+[2026-07-26T09:12:09] free-rotation:   turkey  #3  $1.90/srv  turkey-alfredo-rotini-bake
+[2026-07-26T09:12:09] free-rotation:   turkey  #4  $1.90/srv  turkey-egg-roll-in-a-bowl-over-rice
+[2026-07-26T09:12:09] free-rotation:   turkey  #5  $1.94/srv  haluski-and-kielbasa-cabbage-noodles
+[2026-07-26T09:12:09] free-rotation:   beef    #1  $2.19/srv  youvarlakia-avgolemono-greek-meatball-bowls
+[2026-07-26T09:12:09] free-rotation:   beef    #2  $2.24/srv  beef-potato-au-gratin-casserole
+[2026-07-26T09:12:09] free-rotation:   beef    #3  $2.24/srv  lebanese-hashweh
+[2026-07-26T09:12:09] free-rotation:   beef    #4  $2.30/srv  mediterranean-beef-hummus-bowls
+[2026-07-26T09:12:09] free-rotation:   beef    #5  $2.30/srv  million-dollar-baked-spaghetti
+[2026-07-26T09:12:09] free-rotation:   pork    #1  $1.33/srv  bratwurst-sauerkraut-potatoes-bake
+[2026-07-26T09:12:09] free-rotation:   pork    #2  $1.62/srv  orecchiette-italian-sausage-broccoli
+[2026-07-26T09:12:09] free-rotation:   pork    #3  $1.63/srv  slow-cooker-kalua-pork-bowls
+[2026-07-26T09:12:09] free-rotation:   pork    #4  $1.66/srv  vietnamese-thit-kho-braised-pork-and-eggs
+[2026-07-26T09:12:09] free-rotation:   pork    #5  $1.74/srv  slow-cooker-filipino-pork-adobo-bowls
+[2026-07-26T09:12:09] free-rotation:   FREE   chicken-bulgogi-rice-bowls -> already-public
+[2026-07-26T09:12:09] free-rotation:   FREE   claypot-chicken-mushroom-rice -> already-public
+[2026-07-26T09:12:10] free-rotation:   FREE   nigerian-chicken-suya-bowls -> already-public
+[2026-07-26T09:12:10] free-rotation:   FREE   vietnamese-ginger-chicken-ga-kho-gung -> already-public
+[2026-07-26T09:12:11] free-rotation:   FREE   chicken-40-cloves-garlic -> already-public
+[2026-07-26T09:12:11] free-rotation:   FREE   red-beans-turkey-sausage-and-rice -> already-public
+[2026-07-26T09:12:12] free-rotation:   FREE   turkey-maqluba-upside-down-rice-bake -> already-public
+[2026-07-26T09:12:13] free-rotation:   FREE   turkey-alfredo-rotini-bake -> already-public
+[2026-07-26T09:12:13] free-rotation:   FREE   turkey-egg-roll-in-a-bowl-over-rice -> already-public
+[2026-07-26T09:12:14] free-rotation:   FREE   haluski-and-kielbasa-cabbage-noodles -> already-public
+[2026-07-26T09:12:14] free-rotation:   FREE   youvarlakia-avgolemono-greek-meatball-bowls -> already-public
+[2026-07-26T09:12:15] free-rotation:   FREE   beef-potato-au-gratin-casserole -> already-public
+[2026-07-26T09:12:15] free-rotation:   FREE   lebanese-hashweh -> already-public
+[2026-07-26T09:12:16] free-rotation:   FREE   mediterranean-beef-hummus-bowls -> already-public
+[2026-07-26T09:12:16] free-rotation:   FREE   million-dollar-baked-spaghetti -> already-public
+[2026-07-26T09:12:17] free-rotation:   FREE   bratwurst-sauerkraut-potatoes-bake -> already-public
+[2026-07-26T09:12:17] free-rotation:   FREE   orecchiette-italian-sausage-broccoli -> already-public
+[2026-07-26T09:12:18] free-rotation:   FREE   slow-cooker-kalua-pork-bowls -> already-public
+[2026-07-26T09:12:18] free-rotation:   FREE   vietnamese-thit-kho-braised-pork-and-eggs -> already-public
+[2026-07-26T09:12:19] free-rotation:   FREE   slow-cooker-filipino-pork-adobo-bowls -> already-public
+[2026-07-26T09:12:19] free-rotation: rotation: 20 flip(s), 0 error(s); state + recipes-db + public/free-dinners.json written
+[2026-07-26T09:12:20] smp-feed exported
+[2026-07-26T09:13:28] price-alerts: price-alerts done: 0 email(s) sent
+[2026-07-26T09:13:30] derive-links-from-prices: .
+[2026-07-26T09:14:09] family-fare link fill: APPLIED: 0 Family Fare link(s) written from the plan (0 network calls)
+[2026-07-26T09:14:11] prune-bad-links: links DROPPED (wrong product/price)    : 9   (of which 5 were SALE cells the old rule skipped entirely) | links DROPPED (per-unit unverifiable)  : 0   (cannot prove the link shows our price - unknown is not a pass) | links DROPPED (link carries no price)  : 0   (nothing from the store to check against)
+[2026-07-26T09:14:11] downstream refreshed after flips: Family Fare
+[2026-07-26T09:14:11] REVIEW FLAGS: 14 -> SANITY|Allspice (ground) Bar Soap Bouillon (cubes / granules / base) Bread (loaf) Cajun / Creole Seasoning Chicken Thighs / Drumsticks Chicken Wings Chili Crisp / Chili Oil Cloves (ground) Coconut Oil Corn Dogs (frozen) Corned Beef Brisket (raw) Cucumbers Curry Powder Dill Weed (dried) Dog Treats Drain Cleaner Dried Arbol Chiles Feminine Pads Fennel Seed / Ground Fennel Feta Cheese Fish Sauce Floor Cleaner French Bread / Baguette Furniture Polish / Dusting Spray Garam Masala Garlic Bread (frozen) Grape Juice Grits (quick) Grits (quick) Ground Cinnamon Ground Turmeric Hand Sanitizer Harissa Paste Hummus Jarred / Canned Gravy Jumbo Pasta Shells / Manicotti Lasagna Noodles Lemons Lime Juice (bottled) Limes Minced Garlic (jarred) Mint (fresh) Mirin (Sweet Cooking Wine) Nutmeg (ground) Oats / Oatmeal Poppy Seeds Popsicles / Ice Pops Poultry Seasoning Sandwich Bags Taco Seasoning (packet) Tartar Sauce Thai Red Curry Paste Thyme (dried) Toothbrushes Yeast (baking)|outlier outlier outlier wow outlier wow outlier outlier outlier outlier outlier outlier wow outlier outlier outlier outlier outlier outlier outlier outlier outlier outlier outlier outlier outlier outlier wow outlier wow wow outlier outlier outlier outlier outlier outlier outlier outlier outlier outlier outlier outlier outlier outlier outlier wow outlier outlier outlier wow outlier outlier outlier outlier outlier|Walmart $1.06 is 47% below runner-up Baker's $1.99 - verify the price/size parse Sam's Club $0.55 is 45% below runner-up Hy-Vee $1.00 - verify the price/size parse Walmart $0.08 is 71% below runner-up Sam's Club $0.28 - verify the price/size parse cheapest moved up 98% vs last week ($0.75 -> $1.48) Sam's Club $0.17 is 46% below runner-up Fareway $0.31 - verify the price/size parse cheapest moved up 83% vs last week ($0.70 -> $1.28) Baker's $1.59 is 36% below runner-up Aldi $2.49 - verify the price/size parse Hy-Vee $0.32 is 52% below runner-up Walmart $0.67 - verify the price/size parse Walmart $1.09 is 56% below runner-up Hy-Vee $2.50 - verify the price/size parse Sam's Club $0.20 is 40% below runner-up Baker's $0.33 - verify the price/size parse Baker's $0.50 is 38% below runner-up Walmart $0.81 - verify the price/size parse Hy-Vee $3.15 is 37% below runner-up Walmart $5.00 - verify the price/size parse cheapest moved up 70% vs last week ($0.38 -> $0.65) Sam's Club $0.50 is 52% below runner-up Walmart $1.04 - verify the price/size parse Walmart $1.51 is 60% below runner-up Family Fare $3.78 - verify the price/size parse Sam's Club $0.07 is 71% below runner-up Baker's $0.26 - verify the price/size parse Walmart $0.04 is 46% below runner-up Sam's Club $0.08 - verify the price/size parse Family Fare $0.83 is 86% below runner-up Hy-Vee $5.98 - verify the price/size parse Walmart $0.08 is 41% below runner-up Baker's $0.14 - verify the price/size parse Family Fare $0.62 is 77% below runner-up Baker's $2.70 - verify the price/size parse Sam's Club $0.30 is 36% below runner-up Aldi $0.47 - verify the price/size parse Walmart $0.28 is 45% below runner-up Hy-Vee $0.52 - verify the price/size parse Sam's Club $0.05 is 60% below runner-up Walmart $0.14 - verify the price/size parse Walmart $1.25 is 37% below runner-up Baker's $1.99 - verify the price/size parse Sam's Club $0.14 is 40% below runner-up Fareway $0.24 - verify the price/size parse Walmart $1.64 is 39% below runner-up Baker's $2.69 - verify the price/size parse Baker's $1.17 is 71% below runner-up Fareway $3.99 - verify the price/size parse cheapest moved up 69% vs last week ($0.03 -> $0.05) Sam's Club $0.04 is 64% below runner-up Fareway $0.12 - verify the price/size parse cheapest moved up 1852% vs last week ($0.00 -> $0.04) cheapest moved up 93% vs last week ($0.14 -> $0.27) Sam's Club $0.40 is 41% below runner-up Family Fare $0.68 - verify the price/size parse Sam's Club $0.12 is 50% below runner-up Baker's $0.23 - verify the price/size parse Walmart $0.50 is 92% below runner-up Hy-Vee $6.31 - verify the price/size parse Sam's Club $0.14 is 46% below runner-up Aldi $0.26 - verify the price/size parse Sam's Club $0.09 is 43% below runner-up Hy-Vee $0.16 - verify the price/size parse Baker's $0.24 is 44% below runner-up Hy-Vee $0.42 - verify the price/size parse Aldi $0.07 is 35% below runner-up Walmart $0.12 - verify the price/size parse Walmart $0.50 is 37% below runner-up Family Fare $0.79 - verify the price/size parse Baker's $0.12 is 36% below runner-up Hy-Vee $0.19 - verify the price/size parse Walmart $0.25 is 64% below runner-up Baker's $0.69 - verify the price/size parse Sam's Club $0.12 is 58% below runner-up Hy-Vee $0.28 - verify the price/size parse Family Fare $0.62 is 82% below runner-up Walmart $3.56 - verify the price/size parse Walmart $0.26 is 51% below runner-up Fareway $0.53 - verify the price/size parse Fareway $0.84 is 49% below runner-up Walmart $1.64 - verify the price/size parse Sam's Club $0.05 is 47% below runner-up Aldi $0.10 - verify the price/size parse cheapest moved up 114% vs last week ($0.43 -> $0.92) Walmart $0.05 is 63% below runner-up Baker's $0.15 - verify the price/size parse Walmart $1.31 is 40% below runner-up Family Fare $2.20 - verify the price/size parse Baker's $0.01 is 47% below runner-up Aldi $0.02 - verify the price/size parse cheapest moved up 239% vs last week ($0.09 -> $0.30) Walmart $0.13 is 39% below runner-up Baker's $0.21 - verify the price/size parse Walmart $0.45 is 42% below runner-up Baker's $0.78 - verify the price/size parse Sam's Club $0.88 is 56% below runner-up Walmart $1.99 - verify the price/size parse Walmart $0.17 is 80% below runner-up Baker's $0.82 - verify the price/size parse Sam's Club $0.22 is 84% below runner-up Hy-Vee $1.37 - verify the price/size parse ; MULTIBUY|Hy-Vee|Coffee (ground/beans) ; MULTIBUY|Hy-Vee|Ground Turmeric ; MULTIBUY|Hy-Vee|Toothpaste
+[2026-07-26T09:14:13] review-flag alert sent
+[2026-07-26T09:14:16] pins:   basis-gap SKIPPED (not pinned): boneless-skinless-chicken-thigh / Hy-Vee  board=1.99 link=3.996  (2.0x)
+[2026-07-26T09:14:16] pins:   basis-gap SKIPPED (not pinned): apple / Hy-Vee  board=0.79 link=1.98  (2.5x)
+[2026-07-26T09:14:16] pins:   basis-gap SKIPPED (not pinned): fries / Sam's Club  board=0.0334 link=0.067  (2.0x)
+[2026-07-26T09:14:16] pins:   basis-gap SKIPPED (not pinned): white-mushrooms / Hy-Vee  board=0.54 link=0.2488  (0.5x)
+[2026-07-26T09:14:16] pins:   basis-gap SKIPPED (not pinned): parmesan-cheese / Hy-Vee  board=0.3744 link=1.9967  (5.3x)
+[2026-07-26T09:14:16] pins:   basis-gap SKIPPED (not pinned): smoked-paprika / Family Fare  board=0.9986 link=2.49  (2.5x)
+[2026-07-26T09:14:16] pins: board-overrides: wrote 14 corrections  (skipped: sale=68 collision=873 name-drift=0 no-link=209 bad-price=121 already-agree=2032 basis-gap=6)
+[2026-07-26T09:14:16] guards:   ok    pu-lib per-unit engine self-check
+[2026-07-26T09:14:17] guards:   ok    partial-pull union (compare-deals) self-test
+[2026-07-26T09:14:17] guards:   ok    multipack reject + pricing (walmart-deals) self-test
+[2026-07-26T09:14:17] guards:   ok    fullpull [Walmart]: indeterminate - newest unstamped (pre-pull_terms) capture walmart-regular-2026-07-18.json outranks any stamped-comprehensive file; staying silent until the watch arms fullpull [Sam's Club]: ok - newest comprehensive capture sams-deals-2026-07-23.json (198 terms) is 3 day(s) old (warn at 10, cliff at 14)
+[2026-07-26T09:14:18] guards:   ok    price-mode (in-store pricing)
+[2026-07-26T09:14:20] guards:   ok    household-in-food
+[2026-07-26T09:14:20] guards:   ok    no food commodity matched a wrong-class product (beverage/baby/pet/household/carrier/candy)
+[2026-07-26T09:14:20] guards:   ok    no store lost coverage vs the previous board
+[2026-07-26T09:14:21] guards:   ok    ZERO shipped links disagree with their tile (hard), and no store regressed on coverage (ratchet)
+[2026-07-26T09:14:22] guards:   ok    every override pin is derivable from its own verified link (14 checked)
+[2026-07-26T09:14:22] guards:   ok    no board cell differs from its linked product by a factor
+[2026-07-26T09:14:23] guards:   ok    no multipack row prices a pack as a single unit (34 pack-total size(s) verified by arithmetic)
+[2026-07-26T09:14:24] guards:   ok    no store's newest data file collapsed vs its recent history
+[2026-07-26T09:14:24] guards:   ok    no undated stale discount is being published as a live sale
+[2026-07-26T09:14:25] guards:   ok    no store's price data is older than 14 days
+[2026-07-26T09:14:25] guards:   ok    every price we publish is the price the store charges (11694 rows verified against their own current_price)
+[2026-07-26T09:14:26] guards:   ok    Baker's prices reconcile with the raw store capture (0 pack=our-size rows checked against the exact cur)
+[2026-07-26T09:14:26] guards:   ok    the board is built from the newest ads file (ads-2026-07-26 -> comparison-2026-07-26)
+[2026-07-26T09:14:26] guards: 
+[2026-07-26T09:14:26] guards:   warn  cell-drops: WARNING - 5 everyday cell(s) priced on comparison-2026-07-18 are missing from today's board (a real leak; carry-forward should have prevented it - check the store's newest pull + as_of expiry): |   cantaloupe @ Fareway (was $1.49) |   cauliflower @ Baker's (was $4.49) |   five-spice-powder @ Baker's (was $3.63) |   honeydew @ Fareway (was $1.49) |   rotisserie-chicken @ Baker's (was $8.99)
+[2026-07-26T09:14:26] guards:   warn  allowlist hygiene: 0 entr(y/ies) reviewed >120 days ago + 124 with no 'reviewed' date - re-verify against the store and stamp 'reviewed: yyyy-MM-dd' (multipack-allowlist / coverage-gap-allowlist)
+[2026-07-26T09:14:26] guards:   warn  11 cell(s) drift from their link by <50% (ordinary price movement; the daily consistency repair handles it)
+[2026-07-26T09:14:26] guards:   warn  Aldi           438 rows |   0% re-verified against the store TODAY | file 8d old
+[2026-07-26T09:14:26] guards:   warn  Baker's       6660 rows | 100% re-verified against the store TODAY | file 0d old
+[2026-07-26T09:14:26] guards:   warn  Family Fare   1983 rows |   0% re-verified against the store TODAY | file 1d old  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker's bug)
+[2026-07-26T09:14:26] guards:   warn  Fareway        677 rows |   0% re-verified against the store TODAY | file 3d old  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker's bug)
+[2026-07-26T09:14:26] guards:   warn  Hy-Vee        1446 rows |  70% re-verified against the store TODAY | file 0d old | 440 row(s) flagged unverified
+[2026-07-26T09:14:26] guards:   warn  Sam's Club      29 rows |   0% re-verified against the store TODAY | file 12d old  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker's bug)
+[2026-07-26T09:14:26] guards:   warn  Walmart       1351 rows |   0% re-verified against the store TODAY | file 1d old  <-- NOT price-verified today: this store CAN discount, so it may be publishing regular prices (the Hy-Vee/Baker's bug)
+[2026-07-26T09:14:26] guards: 
+[2026-07-26T09:14:26] guards:   HARD FAIL: stray file in out\regular  'walmart-regular-2026-07-25.json.bak-mpstrip' - only '<store>-regular-<yyyy-MM-dd>.json' may live here; anything else can be read as a store and can outsort the real data (put diagnostics in out\throttled\)
+[2026-07-26T09:14:26] guards: 
+[2026-07-26T09:14:26] guards: GUARDS FAILED: 1 hard invariant(s) violated. Board NOT safe to publish.
+[2026-07-26T09:14:26] GUARDS FAILED - board NOT republished (left at last good state)
+[2026-07-26T09:14:28] share: share-image: 5 drops -> C:\Codex\income\public\share\omaha-drops.png
+[2026-07-26T09:14:28] walmart-fullpull: fullpull [Walmart]: indeterminate - newest unstamped (pre-pull_terms) capture walmart-regular-2026-07-18.json outranks any stamped-comprehensive file; staying silent until the watch arms fullpull [Sam's Club]: ok - newest comprehensive capture sams-deals-2026-07-23.json (198 terms) is 3 day(s) old (warn at 10, cliff at 14)
+[2026-07-26T09:14:29] consistency BREACH - auto-repairing Family Fare + Hy-Vee links + republishing
+[2026-07-26T09:17:41] GUARDS FAILED after consistency auto-repair - NOT republished (left at last good)
+[2026-07-26T09:17:42] consistency STILL breached after repair - no-link=27 (browser-store price drift, needs re-pull)
+[2026-07-26T09:17:44] consistency drift alert sent
+[2026-07-26T09:17:44] store-coverage OK - every staple commodity shows all 7 stores
+[2026-07-26T09:17:45] notify-item-added: notify-item-added: new-ids=26 queue=0 sent=0 failed=0 expired=0
+[2026-07-26T09:17:45] run complete; flips=1

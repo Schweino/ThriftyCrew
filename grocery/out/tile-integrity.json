@@ -1,46 +1,62 @@
 ﻿{
-    "generated":  "2026-07-25 09:36",
-    "board":  "comparison-2026-07-25.json",
-    "total_tiles":  2439,
-    "violations":  252,
+    "generated":  "2026-07-26 09:17",
+    "board":  "comparison-2026-07-26.json",
+    "total_tiles":  2516,
+    "violations":  283,
     "by_store":  {
                      "Walmart":  {
-                                     "coverage":  59,
-                                     "tiles":  411,
-                                     "violations":  59
+                                     "coverage":  69,
+                                     "tiles":  423,
+                                     "violations":  69
                                  },
                      "Fareway":  {
                                      "coverage":  76,
-                                     "tiles":  393,
+                                     "tiles":  395,
                                      "violations":  76
                                  },
                      "Family Fare":  {
-                                         "coverage":  14,
-                                         "tiles":  232,
-                                         "violations":  14
+                                         "coverage":  36,
+                                         "tiles":  247,
+                                         "violations":  37
                                      },
                      "Hy-Vee":  {
-                                    "coverage":  41,
-                                    "tiles":  404,
-                                    "violations":  41
+                                    "coverage":  43,
+                                    "tiles":  426,
+                                    "violations":  44
                                 },
                      "Sam\u0027s Club":  {
-                                             "coverage":  39,
-                                             "tiles":  298,
-                                             "violations":  39
+                                             "coverage":  36,
+                                             "tiles":  301,
+                                             "violations":  36
                                          },
                      "Aldi":  {
-                                  "coverage":  17,
-                                  "tiles":  299,
-                                  "violations":  17
+                                  "coverage":  18,
+                                  "tiles":  300,
+                                  "violations":  18
                               },
                      "Baker\u0027s":  {
-                                          "coverage":  6,
-                                          "tiles":  402,
-                                          "violations":  6
+                                          "coverage":  3,
+                                          "tiles":  424,
+                                          "violations":  3
                                       }
                  },
     "rows":  [
+                 {
+                     "id":  "ground-beef-8020",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh 80% Lean Ground Beef, Angus Value Pack",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-beef-93-7",
+                     "store":  "Aldi",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "93/7 Lean Ground Beef",
+                     "link":  ""
+                 },
                  {
                      "id":  "achiote-paste",
                      "store":  "Walmart",
@@ -79,6 +95,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Granny Smith apples, $1.68 lb.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "apples",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fuji Apples, Small",
                      "link":  ""
                  },
                  {
@@ -266,6 +290,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "brown-gravy-mix",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value Reduced Sodium Brown Gravy Mix, 0.87 oz Packet",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "brown-gravy-mix",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Our Family Gravy Mix, Brown 0.87 Oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "cajun-seasoning",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -426,11 +466,35 @@
                      "link":  ""
                  },
                  {
+                     "id":  "caraway-seeds",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "McCormick Gourmet Organic Caraway Seed, 1.62 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "caraway-seeds",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Mc Cormick Whole Caraway Seed 0.9 Oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "carrots",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Bunny Luv Organic Whole Carrots",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "carrots",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh Baby Carrots Our Family",
                      "link":  ""
                  },
                  {
@@ -482,6 +546,30 @@
                      "link":  ""
                  },
                  {
+                     "id":  "cherry-tomatoes",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Grape Tomatoes Our Family",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "chicken-livers",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Tyson All Natural Chicken Livers, 1.25 lb",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "chicken-livers",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Chicken Liver Cups Gold N Plump",
+                     "link":  ""
+                 },
+                 {
                      "id":  "chicken-noodle-soup",
                      "store":  "Sam\u0027s Club",
                      "fault":  "NO-LINK",
@@ -499,26 +587,10 @@
                  },
                  {
                      "id":  "chicken-thighs",
-                     "store":  "Walmart",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Tyson All Natural, Fresh Chicken Thighs, Family Pack, 3.25 - 6.75 lb Tray",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "chicken-thighs",
                      "store":  "Hy-Vee",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy Vee 100 Natural Chicken Thighs Value Pack",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "chicken-thighs",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Heritage Farm Bone In Skin On Chicken Thighs",
                      "link":  ""
                  },
                  {
@@ -602,6 +674,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "corn-chips",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Corn Chips, Scoops Our Family",
+                     "link":  ""
+                 },
+                 {
                      "id":  "corn-muffin-mix",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
@@ -615,6 +695,30 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "\"JIFFY\" Corn Muffin Mix, 8.5 oz Box",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "corned-beef-brisket",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "TableMakers, Corned Beef Brisket Point Cut",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "corned-beef-brisket",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Blarney Stone, No MSG, Gluten Free, Corned Beef Brisket Flat 1.75-3.75 lb",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "corned-beef-brisket",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Corned Beef Brisket, Point Cut Skylark",
                      "link":  ""
                  },
                  {
@@ -667,14 +771,6 @@
                  },
                  {
                      "id":  "cucumbers",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Seedless English Cucumbers, 3 ct.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "cucumbers",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -695,6 +791,22 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Luvs Platinum Protection Baby Diapers, Size 5",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "diced-ham",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Farmland Diced Ham 16oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "diced-ham",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Farmland Diced Ham 16 Oz",
                      "link":  ""
                  },
                  {
@@ -778,6 +890,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "dried-ancho-chiles",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Zamora Ancho Chile Peppers",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "dried-arbol-chiles",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Chile De Arbol",
+                     "link":  ""
+                 },
+                 {
                      "id":  "dryer-sheets",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -791,6 +919,22 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Hy Vee Wide Egg Noodles",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "eggplant",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh Purple Eggplant, Each",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "eggplant",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Regular Eggplant (Aubergine)",
                      "link":  ""
                  },
                  {
@@ -823,6 +967,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Kleenex Trusted Care Facial Tissues Flat Box 2 Ply",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "ground-fennel",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Sugar \u0027N Spice Fennel Seed Whole",
                      "link":  ""
                  },
                  {
@@ -1026,6 +1178,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "gingersnaps",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Lil Dutch Maid Ginger Snaps",
+                     "link":  ""
+                 },
+                 {
                      "id":  "gochujang",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -1039,14 +1199,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Quaker Granola Bars, Chocolate Chip",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "grape-juice",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Kroger 100% White Grape Juice",
                      "link":  ""
                  },
                  {
@@ -1067,14 +1219,6 @@
                  },
                  {
                      "id":  "grits",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Quaker Quick 5-Minute Grits 5 lb., 3 pk.",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "grits",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -1087,22 +1231,6 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "That\u0027s Smart! Ground Cinnamon 2.5 Oz",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "ground-cinnamon",
-                     "store":  "Sam\u0027s Club",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Member\u0027s Mark Ground Cinnamon",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "ground-cinnamon",
-                     "store":  "Baker\u0027s",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Smart Way Ground Cinnamon",
                      "link":  ""
                  },
                  {
@@ -1210,6 +1338,22 @@
                      "link":  ""
                  },
                  {
+                     "id":  "horseradish-sauce",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value Original Horseradish Sauce, 12 oz (Regular)",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "horseradish-sauce",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Silver Spring Sassy Horseradish Sauce 9.25 Oz",
+                     "link":  ""
+                 },
+                 {
                      "id":  "hot-dog-buns",
                      "store":  "Aldi",
                      "fault":  "NO-LINK",
@@ -1298,6 +1442,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "jumbo-pasta-shells",
+                     "store":  "Hy-Vee",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Barilla Manicotti - Non-GMO Pasta Made with Durum Wheat Semolina - Kosher Certified Pasta",
+                     "link":  ""
+                 },
+                 {
                      "id":  "kale",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
@@ -1367,6 +1519,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Member\u0027s Mark Liquid Egg Whites 16 oz., 6 pk.",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "mac-and-cheese",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Kraft Thick \u0027N Creamy Mac \u0026 Cheese 7.25 Oz",
                      "link":  ""
                  },
                  {
@@ -1595,14 +1755,6 @@
                  },
                  {
                      "id":  "poppy-seeds",
-                     "store":  "Hy-Vee",
-                     "fault":  "NO-LINK",
-                     "detail":  "priced tile with no See-item link",
-                     "board":  "Hy-Vee Poppy Seed",
-                     "link":  ""
-                 },
-                 {
-                     "id":  "poppy-seeds",
                      "store":  "Fareway",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
@@ -1631,6 +1783,22 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Giovanni Rana Skillet Gnocchi 12 oz. Bag, Refrigerated",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "poultry-seasoning",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value Poultry Seasoning, 1.5 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "poultry-seasoning",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Sugar \u0027N Spice Poultry Seasoning",
                      "link":  ""
                  },
                  {
@@ -1679,6 +1847,22 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Tuscan Garden Ranch Salad Dressing and Seasoning Mix",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "red-onion",
+                     "store":  "Hy-Vee",
+                     "fault":  "PRICE-DRIFT",
+                     "detail":  "board $1.5059 vs link $1.28  (17.6% off)",
+                     "board":  "Sweet Red Onions",
+                     "link":  "Sweet Red Onions"
+                 },
+                 {
+                     "id":  "red-onion",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Organic Red Onions",
                      "link":  ""
                  },
                  {
@@ -1754,6 +1938,30 @@
                      "link":  ""
                  },
                  {
+                     "id":  "rye-bread",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value New York Style Rye Bread, 24 oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "rye-bread",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh \u0026 Finest Pumpernickel Rye Bread",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "salsa",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Great Value Thick and Chunky Salsa Mild",
+                     "link":  ""
+                 },
+                 {
                      "id":  "sesame-oil",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -1786,11 +1994,19 @@
                      "link":  ""
                  },
                  {
-                     "id":  "sloppy-joe-sauce",
+                     "id":  "smoked-turkey-sausage",
                      "store":  "Family Fare",
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
-                     "board":  "Manwich Sloppy Joe Sauce, Original 15 Oz",
+                     "board":  "Eckrich Skinless Turkey Smoked Sausage 12 Oz",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "snow-peas",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Marketside Fresh Sugar Snap Peas, 8 oz",
                      "link":  ""
                  },
                  {
@@ -1815,6 +2031,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Clear Frost Sparkling Water, Black Cherry",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "sports-drinks",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Powerade Fruit Punch Sports Drink Bottle 28 Fl Oz",
                      "link":  ""
                  },
                  {
@@ -1954,6 +2178,14 @@
                      "link":  ""
                  },
                  {
+                     "id":  "tomatoes",
+                     "store":  "Family Fare",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Fresh Tomatoes, Hot House",
+                     "link":  ""
+                 },
+                 {
                      "id":  "tortillas",
                      "store":  "Walmart",
                      "fault":  "NO-LINK",
@@ -1983,6 +2215,14 @@
                      "fault":  "NO-LINK",
                      "detail":  "priced tile with no See-item link",
                      "board":  "Bright Essentials Trash Bags, Tall Kitchen, Drawstring, Unscented",
+                     "link":  ""
+                 },
+                 {
+                     "id":  "turkey-breast",
+                     "store":  "Walmart",
+                     "fault":  "NO-LINK",
+                     "detail":  "priced tile with no See-item link",
+                     "board":  "Butterball All Natural Frozen Turkey Breast Roast, 3 lbs",
                      "link":  ""
                  },
                  {
@@ -2056,8 +2296,16 @@
                      "detail":  "priced tile with no See-item link",
                      "board":  "GoGo Squeez Yogurtz Strawberry and Strawberry Banana, 3 oz., 20 ct.",
                      "link":  ""
+                 },
+                 {
+                     "id":  "zucchini",
+                     "store":  "Family Fare",
+                     "fault":  "PRICE-DRIFT",
+                     "detail":  "board $1.99 vs link $2.29  (13.1% off)",
+                     "board":  "Yellow Zucchini/Yellow Squash",
+                     "link":  "Zucchini Squash"
                  }
              ],
     "accuracy_violations":  0,
-    "coverage_violations":  252
+    "coverage_violations":  281
 }

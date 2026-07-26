@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-07-25 09:27",
+    "generated":  "2026-07-26 09:17",
     "tol":  0.3,
-    "no_link_count":  26,
+    "no_link_count":  27,
     "max_no_link":  0,
     "no_link_by_store":  [
                              {
@@ -10,7 +10,7 @@
                              },
                              {
                                  "store":  "Baker\u0027s",
-                                 "count":  5
+                                 "count":  6
                              },
                              {
                                  "store":  "Family Fare",
@@ -45,6 +45,10 @@
                     {
                         "id":  "lettuce",
                         "store":  "Hy-Vee"
+                    },
+                    {
+                        "id":  "bread",
+                        "store":  "Baker\u0027s"
                     },
                     {
                         "id":  "muffins",
@@ -127,7 +131,7 @@
                         "store":  "Hy-Vee"
                     }
                 ],
-    "mismatch_count":  59,
+    "mismatch_count":  56,
     "mismatch":  [
                      {
                          "id":  "boneless-skinless-chicken-thigh",
@@ -346,7 +350,7 @@
                          "board":  0.25,
                          "link":  0.1431,
                          "off_pct":  43,
-                         "product":  "Creamy Peanut Butter Our Family",
+                         "product":  "Crunchy Peanut Butter Our Family",
                          "size":  "16 oz"
                      },
                      {
@@ -468,16 +472,6 @@
                          "off_pct":  433,
                          "product":  "Hy-Vee Grated Parmesan Cheese",
                          "size":  "3 oz"
-                     },
-                     {
-                         "id":  "salsa",
-                         "store":  "Walmart",
-                         "unit":  "oz",
-                         "board":  0.123,
-                         "link":  0.342,
-                         "off_pct":  178,
-                         "product":  "WHOLLY Guacamole Avocado Verde Salsa 10 oz",
-                         "size":  "10 oz"
                      },
                      {
                          "id":  "sun-dried-tomatoes",
@@ -698,26 +692,6 @@
                          "off_pct":  36,
                          "product":  "That\u0027s Smart! Sweet Peas (Frozen)",
                          "size":  "12 oz"
-                     },
-                     {
-                         "id":  "ground-cinnamon",
-                         "store":  "Sam\u0027s Club",
-                         "unit":  "oz",
-                         "board":  0.4433,
-                         "link":  0.141,
-                         "off_pct":  68,
-                         "product":  "Pillsbury Cinnamon Rolls with Cinnabon Icing 13 oz., 4 pk.",
-                         "size":  "52 oz"
-                     },
-                     {
-                         "id":  "ground-cinnamon",
-                         "store":  "Family Fare",
-                         "unit":  "oz",
-                         "board":  0.676,
-                         "link":  0.3328,
-                         "off_pct":  51,
-                         "product":  "Bakery Fresh White Iced Cinnamon Rolls (4 Ct)",
-                         "size":  "18 oz"
                      }
                  ]
 }

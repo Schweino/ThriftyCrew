@@ -1,13 +1,126 @@
 ﻿{
-    "generated":  "2026-07-25 09:41",
+    "generated":  "2026-07-26 09:11",
     "drift_vs_engine":  0,
     "moved":  [
-
+                  {
+                      "name":  "Red Cherry Tomatoes on the Vine",
+                      "from":  "tomatoes",
+                      "to":  "cherry-tomatoes"
+                  },
+                  {
+                      "name":  "Flavor Bombs Cherry Tomatoes On The Vine, 1.5 lbs.",
+                      "from":  "tomatoes",
+                      "to":  "cherry-tomatoes"
+                  },
+                  {
+                      "name":  "Grape Tomatoes Our Family",
+                      "from":  "tomatoes",
+                      "to":  "cherry-tomatoes"
+                  },
+                  {
+                      "name":  "NatureSweet Cherubs Fresh Heavenly Salad Grape Tomatoes, 10 oz",
+                      "from":  "tomatoes",
+                      "to":  "cherry-tomatoes"
+                  },
+                  {
+                      "name":  "Sunset Flavor Rocks Grape Tomatoes On The Vine 12 Oz",
+                      "from":  "tomatoes",
+                      "to":  "cherry-tomatoes"
+                  },
+                  {
+                      "name":  "S. Rosen\u0027s Party Entertainers Caraway Rye Bread",
+                      "from":  "bread",
+                      "to":  "rye-bread"
+                  },
+                  {
+                      "name":  "Private Selection Platinum Rows Cherry Tomatoes on the Vine",
+                      "from":  "tomatoes",
+                      "to":  "cherry-tomatoes"
+                  },
+                  {
+                      "name":  "Private Selection Ruby Rows Fresh Cherry Tomatoes on the Vine",
+                      "from":  "tomatoes",
+                      "to":  "cherry-tomatoes"
+                  },
+                  {
+                      "name":  "Kikkoman Gluten-Free Sweet Soy Sauce for Rice",
+                      "from":  "soy-sauce",
+                      "to":  "sweet-soy-sauce"
+                  },
+                  {
+                      "name":  "Kroger Fresh Grape Tomatoes",
+                      "from":  "tomatoes",
+                      "to":  "cherry-tomatoes"
+                  }
               ],
     "dropped":  [
-
+                    {
+                        "name":  "Buns, Hamburger Rotella\u0027s Italian Bakery",
+                        "from":  "tomatoes-green-chilies"
+                    },
+                    {
+                        "name":  "Rotella\u0027s Italian Brat Buns",
+                        "from":  "tomatoes-green-chilies"
+                    },
+                    {
+                        "name":  "Fresh Grape Tomato, 10 oz Package",
+                        "from":  "tomatoes"
+                    },
+                    {
+                        "name":  "Bushel Boy Cherry On The Vine Tomatoes",
+                        "from":  "tomatoes"
+                    },
+                    {
+                        "name":  "Fresh Salsa Hatch Pepper Avocado",
+                        "from":  "salsa"
+                    },
+                    {
+                        "name":  "Fresh \u0026 Finest By Our Family Salsa Avocado",
+                        "from":  "salsa"
+                    },
+                    {
+                        "name":  "Herdez Guacamole Salsa Mild",
+                        "from":  "salsa"
+                    },
+                    {
+                        "name":  "Fresh \u0026 Finest By Our Family Salsa, Avocado Dragon, Medium 10 Oz",
+                        "from":  "salsa"
+                    },
+                    {
+                        "name":  "Buns, Hot Dog Rotella\u0027s Italian Bakery",
+                        "from":  "tomatoes-green-chilies"
+                    },
+                    {
+                        "name":  "WHOLLY Guacamole Avocado Verde Salsa 10 oz",
+                        "from":  "salsa"
+                    },
+                    {
+                        "name":  "Rotella\u0027s Italian Bakery Hoagies Buns",
+                        "from":  "tomatoes-green-chilies"
+                    }
                 ],
     "new_contested":  [
-
+                          "Applegate Naturals Chicken Sausage, Red Pepper, Onions and Spinach Frittata Bites, 19g of Protein",
+                          "BelGioioso Ricotta Con Latte Whole Milk",
+                          "Birds Eye Mixed Vegetables 10 Oz",
+                          "Colorado Premium\u0027s Fresh Corned Beef Brisket Flat, 2.0- 4.25 lb",
+                          "Fresh Orange Bell Pepper",
+                          "Genova Premium Yellowfin Tuna in Olive Oil",
+                          "Inglehoffer Cream Style Horseradish 9.5 oz",
+                          "Inglehoffer Thick-n-Creamy Horseradish3.75 oz",
+                          "Kraft Monterey Jack Caramelized Onion Mac \u0026 Cheese Macaroni and Cheese Dinner, Box",
+                          "Kraft Parmesan Pesto Mac \u0026 Cheese Macaroni and Cheese Dinner, Box",
+                          "Kroger Herb and Garlic Marinade",
+                          "Kroger No Sugar Added Assorted Strawberry Applesauce Pouches",
+                          "Lay\u0027s Honey Barbecue Potato Chips",
+                          "OREO CHIPS AHOY! Nutter Butter RITZ Bits Cookies \u0026 Crackers Variety Pack",
+                          "Pacific Foods Organic Chicken Bone Broth With Sea Salt",
+                          "Private Selection Black Forest Ham Egg and Cheddar Cheese Everything Bagel Breakfast Sandwich",
+                          "Private Selection Lemon Herb Chicken Thigh",
+                          "ROTEL Hot Diced Tomatoes with Habaneros",
+                          "Spinach Ricotta Chicken Griller",
+                          "Swiss Miss Milk Chocolate Hot Cocoa K-Cup 10 CT",
+                          "Tasty Bite Sauteed Eggplant \u0026 Tomatoes 10oz Eggplant and Tomato Curry",
+                          "Traeger Grills Pork and Poultry Rub with Apple \u0026 Honey"
                       ]
 }

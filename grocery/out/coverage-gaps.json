@@ -1,6 +1,6 @@
 ﻿{
-    "generated":  "2026-07-25 09:08",
-    "gap_count":  33,
+    "generated":  "2026-07-26 09:11",
+    "gap_count":  37,
     "gaps":  [
                  {
                      "commodity":  "bread",
@@ -68,9 +68,9 @@
                      "candidate":  "Jimmy Dean Delights Croissant Breakfast Sandwiches With Turkey Sausage, Egg White, And Cheese, Frozen 4 Ct"
                  },
                  {
-                     "commodity":  "chocolate-chips",
+                     "commodity":  "chocolate-milk",
                      "store":  "Family Fare",
-                     "candidate":  "Little Debbie Cosmic Brownies, With Chocolate Chip Candy 6 Ea"
+                     "candidate":  "M\u0026M\u0027s Chocolate Candies, Milk Chocolate 3.1 Oz"
                  },
                  {
                      "commodity":  "cake-mix",
@@ -91,11 +91,6 @@
                      "commodity":  "tomato-soup",
                      "store":  "Sam\u0027s Club",
                      "candidate":  "Member\u0027s Mark Tomato Basil Soup 32 oz. tubs, 2 pk."
-                 },
-                 {
-                     "commodity":  "sandwich-cookies",
-                     "store":  "Family Fare",
-                     "candidate":  "Little Debbie Sandwich Cookies, Oatmeal Creme Pies 12 Ea"
                  },
                  {
                      "commodity":  "breakfast-sandwiches",
@@ -133,11 +128,6 @@
                      "candidate":  "Biotene Dry Mouth Fresh Mint Oral Rinse 16 Fl Oz"
                  },
                  {
-                     "commodity":  "razors",
-                     "store":  "Baker\u0027s",
-                     "candidate":  "Gillette Venus Women\u0027s Sensitive Skin 3-Blade Disposable Razors"
-                 },
-                 {
                      "commodity":  "cranberry-sauce",
                      "store":  "Fareway",
                      "candidate":  "Ocean Spray Whole Cranberry Sauce, Canned Side Dish"
@@ -166,6 +156,36 @@
                      "commodity":  "poblano-peppers",
                      "store":  "Family Fare",
                      "candidate":  "Del Monte Whole Kernel Southwest Style Corn With Poblano \u0026 Red Peppers 15.25 Oz"
+                 },
+                 {
+                     "commodity":  "eggplant",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Eggplant"
+                 },
+                 {
+                     "commodity":  "doubanjiang",
+                     "store":  "Hy-Vee",
+                     "candidate":  "Mrs. Grimes Original Chili Beans in Chili Sauce 15 oz"
+                 },
+                 {
+                     "commodity":  "doubanjiang",
+                     "store":  "Fareway",
+                     "candidate":  "Mrs. Grimes Original Chili Beans in Chili Sauce"
+                 },
+                 {
+                     "commodity":  "doubanjiang",
+                     "store":  "Baker\u0027s",
+                     "candidate":  "Kroger® Mixed Chili Beans in Mild Sauce 15.5 oz"
+                 },
+                 {
+                     "commodity":  "doubanjiang",
+                     "store":  "Walmart",
+                     "candidate":  "Bush\u0027s Chili Beans, Canned Red Beans in Mild Chili Sauce, 16"
+                 },
+                 {
+                     "commodity":  "snow-peas",
+                     "store":  "Family Fare",
+                     "candidate":  "Birds Eye Broccoli, Carrots, Sugar Snap Peas \u0026 Water Chestnuts 10.8 Oz"
                  }
              ]
 }
