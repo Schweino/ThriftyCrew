@@ -13,9 +13,11 @@
 #     The mapper stage may not have written map-extensions.json yet: that WARNS, never crashes.
 #   * labels-*.json is a glob, not a fixed list - r300 has none yet, so it is simply skipped.
 # Output: recipes-costed.json + cost-flags.txt (any item without a price basis = HARD FLAG, never guessed).
+param([string[]]$Slugs)   # targeted recost: cost only these, splice into existing recipes-costed.json. Default unchanged.
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $computed = Get-Content (Join-Path $here 'recipes-computed.json') -Raw | ConvertFrom-Json
+if($Slugs){ $computed = @($computed | Where-Object { $Slugs -contains [string]$_.slug }); if($computed.Count -eq 0){ throw "no computed recipes match -Slugs" } }
 $cmpFile = Get-ChildItem (Join-Path $here '..\..\grocery\out\comparison-*.json') | Sort-Object Name -Descending | Select-Object -First 1
 $cmp = (Get-Content $cmpFile.FullName -Raw | ConvertFrom-Json).comparison
 
@@ -355,6 +357,12 @@ foreach($r in $computed){
     lines_priced=$priced; lines_unpriced=$unpriced
     lines=@($lines)
   }
+}
+if($Slugs){
+  $existingCost = Get-Content (Join-Path $here 'recipes-costed.json') -Raw | ConvertFrom-Json
+  $newBySlug = @{}; foreach($r in $out){ $newBySlug[[string]$r.slug] = $r }
+  $out = @($existingCost | ForEach-Object { if($newBySlug.ContainsKey([string]$_.slug)){ $newBySlug[[string]$_.slug] } else { $_ } })
+  Write-Output ("targeted recost: spliced into {0} total" -f $out.Count)
 }
 $out | ConvertTo-Json -Depth 7 | Out-File (Join-Path $here 'recipes-costed.json') -Encoding utf8
 $costFlags | Out-File (Join-Path $here 'cost-flags.txt') -Encoding utf8

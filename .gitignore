@@ -77,3 +77,6 @@ grocery/logs-archive/
 !/site-backups/
 site-backups/*
 !site-backups/ghost-export-*.zip
+
+# tool-generated timestamped backups
+*.backup-*.json

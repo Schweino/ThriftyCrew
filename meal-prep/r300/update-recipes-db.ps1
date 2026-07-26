@@ -28,14 +28,23 @@
 #     reader, e.g. the japchae glass noodles), never the display name.
 #   * -DryRun prints the delta and writes nothing. -SpecList overrides the slug list; when
 #     specs-ready.txt is absent (before the auditor GO) a dry run falls back to specs-full-ok.txt.
-param([switch]$DryRun,[string]$SpecList)
+param([switch]$DryRun,[string]$SpecList,[string[]]$Replace)   # -Replace <slugs>: remove those existing rows first (via Remove-RecipeRow), then re-add fresh from their specs - the single-recipe REPLACE flow. Scopes the run to just those slugs.
 $ErrorActionPreference='Stop'
+. (Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) '..\lib\json-db-io.ps1')
 Add-Type -AssemblyName System.Web.Extensions
 $js = New-Object System.Web.Script.Serialization.JavaScriptSerializer
 $js.MaxJsonLength = [int]::MaxValue
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $dbPath = Join-Path $here '..\recipes-db.json'
+if($Replace -and -not $DryRun){
+  Copy-Item $dbPath ($dbPath + '.bak-replace') -Force
+  foreach($rs in $Replace){
+    if([regex]::IsMatch([IO.File]::ReadAllText($dbPath), '"slug"\s*:\s*"' + [regex]::Escape($rs) + '"')){
+      [void](Remove-RecipeRow -DbPath $dbPath -Slug $rs); Write-Output ("  -Replace removed existing row: $rs")
+    }
+  }
+}
 $raw = [IO.File]::ReadAllText($dbPath)
 $iClose = $raw.LastIndexOf(']')
 if($raw.Substring($iClose) -notmatch '^\]\s*\}\s*$'){ throw 'unexpected tail - recipes-db.json is not {..., recipes:[...]}' }
@@ -78,6 +87,7 @@ if(-not $listFile){
 if(-not (Test-Path $listFile)){ throw ('slug list not found: ' + $listFile) }
 Write-Output ("slug list: " + (Split-Path -Leaf $listFile))
 $ready = Get-Content $listFile | Where-Object { $_ }
+if($Replace){ $ready = @($ready | Where-Object { $Replace -contains $_ }); Write-Output ("  -Replace scoped run to " + $ready.Count + " slug(s)") }
 $today = Get-Date -Format 'yyyy-MM-dd'
 $parts = New-Object System.Collections.Generic.List[string]
 $added=0; $skipped=0; $noId=0; $fromIngMap=0; $fromBid=0; $divergent=@{}; $fallbackItems=@{}

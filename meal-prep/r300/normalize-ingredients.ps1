@@ -4,6 +4,7 @@
 # Outputs (this folder): recipes-canon.json, new-items.json, unmapped report to stdout.
 $ErrorActionPreference = 'Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
+. (Join-Path $here '..\lib\json-db-io.ps1')   # Save-JsonArray: top-level array always, no PS5.1 wrap/collapse
 $r100 = Join-Path $here '..\r100'
 
 $rulesRaw = @()
@@ -51,9 +52,9 @@ foreach ($r in $all) {
         ingredients = @($grouped)
     }
 }
-$canonRecipes | ConvertTo-Json -Depth 8 | Out-File (Join-Path $here 'recipes-canon.json') -Encoding utf8
+Save-JsonArray -Array $canonRecipes -Path (Join-Path $here 'recipes-canon.json') -Depth 8 | Out-Null
 $newList = $newItems.GetEnumerator() | Sort-Object -Property @{e={-$_.Value}} | ForEach-Object { [pscustomobject]@{ item = $_.Name; uses = $_.Value } }
-$newList | ConvertTo-Json -Depth 3 | Out-File (Join-Path $here 'new-items.json') -Encoding utf8
+Save-JsonArray -Array $newList -Path (Join-Path $here 'new-items.json') -Depth 3 | Out-Null
 
 Write-Output ("recipes: {0}   new canonical items: {1}" -f $canonRecipes.Count, $newItems.Count)
 Write-Output ("UNMAPPED distinct: " + $unmapped.Count)

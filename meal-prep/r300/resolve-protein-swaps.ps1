@@ -3,6 +3,7 @@
 # normalize-ingredients.ps1 run. Quantities are preserved from the lamb source line.
 $ErrorActionPreference = 'Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
+. (Join-Path $here '..\lib\json-db-io.ps1')   # Save-JsonArray: top-level array always
 $path = Join-Path $here 'recipes-canon.json'
 $rc = Get-Content $path -Raw -Encoding utf8 | ConvertFrom-Json
 
@@ -23,5 +24,5 @@ foreach ($r in $rc) {
         }
     }
 }
-$rc | ConvertTo-Json -Depth 8 | Out-File $path -Encoding utf8
+Save-JsonArray -Array $rc -Path $path -Depth 8 | Out-Null
 Write-Output ("PROTEIN-SWAP-LAMB resolved: {0}" -f $resolved)

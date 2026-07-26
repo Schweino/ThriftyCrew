@@ -71,9 +71,21 @@ function SplitLine([string]$line) {
 }
 
 $out = @(); $headerCount = 0; $noQty = 0; $lineCount = 0
+$fromInline = 0; $fromHarvest = 0
 foreach ($s in $sel) {
-    $h = $harvest[$s.slug]
-    if (-not $h) { throw "no harvest record for $($s.slug)" }
+    # CAPTURE-AT-VERIFY (2026-07-26): sourcers now transcribe ingredients/servings/nutrition/method
+    # INTO the candidate at verification time (recipe-sourcer.md). Prefer that inline capture; the
+    # separate harvest wave is only a fallback for candidates whose inline capture came back short.
+    # An inline capture is a "capture" object (or ingredients array) on the selected record.
+    $inline = $null
+    if ($s.PSObject.Properties.Name -contains 'capture' -and $s.capture -and @($s.capture.ingredients).Count -ge 4) { $inline = $s.capture }
+    elseif ($s.PSObject.Properties.Name -contains 'ingredients' -and @($s.ingredients).Count -ge 4 -and $s.PSObject.Properties.Name -contains 'source_servings') { $inline = $s }
+    if ($inline) { $h = $inline; $fromInline++ }
+    else {
+        $h = $harvest[$s.slug]
+        if (-not $h) { throw "no inline capture AND no harvest record for $($s.slug)" }
+        $fromHarvest++
+    }
     $ings = @()
     foreach ($lineRaw in $h.ingredients) {
         $line = NormalizeLine ([string]$lineRaw)
@@ -98,3 +110,4 @@ foreach ($s in $sel) {
 }
 $out | ConvertTo-Json -Depth 8 | Out-File (Join-Path $here 'FINAL-300.json') -Encoding utf8
 Write-Output ("recipes: {0}  ingredient lines: {1}  headers skipped: {2}  lines w/o qty: {3}" -f $out.Count, $lineCount, $headerCount, $noQty)
+Write-Output ("source: {0} from inline candidate capture, {1} from the harvest fallback" -f $fromInline, $fromHarvest)

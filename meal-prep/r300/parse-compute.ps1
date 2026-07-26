@@ -36,10 +36,12 @@
 # PARITY: run against r100's own canon, this engine matches r100 on 89/100 recipes exactly; all 40 differing
 # ingredient lines trace to the improvements above (authored pint/inch densities, "1 small bunch",
 # "1/2 to 3/4 tsp" range midpoints, "8 (2 lb)" paren weights, real can sizes) plus tuner cascade.
-param([switch]$StrictItems)   # r100 default was: missing DB items are fatal. r300 flags and keeps going.
+param([switch]$StrictItems,   # r100 default was: missing DB items are fatal. r300 flags and keeps going.
+      [string[]]$Slugs)       # targeted recompute: compute only these, splice into existing outputs (macros are per-recipe, no cross-recipe dependency, so a subset is valid). Default (no -Slugs) is unchanged.
 $ErrorActionPreference='Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $rc  = Get-Content (Join-Path $here 'recipes-canon.json') -Raw | ConvertFrom-Json
+if($Slugs){ $rc = @($rc | Where-Object { $Slugs -contains [string]$_.slug }); if($rc.Count -eq 0){ throw "no canon recipes match -Slugs" } }
 $ovr = @{}
 $ovrPath = Join-Path $here 'manual-overrides.json'
 if(Test-Path $ovrPath){
@@ -562,7 +564,16 @@ foreach($r in $rc){
     gate_gap = [Math]::Round([Math]::Max(0,550-$ps.cal),0)
   }
 }
-$out | ConvertTo-Json -Depth 8 | Out-File (Join-Path $here 'recipes-computed.json') -Encoding utf8
+if($Slugs){
+  # splice the recomputed subset into the existing recipes-computed.json (keep the other recipes as-is)
+  $existing = Get-Content (Join-Path $here 'recipes-computed.json') -Raw | ConvertFrom-Json
+  $newBySlug = @{}; foreach($r in $out){ $newBySlug[[string]$r.slug] = $r }
+  $merged = @($existing | ForEach-Object { if($newBySlug.ContainsKey([string]$_.slug)){ $newBySlug[[string]$_.slug] } else { $_ } })
+  $merged | ConvertTo-Json -Depth 8 | Out-File (Join-Path $here 'recipes-computed.json') -Encoding utf8
+  Write-Output ("targeted recompute: spliced {0} recipe(s) into {1} total" -f $out.Count, $merged.Count)
+} else {
+  $out | ConvertTo-Json -Depth 8 | Out-File (Join-Path $here 'recipes-computed.json') -Encoding utf8
+}
 $flags | Out-File (Join-Path $here 'flags-report.txt') -Encoding utf8
 $pass = @($out | Where-Object { $_.gate_550 }).Count
 $unparsed = @($flags | Where-Object { $_ -match 'UNPARSED|NO QTY ANYWHERE' }).Count
