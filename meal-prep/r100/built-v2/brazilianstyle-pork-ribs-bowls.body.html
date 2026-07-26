@@ -106,16 +106,28 @@ function init(box){
     }
     ct.querySelectorAll('.smp-ct-ck input').forEach(function(cb){ cb.addEventListener('change',function(){ removed[cb.getAttribute('data-i')]=!cb.checked; renderTabs(); }); });
   }
-  function renderAll(){ renderIngredients(); renderTabs(); }
+  function updateStats(){
+    // The blue stat rectangle follows the scaler: servings shows the chosen count, and per-serving
+    // is the current-cheapest whole-package total at that count (everyday fallback pre-feed/untracked).
+    try{
+      var bar=document.querySelector('.mts-recipe-stats'); if(!bar) return;
+      var nn=nServ(), t=0;
+      data.ing.forEach(function(it){ t+=price(it,nn,'cheapest').cost; });
+      bar.querySelectorAll('.stat').forEach(function(s){
+        var lEl=s.querySelector('.lbl'), b=s.querySelector('b');
+        if(!lEl||!b) return;
+        var l=lEl.textContent.trim();
+        if(/per serving/i.test(l) && t>0){ b.textContent='$'+(t/nn).toFixed(2); }
+        else if(/^servings$/i.test(l)){ b.textContent=String(nn); }
+      });
+    }catch(e){}
+  }
+  function renderAll(){ renderIngredients(); renderTabs(); updateStats(); }
   box.querySelectorAll('.smp-sc-btn').forEach(function(b){ b.addEventListener('click',function(){ num.value=(parseInt(num.value)||data.base)+parseInt(b.getAttribute('data-d')); renderAll(); }); });
   num.addEventListener('change',renderAll);
   if(ct){ ct.querySelectorAll('.smp-ct-btn').forEach(function(b){ b.addEventListener('click',function(){ tab=b.getAttribute('data-t'); ct.querySelectorAll('.smp-ct-btn').forEach(function(x){ x.classList.toggle('on',x===b); }); renderTabs(); }); }); }
   renderAll();
-  smpGetFeed().then(function(f){ feedData=f; renderTabs();
-    // Per-serving shown in the stat bar = current cheapest whole-package total at base servings.
-    try{ if(f){ var t=0; data.ing.forEach(function(it){ t+=price(it,data.base,'cheapest').cost; });
-      var st=document.querySelector('.mts-recipe-stats .stat b'); if(st&&t>0){ st.textContent='$'+(t/data.base).toFixed(2); } } }catch(e){}
-  });
+  smpGetFeed().then(function(f){ feedData=f; renderTabs(); updateStats(); });
 }
 function go(){ document.querySelectorAll('.smp-sc').forEach(init); }
 if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',go); } else { go(); }
