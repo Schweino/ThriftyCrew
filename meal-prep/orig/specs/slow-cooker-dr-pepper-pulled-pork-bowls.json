@@ -1,0 +1,136 @@
+{
+    "name":  "Slow Cooker Dr Pepper Pulled Pork Bowls",
+    "slug":  "slow-cooker-dr-pepper-pulled-pork-bowls",
+    "cuisine":  "American",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  557,
+                 "protein":  56,
+                 "carbs":  51,
+                 "fat":  13,
+                 "cost_ps":  "2.58"
+             },
+    "intro_html":  "The soda cooks off and leaves behind a sweet, caramel-like depth that makes this pulled pork taste like a backyard cookout. Piled over potatoes, each bowl carries 56 grams of protein for around $1.97. Fourteen servings from one pot is barbecue money well spent.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3400 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 9 lb (3700 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (200 g)",
+                                "\u003cstrong\u003eBBQ Sauce (Sugar Free) (Sweet Baby Ray\u0027s):\u003c/strong\u003e 1 bottle (360 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e for rub (8 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e for rub (3 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e for rub (3 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$1.97 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Use \u003cstrong\u003ezero-sugar soda\u003c/strong\u003e to get the caramelized flavor without the extra sugar and calories. It works just as well as the regular stuff.",
+                       "A \u003cstrong\u003esugar-free BBQ sauce\u003c/strong\u003e keeps the carbs down while still giving you that tangy, smoky finish.",
+                       "Potatoes are your cheapest base by far. A \u003cstrong\u003e9 lb bag under $9\u003c/strong\u003e stretches this whole batch and then some."
+                   ],
+    "make_it":  [
+                    "Set the pork loin in the slow cooker and scatter the sliced onion around it.",
+                    "Pour the zero-sugar soda over the pork until it is about halfway up the sides.",
+                    "Cover and cook on low for 7 to 8 hours until the pork shreds easily.",
+                    "Drain off most of the liquid, then shred the pork right in the pot.",
+                    "Stir in the BBQ sauce and let it warm through for a few minutes.",
+                    "Serve over cooked potatoes and divide into containers."
+                ],
+    "portion_html":  "Each serving lands near 557 calories with 56 grams of protein.",
+    "credit_html":  "",
+    "upsell_html":  "Sweet, smoky, and stupid easy. This one always disappears fast. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  26.11,
+    "cost_batch_true":  28.57,
+    "cost_per_serving":  1.86,
+    "cost_per_serving_true":  2.04,
+    "cost_pantry_add":  7.49,
+    "cost_first_run":  36.06,
+    "scaler":  {
+                   "cost":  "28.57",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Loin",
+                                   "grams":  3400,
+                                   "buy":  "8 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "grams":  3700,
+                                   "buy":  "9 lb",
+                                   "bid":  "potato",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  200,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "BBQ Sauce (Sugar Free)",
+                                   "grams":  360,
+                                   "buy":  "1 bottle",
+                                   "bid":  "sugar-free-bbq-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  8,
+                                   "buy":  "for rub",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "for rub",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  3,
+                                   "buy":  "for rub",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 557 calories and 56 grams of protein for roughly $1.84 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker dr pepper pulled pork bowls, budget dinner",
+                 "costPerServing":  2.58,
+                 "recipeIngredient":  [
+                                          "8 lb Pork Loin",
+                                          "9 lb Potato",
+                                          "2 onions Yellow Onion",
+                                          "1 bottle BBQ Sauce (Sugar Free)",
+                                          "for rub Salt",
+                                          "for rub Black Pepper"
+                                      ],
+                 "steps":  [
+                               "Set the pork loin in the slow cooker and scatter the sliced onion around it.",
+                               "Pour the zero-sugar soda over the pork until it is about halfway up the sides.",
+                               "Cover and cook on low for 7 to 8 hours until the pork shreds easily.",
+                               "Drain off most of the liquid, then shred the pork right in the pot.",
+                               "Stir in the BBQ sauce and let it warm through for a few minutes.",
+                               "Serve over cooked potatoes and divide into containers."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

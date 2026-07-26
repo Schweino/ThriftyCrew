@@ -1,0 +1,176 @@
+{
+    "name":  "Slow Cooker Brown Sugar Sesame Pork Bowls",
+    "slug":  "slow-cooker-brown-sugar-sesame-pork-bowls",
+    "cuisine":  "Asian",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  607,
+                 "protein":  55,
+                 "carbs":  57,
+                 "fat":  15,
+                 "cost_ps":  "3.85"
+             },
+    "intro_html":  "Brown sugar and sesame give this pork a sweet, nutty glaze that tastes like you fussed over it, when really the slow cooker did all the work. Each bowl carries 55 grams of protein over rice and broccoli for just $1.81. Fourteen servings at that price is hard to beat.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3200 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (750 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 4 bags (1200 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1 bag (120 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (120 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (30 g)",
+                                "\u003cstrong\u003eToasted Sesame Seeds (generic):\u003c/strong\u003e 1 jar (18 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (160 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 2 Tbsp (50 g)",
+                                "\u003cstrong\u003eWhite Vinegar (generic):\u003c/strong\u003e 2 Tbsp (50 g)",
+                                "\u003cstrong\u003eGround Ginger (Great Value):\u003c/strong\u003e 3/4 tsp (4 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (18 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$1.81 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Brown sugar and soy sauce make a glaze for almost nothing. A \u003cstrong\u003ebag of brown sugar lasts for months\u003c/strong\u003e and you use just a little each time.",
+                       "Toasted sesame seeds are a small touch that makes the bowl look finished. One \u003cstrong\u003ejar goes a long way\u003c/strong\u003e, so buy it once.",
+                       "Lean on \u003cstrong\u003epork loin at around $2 a pound\u003c/strong\u003e to keep this bowl in the dollar-something range where it belongs."
+                   ],
+    "make_it":  [
+                    "Rub the pork loin with a little olive oil and set it in the slow cooker with the sliced onion.",
+                    "Stir together the brown sugar and soy sauce, then pour it over the pork.",
+                    "Cover and cook on low for 7 to 8 hours until fork-tender.",
+                    "Shred the pork and stir it back through the glaze.",
+                    "Steam the broccoli florets until just tender.",
+                    "Serve over cooked white rice, sprinkle with toasted sesame seeds, and pack it up."
+                ],
+    "portion_html":  "Each serving runs about 607 calories with 55 grams of protein.",
+    "credit_html":  "",
+    "upsell_html":  "Sweet, nutty, and cheap enough that you can make it every week without a second thought. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  25.39,
+    "cost_batch_true":  29.01,
+    "cost_per_serving":  1.81,
+    "cost_per_serving_true":  2.07,
+    "cost_pantry_add":  24.88,
+    "cost_first_run":  53.89,
+    "scaler":  {
+                   "cost":  "29.01",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Loin",
+                                   "grams":  3200,
+                                   "buy":  "8 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  750,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  1200,
+                                   "buy":  "4 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "grams":  120,
+                                   "buy":  "1 bag",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  120,
+                                   "buy":  "1 bottle",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  30,
+                                   "buy":  "1 bottle",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Toasted Sesame Seeds",
+                                   "grams":  18,
+                                   "buy":  "1 jar",
+                                   "bid":  "toasted-sesame-seeds",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  160,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "grams":  50,
+                                   "buy":  "2 Tbsp",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "White Vinegar",
+                                   "grams":  50,
+                                   "buy":  "2 Tbsp",
+                                   "bid":  "white-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Ground Ginger",
+                                   "grams":  4,
+                                   "buy":  "3/4 tsp",
+                                   "bid":  "ground-ginger",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  18,
+                                   "buy":  "2 cloves",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Asian meal prep. Fourteen servings at about 607 calories and 55 grams of protein for roughly $1.63 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker brown sugar sesame pork bowls, budget dinner",
+                 "costPerServing":  3.85,
+                 "recipeIngredient":  [
+                                          "8 lb Pork Loin",
+                                          "1 lb Rice",
+                                          "4 bags Broccoli Florets",
+                                          "1 bag Brown Sugar",
+                                          "1 bottle Soy Sauce",
+                                          "1 bottle Olive Oil"
+                                      ],
+                 "steps":  [
+                               "Rub the pork loin with a little olive oil and set it in the slow cooker with the sliced onion.",
+                               "Stir together the brown sugar and soy sauce, then pour it over the pork.",
+                               "Cover and cook on low for 7 to 8 hours until fork-tender.",
+                               "Shred the pork and stir it back through the glaze.",
+                               "Steam the broccoli florets until just tender.",
+                               "Serve over cooked white rice, sprinkle with toasted sesame seeds, and pack it up."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

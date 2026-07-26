@@ -1,0 +1,190 @@
+{
+    "name":  "Beef Chili Mac",
+    "slug":  "beef-chili-mac",
+    "cuisine":  "American",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  596,
+                 "protein":  53,
+                 "carbs":  62,
+                 "fat":  17,
+                 "cost_ps":  "4.75"
+             },
+    "intro_html":  "Chili and macaroni in one skillet, the way it should be. This crowd-pleaser stacks 53 grams of protein per bowl for about $3.11 and makes 14 servings. It is warm, filling, and cheap enough that you will wonder why you ever bought the boxed version.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2230 g)",
+                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 3 boxs (969 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (250 g)",
+                                "\u003cstrong\u003eKidney Beans (generic):\u003c/strong\u003e 1 can (430 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cans (800 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2 cans (450 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (900 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 1 bag (160 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 jar (14 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 jar (8 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (15 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 tsp (27 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (15 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.11 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "A \u003cstrong\u003ecan of kidney beans\u003c/strong\u003e adds protein and fiber for about a dollar, making it one of the best-value stretchers in the recipe.",
+                       "Buy \u003cstrong\u003echili powder and cumin in bulk jars\u003c/strong\u003e. They cost pennies per meal and last months, unlike the pricey single-use seasoning packets.",
+                       "Grab \u003cstrong\u003estore-brand shredded cheddar\u003c/strong\u003e. Melted into hot chili mac, nobody can tell the difference from the name brand."
+                   ],
+    "make_it":  [
+                    "Brown 4.9 pounds of 93/7 ground beef with the chopped onion, then drain.",
+                    "Stir in the kidney beans, diced tomatoes, tomato sauce, beef broth, chili powder, cumin, and garlic.",
+                    "Simmer until the chili thickens and the flavors come together.",
+                    "Boil the penne separately until just tender, then drain and fold it in.",
+                    "Melt the shredded cheddar over the top before portioning into containers."
+                ],
+    "portion_html":  "Every one of the 14 bowls carries 53 grams of protein at 596 calories, so this comfort-food combo delivers on the numbers too.",
+    "credit_html":  "",
+    "upsell_html":  "One skillet, big flavor, and a fridge stocked for the week. Chili mac never gets old. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  45.43,
+    "cost_batch_true":  49.68,
+    "cost_per_serving":  3.24,
+    "cost_per_serving_true":  3.55,
+    "cost_pantry_add":  16.79,
+    "cost_first_run":  66.47,
+    "scaler":  {
+                   "cost":  "49.68",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  2230,
+                                   "buy":  "5 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Penne Pasta",
+                                   "grams":  969,
+                                   "buy":  "3 boxs",
+                                   "bid":  "penne-pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  250,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Kidney Beans",
+                                   "grams":  430,
+                                   "buy":  "1 can",
+                                   "bid":  "kidney-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "grams":  800,
+                                   "buy":  "2 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "grams":  450,
+                                   "buy":  "2 cans",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "grams":  900,
+                                   "buy":  "1 carton",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "grams":  160,
+                                   "buy":  "1 bag",
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "grams":  14,
+                                   "buy":  "1 jar",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  8,
+                                   "buy":  "1 jar",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  15,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  27,
+                                   "buy":  "2 tsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  15,
+                                   "buy":  "to taste",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 596 calories and 53 grams of protein for roughly $2.89 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, beef chili mac, budget dinner",
+                 "costPerServing":  4.75,
+                 "recipeIngredient":  [
+                                          "5 lb 93/7 Ground Beef",
+                                          "3 boxs Penne Pasta",
+                                          "3 onions Yellow Onion",
+                                          "1 can Kidney Beans",
+                                          "2 cans Diced Tomatoes",
+                                          "2 cans Tomato Sauce"
+                                      ],
+                 "steps":  [
+                               "Brown 4.9 pounds of 93/7 ground beef with the chopped onion, then drain.",
+                               "Stir in the kidney beans, diced tomatoes, tomato sauce, beef broth, chili powder, cumin, and garlic.",
+                               "Simmer until the chili thickens and the flavors come together.",
+                               "Boil the penne separately until just tender, then drain and fold it in.",
+                               "Melt the shredded cheddar over the top before portioning into containers."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

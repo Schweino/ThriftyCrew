@@ -19,7 +19,7 @@ $feedMap = @{}; foreach($p in $feed.PSObject.Properties){ $feedMap[$p.Name] = $p
 function Slugify([string]$s){ (($s.ToLower() -replace "[^a-z0-9]+","-").Trim('-')) }
 
 $rows = @()
-foreach($run in 'r100','r300'){
+foreach($run in 'r100','r300','orig'){
   $costed = Get-Content (Join-Path $mp "$run\recipes-costed.json") -Raw | ConvertFrom-Json
   foreach($sf in (Get-ChildItem (Join-Path $mp "$run\specs\*.json") | Where-Object Name -ne '_index.json')){
     $spec = Get-Content $sf.FullName -Raw | ConvertFrom-Json

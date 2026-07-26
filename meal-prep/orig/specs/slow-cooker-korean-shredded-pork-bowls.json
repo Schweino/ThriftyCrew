@@ -1,0 +1,160 @@
+{
+    "name":  "Slow Cooker Korean Shredded Pork Bowls",
+    "slug":  "slow-cooker-korean-shredded-pork-bowls",
+    "cuisine":  "Korean",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  569,
+                 "protein":  54,
+                 "carbs":  64,
+                 "fat":  8,
+                 "cost_ps":  "3.92"
+             },
+    "intro_html":  "This Korean-style shredded pork brings a sweet and savory punch for less than three bucks a bowl. Lean tenderloin slow cooks in soy, brown sugar, garlic, and ginger until it shreds like a dream, then goes over rice with carrots. It makes 14 servings and hands you 54 grams of protein each.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3200 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (950 g)",
+                                "\u003cstrong\u003eShredded Carrots:\u003c/strong\u003e 2 bags (510 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (120 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1 bag (80 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (120 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (30 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1 root (30 g)",
+                                "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 1 bottle (30 g)",
+                                "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 2, diced (or 2-4 tbsp Sriracha) (45 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.76 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Fresh ginger freezes well and grates straight from frozen. \u003cstrong\u003eBuy a knob of ginger and freeze it\u003c/strong\u003e so it never goes bad on you.",
+                       "Bagged shredded carrots save you the peeling and cost little. \u003cstrong\u003eGrab the pre-shredded carrots\u003c/strong\u003e to keep prep fast.",
+                       "Tenderloin is pricier, so time your buy. \u003cstrong\u003eStock up on tenderloin when it goes on sale\u003c/strong\u003e and freeze what you do not use today."
+                   ],
+    "make_it":  [
+                    "Add the pork tenderloin, sliced onion, garlic, and grated ginger to the slow cooker.",
+                    "Stir the soy sauce and brown sugar together, then pour it over the pork.",
+                    "Cover and cook on low for 7 to 8 hours until the pork shreds easily.",
+                    "Shred the pork right in the pot so it soaks up the sauce.",
+                    "Cook the rice and warm the shredded carrots for a fresh crunch.",
+                    "Pile the pork over rice and top with the carrots."
+                ],
+    "portion_html":  "Each bowl gives you 54 grams of protein at 569 calories, with only 8 grams of fat.",
+    "credit_html":  "",
+    "upsell_html":  "Bold flavor, easy prep, and a price that keeps your grocery budget happy. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  36.42,
+    "cost_batch_true":  43.88,
+    "cost_per_serving":  2.6,
+    "cost_per_serving_true":  3.13,
+    "cost_pantry_add":  10.95,
+    "cost_first_run":  54.83,
+    "scaler":  {
+                   "cost":  "43.88",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Tenderloin",
+                                   "grams":  3200,
+                                   "buy":  "8 lb",
+                                   "bid":  "pork-tenderloin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  950,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Shredded Carrots",
+                                   "grams":  510,
+                                   "buy":  "2 bags",
+                                   "bid":  "shredded-carrots",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  120,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "grams":  80,
+                                   "buy":  "1 bag",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  120,
+                                   "buy":  "1 bottle",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  30,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "grams":  30,
+                                   "buy":  "1 root",
+                                   "bid":  "ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice Vinegar",
+                                   "grams":  30,
+                                   "buy":  "1 bottle",
+                                   "bid":  "rice-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Jalapeno",
+                                   "grams":  45,
+                                   "buy":  "2, diced (or 2-4 tbsp Sriracha)",
+                                   "bid":  "jalapeno",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Korean meal prep. Fourteen servings at about 569 calories and 54 grams of protein for roughly $2.46 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker korean shredded pork bowls, budget dinner",
+                 "costPerServing":  3.92,
+                 "recipeIngredient":  [
+                                          "8 lb Pork Tenderloin",
+                                          "1 lb Rice",
+                                          "2 bags Shredded Carrots",
+                                          "2 onions Yellow Onion",
+                                          "1 bag Brown Sugar",
+                                          "1 bottle Soy Sauce"
+                                      ],
+                 "steps":  [
+                               "Add the pork tenderloin, sliced onion, garlic, and grated ginger to the slow cooker.",
+                               "Stir the soy sauce and brown sugar together, then pour it over the pork.",
+                               "Cover and cook on low for 7 to 8 hours until the pork shreds easily.",
+                               "Shred the pork right in the pot so it soaks up the sauce.",
+                               "Cook the rice and warm the shredded carrots for a fresh crunch.",
+                               "Pile the pork over rice and top with the carrots."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

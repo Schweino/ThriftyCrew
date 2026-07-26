@@ -1,0 +1,136 @@
+{
+    "name":  "Slow Cooker Korean Gochujang Pork Bowls",
+    "slug":  "slow-cooker-korean-gochujang-pork-bowls",
+    "cuisine":  "Korean",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  576,
+                 "protein":  56,
+                 "carbs":  54,
+                 "fat":  13,
+                 "cost_ps":  "2.65"
+             },
+    "intro_html":  "Gochujang brings sweet heat and a deep savory kick, and it turns cheap pork loin into something that tastes like takeout. Each bowl packs 56 grams of protein over rice and broccoli for just $1.78. Fourteen servings at that price is the kind of math that keeps money in your pocket.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3300 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (640 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 3 bags (900 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (130 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (240 g)",
+                                "\u003cstrong\u003eGochujang (generic):\u003c/strong\u003e 1 tub (200 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (120 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$1.78 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Pork loin is your cheap workhorse. At around \u003cstrong\u003e$2 a pound\u003c/strong\u003e it costs half what tenderloin does and shreds up just as nicely.",
+                       "A tub of gochujang looks pricey up front, but you use a little at a time. \u003cstrong\u003eOne tub flavors several batches\u003c/strong\u003e, so the real cost per meal is tiny.",
+                       "Grab \u003cstrong\u003efrozen broccoli florets\u003c/strong\u003e instead of fresh. They are cheaper, they never spoil on you, and they steam straight from the bag."
+                   ],
+    "make_it":  [
+                    "Set the pork loin in the slow cooker.",
+                    "Whisk the gochujang, soy sauce, honey, and chicken broth, then pour it over the pork.",
+                    "Cover and cook on low for 7 to 8 hours until the pork shreds easily.",
+                    "Shred the pork and stir it back into the sauce.",
+                    "Steam the broccoli florets until just tender and set aside.",
+                    "Serve the pork and broccoli over cooked white rice and portion out."
+                ],
+    "portion_html":  "Each of the 14 servings comes in around 576 calories with 56 grams of protein.",
+    "credit_html":  "",
+    "upsell_html":  "Big flavor, small price, and it hits that sweet-and-spicy spot every single time. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  25.49,
+    "cost_batch_true":  27.45,
+    "cost_per_serving":  1.82,
+    "cost_per_serving_true":  1.96,
+    "cost_pantry_add":  9.62,
+    "cost_first_run":  37.07,
+    "scaler":  {
+                   "cost":  "27.45",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Loin",
+                                   "grams":  3300,
+                                   "buy":  "8 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  640,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  900,
+                                   "buy":  "3 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "grams":  130,
+                                   "buy":  "1 bottle",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  240,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Gochujang",
+                                   "grams":  200,
+                                   "buy":  "1 tub",
+                                   "bid":  "gochujang",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  120,
+                                   "buy":  "1 bottle",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Korean meal prep. Fourteen servings at about 576 calories and 56 grams of protein for roughly $1.65 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker korean gochujang pork bowls, budget dinner",
+                 "costPerServing":  2.65,
+                 "recipeIngredient":  [
+                                          "8 lb Pork Loin",
+                                          "1 lb Rice",
+                                          "3 bags Broccoli Florets",
+                                          "1 bottle Honey",
+                                          "1 carton Chicken Broth",
+                                          "1 tub Gochujang"
+                                      ],
+                 "steps":  [
+                               "Set the pork loin in the slow cooker.",
+                               "Whisk the gochujang, soy sauce, honey, and chicken broth, then pour it over the pork.",
+                               "Cover and cook on low for 7 to 8 hours until the pork shreds easily.",
+                               "Shred the pork and stir it back into the sauce.",
+                               "Steam the broccoli florets until just tender and set aside.",
+                               "Serve the pork and broccoli over cooked white rice and portion out."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

@@ -1,0 +1,182 @@
+{
+    "name":  "Ground Beef Stroganoff Pasta",
+    "slug":  "ground-beef-stroganoff-pasta",
+    "cuisine":  "American",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  601,
+                 "protein":  52,
+                 "carbs":  62,
+                 "fat":  18,
+                 "cost_ps":  "4.61"
+             },
+    "intro_html":  "Creamy beef stroganoff turned into a make-ahead skillet that fits your macros. Each bowl carries 52 grams of protein for around $3.32 and the batch makes 14 servings. This is the kind of stick-to-your-ribs dinner that usually costs way more than three bucks.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2240 g)",
+                                "\u003cstrong\u003eRotini Pasta (Barilla):\u003c/strong\u003e 3 boxs (1166 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 4 packages (700 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (900 g)",
+                                "\u003cstrong\u003eLight Sour Cream (generic):\u003c/strong\u003e 1 tub (320 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 1 jar (30 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1 boxs (40 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (20 g)",
+                                "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 3 tbsp (72 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1 tsp (15 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (15 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.32 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eWhite mushrooms\u003c/strong\u003e cost less than baby bellas and cook down the same, so grab the cheaper carton.",
+                       "\u003cstrong\u003eLight sour cream\u003c/strong\u003e gives you the classic creamy tang with less fat, and one tub covers the whole batch.",
+                       "Stir the sour cream in \u003cstrong\u003eoff the heat\u003c/strong\u003e so it does not curdle. A small technique tip that saves you from wasting a good ingredient."
+                   ],
+    "make_it":  [
+                    "Brown 4.9 pounds of 93/7 ground beef with the chopped onion and a pat of butter, then drain.",
+                    "Add the sliced mushrooms and cook until they release their liquid and shrink down.",
+                    "Boil the rotini separately until just tender, then drain.",
+                    "Pour in the beef broth and dijon, simmer, then stir in the light sour cream off the heat so it stays smooth.",
+                    "Fold the cooked rotini into the creamy sauce and portion it out."
+                ],
+    "portion_html":  "Every one of the 14 servings delivers 52 grams of protein and 601 calories, so this creamy classic still earns its spot on a lean plan.",
+    "credit_html":  "",
+    "upsell_html":  "Rich, creamy, and ready in the fridge all week. Comfort food does not have to break the budget. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  47.75,
+    "cost_batch_true":  54.39,
+    "cost_per_serving":  3.41,
+    "cost_per_serving_true":  3.88,
+    "cost_pantry_add":  10.13,
+    "cost_first_run":  64.52,
+    "scaler":  {
+                   "cost":  "54.39",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  2240,
+                                   "buy":  "5 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rotini Pasta",
+                                   "grams":  1166,
+                                   "buy":  "3 boxs",
+                                   "bid":  "rotini-pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "White Mushrooms",
+                                   "grams":  700,
+                                   "buy":  "4 packages",
+                                   "bid":  "white-mushrooms",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  300,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "grams":  900,
+                                   "buy":  "1 carton",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Light Sour Cream",
+                                   "grams":  320,
+                                   "buy":  "1 tub",
+                                   "bid":  "light-sour-cream",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "grams":  30,
+                                   "buy":  "1 jar",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "grams":  40,
+                                   "buy":  "1 boxs",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  20,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "All-Purpose Flour",
+                                   "grams":  72,
+                                   "buy":  "3 tbsp",
+                                   "bid":  "all-purpose-flour",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "grams":  15,
+                                   "buy":  "1 tsp",
+                                   "bid":  "worcestershire-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  15,
+                                   "buy":  "to taste",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 601 calories and 52 grams of protein for roughly $3.12 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, ground beef stroganoff pasta, budget dinner",
+                 "costPerServing":  4.61,
+                 "recipeIngredient":  [
+                                          "5 lb 93/7 Ground Beef",
+                                          "3 boxs Rotini Pasta",
+                                          "4 packages White Mushrooms",
+                                          "3 onions Yellow Onion",
+                                          "1 carton Beef Broth",
+                                          "1 tub Light Sour Cream"
+                                      ],
+                 "steps":  [
+                               "Brown 4.9 pounds of 93/7 ground beef with the chopped onion and a pat of butter, then drain.",
+                               "Add the sliced mushrooms and cook until they release their liquid and shrink down.",
+                               "Boil the rotini separately until just tender, then drain.",
+                               "Pour in the beef broth and dijon, simmer, then stir in the light sour cream off the heat so it stays smooth.",
+                               "Fold the cooked rotini into the creamy sauce and portion it out."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

@@ -1,0 +1,168 @@
+{
+    "name":  "Slow Cooker Chicken Curry Rice Bowls",
+    "slug":  "slow-cooker-chicken-curry-rice-bowls",
+    "cuisine":  "Indian",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  568,
+                 "protein":  59,
+                 "carbs":  65,
+                 "fat":  6,
+                 "cost_ps":  "3.40"
+             },
+    "intro_html":  "A good chicken curry is warm, fragrant, and endlessly forgiving, which makes it perfect for meal prep. This one packs in the protein, keeps the fat low, and stays cheap per serving thanks to a few pantry staples. One batch makes 14 servings.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3100 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1020 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 1 lb (350 g)",
+                                "\u003cstrong\u003eCurry Powder (generic):\u003c/strong\u003e 1 jar (40 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1 tub (340 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (12 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (120 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1 boxs (16 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (36 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (5 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.03 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "A single \u003cstrong\u003ejar of curry powder\u003c/strong\u003e carries the whole flavor and stretches across many future batches.",
+                       "\u003cstrong\u003eGreek yogurt\u003c/strong\u003e stands in for coconut milk or cream and keeps this bowl light and cheap.",
+                       "Whole \u003cstrong\u003ecarrots\u003c/strong\u003e bought by the pound cost far less than the pre-cut bags and stretch the meal further."
+                   ],
+    "make_it":  [
+                    "Add the chicken breast, chopped onion, sliced carrots, and minced garlic to the crock.",
+                    "Stir in the curry powder and pour in the chicken broth.",
+                    "Cover and cook on low for 6 to 8 hours until the chicken is tender.",
+                    "Shred the chicken, then stir in the Greek yogurt for creaminess.",
+                    "Whisk the cornstarch with a little water and stir it in to thicken the sauce.",
+                    "Serve the curry over rice."
+                ],
+    "portion_html":  "Each of the 14 servings comes in around 59g protein for about 568 calories, at roughly $2.03 a bowl.",
+    "credit_html":  "",
+    "upsell_html":  "Fragrant, filling, and easy on the budget, this curry is meal prep you will actually crave. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  31.96,
+    "cost_batch_true":  36.47,
+    "cost_per_serving":  2.28,
+    "cost_per_serving_true":  2.6,
+    "cost_pantry_add":  11.11,
+    "cost_first_run":  47.58,
+    "scaler":  {
+                   "cost":  "36.47",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3100,
+                                   "buy":  "7 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  1020,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  300,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "grams":  350,
+                                   "buy":  "1 lb",
+                                   "bid":  "shredded-carrots",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Curry Powder",
+                                   "grams":  40,
+                                   "buy":  "1 jar",
+                                   "bid":  "curry-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "grams":  340,
+                                   "buy":  "1 tub",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  12,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  120,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "grams":  16,
+                                   "buy":  "1 boxs",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  36,
+                                   "buy":  "2 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  5,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Indian meal prep. Fourteen servings at about 568 calories and 59 grams of protein for roughly $1.98 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker chicken curry rice bowls, budget dinner",
+                 "costPerServing":  3.4,
+                 "recipeIngredient":  [
+                                          "7 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "3 onions Yellow Onion",
+                                          "1 lb Carrots",
+                                          "1 jar Curry Powder",
+                                          "1 tub Greek Yogurt"
+                                      ],
+                 "steps":  [
+                               "Add the chicken breast, chopped onion, sliced carrots, and minced garlic to the crock.",
+                               "Stir in the curry powder and pour in the chicken broth.",
+                               "Cover and cook on low for 6 to 8 hours until the chicken is tender.",
+                               "Shred the chicken, then stir in the Greek yogurt for creaminess.",
+                               "Whisk the cornstarch with a little water and stir it in to thicken the sauce.",
+                               "Serve the curry over rice."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

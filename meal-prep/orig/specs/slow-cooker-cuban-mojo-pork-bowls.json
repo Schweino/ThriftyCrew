@@ -1,0 +1,184 @@
+{
+    "name":  "Slow Cooker Cuban Mojo Pork Bowls",
+    "slug":  "slow-cooker-cuban-mojo-pork-bowls",
+    "cuisine":  "Cuban",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  565,
+                 "protein":  60,
+                 "carbs":  55,
+                 "fat":  9,
+                 "cost_ps":  "4.37"
+             },
+    "intro_html":  "Orange, lime, and garlic give this pork that classic Cuban mojo punch, and it comes together with almost no hands-on time. Served over seasoned black beans, each bowl carries a big 60 grams of protein for about $2.74. Fourteen servings means your fridge is stocked and your wallet barely notices.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3400 g)",
+                                "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 3 cans (1200 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (640 g)",
+                                "\u003cstrong\u003eOrange Juice:\u003c/strong\u003e 1 carton (480 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1 bottle (60 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (15 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 jar (8 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 jar (6 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 1 cup chopped (35 g)",
+                                "\u003cstrong\u003eFresh Mint:\u003c/strong\u003e 1/3 cup chopped (12 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (12 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 tsp (6 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1 tbsp (18 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.74 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Canned \u003cstrong\u003eseasoned black beans save you the spices\u003c/strong\u003e and the soak time. They come pre-flavored, so you get more taste for less work.",
+                       "A small carton of orange juice is plenty. You only need a splash, so \u003cstrong\u003euse the rest for breakfast\u003c/strong\u003e instead of letting it go to waste.",
+                       "Fresh garlic beats the jarred stuff on flavor and price. One \u003cstrong\u003ebulb costs under a dollar\u003c/strong\u003e and lasts weeks."
+                   ],
+    "make_it":  [
+                    "Place the pork tenderloin in the slow cooker.",
+                    "Pour the orange juice and lime juice over the pork, then add the garlic and cumin.",
+                    "Cover and cook on low for 7 to 8 hours until fork-tender.",
+                    "Shred the pork and stir it back through the citrus juices.",
+                    "Warm the seasoned black beans and spoon them into your bowls as the base.",
+                    "Top the beans with the mojo pork and divide into containers."
+                ],
+    "portion_html":  "Every serving delivers around 565 calories and a strong 60 grams of protein.",
+    "credit_html":  "",
+    "upsell_html":  "Bright, filling, and cheap. That is a combination worth keeping in your regular rotation. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  43.96,
+    "cost_batch_true":  49.76,
+    "cost_per_serving":  3.14,
+    "cost_per_serving_true":  3.55,
+    "cost_pantry_add":  11.37,
+    "cost_first_run":  61.13,
+    "scaler":  {
+                   "cost":  "49.76",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Tenderloin",
+                                   "grams":  3400,
+                                   "buy":  "8 lb",
+                                   "bid":  "pork-tenderloin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Seasoned Black Beans",
+                                   "grams":  1200,
+                                   "buy":  "3 cans",
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  640,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Orange Juice",
+                                   "grams":  480,
+                                   "buy":  "1 carton",
+                                   "bid":  "orange-juice",
+                                   "gpu":  "31.000"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "grams":  60,
+                                   "buy":  "1 bottle",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  15,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  8,
+                                   "buy":  "1 jar",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  6,
+                                   "buy":  "1 jar",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "grams":  35,
+                                   "buy":  "1 cup chopped",
+                                   "bid":  "fresh-cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Fresh Mint",
+                                   "grams":  12,
+                                   "buy":  "1/3 cup chopped",
+                                   "bid":  "fresh-mint",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  12,
+                                   "buy":  "1 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  6,
+                                   "buy":  "1 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "grams":  18,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Cuban meal prep. Fourteen servings at about 565 calories and 60 grams of protein for roughly $2.58 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker cuban mojo pork bowls, budget dinner",
+                 "costPerServing":  4.37,
+                 "recipeIngredient":  [
+                                          "8 lb Pork Tenderloin",
+                                          "3 cans Seasoned Black Beans",
+                                          "1 lb Rice",
+                                          "1 carton Orange Juice",
+                                          "1 bottle Lime Juice",
+                                          "1 bulb Garlic"
+                                      ],
+                 "steps":  [
+                               "Place the pork tenderloin in the slow cooker.",
+                               "Pour the orange juice and lime juice over the pork, then add the garlic and cumin.",
+                               "Cover and cook on low for 7 to 8 hours until fork-tender.",
+                               "Shred the pork and stir it back through the citrus juices.",
+                               "Warm the seasoned black beans and spoon them into your bowls as the base.",
+                               "Top the beans with the mojo pork and divide into containers."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

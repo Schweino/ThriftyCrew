@@ -1,0 +1,154 @@
+{
+    "name":  "Slow Cooker Buffalo Chicken and Rice Bowl",
+    "slug":  "slow-cooker-buffalo-chicken-bowl",
+    "cuisine":  "American",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  513,
+                 "protein":  51,
+                 "carbs":  62,
+                 "fat":  5,
+                 "cost_ps":  "3.38"
+             },
+    "intro_html":  "This is a full week of buffalo chicken dinners built right in your slow cooker, tangy shredded chicken over rice with a little broccoli and melty cheddar. It hits that wing-night craving with real protein instead of a plate of empty fried stuff, and every gram of protein comes from lean chicken breast. A tray of buffalo wings runs you $12 a person at a bar, and this bowl feeds you the same flavor for a fraction of that.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2495 g)",
+                                "\u003cstrong\u003eRanch Seasoning Mix (Hidden Valley):\u003c/strong\u003e 1 packet (47 g)",
+                                "\u003cstrong\u003eBuffalo Wing Sauce (Frank\u0027s RedHot):\u003c/strong\u003e 1 bottle (240 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1000 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 2 bags (595 g)",
+                                "\u003cstrong\u003eFat Free Cheddar (Great Value):\u003c/strong\u003e 1 bag (196 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1/4 cup melted (180 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e ~2 tsp (broccoli) (40 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/2 tsp (10 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.29 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy chicken breast in the big family pack.\u003c/strong\u003e The per-pound price on a 5 to 6 lb pack is almost always lower than small trays, and this recipe uses all of it.",
+                       "\u003cstrong\u003eGrab a store-brand ranch seasoning.\u003c/strong\u003e It tastes the same in a slow cooker as the name brand and costs half as much. Buffalo sauce keeps for months, so watch for it on sale and stock up.",
+                       "\u003cstrong\u003eUse frozen broccoli if fresh is pricey that week.\u003c/strong\u003e Frozen is picked at peak, costs less, and works perfectly here since you are cooking it down anyway."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot on a kitchen scale and write the number down. You will need it to portion evenly at the end.",
+                    "Put the chicken breast in the slow cooker, sprinkle on the ranch seasoning, and pour over the buffalo sauce. Cook on low for 6 to 8 hours or high for 3 to 4, until the chicken pulls apart with a fork.",
+                    "While that finishes, cook your rice per the package. This is your base and it stretches the whole batch.",
+                    "Roast or steam the broccoli florets until just tender and still bright green. Do not overcook it or it turns to mush by day three.",
+                    "Shred the chicken while it is still warm, right in the slow cooker, using two forks. Warm chicken shreds far easier than cold.",
+                    "Toss the shredded chicken back through its own cooking liquid so every bite stays juicy and coated.",
+                    "Add the cooked rice, broccoli, and the shredded cheddar to your weighed mixing pot and fold everything together."
+                ],
+    "portion_html":  "Weigh the full pot, subtract the empty-pot weight you wrote down, and divide that number by 14. Scoop that exact weight into each of your 14 containers so every dinner carries the same hearty serving of protein.",
+    "credit_html":  "",
+    "upsell_html":  "Fourteen buffalo chicken dinners for two, at a per-bowl cost that beats one order of wings. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  28.96,
+    "cost_batch_true":  32.99,
+    "cost_per_serving":  2.07,
+    "cost_per_serving_true":  2.36,
+    "cost_pantry_add":  14.35,
+    "cost_first_run":  47.34,
+    "scaler":  {
+                   "cost":  "32.99",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  2495,
+                                   "buy":  "6 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ranch Seasoning Mix",
+                                   "grams":  47,
+                                   "buy":  "1 packet",
+                                   "bid":  "ranch-seasoning-mix",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Buffalo Wing Sauce",
+                                   "grams":  240,
+                                   "buy":  "1 bottle",
+                                   "bid":  "buffalo-wing-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  1000,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  595,
+                                   "buy":  "2 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fat Free Cheddar",
+                                   "grams":  196,
+                                   "buy":  "1 bag",
+                                   "bid":  "fat-free-cheddar",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "grams":  180,
+                                   "buy":  "1/4 cup melted",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  40,
+                                   "buy":  "~2 tsp (broccoli)",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  10,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 513 calories and 51 grams of protein for roughly $2.06 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker buffalo chicken and rice bowl, budget dinner",
+                 "costPerServing":  3.38,
+                 "recipeIngredient":  [
+                                          "6 lb Boneless Skinless Chicken Breast",
+                                          "1 packet Ranch Seasoning Mix",
+                                          "1 bottle Buffalo Wing Sauce",
+                                          "1 lb Rice",
+                                          "2 bags Broccoli Florets",
+                                          "1 bag Fat Free Cheddar"
+                                      ],
+                 "steps":  [
+                               "Weigh your empty mixing pot on a kitchen scale and write the number down. You will need it to portion evenly at the end.",
+                               "Put the chicken breast in the slow cooker, sprinkle on the ranch seasoning, and pour over the buffalo sauce. Cook on low for 6 to 8 hours or high for 3 to 4, until the chicken pulls apart with a fork.",
+                               "While that finishes, cook your rice per the package. This is your base and it stretches the whole batch.",
+                               "Roast or steam the broccoli florets until just tender and still bright green. Do not overcook it or it turns to mush by day three.",
+                               "Shred the chicken while it is still warm, right in the slow cooker, using two forks. Warm chicken shreds far easier than cold.",
+                               "Toss the shredded chicken back through its own cooking liquid so every bite stays juicy and coated.",
+                               "Add the cooked rice, broccoli, and the shredded cheddar to your weighed mixing pot and fold everything together."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

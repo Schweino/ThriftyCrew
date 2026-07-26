@@ -1,0 +1,166 @@
+{
+    "name":  "Slow Cooker Creamy Chicken and Mushroom Bowls",
+    "slug":  "slow-cooker-creamy-chicken-mushroom-bowls",
+    "cuisine":  "American",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  568,
+                 "protein":  63,
+                 "carbs":  55,
+                 "fat":  9,
+                 "cost_ps":  "3.71"
+             },
+    "intro_html":  "Creamy chicken and mushrooms is the kind of stick-to-your-ribs meal that usually comes from a can of soup and a lot of sodium. This slow cooker version does it from scratch, landing at 63 grams of protein for about $2.76 a serving. Fourteen servings means the good stuff feeds you all week for the price of one restaurant plate.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3300 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (900 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 4 packages (900 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (720 g)",
+                                "\u003cstrong\u003e1/3 Fat Cream Cheese (Great Value):\u003c/strong\u003e 1 block (168 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1 tub (340 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 jar (12 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp kosher salt (13 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (3 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 1/2 tsp (2 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 2 tsp (25 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.76 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Whole white mushrooms are usually cheaper than pre-sliced, so \u003cstrong\u003ebuy them whole and slice them yourself\u003c/strong\u003e in two minutes.",
+                       "Greek yogurt plus a little cream cheese replaces cans of condensed soup, so \u003cstrong\u003eskip the canned soup aisle\u003c/strong\u003e and cut the sodium too.",
+                       "Garlic powder is far cheaper than fresh for a dish this size, so \u003cstrong\u003ekeep a jar in the rack\u003c/strong\u003e and season with a free hand."
+                   ],
+    "make_it":  [
+                    "Add the chicken, sliced mushrooms, chicken broth, cream cheese, and garlic powder to the slow cooker.",
+                    "Cover and cook on low for 6 to 7 hours until the chicken is tender and the mushrooms are soft.",
+                    "Shred the chicken and stir everything so the cream cheese melts into a smooth sauce.",
+                    "Stir in the Greek yogurt off the heat to keep the sauce creamy and tangy.",
+                    "Spoon the creamy chicken and mushrooms over white rice."
+                ],
+    "portion_html":  "Each serving delivers 63 grams of protein and 568 calories, creamy comfort without the calorie blowout.",
+    "credit_html":  "",
+    "upsell_html":  "Made from scratch, easy on salt, and heavy on protein. Your future self will thank you. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  38.09,
+    "cost_batch_true":  43.47,
+    "cost_per_serving":  2.72,
+    "cost_per_serving_true":  3.1,
+    "cost_pantry_add":  8.48,
+    "cost_first_run":  51.95,
+    "scaler":  {
+                   "cost":  "43.47",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3300,
+                                   "buy":  "8 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  900,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "White Mushrooms",
+                                   "grams":  900,
+                                   "buy":  "4 packages",
+                                   "bid":  "white-mushrooms",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  720,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "1/3 Fat Cream Cheese",
+                                   "grams":  168,
+                                   "buy":  "1 block",
+                                   "bid":  "1-3-fat-cream-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "grams":  340,
+                                   "buy":  "1 tub",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  12,
+                                   "buy":  "1 jar",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  13,
+                                   "buy":  "1 tsp kosher salt",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "grams":  2,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "grams":  25,
+                                   "buy":  "2 tsp",
+                                   "bid":  "worcestershire-sauce",
+                                   "gpu":  "29.570"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 568 calories and 63 grams of protein for roughly $2.57 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker creamy chicken and mushroom bowls, budget dinner",
+                 "costPerServing":  3.71,
+                 "recipeIngredient":  [
+                                          "8 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "4 packages White Mushrooms",
+                                          "1 carton Chicken Broth",
+                                          "1 block 1/3 Fat Cream Cheese",
+                                          "1 tub Greek Yogurt"
+                                      ],
+                 "steps":  [
+                               "Add the chicken, sliced mushrooms, chicken broth, cream cheese, and garlic powder to the slow cooker.",
+                               "Cover and cook on low for 6 to 7 hours until the chicken is tender and the mushrooms are soft.",
+                               "Shred the chicken and stir everything so the cream cheese melts into a smooth sauce.",
+                               "Stir in the Greek yogurt off the heat to keep the sauce creamy and tangy.",
+                               "Spoon the creamy chicken and mushrooms over white rice."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

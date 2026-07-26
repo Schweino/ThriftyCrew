@@ -1,0 +1,168 @@
+{
+    "name":  "Slow Cooker Teriyaki Pork Bowls",
+    "slug":  "slow-cooker-teriyaki-pork-bowls",
+    "cuisine":  "Japanese",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  565,
+                 "protein":  58,
+                 "carbs":  59,
+                 "fat":  8,
+                 "cost_ps":  "4.14"
+             },
+    "intro_html":  "This one is sweet, savory, and about as easy as dinner gets. Tender teriyaki pork over rice with broccoli and onion gives you 58 grams of protein a bowl for around $3.04. Fourteen servings means you cook once and eat well all week.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3300 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (850 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 3 bags (900 g)",
+                                "\u003cstrong\u003eTeriyaki Sauce (Kikkoman):\u003c/strong\u003e 1 bottle (250 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (360 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (160 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (80 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (12 g)",
+                                "\u003cstrong\u003ePineapple Juice:\u003c/strong\u003e 6 oz (400 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1/2 tsp red chili pepper flakes (2 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.04 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Bottled teriyaki sauce carries the whole dish, but it is the priciest item here. \u003cstrong\u003eCompare the store brand\u003c/strong\u003e against the name brand, since they taste about the same in the slow cooker.",
+                       "Stretch it with a little honey and broth. A \u003cstrong\u003esplash of each thins the sauce\u003c/strong\u003e so one bottle coats the entire batch.",
+                       "Buy \u003cstrong\u003eonions by the bag\u003c/strong\u003e when you batch cook. They keep for weeks in a cool spot and cost about 30 cents each that way."
+                   ],
+    "make_it":  [
+                    "Place the pork tenderloin in the slow cooker and scatter the sliced onion around it.",
+                    "Pour the teriyaki sauce, chicken broth, honey, and garlic over the top.",
+                    "Cover and cook on low for 7 to 8 hours until the pork pulls apart.",
+                    "Shred the pork and stir it back into the sauce with the onions.",
+                    "Steam the broccoli florets until just tender.",
+                    "Serve over cooked white rice and divide into containers."
+                ],
+    "portion_html":  "Each serving lands near 565 calories with 58 grams of protein.",
+    "credit_html":  "",
+    "upsell_html":  "Sweet, simple, and satisfying. This is comfort food that respects your budget. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  39.81,
+    "cost_batch_true":  46.3,
+    "cost_per_serving":  2.84,
+    "cost_per_serving_true":  3.31,
+    "cost_pantry_add":  11.62,
+    "cost_first_run":  57.92,
+    "scaler":  {
+                   "cost":  "46.30",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Tenderloin",
+                                   "grams":  3300,
+                                   "buy":  "8 lb",
+                                   "bid":  "pork-tenderloin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  850,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  900,
+                                   "buy":  "3 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Teriyaki Sauce",
+                                   "grams":  250,
+                                   "buy":  "1 bottle",
+                                   "bid":  "teriyaki-sauce",
+                                   "gpu":  "34.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  360,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  160,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "grams":  80,
+                                   "buy":  "1 bottle",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  12,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Pineapple Juice",
+                                   "grams":  400,
+                                   "buy":  "6 oz",
+                                   "bid":  "pineapple-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "grams":  2,
+                                   "buy":  "1/2 tsp red chili pepper flakes",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Japanese meal prep. Fourteen servings at about 565 calories and 58 grams of protein for roughly $2.79 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker teriyaki pork bowls, budget dinner",
+                 "costPerServing":  4.14,
+                 "recipeIngredient":  [
+                                          "8 lb Pork Tenderloin",
+                                          "1 lb Rice",
+                                          "3 bags Broccoli Florets",
+                                          "1 bottle Teriyaki Sauce",
+                                          "1 carton Chicken Broth",
+                                          "2 onions Yellow Onion"
+                                      ],
+                 "steps":  [
+                               "Place the pork tenderloin in the slow cooker and scatter the sliced onion around it.",
+                               "Pour the teriyaki sauce, chicken broth, honey, and garlic over the top.",
+                               "Cover and cook on low for 7 to 8 hours until the pork pulls apart.",
+                               "Shred the pork and stir it back into the sauce with the onions.",
+                               "Steam the broccoli florets until just tender.",
+                               "Serve over cooked white rice and divide into containers."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

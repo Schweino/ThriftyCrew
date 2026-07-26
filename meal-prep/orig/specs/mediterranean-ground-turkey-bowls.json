@@ -1,0 +1,198 @@
+{
+    "name":  "Mediterranean Ground Turkey Bowls",
+    "slug":  "mediterranean-ground-turkey-bowls",
+    "cuisine":  "Mediterranean",
+    "protein":  "turkey",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  581,
+                 "protein":  51,
+                 "carbs":  45,
+                 "fat":  18,
+                 "cost_ps":  "4.98"
+             },
+    "intro_html":  "Bright, fresh, and creamy, these bowls bring a little Mediterranean sunshine to your meal prep. You get 51 grams of protein per serving for about $3.09, which is a great price for eating this well. One skillet makes 14 servings.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3100 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (700 g)",
+                                "\u003cstrong\u003eZucchini:\u003c/strong\u003e 4 zucchinis (620 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cans (484 g)",
+                                "\u003cstrong\u003eGreek Yogurt (Great Value):\u003c/strong\u003e 1 tub (680 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (160 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (27 g)",
+                                "\u003cstrong\u003eCucumber:\u003c/strong\u003e 1 cucumber (1050 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves, minced (35 g)",
+                                "\u003cstrong\u003eLemon Juice (ReaLemon):\u003c/strong\u003e 1 Tbsp (50 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/2 tsp + 1/4 tsp (turkey + sauce) (16 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1/4 tsp (3 g)",
+                                "\u003cstrong\u003eDried Dill (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp cracked (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.09 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "The \u003cstrong\u003e7 lb ground turkey pack\u003c/strong\u003e keeps your cost per serving low, so buy the big size.",
+                       "A \u003cstrong\u003etub of plain Greek yogurt\u003c/strong\u003e doubles as your creamy topping and a protein boost, so buy it instead of pricey tzatziki.",
+                       "Fresh \u003cstrong\u003ezucchini under a dollar each\u003c/strong\u003e stretches the pan and adds real veggie volume for almost nothing."
+                   ],
+    "make_it":  [
+                    "Heat a little olive oil in a large skillet and brown the ground turkey.",
+                    "Add the chopped onion and sliced zucchini and cook until tender.",
+                    "Stir in the diced tomatoes and let it simmer a few minutes to come together.",
+                    "Season with salt, pepper, and whatever dried herbs you like, then take it off the heat.",
+                    "Serve over cooked white rice with a big dollop of Greek yogurt on top."
+                ],
+    "portion_html":  "Each of the 14 bowls delivers 51 grams of protein and about 581 calories.",
+    "credit_html":  "",
+    "upsell_html":  "Light on the wallet, big on flavor, and it keeps beautifully all week. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  43.77,
+    "cost_batch_true":  48.46,
+    "cost_per_serving":  3.13,
+    "cost_per_serving_true":  3.46,
+    "cost_pantry_add":  21.25,
+    "cost_first_run":  69.71,
+    "scaler":  {
+                   "cost":  "48.46",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "grams":  3100,
+                                   "buy":  "7 lb",
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Zucchini",
+                                   "grams":  620,
+                                   "buy":  "4 zucchinis",
+                                   "bid":  "zucchini",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "grams":  484,
+                                   "buy":  "2 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Greek Yogurt",
+                                   "grams":  680,
+                                   "buy":  "1 tub",
+                                   "bid":  "greek-yogurt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  160,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  27,
+                                   "buy":  "1 bottle",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Cucumber",
+                                   "grams":  1050,
+                                   "buy":  "1 cucumber",
+                                   "bid":  "cucumber",
+                                   "gpu":  "300.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "2 cloves, minced",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Lemon Juice",
+                                   "grams":  50,
+                                   "buy":  "1 Tbsp",
+                                   "bid":  "lemon-juice",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  16,
+                                   "buy":  "1/2 tsp + 1/4 tsp (turkey + sauce)",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  4,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  3,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Dill",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "dried-dill",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp cracked",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Mediterranean meal prep. Fourteen servings at about 581 calories and 51 grams of protein for roughly $2.92 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, mediterranean ground turkey bowls, budget dinner",
+                 "costPerServing":  4.98,
+                 "recipeIngredient":  [
+                                          "7 lb 93/7 Ground Turkey",
+                                          "1 lb Rice",
+                                          "4 zucchinis Zucchini",
+                                          "2 cans Diced Tomatoes",
+                                          "1 tub Greek Yogurt",
+                                          "2 onions Yellow Onion"
+                                      ],
+                 "steps":  [
+                               "Heat a little olive oil in a large skillet and brown the ground turkey.",
+                               "Add the chopped onion and sliced zucchini and cook until tender.",
+                               "Stir in the diced tomatoes and let it simmer a few minutes to come together.",
+                               "Season with salt, pepper, and whatever dried herbs you like, then take it off the heat.",
+                               "Serve over cooked white rice with a big dollop of Greek yogurt on top."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

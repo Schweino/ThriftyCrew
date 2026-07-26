@@ -1,0 +1,128 @@
+{
+    "name":  "Slow Cooker Jerk Pork Bowls",
+    "slug":  "slow-cooker-jerk-pork-bowls",
+    "cuisine":  "Jamaican",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  597,
+                 "protein":  56,
+                 "carbs":  59,
+                 "fat":  12,
+                 "cost_ps":  "2.43"
+             },
+    "intro_html":  "If your weeknight dinners have gotten a little boring, this Jamaican jerk pork wakes things right up. Lean pork loin slow cooks with onion and warm spice until tender, then goes over rice with broccoli. You get 56 grams of protein a serving for under two dollars, and it makes 14 bowls.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3200 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (950 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 4 bags (1200 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (200 g)",
+                                "\u003cstrong\u003eJerk Seasoning (McCormick):\u003c/strong\u003e 1 jar (40 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1/2-1 cup low-sodium vegetable or chicken broth (240 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$1.75 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Pork loin gives you jerk pork at diner prices. \u003cstrong\u003eBuy the whole loin\u003c/strong\u003e and portion it yourself for the best deal.",
+                       "A jar of jerk seasoning lasts months and costs almost nothing per meal. \u003cstrong\u003eBuy one good spice blend\u003c/strong\u003e and lean on it again and again.",
+                       "Frozen broccoli holds up great in the slow cooker rush. \u003cstrong\u003eStock the freezer with bags of florets\u003c/strong\u003e so you always have a vegetable ready."
+                   ],
+    "make_it":  [
+                    "Cut the pork loin into large pieces and add them to the slow cooker.",
+                    "Toss in the sliced onions and your jerk seasoning, rubbing it into the meat a bit.",
+                    "Cover and cook on low for 7 to 8 hours until the pork pulls apart easily.",
+                    "Steam the broccoli florets just until tender toward the end.",
+                    "Cook the rice so it is hot and ready.",
+                    "Shred the pork, spoon it over the rice, and serve the broccoli alongside."
+                ],
+    "portion_html":  "Each of the 14 servings delivers 56 grams of protein and 597 calories, a genuinely filling bowl.",
+    "credit_html":  "",
+    "upsell_html":  "A little heat, a little spice, and proof that cheap dinners never have to be dull. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  23.34,
+    "cost_batch_true":  26.54,
+    "cost_per_serving":  1.67,
+    "cost_per_serving_true":  1.9,
+    "cost_pantry_add":  7.54,
+    "cost_first_run":  34.08,
+    "scaler":  {
+                   "cost":  "26.54",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Loin",
+                                   "grams":  3200,
+                                   "buy":  "8 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  950,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  1200,
+                                   "buy":  "4 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  200,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Jerk Seasoning",
+                                   "grams":  40,
+                                   "buy":  "1 jar",
+                                   "bid":  "jerk-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  240,
+                                   "buy":  "1/2-1 cup low-sodium vegetable or chicken broth",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Jamaican meal prep. Fourteen servings at about 597 calories and 56 grams of protein for roughly $1.57 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker jerk pork bowls, budget dinner",
+                 "costPerServing":  2.43,
+                 "recipeIngredient":  [
+                                          "8 lb Pork Loin",
+                                          "1 lb Rice",
+                                          "4 bags Broccoli Florets",
+                                          "2 onions Yellow Onion",
+                                          "1 jar Jerk Seasoning",
+                                          "1/2-1 cup low-sodium vegetable or chicken broth Chicken Broth"
+                                      ],
+                 "steps":  [
+                               "Cut the pork loin into large pieces and add them to the slow cooker.",
+                               "Toss in the sliced onions and your jerk seasoning, rubbing it into the meat a bit.",
+                               "Cover and cook on low for 7 to 8 hours until the pork pulls apart easily.",
+                               "Steam the broccoli florets just until tender toward the end.",
+                               "Cook the rice so it is hot and ready.",
+                               "Shred the pork, spoon it over the rice, and serve the broccoli alongside."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

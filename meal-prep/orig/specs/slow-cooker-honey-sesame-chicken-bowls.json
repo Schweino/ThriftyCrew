@@ -1,0 +1,160 @@
+{
+    "name":  "Slow Cooker Honey Sesame Chicken Bowls",
+    "slug":  "slow-cooker-honey-sesame-chicken-bowls",
+    "cuisine":  "Chinese",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  562,
+                 "protein":  57,
+                 "carbs":  65,
+                 "fat":  7,
+                 "cost_ps":  "3.45"
+             },
+    "intro_html":  "Honey sesame chicken is sweet, sticky, and just plain fun to eat, and it comes in as the cheapest bowl in the batch. It is high protein, low fat, and tastes like the good takeout without the sticker shock. One batch makes 14 servings.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3100 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1000 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (80 g)",
+                                "\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 1 bottle (80 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (84 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 bottle (10 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1 boxs (8 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (9 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 2 bags (500 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$1.95 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Plain \u003cstrong\u003eketchup and honey\u003c/strong\u003e team up for that sweet-savory glaze without any bottled specialty sauce.",
+                       "A little \u003cstrong\u003esesame oil\u003c/strong\u003e goes a long way, so one bottle flavors many batches.",
+                       "Buy the \u003cstrong\u003echicken breast in a value pack\u003c/strong\u003e to keep every bowl under two dollars."
+                   ],
+    "make_it":  [
+                    "Add the chicken breast and minced garlic to the crock.",
+                    "Pour in the soy sauce, ketchup, honey, and a splash of sesame oil.",
+                    "Cover and cook on low for 6 to 8 hours until the chicken is tender.",
+                    "Shred the chicken, then whisk the cornstarch with a little water and stir it in to thicken the glaze.",
+                    "Steam the broccoli and cook the rice.",
+                    "Serve the honey sesame chicken over rice with broccoli."
+                ],
+    "portion_html":  "Each of the 14 servings runs about 57g protein for roughly 562 calories, at around $1.95 a bowl.",
+    "credit_html":  "",
+    "upsell_html":  "Sticky, sweet, and cheaper than a coffee, this one makes prepping ahead feel like a reward. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  29.3,
+    "cost_batch_true":  30.91,
+    "cost_per_serving":  2.09,
+    "cost_per_serving_true":  2.21,
+    "cost_pantry_add":  17.34,
+    "cost_first_run":  48.25,
+    "scaler":  {
+                   "cost":  "30.91",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3100,
+                                   "buy":  "7 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  1000,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  80,
+                                   "buy":  "1 bottle",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Ketchup",
+                                   "grams":  80,
+                                   "buy":  "1 bottle",
+                                   "bid":  "ketchup",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "grams":  84,
+                                   "buy":  "1 bottle",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "grams":  10,
+                                   "buy":  "1 bottle",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "grams":  8,
+                                   "buy":  "1 boxs",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  9,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  500,
+                                   "buy":  "2 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about 562 calories and 57 grams of protein for roughly $1.87 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker honey sesame chicken bowls, budget dinner",
+                 "costPerServing":  3.45,
+                 "recipeIngredient":  [
+                                          "7 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "1 bottle Soy Sauce",
+                                          "1 bottle Ketchup",
+                                          "1 bottle Honey",
+                                          "1 bottle Sesame Oil"
+                                      ],
+                 "steps":  [
+                               "Add the chicken breast and minced garlic to the crock.",
+                               "Pour in the soy sauce, ketchup, honey, and a splash of sesame oil.",
+                               "Cover and cook on low for 6 to 8 hours until the chicken is tender.",
+                               "Shred the chicken, then whisk the cornstarch with a little water and stir it in to thicken the glaze.",
+                               "Steam the broccoli and cook the rice.",
+                               "Serve the honey sesame chicken over rice with broccoli."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

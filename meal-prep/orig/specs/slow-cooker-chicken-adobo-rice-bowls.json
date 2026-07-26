@@ -1,0 +1,158 @@
+{
+    "name":  "Slow Cooker Chicken Adobo Rice Bowls",
+    "slug":  "slow-cooker-chicken-adobo-rice-bowls",
+    "cuisine":  "Filipino",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  561,
+                 "protein":  64,
+                 "carbs":  58,
+                 "fat":  7,
+                 "cost_ps":  "3.35"
+             },
+    "intro_html":  "Filipino chicken adobo is proof that a handful of pantry staples can make something unforgettable. Vinegar, soy, garlic, and time do all the work, and you land at 64 grams of protein per bowl for about $2.22. One batch makes 14 servings, so a couple of cheap bottles feed you for a week and a half.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3450 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (900 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 3 bags (1000 g)",
+                                "\u003cstrong\u003eWhite Vinegar (generic):\u003c/strong\u003e 1 bottle (120 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (120 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1 bag (25 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (120 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (18 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 3 dried bay leaves (3 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 tsp peppercorns (5 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.22 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "This whole dish rides on \u003cstrong\u003evinegar and soy sauce you can buy dirt cheap\u003c/strong\u003e, so it\u0027s one of the lowest-cost recipes in the rotation.",
+                       "Onions and garlic keep for weeks in a cool spot, so \u003cstrong\u003ebuy the bag, not the single\u003c/strong\u003e and always have them on hand.",
+                       "When chicken breast is high, \u003cstrong\u003euse thighs instead\u003c/strong\u003e. Adobo actually tastes better with them, and they\u0027re usually cheaper."
+                   ],
+    "make_it":  [
+                    "Add the chicken, white vinegar, soy sauce, brown sugar, sliced onion, and garlic to the slow cooker.",
+                    "Cover and cook on low for 6 to 7 hours until the chicken is tender and soaked with flavor.",
+                    "Drop the broccoli florets in for the last 30 minutes so they cook but stay firm.",
+                    "Shred the chicken in the pot and let it soak up the tangy sauce for a few minutes.",
+                    "Spoon it over white rice with plenty of that dark, salty-sour sauce."
+                ],
+    "portion_html":  "Each serving delivers 64 grams of protein and 561 calories, big protein for barely two dollars.",
+    "credit_html":  "",
+    "upsell_html":  "Simple ingredients, huge payoff. That\u0027s the whole idea of eating well without overspending. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  32.77,
+    "cost_batch_true":  35.29,
+    "cost_per_serving":  2.34,
+    "cost_per_serving_true":  2.52,
+    "cost_pantry_add":  11.56,
+    "cost_first_run":  46.85,
+    "scaler":  {
+                   "cost":  "35.29",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3450,
+                                   "buy":  "8 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  900,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  1000,
+                                   "buy":  "3 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "White Vinegar",
+                                   "grams":  120,
+                                   "buy":  "1 bottle",
+                                   "bid":  "white-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  120,
+                                   "buy":  "1 bottle",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "grams":  25,
+                                   "buy":  "1 bag",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  120,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  18,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "grams":  3,
+                                   "buy":  "3 dried bay leaves",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  5,
+                                   "buy":  "1 tsp peppercorns",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Filipino meal prep. Fourteen servings at about 561 calories and 64 grams of protein for roughly $2.12 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker chicken adobo rice bowls, budget dinner",
+                 "costPerServing":  3.35,
+                 "recipeIngredient":  [
+                                          "8 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "3 bags Broccoli Florets",
+                                          "1 bottle White Vinegar",
+                                          "1 bottle Soy Sauce",
+                                          "1 bag Brown Sugar"
+                                      ],
+                 "steps":  [
+                               "Add the chicken, white vinegar, soy sauce, brown sugar, sliced onion, and garlic to the slow cooker.",
+                               "Cover and cook on low for 6 to 7 hours until the chicken is tender and soaked with flavor.",
+                               "Drop the broccoli florets in for the last 30 minutes so they cook but stay firm.",
+                               "Shred the chicken in the pot and let it soak up the tangy sauce for a few minutes.",
+                               "Spoon it over white rice with plenty of that dark, salty-sour sauce."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

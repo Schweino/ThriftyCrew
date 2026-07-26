@@ -1,0 +1,166 @@
+{
+    "name":  "Turkey Bolognese Penne",
+    "slug":  "turkey-bolognese-penne",
+    "cuisine":  "Italian-American",
+    "protein":  "turkey",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  418,
+                 "protein":  34,
+                 "carbs":  41,
+                 "fat":  12,
+                 "cost_ps":  "3.55"
+             },
+    "intro_html":  "A big pot of hearty, saucy bolognese over high-protein penne, made lean with ground turkey. This is the weeknight pasta that tastes like Sunday, holds up beautifully in the fridge, and keeps you full without a food coma. Simple ingredients, big comfort, about two dollars a bowl.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 3.5 lb raw (1587 g)",
+                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 2 boxes (14.5 oz each) (719 g)",
+                                "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 2 jars (24 oz each) (1076 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e about 7/8 cup grated (98 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1/2 onion (scaled ~1.75) (200 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 clove (scaled ~4) (25 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1/2 tbsp (scaled ~2-3 tbsp) (40 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 1 (scaled ~3) (200 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 1 rib (scaled ~3) (140 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (15 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.00 a bowl\u003c/strong\u003e for a from-scratch bolognese. Swap in ground beef if it is cheaper that week, the macros barely move.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eTurkey or beef, whichever is on sale.\u003c/strong\u003e Both work here. Buy the cheaper one and freeze extra in one-pound packs.",
+                       "\u003cstrong\u003eDouble the sauce, freeze half.\u003c/strong\u003e The sauce freezes great, so a little extra effort now buys you a head start on next week.",
+                       "\u003cstrong\u003eStore-brand parmesan\u003c/strong\u003e is a fraction of the name brand and disappears into the sauce anyway."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Boil the penne to al dente per the box, then drain.",
+                    "Brown the ground turkey in a large pot over medium-high heat, breaking it up as it cooks.",
+                    "Pour in the pasta sauce and simmer 10 minutes to let it thicken into a bolognese.",
+                    "Add the drained penne and stir to coat, then fold in the parmesan off the heat."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near 418 calories and 34 grams of protein.",
+    "credit_html":  "",
+    "upsell_html":  "Comfort-food dinners for about $2.00 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  25.7,
+    "cost_batch_true":  35.05,
+    "cost_per_serving":  1.84,
+    "cost_per_serving_true":  2.5,
+    "cost_pantry_add":  14.66,
+    "cost_first_run":  49.71,
+    "scaler":  {
+                   "cost":  "35.05",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "grams":  1587,
+                                   "buy":  "3.5 lb raw",
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Penne Pasta",
+                                   "grams":  719,
+                                   "buy":  "2 boxes (14.5 oz each)",
+                                   "bid":  "penne-pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Marinara Sauce",
+                                   "grams":  1076,
+                                   "buy":  "2 jars (24 oz each)",
+                                   "bid":  "marinara-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "grams":  98,
+                                   "buy":  "about 7/8 cup grated",
+                                   "bid":  "parmesan-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  200,
+                                   "buy":  "1/2 onion (scaled ~1.75)",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  25,
+                                   "buy":  "1 clove (scaled ~4)",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  40,
+                                   "buy":  "1/2 tbsp (scaled ~2-3 tbsp)",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "grams":  200,
+                                   "buy":  "1 (scaled ~3)",
+                                   "bid":  "shredded-carrots",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "grams":  140,
+                                   "buy":  "1 rib (scaled ~3)",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  15,
+                                   "buy":  "1 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A lean ground turkey bolognese over high-protein penne, meal-prep style. Fourteen servings at about 418 calories and 34 grams of protein for roughly $2.00 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, turkey bolognese, healthy pasta, budget dinner",
+                 "costPerServing":  3.55,
+                 "recipeIngredient":  [
+                                          "3.5 lb raw 93/7 Ground Turkey",
+                                          "2 boxes (14.5 oz each) Penne Pasta",
+                                          "2 jars (24 oz each) Marinara Sauce",
+                                          "about 7/8 cup grated Parmesan Cheese",
+                                          "1/2 onion (scaled ~1.75) Yellow Onion",
+                                          "1 clove (scaled ~4) Garlic"
+                                      ],
+                 "steps":  [
+                               "Boil the penne to al dente and drain.",
+                               "Brown the ground turkey in a large pot.",
+                               "Add the pasta sauce and simmer 10 minutes to thicken.",
+                               "Stir in the penne and fold in the parmesan off the heat.",
+                               "Weigh the batch and divide into 14 containers."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

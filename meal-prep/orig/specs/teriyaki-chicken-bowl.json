@@ -1,0 +1,130 @@
+{
+    "name":  "Teriyaki Chicken and Rice Bowl",
+    "slug":  "teriyaki-chicken-bowl",
+    "cuisine":  "Asian",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  519,
+                 "protein":  49,
+                 "carbs":  59,
+                 "fat":  7,
+                 "cost_ps":  "3.07"
+             },
+    "intro_html":  "This is a takeout favorite made at home for a fraction of the cost, and it batches beautifully into 14 dinners. Chicken breast, tender broccoli, and sweet carrots get tossed in teriyaki sauce and spooned over rice. It reheats like a champ, so future you gets a hot dinner with zero effort.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2495 g)",
+                                "\u003cstrong\u003eTeriyaki Sauce (Kikkoman):\u003c/strong\u003e 2 bottles (700 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (30 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (900 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 2 bags (595 g)",
+                                "\u003cstrong\u003eShredded Carrots:\u003c/strong\u003e 1 lb (200 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.61 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy the big pack of chicken breast.\u003c/strong\u003e The family size or bulk tray almost always beats the small packs per pound. Trim and dice it all at once, and freeze half if you are not cooking it right away.",
+                       "\u003cstrong\u003eGrab a jarred teriyaki sauce on sale, or make your own.\u003c/strong\u003e Store brand teriyaki is usually a dollar or two cheaper than the name brand and tastes just as good in a stir fry. Watch for two for one deals and stock up.",
+                       "\u003cstrong\u003eUse frozen broccoli and bagged shredded carrots.\u003c/strong\u003e Frozen broccoli is cheaper than fresh, never goes bad on you, and cooks up just as well here. Pre shredded carrots save you time and waste."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot on a kitchen scale and write the number down. You will need it to portion evenly at the end.",
+                    "Rinse the rice, then cook it according to the package. Set it aside to steam while you handle the skillet.",
+                    "Heat a splash of olive oil in a large skillet over medium high heat. Add the broccoli and shredded carrots and cook 5 to 6 minutes until the broccoli turns bright green and the carrots soften a little. Scoop the veggies into a bowl and set aside.",
+                    "Dice the chicken breast into bite sized pieces. Add a little more oil to the hot skillet, then add the chicken in batches so it browns instead of steaming.",
+                    "Cook the chicken until it is no longer pink in the center and reaches 165 degrees. Do not crowd the pan. Give it room to get a little color.",
+                    "Return the veggies to the skillet and pour in the teriyaki sauce. Stir everything together and cook 2 to 3 minutes until the sauce coats every piece and the whole thing is hot.",
+                    "Fold the cooked rice into the skillet, or layer it into your containers first. Either way works fine."
+                ],
+    "portion_html":  "When the skillet is done, weigh the full pot again and subtract the empty pot weight you wrote down. Divide that number by 14 to get the target weight for each container, then scoop and check on the scale as you go. Even containers mean even meals all week.",
+    "credit_html":  "",
+    "upsell_html":  "That is 14 dinners done in one afternoon, every reheated bowl costing you a fraction of the takeout price. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  29.74,
+    "cost_batch_true":  32.23,
+    "cost_per_serving":  2.12,
+    "cost_per_serving_true":  2.3,
+    "cost_pantry_add":  10.78,
+    "cost_first_run":  43.01,
+    "scaler":  {
+                   "cost":  "32.23",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  2495,
+                                   "buy":  "6 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Teriyaki Sauce",
+                                   "grams":  700,
+                                   "buy":  "2 bottles",
+                                   "bid":  "teriyaki-sauce",
+                                   "gpu":  "34.000"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  30,
+                                   "buy":  "1 bottle",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  900,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  595,
+                                   "buy":  "2 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Shredded Carrots",
+                                   "grams":  200,
+                                   "buy":  "1 lb",
+                                   "bid":  "shredded-carrots",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Asian meal prep. Fourteen servings at about 519 calories and 49 grams of protein for roughly $2.09 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, teriyaki chicken and rice bowl, budget dinner",
+                 "costPerServing":  3.07,
+                 "recipeIngredient":  [
+                                          "6 lb Boneless Skinless Chicken Breast",
+                                          "2 bottles Teriyaki Sauce",
+                                          "1 bottle Olive Oil",
+                                          "1 lb Rice",
+                                          "2 bags Broccoli Florets",
+                                          "1 lb Shredded Carrots"
+                                      ],
+                 "steps":  [
+                               "Weigh your empty mixing pot on a kitchen scale and write the number down. You will need it to portion evenly at the end.",
+                               "Rinse the rice, then cook it according to the package. Set it aside to steam while you handle the skillet.",
+                               "Heat a splash of olive oil in a large skillet over medium high heat. Add the broccoli and shredded carrots and cook 5 to 6 minutes until the broccoli turns bright green and the carrots soften a little. Scoop the veggies into a bowl and set aside.",
+                               "Dice the chicken breast into bite sized pieces. Add a little more oil to the hot skillet, then add the chicken in batches so it browns instead of steaming.",
+                               "Cook the chicken until it is no longer pink in the center and reaches 165 degrees. Do not crowd the pan. Give it room to get a little color.",
+                               "Return the veggies to the skillet and pour in the teriyaki sauce. Stir everything together and cook 2 to 3 minutes until the sauce coats every piece and the whole thing is hot.",
+                               "Fold the cooked rice into the skillet, or layer it into your containers first. Either way works fine."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

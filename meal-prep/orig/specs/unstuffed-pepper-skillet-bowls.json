@@ -1,0 +1,214 @@
+{
+    "name":  "Unstuffed Pepper Skillet Bowls",
+    "slug":  "unstuffed-pepper-skillet-bowls",
+    "cuisine":  "American",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  594,
+                 "protein":  46,
+                 "carbs":  70,
+                 "fat":  13,
+                 "cost_ps":  "5.31"
+             },
+    "intro_html":  "All the flavor of stuffed peppers without the fuss of stuffing a single one. This skillet delivers 46 grams of protein per bowl for about $3.42 and makes 14 servings. You get the same savory beef, pepper, and rice combo, just faster and built for meal prep.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2240 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1081 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 6 peppers (700 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cans (800 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2 cans (450 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (500 g)",
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 1 bag (170 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (20 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1 jar (6 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 tbsp (42 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 2 tsp (30 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1 tsp (8 g)",
+                                "\u003cstrong\u003eCheddar Cheese:\u003c/strong\u003e 1/2 cup shredded (170 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 2 tbsp (90 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/2 tsp (12 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.42 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Chopping the peppers into the skillet means you can buy the \u003cstrong\u003echeaper loose green peppers\u003c/strong\u003e instead of hunting for pretty ones to stuff.",
+                       "\u003cstrong\u003eReduced-fat mozzarella\u003c/strong\u003e melts beautifully and trims the fat, and one bag covers the whole batch.",
+                       "Simmering the rice in the \u003cstrong\u003ebeef broth\u003c/strong\u003e builds flavor for free instead of buying seasoned rice mixes."
+                   ],
+    "make_it":  [
+                    "Brown 4.9 pounds of 93/7 ground beef with the chopped onion and green bell peppers, then drain.",
+                    "Stir in the diced tomatoes, tomato sauce, beef broth, garlic, and italian seasoning.",
+                    "Cook the rice separately, or simmer it right in the skillet with the broth until tender.",
+                    "Let everything simmer together so the rice soaks up the tomato and pepper flavor.",
+                    "Melt the reduced-fat mozzarella over the top before you portion it out."
+                ],
+    "portion_html":  "Each of the 14 bowls serves 46 grams of protein at 594 calories, so this shortcut version loses none of the substance.",
+    "credit_html":  "",
+    "upsell_html":  "Stuffed pepper taste with half the work and a fraction of the cost. Work smarter, eat better. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  51.26,
+    "cost_batch_true":  54.73,
+    "cost_per_serving":  3.66,
+    "cost_per_serving_true":  3.91,
+    "cost_pantry_add":  19.58,
+    "cost_first_run":  74.31,
+    "scaler":  {
+                   "cost":  "54.73",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  2240,
+                                   "buy":  "5 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  1081,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "grams":  700,
+                                   "buy":  "6 peppers",
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  300,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "grams":  800,
+                                   "buy":  "2 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "grams":  450,
+                                   "buy":  "2 cans",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "grams":  500,
+                                   "buy":  "1 carton",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Reduced Fat Mozzarella",
+                                   "grams":  170,
+                                   "buy":  "1 bag",
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  20,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "grams":  6,
+                                   "buy":  "1 jar",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  42,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "grams":  30,
+                                   "buy":  "2 tsp",
+                                   "bid":  "worcestershire-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "grams":  8,
+                                   "buy":  "1 tsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese",
+                                   "grams":  170,
+                                   "buy":  "1/2 cup shredded",
+                                   "bid":  "cheddar-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "grams":  90,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  12,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 594 calories and 46 grams of protein for roughly $3.29 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, unstuffed pepper skillet bowls, budget dinner",
+                 "costPerServing":  5.31,
+                 "recipeIngredient":  [
+                                          "5 lb 93/7 Ground Beef",
+                                          "1 lb Rice",
+                                          "6 peppers Green Bell Peppers",
+                                          "3 onions Yellow Onion",
+                                          "2 cans Diced Tomatoes",
+                                          "2 cans Tomato Sauce"
+                                      ],
+                 "steps":  [
+                               "Brown 4.9 pounds of 93/7 ground beef with the chopped onion and green bell peppers, then drain.",
+                               "Stir in the diced tomatoes, tomato sauce, beef broth, garlic, and italian seasoning.",
+                               "Cook the rice separately, or simmer it right in the skillet with the broth until tender.",
+                               "Let everything simmer together so the rice soaks up the tomato and pepper flavor.",
+                               "Melt the reduced-fat mozzarella over the top before you portion it out."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

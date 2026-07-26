@@ -1,0 +1,192 @@
+{
+    "name":  "Slow Cooker Chicken Taco Rice Bowls",
+    "slug":  "slow-cooker-chicken-tacos-rice-bowls",
+    "cuisine":  "Mexican",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  560,
+                 "protein":  58,
+                 "carbs":  61,
+                 "fat":  9,
+                 "cost_ps":  "3.41"
+             },
+    "intro_html":  "Taco night meets meal prep, and your wallet barely notices. This is that big, saucy, salsa-simmered chicken you can pile over rice all week, and it loads up with protein while staying cheap per serving. One batch makes 14 servings, so you cook once and eat like a champ for days.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3100 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (900 g)",
+                                "\u003cstrong\u003eSalsa (Pace):\u003c/strong\u003e 2 jars (900 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 2 bags (400 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 1 bag (112 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 3 limes, juiced (90 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 tbsp minced (20 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tsp (5 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1 tsp (5 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1/4 tsp (2 g)",
+                                "\u003cstrong\u003eGround Coriander (Great Value):\u003c/strong\u003e 1/2 tsp (2 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/4-1/2 tsp (6 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.31 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Buy the \u003cstrong\u003echicken breast in a big value pack\u003c/strong\u003e. The per pound price drops hard when you buy 7 pounds at once instead of a tidy little tray.",
+                       "Grab the \u003cstrong\u003estore-brand salsa\u003c/strong\u003e instead of the name label. In a slow cooker full of chicken, nobody can tell the difference.",
+                       "Portion the finished chicken into containers and \u003cstrong\u003efreeze half the batch\u003c/strong\u003e so week two is already handled."
+                   ],
+    "make_it":  [
+                    "Lay the chicken breast in the bottom of the crock.",
+                    "Scatter the chopped onion over the top, then pour both jars of salsa over everything.",
+                    "Cover and cook on low for 6 to 8 hours, until the chicken shreds with a fork.",
+                    "Shred the chicken right in the pot and stir it back into the salsa.",
+                    "Steam the broccoli and cook up your rice.",
+                    "Build bowls with rice, taco chicken, a handful of broccoli, and a sprinkle of cheddar."
+                ],
+    "portion_html":  "Each of the 14 servings lands around 58g protein for about 560 calories, at roughly $2.31 a bowl.",
+    "credit_html":  "",
+    "upsell_html":  "Cook it once on Sunday and you have taco bowls waiting every day you are too tired to think. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  33.14,
+    "cost_batch_true":  36.24,
+    "cost_per_serving":  2.37,
+    "cost_per_serving_true":  2.59,
+    "cost_pantry_add":  11.52,
+    "cost_first_run":  47.76,
+    "scaler":  {
+                   "cost":  "36.24",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3100,
+                                   "buy":  "7 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  900,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salsa",
+                                   "grams":  900,
+                                   "buy":  "2 jars",
+                                   "bid":  "salsa",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  300,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  400,
+                                   "buy":  "2 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "grams":  112,
+                                   "buy":  "1 bag",
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "grams":  90,
+                                   "buy":  "3 limes, juiced",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  20,
+                                   "buy":  "1 tbsp minced",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  5,
+                                   "buy":  "1 tsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "grams":  5,
+                                   "buy":  "1 tsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Coriander",
+                                   "grams":  2,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "ground-coriander",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  6,
+                                   "buy":  "1/4-1/2 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 560 calories and 58 grams of protein for roughly $2.03 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker chicken taco rice bowls, budget dinner",
+                 "costPerServing":  3.41,
+                 "recipeIngredient":  [
+                                          "7 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "2 jars Salsa",
+                                          "3 onions Yellow Onion",
+                                          "2 bags Broccoli Florets",
+                                          "1 bag Cheddar Cheese, Shredded"
+                                      ],
+                 "steps":  [
+                               "Lay the chicken breast in the bottom of the crock.",
+                               "Scatter the chopped onion over the top, then pour both jars of salsa over everything.",
+                               "Cover and cook on low for 6 to 8 hours, until the chicken shreds with a fork.",
+                               "Shred the chicken right in the pot and stir it back into the salsa.",
+                               "Steam the broccoli and cook up your rice.",
+                               "Build bowls with rice, taco chicken, a handful of broccoli, and a sprinkle of cheddar."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

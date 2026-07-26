@@ -1,0 +1,144 @@
+{
+    "name":  "Slow Cooker Maple Dijon Pork Bowls",
+    "slug":  "slow-cooker-maple-dijon-pork-bowls",
+    "cuisine":  "American",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  565,
+                 "protein":  59,
+                 "carbs":  61,
+                 "fat":  9,
+                 "cost_ps":  "3.71"
+             },
+    "intro_html":  "Three main ingredients, one slow cooker, and dinner is basically done. Sugar-free maple syrup and dijon mustard glaze lean pork tenderloin until it is tender and just a little sweet, served over potatoes with green beans. It runs around three dollars a serving and gives you 59 grams of protein across 14 bowls.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3400 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 10 lb (4500 g)",
+                                "\u003cstrong\u003eGreen Beans (generic):\u003c/strong\u003e 2 bags (600 g)",
+                                "\u003cstrong\u003eSugar-Free Maple Syrup (generic):\u003c/strong\u003e 1 bottle (120 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 1 jar (80 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1 jar (15 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/2 tsp (12 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/8 tsp (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.28 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Sugar-free maple syrup keeps this glaze sweet without the sugar hit. \u003cstrong\u003eBuy one bottle of sugar-free syrup\u003c/strong\u003e and it lasts through many batches.",
+                       "Frozen green beans cost less than fresh and never spoil on you. \u003cstrong\u003eKeep bags of frozen green beans on hand\u003c/strong\u003e for meals like this.",
+                       "A ten pound bag of potatoes is the cheapest way to buy them. \u003cstrong\u003eBuy the big potato bag\u003c/strong\u003e and you will use every last one."
+                   ],
+    "make_it":  [
+                    "Place the pork tenderloin in the slow cooker.",
+                    "Stir the sugar-free maple syrup, dijon mustard, and garlic powder together, then pour it over the pork.",
+                    "Cover and cook on low for 7 to 8 hours until the pork is fork tender.",
+                    "Steam the green beans just until crisp-tender near the end.",
+                    "Roast or boil the potatoes until soft.",
+                    "Slice or shred the pork, serve it over potatoes, and add the green beans on the side."
+                ],
+    "portion_html":  "Each of the 14 servings comes in at 59 grams of protein and just 565 calories.",
+    "credit_html":  "",
+    "upsell_html":  "When a meal is this easy and this cheap, there is no reason not to keep it in the rotation. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  40.94,
+    "cost_batch_true":  43.19,
+    "cost_per_serving":  2.92,
+    "cost_per_serving_true":  3.08,
+    "cost_pantry_add":  8.71,
+    "cost_first_run":  51.9,
+    "scaler":  {
+                   "cost":  "43.19",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Tenderloin",
+                                   "grams":  3400,
+                                   "buy":  "8 lb",
+                                   "bid":  "pork-tenderloin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "grams":  4500,
+                                   "buy":  "10 lb",
+                                   "bid":  "potato",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Green Beans",
+                                   "grams":  600,
+                                   "buy":  "2 bags",
+                                   "bid":  "frozen-green-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sugar-Free Maple Syrup",
+                                   "grams":  120,
+                                   "buy":  "1 bottle",
+                                   "bid":  "sugar-free-maple-syrup",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "grams":  80,
+                                   "buy":  "1 jar",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  15,
+                                   "buy":  "1 jar",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  12,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "1/8 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 565 calories and 59 grams of protein for roughly $3.12 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker maple dijon pork bowls, budget dinner",
+                 "costPerServing":  3.71,
+                 "recipeIngredient":  [
+                                          "8 lb Pork Tenderloin",
+                                          "10 lb Potato",
+                                          "2 bags Green Beans",
+                                          "1 bottle Sugar-Free Maple Syrup",
+                                          "1 jar Dijon Mustard",
+                                          "1 jar Garlic Powder"
+                                      ],
+                 "steps":  [
+                               "Place the pork tenderloin in the slow cooker.",
+                               "Stir the sugar-free maple syrup, dijon mustard, and garlic powder together, then pour it over the pork.",
+                               "Cover and cook on low for 7 to 8 hours until the pork is fork tender.",
+                               "Steam the green beans just until crisp-tender near the end.",
+                               "Roast or boil the potatoes until soft.",
+                               "Slice or shred the pork, serve it over potatoes, and add the green beans on the side."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

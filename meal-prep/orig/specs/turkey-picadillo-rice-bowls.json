@@ -1,0 +1,166 @@
+{
+    "name":  "Turkey Picadillo Rice Bowls",
+    "slug":  "turkey-picadillo-rice-bowls",
+    "cuisine":  "Cuban",
+    "protein":  "turkey",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  552,
+                 "protein":  47,
+                 "carbs":  46,
+                 "fat":  16,
+                 "cost_ps":  "3.36"
+             },
+    "intro_html":  "A savory Cuban-style turkey simmer with a little sweet-and-savory magic in every bite. At about $2.94 a serving with 47 grams of protein, this is one of the best deals in the whole lineup. One skillet, 14 servings, done.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3100 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (700 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cans (800 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1 can (132 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 peppers (360 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (240 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 jar (12 g)",
+                                "\u003cstrong\u003eGreen Olives:\u003c/strong\u003e 2 tbsp pitted Spanish olives + 2 tbsp brine (110 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves, minced (38 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp kosher salt (22 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 2 small (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.94 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "The \u003cstrong\u003e7 lb ground turkey pack\u003c/strong\u003e is the smart buy and keeps this recipe under three bucks a serving.",
+                       "Canned \u003cstrong\u003ediced tomatoes and tomato paste\u003c/strong\u003e in the store brand do the heavy lifting for pennies.",
+                       "Dry \u003cstrong\u003erice by the pound\u003c/strong\u003e is the cheapest filler you can put in a bowl, so keep a bag on hand."
+                   ],
+    "make_it":  [
+                    "Brown the ground turkey in a large skillet, breaking it up as it cooks.",
+                    "Add the chopped onion and green peppers and cook until they soften.",
+                    "Stir in the cumin, then the diced tomatoes and tomato paste.",
+                    "Let it simmer 10 to 15 minutes so the flavors meld and the sauce thickens.",
+                    "Serve the picadillo over cooked white rice."
+                ],
+    "portion_html":  "Each of the 14 bowls delivers 47 grams of protein and about 552 calories.",
+    "credit_html":  "",
+    "upsell_html":  "Big flavor, tiny price, and it might just become a regular on your rotation. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  40.68,
+    "cost_batch_true":  42.64,
+    "cost_per_serving":  2.91,
+    "cost_per_serving_true":  3.05,
+    "cost_pantry_add":  4.37,
+    "cost_first_run":  47.01,
+    "scaler":  {
+                   "cost":  "42.64",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "grams":  3100,
+                                   "buy":  "7 lb",
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  700,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "grams":  800,
+                                   "buy":  "2 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "grams":  132,
+                                   "buy":  "1 can",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "grams":  360,
+                                   "buy":  "3 peppers",
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  240,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  12,
+                                   "buy":  "1 jar",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Olives",
+                                   "grams":  110,
+                                   "buy":  "2 tbsp pitted Spanish olives + 2 tbsp brine",
+                                   "bid":  "olives",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  38,
+                                   "buy":  "2 cloves, minced",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  22,
+                                   "buy":  "1 tsp kosher salt",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "grams":  2,
+                                   "buy":  "2 small",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Cuban meal prep. Fourteen servings at about 552 calories and 47 grams of protein for roughly $2.85 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, turkey picadillo rice bowls, budget dinner",
+                 "costPerServing":  3.36,
+                 "recipeIngredient":  [
+                                          "7 lb 93/7 Ground Turkey",
+                                          "1 lb Rice",
+                                          "2 cans Diced Tomatoes",
+                                          "1 can Tomato Paste",
+                                          "3 peppers Green Bell Peppers",
+                                          "3 onions Yellow Onion"
+                                      ],
+                 "steps":  [
+                               "Brown the ground turkey in a large skillet, breaking it up as it cooks.",
+                               "Add the chopped onion and green peppers and cook until they soften.",
+                               "Stir in the cumin, then the diced tomatoes and tomato paste.",
+                               "Let it simmer 10 to 15 minutes so the flavors meld and the sauce thickens.",
+                               "Serve the picadillo over cooked white rice."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

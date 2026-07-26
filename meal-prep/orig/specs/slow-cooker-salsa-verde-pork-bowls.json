@@ -1,0 +1,160 @@
+{
+    "name":  "Slow Cooker Salsa Verde Pork Bowls",
+    "slug":  "slow-cooker-salsa-verde-pork-bowls",
+    "cuisine":  "Mexican",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  579,
+                 "protein":  55,
+                 "carbs":  62,
+                 "fat":  9,
+                 "cost_ps":  "3.96"
+             },
+    "intro_html":  "Salsa verde does the heavy lifting here, so you get bright, tangy pork with almost no effort. It stacks up 55 grams of protein per bowl over rice and corn, all for right around $2.99 a serving. Fourteen servings from one batch is a whole lot of lunch for the money.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3300 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (940 g)",
+                                "\u003cstrong\u003eSalsa Verde (Herdez):\u003c/strong\u003e 1 jar (450 g)",
+                                "\u003cstrong\u003eDiced Green Chiles (Old El Paso):\u003c/strong\u003e 2 cans (120 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 3 cans (750 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (480 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1 bottle (45 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (12 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1/3 cup (150 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/4 tsp kosher salt (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.99 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Pork tenderloin runs lean and clean, but watch the tag. If it is over $4 a pound, \u003cstrong\u003echeck for pork loin instead\u003c/strong\u003e and save real money on the same batch.",
+                       "A single \u003cstrong\u003ejar of salsa verde does most of the seasoning\u003c/strong\u003e, so you skip buying a handful of separate spices.",
+                       "Buy \u003cstrong\u003elime juice in a bottle\u003c/strong\u003e rather than fresh limes for batch cooking. It keeps in the fridge and you only use a splash."
+                   ],
+    "make_it":  [
+                    "Set the pork tenderloin in the slow cooker.",
+                    "Pour the salsa verde, diced green chiles, and chicken broth over the top.",
+                    "Add a squeeze of lime juice and the minced garlic.",
+                    "Cover and cook on low for 7 to 8 hours until the pork pulls apart easily.",
+                    "Shred the pork and stir it back into all those juices, then fold in the corn.",
+                    "Spoon over cooked white rice and divide into containers."
+                ],
+    "portion_html":  "You are looking at about 579 calories and 55 grams of protein in every serving.",
+    "credit_html":  "",
+    "upsell_html":  "One quiet afternoon of cooking buys you a week of bowls you will actually look forward to. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  39.87,
+    "cost_batch_true":  43.6,
+    "cost_per_serving":  2.85,
+    "cost_per_serving_true":  3.11,
+    "cost_pantry_add":  11.81,
+    "cost_first_run":  55.41,
+    "scaler":  {
+                   "cost":  "43.60",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Tenderloin",
+                                   "grams":  3300,
+                                   "buy":  "8 lb",
+                                   "bid":  "pork-tenderloin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  940,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salsa Verde",
+                                   "grams":  450,
+                                   "buy":  "1 jar",
+                                   "bid":  "salsa-verde",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Green Chiles",
+                                   "grams":  120,
+                                   "buy":  "2 cans",
+                                   "bid":  "diced-green-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sweet Whole Kernel Corn",
+                                   "grams":  750,
+                                   "buy":  "3 cans",
+                                   "bid":  "canned-sweet-corn",
+                                   "gpu":  "210.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  480,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "grams":  45,
+                                   "buy":  "1 bottle",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  12,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "grams":  150,
+                                   "buy":  "1/3 cup",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  4,
+                                   "buy":  "1/4 tsp kosher salt",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 579 calories and 55 grams of protein for roughly $2.70 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker salsa verde pork bowls, budget dinner",
+                 "costPerServing":  3.96,
+                 "recipeIngredient":  [
+                                          "8 lb Pork Tenderloin",
+                                          "1 lb Rice",
+                                          "1 jar Salsa Verde",
+                                          "2 cans Diced Green Chiles",
+                                          "3 cans Sweet Whole Kernel Corn",
+                                          "1 carton Chicken Broth"
+                                      ],
+                 "steps":  [
+                               "Set the pork tenderloin in the slow cooker.",
+                               "Pour the salsa verde, diced green chiles, and chicken broth over the top.",
+                               "Add a squeeze of lime juice and the minced garlic.",
+                               "Cover and cook on low for 7 to 8 hours until the pork pulls apart easily.",
+                               "Shred the pork and stir it back into all those juices, then fold in the corn.",
+                               "Spoon over cooked white rice and divide into containers."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

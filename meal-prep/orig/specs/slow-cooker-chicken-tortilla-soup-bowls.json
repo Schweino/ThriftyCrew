@@ -1,0 +1,216 @@
+{
+    "name":  "Slow Cooker Chicken Tortilla Soup Bowls",
+    "slug":  "slow-cooker-chicken-tortilla-soup-bowls",
+    "cuisine":  "Mexican",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  559,
+                 "protein":  57,
+                 "carbs":  58,
+                 "fat":  9,
+                 "cost_ps":  "3.80"
+             },
+    "intro_html":  "Tortilla soup flavor, meal prep convenience, and one of the cheapest bowls in the lineup. Black beans and corn round it out so you get plenty of protein and a filling meal that barely dents the grocery bill. One batch makes 14 servings.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3000 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (820 g)",
+                                "\u003cstrong\u003eCrushed Tomatoes (generic):\u003c/strong\u003e 1 can (600 g)",
+                                "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 2 cans (500 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 2 cans (400 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 1 bag (112 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1 medium (220 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 cloves (30 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 4 cups (1680 g)",
+                                "\u003cstrong\u003eEnchilada Sauce (Old El Paso):\u003c/strong\u003e 10 oz can (570 g)",
+                                "\u003cstrong\u003eDiced Green Chiles (Old El Paso):\u003c/strong\u003e 4.5 oz can (255 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (16 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 tbsp (16 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (12 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 1 leaf (1 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e juice of 1 lime (60 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.07 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Canned \u003cstrong\u003eblack beans and corn\u003c/strong\u003e are pantry-cheap and do a lot of the flavor and filling work here.",
+                       "Buy the \u003cstrong\u003echicken breast in bulk\u003c/strong\u003e to keep every bowl well under budget.",
+                       "Store-brand \u003cstrong\u003ecrushed tomatoes\u003c/strong\u003e cook down just as well as the name brand for less money."
+                   ],
+    "make_it":  [
+                    "Add the chicken breast and the can of crushed tomatoes to the crock.",
+                    "Cover and cook on low for 6 to 8 hours until the chicken is tender.",
+                    "Shred the chicken, then stir in the black beans and corn.",
+                    "Let it heat through for another 15 to 20 minutes.",
+                    "Cook your rice while the pot finishes.",
+                    "Spoon over rice and finish each bowl with a little cheddar."
+                ],
+    "portion_html":  "Each of the 14 servings comes in around 57g protein for about 559 calories, at roughly $2.07 a bowl.",
+    "credit_html":  "",
+    "upsell_html":  "Cheap, cozy, and ready to go, this is meal prep that actually makes you smile. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  39.14,
+    "cost_batch_true":  42.58,
+    "cost_per_serving":  2.8,
+    "cost_per_serving_true":  3.04,
+    "cost_pantry_add":  10.62,
+    "cost_first_run":  53.2,
+    "scaler":  {
+                   "cost":  "42.58",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3000,
+                                   "buy":  "7 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  820,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Crushed Tomatoes",
+                                   "grams":  600,
+                                   "buy":  "1 can",
+                                   "bid":  "crushed-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Seasoned Black Beans",
+                                   "grams":  500,
+                                   "buy":  "2 cans",
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sweet Whole Kernel Corn",
+                                   "grams":  400,
+                                   "buy":  "2 cans",
+                                   "bid":  "canned-sweet-corn",
+                                   "gpu":  "210.000"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "grams":  112,
+                                   "buy":  "1 bag",
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  220,
+                                   "buy":  "1 medium",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  30,
+                                   "buy":  "3 cloves",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  1680,
+                                   "buy":  "4 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Enchilada Sauce",
+                                   "grams":  570,
+                                   "buy":  "10 oz can",
+                                   "bid":  "enchilada-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Green Chiles",
+                                   "grams":  255,
+                                   "buy":  "4.5 oz can",
+                                   "bid":  "diced-green-chiles",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  16,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "grams":  16,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  12,
+                                   "buy":  "1 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "grams":  1,
+                                   "buy":  "1 leaf",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "grams":  60,
+                                   "buy":  "juice of 1 lime",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 559 calories and 57 grams of protein for roughly $1.82 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker chicken tortilla soup bowls, budget dinner",
+                 "costPerServing":  3.8,
+                 "recipeIngredient":  [
+                                          "7 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "1 can Crushed Tomatoes",
+                                          "2 cans Seasoned Black Beans",
+                                          "2 cans Sweet Whole Kernel Corn",
+                                          "1 bag Cheddar Cheese, Shredded"
+                                      ],
+                 "steps":  [
+                               "Add the chicken breast and the can of crushed tomatoes to the crock.",
+                               "Cover and cook on low for 6 to 8 hours until the chicken is tender.",
+                               "Shred the chicken, then stir in the black beans and corn.",
+                               "Let it heat through for another 15 to 20 minutes.",
+                               "Cook your rice while the pot finishes.",
+                               "Spoon over rice and finish each bowl with a little cheddar."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

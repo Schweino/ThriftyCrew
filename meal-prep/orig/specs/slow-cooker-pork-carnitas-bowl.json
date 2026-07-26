@@ -1,0 +1,202 @@
+{
+    "name":  "Pork Carnitas Burrito Bowl",
+    "slug":  "slow-cooker-pork-carnitas-bowl",
+    "cuisine":  "Mexican",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  551,
+                 "protein":  47,
+                 "carbs":  64,
+                 "fat":  9,
+                 "cost_ps":  "2.91"
+             },
+    "intro_html":  "Bright citrus, warm spices, and tender shredded pork make this burrito bowl feel like a treat, not a budget meal. The slow cooker does the heavy lifting, and a quick trip under the broiler gives the pork those crispy edges that make carnitas so good. One batch builds 14 loaded bowls.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 5 lb (2268 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 jar (14 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 jar (6 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1 jar (6 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (21 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 3 limes (90 g)",
+                                "\u003cstrong\u003eOrange Juice:\u003c/strong\u003e 2 oranges (120 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (800 g)",
+                                "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 4 cans (910 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 2 cans (420 g)",
+                                "\u003cstrong\u003eFat Free Cheddar (Great Value):\u003c/strong\u003e 1 bag (196 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1/2 tbsp (5 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/2 tsp+ (15 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e freshly cracked (4 g)",
+                                "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 2 small sticks (3 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$1.85 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "\u003cstrong\u003ePork loin is the budget cut here.\u003c/strong\u003e It shreds beautifully and usually costs less per pound than pre-made carnitas. Buy it when it goes on sale and freeze it for later.",
+                       "\u003cstrong\u003eFresh citrus can beat the bottle.\u003c/strong\u003e When oranges and limes are cheap, fresh juice tastes brighter and often costs less than the bottled stuff. Roll them on the counter first to get more juice out.",
+                       "\u003cstrong\u003eCanned beans and corn stretch the meal.\u003c/strong\u003e Stock up when they hit a dollar or less per can. They add protein and bulk so a little pork feeds a lot more people."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot on a kitchen scale and write the number down. You will need it to portion evenly at the end.",
+                    "Rub the pork loin all over with cumin, chili powder, onion powder, and a little salt and pepper. Set it in the slow cooker and add the minced garlic, lime juice, and fresh orange juice.",
+                    "Cover and cook on low for 8 to 10 hours, or on high for 4 to 5 hours, until the pork is fork-tender.",
+                    "About an hour before it is done, shred the pork right in the pot with two forks and let it soak up the citrusy juices.",
+                    "For crispy edges, spread the shredded pork on a foil-lined baking sheet and broil for 8 to 10 minutes. Watch it closely so it browns without burning.",
+                    "Cook the rice per the package. Warm and drain the black beans and the corn.",
+                    "In your weighed pot, combine the rice, beans, corn, and crisped pork, then fold in the fat free cheddar so it melts into the warm mix."
+                ],
+    "portion_html":  "Weigh the full finished pot, subtract the empty pot weight you wrote down, and divide by 14. Spoon that same weight into each of your 14 containers so every burrito bowl comes out equal.",
+    "credit_html":  "",
+    "upsell_html":  "Fourteen restaurant-style burrito bowls for a fraction of takeout money. Add a squeeze of lime when you reheat and it tastes like you just made it. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  24.55,
+    "cost_batch_true":  29,
+    "cost_per_serving":  1.75,
+    "cost_per_serving_true":  2.07,
+    "cost_pantry_add":  11.8,
+    "cost_first_run":  40.8,
+    "scaler":  {
+                   "cost":  "29.00",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Loin",
+                                   "grams":  2268,
+                                   "buy":  "5 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  14,
+                                   "buy":  "1 jar",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "grams":  6,
+                                   "buy":  "1 jar",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "grams":  6,
+                                   "buy":  "1 jar",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  21,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "grams":  90,
+                                   "buy":  "3 limes",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Orange Juice",
+                                   "grams":  120,
+                                   "buy":  "2 oranges",
+                                   "bid":  "orange-juice",
+                                   "gpu":  "31.000"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  800,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Seasoned Black Beans",
+                                   "grams":  910,
+                                   "buy":  "4 cans",
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sweet Whole Kernel Corn",
+                                   "grams":  420,
+                                   "buy":  "2 cans",
+                                   "bid":  "canned-sweet-corn",
+                                   "gpu":  "210.000"
+                               },
+                               {
+                                   "item":  "Fat Free Cheddar",
+                                   "grams":  196,
+                                   "buy":  "1 bag",
+                                   "bid":  "fat-free-cheddar",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  5,
+                                   "buy":  "1/2 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  15,
+                                   "buy":  "1/2 tsp+",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "freshly cracked",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cinnamon",
+                                   "grams":  3,
+                                   "buy":  "2 small sticks",
+                                   "bid":  "ground-cinnamon",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 551 calories and 47 grams of protein for roughly $1.81 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, pork carnitas burrito bowl, budget dinner",
+                 "costPerServing":  2.91,
+                 "recipeIngredient":  [
+                                          "5 lb Pork Loin",
+                                          "1 jar Ground Cumin",
+                                          "1 jar Chili Powder",
+                                          "1 jar Onion Powder",
+                                          "1 bulb Garlic",
+                                          "3 limes Lime Juice"
+                                      ],
+                 "steps":  [
+                               "Weigh your empty mixing pot on a kitchen scale and write the number down. You will need it to portion evenly at the end.",
+                               "Rub the pork loin all over with cumin, chili powder, onion powder, and a little salt and pepper. Set it in the slow cooker and add the minced garlic, lime juice, and fresh orange juice.",
+                               "Cover and cook on low for 8 to 10 hours, or on high for 4 to 5 hours, until the pork is fork-tender.",
+                               "About an hour before it is done, shred the pork right in the pot with two forks and let it soak up the citrusy juices.",
+                               "For crispy edges, spread the shredded pork on a foil-lined baking sheet and broil for 8 to 10 minutes. Watch it closely so it browns without burning.",
+                               "Cook the rice per the package. Warm and drain the black beans and the corn.",
+                               "In your weighed pot, combine the rice, beans, corn, and crisped pork, then fold in the fat free cheddar so it melts into the warm mix."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

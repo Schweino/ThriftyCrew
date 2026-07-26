@@ -1,0 +1,192 @@
+{
+    "name":  "Salisbury Steak and Potato Bowls",
+    "slug":  "salisbury-steak-potato-bowls",
+    "cuisine":  "American",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  538,
+                 "protein":  42,
+                 "carbs":  67,
+                 "fat":  12,
+                 "cost_ps":  "4.58"
+             },
+    "intro_html":  "This is old-fashioned comfort food done lean and cheap. Ground beef patties simmer in a mushroom and onion gravy, all spooned over potatoes for a stick-to-your-ribs bowl. It runs around three forty a serving with 42 grams of protein and makes 14 hearty servings.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2170 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 11 lb (4562 g)",
+                                "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 2 packages (430 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (320 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (720 g)",
+                                "\u003cstrong\u003eBread Crumbs (generic):\u003c/strong\u003e 1 container (120 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1 can (60 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1 tsp (patties) + 1/2 tsp (gravy) (25 g)",
+                                "\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 2 tsp (patties) + 1 tsp (gravy) (50 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 1 tsp (18 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1/2 tsp (5 g)",
+                                "\u003cstrong\u003eOnion Powder:\u003c/strong\u003e 1/2 tsp (5 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (18 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.45 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Bread crumbs stretch the beef and cost almost nothing. \u003cstrong\u003eA single container of bread crumbs\u003c/strong\u003e makes many batches of patties.",
+                       "Mushrooms add meaty flavor cheaply, especially on sale. \u003cstrong\u003eBuy whole mushrooms and slice them yourself\u003c/strong\u003e instead of paying for pre-sliced.",
+                       "A big bag of potatoes is the cheapest base around. \u003cstrong\u003eBuy the ten or eleven pound bag\u003c/strong\u003e and put every spud to use."
+                   ],
+    "make_it":  [
+                    "Mix the ground beef with the bread crumbs and shape into patties.",
+                    "Brown the patties in a large skillet, then set them aside.",
+                    "Cook the sliced mushrooms and onions in the same pan until soft.",
+                    "Stir in the beef broth and tomato paste and let it simmer into a gravy, then return the patties to the pan.",
+                    "Roast or boil the potatoes until fork tender.",
+                    "Serve the patties and gravy over the potatoes."
+                ],
+    "portion_html":  "Each bowl delivers 42 grams of protein and just 538 calories, one of the lighter dinners in the lineup.",
+    "credit_html":  "",
+    "upsell_html":  "Warm, filling, and easy on the wallet, this is comfort food that loves your budget back. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  48.78,
+    "cost_batch_true":  52.22,
+    "cost_per_serving":  3.48,
+    "cost_per_serving_true":  3.73,
+    "cost_pantry_add":  11.9,
+    "cost_first_run":  64.12,
+    "scaler":  {
+                   "cost":  "52.22",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  2170,
+                                   "buy":  "5 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "grams":  4562,
+                                   "buy":  "11 lb",
+                                   "bid":  "potato",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "White Mushrooms",
+                                   "grams":  430,
+                                   "buy":  "2 packages",
+                                   "bid":  "white-mushrooms",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  320,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "grams":  720,
+                                   "buy":  "1 carton",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Bread Crumbs",
+                                   "grams":  120,
+                                   "buy":  "1 container",
+                                   "bid":  "bread-crumbs",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "grams":  60,
+                                   "buy":  "1 can",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "grams":  25,
+                                   "buy":  "1 tsp (patties) + 1/2 tsp (gravy)",
+                                   "bid":  "worcestershire-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Ketchup",
+                                   "grams":  50,
+                                   "buy":  "2 tsp (patties) + 1 tsp (gravy)",
+                                   "bid":  "ketchup",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "grams":  18,
+                                   "buy":  "1 tsp",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  5,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Onion Powder",
+                                   "grams":  5,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "onion-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  18,
+                                   "buy":  "to taste",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 538 calories and 42 grams of protein for roughly $3.24 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, salisbury steak and potato bowls, budget dinner",
+                 "costPerServing":  4.58,
+                 "recipeIngredient":  [
+                                          "5 lb 93/7 Ground Beef",
+                                          "11 lb Potato",
+                                          "2 packages White Mushrooms",
+                                          "3 onions Yellow Onion",
+                                          "1 carton Beef Broth",
+                                          "1 container Bread Crumbs"
+                                      ],
+                 "steps":  [
+                               "Mix the ground beef with the bread crumbs and shape into patties.",
+                               "Brown the patties in a large skillet, then set them aside.",
+                               "Cook the sliced mushrooms and onions in the same pan until soft.",
+                               "Stir in the beef broth and tomato paste and let it simmer into a gravy, then return the patties to the pan.",
+                               "Roast or boil the potatoes until fork tender.",
+                               "Serve the patties and gravy over the potatoes."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

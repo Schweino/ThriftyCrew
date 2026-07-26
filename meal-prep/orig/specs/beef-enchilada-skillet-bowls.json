@@ -1,0 +1,182 @@
+{
+    "name":  "Beef Enchilada Skillet Bowls",
+    "slug":  "beef-enchilada-skillet-bowls",
+    "cuisine":  "Tex-Mex",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  566,
+                 "protein":  52,
+                 "carbs":  46,
+                 "fat":  18,
+                 "cost_ps":  "6.62"
+             },
+    "intro_html":  "Enchilada night, minus the rolling and the oven time, all in one pan. These bowls hit a serious 52 grams of protein each and come in around $3.22 a serving. Fourteen servings from one skillet means the whole week is covered.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2280 g)",
+                                "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 8 cans (3066 g)",
+                                "\u003cstrong\u003eEnchilada Sauce (Old El Paso):\u003c/strong\u003e 3 cans (600 g)",
+                                "\u003cstrong\u003eSweet Whole Kernel Corn (Great Value):\u003c/strong\u003e 2 cans (500 g)",
+                                "\u003cstrong\u003eCheddar Cheese, Shredded (Great Value):\u003c/strong\u003e 1 bag (224 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 jar (14 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 jar (8 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 tbsp (45 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 1/2 onion, diced (190 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 1/2 tsp (5 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (18 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)",
+                                "\u003cstrong\u003eCorn Tortillas:\u003c/strong\u003e 5, cut into triangles (440 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.22 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Buy your \u003cstrong\u003eblack beans by the case of store-brand cans\u003c/strong\u003e. They are the cheap workhorse that stretches the beef.",
+                       "A \u003cstrong\u003esingle bag of shredded cheddar\u003c/strong\u003e is plenty for the whole batch, so no need to overbuy.",
+                       "Chili powder and cumin last for months, so \u003cstrong\u003ebuy one jar of each and reuse them\u003c/strong\u003e across dozens of batches."
+                   ],
+    "make_it":  [
+                    "Brown the ground beef in a large skillet, then drain off the grease.",
+                    "Stir in the chili powder and cumin and let them bloom in the hot beef for a minute.",
+                    "Add the enchilada sauce and corn and simmer until it thickens up a bit.",
+                    "Fold in the seasoned black beans and warm everything through.",
+                    "Spoon it into bowls over the beans, then top with shredded cheddar so it melts in."
+                ],
+    "portion_html":  "Each of the 14 bowls packs 52 grams of protein and about 566 calories.",
+    "credit_html":  "",
+    "upsell_html":  "Big Tex-Mex flavor for pocket change, and it reheats like a champ. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  63.29,
+    "cost_batch_true":  75.18,
+    "cost_per_serving":  4.52,
+    "cost_per_serving_true":  5.37,
+    "cost_pantry_add":  17.49,
+    "cost_first_run":  92.67,
+    "scaler":  {
+                   "cost":  "75.18",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  2280,
+                                   "buy":  "5 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Seasoned Black Beans",
+                                   "grams":  3066,
+                                   "buy":  "8 cans",
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Enchilada Sauce",
+                                   "grams":  600,
+                                   "buy":  "3 cans",
+                                   "bid":  "enchilada-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sweet Whole Kernel Corn",
+                                   "grams":  500,
+                                   "buy":  "2 cans",
+                                   "bid":  "canned-sweet-corn",
+                                   "gpu":  "210.000"
+                               },
+                               {
+                                   "item":  "Cheddar Cheese, Shredded",
+                                   "grams":  224,
+                                   "buy":  "1 bag",
+                                   "bid":  "cheddar-cheese-shredded",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "grams":  14,
+                                   "buy":  "1 jar",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  8,
+                                   "buy":  "1 jar",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  45,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  190,
+                                   "buy":  "1/2 onion, diced",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic Powder",
+                                   "grams":  5,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "garlic-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  18,
+                                   "buy":  "to taste",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Corn Tortillas",
+                                   "grams":  440,
+                                   "buy":  "5, cut into triangles",
+                                   "bid":  "corn-tortillas",
+                                   "gpu":  "30.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Tex-Mex meal prep. Fourteen servings at about 566 calories and 52 grams of protein for roughly $3.09 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, beef enchilada skillet bowls, budget dinner",
+                 "costPerServing":  6.62,
+                 "recipeIngredient":  [
+                                          "5 lb 93/7 Ground Beef",
+                                          "8 cans Seasoned Black Beans",
+                                          "3 cans Enchilada Sauce",
+                                          "2 cans Sweet Whole Kernel Corn",
+                                          "1 bag Cheddar Cheese, Shredded",
+                                          "1 jar Chili Powder"
+                                      ],
+                 "steps":  [
+                               "Brown the ground beef in a large skillet, then drain off the grease.",
+                               "Stir in the chili powder and cumin and let them bloom in the hot beef for a minute.",
+                               "Add the enchilada sauce and corn and simmer until it thickens up a bit.",
+                               "Fold in the seasoned black beans and warm everything through.",
+                               "Spoon it into bowls over the beans, then top with shredded cheddar so it melts in."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

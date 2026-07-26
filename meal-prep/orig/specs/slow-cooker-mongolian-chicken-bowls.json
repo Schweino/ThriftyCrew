@@ -1,0 +1,174 @@
+{
+    "name":  "Slow Cooker Mongolian Chicken Bowls",
+    "slug":  "slow-cooker-mongolian-chicken-bowls",
+    "cuisine":  "Chinese",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  564,
+                 "protein":  63,
+                 "carbs":  57,
+                 "fat":  8,
+                 "cost_ps":  "4.05"
+             },
+    "intro_html":  "Mongolian chicken has that sweet, garlicky, deeply savory sauce that makes rice disappear fast. The slow cooker version gives you all of it with 63 grams of protein per bowl for around $2.34 a serving. One batch is 14 servings, so you\u0027re set for lunches and dinners without touching a restaurant menu.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3400 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (800 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 4 bags (1200 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (180 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1 bag (55 g)",
+                                "\u003cstrong\u003eHoisin Sauce (generic):\u003c/strong\u003e 1 jar (60 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 bottle (20 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (24 g)",
+                                "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 2 tbsp (100 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1 tsp grated (7 g)",
+                                "\u003cstrong\u003eSriracha (Huy Fong Foods):\u003c/strong\u003e 1-2 tsp (25 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1 tbsp (28 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.34 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Sesame oil looks pricey per bottle, but you use a splash, so \u003cstrong\u003eone bottle lasts most of a year\u003c/strong\u003e and pennies out per meal.",
+                       "Brown sugar and soy sauce are pantry cheap, so \u003cstrong\u003ekeep them stocked\u003c/strong\u003e and this sauce comes together on autopilot.",
+                       "Frozen broccoli beats fresh on both price and shelf life, so \u003cstrong\u003ereach for the freezer bag\u003c/strong\u003e and stop losing crowns to the crisper drawer."
+                   ],
+    "make_it":  [
+                    "Combine the chicken, soy sauce, brown sugar, hoisin, sesame oil, and garlic in the slow cooker.",
+                    "Cover and cook on low for 6 to 7 hours until the chicken shreds with almost no effort.",
+                    "Stir in the broccoli florets during the final 30 minutes so they cook through but stay green.",
+                    "If you want a thicker sauce, spoon a little off, whisk in a pinch of cornstarch, and stir it back in.",
+                    "Pull the chicken apart in the pot and serve over steaming white rice."
+                ],
+    "portion_html":  "Each bowl carries 63 grams of protein and just 564 calories, a genuinely lean, high-protein plate.",
+    "credit_html":  "",
+    "upsell_html":  "This one tastes like a splurge and cooks like a nap, which is exactly the deal we want. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  34.31,
+    "cost_batch_true":  37.55,
+    "cost_per_serving":  2.45,
+    "cost_per_serving_true":  2.68,
+    "cost_pantry_add":  19.09,
+    "cost_first_run":  56.64,
+    "scaler":  {
+                   "cost":  "37.55",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3400,
+                                   "buy":  "8 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  800,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  1200,
+                                   "buy":  "4 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  180,
+                                   "buy":  "1 bottle",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "grams":  55,
+                                   "buy":  "1 bag",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Hoisin Sauce",
+                                   "grams":  60,
+                                   "buy":  "1 jar",
+                                   "bid":  "hoisin-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "grams":  20,
+                                   "buy":  "1 bottle",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  24,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Rice Vinegar",
+                                   "grams":  100,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "rice-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "grams":  7,
+                                   "buy":  "1 tsp grated",
+                                   "bid":  "ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Sriracha",
+                                   "grams":  25,
+                                   "buy":  "1-2 tsp",
+                                   "bid":  "sriracha",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "grams":  28,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about 564 calories and 63 grams of protein for roughly $2.20 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker mongolian chicken bowls, budget dinner",
+                 "costPerServing":  4.05,
+                 "recipeIngredient":  [
+                                          "8 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "4 bags Broccoli Florets",
+                                          "1 bottle Soy Sauce",
+                                          "1 bag Brown Sugar",
+                                          "1 jar Hoisin Sauce"
+                                      ],
+                 "steps":  [
+                               "Combine the chicken, soy sauce, brown sugar, hoisin, sesame oil, and garlic in the slow cooker.",
+                               "Cover and cook on low for 6 to 7 hours until the chicken shreds with almost no effort.",
+                               "Stir in the broccoli florets during the final 30 minutes so they cook through but stay green.",
+                               "If you want a thicker sauce, spoon a little off, whisk in a pinch of cornstarch, and stir it back in.",
+                               "Pull the chicken apart in the pot and serve over steaming white rice."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

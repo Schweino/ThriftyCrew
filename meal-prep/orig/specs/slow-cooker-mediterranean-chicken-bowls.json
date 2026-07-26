@@ -1,0 +1,198 @@
+{
+    "name":  "Slow Cooker Mediterranean Chicken Bowls",
+    "slug":  "slow-cooker-mediterranean-chicken-bowls",
+    "cuisine":  "Mediterranean",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  562,
+                 "protein":  61,
+                 "carbs":  55,
+                 "fat":  9,
+                 "cost_ps":  "4.18"
+             },
+    "intro_html":  "This Mediterranean bowl leans on roasted peppers and briny olives to make chicken taste like a vacation. It brings 61 grams of protein for about $2.26 a serving, no fancy technique required. One batch makes 14 servings, so a few jars from the pantry aisle stretch a long way.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3450 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (940 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (200 g)",
+                                "\u003cstrong\u003eRoasted Red Peppers (generic):\u003c/strong\u003e 1 jar (240 g)",
+                                "\u003cstrong\u003eOlives (generic):\u003c/strong\u003e 1 jar (140 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (14 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (120 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (9 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1 bottle (30 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 tsp (7 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 1 tsp (7 g)",
+                                "\u003cstrong\u003eDried Rosemary:\u003c/strong\u003e 1 tsp (7 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 1 leaf (1 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (15 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.26 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Jarred roasted red peppers and olives keep for ages, so \u003cstrong\u003estock a jar of each\u003c/strong\u003e and pull them out whenever a meal needs a lift.",
+                       "Onions and garlic are the cheap flavor backbone here, so \u003cstrong\u003ealways keep both in the house\u003c/strong\u003e.",
+                       "Bottled lime juice saves you from buying fresh citrus you\u0027ll let go bad, so \u003cstrong\u003ekeep a bottle in the fridge\u003c/strong\u003e."
+                   ],
+    "make_it":  [
+                    "Add the chicken, sliced onion, chicken broth, olive oil, garlic, and lime juice to the slow cooker.",
+                    "Cover and cook on low for 6 to 7 hours until the chicken is tender all the way through.",
+                    "Stir in the chopped roasted red peppers and olives during the last 30 minutes.",
+                    "Shred the chicken into the pot so it soaks up the savory, briny juices.",
+                    "Serve over white rice with plenty of the peppers and olives spooned on top."
+                ],
+    "portion_html":  "Each bowl delivers 61 grams of protein and 562 calories, a light but substantial plate.",
+    "credit_html":  "",
+    "upsell_html":  "A few smart pantry jars turn plain chicken into something worth looking forward to. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  32.72,
+    "cost_batch_true":  36.54,
+    "cost_per_serving":  2.34,
+    "cost_per_serving_true":  2.61,
+    "cost_pantry_add":  22.02,
+    "cost_first_run":  58.56,
+    "scaler":  {
+                   "cost":  "36.54",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3450,
+                                   "buy":  "8 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  940,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  200,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Roasted Red Peppers",
+                                   "grams":  240,
+                                   "buy":  "1 jar",
+                                   "bid":  "roasted-red-peppers",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olives",
+                                   "grams":  140,
+                                   "buy":  "1 jar",
+                                   "bid":  "olives",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  14,
+                                   "buy":  "1 bottle",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  120,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  9,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "grams":  30,
+                                   "buy":  "1 bottle",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  7,
+                                   "buy":  "1 tsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Thyme",
+                                   "grams":  7,
+                                   "buy":  "1 tsp",
+                                   "bid":  "dried-thyme",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Rosemary",
+                                   "grams":  7,
+                                   "buy":  "1 tsp",
+                                   "bid":  "dried-rosemary",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "grams":  1,
+                                   "buy":  "1 leaf",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  15,
+                                   "buy":  "to taste",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Mediterranean meal prep. Fourteen servings at about 562 calories and 61 grams of protein for roughly $2.12 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker mediterranean chicken bowls, budget dinner",
+                 "costPerServing":  4.18,
+                 "recipeIngredient":  [
+                                          "8 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "2 onions Yellow Onion",
+                                          "1 jar Roasted Red Peppers",
+                                          "1 jar Olives",
+                                          "1 bottle Olive Oil"
+                                      ],
+                 "steps":  [
+                               "Add the chicken, sliced onion, chicken broth, olive oil, garlic, and lime juice to the slow cooker.",
+                               "Cover and cook on low for 6 to 7 hours until the chicken is tender all the way through.",
+                               "Stir in the chopped roasted red peppers and olives during the last 30 minutes.",
+                               "Shred the chicken into the pot so it soaks up the savory, briny juices.",
+                               "Serve over white rice with plenty of the peppers and olives spooned on top."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

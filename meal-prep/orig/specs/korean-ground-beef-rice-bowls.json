@@ -1,0 +1,160 @@
+{
+    "name":  "Korean Ground Beef Rice Bowls",
+    "slug":  "korean-ground-beef-rice-bowls",
+    "cuisine":  "Korean",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  615,
+                 "protein":  50,
+                 "carbs":  64,
+                 "fat":  17,
+                 "cost_ps":  "4.69"
+             },
+    "intro_html":  "Gochujang gives these Korean ground beef bowls a deep, savory heat that tastes like you fussed for hours. Lean beef browns and simmers in a spicy sweet sauce, then goes over rice with broccoli. It runs a bit higher at around three thirty a serving, but you still get a big 50 grams of protein across 14 bowls.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2680 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (861 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 3 bags (1000 g)",
+                                "\u003cstrong\u003eGochujang (generic):\u003c/strong\u003e 1 tub (210 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (110 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 bottle (40 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1 bag (60 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (30 g)",
+                                "\u003cstrong\u003eRoasted Red Peppers (generic):\u003c/strong\u003e 3 oz, from a jar (300 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1 tsp (8 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.36 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "A tub of gochujang seasons batch after batch. \u003cstrong\u003eBuy one tub of gochujang\u003c/strong\u003e and it will carry you through months of meals.",
+                       "Sesame oil is strong, so a little goes a long way. \u003cstrong\u003eOne small bottle of sesame oil\u003c/strong\u003e lasts a very long time.",
+                       "Lean ground beef is the big cost here. \u003cstrong\u003eWatch for ground beef sales\u003c/strong\u003e and buy extra to freeze when the price is right."
+                   ],
+    "make_it":  [
+                    "Brown the ground beef in a large skillet, breaking it apart, then drain the grease.",
+                    "Stir in the minced garlic and cook until fragrant.",
+                    "Add the gochujang, soy sauce, sesame oil, and brown sugar and stir into a glossy sauce.",
+                    "Toss in the broccoli florets and cook until just tender.",
+                    "Cook the rice while the skillet simmers.",
+                    "Pile the beef and broccoli over the rice and serve."
+                ],
+    "portion_html":  "Each bowl brings 50 grams of protein and 615 calories across all 14 servings.",
+    "credit_html":  "",
+    "upsell_html":  "One tub of gochujang unlocks a whole world of cheap, punchy dinners, and this is a great place to start. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  52.98,
+    "cost_batch_true":  54.09,
+    "cost_per_serving":  3.78,
+    "cost_per_serving_true":  3.86,
+    "cost_pantry_add":  11.51,
+    "cost_first_run":  65.6,
+    "scaler":  {
+                   "cost":  "54.09",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  2680,
+                                   "buy":  "6 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  861,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  1000,
+                                   "buy":  "3 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Gochujang",
+                                   "grams":  210,
+                                   "buy":  "1 tub",
+                                   "bid":  "gochujang",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  110,
+                                   "buy":  "1 bottle",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "grams":  40,
+                                   "buy":  "1 bottle",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "grams":  60,
+                                   "buy":  "1 bag",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  30,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Roasted Red Peppers",
+                                   "grams":  300,
+                                   "buy":  "3 oz, from a jar",
+                                   "bid":  "roasted-red-peppers",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "grams":  8,
+                                   "buy":  "1 tsp",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Korean meal prep. Fourteen servings at about 615 calories and 50 grams of protein for roughly $3.31 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, korean ground beef rice bowls, budget dinner",
+                 "costPerServing":  4.69,
+                 "recipeIngredient":  [
+                                          "6 lb 93/7 Ground Beef",
+                                          "1 lb Rice",
+                                          "3 bags Broccoli Florets",
+                                          "1 tub Gochujang",
+                                          "1 bottle Soy Sauce",
+                                          "1 bottle Sesame Oil"
+                                      ],
+                 "steps":  [
+                               "Brown the ground beef in a large skillet, breaking it apart, then drain the grease.",
+                               "Stir in the minced garlic and cook until fragrant.",
+                               "Add the gochujang, soy sauce, sesame oil, and brown sugar and stir into a glossy sauce.",
+                               "Toss in the broccoli florets and cook until just tender.",
+                               "Cook the rice while the skillet simmers.",
+                               "Pile the beef and broccoli over the rice and serve."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

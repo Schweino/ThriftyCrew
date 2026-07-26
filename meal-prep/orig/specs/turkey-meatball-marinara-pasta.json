@@ -1,0 +1,198 @@
+{
+    "name":  "Turkey Meatball Marinara Pasta",
+    "slug":  "turkey-meatball-marinara-pasta",
+    "cuisine":  "Italian",
+    "protein":  "turkey",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  654,
+                 "protein":  57,
+                 "carbs":  46,
+                 "fat":  25,
+                 "cost_ps":  "5.04"
+             },
+    "intro_html":  "Meatballs and marinara without spending your evening rolling and frying. Cooked skillet-style, this lean turkey pasta delivers 57 grams of protein per serving for about $3.13, and it stretches to 14 servings. That is Italian night on repeat for the price of one takeout order.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 7 lb (3130 g)",
+                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 2 boxs (749 g)",
+                                "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 3 jars (1500 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1 container (140 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (240 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (42 g)",
+                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 1, slightly beaten (150 g)",
+                                "\u003cstrong\u003ePanko Breadcrumbs:\u003c/strong\u003e 1/4 cup (45 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1 tbsp (45 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 clove (15 g)",
+                                "\u003cstrong\u003eDried Basil (Great Value):\u003c/strong\u003e 1 tsp (8 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 tsp (8 g)",
+                                "\u003cstrong\u003eMozzarella Cheese:\u003c/strong\u003e 3 oz cubed + 3/4 cup shredded (510 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (15 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.13 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Jarred \u003cstrong\u003emarinara on sale\u003c/strong\u003e is cheaper and faster than building sauce from scratch, and three jars cover the whole batch.",
+                       "A wedge or tub of \u003cstrong\u003ereal parmesan\u003c/strong\u003e goes a long way. A little grated over the top does more work than a lot of the pre-shredded blends.",
+                       "Buy pasta when it drops to \u003cstrong\u003ea dollar a box\u003c/strong\u003e and stock the pantry. It keeps forever and this recipe leans on it."
+                   ],
+    "make_it":  [
+                    "Brown 6.9 pounds of 93/7 ground turkey with the chopped onion and a splash of olive oil, breaking it into meatball-sized chunks.",
+                    "Boil the penne separately until just tender, then drain.",
+                    "Pour the marinara over the turkey and let it simmer so the sauce soaks in.",
+                    "Toss the cooked pasta into the sauce until everything is coated.",
+                    "Finish each container with a shower of parmesan while it is still hot."
+                ],
+    "portion_html":  "Every one of the 14 servings packs 57 grams of protein and 654 calories, so it fuels you like a full plate should.",
+    "credit_html":  "",
+    "upsell_html":  "Comfort-food Italian, meal-prepped and budget-approved. Twirl your fork and enjoy. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  46.2,
+    "cost_batch_true":  54.29,
+    "cost_per_serving":  3.3,
+    "cost_per_serving_true":  3.88,
+    "cost_pantry_add":  16.25,
+    "cost_first_run":  70.54,
+    "scaler":  {
+                   "cost":  "54.29",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "grams":  3130,
+                                   "buy":  "7 lb",
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Penne Pasta",
+                                   "grams":  749,
+                                   "buy":  "2 boxs",
+                                   "bid":  "penne-pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Marinara Sauce",
+                                   "grams":  1500,
+                                   "buy":  "3 jars",
+                                   "bid":  "marinara-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "grams":  140,
+                                   "buy":  "1 container",
+                                   "bid":  "parmesan-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  240,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  42,
+                                   "buy":  "1 bottle",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Eggs",
+                                   "grams":  150,
+                                   "buy":  "1, slightly beaten",
+                                   "bid":  "eggs",
+                                   "gpu":  "600.000"
+                               },
+                               {
+                                   "item":  "Panko Breadcrumbs",
+                                   "grams":  45,
+                                   "buy":  "1/4 cup",
+                                   "bid":  "breadcrumbs",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "grams":  45,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "worcestershire-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  15,
+                                   "buy":  "1 clove",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Dried Basil",
+                                   "grams":  8,
+                                   "buy":  "1 tsp",
+                                   "bid":  "dried-basil",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  8,
+                                   "buy":  "1 tsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Mozzarella Cheese",
+                                   "grams":  510,
+                                   "buy":  "3 oz cubed + 3/4 cup shredded",
+                                   "bid":  "mozzarella-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  15,
+                                   "buy":  "to taste",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Italian meal prep. Fourteen servings at about 654 calories and 57 grams of protein for roughly $2.94 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, turkey meatball marinara pasta, budget dinner",
+                 "costPerServing":  5.04,
+                 "recipeIngredient":  [
+                                          "7 lb 93/7 Ground Turkey",
+                                          "2 boxs Penne Pasta",
+                                          "3 jars Marinara Sauce",
+                                          "1 container Parmesan Cheese",
+                                          "3 onions Yellow Onion",
+                                          "1 bottle Olive Oil"
+                                      ],
+                 "steps":  [
+                               "Brown 6.9 pounds of 93/7 ground turkey with the chopped onion and a splash of olive oil, breaking it into meatball-sized chunks.",
+                               "Boil the penne separately until just tender, then drain.",
+                               "Pour the marinara over the turkey and let it simmer so the sauce soaks in.",
+                               "Toss the cooked pasta into the sauce until everything is coated.",
+                               "Finish each container with a shower of parmesan while it is still hot."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

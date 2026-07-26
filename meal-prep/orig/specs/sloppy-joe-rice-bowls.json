@@ -1,0 +1,190 @@
+{
+    "name":  "Sloppy Joe Rice Bowls",
+    "slug":  "sloppy-joe-rice-bowls",
+    "cuisine":  "American",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  584,
+                 "protein":  45,
+                 "carbs":  70,
+                 "fat":  13,
+                 "cost_ps":  "5.45"
+             },
+    "intro_html":  "The messy sandwich you loved as a kid, grown up into a high-protein rice bowl. Each serving brings 45 grams of protein for about $3.43 and the batch makes 14. Same tangy, savory sloppy joe flavor, now built to fuel you instead of just fill you.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2450 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (1050 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 4 peppers (400 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
+                                "\u003cstrong\u003eTomato Sauce (generic):\u003c/strong\u003e 2 cans (680 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1 can (120 g)",
+                                "\u003cstrong\u003eKetchup (generic):\u003c/strong\u003e 1 bottle (150 g)",
+                                "\u003cstrong\u003eDijon Mustard (generic):\u003c/strong\u003e 1 jar (30 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (20 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 2 tsp (beef) + oil for base (20 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (15 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (3 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 1/2 tsp (3 g)",
+                                "\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 1 tbsp (30 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.43 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "The sauce is \u003cstrong\u003eketchup, tomato paste, and mustard\u003c/strong\u003e you likely already have, so skip the pricey sloppy joe seasoning packets.",
+                       "\u003cstrong\u003eGreen bell peppers\u003c/strong\u003e are the budget pick and give you that classic sloppy joe bite.",
+                       "Buy \u003cstrong\u003etomato sauce and paste in the small cans\u003c/strong\u003e when they hit their sale price and keep a few in the pantry for recipes like this."
+                   ],
+    "make_it":  [
+                    "Brown 5.4 pounds of 93/7 ground beef with the chopped onion and green bell peppers, then drain.",
+                    "Stir in the tomato sauce, tomato paste, ketchup, dijon, and garlic.",
+                    "Simmer until the sauce thickens and clings to the meat.",
+                    "Cook the rice separately so it stays fluffy.",
+                    "Spoon the sloppy joe beef over the rice in each container."
+                ],
+    "portion_html":  "Every one of the 14 bowls serves 45 grams of protein at 584 calories, so this childhood favorite pulls real nutritional weight.",
+    "credit_html":  "",
+    "upsell_html":  "Nostalgia in a bowl, portioned and paid off. Some meals just make you smile. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  47.59,
+    "cost_batch_true":  53.64,
+    "cost_per_serving":  3.4,
+    "cost_per_serving_true":  3.83,
+    "cost_pantry_add":  22.68,
+    "cost_first_run":  76.32,
+    "scaler":  {
+                   "cost":  "53.64",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  2450,
+                                   "buy":  "6 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  1050,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "grams":  400,
+                                   "buy":  "4 peppers",
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  300,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Tomato Sauce",
+                                   "grams":  680,
+                                   "buy":  "2 cans",
+                                   "bid":  "tomato-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "grams":  120,
+                                   "buy":  "1 can",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ketchup",
+                                   "grams":  150,
+                                   "buy":  "1 bottle",
+                                   "bid":  "ketchup",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dijon Mustard",
+                                   "grams":  30,
+                                   "buy":  "1 jar",
+                                   "bid":  "dijon-mustard",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  20,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  20,
+                                   "buy":  "2 tsp (beef) + oil for base",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  15,
+                                   "buy":  "1 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Paprika",
+                                   "grams":  3,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "paprika",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Apple Cider Vinegar",
+                                   "grams":  30,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "apple-cider-vinegar",
+                                   "gpu":  "29.570"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 584 calories and 45 grams of protein for roughly $3.08 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, sloppy joe rice bowls, budget dinner",
+                 "costPerServing":  5.45,
+                 "recipeIngredient":  [
+                                          "6 lb 93/7 Ground Beef",
+                                          "1 lb Rice",
+                                          "4 peppers Green Bell Peppers",
+                                          "3 onions Yellow Onion",
+                                          "2 cans Tomato Sauce",
+                                          "1 can Tomato Paste"
+                                      ],
+                 "steps":  [
+                               "Brown 5.4 pounds of 93/7 ground beef with the chopped onion and green bell peppers, then drain.",
+                               "Stir in the tomato sauce, tomato paste, ketchup, dijon, and garlic.",
+                               "Simmer until the sauce thickens and clings to the meat.",
+                               "Cook the rice separately so it stays fluffy.",
+                               "Spoon the sloppy joe beef over the rice in each container."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

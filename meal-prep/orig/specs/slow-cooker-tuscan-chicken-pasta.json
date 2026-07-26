@@ -1,0 +1,190 @@
+{
+    "name":  "Slow Cooker Tuscan Chicken Pasta",
+    "slug":  "slow-cooker-tuscan-chicken-pasta",
+    "cuisine":  "Italian",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  577,
+                 "protein":  67,
+                 "carbs":  47,
+                 "fat":  14,
+                 "cost_ps":  "4.25"
+             },
+    "intro_html":  "Creamy Tuscan chicken with sun-dried tomatoes tastes like a restaurant special, but the slow cooker makes it a weeknight regular. This bowl brings 67 grams of protein for about $2.69 a serving, tossed with penne in a rich, tangy sauce. Fourteen servings from one pot turns a fancy-feeling dinner into an affordable weekly habit.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3300 g)",
+                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 2 boxs (840 g)",
+                                "\u003cstrong\u003eSun-Dried Tomatoes:\u003c/strong\u003e 2 bags (140 g)",
+                                "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 1 can (320 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1 carton (480 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1 container (84 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (14 g)",
+                                "\u003cstrong\u003eShallots:\u003c/strong\u003e 1/2 cup chopped (180 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves (25 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1 tsp (6 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1/4 tsp (4 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1 tbsp (18 g)",
+                                "\u003cstrong\u003eSpinach:\u003c/strong\u003e 3 cups fresh, chopped (200 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.69 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Sun-dried tomatoes are the priciest item here, so \u003cstrong\u003ebuy the bag, not the oil-packed jar\u003c/strong\u003e, and a little rehydrates into big flavor.",
+                       "Canned coconut milk stands in for heavy cream at a fraction of the price, so \u003cstrong\u003ekeep a can or two in the pantry\u003c/strong\u003e.",
+                       "Parmesan brings the salty depth, so \u003cstrong\u003ebuy a wedge or shaker and use it sparingly\u003c/strong\u003e across this and other pasta nights."
+                   ],
+    "make_it":  [
+                    "Add the chicken, chopped sun-dried tomatoes, coconut milk, and chicken broth to the slow cooker.",
+                    "Cover and cook on low for 6 to 7 hours until the chicken is tender and the sauce is fragrant.",
+                    "Shred the chicken and stir in the parmesan and a drizzle of olive oil until the sauce turns creamy.",
+                    "Boil the penne separately until just al dente and drain it.",
+                    "Toss the pasta with the creamy Tuscan sauce, or spoon the sauce over each serving of pasta."
+                ],
+    "portion_html":  "You get 67 grams of protein and 577 calories per serving, restaurant flavor at a home-cook price.",
+    "credit_html":  "",
+    "upsell_html":  "Tastes like a splurge, costs like a staple. That\u0027s the sweet spot we\u0027re always chasing. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  34.31,
+    "cost_batch_true":  40.14,
+    "cost_per_serving":  2.45,
+    "cost_per_serving_true":  2.87,
+    "cost_pantry_add":  19.33,
+    "cost_first_run":  59.47,
+    "scaler":  {
+                   "cost":  "40.14",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3300,
+                                   "buy":  "8 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Penne Pasta",
+                                   "grams":  840,
+                                   "buy":  "2 boxs",
+                                   "bid":  "penne-pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sun-Dried Tomatoes",
+                                   "grams":  140,
+                                   "buy":  "2 bags",
+                                   "bid":  "sun-dried-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Coconut Milk",
+                                   "grams":  320,
+                                   "buy":  "1 can",
+                                   "bid":  "coconut-milk",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  480,
+                                   "buy":  "1 carton",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "grams":  84,
+                                   "buy":  "1 container",
+                                   "bid":  "parmesan-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  14,
+                                   "buy":  "1 bottle",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Shallots",
+                                   "grams":  180,
+                                   "buy":  "1/2 cup chopped",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  25,
+                                   "buy":  "2 cloves",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "grams":  6,
+                                   "buy":  "1 tsp",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  4,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "grams":  18,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Spinach",
+                                   "grams":  200,
+                                   "buy":  "3 cups fresh, chopped",
+                                   "bid":  "frozen-chopped-spinach",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Italian meal prep. Fourteen servings at about 577 calories and 67 grams of protein for roughly $2.40 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker tuscan chicken pasta, budget dinner",
+                 "costPerServing":  4.25,
+                 "recipeIngredient":  [
+                                          "8 lb Boneless Skinless Chicken Breast",
+                                          "2 boxs Penne Pasta",
+                                          "2 bags Sun-Dried Tomatoes",
+                                          "1 can Coconut Milk",
+                                          "1 carton Chicken Broth",
+                                          "1 container Parmesan Cheese"
+                                      ],
+                 "steps":  [
+                               "Add the chicken, chopped sun-dried tomatoes, coconut milk, and chicken broth to the slow cooker.",
+                               "Cover and cook on low for 6 to 7 hours until the chicken is tender and the sauce is fragrant.",
+                               "Shred the chicken and stir in the parmesan and a drizzle of olive oil until the sauce turns creamy.",
+                               "Boil the penne separately until just al dente and drain it.",
+                               "Toss the pasta with the creamy Tuscan sauce, or spoon the sauce over each serving of pasta."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

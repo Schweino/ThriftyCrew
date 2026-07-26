@@ -1,0 +1,441 @@
+﻿{
+    "_doc":  "Typical smallest-standard Walmart package per BULK/pantry item, in GRAMS. Used by cost-engine.ps1 to compute the one-time empty-pantry starter cost (whole containers instead of utilization). Gram convention matches the food DB: net weight where the label is weight (honey, peanut butter, ketchup, mayo), 1 ml = 1 g for water-like liquids (vinegars, broths, thin sauces, juices), 0.92 g/ml for oils. Every BULK item used in any recipe MUST have an entry; the engine hard-flags misses.",
+    "packages":  {
+                     "Achiote Paste":  {
+                                           "g":  99,
+                                           "label":  "3.5oz box"
+                                       },
+                     "All-Purpose Flour":  {
+                                               "g":  2268,
+                                               "label":  "5lb bag"
+                                           },
+                     "Apple Cider Vinegar":  {
+                                                 "g":  946,
+                                                 "label":  "32floz bottle"
+                                             },
+                     "Balsamic Vinegar":  {
+                                              "g":  500,
+                                              "label":  "500ml bottle"
+                                          },
+                     "Bay Leaves":  {
+                                        "g":  6,
+                                        "label":  "0.2oz jar"
+                                    },
+                     "BBQ Sauce":  {
+                                       "g":  510,
+                                       "label":  "18oz bottle"
+                                   },
+                     "BBQ Sauce (Sugar Free)":  {
+                                                    "g":  510,
+                                                    "label":  "18oz bottle"
+                                                },
+                     "Beef Broth":  {
+                                        "g":  907,
+                                        "label":  "32oz carton"
+                                    },
+                     "Berbere Seasoning":  {
+                                               "g":  37,
+                                               "label":  "1.3oz jar"
+                                           },
+                     "Black Pepper":  {
+                                          "g":  85,
+                                          "label":  "3oz shaker"
+                                      },
+                     "Bread Crumbs":  {
+                                          "g":  425,
+                                          "label":  "15oz canister"
+                                      },
+                     "Brown Sugar":  {
+                                         "g":  907,
+                                         "label":  "2lb bag"
+                                     },
+                     "Buffalo Wing Sauce":  {
+                                                "g":  340,
+                                                "label":  "12floz bottle"
+                                            },
+                     "Butter Crackers":  {
+                                             "g":  382,
+                                             "label":  "13.5oz box"
+                                         },
+                     "Cajun Seasoning":  {
+                                             "g":  227,
+                                             "label":  "8oz shaker"
+                                         },
+                     "Cayenne Pepper":  {
+                                            "g":  64,
+                                            "label":  "2.25oz jar"
+                                        },
+                     "Chicken Broth":  {
+                                           "g":  907,
+                                           "label":  "32oz carton"
+                                       },
+                     "Chili Crisp":  {
+                                         "g":  190,
+                                         "label":  "6.7oz jar"
+                                     },
+                     "Chili Powder":  {
+                                          "g":  71,
+                                          "label":  "2.5oz jar"
+                                      },
+                     "Chipotle in Adobo":  {
+                                               "g":  198,
+                                               "label":  "7oz can"
+                                           },
+                     "Cornstarch":  {
+                                        "g":  454,
+                                        "label":  "16oz box"
+                                    },
+                     "Curry Powder":  {
+                                          "g":  57,
+                                          "label":  "2oz jar"
+                                      },
+                     "Diced Green Chiles":  {
+                                                "g":  113,
+                                                "label":  "4oz can"
+                                            },
+                     "Dijon Mustard":  {
+                                           "g":  340,
+                                           "label":  "12oz bottle"
+                                       },
+                     "Dill Pickles":  {
+                                          "g":  907,
+                                          "label":  "32oz jar"
+                                      },
+                     "Dried Basil":  {
+                                         "g":  14,
+                                         "label":  "0.5oz jar"
+                                     },
+                     "Dried Dill":  {
+                                        "g":  14,
+                                        "label":  "0.5oz jar"
+                                    },
+                     "Dried Oregano":  {
+                                           "g":  21,
+                                           "label":  "0.75oz jar"
+                                       },
+                     "Dried Parsley":  {
+                                           "g":  14,
+                                           "label":  "0.5oz jar"
+                                       },
+                     "Dried Thyme":  {
+                                         "g":  14,
+                                         "label":  "0.5oz jar"
+                                     },
+                     "Fajita Seasoning":  {
+                                              "g":  28,
+                                              "label":  "1oz packet"
+                                          },
+                     "Fish Sauce":  {
+                                        "g":  200,
+                                        "label":  "6.76floz bottle"
+                                    },
+                     "Five-Spice Powder":  {
+                                               "g":  53,
+                                               "label":  "1.87oz jar"
+                                           },
+                     "Garam Masala":  {
+                                          "g":  57,
+                                          "label":  "2oz jar"
+                                      },
+                     "Garlic Powder":  {
+                                           "g":  92,
+                                           "label":  "3.25oz jar"
+                                       },
+                     "Gochujang":  {
+                                       "g":  500,
+                                       "label":  "500g tub"
+                                   },
+                     "Golden Raisins":  {
+                                            "g":  340,
+                                            "label":  "12oz bag"
+                                        },
+                     "Grits":  {
+                                   "g":  680,
+                                   "label":  "24oz canister"
+                               },
+                     "Ground Allspice":  {
+                                             "g":  47,
+                                             "label":  "1.65oz jar"
+                                         },
+                     "Ground Cinnamon":  {
+                                             "g":  74,
+                                             "label":  "2.6oz jar"
+                                         },
+                     "Ground Cloves":  {
+                                           "g":  42,
+                                           "label":  "1.5oz jar"
+                                       },
+                     "Ground Coriander":  {
+                                              "g":  45,
+                                              "label":  "1.6oz jar"
+                                          },
+                     "Ground Cumin":  {
+                                          "g":  71,
+                                          "label":  "2.5oz jar"
+                                      },
+                     "Ground Ginger":  {
+                                           "g":  45,
+                                           "label":  "1.6oz jar"
+                                       },
+                     "Ground Nutmeg":  {
+                                           "g":  54,
+                                           "label":  "1.9oz jar"
+                                       },
+                     "Ground Turmeric":  {
+                                             "g":  57,
+                                             "label":  "2oz jar"
+                                         },
+                     "Harissa Paste":  {
+                                           "g":  283,
+                                           "label":  "10oz jar"
+                                       },
+                     "Hoisin Sauce":  {
+                                          "g":  425,
+                                          "label":  "15oz bottle"
+                                      },
+                     "Honey":  {
+                                   "g":  340,
+                                   "label":  "12oz bottle"
+                               },
+                     "Hot Honey":  {
+                                       "g":  340,
+                                       "label":  "12oz bottle"
+                                   },
+                     "Hot Sauce":  {
+                                       "g":  355,
+                                       "label":  "12floz bottle"
+                                   },
+                     "Italian Seasoning":  {
+                                               "g":  21,
+                                               "label":  "0.75oz jar"
+                                           },
+                     "Ketchup":  {
+                                     "g":  567,
+                                     "label":  "20oz bottle"
+                                 },
+                     "Lemon Juice":  {
+                                         "g":  946,
+                                         "label":  "32floz bottle"
+                                     },
+                     "Lemongrass Paste":  {
+                                              "g":  113,
+                                              "label":  "4oz tube"
+                                          },
+                     "Lime Juice":  {
+                                        "g":  237,
+                                        "label":  "8floz bottle"
+                                    },
+                     "Liquid Smoke":  {
+                                          "g":  103,
+                                          "label":  "3.5floz bottle"
+                                      },
+                     "Mayonnaise":  {
+                                        "g":  850,
+                                        "label":  "30oz jar"
+                                    },
+                     "Mirin":  {
+                                   "g":  296,
+                                   "label":  "10floz bottle"
+                               },
+                     "Olive Oil":  {
+                                       "g":  690,
+                                       "label":  "25.5floz bottle"
+                                   },
+                     "Onion Powder":  {
+                                          "g":  79,
+                                          "label":  "2.79oz jar"
+                                      },
+                     "Oyster Sauce":  {
+                                          "g":  255,
+                                          "label":  "9oz bottle"
+                                      },
+                     "Paprika":  {
+                                     "g":  71,
+                                     "label":  "2.5oz jar"
+                                 },
+                     "Peanut Butter":  {
+                                           "g":  462,
+                                           "label":  "16.3oz jar"
+                                       },
+                     "Pomegranate Molasses":  {
+                                                  "g":  296,
+                                                  "label":  "10floz bottle"
+                                              },
+                     "Poppy Seeds":  {
+                                         "g":  60,
+                                         "label":  "2.12oz jar"
+                                     },
+                     "Ranch Seasoning Mix":  {
+                                                 "g":  28,
+                                                 "label":  "1oz packet"
+                                             },
+                     "Red Pepper Flakes":  {
+                                               "g":  39,
+                                               "label":  "1.375oz jar"
+                                           },
+                     "Red Wine":  {
+                                      "g":  750,
+                                      "label":  "750ml bottle"
+                                  },
+                     "Red Wine Vinegar":  {
+                                              "g":  355,
+                                              "label":  "12floz bottle"
+                                          },
+                     "Rice":  {
+                                  "g":  907,
+                                  "label":  "2lb bag"
+                              },
+                     "Rice Vinegar":  {
+                                          "g":  355,
+                                          "label":  "12floz bottle"
+                                      },
+                     "Salt":  {
+                                  "g":  737,
+                                  "label":  "26oz canister"
+                              },
+                     "Sesame Oil":  {
+                                        "g":  136,
+                                        "label":  "5floz bottle"
+                                    },
+                     "Smoked Paprika":  {
+                                            "g":  49,
+                                            "label":  "1.75oz jar"
+                                        },
+                     "Soy Sauce":  {
+                                       "g":  444,
+                                       "label":  "15floz bottle"
+                                   },
+                     "Sriracha":  {
+                                      "g":  481,
+                                      "label":  "17oz bottle"
+                                  },
+                     "Sugar":  {
+                                   "g":  1814,
+                                   "label":  "4lb bag"
+                               },
+                     "Sugar-Free Maple Syrup":  {
+                                                    "g":  355,
+                                                    "label":  "12floz bottle"
+                                                },
+                     "Sun-Dried Tomatoes":  {
+                                                "g":  198,
+                                                "label":  "7oz jar"
+                                            },
+                     "Sweet Chili Sauce":  {
+                                               "g":  355,
+                                               "label":  "12floz bottle"
+                                           },
+                     "Taco Seasoning":  {
+                                            "g":  28,
+                                            "label":  "1oz packet"
+                                        },
+                     "Tahini":  {
+                                    "g":  454,
+                                    "label":  "16oz jar"
+                                },
+                     "Teriyaki Sauce":  {
+                                            "g":  444,
+                                            "label":  "15floz bottle"
+                                        },
+                     "Toasted Sesame Seeds":  {
+                                                  "g":  104,
+                                                  "label":  "3.66oz jar"
+                                              },
+                     "Vegetable Oil":  {
+                                           "g":  1306,
+                                           "label":  "48floz bottle"
+                                       },
+                     "White Vinegar":  {
+                                           "g":  946,
+                                           "label":  "32floz bottle"
+                                       },
+                     "Worcestershire Sauce":  {
+                                                  "g":  296,
+                                                  "label":  "10floz bottle"
+                                              },
+                     "_r300_note":  {
+                                        "g":  0,
+                                        "label":  "R300 additions below (2026-07-25): container sizes from board comparison rows / walmart-r300-raw.txt / labels-r300.json. Sweet Soy uses the map\u0027s 38 g/floz density (kecap manis is syrup-dense), so 20.2 floz = 768 g. Jerk Seasoning deliberately ABSENT: no sourced container size - engine flags it rather than guessing."
+                                    },
+                     "Dried Ancho Chiles":  {
+                                                "g":  454,
+                                                "label":  "1lb bag (board capture)"
+                                            },
+                     "Dried Guajillo Chiles":  {
+                                                   "g":  113,
+                                                   "label":  "4oz bag"
+                                               },
+                     "Dried Arbol Chiles":  {
+                                                "g":  113,
+                                                "label":  "4oz bag"
+                                            },
+                     "Poultry Seasoning":  {
+                                               "g":  43,
+                                               "label":  "1.5oz jar"
+                                           },
+                     "Caraway Seeds":  {
+                                           "g":  50,
+                                           "label":  "1.75oz jar"
+                                       },
+                     "Ground Fennel":  {
+                                           "g":  227,
+                                           "label":  "8oz jar (board capture)"
+                                       },
+                     "Sazon Seasoning":  {
+                                             "g":  40,
+                                             "label":  "1.41oz 8ct box"
+                                         },
+                     "Sumac":  {
+                                   "g":  227,
+                                   "label":  "8oz jar (label capture)"
+                               },
+                     "Cocoa Powder":  {
+                                          "g":  227,
+                                          "label":  "8oz canister"
+                                      },
+                     "Baking Powder":  {
+                                           "g":  230,
+                                           "label":  "8.1oz can"
+                                       },
+                     "Baking Soda":  {
+                                         "g":  454,
+                                         "label":  "16oz box"
+                                     },
+                     "Sweet Soy Sauce":  {
+                                             "g":  768,
+                                             "label":  "20.2floz bottle (600ml)"
+                                         },
+                     "Doubanjiang":  {
+                                         "g":  227,
+                                         "label":  "8oz jar"
+                                     },
+                     "Aji Amarillo Paste":  {
+                                                "g":  298,
+                                                "label":  "10.5oz jar"
+                                            },
+                     "Horseradish Sauce":  {
+                                               "g":  340,
+                                               "label":  "12oz bottle"
+                                           },
+                     "Brown Gravy Mix":  {
+                                             "g":  25,
+                                             "label":  "0.87oz packet"
+                                         },
+                     "Onion Soup Mix":  {
+                                            "g":  62,
+                                            "label":  "2.2oz 2ct box"
+                                        },
+                     "Capers":  {
+                                    "g":  104,
+                                    "label":  "3.5floz jar"
+                                },
+                     "Pepperoncini":  {
+                                          "g":  355,
+                                          "label":  "12floz jar"
+                                      },
+                     "Jerk Seasoning":  {
+                                            "g":  283,
+                                            "label":  "10 oz jar (Walkerswood, Walmart $4.52 captured 2026-07-25)"
+                                        }
+                 }
+}

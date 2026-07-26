@@ -1,0 +1,152 @@
+{
+    "name":  "Slow Cooker Italian Pork and White Bean Bowls",
+    "slug":  "slow-cooker-italian-pork-loin-bowls",
+    "cuisine":  "Italian",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  593,
+                 "protein":  66,
+                 "carbs":  40,
+                 "fat":  17,
+                 "cost_ps":  "3.20"
+             },
+    "intro_html":  "This one eats like a rustic Italian dinner, with tender pork, white beans, tomatoes, and a little melted mozzarella on top. It is the protein champ of the group at 66 grams a bowl, all for about $2.14 a serving. Fourteen servings from one pot is a hearty, filling week sorted.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3300 g)",
+                                "\u003cstrong\u003eCannellini Beans (generic):\u003c/strong\u003e 6 cans (2500 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 2 cans (700 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 2 peppers (150 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (120 g)",
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 1 bag (150 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (30 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1 jar (6 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (16 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.14 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eCanned cannellini beans\u003c/strong\u003e are the base here, and they stretch the protein and fiber for about a dollar a can. No soaking required.",
+                       "A little \u003cstrong\u003echeese goes a long way\u003c/strong\u003e. One bag of reduced-fat mozzarella tops the whole batch, so buy the small size.",
+                       "Canned diced tomatoes are always cheaper than fresh for a cooked dish. Keep a \u003cstrong\u003efew cans in the pantry\u003c/strong\u003e for meals like this."
+                   ],
+    "make_it":  [
+                    "Rub the pork loin with a little olive oil and set it in the slow cooker.",
+                    "Add the diced tomatoes, chopped onion, and sliced red bell pepper.",
+                    "Cover and cook on low for 7 to 8 hours until the pork is tender.",
+                    "Shred the pork and stir in the drained cannellini beans.",
+                    "Cook another 15 to 20 minutes to warm the beans through.",
+                    "Spoon into bowls, top with the shredded mozzarella, and let it melt before packing up."
+                ],
+    "portion_html":  "Each serving delivers around 593 calories and a hefty 66 grams of protein.",
+    "credit_html":  "",
+    "upsell_html":  "Filling, comforting, and packed with protein. This is the bowl that keeps you full till dinner. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  28.63,
+    "cost_batch_true":  32.82,
+    "cost_per_serving":  2.04,
+    "cost_per_serving_true":  2.34,
+    "cost_pantry_add":  11.91,
+    "cost_first_run":  44.73,
+    "scaler":  {
+                   "cost":  "32.82",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Loin",
+                                   "grams":  3300,
+                                   "buy":  "8 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Cannellini Beans",
+                                   "grams":  2500,
+                                   "buy":  "6 cans",
+                                   "bid":  "cannellini-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "grams":  700,
+                                   "buy":  "2 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "grams":  150,
+                                   "buy":  "2 peppers",
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  120,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Reduced Fat Mozzarella",
+                                   "grams":  150,
+                                   "buy":  "1 bag",
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  30,
+                                   "buy":  "1 bottle",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "grams":  6,
+                                   "buy":  "1 jar",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  16,
+                                   "buy":  "2 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Italian meal prep. Fourteen servings at about 593 calories and 66 grams of protein for roughly $1.87 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker italian pork and white bean bowls, budget dinner",
+                 "costPerServing":  3.2,
+                 "recipeIngredient":  [
+                                          "8 lb Pork Loin",
+                                          "6 cans Cannellini Beans",
+                                          "2 cans Diced Tomatoes",
+                                          "2 peppers Red Bell Pepper",
+                                          "2 onions Yellow Onion",
+                                          "1 bag Reduced Fat Mozzarella"
+                                      ],
+                 "steps":  [
+                               "Rub the pork loin with a little olive oil and set it in the slow cooker.",
+                               "Add the diced tomatoes, chopped onion, and sliced red bell pepper.",
+                               "Cover and cook on low for 7 to 8 hours until the pork is tender.",
+                               "Shred the pork and stir in the drained cannellini beans.",
+                               "Cook another 15 to 20 minutes to warm the beans through.",
+                               "Spoon into bowls, top with the shredded mozzarella, and let it melt before packing up."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

@@ -1,0 +1,144 @@
+{
+    "name":  "Slow Cooker Mississippi Pork Bowls",
+    "slug":  "slow-cooker-mississippi-pork-bowls",
+    "cuisine":  "American",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  550,
+                 "protein":  52,
+                 "carbs":  53,
+                 "fat":  13,
+                 "cost_ps":  "3.80"
+             },
+    "intro_html":  "Mississippi pork is that tangy, buttery, ranch-and-pepperoncini magic, and it works just as well on pork as it does on the classic pot roast. Piled over potatoes with carrots, each bowl brings 52 grams of protein for about $3.33. Fourteen servings out of one pot keeps the whole week covered.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 7 lb (3120 g)",
+                                "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 8 lb (3606 g)",
+                                "\u003cstrong\u003eShredded Carrots:\u003c/strong\u003e 4 bags (900 g)",
+                                "\u003cstrong\u003ePepperoncini (Mezzetta):\u003c/strong\u003e 1 jar (150 g)",
+                                "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 1 boxs (90 g)",
+                                "\u003cstrong\u003eRanch Seasoning Mix (Hidden Valley):\u003c/strong\u003e 1 packet (36 g)",
+                                "\u003cstrong\u003eAu Jus Gravy Mix:\u003c/strong\u003e 1 (1 oz) packet (65 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 2 tbsp (35 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.33 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Potatoes are one of the cheapest bases going. An \u003cstrong\u003e8 lb bag runs under $8\u003c/strong\u003e and doubles as your starch, so skip buying rice for this one.",
+                       "One \u003cstrong\u003epacket of ranch seasoning\u003c/strong\u003e does all the flavor work. No need for a cabinet full of separate spices.",
+                       "A \u003cstrong\u003ejar of pepperoncini\u003c/strong\u003e lasts a long time in the fridge, so the third of a jar you use here costs next to nothing per bowl."
+                   ],
+    "make_it":  [
+                    "Set the pork tenderloin in the slow cooker and surround it with the potatoes and shredded carrots.",
+                    "Sprinkle the ranch seasoning mix over everything.",
+                    "Add the pepperoncini along with a splash of their juice, then lay the butter on top.",
+                    "Cover and cook on low for 7 to 8 hours until the pork and potatoes are tender.",
+                    "Shred the pork and stir it through all those buttery, tangy juices.",
+                    "Divide the pork and potatoes into your containers."
+                ],
+    "portion_html":  "Every serving comes in around 550 calories with 52 grams of protein.",
+    "credit_html":  "",
+    "upsell_html":  "Tangy, hearty, and dead simple. Set it in the morning and dinner takes care of itself. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  44.86,
+    "cost_batch_true":  50,
+    "cost_per_serving":  3.2,
+    "cost_per_serving_true":  3.57,
+    "cost_pantry_add":  3.22,
+    "cost_first_run":  53.22,
+    "scaler":  {
+                   "cost":  "50.00",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Tenderloin",
+                                   "grams":  3120,
+                                   "buy":  "7 lb",
+                                   "bid":  "pork-tenderloin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Potato",
+                                   "grams":  3606,
+                                   "buy":  "8 lb",
+                                   "bid":  "potato",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Shredded Carrots",
+                                   "grams":  900,
+                                   "buy":  "4 bags",
+                                   "bid":  "shredded-carrots",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Pepperoncini",
+                                   "grams":  150,
+                                   "buy":  "1 jar",
+                                   "bid":  "pepperoncini",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Butter",
+                                   "grams":  90,
+                                   "buy":  "1 boxs",
+                                   "bid":  "butter",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ranch Seasoning Mix",
+                                   "grams":  36,
+                                   "buy":  "1 packet",
+                                   "bid":  "ranch-seasoning-mix",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Au Jus Gravy Mix",
+                                   "grams":  65,
+                                   "buy":  "1 (1 oz) packet",
+                                   "bid":  "au-jus-gravy-mix",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "grams":  35,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 550 calories and 52 grams of protein for roughly $3.05 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker mississippi pork bowls, budget dinner",
+                 "costPerServing":  3.8,
+                 "recipeIngredient":  [
+                                          "7 lb Pork Tenderloin",
+                                          "8 lb Potato",
+                                          "4 bags Shredded Carrots",
+                                          "1 jar Pepperoncini",
+                                          "1 boxs Butter",
+                                          "1 packet Ranch Seasoning Mix"
+                                      ],
+                 "steps":  [
+                               "Set the pork tenderloin in the slow cooker and surround it with the potatoes and shredded carrots.",
+                               "Sprinkle the ranch seasoning mix over everything.",
+                               "Add the pepperoncini along with a splash of their juice, then lay the butter on top.",
+                               "Cover and cook on low for 7 to 8 hours until the pork and potatoes are tender.",
+                               "Shred the pork and stir it through all those buttery, tangy juices.",
+                               "Divide the pork and potatoes into your containers."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

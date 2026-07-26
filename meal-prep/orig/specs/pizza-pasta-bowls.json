@@ -1,0 +1,108 @@
+{
+    "name":  "Pizza Pasta Bowls",
+    "slug":  "pizza-pasta-bowls",
+    "cuisine":  "Italian-American",
+    "protein":  "turkey",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  396,
+                 "protein":  28,
+                 "carbs":  54,
+                 "fat":  10,
+                 "cost_ps":  "1.20"
+             },
+    "intro_html":  "All the fun of pizza night, none of the delivery fee. Turkey pepperoni, high-protein rotini, marinara, and gooey mozzarella bake up into a bowl the kids will actually ask for again. It reheats great, it costs about a dollar twenty a serving, and it scratches the pizza itch without the twenty-dollar order.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eTurkey Pepperoni (Great Value):\u003c/strong\u003e 1 package (about 9.5 oz) (261 g)",
+                                "\u003cstrong\u003eRotini Pasta (Barilla):\u003c/strong\u003e 3 boxes (14.5 oz each) (959 g)",
+                                "\u003cstrong\u003eMarinara Sauce (Great Value):\u003c/strong\u003e 2 jars (24 oz each) (1148 g)",
+                                "\u003cstrong\u003eReduced Fat Mozzarella (Great Value):\u003c/strong\u003e 2 bags (8 oz each) (392 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$1.19 a bowl\u003c/strong\u003e for pizza-night flavor. A large delivery pizza runs $18 or more, so this is one of the easiest swaps on the menu.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eTurkey pepperoni beats regular on macros.\u003c/strong\u003e It brings the same pizza flavor with less fat, which is why it earns its spot here.",
+                       "\u003cstrong\u003eProtein pasta or regular, your call.\u003c/strong\u003e Regular rotini is a bit cheaper. The protein version adds a few grams per serving for about the same price.",
+                       "\u003cstrong\u003eBuy shredded cheese in the bigger bag\u003c/strong\u003e and check the price per ounce. The store brand melts just as well."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot and write the number down for portioning later.",
+                    "Boil the rotini to al dente per the box, then drain.",
+                    "Warm the marinara in a large skillet and stir in most of the pepperoni, saving a little to top the bowls.",
+                    "Add the drained pasta and stir to coat.",
+                    "Fold in the mozzarella off the heat until melty, then scatter the reserved pepperoni on top."
+                ],
+    "portion_html":  "Set the full pot on your scale and subtract the empty-pot weight from Step 1. Divide that total by 14 and scoop the exact amount into each container. Every bowl lands near 396 calories and 28 grams of protein.",
+    "credit_html":  "",
+    "upsell_html":  "Pizza-night dinners for about $1.19 a bowl. This is one of many. Members get every recipe in the Meal Prep section, plus the full library of money lessons, calculators, and tools, all for $1 a month.",
+    "cost_batch":  14.11,
+    "cost_batch_true":  16.74,
+    "cost_per_serving":  1.01,
+    "cost_per_serving_true":  1.2,
+    "cost_pantry_add":  0,
+    "cost_first_run":  16.74,
+    "scaler":  {
+                   "cost":  "16.74",
+                   "ing":  [
+                               {
+                                   "item":  "Turkey Pepperoni",
+                                   "grams":  261,
+                                   "buy":  "1 package (about 9.5 oz)",
+                                   "bid":  "turkey-pepperoni",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rotini Pasta",
+                                   "grams":  959,
+                                   "buy":  "3 boxes (14.5 oz each)",
+                                   "bid":  "rotini-pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Marinara Sauce",
+                                   "grams":  1148,
+                                   "buy":  "2 jars (24 oz each)",
+                                   "bid":  "marinara-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Reduced Fat Mozzarella",
+                                   "grams":  392,
+                                   "buy":  "2 bags (8 oz each)",
+                                   "bid":  "reduced-fat-mozzarella",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A kid-friendly turkey pepperoni, protein pasta, marinara, and mozzarella meal prep. Fourteen servings at about 396 calories and 28 grams of protein for roughly $1.19 each.",
+                 "keywords":  "cheap meal prep, pizza pasta, kid friendly meal prep, high protein pasta, budget dinner",
+                 "costPerServing":  1.2,
+                 "recipeIngredient":  [
+                                          "1 package (about 9.5 oz) Turkey Pepperoni",
+                                          "3 boxes (14.5 oz each) Rotini Pasta",
+                                          "2 jars (24 oz each) Marinara Sauce",
+                                          "2 bags (8 oz each) Reduced Fat Mozzarella"
+                                      ],
+                 "steps":  [
+                               "Boil the rotini to al dente and drain.",
+                               "Warm the marinara with most of the pepperoni in a large skillet.",
+                               "Add the drained pasta and stir to coat.",
+                               "Fold in the mozzarella off the heat and top with the reserved pepperoni.",
+                               "Weigh the batch and divide into 14 containers."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

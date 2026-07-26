@@ -1,0 +1,168 @@
+{
+    "name":  "Slow Cooker Pork Tinga Bowls",
+    "slug":  "slow-cooker-pork-tinga-bowls",
+    "cuisine":  "Mexican",
+    "protein":  "pork",
+    "visibility":  "public",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  569,
+                 "protein":  52,
+                 "carbs":  57,
+                 "fat":  12,
+                 "cost_ps":  "2.45"
+             },
+    "intro_html":  "Smoky chipotle, tomatoes, and lean pork come together in this Mexican-inspired tinga that costs almost nothing per bowl. The slow cooker does all the work while the flavor builds, then it all goes over rice. At around a dollar sixty a serving with 52 grams of protein, this one is hard to beat, and it makes 14 servings.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 7 lb (3100 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (900 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4 onions (400 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (30 g)",
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3 cans (871 g)",
+                                "\u003cstrong\u003eChipotle in Adobo (La Costena):\u003c/strong\u003e 1 can (90 g)",
+                                "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 1 tablespoon (50 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1 tablespoon (52 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 teaspoon (8 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (14 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (7 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$1.60 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "One can of chipotle in adobo seasons the whole batch. \u003cstrong\u003eA single small can does the job\u003c/strong\u003e, so you do not need to buy much.",
+                       "Store-brand diced tomatoes taste the same in a sauce as the name brands. \u003cstrong\u003eReach for the cheapest canned tomatoes\u003c/strong\u003e every time.",
+                       "Pork loin keeps this cheap and lean. \u003cstrong\u003eBuy the loin over pre-shredded pork\u003c/strong\u003e and do the shredding yourself in the pot."
+                   ],
+    "make_it":  [
+                    "Add the pork loin, sliced onions, and garlic to the slow cooker.",
+                    "Pour in the diced tomatoes and stir in the chopped chipotle in adobo.",
+                    "Cover and cook on low for 7 to 8 hours until the pork shreds with a fork.",
+                    "Shred the pork right in the pot and stir it back into the smoky sauce.",
+                    "Cook the rice while the pork soaks up the flavor.",
+                    "Spoon the saucy pork over the rice and serve."
+                ],
+    "portion_html":  "Each bowl comes in at 52 grams of protein and 569 calories across all 14 servings.",
+    "credit_html":  "",
+    "upsell_html":  "Big smoky flavor for pocket change is exactly the kind of win we like around here. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  22.23,
+    "cost_batch_true":  23.71,
+    "cost_per_serving":  1.59,
+    "cost_per_serving_true":  1.69,
+    "cost_pantry_add":  10.65,
+    "cost_first_run":  34.36,
+    "scaler":  {
+                   "cost":  "23.71",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Loin",
+                                   "grams":  3100,
+                                   "buy":  "7 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  900,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  400,
+                                   "buy":  "4 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  30,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Diced Tomatoes",
+                                   "grams":  871,
+                                   "buy":  "3 cans",
+                                   "bid":  "diced-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Chipotle in Adobo",
+                                   "grams":  90,
+                                   "buy":  "1 can",
+                                   "bid":  "chipotle-in-adobo",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Vegetable Oil",
+                                   "grams":  50,
+                                   "buy":  "1 tablespoon",
+                                   "bid":  "vegetable-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "grams":  52,
+                                   "buy":  "1 tablespoon",
+                                   "bid":  "worcestershire-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  8,
+                                   "buy":  "1 teaspoon",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  14,
+                                   "buy":  "to taste",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  7,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 569 calories and 52 grams of protein for roughly $1.45 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker pork tinga bowls, budget dinner",
+                 "costPerServing":  2.45,
+                 "recipeIngredient":  [
+                                          "7 lb Pork Loin",
+                                          "1 lb Rice",
+                                          "4 onions Yellow Onion",
+                                          "1 bulb Garlic",
+                                          "3 cans Diced Tomatoes",
+                                          "1 can Chipotle in Adobo"
+                                      ],
+                 "steps":  [
+                               "Add the pork loin, sliced onions, and garlic to the slow cooker.",
+                               "Pour in the diced tomatoes and stir in the chopped chipotle in adobo.",
+                               "Cover and cook on low for 7 to 8 hours until the pork shreds with a fork.",
+                               "Shred the pork right in the pot and stir it back into the smoky sauce.",
+                               "Cook the rice while the pork soaks up the flavor.",
+                               "Spoon the saucy pork over the rice and serve."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

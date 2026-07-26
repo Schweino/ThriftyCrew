@@ -1,0 +1,192 @@
+{
+    "name":  "Slow Cooker Sweet and Sour Pork Bowls",
+    "slug":  "slow-cooker-sweet-and-sour-pork-bowls",
+    "cuisine":  "Chinese",
+    "protein":  "pork",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  581,
+                 "protein":  55,
+                 "carbs":  67,
+                 "fat":  8,
+                 "cost_ps":  "4.98"
+             },
+    "intro_html":  "This sweet and sour pork is the meal-prep answer to your favorite Chinese takeout. Lean pork tenderloin cooks low and slow with peppers, onion, and pineapple in a honey soy glaze, then goes over rice. It runs a touch higher at around three dollars a serving, but you still get 55 grams of protein across 14 bowls.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Tenderloin:\u003c/strong\u003e 8 lb (3200 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (950 g)",
+                                "\u003cstrong\u003eGreen Bell Peppers:\u003c/strong\u003e 3 peppers (357 g)",
+                                "\u003cstrong\u003eRed Bell Pepper (generic):\u003c/strong\u003e 3 peppers (300 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (250 g)",
+                                "\u003cstrong\u003ePineapple Chunks (generic):\u003c/strong\u003e 1 can (300 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (120 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (120 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2 cloves, crushed (21 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1 tbsp (45 g)",
+                                "\u003cstrong\u003eGround Ginger (Great Value):\u003c/strong\u003e 1 tsp (8 g)",
+                                "\u003cstrong\u003eSweet Chili Sauce:\u003c/strong\u003e 2 tbsp (105 g)",
+                                "\u003cstrong\u003eWhite Wine Vinegar:\u003c/strong\u003e 1 tbsp (52 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1 tsp (8 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.27 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Tenderloin costs more than loin, so watch the sales. \u003cstrong\u003eBuy tenderloin only when it drops below four dollars a pound\u003c/strong\u003e and stock the freezer.",
+                       "Canned pineapple in juice is cheaper than fresh and adds sweetness for free. \u003cstrong\u003eGrab the canned pineapple in juice, not syrup\u003c/strong\u003e, to skip the added sugar.",
+                       "Bell peppers are cheapest in the multi-packs. \u003cstrong\u003eBuy peppers by the bag\u003c/strong\u003e when your store carries them that way."
+                   ],
+    "make_it":  [
+                    "Add the pork tenderloin, sliced peppers, and onion to the slow cooker.",
+                    "Stir the honey, soy sauce, and pineapple with its juice together, then pour it over the top.",
+                    "Cover and cook on low for 6 to 7 hours until the pork is tender.",
+                    "Cook the rice while the pork finishes.",
+                    "Cut or shred the pork into bite-sized pieces and stir it back through the sauce.",
+                    "Spoon the pork and vegetables over rice and drizzle with extra sauce."
+                ],
+    "portion_html":  "Each of the 14 servings gives you 55 grams of protein at 581 calories with only 8 grams of fat.",
+    "credit_html":  "",
+    "upsell_html":  "Skip the delivery app and let this one prove homemade beats takeout on price and protein. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  42.42,
+    "cost_batch_true":  50.97,
+    "cost_per_serving":  3.03,
+    "cost_per_serving_true":  3.64,
+    "cost_pantry_add":  18.81,
+    "cost_first_run":  69.78,
+    "scaler":  {
+                   "cost":  "50.97",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Tenderloin",
+                                   "grams":  3200,
+                                   "buy":  "8 lb",
+                                   "bid":  "pork-tenderloin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  950,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Bell Peppers",
+                                   "grams":  357,
+                                   "buy":  "3 peppers",
+                                   "bid":  "green-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Red Bell Pepper",
+                                   "grams":  300,
+                                   "buy":  "3 peppers",
+                                   "bid":  "red-bell-pepper",
+                                   "gpu":  "120.000"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  250,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Pineapple Chunks",
+                                   "grams":  300,
+                                   "buy":  "1 can",
+                                   "bid":  "pineapple-chunks",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "grams":  120,
+                                   "buy":  "1 bottle",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  120,
+                                   "buy":  "1 bottle",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  21,
+                                   "buy":  "2 cloves, crushed",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "grams":  45,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Ground Ginger",
+                                   "grams":  8,
+                                   "buy":  "1 tsp",
+                                   "bid":  "ground-ginger",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sweet Chili Sauce",
+                                   "grams":  105,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "sweet-chili-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "White Wine Vinegar",
+                                   "grams":  52,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "white-wine-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "grams":  8,
+                                   "buy":  "1 tsp",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about 581 calories and 55 grams of protein for roughly $2.89 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker sweet and sour pork bowls, budget dinner",
+                 "costPerServing":  4.98,
+                 "recipeIngredient":  [
+                                          "8 lb Pork Tenderloin",
+                                          "1 lb Rice",
+                                          "3 peppers Green Bell Peppers",
+                                          "3 peppers Red Bell Pepper",
+                                          "3 onions Yellow Onion",
+                                          "1 can Pineapple Chunks"
+                                      ],
+                 "steps":  [
+                               "Add the pork tenderloin, sliced peppers, and onion to the slow cooker.",
+                               "Stir the honey, soy sauce, and pineapple with its juice together, then pour it over the top.",
+                               "Cover and cook on low for 6 to 7 hours until the pork is tender.",
+                               "Cook the rice while the pork finishes.",
+                               "Cut or shred the pork into bite-sized pieces and stir it back through the sauce.",
+                               "Spoon the pork and vegetables over rice and drizzle with extra sauce."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

@@ -1,0 +1,184 @@
+{
+    "name":  "Slow Cooker Orange Chicken Rice Bowls",
+    "slug":  "slow-cooker-orange-chicken-rice-bowls",
+    "cuisine":  "Chinese",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  567,
+                 "protein":  57,
+                 "carbs":  66,
+                 "fat":  7,
+                 "cost_ps":  "4.19"
+             },
+    "intro_html":  "Orange chicken you can meal prep, and it is the cheapest bowl on the whole list. Bright, sweet, and savory, it packs in the protein while keeping the fat low and the price under two bucks. One batch makes 14 servings.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 7 lb (3100 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (980 g)",
+                                "\u003cstrong\u003eOrange Juice:\u003c/strong\u003e 1 carton (240 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (60 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (84 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1 boxs (32 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 bottle (14 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (8 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 2 bags (500 g)",
+                                "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 1 oz (50 g)",
+                                "\u003cstrong\u003eGround Ginger (Great Value):\u003c/strong\u003e 1 tsp (5 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (3 g)",
+                                "\u003cstrong\u003eOrange Zest:\u003c/strong\u003e from orange (8 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$1.96 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "A \u003cstrong\u003ecarton of orange juice\u003c/strong\u003e is far cheaper than bottled orange sauce and gives you the real citrus flavor.",
+                       "\u003cstrong\u003eCornstarch\u003c/strong\u003e thickens the sauce into that glossy takeout texture for pennies.",
+                       "Buy the \u003cstrong\u003echicken breast in bulk\u003c/strong\u003e to keep this the cheapest bowl in your rotation."
+                   ],
+    "make_it":  [
+                    "Add the chicken breast and minced garlic to the crock.",
+                    "Pour in the orange juice, soy sauce, honey, and a splash of sesame oil.",
+                    "Cover and cook on low for 6 to 8 hours until the chicken is tender.",
+                    "Shred the chicken, then whisk the cornstarch with a little water and stir it in to thicken the sauce.",
+                    "Steam the broccoli and cook the rice.",
+                    "Serve the orange chicken over rice with broccoli."
+                ],
+    "portion_html":  "Each of the 14 servings comes in around 57g protein for about 567 calories, at roughly $1.96 a bowl.",
+    "credit_html":  "",
+    "upsell_html":  "Sweet, tangy, and dirt cheap, this bowl proves takeout flavor can live in your fridge for less. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  30.75,
+    "cost_batch_true":  35.47,
+    "cost_per_serving":  2.2,
+    "cost_per_serving_true":  2.53,
+    "cost_pantry_add":  23.13,
+    "cost_first_run":  58.6,
+    "scaler":  {
+                   "cost":  "35.47",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3100,
+                                   "buy":  "7 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  980,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Orange Juice",
+                                   "grams":  240,
+                                   "buy":  "1 carton",
+                                   "bid":  "orange-juice",
+                                   "gpu":  "31.000"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  60,
+                                   "buy":  "1 bottle",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "grams":  84,
+                                   "buy":  "1 bottle",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "grams":  32,
+                                   "buy":  "1 boxs",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "grams":  14,
+                                   "buy":  "1 bottle",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  8,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  500,
+                                   "buy":  "2 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Rice Vinegar",
+                                   "grams":  50,
+                                   "buy":  "1 oz",
+                                   "bid":  "rice-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Ground Ginger",
+                                   "grams":  5,
+                                   "buy":  "1 tsp",
+                                   "bid":  "ground-ginger",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  3,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Orange Zest",
+                                   "grams":  8,
+                                   "buy":  "from orange",
+                                   "bid":  "orange-juice",
+                                   "gpu":  "31.000"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about 567 calories and 57 grams of protein for roughly $1.88 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker orange chicken rice bowls, budget dinner",
+                 "costPerServing":  4.19,
+                 "recipeIngredient":  [
+                                          "7 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "1 carton Orange Juice",
+                                          "1 bottle Soy Sauce",
+                                          "1 bottle Honey",
+                                          "1 boxs Cornstarch"
+                                      ],
+                 "steps":  [
+                               "Add the chicken breast and minced garlic to the crock.",
+                               "Pour in the orange juice, soy sauce, honey, and a splash of sesame oil.",
+                               "Cover and cook on low for 6 to 8 hours until the chicken is tender.",
+                               "Shred the chicken, then whisk the cornstarch with a little water and stir it in to thicken the sauce.",
+                               "Steam the broccoli and cook the rice.",
+                               "Serve the orange chicken over rice with broccoli."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

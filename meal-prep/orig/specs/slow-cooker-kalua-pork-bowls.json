@@ -1,0 +1,119 @@
+{
+    "name":  "Slow Cooker Kalua Pork Bowls",
+    "slug":  "slow-cooker-kalua-pork-bowls",
+    "cuisine":  "Hawaiian",
+    "protein":  "pork",
+    "visibility":  "public",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  567,
+                 "protein":  56,
+                 "carbs":  50,
+                 "fat":  13,
+                 "cost_ps":  "1.90"
+             },
+    "intro_html":  "Kalua pork is Hawaiian comfort food at its simplest: pork, cabbage, and a long slow cook. This may be the cheapest bowl in the bunch at just $1.51 a serving, and it still delivers 56 grams of protein. Fourteen servings from a short ingredient list is proof that good food does not have to be complicated.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003ePork Loin:\u003c/strong\u003e 8 lb (3400 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (800 g)",
+                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 4 lb (1400 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tbsp (15 g)",
+                                "\u003cstrong\u003eLiquid Smoke:\u003c/strong\u003e 1 bottle (15 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$1.51 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "This recipe wins on a \u003cstrong\u003eshort ingredient list\u003c/strong\u003e. Just pork, rice, and cabbage means fewer things to buy and less to go wrong.",
+                       "Green cabbage is one of the best deals in the produce aisle at \u003cstrong\u003eunder 70 cents a pound\u003c/strong\u003e, and it cooks down soft and savory.",
+                       "Season with plain salt and let the slow cooker do the rest. There is \u003cstrong\u003eno need for fancy spice blends\u003c/strong\u003e here."
+                   ],
+    "make_it":  [
+                    "Set the pork loin in the slow cooker and season it well with salt.",
+                    "Add a splash of water, cover, and cook on low for 8 to 9 hours until it falls apart.",
+                    "Shred the pork right in the pot and stir it through the juices.",
+                    "Pile the chopped cabbage on top of the pork.",
+                    "Cover and cook another 30 to 45 minutes until the cabbage is tender.",
+                    "Serve the pork and cabbage over cooked white rice and portion out."
+                ],
+    "portion_html":  "Every serving comes in around 567 calories with 56 grams of protein.",
+    "credit_html":  "",
+    "upsell_html":  "Three ingredients, a dollar and a half a bowl, and it tastes like the islands. Hard to argue with that. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  21.11,
+    "cost_batch_true":  22.94,
+    "cost_per_serving":  1.51,
+    "cost_per_serving_true":  1.64,
+    "cost_pantry_add":  3.67,
+    "cost_first_run":  26.61,
+    "scaler":  {
+                   "cost":  "22.94",
+                   "ing":  [
+                               {
+                                   "item":  "Pork Loin",
+                                   "grams":  3400,
+                                   "buy":  "8 lb",
+                                   "bid":  "pork-loin",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  800,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Cabbage",
+                                   "grams":  1400,
+                                   "buy":  "4 lb",
+                                   "bid":  "green-cabbage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  15,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Liquid Smoke",
+                                   "grams":  15,
+                                   "buy":  "1 bottle",
+                                   "bid":  "liquid-smoke",
+                                   "gpu":  "29.570"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Hawaiian meal prep. Fourteen servings at about 567 calories and 56 grams of protein for roughly $1.39 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker kalua pork bowls, budget dinner",
+                 "costPerServing":  1.9,
+                 "recipeIngredient":  [
+                                          "8 lb Pork Loin",
+                                          "1 lb Rice",
+                                          "4 lb Green Cabbage",
+                                          "2 tbsp Salt",
+                                          "1 bottle Liquid Smoke"
+                                      ],
+                 "steps":  [
+                               "Set the pork loin in the slow cooker and season it well with salt.",
+                               "Add a splash of water, cover, and cook on low for 8 to 9 hours until it falls apart.",
+                               "Shred the pork right in the pot and stir it through the juices.",
+                               "Pile the chopped cabbage on top of the pork.",
+                               "Cover and cook another 30 to 45 minutes until the cabbage is tender.",
+                               "Serve the pork and cabbage over cooked white rice and portion out."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

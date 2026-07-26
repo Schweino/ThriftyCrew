@@ -1,0 +1,182 @@
+{
+    "name":  "Ground Beef and Broccoli Bowls",
+    "slug":  "ground-beef-and-broccoli-bowls",
+    "cuisine":  "Chinese",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  596,
+                 "protein":  45,
+                 "carbs":  71,
+                 "fat":  14,
+                 "cost_ps":  "4.77"
+             },
+    "intro_html":  "Takeout beef and broccoli, made at home for a fraction of the delivery bill. This skillet stacks 45 grams of protein over rice for about $3.11 a bowl and makes 14 servings. Same savory, garlicky, gingery flavor you order out, minus the tip and the wait.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 5 lb (2240 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (981 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 5 bags (1500 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
+                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 bottle (180 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (300 g)",
+                                "\u003cstrong\u003eBrown Sugar (generic):\u003c/strong\u003e 1 bag (70 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 bottle (30 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1 boxs (30 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (20 g)",
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 1 root (15 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e to taste (15 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e to taste (4 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.11 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "A \u003cstrong\u003ebag of frozen broccoli florets\u003c/strong\u003e costs less than fresh, never wilts in the fridge, and steams in minutes.",
+                       "The sauce is just \u003cstrong\u003esoy sauce, broth, and pantry staples\u003c/strong\u003e, so skip the bottled stir-fry sauces that charge you double for the same thing.",
+                       "Buy a \u003cstrong\u003eknob of fresh ginger and a whole garlic bulb\u003c/strong\u003e once. Pennies per meal and they carry across several recipes in this section."
+                   ],
+    "make_it":  [
+                    "Brown 4.9 pounds of 93/7 ground beef with the chopped onion, then drain any excess fat.",
+                    "Steam or microwave the broccoli florets until bright green and just tender.",
+                    "Whisk the soy sauce, beef broth, brown sugar, sesame oil, garlic, ginger, and cornstarch into a quick sauce.",
+                    "Pour the sauce over the beef and simmer until it thickens and glossy-coats the meat.",
+                    "Fold in the broccoli, then serve everything over cooked rice in each container."
+                ],
+    "portion_html":  "Each of the 14 bowls serves up 45 grams of protein at 596 calories, so it satisfies without weighing you down.",
+    "credit_html":  "",
+    "upsell_html":  "Skip the delivery app this week. You just made it better and cheaper at home. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  45.87,
+    "cost_batch_true":  48.42,
+    "cost_per_serving":  3.28,
+    "cost_per_serving_true":  3.46,
+    "cost_pantry_add":  18.36,
+    "cost_first_run":  66.78,
+    "scaler":  {
+                   "cost":  "48.42",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  2240,
+                                   "buy":  "5 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  981,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  1500,
+                                   "buy":  "5 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  300,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Soy Sauce",
+                                   "grams":  180,
+                                   "buy":  "1 bottle",
+                                   "bid":  "soy-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "grams":  300,
+                                   "buy":  "1 carton",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Brown Sugar",
+                                   "grams":  70,
+                                   "buy":  "1 bag",
+                                   "bid":  "brown-sugar",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "grams":  30,
+                                   "buy":  "1 bottle",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Cornstarch",
+                                   "grams":  30,
+                                   "buy":  "1 boxs",
+                                   "bid":  "cornstarch",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  20,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ginger",
+                                   "grams":  15,
+                                   "buy":  "1 root",
+                                   "bid":  "ginger",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  15,
+                                   "buy":  "to taste",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "to taste",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Chinese meal prep. Fourteen servings at about 596 calories and 45 grams of protein for roughly $3.02 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, ground beef and broccoli bowls, budget dinner",
+                 "costPerServing":  4.77,
+                 "recipeIngredient":  [
+                                          "5 lb 93/7 Ground Beef",
+                                          "1 lb Rice",
+                                          "5 bags Broccoli Florets",
+                                          "3 onions Yellow Onion",
+                                          "1 bottle Soy Sauce",
+                                          "1 carton Beef Broth"
+                                      ],
+                 "steps":  [
+                               "Brown 4.9 pounds of 93/7 ground beef with the chopped onion, then drain any excess fat.",
+                               "Steam or microwave the broccoli florets until bright green and just tender.",
+                               "Whisk the soy sauce, beef broth, brown sugar, sesame oil, garlic, ginger, and cornstarch into a quick sauce.",
+                               "Pour the sauce over the beef and simmer until it thickens and glossy-coats the meat.",
+                               "Fold in the broccoli, then serve everything over cooked rice in each container."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

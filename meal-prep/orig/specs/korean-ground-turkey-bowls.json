@@ -1,0 +1,158 @@
+{
+    "name":  "Korean Ground Turkey Bowls",
+    "slug":  "korean-ground-turkey-bowls",
+    "cuisine":  "Korean",
+    "protein":  "turkey",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  651,
+                 "protein":  52,
+                 "carbs":  59,
+                 "fat":  19,
+                 "cost_ps":  "5.07"
+             },
+    "intro_html":  "Sweet, savory, and a little garlicky, these bowls taste like a treat but cost like a bargain. Each one packs 52 grams of protein for about $3.29 a serving. Fourteen servings means your week of lunches is sorted.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Turkey (Jennie-O):\u003c/strong\u003e 8 lb (3300 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (900 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 3 bags (700 g)",
+                                "\u003cstrong\u003eTeriyaki Sauce (Kikkoman):\u003c/strong\u003e 1 bottle (200 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (63 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (27 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (27 g)",
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 bottle (15 g)",
+                                "\u003cstrong\u003eGround Ginger (Great Value):\u003c/strong\u003e 1/4 tsp (2 g)",
+                                "\u003cstrong\u003eRed Pepper Flakes (Great Value):\u003c/strong\u003e 1/4 tsp crushed (2 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.29 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Grab the \u003cstrong\u003e8 lb ground turkey pack\u003c/strong\u003e for the best price per pound on your main ingredient.",
+                       "Buy \u003cstrong\u003efrozen broccoli florets\u003c/strong\u003e instead of fresh. They are cheaper, keep longer, and cook up just fine here.",
+                       "One bottle of teriyaki and a squeeze of honey go a long way, so \u003cstrong\u003ebuy them once and reuse for months\u003c/strong\u003e."
+                   ],
+    "make_it":  [
+                    "Heat a little olive oil in a large skillet and brown the ground turkey.",
+                    "Stir in the minced garlic and cook until fragrant, about a minute.",
+                    "Add the teriyaki sauce and honey and let it simmer so the turkey soaks up the glaze.",
+                    "Steam or microwave the broccoli florets until just tender and fold them in.",
+                    "Serve over cooked white rice with the sauce spooned on top."
+                ],
+    "portion_html":  "Each of the 14 bowls gives you 52 grams of protein and about 651 calories.",
+    "credit_html":  "",
+    "upsell_html":  "This is the bowl that makes you look forward to opening the fridge at lunch. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  42.08,
+    "cost_batch_true":  46.66,
+    "cost_per_serving":  3.01,
+    "cost_per_serving_true":  3.33,
+    "cost_pantry_add":  24.38,
+    "cost_first_run":  71.04,
+    "scaler":  {
+                   "cost":  "46.66",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Turkey",
+                                   "grams":  3300,
+                                   "buy":  "8 lb",
+                                   "bid":  "93-7-ground-turkey",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  900,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  700,
+                                   "buy":  "3 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Teriyaki Sauce",
+                                   "grams":  200,
+                                   "buy":  "1 bottle",
+                                   "bid":  "teriyaki-sauce",
+                                   "gpu":  "34.000"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "grams":  63,
+                                   "buy":  "1 bottle",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  27,
+                                   "buy":  "1 bottle",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  27,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Sesame Oil",
+                                   "grams":  15,
+                                   "buy":  "1 bottle",
+                                   "bid":  "sesame-oil",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Ground Ginger",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "ground-ginger",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Red Pepper Flakes",
+                                   "grams":  2,
+                                   "buy":  "1/4 tsp crushed",
+                                   "bid":  "red-pepper-flakes",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Korean meal prep. Fourteen servings at about 651 calories and 52 grams of protein for roughly $2.97 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, korean ground turkey bowls, budget dinner",
+                 "costPerServing":  5.07,
+                 "recipeIngredient":  [
+                                          "8 lb 93/7 Ground Turkey",
+                                          "1 lb Rice",
+                                          "3 bags Broccoli Florets",
+                                          "1 bottle Teriyaki Sauce",
+                                          "1 bottle Honey",
+                                          "1 bottle Olive Oil"
+                                      ],
+                 "steps":  [
+                               "Heat a little olive oil in a large skillet and brown the ground turkey.",
+                               "Stir in the minced garlic and cook until fragrant, about a minute.",
+                               "Add the teriyaki sauce and honey and let it simmer so the turkey soaks up the glaze.",
+                               "Steam or microwave the broccoli florets until just tender and fold them in.",
+                               "Serve over cooked white rice with the sauce spooned on top."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

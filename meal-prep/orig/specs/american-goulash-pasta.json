@@ -1,0 +1,206 @@
+{
+    "name":  "American Goulash Pasta",
+    "slug":  "american-goulash-pasta",
+    "cuisine":  "American",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  598,
+                 "protein":  55,
+                 "carbs":  63,
+                 "fat":  16,
+                 "cost_ps":  "5.78"
+             },
+    "intro_html":  "Old-school American goulash, the humble one-pot dinner that fed families for generations because it stretched a dollar. This version packs 55 grams of protein per serving for about $3.44 and makes 14 bowls. Cheap, hearty, and honestly hard to beat for feeding a crowd.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003e93/7 Ground Beef (Member\u0027s Mark):\u003c/strong\u003e 6 lb (2450 g)",
+                                "\u003cstrong\u003ePenne Pasta (Barilla):\u003c/strong\u003e 3 boxs (1050 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
+                                "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 1 lb (200 g)",
+                                "\u003cstrong\u003eCrushed Tomatoes (generic):\u003c/strong\u003e 2 cans (1300 g)",
+                                "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1 can (120 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (700 g)",
+                                "\u003cstrong\u003eParmesan Cheese (Great Value):\u003c/strong\u003e 1 container (80 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (20 g)",
+                                "\u003cstrong\u003eItalian Seasoning:\u003c/strong\u003e 1 jar (6 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 tbsp (42 g)",
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 1 stick, finely chopped (120 g)",
+                                "\u003cstrong\u003eWorcestershire Sauce (Lea \u0026 Perrins):\u003c/strong\u003e 1 tbsp (45 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (36 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1/2 tsp (4 g)",
+                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 1/4 tsp (3 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$3.44 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eCrushed tomatoes in the large can\u003c/strong\u003e are one of the cheapest ways to build a big pot of sauce, and this recipe leans right into that.",
+                       "A pound of \u003cstrong\u003ewhole carrots\u003c/strong\u003e costs less than pre-shredded and shreds in seconds. Small savings that add up across a batch.",
+                       "Dried \u003cstrong\u003eitalian seasoning from a single jar\u003c/strong\u003e covers this and a dozen other recipes, so buy it once and forget about it."
+                   ],
+    "make_it":  [
+                    "Brown 5.4 pounds of 93/7 ground beef with the chopped onion and shredded carrots, then drain.",
+                    "Stir in the crushed tomatoes, tomato paste, beef broth, garlic, and italian seasoning.",
+                    "Boil the penne separately until just tender, then drain.",
+                    "Simmer the sauce a few minutes so it thickens, then fold in the cooked pasta.",
+                    "Stir in the parmesan and portion it into containers."
+                ],
+    "portion_html":  "Each of the 14 servings delivers 55 grams of protein at 598 calories, proving this old-fashioned budget meal still competes on protein.",
+    "credit_html":  "",
+    "upsell_html":  "A classic that has stretched budgets for a hundred years, now stretching yours too. Grandma knew what she was doing. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  49.8,
+    "cost_batch_true":  61.56,
+    "cost_per_serving":  3.56,
+    "cost_per_serving_true":  4.4,
+    "cost_pantry_add":  19.39,
+    "cost_first_run":  80.95,
+    "scaler":  {
+                   "cost":  "61.56",
+                   "ing":  [
+                               {
+                                   "item":  "93/7 Ground Beef",
+                                   "grams":  2450,
+                                   "buy":  "6 lb",
+                                   "bid":  "93-7-ground-beef",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Penne Pasta",
+                                   "grams":  1050,
+                                   "buy":  "3 boxs",
+                                   "bid":  "penne-pasta",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  300,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Carrots",
+                                   "grams":  200,
+                                   "buy":  "1 lb",
+                                   "bid":  "shredded-carrots",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Crushed Tomatoes",
+                                   "grams":  1300,
+                                   "buy":  "2 cans",
+                                   "bid":  "crushed-tomatoes",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Tomato Paste",
+                                   "grams":  120,
+                                   "buy":  "1 can",
+                                   "bid":  "tomato-paste",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "grams":  700,
+                                   "buy":  "1 carton",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Parmesan Cheese",
+                                   "grams":  80,
+                                   "buy":  "1 container",
+                                   "bid":  "parmesan-cheese",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  20,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Italian Seasoning",
+                                   "grams":  6,
+                                   "buy":  "1 jar",
+                                   "bid":  "italian-seasoning",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  42,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Celery",
+                                   "grams":  120,
+                                   "buy":  "1 stick, finely chopped",
+                                   "bid":  "celery",
+                                   "gpu":  "450.000"
+                               },
+                               {
+                                   "item":  "Worcestershire Sauce",
+                                   "grams":  45,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "worcestershire-sauce",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  36,
+                                   "buy":  "2 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  4,
+                                   "buy":  "1/2 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Sugar",
+                                   "grams":  3,
+                                   "buy":  "1/4 tsp",
+                                   "bid":  "sugar",
+                                   "gpu":  "453.592"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein American meal prep. Fourteen servings at about 598 calories and 55 grams of protein for roughly $3.02 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, american goulash pasta, budget dinner",
+                 "costPerServing":  5.78,
+                 "recipeIngredient":  [
+                                          "6 lb 93/7 Ground Beef",
+                                          "3 boxs Penne Pasta",
+                                          "3 onions Yellow Onion",
+                                          "1 lb Carrots",
+                                          "2 cans Crushed Tomatoes",
+                                          "1 can Tomato Paste"
+                                      ],
+                 "steps":  [
+                               "Brown 5.4 pounds of 93/7 ground beef with the chopped onion and shredded carrots, then drain.",
+                               "Stir in the crushed tomatoes, tomato paste, beef broth, garlic, and italian seasoning.",
+                               "Boil the penne separately until just tender, then drain.",
+                               "Simmer the sauce a few minutes so it thickens, then fold in the cooked pasta.",
+                               "Stir in the parmesan and portion it into containers."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

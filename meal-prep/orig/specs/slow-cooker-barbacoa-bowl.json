@@ -1,0 +1,202 @@
+{
+    "name":  "Slow Cooker Barbacoa Burrito Bowl",
+    "slug":  "slow-cooker-barbacoa-bowl",
+    "cuisine":  "Mexican",
+    "protein":  "beef",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  558,
+                 "protein":  39,
+                 "carbs":  61,
+                 "fat":  15,
+                 "cost_ps":  "4.35"
+             },
+    "intro_html":  "This is the kind of dinner that makes your whole week easier. One chuck roast, a lazy day in the slow cooker, and you walk away with fourteen loaded burrito bowls that taste like they came from your favorite taco spot. The beef does all the work while you do anything else.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 4 lb (1814 g)",
+                                "\u003cstrong\u003eChipotle in Adobo (La Costena):\u003c/strong\u003e 1 can (105 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 2 onions (193 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 1 bulb (26 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 4 limes (105 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 jar (11 g)",
+                                "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 1 carton (240 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (800 g)",
+                                "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 4 cans (910 g)",
+                                "\u003cstrong\u003eFat Free Cheddar (Great Value):\u003c/strong\u003e 1 bag (196 g)",
+                                "\u003cstrong\u003eApple Cider Vinegar (Great Value):\u003c/strong\u003e 2 tbsp (60 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 tbsp (10 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2 tsp (20 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1 tsp (5 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 2 whole (1 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.74 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "\u003cstrong\u003eBuy the roast on sale.\u003c/strong\u003e Chuck roast goes on markdown all the time. When you see a good price, grab it and freeze it. This whole batch is built around one cheap cut stretched across fourteen meals.",
+                       "\u003cstrong\u003eOne little can of chipotles goes a long way.\u003c/strong\u003e Chipotles in adobo are cheap and last. Freeze the leftover peppers in a small bag so nothing goes to waste and the next batch costs even less.",
+                       "\u003cstrong\u003eDry rice and canned beans keep it cheap.\u003c/strong\u003e Cooking rice yourself costs pennies per serving. If you are short on time, store brand canned beans keep the price low without any fuss."
+                   ],
+    "make_it":  [
+                    "Weigh your empty mixing pot on a kitchen scale and write the number down. You will need it to portion evenly at the end.",
+                    "Cut the chuck roast into big 3 inch chunks and drop them in the slow cooker.",
+                    "Add the diced yellow onion, minced garlic, a few finely chopped chipotle peppers with a spoonful of their adobo sauce, the lime juice, cumin, a pinch of salt and pepper, and the beef broth. Stir it all together with tongs.",
+                    "Cover and cook on low for 8 to 9 hours or on high for 4 to 5 hours, until the beef falls apart when you poke it with a fork.",
+                    "Lift the beef onto a cutting board and shred it with two forks. Skim the fat off the top of the cooking liquid and pour some of the broth back over the meat so it stays juicy.",
+                    "Cook your rice per the package. Warm and drain the black beans.",
+                    "To build the bowls, layer rice on the bottom, then a scoop of barbacoa, then beans, and finish with a sprinkle of fat free cheddar."
+                ],
+    "portion_html":  "Weigh the full pot of finished beef, subtract the empty pot weight you wrote down, and divide by 14. Scoop that same amount into each container over an even bed of rice and beans so every bowl is equal.",
+    "credit_html":  "",
+    "upsell_html":  "Fourteen dinners done in one afternoon, stacked in the fridge and ready to grab all week, and every bowl cost you next to nothing. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  46,
+    "cost_batch_true":  47.9,
+    "cost_per_serving":  3.29,
+    "cost_per_serving_true":  3.42,
+    "cost_pantry_add":  13.01,
+    "cost_first_run":  60.91,
+    "scaler":  {
+                   "cost":  "47.90",
+                   "ing":  [
+                               {
+                                   "item":  "Beef Chuck Roast",
+                                   "grams":  1814,
+                                   "buy":  "4 lb",
+                                   "bid":  "beef-chuck-roast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Chipotle in Adobo",
+                                   "grams":  105,
+                                   "buy":  "1 can",
+                                   "bid":  "chipotle-in-adobo",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  193,
+                                   "buy":  "2 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  26,
+                                   "buy":  "1 bulb",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "grams":  105,
+                                   "buy":  "4 limes",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  11,
+                                   "buy":  "1 jar",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Beef Broth",
+                                   "grams":  240,
+                                   "buy":  "1 carton",
+                                   "bid":  "beef-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  800,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Seasoned Black Beans",
+                                   "grams":  910,
+                                   "buy":  "4 cans",
+                                   "bid":  "seasoned-black-beans",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Fat Free Cheddar",
+                                   "grams":  196,
+                                   "buy":  "1 bag",
+                                   "bid":  "fat-free-cheddar",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Apple Cider Vinegar",
+                                   "grams":  60,
+                                   "buy":  "2 tbsp",
+                                   "bid":  "apple-cider-vinegar",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  10,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  20,
+                                   "buy":  "2 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Black Pepper",
+                                   "grams":  5,
+                                   "buy":  "1 tsp",
+                                   "bid":  "black-pepper",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Bay Leaves",
+                                   "grams":  1,
+                                   "buy":  "2 whole",
+                                   "bid":  "bay-leaves",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 558 calories and 39 grams of protein for roughly $2.66 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker barbacoa burrito bowl, budget dinner",
+                 "costPerServing":  4.35,
+                 "recipeIngredient":  [
+                                          "4 lb Beef Chuck Roast",
+                                          "1 can Chipotle in Adobo",
+                                          "2 onions Yellow Onion",
+                                          "1 bulb Garlic",
+                                          "4 limes Lime Juice",
+                                          "1 jar Ground Cumin"
+                                      ],
+                 "steps":  [
+                               "Weigh your empty mixing pot on a kitchen scale and write the number down. You will need it to portion evenly at the end.",
+                               "Cut the chuck roast into big 3 inch chunks and drop them in the slow cooker.",
+                               "Add the diced yellow onion, minced garlic, a few finely chopped chipotle peppers with a spoonful of their adobo sauce, the lime juice, cumin, a pinch of salt and pepper, and the beef broth. Stir it all together with tongs.",
+                               "Cover and cook on low for 8 to 9 hours or on high for 4 to 5 hours, until the beef falls apart when you poke it with a fork.",
+                               "Lift the beef onto a cutting board and shred it with two forks. Skim the fat off the top of the cooking liquid and pour some of the broth back over the meat so it stays juicy.",
+                               "Cook your rice per the package. Warm and drain the black beans.",
+                               "To build the bowls, layer rice on the bottom, then a scoop of barbacoa, then beans, and finish with a sprinkle of fat free cheddar."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

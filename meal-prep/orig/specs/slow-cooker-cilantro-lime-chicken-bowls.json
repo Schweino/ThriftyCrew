@@ -1,0 +1,160 @@
+{
+    "name":  "Slow Cooker Cilantro Lime Chicken Bowls",
+    "slug":  "slow-cooker-cilantro-lime-chicken-bowls",
+    "cuisine":  "Mexican",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  578,
+                 "protein":  57,
+                 "carbs":  53,
+                 "fat":  15,
+                 "cost_ps":  "4.00"
+             },
+    "intro_html":  "Bright, zesty, and just a touch sweet, cilantro lime chicken never gets boring even when you eat it all week. It is high protein, cheap per serving, and the lime keeps every bowl tasting fresh. One batch makes 14 servings.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3200 g)",
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 1 lb (780 g)",
+                                "\u003cstrong\u003eBroccoli Florets (Great Value):\u003c/strong\u003e 2 bags (400 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (120 g)",
+                                "\u003cstrong\u003eHoney (Great Value):\u003c/strong\u003e 1 bottle (120 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 1 bottle (90 g)",
+                                "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 2 cups packed (120 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 3 cloves (25 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tsp (5 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (10 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.25 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Bottled \u003cstrong\u003elime juice\u003c/strong\u003e costs a fraction of fresh limes and works perfectly in a slow cooker.",
+                       "A little \u003cstrong\u003ehoney\u003c/strong\u003e goes a long way here, so one bottle carries you through many batches.",
+                       "Stick with the \u003cstrong\u003ebulk chicken breast\u003c/strong\u003e to keep the whole thing cheap per serving."
+                   ],
+    "make_it":  [
+                    "Put the chicken breast in the crock.",
+                    "Drizzle with olive oil, honey, and a good pour of lime juice.",
+                    "Cover and cook on low for 6 to 8 hours until the chicken shreds easily.",
+                    "Shred the chicken and toss it back through the tangy juices.",
+                    "Steam the broccoli and cook the rice.",
+                    "Build bowls with rice, cilantro lime chicken, and broccoli."
+                ],
+    "portion_html":  "Each of the 14 servings runs about 57g protein for roughly 578 calories, at around $2.25 a bowl.",
+    "credit_html":  "",
+    "upsell_html":  "Fresh, easy, and endlessly repeatable, this one earns a permanent spot in your rotation. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  33.76,
+    "cost_batch_true":  38.86,
+    "cost_per_serving":  2.41,
+    "cost_per_serving_true":  2.78,
+    "cost_pantry_add":  17.17,
+    "cost_first_run":  56.03,
+    "scaler":  {
+                   "cost":  "38.86",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3200,
+                                   "buy":  "8 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Rice",
+                                   "grams":  780,
+                                   "buy":  "1 lb",
+                                   "bid":  "jasmine-rice",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Broccoli Florets",
+                                   "grams":  400,
+                                   "buy":  "2 bags",
+                                   "bid":  "frozen-broccoli-florets",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  120,
+                                   "buy":  "1 bottle",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Honey",
+                                   "grams":  120,
+                                   "buy":  "1 bottle",
+                                   "bid":  "honey",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Lime Juice",
+                                   "grams":  90,
+                                   "buy":  "1 bottle",
+                                   "bid":  "limes",
+                                   "gpu":  "30.000"
+                               },
+                               {
+                                   "item":  "Fresh Cilantro",
+                                   "grams":  120,
+                                   "buy":  "2 cups packed",
+                                   "bid":  "fresh-cilantro",
+                                   "gpu":  "57.000"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  25,
+                                   "buy":  "3 cloves",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  5,
+                                   "buy":  "1 tsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  10,
+                                   "buy":  "1 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 578 calories and 57 grams of protein for roughly $1.98 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker cilantro lime chicken bowls, budget dinner",
+                 "costPerServing":  4,
+                 "recipeIngredient":  [
+                                          "8 lb Boneless Skinless Chicken Breast",
+                                          "1 lb Rice",
+                                          "2 bags Broccoli Florets",
+                                          "1 bottle Olive Oil",
+                                          "1 bottle Honey",
+                                          "1 bottle Lime Juice"
+                                      ],
+                 "steps":  [
+                               "Put the chicken breast in the crock.",
+                               "Drizzle with olive oil, honey, and a good pour of lime juice.",
+                               "Cover and cook on low for 6 to 8 hours until the chicken shreds easily.",
+                               "Shred the chicken and toss it back through the tangy juices.",
+                               "Steam the broccoli and cook the rice.",
+                               "Build bowls with rice, cilantro lime chicken, and broccoli."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}

@@ -1,0 +1,176 @@
+{
+    "name":  "Slow Cooker Chicken Pozole Bowls",
+    "slug":  "slow-cooker-chicken-pozole-bowls",
+    "cuisine":  "Mexican",
+    "protein":  "chicken",
+    "visibility":  "paid",
+    "source_url":  "",
+    "source_site":  "",
+    "manual_balance":  false,
+    "tuning":  [
+
+               ],
+    "stat":  {
+                 "cal":  549,
+                 "protein":  55,
+                 "carbs":  40,
+                 "fat":  18,
+                 "cost_ps":  "3.96"
+             },
+    "intro_html":  "Pozole is warm, hearty, and hominy makes it stick to your ribs in the best way. This one is built for meal prep, packing solid protein into a cheap-per-serving bowl with real depth of flavor. One batch makes 14 servings.",
+    "ingredients_display":  [
+                                "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 8 lb (3200 g)",
+                                "\u003cstrong\u003eHominy (generic):\u003c/strong\u003e 5 cans (3400 g)",
+                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 3 onions (300 g)",
+                                "\u003cstrong\u003eEnchilada Sauce (Old El Paso):\u003c/strong\u003e 2 cans (300 g)",
+                                "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 1 lb (400 g)",
+                                "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 1 bottle (140 g)",
+                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 4 cups (1440 g)",
+                                "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 cloves (35 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1 tbsp (16 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 2 tsp (10 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tsp (12 g)",
+                                "\u003cstrong\u003eDried Oregano (Great Value):\u003c/strong\u003e 1 tbsp Mexican oregano (6 g)"
+                            ],
+    "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
+    "cost_closing_html":  "About \u003cstrong\u003e$2.50 a bowl\u003c/strong\u003e for a high-protein dinner that beats takeout on price and macros.",
+    "shop_smart":  [
+                       "Canned \u003cstrong\u003ehominy\u003c/strong\u003e is the cheap, filling base here, and it stretches the batch without stretching your budget.",
+                       "The \u003cstrong\u003evalue pack chicken breast\u003c/strong\u003e is your best friend for keeping the per serving cost down.",
+                       "A little \u003cstrong\u003eshredded cabbage on top\u003c/strong\u003e adds crunch for pennies instead of pricier garnishes."
+                   ],
+    "make_it":  [
+                    "Place the chicken breast in the crock with the chopped onion.",
+                    "Pour in both cans of enchilada sauce and a drizzle of olive oil.",
+                    "Cover and cook on low for 6 to 8 hours until the chicken shreds easily.",
+                    "Shred the chicken, then stir in the drained hominy and let it heat through.",
+                    "Shred the cabbage while the pot warms up.",
+                    "Ladle into bowls and top each with a handful of crisp cabbage."
+                ],
+    "portion_html":  "Each of the 14 servings lands around 55g protein for about 549 calories, at roughly $2.50 a bowl.",
+    "credit_html":  "",
+    "upsell_html":  "This is the kind of bowl that feels like a hug after a long day, and it is waiting all week. Members get every recipe in the Meal Prep section, plus the full library of money lessons and tools, all for $1 a month.",
+    "cost_batch":  37.17,
+    "cost_batch_true":  42.61,
+    "cost_per_serving":  2.66,
+    "cost_per_serving_true":  3.04,
+    "cost_pantry_add":  12.9,
+    "cost_first_run":  55.51,
+    "scaler":  {
+                   "cost":  "42.61",
+                   "ing":  [
+                               {
+                                   "item":  "Boneless Skinless Chicken Breast",
+                                   "grams":  3200,
+                                   "buy":  "8 lb",
+                                   "bid":  "chicken-breast",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Hominy",
+                                   "grams":  3400,
+                                   "buy":  "5 cans",
+                                   "bid":  "hominy",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Yellow Onion",
+                                   "grams":  300,
+                                   "buy":  "3 onions",
+                                   "bid":  "onions",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Enchilada Sauce",
+                                   "grams":  300,
+                                   "buy":  "2 cans",
+                                   "bid":  "enchilada-sauce",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Green Cabbage",
+                                   "grams":  400,
+                                   "buy":  "1 lb",
+                                   "bid":  "green-cabbage",
+                                   "gpu":  "453.592"
+                               },
+                               {
+                                   "item":  "Olive Oil",
+                                   "grams":  140,
+                                   "buy":  "1 bottle",
+                                   "bid":  "olive-oil",
+                                   "gpu":  "28.000"
+                               },
+                               {
+                                   "item":  "Chicken Broth",
+                                   "grams":  1440,
+                                   "buy":  "4 cups",
+                                   "bid":  "chicken-broth",
+                                   "gpu":  "29.570"
+                               },
+                               {
+                                   "item":  "Garlic",
+                                   "grams":  35,
+                                   "buy":  "4 cloves",
+                                   "bid":  "garlic",
+                                   "gpu":  "50.000"
+                               },
+                               {
+                                   "item":  "Chili Powder",
+                                   "grams":  16,
+                                   "buy":  "1 tbsp",
+                                   "bid":  "chili-powder",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Ground Cumin",
+                                   "grams":  10,
+                                   "buy":  "2 tsp",
+                                   "bid":  "ground-cumin",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Salt",
+                                   "grams":  12,
+                                   "buy":  "1 tsp",
+                                   "bid":  "salt",
+                                   "gpu":  "28.350"
+                               },
+                               {
+                                   "item":  "Dried Oregano",
+                                   "grams":  6,
+                                   "buy":  "1 tbsp Mexican oregano",
+                                   "bid":  "dried-oregano",
+                                   "gpu":  "28.350"
+                               }
+                           ]
+               },
+    "head":  {
+                 "description":  "A high-protein Mexican meal prep. Fourteen servings at about 549 calories and 55 grams of protein for roughly $2.19 each.",
+                 "keywords":  "high protein meal prep, cheap meal prep, slow cooker chicken pozole bowls, budget dinner",
+                 "costPerServing":  3.96,
+                 "recipeIngredient":  [
+                                          "8 lb Boneless Skinless Chicken Breast",
+                                          "5 cans Hominy",
+                                          "3 onions Yellow Onion",
+                                          "2 cans Enchilada Sauce",
+                                          "1 lb Green Cabbage",
+                                          "1 bottle Olive Oil"
+                                      ],
+                 "steps":  [
+                               "Place the chicken breast in the crock with the chopped onion.",
+                               "Pour in both cans of enchilada sauce and a drizzle of olive oil.",
+                               "Cover and cook on low for 6 to 8 hours until the chicken shreds easily.",
+                               "Shred the chicken, then stir in the drained hominy and let it heat through.",
+                               "Shred the cabbage while the pot warms up.",
+                               "Ladle into bowls and top each with a handful of crisp cabbage."
+                           ],
+                 "step_names":  [
+
+                                ],
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
+                 "prepTime":  "PT20M",
+                 "cookTime":  "PT45M",
+                 "totalTime":  "PT1H5M"
+             }
+}
