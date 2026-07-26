@@ -12,7 +12,7 @@ No seafood recipes: seafood is expensive per serving and nobody has asked (Brad,
 |---|---|---|---|
 | 1. Source candidates from the internet (fan out N slices by cuisine/protein/method) | **recipe-sourcer** (parallel) | **opus** | breadth research; returns structured candidates + source URLs; selector culls |
 | 2. DEDUP + select final batch to protein targets | **recipe-dedup-selector** | **opus 4.8** | judges the DISH not the name, vs catalog AND pool; Brad's rule: no duplicates or darn-near |
-| 2.5 Normalize ingredients -> canonical worklist | scripts + main session | any | mechanical (normalize-recipe-ids.ps1 is idempotent) |
+| 2.5 Normalize ingredients -> canonical worklist | scripts + main session | any | splitter + canon rules; start from meal-prep\canon-rules-standing.json (promoted r300 base) |
 | 3. NEW ingredient mapping + food-DB entries | **recipe-ingredient-mapper** | **fable** | accuracy-critical; evidence-gate judgment; label transcription |
 | 4. Scale to 14 servings, macros, 550 gate, pricing | scripts (r100 pipeline) | any | the gates do the checking |
 | 5. Prose + card assembly (fan out slices) | **recipe-writer** (N in parallel) | **opus** | volume; numbers are transcribed, never computed |
@@ -28,12 +28,11 @@ target), then run a short final merge pass in the main session for the only cros
 same-dish-different-protein twins (e.g. a turkey chili vs a beef chili candidate). Cross-protein twins
 vs the LIVE catalog are already each selector's job; only candidate-vs-candidate twins need the merge pass.
 
-### Stage 2.5 speed note (learned on r300, 2026-07-25) - REVIEW NEXT RUN
-Candidate optimizations for the normalize/rule-writing stage, none applied yet - evaluate before the
-next run, and only keep what costs zero accuracy:
-1. Rules COMPOUND across runs: r300-canon-rules.json + r100's become the standing base, so each run's
-   unmapped list shrinks. Promote run-specific rule files into one canonical canon-rules file after the
-   run's audit passes (audit first - never promote unaudited rules).
+### Stage 2.5 speed note (learned on r300, 2026-07-25)
+Status of the candidate optimizations:
+1. APPLIED 2026-07-25: meal-prep\canon-rules-standing.json is the promoted base (= r300's built rules:
+   authored 208 + rebased r100 223, all patches, audit-passed). Next run loads THIS file plus its own
+   run-specific additions; keep promoting after each run's audit passes (never promote unaudited rules).
 2. Start normalize DURING harvest: run the splitter + normalizer per harvest chunk as each lands
    (incremental unmapped inventory) instead of waiting for all chunks. The rule agent can start on the
    first ~80% of the inventory while the last chunks finish.
@@ -47,16 +46,13 @@ next run, and only keep what costs zero accuracy:
 
 ### Pre-launch efficiency checklist (r300 retrospective, 2026-07-25)
 What we'd do differently BEFORE dispatching the next big run:
-1. CAPTURE-AT-VERIFY (biggest win): sourcers already fetch every candidate page to verify it is a real
-   recipe, then a separate harvest wave re-fetched all selected pages. Require sourcers to transcribe
-   ingredients/servings/nutrition INTO the candidate record at verification time. Kills an entire stage
-   (~8 agents / ~45 min / ~730k tokens on r300) for the cost of slightly fatter candidate files; capture
-   on cut candidates is cheap because the page text is already in the sourcer's context.
-2. WEB-SEARCH BUDGET: 10 parallel sourcers burned the session's 200 WebSearch calls in minutes; every
-   agent hit the wall mid-slice and independently rediscovered the fallback. Before the wave: raise
-   CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION, and put the fallback (site category indexes, WordPress
-   /wp-json/wp/v2/search and ?s= search, known 403 domain list) in the dispatch prompt from the start.
-   Discovery bias was real (one slice went 13/40 Chinese because index-crawling replaced search).
+1. CAPTURE-AT-VERIFY - APPLIED 2026-07-25: now baked into recipe-sourcer.md (sourcers transcribe
+   ingredients/servings/nutrition at verification). The separate harvest stage is only needed for
+   candidates whose capture came back incomplete. (~8 agents / ~45 min / ~730k tokens saved per run.)
+2. WEB-SEARCH BUDGET - PARTIALLY APPLIED: the fallback method + 403 domain list are baked into
+   recipe-sourcer.md, and CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION is raised in .claude\settings.json
+   (verify it took effect at the next wave: sourcers should report searches available deep into their
+   slices). Discovery bias from index-crawling (one slice went 13/40 Chinese) is called out in the def.
 3. SHARED PRE-DIGESTS: write ONE catalog digest (slugs+names by protein) and ONE merged candidate pool
    file before dispatch, instead of 10 sourcers each re-reading recipes-db.json and the selector
    re-reading 10 files. Same for any common brief: put it in a file agents Read, not 10x in prompts.

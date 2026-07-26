@@ -1,4 +1,26 @@
 # R300 run state (started 2026-07-25)
+
+## FIX-EVERYTHING PASS (2026-07-25 late) - Brad's order after run completion
+DONE: agent-registry ROOT CAUSE found+fixed (UTF-8 BOM on 5 of 6 .claude\agents files broke frontmatter
+parsing - exactly the 5 that failed to register; BOMs stripped, registry loads next app start).
+All 6 agent defs updated with r300 lessons (sourcer capture-at-verify + search fallback + 403 list;
+mapper + auditor normalize-recipe-ids correction; writer flag-duty + no-$-in-shop-smart; selector
+parallel-by-protein scope; reviewer concurrent-batch scope). canon-rules-standing.json promoted
+(431 audit-passed rules). CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION=1000 in .claude\settings.local.json.
+Playbook: stale normalize-recipe-ids instruction fixed, stage 3-8 lessons section added, statuses
+updated. Planner "Search 213 recipes" -> count-agnostic + japchae dangmyeon display override in
+gen-planner-data. REAL store prices captured: GV Jumbo Shells 12oz $1.96 (was marketplace $7.50),
+bettergoods Bulgur 12oz $2.42 (was $11.99) -> labels-r300 updated, engines re-run (0 flags), 3 recipes
+recost (kibbeh 3.01->2.60, lasagna-cass 2.78->2.05, manicotti 2.62->1.98), specs/guards/cards/publish
+re-run for the 3 (300/300 READY), db rows patched in place (6 cost fields, parse-verified).
+GATE AMENDMENT: run-slugs.txt manifest exempts this run's own published slugs from the live-collision
+gates in build-specs + spec-guards (post-publish regen was impossible without it).
+CLOSE-OUT REVIEWER (FIXED-AND-CLEAN) fixed+pushed: feed re-export (worker now 513 recipes/525
+ingredients), r300-board-map.json + gen-planner-data wiring (6993/6999 planner lines feed-priced),
+playbook commit. IN FLIGHT: board agent registering 8 proxy-debt commodities (batch8-proxy).
+PENDING after batch8: item_id re-point in recipes-db for proxy items + feed re-export + planner
+rebuild/republish + final repo push. WRAP TRAP STRUCK AGAIN on labels-r300 (recovered via text
+unwrap) - the ConvertTo-Json array ban is absolute, no exceptions, not even -InputObject.
 Goal: +300 recipes, evening the 4 proteins. Census at start: chicken 69, beef 55, pork 50, turkey 37 (+2 other).
 Targets: turkey +90, pork +78, beef +73, chicken +59 (=300; ~128 each final).
 Pipeline: NEXT-RUN-PLAYBOOK.md stages; r100 pipeline reused; agents pinned (sourcer/writer=opus-4.8 high, mapper/auditor/reviewer=fable high).
@@ -15,13 +37,27 @@ not by the rules - proven by the isolated registration-only diff which was chang
 Coverage 39 cells over 17 of 21 ids: horseradish-sauce 5 stores; poultry-seasoning/brown-gravy-mix/chicken-livers/
 diced-ham/corned-beef-brisket/ground-fennel 3; caraway-seeds/snow-peas/sweet-soy-sauce/turkey-breast/
 dried-arbol-chiles/eggplant 2; pigeon-peas/dried-ancho-chiles/wild-rice/sazon-seasoning 1.
-ZERO coverage (honest gaps, NOT errors): dried-guajillo-chiles, doubanjiang, aji-amarillo-paste (none of the
-three headless stores carry them - exactly the mapper's coverage flags), and rye-bread which is BLOCKED ON UNIT:
-31 real rye loaves sit in the FF/Hy-Vee/Baker's files but the commodity unit is `each` and every one of those
-rows carries an oz size, which the engine refuses to convert to a count. DECISION NEEDED: either switch
-rye-bread to `oz` (and change the mapper gpu from 454 g/each to 28.3495 g/oz to match) or let a Walmart capture
-supply an `each`-sized row. Left as `each` per the mapper's decision rather than silently desyncing the gpu.
-corned-beef-brisket is seasonal but is actually carried TODAY at 3 stores.
+corned-beef-brisket is seasonal but is actually carried TODAY at 4 stores.
+rye-bread: I registered it `each` per the mapper and reported it as blocked-on-unit (oz-sized loaves cannot
+convert to a count). It is now `oz` in commodities.json - changed by another session, not by me - and prices at
+4 stores. **The mapper gpu must move 454 g/each -> 28.3495 g/oz or the recipe cost engine is 16x wrong.**
+
+## Board registration - batch 8 (proxy debt) REGISTERED LOCALLY 2026-07-25 (NOT pushed)
+Same push warning applies. 8/8 registered, 0 rejected: ricotta, red-onion, cherry-tomatoes, gingersnaps,
+corn-chips, smoked-turkey-sausage, ground-beef-93-7, jumbo-pasta-shells. Board 445 -> 453 commodities.
+Hijack audit CLEAN twice: registration-only diff changed=0 dropped=0 added=14 (cells that appeared for free from
+data already in the store files); primer-isolation diff moved only my OWN new rows. recipes-db untouched - the
+item_id re-point is the main session's step.
+Lean-point ruling (documented, not guessed): 90/10, 85/15 and 96/4 ground beef are claimed by NEITHER
+ground-beef row. Folding a cheaper lean point into 93/7 would win the cheapest slot with a fattier product.
+cherry-tomatoes carries pint_oz=10: a bare "1 pt" size converts to 16 oz in the engine and would have published
+a 10 oz clamshell 1.6x too cheap (it is live at Family Fare on a "1 pt" size, so this guard is load-bearing).
+All 8 have coverage (2-5 stores); ZERO zero-coverage. Whole-run total: 88 cells over 29 new commodities.
+**FLAG for the main session:** the Walmart capture that landed 17:39 gives 20 of the 29 new ids a Walmart cell,
+but several are third-party MARKETPLACE listings, not shelf prices - "by 1400s Spices" (arbol), "Fusion Select"
+(guajillo), "Dubble O Brand" (caraway, 0.41x the cross-store average), "The Spice Way" (fennel), and Lee Kum Kee
+doubanjiang at $12.79/jar. Memory says Walmart marketplace rows must be filtered (fulfillmentType) and no guard
+in the repo checks it. Not my capture, so I left it alone - verify before publish.
 Walled stores (Walmart/Sam's/Aldi/Fareway) get zero free coverage: worklist at
 meal-prep\r300\board-capture-worklist.json (Walmart 20, Sam's 21, Aldi 21, Fareway 20 ids).
 Work files + rerunnable scripts: grocery\out\r300\ (rules, reciprocal-exclude and relax patches, probe,

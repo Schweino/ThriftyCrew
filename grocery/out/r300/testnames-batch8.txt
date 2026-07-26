@@ -1,0 +1,44 @@
+# batch-8 (proxy-debt) registration probe corpus. Realistic Omaha shelf names for the 8 new commodities
+# plus DECOYS that must stay with their existing commodity.
+ricotta	Frigo Whole Milk Ricotta Cheese, 15 oz
+ricotta	Great Value Part Skim Ricotta Cheese, 32 oz
+ricotta	Precious Ricotta Cheese Whole Milk
+cottage-cheese	Hy-Vee Small Curd Cottage Cheese, 24 oz
+red-onion	Red Onions, 3 lb Bag
+red-onion	Fresh Red Onion, each
+red-onion	Organic Red Onions
+onions	Yellow Onions, 3 lb Bag
+onions	Great Value Whole White Onions, 2 lb
+cherry-tomatoes	Cherry Tomatoes, 10 oz Package
+cherry-tomatoes	NatureSweet Grape Tomatoes, 10 oz
+cherry-tomatoes	Hy-Vee Grape Tomatoes Clamshell 1 pt
+tomatoes	Roma Tomatoes, per lb
+tomatoes	Vine Ripe Tomatoes
+gingersnaps	Nabisco Ginger Snaps Cookies, 16 oz
+gingersnaps	Great Value Gingersnap Cookies
+gingersnaps	Murray Old Fashioned Ginger Snaps
+cookies	Chips Ahoy Chocolate Chip Cookies, 13 oz
+corn-chips	Fritos Original Corn Chips, 9.25 oz
+corn-chips	Great Value Corn Chips, 10 oz
+corn-chips	Fritos Scoops Corn Chips Party Size
+tortilla-chips	Santitas Yellow Corn Tortilla Chips, 11 oz
+tortilla-chips	Tostitos Scoops Tortilla Chips
+potato-chips	Lay's Classic Potato Chips, 8 oz
+smoked-turkey-sausage	Butterball Turkey Smoked Sausage, 13 oz
+smoked-turkey-sausage	Jennie-O Turkey Smoked Sausage Rope
+smoked-turkey-sausage	Hillshire Farm Turkey Polska Kielbasa
+kielbasa	Hillshire Farm Polska Kielbasa Smoked Sausage, 14 oz
+bratwurst	Johnsonville Original Bratwurst, 19 oz
+italian-sausage	Johnsonville Mild Italian Sausage Links
+ground-beef-93-7	93% Lean 7% Fat Ground Beef, 1 lb Roll
+ground-beef-93-7	Great Value All Natural 93/7 Lean Ground Beef
+ground-beef-93-7	Laura's Lean 93% Lean Ground Beef
+ground-beef-8020	Great Value 80/20 Ground Beef Chuck, 1 lb
+ground-beef-8020	Ground Chuck 80% Lean 20% Fat
+jumbo-pasta-shells	Barilla Jumbo Shells Pasta, 12 oz
+jumbo-pasta-shells	Great Value Jumbo Pasta Shells, 12 oz
+jumbo-pasta-shells	Ronzoni Manicotti, 8 oz
+pasta	Barilla Medium Shells Pasta, 16 oz
+pasta	Great Value Elbow Macaroni, 16 oz
+# EXPECT nobody or an existing lean-point decision - documented, see report:  Great Value 85/15 Ground Beef
+# EXPECT nobody (90/10 lean point is claimed by neither ground-beef row):  Ground Sirloin 90% Lean 10% Fat

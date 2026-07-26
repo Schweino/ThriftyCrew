@@ -1,4 +1,4 @@
-﻿{
+{
     "readme":  "Proposed ingredient-map.json additions for R300 (r100-board-map.json format: item -\u003e bid/unit/gpu, plus board and status fields for the publish stage). status=existing means the bid is live on the board today; status=needs-registration means the bid is proposed in decisions.json and MUST be registered (and pass the match-soundness gate) before this map row goes live - do not merge a needs-registration row into ingredient-map.json until its commodity exists. board field: none of these ids appear in grocery/recipe-commodities.json, so all rows are board=weekly per the membership rule. gpu unit basis is stated in decisions.json for every non-mechanical value (each-unit rows calibrated against live board prices 2026-07-25: kale $1.48/bunch, bread $0.75/loaf, tortillas $0.106/tortilla - per-piece, not per-pack). Covers (a) the 47 board-relevant NEW items (Swiss Cheese, Capers, Jerk Seasoning are already in ingredient-map.json - no extension needed) and (b) the 15 existing-DB items used by r300 that were missing from ingredient-map.json (11 mapped + 4 adjudicated null). Authored 2026-07-25.",
     "map":  {
                 "Pork Shoulder":  {
@@ -379,8 +379,15 @@
                                  "gpu":  45,
                                  "board":  "weekly",
                                  "status":  "existing"
-                             }
-            },
+                             },
+    "Ricotta Cheese":        { "bid": "ricotta", "unit": "oz", "gpu": 28.3495, "board": "weekly", "status": "re-pointed 2026-07-25 close-out: ricotta commodity registered (batch8), supersedes the cottage-cheese fold" },
+    "Red Onion":             { "bid": "red-onion", "unit": "lb", "gpu": 453.592, "board": "weekly", "status": "re-pointed 2026-07-25: red-onion registered, standing rejection satisfied by its own row" },
+    "Cherry Tomatoes":       { "bid": "cherry-tomatoes", "unit": "oz", "gpu": 28.3495, "board": "weekly", "status": "re-pointed 2026-07-25: cherry-tomatoes registered (pint_oz=10 guard)" },
+    "Gingersnap Cookies":    { "bid": "gingersnaps", "unit": "oz", "gpu": 28.3495, "board": "weekly", "status": "re-pointed 2026-07-25: gingersnaps registered, supersedes cookies fold" },
+    "Corn Chips":            { "bid": "corn-chips", "unit": "oz", "gpu": 28.3495, "board": "weekly", "status": "re-pointed 2026-07-25: corn-chips registered, supersedes potato-chips fold" },
+    "Smoked Turkey Sausage": { "bid": "smoked-turkey-sausage", "unit": "lb", "gpu": 453.592, "board": "weekly", "status": "re-pointed 2026-07-25: smoked-turkey-sausage registered, supersedes kielbasa fold" },
+    "Pasta Shells - jumbo":  { "bid": "jumbo-pasta-shells", "unit": "oz", "gpu": 28.3495, "board": "weekly", "status": "re-pointed 2026-07-25: jumbo-pasta-shells registered, was null/label-priced" }
+  },
     "map_notes":  {
                       "Corn Chips":  "r100 widget-map precedent (Corn Chips -\u003e potato-chips): same-class salty-bag fold at the same price class. The corn-chips -\u003e tortilla-chips rejection stands; this is a different, already-verified fold.",
                       "Ricotta Cheese":  "Follows the verified r100 widget-map precedent (Ricotta -\u003e cottage-cheese, same price class ~$0.12-0.16/oz). Concept stretch flagged for the match-soundness gate - happy to null it if the gate disagrees.",

@@ -3,7 +3,7 @@
     "new_board":  "comparison-2026-07-25.json",
     "prev_board":  "comparison-2026-07-24.json",
     "rows_was":  424,
-    "rows_now":  441,
+    "rows_now":  453,
     "thresholds":  {
                        "max_drop_cells":  15,
                        "max_drop_pct":  10
@@ -12,63 +12,63 @@
                    {
                        "store":  "Aldi",
                        "was":  299,
-                       "now":  299,
-                       "drop":  0,
-                       "pct":  0,
-                       "regression":  false,
-                       "acked":  false
-                   },
-                   {
-                       "store":  "Baker\u0027s",
-                       "was":  399,
-                       "now":  416,
-                       "drop":  -17,
-                       "pct":  -4.3,
-                       "regression":  false,
-                       "acked":  false
-                   },
-                   {
-                       "store":  "Family Fare",
-                       "was":  232,
-                       "now":  243,
-                       "drop":  -11,
-                       "pct":  -4.7,
-                       "regression":  false,
-                       "acked":  false
-                   },
-                   {
-                       "store":  "Fareway",
-                       "was":  393,
-                       "now":  394,
+                       "now":  300,
                        "drop":  -1,
                        "pct":  -0.3,
                        "regression":  false,
                        "acked":  false
                    },
                    {
+                       "store":  "Baker\u0027s",
+                       "was":  399,
+                       "now":  423,
+                       "drop":  -24,
+                       "pct":  -6,
+                       "regression":  false,
+                       "acked":  false
+                   },
+                   {
+                       "store":  "Family Fare",
+                       "was":  232,
+                       "now":  251,
+                       "drop":  -19,
+                       "pct":  -8.2,
+                       "regression":  false,
+                       "acked":  false
+                   },
+                   {
+                       "store":  "Fareway",
+                       "was":  393,
+                       "now":  395,
+                       "drop":  -2,
+                       "pct":  -0.5,
+                       "regression":  false,
+                       "acked":  false
+                   },
+                   {
                        "store":  "Hy-Vee",
                        "was":  403,
-                       "now":  417,
-                       "drop":  -14,
-                       "pct":  -3.5,
+                       "now":  426,
+                       "drop":  -23,
+                       "pct":  -5.7,
                        "regression":  false,
                        "acked":  false
                    },
                    {
                        "store":  "Sam\u0027s Club",
                        "was":  298,
-                       "now":  298,
-                       "drop":  0,
-                       "pct":  0,
+                       "now":  301,
+                       "drop":  -3,
+                       "pct":  -1,
                        "regression":  false,
                        "acked":  false
                    },
                    {
                        "store":  "Walmart",
                        "was":  411,
-                       "now":  412,
-                       "drop":  -1,
-                       "pct":  -0.2,
+                       "now":  431,
+                       "drop":  -20,
+                       "pct":  -4.9,
                        "regression":  false,
                        "acked":  false
                    }

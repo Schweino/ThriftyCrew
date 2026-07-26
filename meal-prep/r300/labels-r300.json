@@ -1,52 +1,82 @@
 [
+                  {
+                      "item":  "Bulgur Wheat",
+                      "brand":  "bettergoods (Walmart)",
+                      "product":  "bettergoods Bulgur, 12 oz",
+                      "package_size":  "12 oz",
+                      "package_price_usd":  2.42,
+                      "price_source":  "https://www.walmart.com/ip/16633701911 (captured 2026-07-25 evening, Walmart house brand, 20.2 c/oz - replaces marketplace Rani $11.99/32oz)",
+                      "status":  "price-only",
+                      "notes":  "Store-brand price basis. Macros = Bulgur Wheat USDA DB entry."
+                  },
+                  {
+                      "item":  "Pasta Shells - jumbo",
+                      "brand":  "Great Value",
+                      "product":  "Great Value Jumbo Shell, 12 oz",
+                      "package_size":  "12 oz",
+                      "package_price_usd":  1.96,
+                      "price_source":  "https://www.walmart.com/ip/10534075 (captured 2026-07-25 evening, Walmart store brand, 16.3 c/oz - replaces marketplace Barilla $7.50)",
+                      "status":  "price-only",
+                      "notes":  "Store-brand price basis. Macros = pasta DB item. GV Manicotti 8oz also $1.96 (ip/10534109)."
+                  },
+                  {
+                      "item":  "Keto Bun",
+                      "brand":  "bettergoods (Walmart)",
+                      "product":  "bettergoods Keto Friendly Hamburger Buns, 14 oz, 8 Count",
+                      "package_size":  "14 oz (8 ct)",
+                      "package_price_usd":  4.78,
+                      "price_source":  "https://www.walmart.com/ip/5352547355 (captured 2026-07-25, Walmart house brand, store price 34.1 c/oz)",
+                      "status":  "price-only",
+                      "notes":  "Macros already in food-macros-db. 8 buns per package."
+                  },
+                  {
+                      "item":  "Korean Rice Cakes",
+                      "brand":  "Fusion Select",
+                      "product":  "Fusion Select Korean Rice Cakes (Tteokbokki Sticks), 600g",
+                      "package_size":  "21.16 oz",
+                      "package_price_usd":  11.99,
+                      "price_source":  "https://www.walmart.com/ip/3731710175 (captured 2026-07-25, marketplace listing - Asian-market in-store typically cheaper; flagged premium)",
+                      "status":  "price-only",
+                      "notes":  "Macros already in food-macros-db. 600 g = 21.16 oz package."
+                  },
+                  {
+                      "item":  "Sumac",
+                      "brand":  "The Spice Way",
+                      "product":  "The Spice Way Ground Sumac 8 oz",
+                      "package_size":  "8 oz",
+                      "package_price_usd":  8.99,
+                      "price_source":  "https://www.walmart.com/ip/440994818 (captured 2026-07-25, marketplace listing)",
+                      "status":  "price-only",
+                      "notes":  "Macros already in food-macros-db. Identity spice for musakhan; used in small quantities so package premium barely moves cost/serving."
+                  },
   {
-    "item": "Bulgur Wheat",
-    "brand": "Rani",
-    "product": "Rani Cracked Wheat Fine (Kansar, Bulgur) 32oz",
-    "package_size": "32 oz",
-    "package_price_usd": 11.99,
-    "price_source": "https://www.walmart.com/ip/621670365 (captured 2026-07-25, marketplace listing - premium vs grocery-aisle typical; only bulgur at Walmart)",
-    "status": "price-only",
-    "notes": "Macros already in food-macros-db (USDA entry from mapper). This row supplies the package price basis only."
-  },
-  {
-    "item": "Pasta Shells - jumbo",
-    "brand": "Barilla",
-    "product": "Barilla Classic Blue Box Oven Pasta Jumbo Shells 12 oz",
-    "package_size": "12 oz",
-    "package_price_usd": 7.50,
-    "price_source": "https://www.walmart.com/ip/5202205898 (captured 2026-07-25, marketplace listing - in-store Barilla shells typically cheaper; flagged premium)",
-    "status": "price-only",
-    "notes": "Mapper ruled jumbo shells are 2x the dry-pasta price class, so they get their own package price rather than the pasta board row. Macros = pasta DB item."
-  },
-  {
-    "item": "Keto Bun",
-    "brand": "bettergoods (Walmart)",
-    "product": "bettergoods Keto Friendly Hamburger Buns, 14 oz, 8 Count",
-    "package_size": "14 oz (8 ct)",
-    "package_price_usd": 4.78,
-    "price_source": "https://www.walmart.com/ip/5352547355 (captured 2026-07-25, Walmart house brand, store price 34.1 c/oz)",
-    "status": "price-only",
-    "notes": "Macros already in food-macros-db. 8 buns per package."
-  },
-  {
-    "item": "Korean Rice Cakes",
+    "item": "Dried Guajillo Chiles",
     "brand": "Fusion Select",
-    "product": "Fusion Select Korean Rice Cakes (Tteokbokki Sticks), 600g",
-    "package_size": "21.16 oz",
-    "package_price_usd": 11.99,
-    "price_source": "https://www.walmart.com/ip/3731710175 (captured 2026-07-25, marketplace listing - Asian-market in-store typically cheaper; flagged premium)",
+    "product": "Fusion Select Guajillo Dried Chiles 4 oz",
+    "package_size": "4 oz",
+    "package_price_usd": 6.99,
+    "price_source": "walmart.com/ip/1690481427 MARKETPLACE listing (3P seller) - REGISTER-COST ESTIMATE ONLY, stripped from the board per the in-store rule 2026-07-25; no first-party Omaha source found",
     "status": "price-only",
-    "notes": "Macros already in food-macros-db. 600 g = 21.16 oz package."
+    "notes": "Estimate basis for the cost engine only; the board carries no Walmart cell for this id."
   },
   {
-    "item": "Sumac",
-    "brand": "The Spice Way",
-    "product": "The Spice Way Ground Sumac 8 oz",
+    "item": "Doubanjiang",
+    "brand": "Lee Kum Kee",
+    "product": "LKK Chili Bean Sauce (Toban Djan) 8 oz",
     "package_size": "8 oz",
-    "package_price_usd": 8.99,
-    "price_source": "https://www.walmart.com/ip/440994818 (captured 2026-07-25, marketplace listing)",
+    "package_price_usd": 12.79,
+    "price_source": "walmart.com/ip/302995521 MARKETPLACE listing (3P seller Affluent Supply) - REGISTER-COST ESTIMATE ONLY, stripped from the board per the in-store rule 2026-07-25; Asian-market in-store typically ~$4-5",
     "status": "price-only",
-    "notes": "Macros already in food-macros-db. Identity spice for musakhan; used in small quantities so package premium barely moves cost/serving."
+    "notes": "Overstates cost (safe direction). Macros = browser-captured label."
+  },
+  {
+    "item": "Aji Amarillo Paste",
+    "brand": "Inca's Food",
+    "product": "Inca's Food Aji Amarillo Molido 10.5 oz",
+    "package_size": "10.5 oz",
+    "package_price_usd": 8.97,
+    "price_source": "walmart.com/ip/234707985 MARKETPLACE listing (3P seller) - REGISTER-COST ESTIMATE ONLY, stripped from the board per the in-store rule 2026-07-25",
+    "status": "price-only",
+    "notes": "Estimate basis only. Macros = browser-captured Goya label."
   }
 ]

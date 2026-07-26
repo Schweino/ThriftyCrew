@@ -1,11 +1,6 @@
 {
     "readme":  "item NAME -\u003e {bid,gpu,unit} for r300 recipe ingredients, same shape as r100-board-map.json. Built by build-r300-board-map.ps1 from recipes-db item_ids (audited board ids) + the built scaler payloads\u0027 unit-reconciled gpu. gen-planner-data loads it after the r100 map, before ingredient-map.",
     "map":  {
-                "Aji Amarillo Paste":  {
-                                           "bid":  "aji-amarillo-paste",
-                                           "gpu":  28.3495,
-                                           "unit":  "oz"
-                                       },
                 "Alfredo Sauce":  {
                                       "bid":  "alfredo-sauce",
                                       "gpu":  28.3495,
@@ -101,11 +96,6 @@
                                   "gpu":  28.3495,
                                   "unit":  "oz"
                               },
-                "Doubanjiang":  {
-                                    "bid":  "doubanjiang",
-                                    "gpu":  28.3495,
-                                    "unit":  "oz"
-                                },
                 "Dried Ancho Chiles":  {
                                            "bid":  "dried-ancho-chiles",
                                            "gpu":  28.3495,
@@ -116,18 +106,13 @@
                                            "gpu":  28.3495,
                                            "unit":  "oz"
                                        },
-                "Dried Guajillo Chiles":  {
-                                              "bid":  "dried-guajillo-chiles",
-                                              "gpu":  28.3495,
-                                              "unit":  "oz"
-                                          },
                 "Eggplant":  {
                                  "bid":  "eggplant",
                                  "gpu":  548,
                                  "unit":  "each"
                              },
                 "Gingersnap Cookies":  {
-                                           "bid":  "cookies",
+                                           "bid":  "gingersnaps",
                                            "gpu":  28.3495,
                                            "unit":  "oz"
                                        },
@@ -151,6 +136,11 @@
                                        "gpu":  28.3495,
                                        "unit":  "oz"
                                    },
+                "Pasta Shells - jumbo":  {
+                                             "bid":  "jumbo-pasta-shells",
+                                             "gpu":  28.3495,
+                                             "unit":  "oz"
+                                         },
                 "Pigeon Peas":  {
                                     "bid":  "pigeon-peas",
                                     "gpu":  28.3495,
@@ -225,6 +215,11 @@
                                   "bid":  "wild-rice",
                                   "gpu":  28.3495,
                                   "unit":  "oz"
-                              }
-            }
+                              },
+    "Red Onion":             { "bid": "red-onion", "gpu": 453.592, "unit": "lb" },
+    "Ricotta Cheese":        { "bid": "ricotta", "gpu": 28.3495, "unit": "oz" },
+    "Smoked Turkey Sausage": { "bid": "smoked-turkey-sausage", "gpu": 453.592, "unit": "lb" },
+    "Cherry Tomatoes":       { "bid": "cherry-tomatoes", "gpu": 28.3495, "unit": "oz" },
+    "Corn Chips":            { "bid": "corn-chips", "gpu": 28.3495, "unit": "oz" }
+  }
 }

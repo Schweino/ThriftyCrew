@@ -175,6 +175,9 @@ function DispName([string]$slug,[string]$item){
 }
 
 # ---- slug integrity (hard fail before anything is written) ----------------------------------------
+$ownSlugs=@{}
+$runManifest = Join-Path $here 'run-slugs.txt'
+if(Test-Path $runManifest){ foreach($s in (Get-Content $runManifest)){ if($s){ $ownSlugs[$s.Trim()]=1 } } }
 $seen=@{}; $slugErrors=@()
 foreach($r in $computed){
   $slug = [string]$r.slug
@@ -182,7 +185,10 @@ foreach($r in $computed){
   if(-not $selIdx.ContainsKey($slug)){ $slugErrors += ("slug not in selected.json: $slug"); continue }
   if($seen.ContainsKey($slug)){ $slugErrors += ("duplicate slug inside the 300: $slug") }
   $seen[$slug]=1
-  if($liveSlugs.ContainsKey($slug)){ $slugErrors += ("slug collides with a LIVE recipe: $slug") }
+  # Live-collision gate: pre-publish this catches accidental reuse of an existing catalog slug.
+  # POST-publish (this run's rows are now in recipes-db) a regeneration legitimately "collides"
+  # with its own rows - the run manifest (specs-ready.txt, if present) exempts exactly those.
+  if($liveSlugs.ContainsKey($slug) -and -not $ownSlugs.ContainsKey($slug)){ $slugErrors += ("slug collides with a LIVE recipe: $slug") }
   if($selIdx[$slug].source_url -ne $r.source_url){ $slugErrors += ("source_url differs selected vs computed: $slug") }
 }
 if($slugErrors.Count -gt 0){

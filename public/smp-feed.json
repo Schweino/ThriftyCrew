@@ -1,7 +1,7 @@
 ﻿{
-    "generated":  "2026-07-25T19:52:34",
+    "generated":  "2026-07-25T20:58:04",
     "week_of":  "2026-07-25",
-    "ingredient_count":  525,
+    "ingredient_count":  530,
     "recipe_count":  513,
     "ingredients":  {
                         "ground-beef-8020":  {
@@ -19,6 +19,21 @@
                                                                 "Baker\u0027s":  6.6667,
                                                                 "Hy-Vee":  6.99,
                                                                 "Family Fare":  7.33
+                                                            }
+                                             },
+                        "ground-beef-93-7":  {
+                                                 "unit":  "lb",
+                                                 "cheapest":  6.17,
+                                                 "store":  "Sam\u0027s Club",
+                                                 "type":  "everyday",
+                                                 "url":  "",
+                                                 "n":  5,
+                                                 "stores":  {
+                                                                "Sam\u0027s Club":  6.17,
+                                                                "Walmart":  6.97,
+                                                                "Aldi":  7.49,
+                                                                "Hy-Vee":  8.99,
+                                                                "Family Fare":  9.29
                                                             }
                                              },
                         "achiote-paste":  {
@@ -42,21 +57,10 @@
                                               "stores":  {
                                                              "Fareway":  0.2027,
                                                              "Hy-Vee":  0.2178,
-                                                             "Aldi":  0.4247,
-                                                             "Baker\u0027s":  0.5543
+                                                             "Baker\u0027s":  0.2452,
+                                                             "Aldi":  0.4247
                                                          }
                                           },
-                        "aji-amarillo-paste":  {
-                                                   "unit":  "oz",
-                                                   "cheapest":  0.8543,
-                                                   "store":  "Walmart",
-                                                   "type":  "everyday",
-                                                   "url":  "",
-                                                   "n":  1,
-                                                   "stores":  {
-                                                                  "Walmart":  0.8543
-                                                              }
-                                               },
                         "alfredo-sauce":  {
                                               "unit":  "oz",
                                               "cheapest":  0.1167,
@@ -360,8 +364,8 @@
                                       "stores":  {
                                                      "Walmart":  3.96,
                                                      "Hy-Vee":  3.97,
-                                                     "Baker\u0027s":  3.9867,
                                                      "Aldi":  3.99,
+                                                     "Baker\u0027s":  3.99,
                                                      "Sam\u0027s Club":  3.992,
                                                      "Fareway":  4.99,
                                                      "Family Fare":  5.495
@@ -1504,13 +1508,12 @@
                                        },
                         "caraway-seeds":  {
                                               "unit":  "oz",
-                                              "cheapest":  1.5,
-                                              "store":  "Walmart",
+                                              "cheapest":  4.3148,
+                                              "store":  "Hy-Vee",
                                               "type":  "everyday",
                                               "url":  "",
-                                              "n":  3,
+                                              "n":  2,
                                               "stores":  {
-                                                             "Walmart":  1.5,
                                                              "Hy-Vee":  4.3148,
                                                              "Family Fare":  5.1
                                                          }
@@ -1612,14 +1615,14 @@
                                    },
                         "charcoal":  {
                                          "unit":  "lb",
-                                         "cheapest":  0.5838,
-                                         "store":  "Baker\u0027s",
+                                         "cheapest":  0.6831,
+                                         "store":  "Walmart",
                                          "type":  "everyday",
-                                         "url":  "https://www.bakersplus.com/p/kroger-ridged-charcoal-briquettes-original-15-4-lb/0004126037327",
+                                         "url":  "https://www.walmart.com/ip/Kingsford-Original-Charcoal-Briquettes-BBQ-Charcoal-for-Grilling-16-Pounds/987796704",
                                          "n":  4,
                                          "stores":  {
-                                                        "Baker\u0027s":  0.5838,
                                                         "Walmart":  0.6831,
+                                                        "Baker\u0027s":  0.7494,
                                                         "Hy-Vee":  0.8169,
                                                         "Fareway":  0.9925
                                                     }
@@ -1676,6 +1679,21 @@
                                                         "Hy-Vee":  5.99
                                                     }
                                      },
+                        "cherry-tomatoes":  {
+                                                "unit":  "oz",
+                                                "cheapest":  0.2136,
+                                                "store":  "Baker\u0027s",
+                                                "type":  "everyday",
+                                                "url":  "",
+                                                "n":  5,
+                                                "stores":  {
+                                                               "Baker\u0027s":  0.2136,
+                                                               "Sam\u0027s Club":  0.3112,
+                                                               "Family Fare":  0.329,
+                                                               "Fareway":  0.3325,
+                                                               "Hy-Vee":  0.399
+                                                           }
+                                            },
                         "chicken-broth":  {
                                               "unit":  "floz",
                                               "cheapest":  0.0391,
@@ -2115,6 +2133,19 @@
                                                                 "Hy-Vee":  3.98
                                                             }
                                              },
+                        "corn-chips":  {
+                                           "unit":  "oz",
+                                           "cheapest":  0.2041,
+                                           "store":  "Baker\u0027s",
+                                           "type":  "everyday",
+                                           "url":  "",
+                                           "n":  3,
+                                           "stores":  {
+                                                          "Baker\u0027s":  0.2041,
+                                                          "Family Fare":  0.2554,
+                                                          "Hy-Vee":  0.299
+                                                      }
+                                       },
                         "corn-dogs":  {
                                           "unit":  "each",
                                           "cheapest":  0.4994,
@@ -2444,12 +2475,12 @@
                                                        "n":  7,
                                                        "stores":  {
                                                                       "Family Fare":  0.0683,
+                                                                      "Baker\u0027s":  0.069,
                                                                       "Fareway":  0.0786,
                                                                       "Hy-Vee":  0.0821,
                                                                       "Aldi":  0.095,
                                                                       "Walmart":  0.0971,
-                                                                      "Sam\u0027s Club":  0.0998,
-                                                                      "Baker\u0027s":  0.1
+                                                                      "Sam\u0027s Club":  0.0998
                                                                   }
                                                    },
                         "dijon-mustard":  {
@@ -2604,8 +2635,8 @@
                                            "n":  6,
                                            "stores":  {
                                                           "Sam\u0027s Club":  0.0749,
+                                                          "Baker\u0027s":  0.2596,
                                                           "Walmart":  0.2756,
-                                                          "Baker\u0027s":  0.2778,
                                                           "Fareway":  0.2778,
                                                           "Aldi":  0.5255,
                                                           "Hy-Vee":  0.8
@@ -2624,17 +2655,6 @@
                                                       "Sam\u0027s Club":  0.6933
                                                   }
                                    },
-                        "doubanjiang":  {
-                                            "unit":  "oz",
-                                            "cheapest":  1.5987,
-                                            "store":  "Walmart",
-                                            "type":  "everyday",
-                                            "url":  "",
-                                            "n":  1,
-                                            "stores":  {
-                                                           "Walmart":  1.5987
-                                                       }
-                                        },
                         "drain-cleaner":  {
                                               "unit":  "floz",
                                               "cheapest":  0.0431,
@@ -2668,24 +2688,12 @@
                                                    "store":  "Family Fare",
                                                    "type":  "everyday",
                                                    "url":  "",
-                                                   "n":  3,
+                                                   "n":  2,
                                                    "stores":  {
                                                                   "Family Fare":  0.83,
-                                                                  "Walmart":  1.6175,
                                                                   "Hy-Vee":  5.98
                                                               }
                                                },
-                        "dried-guajillo-chiles":  {
-                                                      "unit":  "oz",
-                                                      "cheapest":  1.7475,
-                                                      "store":  "Walmart",
-                                                      "type":  "everyday",
-                                                      "url":  "",
-                                                      "n":  1,
-                                                      "stores":  {
-                                                                     "Walmart":  1.7475
-                                                                 }
-                                                  },
                         "dryer-sheets":  {
                                              "unit":  "each",
                                              "cheapest":  0.0207,
@@ -2846,10 +2854,9 @@
                                               "store":  "Family Fare",
                                               "type":  "everyday",
                                               "url":  "",
-                                              "n":  4,
+                                              "n":  3,
                                               "stores":  {
                                                              "Family Fare":  0.6232,
-                                                             "Walmart":  1.1238,
                                                              "Baker\u0027s":  2.6959,
                                                              "Hy-Vee":  4.6941
                                                          }
@@ -3005,7 +3012,7 @@
                                                 "n":  4,
                                                 "stores":  {
                                                                "Aldi":  0.4738,
-                                                               "Baker\u0027s":  0.6244,
+                                                               "Baker\u0027s":  0.6862,
                                                                "Walmart":  1,
                                                                "Fareway":  1.67
                                                            }
@@ -3233,7 +3240,7 @@
                                                             "Sam\u0027s Club":  0.1331,
                                                             "Walmart":  0.1742,
                                                             "Hy-Vee":  0.1748,
-                                                            "Baker\u0027s":  0.1998,
+                                                            "Baker\u0027s":  0.1968,
                                                             "Fareway":  0.329
                                                         }
                                          },
@@ -3357,6 +3364,19 @@
                                                             "Hy-Vee":  5.99
                                                         }
                                          },
+                        "gingersnaps":  {
+                                            "unit":  "oz",
+                                            "cheapest":  0.2211,
+                                            "store":  "Family Fare",
+                                            "type":  "everyday",
+                                            "url":  "",
+                                            "n":  3,
+                                            "stores":  {
+                                                           "Family Fare":  0.2211,
+                                                           "Baker\u0027s":  0.2492,
+                                                           "Hy-Vee":  0.4056
+                                                       }
+                                        },
                         "glass-cleaner":  {
                                               "unit":  "floz",
                                               "cheapest":  0.0541,
@@ -3602,10 +3622,9 @@
                                             "store":  "Sam\u0027s Club",
                                             "type":  "everyday",
                                             "url":  "https://www.samsclub.com/ip/13709709989",
-                                            "n":  7,
+                                            "n":  6,
                                             "stores":  {
                                                            "Sam\u0027s Club":  2.98,
-                                                           "Baker\u0027s":  2.99,
                                                            "Fareway":  2.99,
                                                            "Aldi":  3.29,
                                                            "Walmart":  3.41,
@@ -4117,6 +4136,18 @@
                                                      "Family Fare":  0.183
                                                  }
                                   },
+                        "jumbo-pasta-shells":  {
+                                                   "unit":  "oz",
+                                                   "cheapest":  0.2369,
+                                                   "store":  "Baker\u0027s",
+                                                   "type":  "everyday",
+                                                   "url":  "",
+                                                   "n":  2,
+                                                   "stores":  {
+                                                                  "Baker\u0027s":  0.2369,
+                                                                  "Hy-Vee":  0.4238
+                                                              }
+                                               },
                         "kale":  {
                                      "unit":  "each",
                                      "cheapest":  1.48,
@@ -4405,9 +4436,9 @@
                                                "n":  6,
                                                "stores":  {
                                                               "Fareway":  0.68,
-                                                              "Baker\u0027s":  0.758,
                                                               "Hy-Vee":  0.798,
                                                               "Sam\u0027s Club":  0.8311,
+                                                              "Baker\u0027s":  0.898,
                                                               "Walmart":  0.976,
                                                               "Family Fare":  2.995
                                                           }
@@ -4527,17 +4558,17 @@
                                           },
                         "fresh-mint":  {
                                            "unit":  "oz",
-                                           "cheapest":  0.5321,
-                                           "store":  "Baker\u0027s",
+                                           "cheapest":  0.6244,
+                                           "store":  "Family Fare",
                                            "type":  "everyday",
-                                           "url":  "https://www.bakersplus.com/p/therabreath-deep-clean-oral-rinse-fresh-mint/0069702999402",
+                                           "url":  "https://www.shopfamilyfare.com/shop/health_beauty/oral_care/rinses_fresheners_whiteners/thera_breath_deep_clean_fresh_mint_oral_rinse_16_fl_oz/p/1564405684715625091",
                                            "n":  5,
                                            "stores":  {
-                                                          "Baker\u0027s":  0.5321,
                                                           "Family Fare":  0.6244,
                                                           "Walmart":  3.56,
+                                                          "Hy-Vee":  3.9867,
                                                           "Fareway":  3.9867,
-                                                          "Hy-Vee":  3.9867
+                                                          "Baker\u0027s":  4.98
                                                       }
                                        },
                         "miracle-whip":  {
@@ -5104,10 +5135,9 @@
                                             "store":  "Baker\u0027s",
                                             "type":  "everyday",
                                             "url":  "",
-                                            "n":  2,
+                                            "n":  1,
                                             "stores":  {
-                                                           "Baker\u0027s":  0.1593,
-                                                           "Walmart":  0.1847
+                                                           "Baker\u0027s":  0.1593
                                                        }
                                         },
                         "pineapple":  {
@@ -5548,6 +5578,20 @@
                                                       "Fareway":  2.33
                                                   }
                                    },
+                        "red-onion":  {
+                                          "unit":  "lb",
+                                          "cheapest":  1.2824,
+                                          "store":  "Hy-Vee",
+                                          "type":  "everyday",
+                                          "url":  "",
+                                          "n":  4,
+                                          "stores":  {
+                                                         "Hy-Vee":  1.2824,
+                                                         "Baker\u0027s":  1.33,
+                                                         "Walmart":  1.34,
+                                                         "Family Fare":  1.99
+                                                     }
+                                      },
                         "red-pepper-flakes":  {
                                                   "unit":  "oz",
                                                   "cheapest":  0.433,
@@ -5688,6 +5732,19 @@
                                                             "Hy-Vee":  0.3908
                                                         }
                                          },
+                        "ricotta":  {
+                                        "unit":  "oz",
+                                        "cheapest":  0.183,
+                                        "store":  "Baker\u0027s",
+                                        "type":  "everyday",
+                                        "url":  "",
+                                        "n":  3,
+                                        "stores":  {
+                                                       "Baker\u0027s":  0.183,
+                                                       "Family Fare":  0.1872,
+                                                       "Hy-Vee":  0.2341
+                                                   }
+                                    },
                         "rotisserie-chicken":  {
                                                    "unit":  "each",
                                                    "cheapest":  5.97,
@@ -5984,6 +6041,20 @@
                                                                 "Fareway":  0.1019
                                                             }
                                              },
+                        "smoked-turkey-sausage":  {
+                                                      "unit":  "lb",
+                                                      "cheapest":  3.6457,
+                                                      "store":  "Sam\u0027s Club",
+                                                      "type":  "everyday",
+                                                      "url":  "",
+                                                      "n":  4,
+                                                      "stores":  {
+                                                                     "Sam\u0027s Club":  3.6457,
+                                                                     "Baker\u0027s":  4.0492,
+                                                                     "Family Fare":  5.32,
+                                                                     "Hy-Vee":  5.9141
+                                                                 }
+                                                  },
                         "snow-peas":  {
                                           "unit":  "oz",
                                           "cheapest":  0.2242,
@@ -6232,11 +6303,10 @@
                                                 "store":  "Baker\u0027s",
                                                 "type":  "everyday",
                                                 "url":  "",
-                                                "n":  3,
+                                                "n":  2,
                                                 "stores":  {
                                                                "Baker\u0027s":  0.399,
-                                                               "Hy-Vee":  0.549,
-                                                               "Walmart":  0.5931
+                                                               "Hy-Vee":  0.549
                                                            }
                                             },
                         "condensed-milk":  {

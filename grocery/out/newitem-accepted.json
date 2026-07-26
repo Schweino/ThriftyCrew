@@ -125,6 +125,55 @@
                          "size":  "15 oz"
                      },
                      {
+                         "store":  "Family Fare",
+                         "id":  "ricotta",
+                         "item":  "Our Family Ricotta Cheese, Whole Milk 15 Oz",
+                         "price":  3.49,
+                         "size":  "15 oz"
+                     },
+                     {
+                         "store":  "Family Fare",
+                         "id":  "red-onion",
+                         "item":  "Organic Red Onions",
+                         "price":  1.99,
+                         "size":  "lb"
+                     },
+                     {
+                         "store":  "Family Fare",
+                         "id":  "cherry-tomatoes",
+                         "item":  "Grape Tomatoes Our Family",
+                         "price":  3.29,
+                         "size":  "1 pt"
+                     },
+                     {
+                         "store":  "Family Fare",
+                         "id":  "gingersnaps",
+                         "item":  "Buds Best Cookies, Ginger Snaps, Old Fashioned 6 Oz",
+                         "price":  1.99,
+                         "size":  "6 oz"
+                     },
+                     {
+                         "store":  "Family Fare",
+                         "id":  "corn-chips",
+                         "item":  "Our Family Corn Chips 9 Oz",
+                         "price":  2.49,
+                         "size":  "9 oz"
+                     },
+                     {
+                         "store":  "Family Fare",
+                         "id":  "smoked-turkey-sausage",
+                         "item":  "Eckrich Skinless Turkey Smoked Sausage 12 Oz",
+                         "price":  3.99,
+                         "size":  "12 oz"
+                     },
+                     {
+                         "store":  "Family Fare",
+                         "id":  "ground-beef-93-7",
+                         "item":  "Our Certified 93% Lean / 7% Fat, Lean Ground Beef Roll, 1 Lb. 16 Oz",
+                         "price":  9.29,
+                         "size":  "16 oz"
+                     },
+                     {
                          "store":  "Hy-Vee",
                          "id":  "turkey-breast",
                          "item":  "Butterball All Natural Extra Lean Turkey Breast Tenderloins, 98%",
@@ -230,6 +279,62 @@
                          "size":  "16 oz"
                      },
                      {
+                         "store":  "Hy-Vee",
+                         "id":  "ricotta",
+                         "item":  "Hy-Vee Low Fat Ricotta Cheese",
+                         "price":  4.49,
+                         "size":  "15 oz"
+                     },
+                     {
+                         "store":  "Hy-Vee",
+                         "id":  "red-onion",
+                         "item":  "Sweet Red Onions",
+                         "price":  1.09,
+                         "size":  "0.85 lbs ($1.28/lb)"
+                     },
+                     {
+                         "store":  "Hy-Vee",
+                         "id":  "cherry-tomatoes",
+                         "item":  "NatureSweet Cherubs Fresh Heavenly Salad Grape Tomatoes, 10 oz",
+                         "price":  3.99,
+                         "size":  "10 oz"
+                     },
+                     {
+                         "store":  "Hy-Vee",
+                         "id":  "gingersnaps",
+                         "item":  "Mi-Del Gluten Free All Natural Ginger Snaps",
+                         "price":  5.99,
+                         "size":  "8 oz"
+                     },
+                     {
+                         "store":  "Hy-Vee",
+                         "id":  "corn-chips",
+                         "item":  "Hy-Vee Corn Chips",
+                         "price":  2.99,
+                         "size":  "10 oz"
+                     },
+                     {
+                         "store":  "Hy-Vee",
+                         "id":  "smoked-turkey-sausage",
+                         "item":  "Johnsonville Smoked Turkey Sausage, 6 Count, 13.5 oz",
+                         "price":  4.99,
+                         "size":  "13.5 oz"
+                     },
+                     {
+                         "store":  "Hy-Vee",
+                         "id":  "ground-beef-93-7",
+                         "item":  "93% Lean 7% Fat Fresh Ground Beef",
+                         "price":  8.99,
+                         "size":  "16 oz"
+                     },
+                     {
+                         "store":  "Hy-Vee",
+                         "id":  "jumbo-pasta-shells",
+                         "item":  "Barilla Manicotti - Non-GMO Pasta Made with Durum Wheat Semolina - Kosher Certified Pasta",
+                         "price":  3.39,
+                         "size":  "8 oz"
+                     },
+                     {
                          "store":  "Baker\u0027s",
                          "id":  "turkey-breast",
                          "item":  "Jennie-O Turkey Applewood Smoke Flavor Turkey Breast Tenderloin",
@@ -323,9 +428,58 @@
                      {
                          "store":  "Baker\u0027s",
                          "id":  "rye-bread",
-                         "item":  "Private Selection Light Rye Bread Wide Pan",
+                         "item":  "Private Selection Dark Rye Bread Wide Pan",
                          "price":  3.49,
                          "size":  "24 oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "ricotta",
+                         "item":  "Kroger Part Skim Ricotta Cheese",
+                         "price":  2.99,
+                         "size":  "15 oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "red-onion",
+                         "item":  "Jumbo Red Onions",
+                         "price":  1.69,
+                         "size":  "lb"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "cherry-tomatoes",
+                         "item":  "Cherry Tomatoes (Ciliegini)",
+                         "price":  2.99,
+                         "size":  "14 oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "gingersnaps",
+                         "item":  "Kroger Ginger Snaps Cookies",
+                         "price":  2.99,
+                         "size":  "12 oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "corn-chips",
+                         "item":  "Kroger Honey BBQ Flavored Corn Chips",
+                         "price":  1.99,
+                         "size":  "8 oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "smoked-turkey-sausage",
+                         "item":  "Kroger Hardwood Smoked Sausage Turkey Link 13 OZ",
+                         "price":  3.29,
+                         "size":  "13 oz"
+                     },
+                     {
+                         "store":  "Baker\u0027s",
+                         "id":  "jumbo-pasta-shells",
+                         "item":  "Private Selection Italian Jumbo Shells",
+                         "price":  3.79,
+                         "size":  "16 oz"
                      }
                  ]
 }

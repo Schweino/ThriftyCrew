@@ -8,11 +8,18 @@
   Scope is deliberately tiny and reversible: only rows whose source_ad says 'batch primer' AND whose as_of is
   today are eligible, so nothing captured by any other pull can ever be touched.
 #>
-param([switch]$WhatIf)
+param([switch]$WhatIf, [string]$IdsFile = 'out\r300\r300-ids.txt')
 $ErrorActionPreference = 'Stop'
 $root = 'C:\Codex\income\grocery'
 $today = (Get-Date).ToString('yyyy-MM-dd')
-$ids = ((Get-Content (Join-Path $root 'out\r300\r300-ids.txt') -Raw).Trim() -split ',')
+# every registered batch id must be considered, not just the batch being purged: a row primed for batch A that
+# legitimately belongs to batch B must not be deleted as "off-target".
+$ids = @()
+foreach ($f in @('out\r300\r300-ids.txt', 'out\r300\batch8-ids.txt')) {
+  $p = Join-Path $root $f
+  if (Test-Path $p) { $ids += ((Get-Content $p -Raw).Trim() -split ',') }
+}
+$ids = @($ids | Where-Object { $_ })
 
 $rules = @{}
 foreach ($c in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) { $rules[[string]$c.id] = $c }

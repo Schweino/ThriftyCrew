@@ -1,4 +1,4 @@
-<#
+﻿<#
   build-r300-fills.ps1 - turn every row this batch contributed to a store file (Family Fare + Hy-Vee via the
   primer, Baker's via the Kroger API) into validate-fills.ps1's candidate shape, so the STANDING guard - not
   just my own diff - re-runs each product name through the real Match-Category (array order + GLOBAL_EXCLUDE +
@@ -11,7 +11,9 @@
 $ErrorActionPreference = 'Stop'
 $root = 'C:\Codex\income\grocery'
 $today = (Get-Date).ToString('yyyy-MM-dd')
-$ids = ((Get-Content (Join-Path $root 'out\r300\r300-ids.txt') -Raw).Trim() -split ',')
+$ids = @()
+foreach ($f in @('out\r300\r300-ids.txt','out\r300\batch8-ids.txt')) { $fp = Join-Path $root $f; if (Test-Path $fp) { $ids += ((Get-Content $fp -Raw).Trim() -split ',') } }
+$ids = @($ids | Where-Object { $_ })
 
 $rules = @{}
 foreach ($c in (Get-Content (Join-Path $root 'commodities.json') -Raw | ConvertFrom-Json)) { $rules[[string]$c.id] = $c }
@@ -46,3 +48,4 @@ foreach ($fx in $files) {
 $outF = Join-Path $root 'out\r300\r300-fill-candidates.json'
 (@{ readme = 'r300 batch fill rows, per store x commodity, cheapest-first - input for validate-fills.ps1'; candidates = $groups.ToArray() } | ConvertTo-Json -Depth 6) | Set-Content $outF -Encoding UTF8
 Write-Output ("wrote {0} store x commodity group(s) -> {1}" -f $groups.Count, $outF)
+

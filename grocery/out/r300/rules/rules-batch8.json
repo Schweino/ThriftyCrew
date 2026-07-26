@@ -1,0 +1,74 @@
+[
+  {
+    "id": "ricotta",
+    "label": "Ricotta Cheese",
+    "unit": "oz",
+    "include": ["\\bricotta\\b"],
+    "exclude": ["\\bsalata\\b", "\\blasagna\\b", "\\bravioli\\b", "\\btortellini\\b", "\\bcannoli\\b", "\\bpizza\\b", "\\bpasta\\b", "\\bshells?\\b", "\\bmanicotti\\b", "\\bcake\\b", "\\bpie\\b", "\\bfilling\\b"],
+    "search_term": "ricotta cheese",
+    "note": "cottage-cheese (index 9) is phrase-anchored to 'cottage cheese' and CANNOT reach a ricotta product - proven by the pre-registration probe (all three ricotta names resolved to nobody), so no reciprocal exclude is needed there and none was added (an exclude that can never fire is noise). The fence in this direction is real though: ricotta is a NAMED INGREDIENT of lasagna/ravioli/cannoli/cheesecake, and those carriers are the way a $0.25/oz dessert would come to price a $0.13/oz tub. Ricotta SALATA is a hard aged cheese at several times the price - excluded."
+  },
+  {
+    "id": "red-onion",
+    "label": "Red Onions",
+    "unit": "lb",
+    "include": ["red\\s+onions?"],
+    "exclude": ["\\bpowder\\b", "\\brings?\\b", "\\bdressing\\b", "\\bpickled\\b", "\\bmarmalade\\b", "\\bjam\\b", "\\brelish\\b", "\\bdiced\\b", "\\bchopped\\b", "\\bsliced\\b", "\\bseeds?\\b", "\\bplant\\b", "\\bsets\\b", "\\bchips?\\b", "\\bsalsa\\b", "\\bhummus\\b"],
+    "search_term": "red onion",
+    "note": "Fenced BOTH ways with no edit needed on onions (index 19): its own exclude list ALREADY carries 'red\\s+onion' (the standing variety-pricing rejection), which the probe confirms - 'Red Onions, 3 lb Bag' resolved to nobody before registration while 'Yellow Onions' and 'White Onions' stayed with onions. So yellow coverage cannot move. Prepped forms (diced/chopped/sliced tubs) excluded: a cut-produce pack is a different price class from a whole onion."
+  },
+  {
+    "id": "cherry-tomatoes",
+    "label": "Cherry / Grape Tomatoes",
+    "unit": "oz",
+    "include": ["cherry\\s+tomatoes?", "grape\\s+tomatoes?", "tomatoes?,?\\s+cherry", "tomatoes?,?\\s+grape"],
+    "exclude": ["sun[\\s-]?dried", "\\bdried\\b", "\\bpaste\\b", "\\bplant\\b", "\\bseeds?\\b", "\\bsalsa\\b", "\\bbruschetta\\b", "\\bpizza\\b", "\\bpasta\\b", "\\bsalad\\s+kit\\b"],
+    "search_term": "cherry tomatoes",
+    "note": "Reciprocal exclude added to tomatoes (index 42): its bare '\\btomato(?:es)?\\b' was claiming every cherry and grape clamshell - that IS the proxy the audit recorded as debt. Verified against the live tomatoes cells first: all seven are roma / vine / beefsteak, so the fence drops NOTHING from the base row. Roma and slicing stay on tomatoes by design. ALSO declares pint_oz=10: a bare '1 pt' size on an oz commodity converts to 16 oz in the engine, which would price a 10 oz clamshell 1.6x too cheap and win the cheapest slot with a fiction. 10 oz is the US retail cherry/grape pint (NatureSweet et al)."
+  },
+  {
+    "id": "gingersnaps",
+    "label": "Gingersnap Cookies",
+    "unit": "oz",
+    "include": ["ginger\\s*snaps?"],
+    "exclude": ["\\bdough\\b", "\\bcrust\\b", "\\bcrumbs?\\b", "\\bcheesecake\\b", "\\bice\\s*cream\\b", "\\bcoffee\\b", "\\bcreamer\\b", "\\blatte\\b", "\\bcandle\\b", "\\bdog\\b", "\\bhouse\\s*kit\\b"],
+    "search_term": "ginger snaps",
+    "note": "Reciprocal exclude added to cookies (index 220): its '\\bcookies?\\b' was claiming 'Nabisco Ginger Snaps COOKIES' and 'Great Value Gingersnap COOKIES'. Live cookies cells are all chocolate-chip / vanilla-wafer, so the fence drops nothing. RELAX \\bsnack\\b for parity with cookies (party/snack-size bags). 'Gingersnap' is also a flavor word on creamers, lattes and candles - fenced."
+  },
+  {
+    "id": "corn-chips",
+    "label": "Corn Chips (Fritos class)",
+    "unit": "oz",
+    "include": ["corn\\s+chips?", "\\bfritos\\b"],
+    "exclude": ["tortilla", "\\btostada\\b", "taco\\s+shells?", "\\bsalsa\\b", "\\bqueso\\b", "\\bpuffs?\\b", "\\bcurls?\\b", "\\bcheetos\\b", "\\bchili\\s+cheese\\s+dip\\b", "\\bnuts\\b", "\\bcombo\\b"],
+    "search_term": "corn chips",
+    "note": "PRODUCT-CLASS TRAP, per the r100 ruling: corn chips (Fritos) are NOT tortilla chips, and that cross-concept flip stays rejected. Both existing rows are phrase-anchored ('potato\\s+chips?' index 82, 'tortilla\\s+chips?' index 81) so neither could ever claim 'Fritos Original Corn Chips' - the probe confirmed nobody claimed it. Reciprocal 'corn\\s+chips?' + '\\bfritos\\b' excludes were still added to BOTH rows as durable class fences (they are no-ops today and the diff proves they removed nothing; they exist so a future include loosening cannot silently re-create the proxy). RELAX \\bsnack\\b + flavored, matching potato-chips and tortilla-chips - without them every 'flavored'/'snack size' bag is globally dropped."
+  },
+  {
+    "id": "smoked-turkey-sausage",
+    "label": "Smoked Turkey Sausage",
+    "unit": "lb",
+    "include": ["turkey\\s+smoked\\s+sausage", "smoked\\s+turkey\\s+sausage", "turkey\\s+(?:polska\\s+)?kielbasa", "turkey\\s+sausage\\b.{0,20}smoked", "smoked\\s+sausage\\b.{0,20}turkey"],
+    "exclude": ["breakfast", "\\bpatt(?:y|ies)\\b", "\\bbratwurst\\b", "\\bbrats\\b", "\\bitalian\\b", "\\bground\\b", "\\bjerky\\b", "\\bsticks?\\b", "\\bbites\\b", "\\bfranks?\\b", "\\bhot\\s*dogs?\\b", "\\bcrumbles\\b", "\\bdeli\\b", "\\bsliced\\b"],
+    "search_term": "turkey smoked sausage",
+    "note": "Fenced BOTH ways with no edit needed on kielbasa (index 133): its include reaches 'smoked sausage' but its own exclude list ALREADY carries 'turkey' AND 'chicken', so a Butterball/Jennie-O turkey rope cannot land there - probe-confirmed (all three turkey names resolved to nobody, while 'Hillshire Farm Polska Kielbasa Smoked Sausage' stayed with kielbasa). bratwurst and italian-sausage are phrase-anchored to their own words and are excluded here as well."
+  },
+  {
+    "id": "ground-beef-93-7",
+    "label": "93/7 Lean Ground Beef",
+    "unit": "lb",
+    "include": ["93\\s*%?\\s*lean", "93\\s*/\\s*7", "ground\\s+beef[^.]*93", "93\\s*%?\\s*lean[^.]*ground\\s+beef"],
+    "exclude": ["turkey", "chicken", "\\bpork\\b", "\\bbison\\b", "meatball", "patty", "patties", "\\bjerky\\b", "80%", "80/20", "85%", "85/15", "90%", "90/10", "96%", "96/4", "organic", "grass[\\s-]*fed", "\\bcrumbles\\b", "\\bsticks?\\b"],
+    "search_term": "93 lean ground beef",
+    "note": "Fenced BOTH ways. ground-beef-8020 (index 2) already excluded '93%', so it never claimed these (probe: all three 93/7 names resolved to nobody); '93\\s*/\\s*7' was added to its exclude anyway so the slash spelling is fenced by RULE and not by luck. THE LEAN-POINT DECISION, documented rather than guessed: 90/10, 85/15 and 96/4 are claimed by NEITHER row. 8020 already excluded them, and folding any of them into 93/7 would misprice - 85/15 and 90/10 are cheaper per lb and would win the cheapest slot with a fattier product, 96/4 is dearer and would inflate it. They stay an honest, visible gap; if Brad wants them tracked they are their own rows, not a fold."
+  },
+  {
+    "id": "jumbo-pasta-shells",
+    "label": "Jumbo Pasta Shells / Manicotti",
+    "unit": "oz",
+    "include": ["jumbo\\s+(?:pasta\\s+)?shells?", "shells?\\s+jumbo", "\\bmanicotti\\b"],
+    "exclude": ["\\bcheese\\b", "\\bravioli\\b", "\\bmeat\\s+filled\\b", "\\bentree\\b", "\\bdinner\\b", "\\bstouffer", "\\bmicrowav"],
+    "search_term": "jumbo pasta shells",
+    "note": "Reciprocal exclude added to pasta (index 57): its '\\bpasta\\b' include was claiming 'Barilla Jumbo Shells Pasta' and 'Great Value Jumbo Pasta Shells'. The pasta row's existing filled-pasta excludes (ravioli/tortellini/lasagna) do NOT cover jumbo shells or manicotti - verified, which is why the reciprocal was necessary. MEDIUM/small shells and elbows stay on pasta (my include requires the word jumbo), probe-confirmed. Stuffed/frozen manicotti is dropped by the global \\bstuffed\\b and \\bfrozen\\b tokens, which this row does NOT relax - dry boxes only."
+  }
+]

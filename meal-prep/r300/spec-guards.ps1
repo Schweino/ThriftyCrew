@@ -33,6 +33,9 @@ $computed = Get-Content (Join-Path $here 'recipes-computed.json') -Raw | Convert
 $compIdx=@{}; foreach($r in $computed){ $compIdx[[string]$r.slug]=$r }
 $liveSlugs=@{}
 foreach($m in [regex]::Matches([IO.File]::ReadAllText((Join-Path $here '..\recipes-db.json')), '"slug"\s*:\s*"([^"]+)"')){ $liveSlugs[$m.Groups[1].Value]=1 }
+$runSlugs=@{}
+$runManifest = Join-Path $here 'run-slugs.txt'
+if(Test-Path $runManifest){ foreach($s in (Get-Content $runManifest)){ if($s){ $runSlugs[$s.Trim()]=1 } } }
 
 $WEIGH = 'Weigh your empty mixing pot and write the number down for portioning later.'
 $fails=@{}; $ready=@()
@@ -62,7 +65,9 @@ foreach($sf in $specs){
   if($slug -ne $sf.BaseName){ Fail $sf.BaseName ("slug '$slug' != filename") }
   if($slugSeen.ContainsKey($slug)){ Fail $slug 'duplicate slug across spec files' }
   $slugSeen[$slug]=1
-  if($liveSlugs.ContainsKey($slug)){ Fail $slug 'slug collides with a LIVE recipe' }
+  # Post-publish regen: this run's own rows are in recipes-db now. run-slugs.txt (the immutable
+  # run manifest, written from selected.json) exempts exactly those from the live-collision gate.
+  if($liveSlugs.ContainsKey($slug) -and -not $runSlugs.ContainsKey($slug)){ Fail $slug 'slug collides with a LIVE recipe' }
   foreach($k in @('name','slug','cuisine','protein','servings','visibility','source_url','source_site','stat','ingredients_display','cost_lines','credit_html','scaler','head','ingredients_grams')){
     if($spec.PSObject.Properties.Name -notcontains $k){ Fail $slug ("missing field: $k") }
   }

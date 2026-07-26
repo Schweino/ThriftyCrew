@@ -18,9 +18,12 @@ foreach($p in $feed.PSObject.Properties){ $feedUnit[$p.Name]=[string]$p.Value.un
 $mapNew=(Get-Content (Join-Path $here 'r100\r100-board-map.json') -Raw | ConvertFrom-Json).map
 $mapR300=(Get-Content (Join-Path $here 'r300\r300-board-map.json') -Raw | ConvertFrom-Json).map   # 2026-07-25 close-out: r300 names (Turkey Breast, Pork Shoulder, ...) were feed-unpriced without it
 $mapOld=(Get-Content (Join-Path $here 'ingredient-map.json') -Raw | ConvertFrom-Json).mappings
+# PRECEDENCE (flipped 2026-07-25 close-out): r300 map FIRST - it is derived from the CURRENT audited
+# recipes-db item_ids (incl. the proxy-debt re-points: Red Onion->red-onion, Ricotta->ricotta, ...).
+# r100's era map second, the 90-run map last.
 $item=@{}
-foreach($p in $mapNew.PSObject.Properties){ $item[$p.Name]=@{bid=$p.Value.bid;gpu=[double]$p.Value.gpu;unit=[string]$p.Value.unit} }
-foreach($p in $mapR300.PSObject.Properties){ if(-not $item.ContainsKey($p.Name)){ $item[$p.Name]=@{bid=$p.Value.bid;gpu=[double]$p.Value.gpu;unit=[string]$p.Value.unit} } }
+foreach($p in $mapR300.PSObject.Properties){ $item[$p.Name]=@{bid=$p.Value.bid;gpu=[double]$p.Value.gpu;unit=[string]$p.Value.unit} }
+foreach($p in $mapNew.PSObject.Properties){ if(-not $item.ContainsKey($p.Name)){ $item[$p.Name]=@{bid=$p.Value.bid;gpu=[double]$p.Value.gpu;unit=[string]$p.Value.unit} } }
 foreach($m in $mapOld){ if(-not $item.ContainsKey($m.item)){ $item[$m.item]=@{bid=$m.board_id;gpu=[double]$m.grams_per_unit;unit=[string]$m.unit} } }
 $UNIT_G=@{ lb=453.592; oz=28.3495; floz=29.57; kg=1000.0; g=1.0 }
 
@@ -73,6 +76,10 @@ function J([string]$s){
   return '"'+$s+'"'
 }
 
+# reader-facing display renames (macro/pricing identity stays canonical; the shopper must see the
+# real grocery name - mirrors the card-side scaler rename, e.g. japchae's dangmyeon vs Cornstarch)
+$DISPLAY_OVERRIDES=@{ 'korean-turkey-japchae|Cornstarch'='Korean glass noodles (dangmyeon)' }
+
 $rows=New-Object System.Collections.Generic.List[string]
 $withBid=0; $totalIng=0
 foreach($r in $db){
@@ -85,7 +92,10 @@ foreach($r in $db){
     $extra=''
     if($fb){ $withBid++; $extra=',"bid":'+(J $fb.bid)+',"gpu":'+$fb.gpu }
     if($pkg.ContainsKey($ing.item)){ $extra+=',"pk":'+$pkg[$ing.item].g+',"pl":'+(J $pkg[$ing.item].l) }
-    [void]$ings.Add('{"i":'+(J $ing.item)+',"g":'+$g+',"b":'+(J ([string]$ing.buy))+$extra+'}')
+    $dispName=[string]$ing.item
+    $ovKey=([string]$r.slug)+'|'+$dispName
+    if($DISPLAY_OVERRIDES.ContainsKey($ovKey)){ $dispName=$DISPLAY_OVERRIDES[$ovKey] }
+    [void]$ings.Add('{"i":'+(J $dispName)+',"g":'+$g+',"b":'+(J ([string]$ing.buy))+$extra+'}')
   }
   $cps=[double]$r.cost_per_serving
   [void]$rows.Add('{"s":'+(J $r.slug)+',"n":'+(J $r.name)+',"c":'+(J ([string]$r.cuisine))+',"p":'+(J (Get-ProteinCat $r))+

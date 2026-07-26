@@ -1,0 +1,1729 @@
+{
+    "readme":  "STANDING canon-rules base, promoted 2026-07-25 from the audit-passed r300 build (authored 208 + rebased-r100 223 + latent-bug patches: sage \b, sausages->Bratwurst, mushroom-vs-cream-of, egg-in-eggplant, butter-in-butternut...). Future runs load THIS file first, then their own run-specific additions. Rebuild/promote only from an audit-passed run (see NEXT-RUN-PLAYBOOK stage 2.5 note). First match wins, case-insensitive.",
+    "rules":  [
+                  [
+                      "^(sauce|sides|rub|stew|gravy|spices|seasonings|topping|toppings|topping options|meatballs|serve with|to serve|you also need|taco ingredients|meat \u0026 binder|chicken and rice|pork birria|turkey filling|hashweh filling|kibbeh mixture|for the sauce|sauce ingredients|wet ingredients \u0026 seasonings)$",
+                      "DROP"
+                  ],
+                  [
+                      "spice mixture above|shepherd\u0027s pie|doner kebab|glaze for topping|^garnish|^for serving|^for the |flaked almonds|fried shallots|crispy shallots|shallot pickle|romaine|optional boiled eggs|potato cooking water",
+                      "DROP"
+                  ],
+                  [
+                      "^vegetables?$|vegetables or more|panade \u0026 vegetables",
+                      "DROP"
+                  ],
+                  [
+                      "frozen vegetables|leftover vegetables",
+                      "Frozen Green Peas"
+                  ],
+                  [
+                      "blanched green vegetable",
+                      "Broccoli Florets"
+                  ],
+                  [
+                      "skewer|^ice$|blood jelly|ratanjot|arugula|bok choy|\\bradish|jicama|perilla|carom seed|asafetida|gumbo|crouton|fios de|pickled (red )?ginger",
+                      "DROP"
+                  ],
+                  [
+                      "garlic toast|texas toast|crusty bread or pita",
+                      "DROP"
+                  ],
+                  [
+                      "juices from the crockpot|juices/drippings|additional horseradish|zest of 1 lemon|zest from 1 orange|lime wedge",
+                      "DROP"
+                  ],
+                  [
+                      "oil spray|cooking spray",
+                      "DROP"
+                  ],
+                  [
+                      "^sausages?$",
+                      "Bratwurst"
+                  ],
+                  [
+                      "^water\\b(?! or (chicken|beef))|^hot water|^tap water|^filtered water|^bit of water|quente",
+                      "DROP"
+                  ],
+                  [
+                      "shrimp paste|whole raw prawn|raw king prawn|prawns?/shrimp",
+                      "DROP"
+                  ],
+                  [
+                      "tequila|vodka|coconut slices",
+                      "DROP"
+                  ],
+                  [
+                      "sumac",
+                      "Sumac"
+                  ],
+                  [
+                      "cream of chicken|cream of celery|broccoli cheese soup",
+                      "Cream of Chicken Soup"
+                  ],
+                  [
+                      "cream of mushroom",
+                      "Cream of Mushroom Soup"
+                  ],
+                  [
+                      "celery salt",
+                      "Salt"
+                  ],
+                  [
+                      "pickled mustard greens",
+                      "DROP"
+                  ],
+                  [
+                      "mustard oil",
+                      "Vegetable Oil"
+                  ],
+                  [
+                      "sofrito",
+                      "Salsa"
+                  ],
+                  [
+                      "stewed tomatoes",
+                      "Diced Tomatoes"
+                  ],
+                  [
+                      "chickpea flour|gram flour|besan",
+                      "All-Purpose Flour"
+                  ],
+                  [
+                      "^olive oil",
+                      "Olive Oil"
+                  ],
+                  [
+                      "^penne",
+                      "Penne Pasta"
+                  ],
+                  [
+                      "corned beef",
+                      "Corned Beef Brisket"
+                  ],
+                  [
+                      "ground (beef|meat).*lamb",
+                      "93/7 Ground Beef"
+                  ],
+                  [
+                      "\\blamb\\b",
+                      "NEW:PROTEIN-SWAP-LAMB"
+                  ],
+                  [
+                      "\\blivers?\\b|giblet",
+                      "Chicken Livers"
+                  ],
+                  [
+                      "kie.basa",
+                      "Smoked Turkey Sausage"
+                  ],
+                  [
+                      "\\bbrats?\\b|bratwurst",
+                      "Bratwurst"
+                  ],
+                  [
+                      "bacon|lardon",
+                      "Hickory Smoked Bacon"
+                  ],
+                  [
+                      "\\bham\\b",
+                      "Diced Ham"
+                  ],
+                  [
+                      "chorizo",
+                      "Pork Chorizo"
+                  ],
+                  [
+                      "pork tenderloin|pork fillet",
+                      "Pork Tenderloin"
+                  ],
+                  [
+                      "pork (loin )?chops?|pork steak|^chops$",
+                      "Pork Chops"
+                  ],
+                  [
+                      "pork sirloin|pork loin",
+                      "Pork Loin"
+                  ],
+                  [
+                      "pork (\u0026|and) beans",
+                      "Baked Beans"
+                  ],
+                  [
+                      "pork belly|pork butt|pork shoulder|pork spare ribs|country.style pork ribs|pork back ribs|pulled pork|bone-in pork roast|50% belly",
+                      "Pork Shoulder"
+                  ],
+                  [
+                      "ground pork|pork mince|pork sausage",
+                      "Ground Pork"
+                  ],
+                  [
+                      "^pork\\b",
+                      "Pork Shoulder"
+                  ],
+                  [
+                      "broth from boiling|low sodium chicken or turkey broth|turkey or chicken broth|^broth\\b|and pork stock|^stock\\b|^bouillon( paste)?$|caldo de galinha|maggi|rosdee|dried sea kelp|coconut water|vinho branco|cognac",
+                      "Chicken Broth"
+                  ],
+                  [
+                      "beef powder|royco",
+                      "Beef Broth"
+                  ],
+                  [
+                      "chicken fat|shortening|beurre",
+                      "Butter"
+                  ],
+                  [
+                      "^lard\\b",
+                      "Vegetable Oil"
+                  ],
+                  [
+                      "bay lea",
+                      "Bay Leaves"
+                  ],
+                  [
+                      "poultry seasoning|chicken spice",
+                      "Poultry Seasoning"
+                  ],
+                  [
+                      "cooked (chopped |shredded |cubed )?chicken|rotisserie",
+                      "Boneless Skinless Chicken Breast"
+                  ],
+                  [
+                      "ground chicken",
+                      "Boneless Skinless Chicken Thigh"
+                  ],
+                  [
+                      "chicken legs|chicken pieces|assorted chicken|chicken party wings|chicken, broken|^chicken \\d|skin-on chicken|sobrecoxas|frango",
+                      "Boneless Skinless Chicken Thigh"
+                  ],
+                  [
+                      "ground turkey sausage",
+                      "93/7 Ground Turkey"
+                  ],
+                  [
+                      "turkey sausage",
+                      "Smoked Turkey Sausage"
+                  ],
+                  [
+                      "ground turkey",
+                      "93/7 Ground Turkey"
+                  ],
+                  [
+                      "cooked[^,]*turkey|leftover turkey|roast(ed)? turkey|chopped turkey|^turkey$|jennie",
+                      "Turkey Breast"
+                  ],
+                  [
+                      "^beef or chicken$|chuck|brisket|stew(ing)? (meat|beef)|short rib|beef shank|beef neck|beef with bones|^diced beef$|^beef$|veal shoulder|round steak|beef roast",
+                      "Beef Chuck Roast"
+                  ],
+                  [
+                      "flank|skirt steak|sirloin|strip steak|scotch fillet|rib eye|striploin|thinly sliced beef|thinly cut beef",
+                      "Beef Flank/Sirloin Steak"
+                  ],
+                  [
+                      "garlic and ginger paste|ginger garlic",
+                      "Garlic"
+                  ],
+                  [
+                      "^garlic[,;]|^garlic -|^garlic (cloves?|minced|chopped|diced|mashed|peeled|pressed|sliced|loves)|crushed garlic|dentes de alho",
+                      "Garlic"
+                  ],
+                  [
+                      "^\\d[-\\d ]*cloves$",
+                      "Garlic"
+                  ],
+                  [
+                      "whole cloves|teaspoon cloves",
+                      "Ground Cloves"
+                  ],
+                  [
+                      "gingersnap",
+                      "Gingersnap Cookies"
+                  ],
+                  [
+                      "dry ginger powder",
+                      "Ground Ginger"
+                  ],
+                  [
+                      "^ginger[ ,]|piece (of )?ginger|piece ginger|grated\\s+ginger|inch\\s+ginger|lb ginger|thumb.size ginger|chopped ginger",
+                      "Ginger"
+                  ],
+                  [
+                      "cebola verde",
+                      "Green Onions"
+                  ],
+                  [
+                      "eschall?ot|cebola",
+                      "Yellow Onion"
+                  ],
+                  [
+                      "aromatic herb packet",
+                      "Five-Spice Powder"
+                  ],
+                  [
+                      "tomatoes pureed|crushed (canned )?tomato",
+                      "Crushed Tomatoes"
+                  ],
+                  [
+                      "^tomato juice$|tomato puree",
+                      "Tomato Sauce"
+                  ],
+                  [
+                      "tomato concentrate|extrato de tomate",
+                      "Tomato Paste"
+                  ],
+                  [
+                      "^tomatoes$|^(canned chopped|chopped|fresh|juicy) tomatoes$|^plum tomatoes|^tomato(es)?\\s*[,-]?\\s*(diced|chopped|quartered|finely|sliced|peeled)|^diced tomato$|tomates grandes|vine.ripened|^4- 6 tomatoes",
+                      "Diced Tomatoes"
+                  ],
+                  [
+                      "red capsicum|diced red pepper|red pepper chopped|red peppers cleaned",
+                      "Red Bell Pepper"
+                  ],
+                  [
+                      "capsicum|chopped bell pepper|grande picado",
+                      "Green Bell Peppers"
+                  ],
+                  [
+                      "hot pepper sauce|tabasco|african pepper sauce|peri peri sauce",
+                      "Hot Sauce"
+                  ],
+                  [
+                      "peri peri seasoning",
+                      "Cajun Seasoning"
+                  ],
+                  [
+                      "red chili flakes|crushed red pepper|chili flakes|gochugaru|korean chili flakes|calabrian",
+                      "Red Pepper Flakes"
+                  ],
+                  [
+                      "guajillo|kashmiri(?!.*powder)",
+                      "Dried Guajillo Chiles"
+                  ],
+                  [
+                      "ancho chile|dried ancho",
+                      "Dried Ancho Chiles"
+                  ],
+                  [
+                      "rbol chile|dried [a-z ]*chill?i",
+                      "Dried Arbol Chiles"
+                  ],
+                  [
+                      "can green chiles|chopped green chiles",
+                      "Diced Green Chiles"
+                  ],
+                  [
+                      "green chiles, cut",
+                      "Poblano Peppers"
+                  ],
+                  [
+                      "^hot (green )?pepper$|thai peppers|red chill?i(es)?\\b(?!\\s*(powder|flakes))|chilies, adjust|green or red chillies",
+                      "Jalapeno"
+                  ],
+                  [
+                      "green peppers?\\b",
+                      "Green Bell Peppers"
+                  ],
+                  [
+                      "jalape",
+                      "Jalapeno"
+                  ],
+                  [
+                      "green beans",
+                      "Green Beans"
+                  ],
+                  [
+                      "snow peas",
+                      "Snow Peas"
+                  ],
+                  [
+                      "^peas,|petite peas|frozen or fresh peas|ervilhas",
+                      "Frozen Green Peas"
+                  ],
+                  [
+                      "corn starch",
+                      "Cornstarch"
+                  ],
+                  [
+                      "^corn$|^corn,|corn kernels|frozen or fresh corn",
+                      "Sweet Whole Kernel Corn"
+                  ],
+                  [
+                      "hominy",
+                      "Hominy"
+                  ],
+                  [
+                      "northern beans|cannellini|white beans|mixed beans|butter ?/? ?(lima )?beans|butter/lima beans",
+                      "Cannellini Beans"
+                  ],
+                  [
+                      "buttered (noddles|noodles|toast)",
+                      "DROP"
+                  ],
+                  [
+                      "birds eye frozen|frozen mixed vegetables",
+                      "Frozen Green Peas"
+                  ],
+                  [
+                      "garbanzo",
+                      "Chickpeas"
+                  ],
+                  [
+                      "pigeon",
+                      "Pigeon Peas"
+                  ],
+                  [
+                      "refried",
+                      "Seasoned Black Beans"
+                  ],
+                  [
+                      "sauerkraut",
+                      "Sauerkraut"
+                  ],
+                  [
+                      "\\bkale\\b|lacinato|escarole",
+                      "Kale"
+                  ],
+                  [
+                      "brussels",
+                      "Brussels Sprouts"
+                  ],
+                  [
+                      "^cauliflower",
+                      "Broccoli Florets"
+                  ],
+                  [
+                      "artichoke",
+                      "Artichoke Hearts"
+                  ],
+                  [
+                      "butternut|peeled and diced squash",
+                      "Sweet Potatoes"
+                  ],
+                  [
+                      "potato starch",
+                      "Cornstarch"
+                  ],
+                  [
+                      "potato puffs",
+                      "Tater Tots"
+                  ],
+                  [
+                      "eggplant",
+                      "Eggplant"
+                  ],
+                  [
+                      "parm[ai]giano|reggiano",
+                      "Parmesan Cheese"
+                  ],
+                  [
+                      "french onion soup",
+                      "Beef Broth"
+                  ],
+                  [
+                      "onion soup",
+                      "Onion Soup Mix"
+                  ],
+                  [
+                      "\\byuca\\b|\\btaro\\b",
+                      "Potato"
+                  ],
+                  [
+                      "french fries",
+                      "Fries"
+                  ],
+                  [
+                      "apple juice|apple cider(?! vinegar)",
+                      "Apple Juice"
+                  ],
+                  [
+                      "^apples?\\b(?! cider| juice)|granny smith|^red apple$|firm apple",
+                      "Apple"
+                  ],
+                  [
+                      "blackberr",
+                      "Blackberries"
+                  ],
+                  [
+                      "naranjilla|juice of 1 orange",
+                      "Orange Juice"
+                  ],
+                  [
+                      "dried apricot|prune|^dates|sultana",
+                      "Golden Raisins"
+                  ],
+                  [
+                      "loomi|dried lime",
+                      "Lime Juice"
+                  ],
+                  [
+                      "anardana|dried pomegranate",
+                      "Pomegranate Molasses"
+                  ],
+                  [
+                      "candlenut",
+                      "Cashews"
+                  ],
+                  [
+                      "almonds",
+                      "Almonds"
+                  ],
+                  [
+                      "pecan",
+                      "Walnuts"
+                  ],
+                  [
+                      "pumpkin puree|can pumpkin",
+                      "Pumpkin Puree"
+                  ],
+                  [
+                      "gouda|sharp cheese",
+                      "Cheddar Cheese, Shredded"
+                  ],
+                  [
+                      "italian cheese blend",
+                      "Reduced Fat Mozzarella"
+                  ],
+                  [
+                      "pepperjack|monterrey|mexican blend",
+                      "Mexican Cheese Blend"
+                  ],
+                  [
+                      "^crema$",
+                      "Light Sour Cream"
+                  ],
+                  [
+                      "heavy/whipping|whipping cream|double cream|half-and-half|^and half|evaporated milk",
+                      "Heavy Cream"
+                  ],
+                  [
+                      "condensed milk",
+                      "Sugar"
+                  ],
+                  [
+                      "^milk\\b|% milk|cups milk|soup can milk|warm milk",
+                      "Milk"
+                  ],
+                  [
+                      "coconut cream",
+                      "Coconut Milk"
+                  ],
+                  [
+                      "coconut soda|sprite",
+                      "Zero-Sugar Soda"
+                  ],
+                  [
+                      "^yogurt$",
+                      "Greek Yogurt"
+                  ],
+                  [
+                      "palm oil|oil, for frying|^oil or more$|sopa de|^neutral oil|^avocado oil$",
+                      "Vegetable Oil"
+                  ],
+                  [
+                      "cornbread",
+                      "Corn Muffin Mix"
+                  ],
+                  [
+                      "rye bread",
+                      "Rye Bread"
+                  ],
+                  [
+                      "stuffing",
+                      "Stuffing Mix"
+                  ],
+                  [
+                      "^bread$|sandwich bread|loaf bread|crustless bread",
+                      "Sandwich Bread"
+                  ],
+                  [
+                      "hoagie",
+                      "Keto Bun"
+                  ],
+                  [
+                      "^crackers$",
+                      "Butter Crackers"
+                  ],
+                  [
+                      "dorito",
+                      "Corn Chips"
+                  ],
+                  [
+                      "tostada|moo shu pancakes|pita or turkish bread|^flatbread",
+                      "Tortilla"
+                  ],
+                  [
+                      "manicotti",
+                      "Pasta Shells - jumbo"
+                  ],
+                  [
+                      "acini|ditalini|elbow|macaroni|orecchiette|farfalle|^uncooked shells$",
+                      "Pasta Shells"
+                  ],
+                  [
+                      "fideo",
+                      "Spaghetti"
+                  ],
+                  [
+                      "lasagna",
+                      "Ziti Pasta"
+                  ],
+                  [
+                      "^pasta$",
+                      "Penne Pasta"
+                  ],
+                  [
+                      "wheat\\s+noodle",
+                      "Lo Mein Noodles"
+                  ],
+                  [
+                      "glass noodle|shirataki|konnyaku|sweet potato noodle",
+                      "Rice Noodles"
+                  ],
+                  [
+                      "rice cakes",
+                      "Korean Rice Cakes"
+                  ],
+                  [
+                      "wild rice",
+                      "Wild Rice"
+                  ],
+                  [
+                      "arborio|minute rice|jasmin rice|^grain rice$|rice of your choice|day.old cold rice|steamed rice|arroz|rice-a-roni",
+                      "Rice"
+                  ],
+                  [
+                      "cornmeal|semolina",
+                      "Grits"
+                  ],
+                  [
+                      "bulgur",
+                      "Bulgur Wheat"
+                  ],
+                  [
+                      "baking powder",
+                      "Baking Powder"
+                  ],
+                  [
+                      "baking soda",
+                      "Baking Soda"
+                  ],
+                  [
+                      "kecap manis|sweet dark soy",
+                      "Sweet Soy Sauce"
+                  ],
+                  [
+                      "sweet rice wine",
+                      "Mirin"
+                  ],
+                  [
+                      "rice wine(?! vinegar)",
+                      "Chicken Broth"
+                  ],
+                  [
+                      "red wine(?! vinegar)|pinot noir|gratsi",
+                      "Beef Broth"
+                  ],
+                  [
+                      "guinness|pale ale|^beer\\b|german beer|beer for marinating",
+                      "Beef Broth"
+                  ],
+                  [
+                      "sherry vinegar",
+                      "Red Wine Vinegar"
+                  ],
+                  [
+                      "white wine vinegar|white distilled vinegar|^vinegar$",
+                      "White Vinegar"
+                  ],
+                  [
+                      "worcester|browning sauce",
+                      "Worcestershire Sauce"
+                  ],
+                  [
+                      "liquid smoke",
+                      "Smoked Paprika"
+                  ],
+                  [
+                      "barbecue",
+                      "BBQ Sauce"
+                  ],
+                  [
+                      "taco sauce",
+                      "Salsa"
+                  ],
+                  [
+                      "red chile sauce",
+                      "Enchilada Sauce"
+                  ],
+                  [
+                      "sweet chili sauce",
+                      "Hot Honey"
+                  ],
+                  [
+                      "korean chili paste",
+                      "Gochujang"
+                  ],
+                  [
+                      "korean corn syrup|chutney",
+                      "Honey"
+                  ],
+                  [
+                      "douban|spicy (fermented )?bean",
+                      "Doubanjiang"
+                  ],
+                  [
+                      "ground bean sauce|sweet bean sauce|tianmianjiang",
+                      "Hoisin Sauce"
+                  ],
+                  [
+                      "green curry paste|massaman|curry paste, less",
+                      "Red Curry Paste"
+                  ],
+                  [
+                      "curry sauce",
+                      "Japanese Curry Roux"
+                  ],
+                  [
+                      "haitian epis",
+                      "Fresh Cilantro"
+                  ],
+                  [
+                      "^adobo$|^adobo,|^saz|sazon goya",
+                      "Sazon Seasoning"
+                  ],
+                  [
+                      "jerk",
+                      "Jerk Seasoning"
+                  ],
+                  [
+                      "brown gravy|leftover gravy",
+                      "Brown Gravy Mix"
+                  ],
+                  [
+                      "pesto",
+                      "Basil Pesto"
+                  ],
+                  [
+                      "caper",
+                      "Capers"
+                  ],
+                  [
+                      "horseradish",
+                      "Horseradish Sauce"
+                  ],
+                  [
+                      "aji amarillo",
+                      "Aji Amarillo Paste"
+                  ],
+                  [
+                      "alfredo",
+                      "Alfredo Sauce"
+                  ],
+                  [
+                      "pep?peroncini",
+                      "Pepperoncini"
+                  ],
+                  [
+                      "manzanilla|spanish olives|black olives",
+                      "Olives"
+                  ],
+                  [
+                      "italian dressing",
+                      "Italian Seasoning"
+                  ],
+                  [
+                      "thousand island",
+                      "Mayonnaise"
+                  ],
+                  [
+                      "ranch packet",
+                      "Ranch Seasoning Mix"
+                  ],
+                  [
+                      "mexican chocolate|cocoa",
+                      "Cocoa Powder"
+                  ],
+                  [
+                      "molasses, original|^molasses$",
+                      "Brown Sugar"
+                  ],
+                  [
+                      "rock sugar|raw sugar|regular sugar|caramel color",
+                      "Sugar"
+                  ],
+                  [
+                      "coriander powder",
+                      "Ground Coriander"
+                  ],
+                  [
+                      "coriander leaves|green coriander",
+                      "Fresh Cilantro"
+                  ],
+                  [
+                      "^basil\\b|basil leaves|chopped basil|holy basil",
+                      "Fresh Basil"
+                  ],
+                  [
+                      "kabsa|pilau masala|cardamon|kasuri methi|fenugreek",
+                      "Garam Masala"
+                  ],
+                  [
+                      "geera|kamouneh|cominho",
+                      "Ground Cumin"
+                  ],
+                  [
+                      "fennel powder",
+                      "Ground Fennel"
+                  ],
+                  [
+                      "^mace$",
+                      "Ground Nutmeg"
+                  ],
+                  [
+                      "ground anise",
+                      "Five-Spice Powder"
+                  ],
+                  [
+                      "caraway",
+                      "Caraway Seeds"
+                  ],
+                  [
+                      "marjoram",
+                      "Dried Oregano"
+                  ],
+                  [
+                      "tarragon|herbes de provence",
+                      "Italian Seasoning"
+                  ],
+                  [
+                      "dried chives",
+                      "Dried Parsley"
+                  ],
+                  [
+                      "^all spice$|^spice$",
+                      "Ground Allspice"
+                  ],
+                  [
+                      "tumeric",
+                      "Ground Turmeric"
+                  ],
+                  [
+                      "louro",
+                      "Bay Leaves"
+                  ],
+                  [
+                      "^(big pinch coarse |pinch of |seasoning )?salt[^,]* ?(\u0026|and|/) *(fresh |freshly |ground |black )*pepper",
+                      "Black Pepper"
+                  ],
+                  [
+                      "^salt\\b(?!.*pepper)(?!.*creole)|tsp salt|teaspoons? salt|pinch (of |coarse )?salt$|cooking salt|dash of salt|^seasoning salt$|de sal$",
+                      "Salt"
+                  ],
+                  [
+                      "^(ground|cracked|fresh cracked|fresh ground|freshly ground) pepper|^pepper to taste$|peppercorn|kampot|pimenta",
+                      "Black Pepper"
+                  ],
+                  [
+                      "^lim.o$|lemon, juice|lemons, juiced|lemons?, one for|juice of \\d+ lemons?|lemons or limes",
+                      "Lemon Juice"
+                  ],
+                  [
+                      "juice (from|of) [\\d/]+ limes?|juice of one lime",
+                      "Lime Juice"
+                  ],
+                  [
+                      "garlic clove|minced garlic|chopped garlic|fresh garlic|garlic paste|^garlic$|garlic chives|ginger garlic paste",
+                      "Garlic"
+                  ],
+                  [
+                      "garlic salt|granulated garlic|garlic powder",
+                      "Garlic Powder"
+                  ],
+                  [
+                      "ground turkey sausage",
+                      "93/7 Ground Turkey"
+                  ],
+                  [
+                      "turkey sausage",
+                      "Smoked Turkey Sausage"
+                  ],
+                  [
+                      "smoked spicy sausage|andouille",
+                      "Smoked Turkey Sausage"
+                  ],
+                  [
+                      "ground turkey|turkey mince",
+                      "93/7 Ground Turkey"
+                  ],
+                  [
+                      "ground beef|beef mince|minced *beef|ground meat",
+                      "93/7 Ground Beef"
+                  ],
+                  [
+                      "chorizo",
+                      "Pork Chorizo"
+                  ],
+                  [
+                      "italian sausage",
+                      "Hot Italian Sausage"
+                  ],
+                  [
+                      "ground pork|pork mince|minced pork|pork sausage",
+                      "Ground Pork"
+                  ],
+                  [
+                      "pancetta|bacon grease|^bacon$|^bacon,",
+                      "Hickory Smoked Bacon"
+                  ],
+                  [
+                      "pork tenderloin|pork fillet",
+                      "Pork Tenderloin"
+                  ],
+                  [
+                      "pork loin chops|pork chop|pork steak|center cut pork",
+                      "Pork Chops"
+                  ],
+                  [
+                      "pork shoulder|pork spare ribs|pork loin|lemongrass-marinated pork",
+                      "Pork Loin"
+                  ],
+                  [
+                      "chicken breast|chicken tenderloin|^chicken$|cooked chicken|shredded cooked chicken",
+                      "Boneless Skinless Chicken Breast"
+                  ],
+                  [
+                      "chicken thigh|bone-in chicken|whole chicken|chicken wings|drumstick|thighs and legs|skinless chicken thighs",
+                      "Boneless Skinless Chicken Thigh"
+                  ],
+                  [
+                      "firm tofu",
+                      "DROP"
+                  ],
+                  [
+                      "egg white|egg yolk|boiled egg|fried egg|hard-boiled egg|^eggs?$|^eggs?,|large eggs?|^egg,|eggs, lightly",
+                      "Eggs"
+                  ],
+                  [
+                      "heavy (whipping )?cream|half and half",
+                      "Heavy Cream"
+                  ],
+                  [
+                      "ricotta",
+                      "Ricotta Cheese"
+                  ],
+                  [
+                      "cream cheese",
+                      "1/3 Fat Cream Cheese"
+                  ],
+                  [
+                      "sour cream",
+                      "Light Sour Cream"
+                  ],
+                  [
+                      "greek yogurt|plain yogurt|whole-milk yogurt|plain full-fat greek",
+                      "Greek Yogurt"
+                  ],
+                  [
+                      "parmesan|pecorino|kefalotyri",
+                      "Parmesan Cheese"
+                  ],
+                  [
+                      "mozzarella",
+                      "Reduced Fat Mozzarella"
+                  ],
+                  [
+                      "cheddar",
+                      "Cheddar Cheese, Shredded"
+                  ],
+                  [
+                      "monterey jack|pepper jack|colby jack|mexican cheese blend|queso quesadilla|queso fresco|queso (cheese )?dip|salsa con queso|shredded cheese$",
+                      "Mexican Cheese Blend"
+                  ],
+                  [
+                      "feta",
+                      "Feta Cheese"
+                  ],
+                  [
+                      "swiss",
+                      "Swiss Cheese"
+                  ],
+                  [
+                      "butter round crackers|ritz",
+                      "Butter Crackers"
+                  ],
+                  [
+                      "sesame paste|peanut butter",
+                      "Peanut Butter"
+                  ],
+                  [
+                      "apple cider vinegar|cider or white wine",
+                      "Apple Cider Vinegar"
+                  ],
+                  [
+                      "butter|ghee|niter kibbeh|duck fat",
+                      "Butter"
+                  ],
+                  [
+                      "^milk$|whole milk|hot milk",
+                      "Milk"
+                  ],
+                  [
+                      "mayonnaise|mayo",
+                      "Mayonnaise"
+                  ],
+                  [
+                      "^grits",
+                      "Grits"
+                  ],
+                  [
+                      "mashed potatoes|roasted potatoes",
+                      "Potato"
+                  ],
+                  [
+                      "rice noodle|rice stick|vermicelli noodle|white fresh noodles|wide rice",
+                      "Rice Noodles"
+                  ],
+                  [
+                      "egg noodle",
+                      "Egg Noodles"
+                  ],
+                  [
+                      "lo mein|chow mein|yakisoba|udon|ramen",
+                      "Lo Mein Noodles"
+                  ],
+                  [
+                      "spaghetti sauce",
+                      "Marinara Sauce"
+                  ],
+                  [
+                      "spaghetti|angel hair|bucatini|vermicelli pasta",
+                      "Spaghetti"
+                  ],
+                  [
+                      "ziti|rigatoni",
+                      "Ziti Pasta"
+                  ],
+                  [
+                      "penne",
+                      "Penne Pasta"
+                  ],
+                  [
+                      "rotini",
+                      "Rotini Pasta"
+                  ],
+                  [
+                      "pasta shells|shell pasta|jumbo.*shells|medium shell",
+                      "Pasta Shells"
+                  ],
+                  [
+                      "tortellini",
+                      "Cheese Tortellini"
+                  ],
+                  [
+                      "gnocchi",
+                      "Potato Gnocchi"
+                  ],
+                  [
+                      "orzo",
+                      "Orzo Pasta"
+                  ],
+                  [
+                      "pappardelle|tagliatelle|fettuccin",
+                      "Fettuccine"
+                  ],
+                  [
+                      "tater tot",
+                      "Tater Tots"
+                  ],
+                  [
+                      "hash brown",
+                      "Frozen Hash Browns"
+                  ],
+                  [
+                      "frito",
+                      "Corn Chips"
+                  ],
+                  [
+                      "corn muffin|jiffy",
+                      "Corn Muffin Mix"
+                  ],
+                  [
+                      "grands|biscuit",
+                      "Refrigerated Biscuits"
+                  ],
+                  [
+                      "butter round crackers|ritz",
+                      "Butter Crackers"
+                  ],
+                  [
+                      "sweet potato",
+                      "Sweet Potatoes"
+                  ],
+                  [
+                      "jasmine|basmati|white rice|long.grain|broken rice|short.grain|purple/black rice|^rice$|cooked rice|boiled rice|warm rice|brown rice|quinoa|pasta or rice|rice or naan|old el paso cheesy mexican rice|rice, soaked",
+                      "Rice"
+                  ],
+                  [
+                      "potato gnocchi",
+                      "Potato Gnocchi"
+                  ],
+                  [
+                      "potato|russet|yukon",
+                      "Potato"
+                  ],
+                  [
+                      "tortilla",
+                      "Tortilla"
+                  ],
+                  [
+                      "naan",
+                      "Rice"
+                  ],
+                  [
+                      "green onion|scallion|spring onion|mitsuba",
+                      "Green Onions"
+                  ],
+                  [
+                      "fried onions",
+                      "DROP"
+                  ],
+                  [
+                      "red onion|pickled onion",
+                      "Red Onion"
+                  ],
+                  [
+                      "onion powder|granulated onion",
+                      "Onion Powder"
+                  ],
+                  [
+                      "onion|shallot",
+                      "Yellow Onion"
+                  ],
+                  [
+                      "fresh ginger|grated fresh ginger|minced ginger|^ginger$|galangal",
+                      "Ginger"
+                  ],
+                  [
+                      "ground ginger",
+                      "Ground Ginger"
+                  ],
+                  [
+                      "red bell|red/orange|colored bell|yellow (bell )?pepper|^red pepper$|red bell peppers",
+                      "Red Bell Pepper"
+                  ],
+                  [
+                      "green bell|^bell pepper|diced bell",
+                      "Green Bell Peppers"
+                  ],
+                  [
+                      "poblano",
+                      "Poblano Peppers"
+                  ],
+                  [
+                      "rotel|ro-tel|tomatoes and chilies|(diced )?tomatoes (with|and) green chil",
+                      "Diced Tomatoes \u0026 Green Chilies"
+                  ],
+                  [
+                      "jalapeno|serrano|thai chili(es)?|birds eye|green chili|green chillies|fresno|scotch bonnet|habanero|green chilli",
+                      "Jalapeno"
+                  ],
+                  [
+                      "cherry tomato|grape tomato",
+                      "Cherry Tomatoes"
+                  ],
+                  [
+                      "fire.roasted|canned (whole |crushed )?tomato|whole tomatoes|diced tomatoes|roma|ripe tomato|^tomato$",
+                      "Diced Tomatoes"
+                  ],
+                  [
+                      "crushed tomato",
+                      "Crushed Tomatoes"
+                  ],
+                  [
+                      "passata|tomato puree|tomato soup",
+                      "Tomato Sauce"
+                  ],
+                  [
+                      "tomato paste",
+                      "Tomato Paste"
+                  ],
+                  [
+                      "tomato sauce",
+                      "Tomato Sauce"
+                  ],
+                  [
+                      "marinara",
+                      "Marinara Sauce"
+                  ],
+                  [
+                      "mushroom",
+                      "White Mushrooms"
+                  ],
+                  [
+                      "spinach",
+                      "Frozen Chopped Spinach"
+                  ],
+                  [
+                      "broccoli|choy sum",
+                      "Broccoli Florets"
+                  ],
+                  [
+                      "zucchini|courgette",
+                      "Zucchini"
+                  ],
+                  [
+                      "carrot",
+                      "Carrots"
+                  ],
+                  [
+                      "celery",
+                      "Celery"
+                  ],
+                  [
+                      "cucumber",
+                      "Cucumber"
+                  ],
+                  [
+                      "cabbage|coleslaw",
+                      "Green Cabbage"
+                  ],
+                  [
+                      "bean ?sprout",
+                      "DROP"
+                  ],
+                  [
+                      "edamame|mixed vegetables|peas and carrots|frozen (sweet |green )?peas|^peas$",
+                      "Frozen Green Peas"
+                  ],
+                  [
+                      "black beans",
+                      "Seasoned Black Beans"
+                  ],
+                  [
+                      "kidney beans|pinto beans",
+                      "Kidney Beans"
+                  ],
+                  [
+                      "chickpea",
+                      "Chickpeas"
+                  ],
+                  [
+                      "frozen corn|can corn|whole kernel|sweet corn",
+                      "Sweet Whole Kernel Corn"
+                  ],
+                  [
+                      "frozen onion, bell pepper",
+                      "Yellow Onion"
+                  ],
+                  [
+                      "frozen chopped onions",
+                      "Yellow Onion"
+                  ],
+                  [
+                      "daikon|pickled vegetable",
+                      "DROP"
+                  ],
+                  [
+                      "avocado|guacamole",
+                      "DROP"
+                  ],
+                  [
+                      "lettuce",
+                      "DROP"
+                  ],
+                  [
+                      "kalamata|green olives|pimento|sliced olives|^olives",
+                      "Olives"
+                  ],
+                  [
+                      "sun.dried",
+                      "Sun-Dried Tomatoes"
+                  ],
+                  [
+                      "roasted red pepper",
+                      "Roasted Red Peppers"
+                  ],
+                  [
+                      "pineapple",
+                      "Pineapple Chunks"
+                  ],
+                  [
+                      "raisin",
+                      "Golden Raisins"
+                  ],
+                  [
+                      "dill pickle",
+                      "Dill Pickles"
+                  ],
+                  [
+                      "tomatillo",
+                      "Tomatillos"
+                  ],
+                  [
+                      "lemongrass",
+                      "Lemongrass Paste"
+                  ],
+                  [
+                      "thai basil|fresh basil|basil, packed|basil or cilantro",
+                      "Fresh Basil"
+                  ],
+                  [
+                      "ground coriander|coriander seed",
+                      "Ground Coriander"
+                  ],
+                  [
+                      "cilantro|^coriander$|fresh coriander|green seasoning",
+                      "Fresh Cilantro"
+                  ],
+                  [
+                      "dried mint|mint",
+                      "Fresh Mint"
+                  ],
+                  [
+                      "dried parsley",
+                      "Dried Parsley"
+                  ],
+                  [
+                      "parsley",
+                      "DROP"
+                  ],
+                  [
+                      "fresh thyme|thyme",
+                      "Dried Thyme"
+                  ],
+                  [
+                      "rosemary|\\bsage\\b",
+                      "Italian Seasoning"
+                  ],
+                  [
+                      "curry leaves|kaffir|lime leaves",
+                      "DROP"
+                  ],
+                  [
+                      "lemon juice|^lemons?$|lemon, juiced|freshly squeezed lemon",
+                      "Lemon Juice"
+                  ],
+                  [
+                      "lemon zest|lemon wedges|lemon, feta",
+                      "DROP"
+                  ],
+                  [
+                      "lime juice|^limes?$|lime, juiced|limes, juiced|calamansi|lime zest",
+                      "Lime Juice"
+                  ],
+                  [
+                      "lime, cilantro",
+                      "DROP"
+                  ],
+                  [
+                      "saffron",
+                      "DROP"
+                  ],
+                  [
+                      "garnish|for serving|toppings",
+                      "DROP"
+                  ],
+                  [
+                      "tzatziki",
+                      "Greek Yogurt"
+                  ],
+                  [
+                      "hummus",
+                      "Hummus"
+                  ],
+                  [
+                      "pico de gallo|salsa",
+                      "Salsa"
+                  ],
+                  [
+                      "oyster sauce",
+                      "Oyster Sauce"
+                  ],
+                  [
+                      "fish sauce",
+                      "Fish Sauce"
+                  ],
+                  [
+                      "sweet soy|dark soy|light soy|low sodium soy|soy sauce|coconut aminos|liquid aminos",
+                      "Soy Sauce"
+                  ],
+                  [
+                      "hoisin",
+                      "Hoisin Sauce"
+                  ],
+                  [
+                      "mirin",
+                      "Mirin"
+                  ],
+                  [
+                      "^red wine$|dry red wine",
+                      "Beef Broth"
+                  ],
+                  [
+                      "sake|shaoxing|chinese cooking wine|white wine|brandy|dashi|vegetable broth|bouillon cube$|boiling water",
+                      "Chicken Broth"
+                  ],
+                  [
+                      "chicken (broth|stock)|chicken bouillon|stock/broth|hot chicken",
+                      "Chicken Broth"
+                  ],
+                  [
+                      "beef (broth|stock)|beef bouillon",
+                      "Beef Broth"
+                  ],
+                  [
+                      "^water$|water or",
+                      "DROP"
+                  ],
+                  [
+                      "worcestershire",
+                      "Worcestershire Sauce"
+                  ],
+                  [
+                      "ketchup",
+                      "Ketchup"
+                  ],
+                  [
+                      "bbq sauce",
+                      "BBQ Sauce"
+                  ],
+                  [
+                      "buffalo sauce|buffalo wing",
+                      "Buffalo Wing Sauce"
+                  ],
+                  [
+                      "sriracha|sambal|chili garlic|thai chili sauce",
+                      "Sriracha"
+                  ],
+                  [
+                      "chilli oil|chili oil|chili crisp|chilli paste in oil",
+                      "Chili Crisp"
+                  ],
+                  [
+                      "sesame paste|peanut butter",
+                      "Peanut Butter"
+                  ],
+                  [
+                      "peanut",
+                      "Peanuts"
+                  ],
+                  [
+                      "walnut",
+                      "Walnuts"
+                  ],
+                  [
+                      "pine nut",
+                      "DROP"
+                  ],
+                  [
+                      "cashew",
+                      "Cashews"
+                  ],
+                  [
+                      "sesame seed",
+                      "Toasted Sesame Seeds"
+                  ],
+                  [
+                      "poppy seed",
+                      "Poppy Seeds"
+                  ],
+                  [
+                      "tahini",
+                      "Tahini"
+                  ],
+                  [
+                      "red curry paste",
+                      "Red Curry Paste"
+                  ],
+                  [
+                      "japanese curry|curry sauce packet",
+                      "Japanese Curry Roux"
+                  ],
+                  [
+                      "miso",
+                      "NEW:Miso Paste"
+                  ],
+                  [
+                      "gochujang",
+                      "Gochujang"
+                  ],
+                  [
+                      "harissa",
+                      "Harissa Paste"
+                  ],
+                  [
+                      "berbere",
+                      "Berbere Seasoning"
+                  ],
+                  [
+                      "mole",
+                      "Mole Paste"
+                  ],
+                  [
+                      "achiote|annatto",
+                      "Achiote Paste"
+                  ],
+                  [
+                      "pomegranate molasses",
+                      "Pomegranate Molasses"
+                  ],
+                  [
+                      "tamarind",
+                      "Lime Juice"
+                  ],
+                  [
+                      "maple syrup",
+                      "Sugar-Free Maple Syrup"
+                  ],
+                  [
+                      "hot honey",
+                      "Hot Honey"
+                  ],
+                  [
+                      "honey",
+                      "Honey"
+                  ],
+                  [
+                      "hot sauce",
+                      "Hot Sauce"
+                  ],
+                  [
+                      "green enchilada|salsa verde|green chile sauce",
+                      "Salsa Verde"
+                  ],
+                  [
+                      "enchilada",
+                      "Enchilada Sauce"
+                  ],
+                  [
+                      "diced green chile|mild diced green",
+                      "Diced Green Chiles"
+                  ],
+                  [
+                      "chipotle",
+                      "Chipotle in Adobo"
+                  ],
+                  [
+                      "cream of mushroom",
+                      "Cream of Mushroom Soup"
+                  ],
+                  [
+                      "cream of chicken",
+                      "Cream of Chicken Soup"
+                  ],
+                  [
+                      "coconut milk",
+                      "Coconut Milk"
+                  ],
+                  [
+                      "coconut sugar|brown sugar",
+                      "Brown Sugar"
+                  ],
+                  [
+                      "granulated sugar|white sugar|^sugar",
+                      "Sugar"
+                  ],
+                  [
+                      "almond flour",
+                      "Bread Crumbs"
+                  ],
+                  [
+                      "flour",
+                      "All-Purpose Flour"
+                  ],
+                  [
+                      "cornstarch|cornflour",
+                      "Cornstarch"
+                  ],
+                  [
+                      "panko|bread ?crumbs",
+                      "Bread Crumbs"
+                  ],
+                  [
+                      "rice (wine )?vinegar",
+                      "Rice Vinegar"
+                  ],
+                  [
+                      "apple cider vinegar|cider or white wine",
+                      "Apple Cider Vinegar"
+                  ],
+                  [
+                      "white wine vinegar|coconut vinegar|white vinegar",
+                      "White Vinegar"
+                  ],
+                  [
+                      "red wine vinegar",
+                      "Red Wine Vinegar"
+                  ],
+                  [
+                      "balsamic",
+                      "Balsamic Vinegar"
+                  ],
+                  [
+                      "dijon|dry mustard|mustard powder|mustard",
+                      "Dijon Mustard"
+                  ],
+                  [
+                      "olive oil",
+                      "Olive Oil"
+                  ],
+                  [
+                      "sesame oil",
+                      "Sesame Oil"
+                  ],
+                  [
+                      "vegetable|canola|avocado oil|peanut oil|coconut oil|neutral|rapeseed|sunflower|grapeseed|cooking oil|^oil$|mustard oil|oil for frying",
+                      "Vegetable Oil"
+                  ],
+                  [
+                      "dried oregano|oregano",
+                      "Dried Oregano"
+                  ],
+                  [
+                      "smoked paprika",
+                      "Smoked Paprika"
+                  ],
+                  [
+                      "paprika",
+                      "Paprika"
+                  ],
+                  [
+                      "cayenne",
+                      "Cayenne Pepper"
+                  ],
+                  [
+                      "chili powder|kashmiri|red chili powder|red chilli powder|ancho",
+                      "Chili Powder"
+                  ],
+                  [
+                      "cumin|shahi jeera",
+                      "Ground Cumin"
+                  ],
+                  [
+                      "turmeric",
+                      "Ground Turmeric"
+                  ],
+                  [
+                      "garam masala|biryani masala|cardamom",
+                      "Garam Masala"
+                  ],
+                  [
+                      "curry powder",
+                      "Curry Powder"
+                  ],
+                  [
+                      "five.spice",
+                      "Five-Spice Powder"
+                  ],
+                  [
+                      "cinnamon",
+                      "Ground Cinnamon"
+                  ],
+                  [
+                      "ground cloves|^cloves$",
+                      "Ground Cloves"
+                  ],
+                  [
+                      "star anise|black onion seeds|sumac|sui mi ya cai|toasted grated coconut",
+                      "DROP"
+                  ],
+                  [
+                      "nutmeg",
+                      "Ground Nutmeg"
+                  ],
+                  [
+                      "allspice|lebanese 7 spice",
+                      "Ground Allspice"
+                  ],
+                  [
+                      "fennel seed",
+                      "Italian Seasoning"
+                  ],
+                  [
+                      "bay lea",
+                      "Bay Leaves"
+                  ],
+                  [
+                      "dried basil|ground basil",
+                      "Dried Basil"
+                  ],
+                  [
+                      "dill",
+                      "Dried Dill"
+                  ],
+                  [
+                      "italian seasoning",
+                      "Italian Seasoning"
+                  ],
+                  [
+                      "cajun|creole",
+                      "Cajun Seasoning"
+                  ],
+                  [
+                      "sichuan pepper|white pepper",
+                      "Black Pepper"
+                  ],
+                  [
+                      "red pepper flake|chilli flakes|dried chilies",
+                      "Red Pepper Flakes"
+                  ],
+                  [
+                      "black pepper|^pepper$|salt and pepper|salt and ground black",
+                      "Black Pepper"
+                  ],
+                  [
+                      "kosher salt|sea salt|^salt$|seasoned salt|^salt /|^salt,",
+                      "Salt"
+                  ],
+                  [
+                      "ranch seasoning",
+                      "Ranch Seasoning Mix"
+                  ],
+                  [
+                      "taco seasoning",
+                      "Taco Seasoning"
+                  ],
+                  [
+                      "fajita seasoning",
+                      "Fajita Seasoning"
+                  ],
+                  [
+                      "orange juice",
+                      "Orange Juice"
+                  ],
+                  [
+                      "onion powder / garlic",
+                      "Onion Powder"
+                  ],
+                  [
+                      "salt / cumin",
+                      "Ground Cumin"
+                  ],
+                  [
+                      "sugar / salt",
+                      "Sugar"
+                  ],
+                  [
+                      "dried rosemary, sage",
+                      "Italian Seasoning"
+                  ],
+                  [
+                      "dried thyme and paprika",
+                      "Dried Thyme"
+                  ],
+                  [
+                      "chow mein noodles",
+                      "Lo Mein Noodles"
+                  ],
+                  [
+                      "grits",
+                      "Grits"
+                  ],
+                  [
+                      "egg",
+                      "Eggs"
+                  ]
+              ]
+}
