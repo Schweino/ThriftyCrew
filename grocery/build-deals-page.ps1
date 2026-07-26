@@ -688,7 +688,7 @@ if ($riDoc) {
 
 # membership CTA: this page is the site's best proof asset - close the loop from free prices to the $1 offer.
 [void]$sb.Append("<div class='pg-cta'><h3>The prices are free. The dinners are about a dollar a month.</h3>")
-[void]$sb.Append("<p>This board tells you where the cheap groceries are. The membership turns them into dinners: 113 meal-prep recipes costed to the plate, most at $2 to $3 a serving, plus the 52-week money program. It pays for itself in one grocery run.</p>")
+[void]$sb.Append("<p>This board tells you where the cheap groceries are. The membership turns them into dinners: <span class='tc-rc'>500+</span> meal-prep recipes costed to the plate, plus the 52-week money program. It pays for itself in one grocery run.</p>")
 [void]$sb.Append("<p class='pg-cta-row'><a class='pg-cta-btn' href='#/portal/signup'>Join for $1 a month &rarr;</a> <a class='pg-cta-alt' href='/meal-prep-recipes/'>or browse a few recipes free</a></p>")
 [void]$sb.Append("<p class='pg-cta-fine'>Not a trial, not an intro rate. $1 a month is the whole price, and it gets everything.</p></div>")
 # transparency strip lives down here with the fine print, not above the prices

@@ -58,7 +58,12 @@ if($Validate){
 # --- build all cards, cost ascending ---
 $rows=@()
 foreach($r in $recipes){
-  $cat=Get-ProteinCat $r
+  # 2026-07-26: recipes-db.protein (stamped by normalize-recipe-ids, used by rotation + top5) is the
+  # vetted source; the local name-regex is only a fallback (it misses e.g. Bratwurst - the r300
+  # sausage lesson). Keeps every surface reading the SAME protein field.
+  $cat=$null
+  if($r.PSObject.Properties.Name -contains 'protein' -and $r.protein -in @('chicken','beef','pork','turkey')){ $cat=[string]$r.protein }
+  if(-not $cat){ $cat=Get-ProteinCat $r }
   if(-not $cat){ throw "no protein category for $($r.slug)" }
   $rows += [pscustomobject]@{
     slug=$r.slug; name=(Enc $r.name); cuisine=(Enc $r.cuisine); cat=$cat
@@ -104,10 +109,16 @@ $html=$html -replace 'data-p="pork">Pork <span class="mpr-fn">\d+</span>', ("dat
 $html=$html -replace 'data-p="beef">Beef <span class="mpr-fn">\d+</span>', ("data-p=""beef"">Beef <span class=""mpr-fn"">$($counts.beef)</span>")
 $html=$html -replace 'data-p="turkey">Turkey <span class="mpr-fn">\d+</span>', ("data-p=""turkey"">Turkey <span class=""mpr-fn"">$($counts.turkey)</span>")
 
-# 3) copy: three "113" prose mentions -> total
-$html=$html.Replace('113 high-protein meal prep dinners.', "$total high-protein meal prep dinners.")
-$html=$html.Replace('All 113 recipes with full instructions', "All $total recipes with full instructions")
-$html=$html.Replace('113 high-protein dinners, macros from real', "$total high-protein dinners, macros from real")
+# 3) copy: prose recipe-count mentions -> total.
+# 2026-07-26 fix: the old .Replace('113 ...') was a ONE-WAY RATCHET - anchored to the original literal,
+# so after the first run (113->213) later runs matched nothing and the number froze (Brad caught "All
+# 213 recipes" at 513). Now: idempotent regex on ANY number in those phrases, PLUS the counts are
+# wrapped in <span class="tc-rc"> markers that the site-wide head script live-updates from the feed's
+# recipe_count - so the page is right even between rebuilds.
+$rcSpan = '<span class="tc-rc">' + $total + '</span>'
+$html=$html -replace '(?:<span class="tc-rc">)?\d+(?:</span>)?( high-protein meal prep dinners\.)', ($rcSpan + '$1')
+$html=$html -replace 'All (?:<span class="tc-rc">)?\d+(?:</span>)?( recipes with full instructions)', ('All ' + $rcSpan + '$1')
+$html=$html -replace '(?:<span class="tc-rc">)?\d+(?:</span>)?( high-protein dinners, macros from real)', ($rcSpan + '$1')
 
 # 4) members-only recipe-suggestion form (idempotent; inserted UP TOP, just above the filter
 #    bar / grid so members see it without scrolling past all 213 cards)
