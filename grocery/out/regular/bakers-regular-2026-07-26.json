@@ -7,8 +7,8 @@
     "source":  "kroger-public-api",
     "location_id":  "61500319",
     "store_label":  "Baker\u0027s - Saddlecreek, Omaha 68106",
-    "pull_terms":  473,
-    "deal_count":  6660,
+    "pull_terms":  476,
+    "deal_count":  6728,
     "deals":  [
                   {
                       "store":  "Baker\u0027s",
@@ -206,7 +206,7 @@
                       "product_id":  "0025086250000",
                       "size_raw":  "1 lb",
                       "size_basis":  "soldby-weight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/smart-nae-boneless-skinless-chicken-breast/0025086250000",
                       "base_price":  7.49,
                       "marked_down":  true
@@ -1912,7 +1912,7 @@
                       "product_id":  "0086174500002",
                       "size_raw":  "12 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/vital-farms-pasture-raised-large-brown-grade-a-organic-eggs/0086174500002"
                   },
                   {
@@ -2886,7 +2886,7 @@
                       "product_id":  "0007342052440",
                       "size_raw":  "24 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/daisy-pure-and-natural-4-cottage-cheese/0007342052440"
                   },
                   {
@@ -2901,7 +2901,7 @@
                       "product_id":  "0001111015582",
                       "size_raw":  "16 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-protein-2-milkfat-small-curd-cottage-cheese/0001111015582"
                   },
                   {
@@ -2931,7 +2931,7 @@
                       "product_id":  "0007342052420",
                       "size_raw":  "24 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/daisy-pure-and-natural-2-low-fat-cottage-cheese/0007342052420"
                   },
                   {
@@ -4932,7 +4932,7 @@
                       "product_id":  "0005100015339",
                       "size_raw":  "46 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/v8-strawberry-banana-100-vegetable-fruit-juice-bottle/0005100015339",
                       "base_price":  4.29,
                       "marked_down":  true
@@ -5132,7 +5132,7 @@
                       "product_id":  "0071575620022",
                       "size_raw":  "2 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/fresh-organic-strawberries-2-lb-clamshell/0071575620022"
                   },
                   {
@@ -5194,7 +5194,7 @@
                       "product_id":  "0001500004730",
                       "size_raw":  "1 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/gerber-stage-3-baby-food-snacks-strawberry-yogurt-melts-baby-led-feeding/0001500004730"
                   },
                   {
@@ -5226,7 +5226,7 @@
                       "product_id":  "0001111016107",
                       "size_raw":  "4 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-sliced-strawberries-big-deal-/0001111016107"
                   },
                   {
@@ -5532,7 +5532,7 @@
                       "product_id":  "0001111036742",
                       "size_raw":  "10 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-frozen-blueberries/0001111036742",
                       "base_price":  4.39,
                       "marked_down":  true
@@ -5598,7 +5598,7 @@
                       "product_id":  "0001111016105",
                       "size_raw":  "4 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-frozen-blueberries-big-deal-/0001111016105"
                   },
                   {
@@ -6107,7 +6107,7 @@
                       "product_id":  "0082951532770",
                       "size_raw":  "6 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/sensible-portions-garden-veggie-straws-avocado-oil-zesty-ranch-veggie-chips/0082951532770"
                   },
                   {
@@ -7370,7 +7370,7 @@
                       "product_id":  "0001111069708",
                       "size_raw":  "8 ct",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-sweet-corn-mini-cobs/0001111069708"
                   },
                   {
@@ -8181,7 +8181,7 @@
                       "product_id":  "0001111002927",
                       "size_raw":  "15.25 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-canned-yellow-cling-sliced-peaches-in-heavy-syrup/0001111002927"
                   },
                   {
@@ -9235,7 +9235,7 @@
                       "product_id":  "0001111015691",
                       "size_raw":  "46 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-orange-juice-no-pulp/0001111015691"
                   },
                   {
@@ -11371,7 +11371,7 @@
                       "product_id":  "0001111015601",
                       "size_raw":  "48 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-99-fat-free-chicken-broth-family-size/0001111015601"
                   },
                   {
@@ -12097,7 +12097,7 @@
                       "product_id":  "0000000004608",
                       "size_raw":  "1 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/garlic/0000000004608"
                   },
                   {
@@ -13114,7 +13114,7 @@
                       "product_id":  "0001111016446",
                       "size_raw":  "12 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/private-selection-scotch-bonnet-pepper-hot-honey-infused-with-chilies/0001111016446"
                   },
                   {
@@ -13599,7 +13599,7 @@
                       "product_id":  "0004150080502",
                       "size_raw":  "12 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/frank-s-redhot-original-cayenne-pepper-hot-sauce-12-0-fl-oz/0004150080502"
                   },
                   {
@@ -14145,7 +14145,7 @@
                       "product_id":  "0000000094048",
                       "size_raw":  "1 each",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/fresh-organic-limes-each/0000000094048"
                   },
                   {
@@ -14160,7 +14160,7 @@
                       "product_id":  "0001111062367",
                       "size_raw":  "1 lb",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-fresh-limes-bag/0001111062367"
                   },
                   {
@@ -14827,7 +14827,7 @@
                       "product_id":  "0004138732790",
                       "size_raw":  "6 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/4c-homestyle-parmesan-grated-cheese/0004138732790"
                   },
                   {
@@ -14917,7 +14917,7 @@
                       "product_id":  "0001111063677",
                       "size_raw":  "4.5 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/private-selection-shaved-parmesan-cheese-cup/0001111063677"
                   },
                   {
@@ -14932,7 +14932,7 @@
                       "product_id":  "0001111063681",
                       "size_raw":  "8 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/private-selection-18-month-aged-parmesan-wedge-cheese/0001111063681"
                   },
                   {
@@ -15022,7 +15022,7 @@
                       "product_id":  "0004610040059",
                       "size_raw":  "5 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/5-oz-srg-otb-parm-shr/0004610040059",
                       "base_price":  3.5,
                       "marked_down":  true
@@ -15084,7 +15084,7 @@
                       "product_id":  "0001111012735",
                       "size_raw":  "8 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-mercado-mexican-style-queso-cotija-grated-cheese/0001111012735"
                   },
                   {
@@ -15116,7 +15116,7 @@
                       "product_id":  "0001111009842",
                       "size_raw":  "3 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-parmesan-grated-cheese/0001111009842"
                   },
                   {
@@ -16061,7 +16061,7 @@
                       "product_id":  "0004973309017",
                       "size_raw":  "12 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/cholula-salsa-verde-mild-salsa/0004973309017"
                   },
                   {
@@ -17100,7 +17100,7 @@
                       "product_id":  "0003320000171",
                       "size_raw":  "24 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/arm-hammer-plus-oxiclean-with-odor-blasters-fresh-burst-laundry-detergent-5-in-1-power-paks/0003320000171"
                   },
                   {
@@ -17661,7 +17661,7 @@
                       "product_id":  "0007790019209",
                       "size_raw":  "9.6 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/jimmy-dean-fully-cooked-original-pork-breakfast-sausage-patties/0007790019209",
                       "base_price":  5.99,
                       "marked_down":  true
@@ -17723,7 +17723,7 @@
                       "product_id":  "0001111097129",
                       "size_raw":  "8 ct / 12 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-traditional-pork-sausage-patties/0001111097129",
                       "base_price":  4.79,
                       "marked_down":  true
@@ -17757,7 +17757,7 @@
                       "product_id":  "0007790011633",
                       "size_raw":  "16 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/jimmy-dean-premium-pork-sage-breakfast-sausage-roll/0007790011633"
                   },
                   {
@@ -17802,7 +17802,7 @@
                       "product_id":  "0009222774109",
                       "size_raw":  "9 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/sausages-by-amylu-amylu-foods-breakfast-time-mini-chicken-sausage-links/0009222774109"
                   },
                   {
@@ -19082,7 +19082,7 @@
                       "product_id":  "0008000049563",
                       "size_raw":  "4 pk / 5 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/starkist-solid-white-albacore-tuna-in-water-can/0008000049563"
                   },
                   {
@@ -19454,7 +19454,7 @@
                       "product_id":  "0005399701700",
                       "size_raw":  "3 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/sterling-silver-ground-beef-sirloin-90-lean/0005399701700"
                   },
                   {
@@ -20475,7 +20475,7 @@
                       "product_id":  "0001111063086",
                       "size_raw":  "16 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-iceberg-shredded-lettuce-bagged-salad-big-deal-/0001111063086"
                   },
                   {
@@ -20507,7 +20507,7 @@
                       "product_id":  "0085392700311",
                       "size_raw":  "4.5 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/gotham-greens-greenhouse-crunch-lettuce/0085392700311",
                       "base_price":  3.49,
                       "marked_down":  true
@@ -20539,7 +20539,7 @@
                       "product_id":  "0001111091046",
                       "size_raw":  "10 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-leafy-romaine-lettuce-salad-mix/0001111091046"
                   },
                   {
@@ -20569,7 +20569,7 @@
                       "product_id":  "0001111091661",
                       "size_raw":  "12 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-romaine-hearts/0001111091661"
                   },
                   {
@@ -20689,7 +20689,7 @@
                       "product_id":  "0001111062469",
                       "size_raw":  "4 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-shredded-green-leaf-lettuce/0001111062469"
                   },
                   {
@@ -21096,7 +21096,7 @@
                       "product_id":  "0000000003082",
                       "size_raw":  "1 lb",
                       "size_basis":  "soldby-weight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/broccoli-crown/0000000003082"
                   },
                   {
@@ -21156,7 +21156,7 @@
                       "product_id":  "0001111060376",
                       "size_raw":  "16 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/private-selection-long-celery-sticks/0001111060376"
                   },
                   {
@@ -21458,7 +21458,7 @@
                       "product_id":  "0001111089787",
                       "size_raw":  "12 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-frozen-mirepoix-cajun-style-blend-onions-celery-and-green-peppers/0001111089787",
                       "base_price":  1.59,
                       "marked_down":  true
@@ -21595,7 +21595,7 @@
                       "product_id":  "0000000094593",
                       "size_raw":  "1 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/organic-long-english-cucumber/0000000094593"
                   },
                   {
@@ -21704,7 +21704,7 @@
                       "product_id":  "0001299322123",
                       "size_raw":  "8 pk / 12 fl oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/lacroix-sparkling-water-blackberry-cucumber-12-fl-oz-pack-of-8-/0001299322123"
                   },
                   {
@@ -22115,7 +22115,7 @@
                       "product_id":  "0001111067494",
                       "size_raw":  "24 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-sliced-white-mushrooms-big-deal-/0001111067494"
                   },
                   {
@@ -22971,7 +22971,7 @@
                       "product_id":  "0001111011471",
                       "size_raw":  "8 ct / 14 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-100-whole-wheat-hamburger-buns/0001111011471"
                   },
                   {
@@ -23148,7 +23148,7 @@
                       "product_id":  "0001111011689",
                       "size_raw":  "8 ct / 12 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/smart-way-hamburger-buns/0001111011689"
                   },
                   {
@@ -23240,7 +23240,7 @@
                       "product_id":  "0001111008416",
                       "size_raw":  "6 ct / 18 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-plain-bagels/0001111008416"
                   },
                   {
@@ -24213,7 +24213,7 @@
                       "product_id":  "0007321400940",
                       "size_raw":  "24.5 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/mezzetta-family-recipes-spicy-marinara/0007321400940"
                   },
                   {
@@ -24980,7 +24980,7 @@
                       "product_id":  "0003114605810",
                       "size_raw":  "3.56 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/nongshim-tonkotsu-ramen-with-kuromayu-black-garlic-oil/0003114605810"
                   },
                   {
@@ -25492,7 +25492,7 @@
                       "product_id":  "0001111085585",
                       "size_raw":  "32 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-light-brown-sugar/0001111085585"
                   },
                   {
@@ -25732,7 +25732,7 @@
                       "product_id":  "0005000033104",
                       "size_raw":  "28 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/starbucks-oat-milk-creamer-brown-sugar-cinnamon-28floz/0005000033104"
                   },
                   {
@@ -26169,7 +26169,7 @@
                       "product_id":  "0001111534004",
                       "size_raw":  "15 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/brummel-brown-buttery-vegetable-oil-with-yogurt-spread/0001111534004"
                   },
                   {
@@ -26419,7 +26419,7 @@
                       "product_id":  "0002190845556",
                       "size_raw":  "9.2 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/cascadian-farm-organic-cinnamon-crunch-cereal/0002190845556",
                       "base_price":  4.99,
                       "marked_down":  true
@@ -30012,7 +30012,7 @@
                       "product_id":  "0001111008890",
                       "size_raw":  "13 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-classic-potato-chips-family-size/0001111008890"
                   },
                   {
@@ -30378,7 +30378,7 @@
                       "product_id":  "0084942900089",
                       "size_raw":  "12 pk / 12 fl oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/zevia-cola-zero-sugar-soda-cans/0084942900089"
                   },
                   {
@@ -30440,7 +30440,7 @@
                       "product_id":  "0001111049681",
                       "size_raw":  "12 pk / 12 fl oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/diet-big-k-cola-caffeine-free-zero-calorie-soda-cans/0001111049681",
                       "base_price":  4.99,
                       "marked_down":  true
@@ -31266,7 +31266,7 @@
                       "product_id":  "0001111011830",
                       "size_raw":  "24 ct",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-vanilla-frozen-dairy-dessert-sandwiches/0001111011830"
                   },
                   {
@@ -31435,7 +31435,7 @@
                       "product_id":  "0001111009160",
                       "size_raw":  "48 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-frozen-vegetables-mixed-big-deal-/0001111009160",
                       "base_price":  8.79,
                       "marked_down":  true
@@ -31548,7 +31548,7 @@
                       "product_id":  "0001450001190",
                       "size_raw":  "10.8 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/birds-eye-steamfresh-mediterranean-style-blend-frozen-vegetables/0001450001190"
                   },
                   {
@@ -33308,7 +33308,7 @@
                       "product_id":  "0003077220704",
                       "size_raw":  "18 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/dawn-ultra-dish-soap-dishwashing-liquid-apple-blossom/0003077220704",
                       "base_price":  3.49,
                       "marked_down":  true
@@ -36176,7 +36176,7 @@
                       "product_id":  "0000000004050",
                       "size_raw":  "1 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/cantaloupe/0000000004050"
                   },
                   {
@@ -36600,7 +36600,7 @@
                       "product_id":  "0003890000143",
                       "size_raw":  "20 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/dole-canned-pineapple-slices-fruit-in-100-pineapple-juice/0003890000143"
                   },
                   {
@@ -36942,7 +36942,7 @@
                       "product_id":  "0001111063571",
                       "size_raw":  "3 lbs.",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/fresh-kroger-plums-in-3lb-clamshell/0001111063571"
                   },
                   {
@@ -37077,7 +37077,7 @@
                       "product_id":  "0001111081486",
                       "size_raw":  "28 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/private-selection-san-marzano-peeled-whole-plum-tomatoes-with-basil/0001111081486"
                   },
                   {
@@ -39086,7 +39086,7 @@
                       "product_id":  "0001111060338",
                       "size_raw":  "1 lb",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/private-selection-red-mini-petite-spudlings-gourmet-potatoes/0001111060338"
                   },
                   {
@@ -39853,7 +39853,7 @@
                       "product_id":  "0007024717687",
                       "size_raw":  "12 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/farmland-original-pork-sausage-roll/0007024717687",
                       "base_price":  2.99,
                       "marked_down":  true
@@ -40229,7 +40229,7 @@
                       "product_id":  "0001111063954",
                       "size_raw":  "5 ct / 18 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-limited-edition-chili-cheese-bratwurst/0001111063954"
                   },
                   {
@@ -41134,7 +41134,7 @@
                       "product_id":  "0063803161220",
                       "size_raw":  "5 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/field-roast-classic-pizzeria-plant-based-pepperoni-slices/0063803161220"
                   },
                   {
@@ -42095,7 +42095,7 @@
                       "product_id":  "0004126089788",
                       "size_raw":  "1 pint",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/jackson-company-half-half/0004126089788"
                   },
                   {
@@ -42185,7 +42185,7 @@
                       "product_id":  "0074236523295",
                       "size_raw":  "1 qt",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/horizon-organic-half-and-half/0074236523295"
                   },
                   {
@@ -42247,7 +42247,7 @@
                       "product_id":  "0009396651300",
                       "size_raw":  "64 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/organic-valley-whole-milk-half-gallon/0009396651300",
                       "base_price":  5.79,
                       "marked_down":  true
@@ -42703,7 +42703,7 @@
                       "product_id":  "0004157011019",
                       "size_raw":  "96 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/blue-diamond-almond-breeze-unsweetened-original-almond-milk/0004157011019"
                   },
                   {
@@ -42810,7 +42810,7 @@
                       "product_id":  "0081363602335",
                       "size_raw":  "48 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/califia-farms-organic-unsweetened-almond-milk/0081363602335"
                   },
                   {
@@ -42962,7 +42962,7 @@
                       "product_id":  "0002529300535",
                       "size_raw":  "24 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/silk-unsweetened-vanilla-dairy-free-vegan-almond-milk-yogurt-alternative-tub/0002529300535"
                   },
                   {
@@ -43271,7 +43271,7 @@
                       "product_id":  "0019064663214",
                       "size_raw":  "64 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/oatly-dairy-free-vanilla-oatmilk/0019064663214",
                       "base_price":  5.99,
                       "marked_down":  true
@@ -43696,7 +43696,7 @@
                       "product_id":  "0007027729000",
                       "size_raw":  "12 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/athenos-traditional-crumbled-feta-cheese/0007027729000"
                   },
                   {
@@ -43758,7 +43758,7 @@
                       "product_id":  "0007790100781",
                       "size_raw":  "6 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/president-feta-cheese-crumbles-6-oz/0007790100781",
                       "base_price":  5.49,
                       "marked_down":  true
@@ -44370,7 +44370,7 @@
                       "product_id":  "0005000035022",
                       "size_raw":  "64 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/coffee-mate-french-vanilla-flavored-coffee-creamer-non-dairy-gluten-free/0005000035022"
                   },
                   {
@@ -44475,7 +44475,7 @@
                       "product_id":  "0004127101993",
                       "size_raw":  "32 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/international-delight-cinnabon-liquid-coffee-creamer/0004127101993"
                   },
                   {
@@ -45093,7 +45093,7 @@
                       "product_id":  "0001111011403",
                       "size_raw":  "8 ct / 13 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-100-whole-wheat-hot-dog-buns/0001111011403"
                   },
                   {
@@ -45125,7 +45125,7 @@
                       "product_id":  "0001111011516",
                       "size_raw":  "8 ct / 17 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/private-selection-sweet-hawaiian-hot-dog-buns/0001111011516",
                       "base_price":  3.79,
                       "marked_down":  true
@@ -45379,7 +45379,7 @@
                       "product_id":  "0001111014669",
                       "size_raw":  "12 ct",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/private-selection-brioche-dinner-rolls/0001111014669"
                   },
                   {
@@ -45880,7 +45880,7 @@
                       "product_id":  "0007790050241",
                       "size_raw":  "4 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/jimmy-dean-delights-turkey-sausage-egg-white-cheese-english-muffin-frozen-breakfast-sandwiches/0007790050241"
                   },
                   {
@@ -47333,7 +47333,7 @@
                       "product_id":  "0002840000848",
                       "size_raw":  "6.75 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/stacy-s-pita-thins-sea-salt-no-artificial-colors-or-flavors/0002840000848"
                   },
                   {
@@ -47579,7 +47579,7 @@
                       "product_id":  "0001330028064",
                       "size_raw":  "32 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/hungry-jack-complete-buttermilk-pancake-mix-and-waffle-mix-32-oz-box/0001330028064",
                       "base_price":  3.39,
                       "marked_down":  true
@@ -49203,7 +49203,7 @@
                       "product_id":  "0001111085347",
                       "size_raw":  "16 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-powdered-sugar/0001111085347"
                   },
                   {
@@ -50816,7 +50816,7 @@
                       "product_id":  "0001111013790",
                       "size_raw":  "14 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-unrefined-virgin-coconut-oil/0001111013790"
                   },
                   {
@@ -51203,7 +51203,7 @@
                       "product_id":  "0001111010766",
                       "size_raw":  "32 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-raw-and-unfiltered-apple-cider-vinegar/0001111010766"
                   },
                   {
@@ -51558,7 +51558,7 @@
                       "product_id":  "0001340935231",
                       "size_raw":  "28 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/sweet-baby-ray-s-original-barbecue-sauce/0001340935231"
                   },
                   {
@@ -51913,7 +51913,7 @@
                       "product_id":  "0002066200193",
                       "size_raw":  "16 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/newman-s-own-family-recipe-italian-salad-dressing/0002066200193"
                   },
                   {
@@ -56444,7 +56444,7 @@
                       "product_id":  "0001111084736",
                       "size_raw":  "14 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-instant-brown-rice/0001111084736"
                   },
                   {
@@ -56583,7 +56583,7 @@
                       "product_id":  "0005480042348",
                       "size_raw":  "8.5 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/ben-s-original-ready-rice-brown-basmati-rice-easy-dinner-side-8-5-oz-pouch/0005480042348"
                   },
                   {
@@ -56795,7 +56795,7 @@
                       "product_id":  "0009281924041",
                       "size_raw":  "13.5 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/mrs-miller-s-medium-egg-noodles/0009281924041"
                   },
                   {
@@ -57324,7 +57324,7 @@
                       "product_id":  "0085002473560",
                       "size_raw":  "15 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/carbone-alfredo-pasta-sauce/0085002473560",
                       "base_price":  8.99,
                       "marked_down":  true
@@ -58062,7 +58062,7 @@
                       "product_id":  "0001111019438",
                       "size_raw":  "8 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-roasted-red-pepper-hummus/0001111019438",
                       "base_price":  3.99,
                       "marked_down":  true
@@ -58094,7 +58094,7 @@
                       "product_id":  "0004411540301",
                       "size_raw":  "10 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/cedar-s-organic-original-hummus/0004411540301"
                   },
                   {
@@ -61330,7 +61330,7 @@
                       "product_id":  "0002700048917",
                       "size_raw":  "19.74 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/orville-redenbacher-s-naturals-simply-salted-microwave-popcorn-microwave-popcorn/0002700048917",
                       "base_price":  5.29,
                       "marked_down":  true
@@ -62387,7 +62387,7 @@
                       "product_id":  "0001111003763",
                       "size_raw":  "18 ct / 0.84 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-chewy-granola-bars-variety-pack/0001111003763"
                   },
                   {
@@ -63231,7 +63231,7 @@
                       "product_id":  "0004142008102",
                       "size_raw":  "22 ct",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/black-forest-juicy-burst-mixed-fruit-fruit-flavored-snacks/0004142008102",
                       "base_price":  6.29,
                       "marked_down":  true
@@ -64162,7 +64162,7 @@
                       "product_id":  "0081058903109",
                       "size_raw":  "8 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/purely-elizabeth-honey-almond-ancient-grain-granola/0081058903109"
                   },
                   {
@@ -64237,7 +64237,7 @@
                       "product_id":  "0003000016947",
                       "size_raw":  "7.23 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/quaker-chocolate-rice-cakes/0003000016947"
                   },
                   {
@@ -65072,7 +65072,7 @@
                       "product_id":  "0003890003032",
                       "size_raw":  "4 ct / 4.3 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/dole-fruit-bowls-peaches-in-strawberry-flavored-gel-fruit-cups/0003890003032",
                       "base_price":  3.79,
                       "marked_down":  true
@@ -65119,7 +65119,7 @@
                       "product_id":  "0001111006400",
                       "size_raw":  "4 ct / 4 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-pineapple-tidbits-cups-in-100-pineapple-juice/0001111006400"
                   },
                   {
@@ -66068,7 +66068,7 @@
                       "product_id":  "0001480000039",
                       "size_raw":  "1 gal",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/mott-s-original-no-sugar-added-100-apple-juice/0001480000039"
                   },
                   {
@@ -66158,7 +66158,7 @@
                       "product_id":  "0003120022007",
                       "size_raw":  "64 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/ocean-spray-cran-grape-juice-drink/0003120022007"
                   },
                   {
@@ -68549,7 +68549,7 @@
                       "product_id":  "0007024230120",
                       "size_raw":  "1 gallon",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/red-diamond-unsweetened-iced-tea-carton/0007024230120"
                   },
                   {
@@ -68639,7 +68639,7 @@
                       "product_id":  "0001111013443",
                       "size_raw":  "1 gal",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-half-half-decaffeinated-iced-tea-lemonade/0001111013443"
                   },
                   {
@@ -69715,7 +69715,7 @@
                       "product_id":  "0001111007475",
                       "size_raw":  "12 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-hazelnut-light-roast-k-cup-coffee-pods/0001111007475",
                       "base_price":  4.99,
                       "marked_down":  true
@@ -70560,7 +70560,7 @@
                       "product_id":  "0001450001125",
                       "size_raw":  "10.8 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/birds-eye-steamfresh-mexican-style-street-corn-frozen-vegetables/0001450001125",
                       "base_price":  2.99,
                       "marked_down":  true
@@ -72404,7 +72404,7 @@
                       "product_id":  "0001111087584",
                       "size_raw":  "5 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-frozen-tater-bites-big-deal-/0001111087584"
                   },
                   {
@@ -74873,7 +74873,7 @@
                       "product_id":  "0075703751650",
                       "size_raw":  "5 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/oxiclean-versatile-stain-remover-powder/0075703751650"
                   },
                   {
@@ -75500,7 +75500,7 @@
                       "product_id":  "0003700006356",
                       "size_raw":  "400 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/bounty-white-paper-napkins/0003700006356",
                       "base_price":  7.49,
                       "marked_down":  true
@@ -76411,7 +76411,7 @@
                       "product_id":  "0001920077182",
                       "size_raw":  "80 ct",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/lysol-disinfecting-wipes-lemon-lime-blossom-cannister/0001920077182",
                       "base_price":  5.79,
                       "marked_down":  true
@@ -79503,6 +79503,1084 @@
                   },
                   {
                       "store":  "Baker\u0027s",
+                      "item":  "Suave Essentials Cocoa Butter \u0026 Shea Body Wash",
+                      "ad_price":  "$3.29",
+                      "size":  "18 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  3.29,
+                      "product_id":  "0038371100447",
+                      "size_raw":  "18 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/suave-essentials-cocoa-butter-shea-body-wash/0038371100447"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Olay Fresh Radiance Body Wash Black Cherry and Vanilla Vitamin B3 and Antioxidant Blend",
+                      "ad_price":  "$7.99",
+                      "size":  "22 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  7.99,
+                      "product_id":  "0003077222067",
+                      "size_raw":  "22 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/olay-fresh-radiance-body-wash-black-cherry-and-vanilla-vitamin-b3-and-antioxidant-blend/0003077222067",
+                      "base_price":  8.49,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dove Body Wash Pump For 24hr Lotion-Soft Sensitive Skin Moisturizing Cleanser Gentle Hypoallergenic",
+                      "ad_price":  "$10.49",
+                      "size":  "30.6 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  10.49,
+                      "product_id":  "0001111139649",
+                      "size_raw":  "30.6 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dove-body-wash-pump-for-24hr-lotion-soft-sensitive-skin-moisturizing-cleanser-gentle-hypoallergenic/0001111139649",
+                      "base_price":  11.49,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dial Refresh \u0026 Renew Spring Water Body Wash Gentle on All Skin Types",
+                      "ad_price":  "$3.99",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  3.99,
+                      "product_id":  "0001700001874",
+                      "size_raw":  "16 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dial-refresh-renew-spring-water-body-wash-gentle-on-all-skin-types/0001700001874",
+                      "base_price":  5.29,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Suave Wild Cherry Blossom Body Wash",
+                      "ad_price":  "$3.29",
+                      "size":  "18 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  3.29,
+                      "product_id":  "0038371100467",
+                      "size_raw":  "18 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/suave-wild-cherry-blossom-body-wash/0038371100467"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dove Body Wash for 24hr Lotion-Soft Skin Restore Coconut \u0026 Cocoa Butter Moisturizing Skin Cleanser",
+                      "ad_price":  "$8.49",
+                      "size":  "20 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  8.49,
+                      "product_id":  "0001111107973",
+                      "size_raw":  "20 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dove-body-wash-for-24hr-lotion-soft-skin-restore-coconut-cocoa-butter-moisturizing-skin-cleanser/0001111107973",
+                      "base_price":  8.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Suave Essentials Milk \u0026 Honey Body Wash",
+                      "ad_price":  "$3.29",
+                      "size":  "18 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  3.29,
+                      "product_id":  "0038371100452",
+                      "size_raw":  "18 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/suave-essentials-milk-honey-body-wash/0038371100452"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dial Exfoliate \u0026 Restore Himalayan Salt Body Wash with Vitamin E",
+                      "ad_price":  "$3.99",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  3.99,
+                      "product_id":  "0001700009273",
+                      "size_raw":  "16 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dial-exfoliate-restore-himalayan-salt-body-wash-with-vitamin-e/0001700009273",
+                      "base_price":  5.29,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dr Teal\u0027s Body Wash with Pure Epsom Salt, Relax \u0026 Relief with Eucalyptus \u0026 Spearmint Essential Oil",
+                      "ad_price":  "$5.99",
+                      "size":  "24 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  5.99,
+                      "product_id":  "0081106801159",
+                      "size_raw":  "24 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dr-teal-s-body-wash-with-pure-epsom-salt-relax-relief-with-eucalyptus-spearmint-essential-oil/0081106801159"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Olay Ultra Moisture Body Wash with Shea Butter Vitamin B3 and Hyaluronic Blend",
+                      "ad_price":  "$11.49",
+                      "size":  "35 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  11.49,
+                      "product_id":  "0003077222069",
+                      "size_raw":  "35 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/olay-ultra-moisture-body-wash-with-shea-butter-vitamin-b3-and-hyaluronic-blend/0003077222069"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Softsoap Body Wash Moisturizing Juicy Pomegranate \u0026 Mango Scent",
+                      "ad_price":  "$5.49",
+                      "size":  "20 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  5.49,
+                      "product_id":  "0007418247351",
+                      "size_raw":  "20 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/softsoap-body-wash-moisturizing-juicy-pomegranate-mango-scent/0007418247351"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Olay Ultra Moisture Exfoliating Body Wash Vitamin B3 and Hyaluronic Blend",
+                      "ad_price":  "$7.99",
+                      "size":  "22 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  7.99,
+                      "product_id":  "0003700097481",
+                      "size_raw":  "22 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/olay-ultra-moisture-exfoliating-body-wash-vitamin-b3-and-hyaluronic-blend/0003700097481",
+                      "base_price":  8.49,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Old Spice Men\u0027s Body Wash Pump Swagger Scent of Confidence",
+                      "ad_price":  "$10.99",
+                      "size":  "33.4 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  10.99,
+                      "product_id":  "0003700073357",
+                      "size_raw":  "33.4 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/old-spice-men-s-body-wash-pump-swagger-scent-of-confidence/0003700073357"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "eos Vanilla Cashmere Body Wash",
+                      "ad_price":  "$10.99",
+                      "size":  "16 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  10.99,
+                      "product_id":  "0084004471416",
+                      "size_raw":  "16 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/eos-vanilla-cashmere-body-wash/0084004471416"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dove Body Wash Sensitive Skin Moisturizing Skin Cleanser",
+                      "ad_price":  "$8.49",
+                      "size":  "20 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  8.49,
+                      "product_id":  "0001111112224",
+                      "size_raw":  "20 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dove-body-wash-sensitive-skin-moisturizing-skin-cleanser/0001111112224",
+                      "base_price":  8.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Kroger Sensitive Skin Body Wash",
+                      "ad_price":  "$6.49",
+                      "size":  "33.8 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  6.49,
+                      "product_id":  "0004126001803",
+                      "size_raw":  "33.8 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/kroger-sensitive-skin-body-wash/0004126001803"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dial Ultimate Clean Men\u0027s 3-in-1 Body Wash + Hair + Face Wash in Amber Wood Scent",
+                      "ad_price":  "$3.99",
+                      "size":  "16 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  3.99,
+                      "product_id":  "0001700004620",
+                      "size_raw":  "16 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dial-ultimate-clean-men-s-3-in-1-body-wash-hair-face-wash-in-amber-wood-scent/0001700004620",
+                      "base_price":  5.29,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dove Body Wash with Pump For 24hr Lotion-Soft Skin Renew Peony \u0026 Rose Oil Moisturizing Skin Cleanser",
+                      "ad_price":  "$8.49",
+                      "size":  "20 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  8.49,
+                      "product_id":  "0001111152720",
+                      "size_raw":  "20 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dove-body-wash-with-pump-for-24hr-lotion-soft-skin-renew-peony-rose-oil-moisturizing-skin-cleanser/0001111152720",
+                      "base_price":  8.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Old Spice High Endurance for Men Body Wash, Pure Sport Scent, 33.4 fl oz",
+                      "ad_price":  "$9.99",
+                      "size":  "33.4 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  9.99,
+                      "product_id":  "0003700073360",
+                      "size_raw":  "33.4 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
+                      "link_url":  "https://www.bakersplus.com/p/old-spice-high-endurance-for-men-body-wash-pure-sport-scent-33-4-fl-oz/0003700073360"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dove Body Wash Pamper Shea Butter \u0026 Vanilla Moisturizing Skin Cleanser with No Sulfates No Parabens",
+                      "ad_price":  "$8.49",
+                      "size":  "20 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  8.49,
+                      "product_id":  "0001111111522",
+                      "size_raw":  "20 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dove-body-wash-pamper-shea-butter-vanilla-moisturizing-skin-cleanser-with-no-sulfates-no-parabens/0001111111522",
+                      "base_price":  8.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Method Men Sea + Surf Body Wash",
+                      "ad_price":  "$12.99",
+                      "size":  "28.0 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  12.99,
+                      "product_id":  "0084353610716",
+                      "size_raw":  "28.0 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/method-men-sea-surf-body-wash/0084353610716"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Caress Daily Silk Body Wash, White Peach \u0026 Orange Blossom, Silky Soft Skin",
+                      "ad_price":  "$6.99",
+                      "size":  "20 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  6.99,
+                      "product_id":  "0001111104143",
+                      "size_raw":  "20 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/caress-daily-silk-body-wash-white-peach-orange-blossom-silky-soft-skin/0001111104143"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Olay Fresh Radiance Body Wash Birch Water and Lavender Vitamin B3 and Antioxidant Blend",
+                      "ad_price":  "$7.99",
+                      "size":  "22 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  7.99,
+                      "product_id":  "0003077222098",
+                      "size_raw":  "22 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/olay-fresh-radiance-body-wash-birch-water-and-lavender-vitamin-b3-and-antioxidant-blend/0003077222098",
+                      "base_price":  8.49,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Irish Spring Bar Soap Original Scent",
+                      "ad_price":  "$4.79",
+                      "size":  "8 pk 3.7 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  4.79,
+                      "product_id":  "0003500014110",
+                      "size_raw":  "8 ct / 3.7 oz",
+                      "size_basis":  "netweight",
+                      "stock_level":  "LOW",
+                      "link_url":  "https://www.bakersplus.com/p/irish-spring-bar-soap-original-scent/0003500014110",
+                      "base_price":  6.29,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Irish Spring Bar Soap Original Scent",
+                      "ad_price":  "$3.29",
+                      "size":  "3 pk 3.7 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  3.29,
+                      "product_id":  "0003500014108",
+                      "size_raw":  "3 ct / 3.7 oz",
+                      "size_basis":  "netweight",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/irish-spring-bar-soap-original-scent/0003500014108"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Ivory Gentle Bar Soap Plant-Based Without Heavy Perfumes, Parabens or Phthalates, Original Scent",
+                      "ad_price":  "$1.99",
+                      "size":  "2 ct",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  1.99,
+                      "product_id":  "0003077222301",
+                      "size_raw":  "2 ct",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/ivory-gentle-bar-soap-plant-based-without-heavy-perfumes-parabens-or-phthalates-original-scent/0003077222301"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dove Beauty Bar Soap for Nourished, Radiant Skin Shea Butter Enriches Skin",
+                      "ad_price":  "$8.49",
+                      "size":  "4 pk 3.75 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  8.49,
+                      "product_id":  "0001111107625",
+                      "size_raw":  "4 ct / 3.75 oz",
+                      "size_basis":  "netweight",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dove-beauty-bar-soap-for-nourished-radiant-skin-shea-butter-enriches-skin/0001111107625",
+                      "base_price":  9.29,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Simple Truth Hypoallergenic Pure Castile Bar Soap Honey Almond Scent",
+                      "ad_price":  "$3.49",
+                      "size":  "4.5 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  3.49,
+                      "product_id":  "0004126038526",
+                      "size_raw":  "4.5 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/simple-truth-hypoallergenic-pure-castile-bar-soap-honey-almond-scent/0004126038526"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dial Advanced Clean Gold Antibacterial Deodorant Bar Soap",
+                      "ad_price":  "$4.99",
+                      "size":  "3 pk 4 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  4.99,
+                      "product_id":  "0001700002402",
+                      "size_raw":  "3 pk / 4 oz",
+                      "size_basis":  "netweight",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dial-advanced-clean-gold-antibacterial-deodorant-bar-soap/0001700002402"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dove Beauty Bar Soap Antibacterial Care Removes 99% Bacteria",
+                      "ad_price":  "$8.49",
+                      "size":  "4 pk 3.75 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  8.49,
+                      "product_id":  "0001111102588",
+                      "size_raw":  "4 ct / 3.75 oz",
+                      "size_basis":  "netweight",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dove-beauty-bar-soap-antibacterial-care-removes-99-bacteria/0001111102588",
+                      "base_price":  9.29,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Zest 8 Pack Bar Soap with Cocoa Butter \u0026 Shea Moisturizing",
+                      "ad_price":  "$6.49",
+                      "size":  "8 pk 4 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  6.49,
+                      "product_id":  "0081655901251",
+                      "size_raw":  "8 ct / 4 oz",
+                      "size_basis":  "netweight",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/zest-8-pack-bar-soap-with-cocoa-butter-shea-moisturizing/0081655901251"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Irish Spring Bar Soap Moisture Blast",
+                      "ad_price":  "$4.79",
+                      "size":  "8 pk 3.7 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  4.79,
+                      "product_id":  "0003500014329",
+                      "size_raw":  "8 ct / 3.7 oz",
+                      "size_basis":  "netweight",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/irish-spring-bar-soap-moisture-blast/0003500014329",
+                      "base_price":  6.29,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dove 4 Bars Sensitive Fragrance Free and Hypoallergenic",
+                      "ad_price":  "$8.49",
+                      "size":  "3.75 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  8.49,
+                      "product_id":  "0001111161554",
+                      "size_raw":  "3.75 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dove-4-bars-sensitive-fragrance-free-and-hypoallergenic/0001111161554",
+                      "base_price":  9.29,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dove Original with 1/4 Moisturizing Cream",
+                      "ad_price":  "$8.49",
+                      "size":  "4 pk 3.75 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  8.49,
+                      "product_id":  "0001111161069",
+                      "size_raw":  "4 ct / 3.75 oz",
+                      "size_basis":  "netweight",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dove-original-with-1-4-moisturizing-cream/0001111161069",
+                      "base_price":  9.29,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dial Refresh \u0026 Renew Spring Water Antibacterial Deodorant Bar Soap",
+                      "ad_price":  "$4.99",
+                      "size":  "3 pk 4 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  4.99,
+                      "product_id":  "0001700001840",
+                      "size_raw":  "3 pk / 4 oz",
+                      "size_basis":  "netweight",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dial-refresh-renew-spring-water-antibacterial-deodorant-bar-soap/0001700001840"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dove Men+Care 6 Bars Clean Comfort More Moisturizing Than Bar Soap",
+                      "ad_price":  "$11.79",
+                      "size":  "3.75 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  11.79,
+                      "product_id":  "0001111140784",
+                      "size_raw":  "3.75 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dove-men-care-6-bars-clean-comfort-more-moisturizing-than-bar-soap/0001111140784"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dove 2 Bars Beauty Bar Soap for Sensitive Skin Fragrance Free and Hypoallergenic",
+                      "ad_price":  "$5.49",
+                      "size":  "2 pk 3.75 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  5.49,
+                      "product_id":  "0001111161120",
+                      "size_raw":  "2 ct / 3.75 oz",
+                      "size_basis":  "netweight",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dove-2-bars-beauty-bar-soap-for-sensitive-skin-fragrance-free-and-hypoallergenic/0001111161120"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Zest 8-Pack Bar Soap Refreshing Aqua Scent With Vitamin E",
+                      "ad_price":  "$6.49",
+                      "size":  "8 pk 4 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  6.49,
+                      "product_id":  "0081655901009",
+                      "size_raw":  "8 ct / 4 oz",
+                      "size_basis":  "netweight",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/zest-8-pack-bar-soap-refreshing-aqua-scent-with-vitamin-e/0081655901009"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dove Beauty Bar Original Made With 1/4 Moisturizing Cream",
+                      "ad_price":  "$2.49",
+                      "size":  "3.17 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  2.49,
+                      "product_id":  "0001111161424",
+                      "size_raw":  "3.17 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dove-beauty-bar-original-made-with-1-4-moisturizing-cream/0001111161424"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dr. Bronner\u0027s All-One Hemp Lavender Pure-Castile Bar Soap",
+                      "ad_price":  "$5.99",
+                      "size":  "5 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  5.99,
+                      "product_id":  "0001878778405",
+                      "size_raw":  "5 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dr-bronner-s-all-one-hemp-lavender-pure-castile-bar-soap/0001878778405"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dr. Bronner\u0027s 18-in-1 Pure Castile Magic Bar Soap Peppermint",
+                      "ad_price":  "$5.99",
+                      "size":  "5 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  5.99,
+                      "product_id":  "0001878778505",
+                      "size_raw":  "5 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dr-bronner-s-18-in-1-pure-castile-magic-bar-soap-peppermint/0001878778505"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Irish Spring Bar Soap Original Scent",
+                      "ad_price":  "$9.49",
+                      "size":  "12 pk 3.7 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  9.49,
+                      "product_id":  "0003500014112",
+                      "size_raw":  "12 ct / 3.7 oz",
+                      "size_basis":  "netweight",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/irish-spring-bar-soap-original-scent/0003500014112"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Simple Truth Lavender Hypoallergenic Pure Castile Soap",
+                      "ad_price":  "$3.49",
+                      "size":  "4.5 oz.",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  3.49,
+                      "product_id":  "0004126037634",
+                      "size_raw":  "4.5 oz.",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/simple-truth-lavender-hypoallergenic-pure-castile-soap/0004126037634"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Suave Antiperspirant Deodorant For Women, Invisible 48hr Protection, Powder, 2.6 oz",
+                      "ad_price":  "$3.19",
+                      "size":  "2.6 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  3.19,
+                      "product_id":  "0038371100250",
+                      "size_raw":  "2.6 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/suave-antiperspirant-deodorant-for-women-invisible-48hr-protection-powder-2-6-oz/0038371100250"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Degree Antiperspirant Deodorant 72-hour Sweat and Odor Protection",
+                      "ad_price":  "$5.49",
+                      "size":  "2.6 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  5.49,
+                      "product_id":  "0007940044870",
+                      "size_raw":  "2.6 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/degree-antiperspirant-deodorant-72-hour-sweat-and-odor-protection/0007940044870"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Suave Antiperspirant Deodorant For Women, Invisible 48hr Protection, Powder, 1.2 oz",
+                      "ad_price":  "$2.19",
+                      "size":  "1.2 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  2.19,
+                      "product_id":  "0038371100253",
+                      "size_raw":  "1.2 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/suave-antiperspirant-deodorant-for-women-invisible-48hr-protection-powder-1-2-oz/0038371100253"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Arm \u0026 Hammer Ultra Max Fresh Antiperspirant Deodorant Stick",
+                      "ad_price":  "$2.99",
+                      "size":  "2.6 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  2.99,
+                      "product_id":  "0003320019724",
+                      "size_raw":  "2.6 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/arm-hammer-ultra-max-fresh-antiperspirant-deodorant-stick/0003320019724"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dove Advanced Care Caring Coconut Antiperspirant Deodorant Stick",
+                      "ad_price":  "$7.99",
+                      "size":  "2.6 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  7.99,
+                      "product_id":  "0007940038641",
+                      "size_raw":  "2.6 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dove-advanced-care-caring-coconut-antiperspirant-deodorant-stick/0007940038641",
+                      "base_price":  8.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Degree Men Antiperspirant Deodorant For Men With MotionSense Technology",
+                      "ad_price":  "$5.49",
+                      "size":  "2.7 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  5.49,
+                      "product_id":  "0007940058708",
+                      "size_raw":  "2.7 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/degree-men-antiperspirant-deodorant-for-men-with-motionsense-technology/0007940058708"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Secret for Women Antiperspirant Deodorant Clear Gel Refreshing Lavender Scent",
+                      "ad_price":  "$6.99",
+                      "size":  "1 pk 2.6 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  6.99,
+                      "product_id":  "0003700020468",
+                      "size_raw":  "1 pack / 2.6 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/secret-for-women-antiperspirant-deodorant-clear-gel-refreshing-lavender-scent/0003700020468",
+                      "base_price":  7.49,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Degree Antiperspirant Deodorant Sexy Intrigue",
+                      "ad_price":  "$5.49",
+                      "size":  "2.6 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  5.49,
+                      "product_id":  "0007940001743",
+                      "size_raw":  "2.6 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/degree-antiperspirant-deodorant-sexy-intrigue/0007940001743"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Old Spice for Men Antiperspirant Deodorant Invisible Solid Fiji Scent 1-Pack",
+                      "ad_price":  "$7.99",
+                      "size":  "1 pk 2.6 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  7.99,
+                      "product_id":  "0001204401560",
+                      "size_raw":  "1 pack / 2.6 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/old-spice-for-men-antiperspirant-deodorant-invisible-solid-fiji-scent-1-pack/0001204401560",
+                      "base_price":  8.49,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Gillette ClearShield for Men Antiperspirant Deodorant Clear Gel Cool Wave Scent 1-Pack",
+                      "ad_price":  "$6.99",
+                      "size":  "1 pk 3.8 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  6.99,
+                      "product_id":  "0004740009772",
+                      "size_raw":  "1 pack / 3.8 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/gillette-clearshield-for-men-antiperspirant-deodorant-clear-gel-cool-wave-scent-1-pack/0004740009772",
+                      "base_price":  7.49,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Degree Original Men\u0027s Antiperspirant Deodorant Cool Rush",
+                      "ad_price":  "$4.69",
+                      "size":  "2.6 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  4.69,
+                      "product_id":  "0007940026540",
+                      "size_raw":  "2.6 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/degree-original-men-s-antiperspirant-deodorant-cool-rush/0007940026540"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dove Advanced Care Cool Essentials Antiperspirant Deodorant for Women",
+                      "ad_price":  "$7.99",
+                      "size":  "2.6 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  7.99,
+                      "product_id":  "0007940035297",
+                      "size_raw":  "2.6 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dove-advanced-care-cool-essentials-antiperspirant-deodorant-for-women/0007940035297",
+                      "base_price":  8.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Secret for Women Antiperspirant Deodorant Invisible Solid Powder Fresh Scent",
+                      "ad_price":  "$5.29",
+                      "size":  "1 pk 2.6 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  5.29,
+                      "product_id":  "0003700012343",
+                      "size_raw":  "1 pack / 2.6 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/secret-for-women-antiperspirant-deodorant-invisible-solid-powder-fresh-scent/0003700012343"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Suave Antiperspirant Deodorant For Women, Invisible 48hr Protection, Fresh, 2.6 oz",
+                      "ad_price":  "$3.19",
+                      "size":  "2.6 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  3.19,
+                      "product_id":  "0038371100249",
+                      "size_raw":  "2.6 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/suave-antiperspirant-deodorant-for-women-invisible-48hr-protection-fresh-2-6-oz/0038371100249"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Secret for Women Antiperspirant Deodorant Invisible Solid Coconut Scent",
+                      "ad_price":  "$6.99",
+                      "size":  "1 pk 2.6 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  6.99,
+                      "product_id":  "0003700049800",
+                      "size_raw":  "1 pack / 2.6 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/secret-for-women-antiperspirant-deodorant-invisible-solid-coconut-scent/0003700049800",
+                      "base_price":  7.49,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Secret for Women Aluminum-Free Deodorant Coconut Scent",
+                      "ad_price":  "$6.99",
+                      "size":  "2.4 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  6.99,
+                      "product_id":  "0003700080091",
+                      "size_raw":  "2.4 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/secret-for-women-aluminum-free-deodorant-coconut-scent/0003700080091",
+                      "base_price":  7.49,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Secret Clinical Antiperspirant Deodorant for Women, 100HR Sweat \u0026 Odor Protection",
+                      "ad_price":  "$13.99",
+                      "size":  "1 pk 2.6 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  13.99,
+                      "product_id":  "0003700088527",
+                      "size_raw":  "1 pack / 2.6 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/secret-clinical-antiperspirant-deodorant-for-women-100hr-sweat-odor-protection/0003700088527",
+                      "base_price":  14.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Secret Outlast for Women Antiperspirant Deodorant Clear Gel Completely Clean Scent",
+                      "ad_price":  "$7.99",
+                      "size":  "1 pk 2.6 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  7.99,
+                      "product_id":  "0003700080822",
+                      "size_raw":  "1 pack / 2.6 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/secret-outlast-for-women-antiperspirant-deodorant-clear-gel-completely-clean-scent/0003700080822",
+                      "base_price":  8.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Degree Original Men Antiperspirant Deodorant Cool Rush Antiperspirant For Men",
+                      "ad_price":  "$7.79",
+                      "size":  "2.7 fl oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  7.79,
+                      "product_id":  "0007940026700",
+                      "size_raw":  "2.7 fl oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/degree-original-men-antiperspirant-deodorant-cool-rush-antiperspirant-for-men/0007940026700"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Arm \u0026 Hammer Essentials Rosemary Lavender Deodorant Stick with Natural Deodorizers",
+                      "ad_price":  "$4.49",
+                      "size":  "2.5 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  4.49,
+                      "product_id":  "0003320019793",
+                      "size_raw":  "2.5 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/arm-hammer-essentials-rosemary-lavender-deodorant-stick-with-natural-deodorizers/0003320019793"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dove Clinical + Care Antiperspirant Deodorant Soft Solid for Women Original Clean",
+                      "ad_price":  "$12.99",
+                      "size":  "1.7 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  12.99,
+                      "product_id":  "0007940000879",
+                      "size_raw":  "1.7 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dove-clinical-care-antiperspirant-deodorant-soft-solid-for-women-original-clean/0007940000879"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dove Advanced Care Antiperspirant Deodorant Dry Spray Cool Essentials",
+                      "ad_price":  "$9.49",
+                      "size":  "3.8 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  9.49,
+                      "product_id":  "0007940034218",
+                      "size_raw":  "3.8 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dove-advanced-care-antiperspirant-deodorant-dry-spray-cool-essentials/0007940034218",
+                      "base_price":  9.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Dove Men+Care Men\u0027s Antiperspirant Deodorant Stick Clean Comfort",
+                      "ad_price":  "$8.49",
+                      "size":  "2.6 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  8.49,
+                      "product_id":  "0007940006671",
+                      "size_raw":  "2.6 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/dove-men-care-men-s-antiperspirant-deodorant-stick-clean-comfort/0007940006671",
+                      "base_price":  9.49,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Degree UltraClear Black+White Antiperspirant Deodorant Dry Spray for Women",
+                      "ad_price":  "$6.49",
+                      "size":  "3.8 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  6.49,
+                      "product_id":  "0007940044854",
+                      "size_raw":  "3.8 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/degree-ultraclear-black-white-antiperspirant-deodorant-dry-spray-for-women/0007940044854"
+                  },
+                  {
+                      "store":  "Baker\u0027s",
+                      "item":  "Secret Outlast Women\u0027s Antiperspirant Deodorant Invisible Solid Completely Clean, 2.6oz",
+                      "ad_price":  "$7.99",
+                      "size":  "1 pk 2.6 oz",
+                      "regular":  null,
+                      "source_ad":  "kroger-api",
+                      "as_of":  "2026-07-26",
+                      "current_price":  7.99,
+                      "product_id":  "0003700080805",
+                      "size_raw":  "1 pack / 2.6 oz",
+                      "size_basis":  "label",
+                      "stock_level":  "HIGH",
+                      "link_url":  "https://www.bakersplus.com/p/secret-outlast-women-s-antiperspirant-deodorant-invisible-solid-completely-clean-2-6oz/0003700080805",
+                      "base_price":  8.99,
+                      "marked_down":  true
+                  },
+                  {
+                      "store":  "Baker\u0027s",
                       "item":  "Kroger Twin Blade Disposable Razors Soft Touch",
                       "ad_price":  "$2.29",
                       "size":  "10 ct",
@@ -80722,7 +81800,7 @@
                       "product_id":  "0001700005400",
                       "size_raw":  "7.5 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/dial-antibacterial-defense-spring-water-scent-foaming-hand-soap/0001700005400"
                   },
                   {
@@ -83398,7 +84476,7 @@
                       "product_id":  "0002310014357",
                       "size_raw":  "18 lbs",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/pedigree-complete-nutrition-adult-dry-dog-food-roasted-chicken-vegetable-flavor/0002310014357"
                   },
                   {
@@ -83668,7 +84746,7 @@
                       "product_id":  "0005000010034",
                       "size_raw":  "3.15 lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/purina-friskies-cat-food-surfin-and-turfin-favorites-chicken-whitefish-salmon-and-filet-mignon/0005000010034"
                   },
                   {
@@ -84058,7 +85136,7 @@
                       "product_id":  "0007023001669",
                       "size_raw":  "35lb",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/purina-tidy-cats-clumping-cat-litter-24-7-performance-multi-cat-litter-35-lb-pail/0007023001669"
                   },
                   {
@@ -85722,7 +86800,7 @@
                       "product_id":  "0005210002276",
                       "size_raw":  "1.75 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/mccormick-smoked-paprika/0005210002276"
                   },
                   {
@@ -86358,7 +87436,7 @@
                       "product_id":  "0001111012124",
                       "size_raw":  "4 ct / 15 oz",
                       "size_basis":  "netweight",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-low-sodium-garbanzo-beans-big-deal-/0001111012124"
                   },
                   {
@@ -87491,7 +88569,7 @@
                       "product_id":  "0072534228315",
                       "size_raw":  "8 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/muir-glen-organic-tomato-sauce/0072534228315"
                   },
                   {
@@ -87596,7 +88674,7 @@
                       "product_id":  "0004139000003",
                       "size_raw":  "20 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kikkoman-soy-sauce/0004139000003"
                   },
                   {
@@ -87656,7 +88734,7 @@
                       "product_id":  "0004139000808",
                       "size_raw":  "10 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kikkoman-gluten-free-tamari-soy-sauce/0004139000808"
                   },
                   {
@@ -87866,7 +88944,7 @@
                       "product_id":  "0001111015826",
                       "size_raw":  "14 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-roasted-garlic-ginger-soy-stir-fry-sauce/0001111015826"
                   },
                   {
@@ -91186,7 +92264,7 @@
                       "product_id":  "0001111088739",
                       "size_raw":  "12 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-dijon-mustard/0001111088739"
                   },
                   {
@@ -91492,7 +92570,7 @@
                       "product_id":  "0003800029835",
                       "size_raw":  "5.5 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/pringles-honey-mustard-potato-crisps-chips/0003800029835",
                       "base_price":  2.59,
                       "marked_down":  true
@@ -91770,7 +92848,7 @@
                       "product_id":  "0007020055160",
                       "size_raw":  "12 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/marzetti-simply-dressed-creamy-caesar-dressing-and-dip/0007020055160",
                       "base_price":  4.99,
                       "marked_down":  true
@@ -92613,7 +93691,7 @@
                       "product_id":  "0007064100006",
                       "size_raw":  "12 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/marukan-genuine-brewed-rice-vinegar/0007064100006"
                   },
                   {
@@ -92852,7 +93930,7 @@
                       "product_id":  "0001111008998",
                       "size_raw":  "10 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-teriyaki-marinade-and-sauce/0001111008998"
                   },
                   {
@@ -92884,7 +93962,7 @@
                       "product_id":  "0004139000005",
                       "size_raw":  "10 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kikkoman-teriyaki-marinade-sauce/0004139000005"
                   },
                   {
@@ -93735,7 +94813,7 @@
                       "product_id":  "0003900000890",
                       "size_raw":  "8 ounces",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/ortega-original-thick-and-smooth-mild-taco-sauce-kosher-8-oz/0003900000890",
                       "base_price":  2.99,
                       "marked_down":  true
@@ -94423,7 +95501,7 @@
                       "product_id":  "0001111003131",
                       "size_raw":  "6.5 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-basil-pesto-with-parmigiano-reggiano/0001111003131"
                   },
                   {
@@ -94498,7 +95576,7 @@
                       "product_id":  "0007680800890",
                       "size_raw":  "6.2 oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/barilla-creamy-genovese-pesto-with-italian-basil-pasta-sauce-and-spread/0007680800890"
                   },
                   {
@@ -97108,7 +98186,7 @@
                       "product_id":  "0085392700300",
                       "size_raw":  "1.25 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/gotham-greens-fresh-basil/0085392700300"
                   },
                   {
@@ -99084,7 +100162,7 @@
                       "product_id":  "0007065080084",
                       "size_raw":  "8.8 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/a-taste-of-thai-vermicelli-rice-noodles/0007065080084"
                   },
                   {
@@ -100331,7 +101409,7 @@
                       "product_id":  "0001111000219",
                       "size_raw":  "16 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/simple-truth-organic-roma-tomatoes/0001111000219"
                   },
                   {
@@ -101091,7 +102169,7 @@
                       "product_id":  "0001111079554",
                       "size_raw":  "16 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/kroger-sugar-snap-peas/0001111079554"
                   },
                   {
@@ -101121,7 +102199,7 @@
                       "product_id":  "0001111014999",
                       "size_raw":  "11.5 fl oz",
                       "size_basis":  "label",
-                      "stock_level":  "LOW",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/kroger-horseradish-sauce/0001111014999"
                   },
                   {
@@ -101904,7 +102982,7 @@
                       "product_id":  "0007232012442",
                       "size_raw":  "14 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/stauffer-s-snaps-ginger-14-oz/0007232012442",
                       "base_price":  3.99,
                       "marked_down":  true
@@ -102272,7 +103350,7 @@
                       "product_id":  "0002265530646",
                       "size_raw":  "13 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "LOW",
                       "link_url":  "https://www.bakersplus.com/p/butterball-fully-cooked-natural-hardwood-smoked-turkey-sausage/0002265530646",
                       "base_price":  4.49,
                       "marked_down":  true
@@ -102387,7 +103465,7 @@
                       "product_id":  "0001356200004",
                       "size_raw":  "6 oz",
                       "size_basis":  "label",
-                      "stock_level":  "HIGH",
+                      "stock_level":  "TEMPORARILY_OUT_OF_STOCK",
                       "link_url":  "https://www.bakersplus.com/p/annie-s-organic-shells-pasta-and-white-cheddar-cheese/0001356200004"
                   }
               ]

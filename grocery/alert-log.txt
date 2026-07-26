@@ -38,3 +38,11 @@
 [2026-07-26T09:14:13] SENT 'Grocery: 14 price(s) to review - 2026-07-26' -> schweino68@gmail.com (id 19f9ec6b62bd0061)
 [2026-07-26T09:14:27] SENT 'Grocery: GUARDS FAILED - board not published - 2026-07-26' -> schweino68@gmail.com (id 19f9ec6f044b04e1)
 [2026-07-26T09:17:44] SENT 'Grocery: board-link price drift (27 chips) - 2026-07-26' -> schweino68@gmail.com (id 19f9ec9f09142f5d)
+[2026-07-26T13:03:00] SUPPRESSED (already sent this type today) 'Grocery matching soundness - review needed' [type: grocery matching soundness review needed]
+[2026-07-26T13:03:02] SUPPRESSED (already sent this type today) 'Grocery: 4 on-sale item(s) have no everyday fallback - 2026-07-26' [type: grocery on sale item s have no everyday fallback]
+[2026-07-26T13:04:30] SEND FAILED 'bakers-daily-scan FAILED': The remote server returned an error: (400) Bad Request.
+[2026-07-26T13:18:46] SENT 'bakers-daily-scan FAILED' -> schweino68@gmail.com (id 19f9fa6a514c9adc)
+[2026-07-26T13:37:03] SUPPRESSED (already sent this type today) 'Grocery: 3 on-sale item(s) have no everyday fallback - 2026-07-26' [type: grocery on sale item s have no everyday fallback]
+[2026-07-26T13:39:17] SUPPRESSED (already sent this type today) 'Grocery: 14 price(s) to review - 2026-07-26' [type: grocery price s to review]
+[2026-07-26T13:39:33] SUPPRESSED (already sent this type today) 'Grocery: GUARDS FAILED - board not published - 2026-07-26' [type: grocery guards failed board not published]
+[2026-07-26T13:42:35] SUPPRESSED (already sent this type today) 'Grocery: board-link price drift (33 chips) - 2026-07-26' [type: grocery board link price drift chips]

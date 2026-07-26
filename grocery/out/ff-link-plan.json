@@ -1,134 +1,262 @@
 ﻿{
     "resolved":  [
-
+                     {
+                         "id":  "apples",
+                         "fault":  "NO-LINK",
+                         "board":  "Fuji Apples, Small",
+                         "board_pu":  2.19,
+                         "name":  "Fuji Apples, Small",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/apples/fuji_apples_small/p/78536",
+                         "price":  "$2.19",
+                         "size":  "lb",
+                         "score":  1
+                     },
+                     {
+                         "id":  "brown-gravy-mix",
+                         "fault":  "NO-LINK",
+                         "board":  "Our Family Gravy Mix, Brown 0.87 Oz",
+                         "board_pu":  0.6782,
+                         "name":  "Our Family Gravy Mix, Brown 0.87 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/mixes_for_sauces_gravies/our_family_gravy_mix_brown_0_87_oz/p/6787112",
+                         "price":  "$0.59",
+                         "size":  "0.87 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "caraway-seeds",
+                         "fault":  "NO-LINK",
+                         "board":  "Mc Cormick Whole Caraway Seed 0.9 Oz",
+                         "board_pu":  5.1,
+                         "name":  "Mc Cormick Whole Caraway Seed 0.9 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/pantry/mixes_spices_seasoning/spices/mc_cormick_whole_caraway_seed_0_9_oz/p/10479",
+                         "price":  "$4.59",
+                         "size":  "0.9 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "chicken-livers",
+                         "fault":  "NO-LINK",
+                         "board":  "Chicken Liver Cups Gold N Plump",
+                         "board_pu":  2.19,
+                         "name":  "Chicken Liver Cups Gold N Plump",
+                         "url":  "https://www.shopfamilyfare.com/shop/meat/chicken/fresh_chicken/chicken_liver_cups_gold_n_plump/p/1564405684714638114",
+                         "price":  "$2.19",
+                         "size":  "lb",
+                         "score":  1
+                     },
+                     {
+                         "id":  "corn-chips",
+                         "fault":  "NO-LINK",
+                         "board":  "Corn Chips, Scoops Our Family",
+                         "board_pu":  0.2554,
+                         "name":  "Corn Chips, Scoops Our Family",
+                         "url":  "https://www.shopfamilyfare.com/shop/pantry/chips_other_salty_snacks/corn_chips/corn_chips_scoops_our_family/p/7081249",
+                         "price":  "$2.49",
+                         "size":  "9.75 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "corned-beef-brisket",
+                         "fault":  "NO-LINK",
+                         "board":  "Corned Beef Brisket, Point Cut Skylark",
+                         "board_pu":  7.49,
+                         "name":  "Corned Beef Brisket, Point Cut Skylark",
+                         "url":  "https://www.shopfamilyfare.com/shop/meat/beef/roasts/corned_beef_brisket_point_cut_skylark/p/1564405684713031156",
+                         "price":  "$7.49",
+                         "size":  "lb",
+                         "score":  1
+                     },
+                     {
+                         "id":  "diced-ham",
+                         "fault":  "NO-LINK",
+                         "board":  "Farmland Diced Ham 16 Oz",
+                         "board_pu":  0.3931,
+                         "name":  "Farmland Diced Ham 16 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/meat/ham/fresh/farmland_diced_ham_16_oz/p/575332",
+                         "price":  "$6.29",
+                         "size":  "16 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "dried-dill",
+                         "fault":  "NO-LINK",
+                         "board":  "Sugar \u0027N Spice Dill Weed Pp",
+                         "board_pu":  3.78,
+                         "name":  "Sugar \u0027N Spice Dill Weed Pp",
+                         "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/salad_mixes_toppings/sugar_n_spice_dill_weed_pp/p/1564405684701720476",
+                         "price":  "$1.89",
+                         "size":  "0.5 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "dried-ancho-chiles",
+                         "fault":  "NO-LINK",
+                         "board":  "Zamora Ancho Chile Peppers",
+                         "board_pu":  0.5619,
+                         "name":  "Zamora Ancho Chile Peppers",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/zamora_ancho_chile_peppers/p/1564405684706812661",
+                         "price":  "$8.99",
+                         "size":  "1 lb",
+                         "score":  1
+                     },
+                     {
+                         "id":  "dried-arbol-chiles",
+                         "fault":  "NO-LINK",
+                         "board":  "Chile De Arbol",
+                         "board_pu":  0.83,
+                         "name":  "Chile De Arbol",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/peppers/chile_de_arbol/p/1564405684702623794",
+                         "price":  "$2.49",
+                         "size":  "3 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "eggplant",
+                         "fault":  "NO-LINK",
+                         "board":  "Regular Eggplant (Aubergine)",
+                         "board_pu":  1.99,
+                         "name":  "Regular Eggplant (Aubergine)",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/other_vegetables/regular_eggplant_aubergine/p/12442",
+                         "price":  "$1.99",
+                         "size":  "1 ct",
+                         "score":  1
+                     },
+                     {
+                         "id":  "gingersnaps",
+                         "fault":  "NO-LINK",
+                         "board":  "Lil Dutch Maid Ginger Snaps",
+                         "board_pu":  0.2211,
+                         "name":  "Lil Dutch Maid Ginger Snaps",
+                         "url":  "https://www.shopfamilyfare.com/shop/seasonal_special_occasion/trial_sizes_store/lil_dutch_maid_ginger_snaps/p/1564405684712196045",
+                         "price":  "$1.99",
+                         "size":  "9 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "horseradish-sauce",
+                         "fault":  "NO-LINK",
+                         "board":  "Silver Spring Sassy Horseradish Sauce 9.25 Oz",
+                         "board_pu":  0.3773,
+                         "name":  "Silver Spring Sassy Horseradish Sauce 9.25 Oz",
+                         "url":  "https://www.shopfamilyfare.com/shop/pantry/condiments_dressing/mustard_horseradish/silver_spring_sassy_horseradish_sauce_9_25_oz/p/2009254",
+                         "price":  "$3.49",
+                         "size":  "9.25 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "poultry-seasoning",
+                         "fault":  "NO-LINK",
+                         "board":  "Sugar \u0027N Spice Poultry Seasoning",
+                         "board_pu":  2.2029,
+                         "name":  "Sugar \u0027N Spice Poultry Seasoning",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/fresh_spices_herbs/sugar_n_spice_poultry_seasoning/p/1564405684713462912",
+                         "price":  "$7.49",
+                         "size":  "3.4 oz",
+                         "score":  1
+                     },
+                     {
+                         "id":  "red-onion",
+                         "fault":  "NO-LINK",
+                         "board":  "Organic Red Onions",
+                         "board_pu":  1.99,
+                         "name":  "Organic Red Onions",
+                         "url":  "https://www.shopfamilyfare.com/shop/fresh_fruits_vegetables/onions/organic_red_onions/p/2313279",
+                         "price":  "$1.99",
+                         "size":  "lb",
+                         "score":  1
+                     }
                  ],
     "refused":  [
                     {
+                        "id":  "ground-beef-8020",
+                        "why":  "match found but per-unit disagrees: board $6.49 vs link $7.99 (18.8%)"
+                    },
+                    {
                         "id":  "applesauce",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but per-unit disagrees: board $0.1454 vs link $0.8725 (83.3%)"
                     },
                     {
-                        "id":  "brown-gravy-mix",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
-                    },
-                    {
-                        "id":  "caraway-seeds",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "id":  "carrots",
+                        "why":  "match found but per-unit disagrees: board $1 vs link $1.39 (28.1%)"
                     },
                     {
                         "id":  "cherry-tomatoes",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
-                    },
-                    {
-                        "id":  "chicken-livers",
-                        "why":  "search failed after 3 tries - LEFT ALONE, not recorded as absent: The remote server returned an error: (400) Bad Request."
+                        "why":  "match found but its size \"1 pt\" gives no per-unit in oz"
                     },
                     {
                         "id":  "ground-coriander",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "corn-chips",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "corned-beef-brisket",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "diced-ham",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "dried-dill",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "dried-ancho-chiles",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "dried-arbol-chiles",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "eggplant",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "ground-fennel",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but per-unit disagrees: board $0.6232 vs link $0.945 (34.1%)"
                     },
                     {
                         "id":  "gelatin",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "gingersnaps",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"3 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "ground-cinnamon",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "ground-cumin",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but per-unit disagrees: board $1.145 vs link $1.295 (11.6%)"
                     },
                     {
                         "id":  "ground-turmeric",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "no confident match (best 0)"
                     },
                     {
                         "id":  "deli-ham",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but per-unit disagrees: board $0.6656 vs link $0.7767 (14.3%)"
                     },
                     {
                         "id":  "hamburger-buns",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"16 oz\" gives no per-unit in each"
                     },
                     {
-                        "id":  "horseradish-sauce",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "id":  "mac-and-cheese",
+                        "why":  "match found but its size \"7.25 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "muffins",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but its size \"16 oz\" gives no per-unit in each"
                     },
                     {
                         "id":  "paper-towels",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "poultry-seasoning",
-                        "why":  "not attempted - circuit breaker tripped"
-                    },
-                    {
-                        "id":  "red-onion",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "match found but per-unit disagrees: board $1.3738 vs link $1.4988 (8.3%)"
                     },
                     {
                         "id":  "rye-bread",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "shower-cleaner",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "smoked-turkey-sausage",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                    },
+                    {
+                        "id":  "sports-drinks",
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "tomatillos",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
+                    },
+                    {
+                        "id":  "tomatoes",
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     },
                     {
                         "id":  "zucchini",
-                        "why":  "not attempted - circuit breaker tripped"
+                        "why":  "not attempted - call budget for this run spent (re-run after a cooldown)"
                     }
                 ],
-    "worked":  31,
-    "generated":  "2026-07-26 09:14",
+    "worked":  37,
+    "generated":  "2026-07-26 13:39",
     "board":  "comparison-2026-07-26.json"
 }
