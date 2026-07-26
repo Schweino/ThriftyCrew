@@ -31,6 +31,13 @@ function New-GhostJWT {
 
 $mapDoc = Get-Content (Join-Path $root 'ingredient-map.json') -Raw | ConvertFrom-Json
 $db     = (Get-Content (Join-Path $root 'recipes-db.json') -Raw | ConvertFrom-Json).recipes
+# 2026-07-26 cost-redesign: per_serving is now the CURRENT-CHEAPEST WHOLE-PACKAGE number (matches the
+# recipe cards' headline + rectangle), read from the v2 manifest (pipeline\v2-perserving.json, regenerated
+# weekly by compute-v2-perserving.ps1 off the live feed). The old cost_batch_true+delta basis is retained
+# ONLY to detect this week's sale items for the badge. Recipes missing from the manifest fall back to the
+# old basis so nothing drops.
+$cheapestBySlug = @{}
+try { (Get-Content (Join-Path $root 'pipeline\v2-perserving.json') -Raw | ConvertFrom-Json) | ForEach-Object { $cheapestBySlug[[string]$_.slug] = [double]$_.cheapest_ps } } catch { Write-Output 'WARN: v2-perserving.json unreadable - falling back to legacy per_serving basis' }
 $live   = (Get-Content (Join-Path $gout 'recipe-board.json') -Raw | ConvertFrom-Json).comparison
 $floor  = (Get-Content (Join-Path $gout 'recipe-board-everyday.json') -Raw | ConvertFrom-Json).comparison
 
@@ -55,9 +62,15 @@ foreach ($r in $db) {
     $d = $qty * ($liveMin[$id] - $floorMin[$id])
     if ([math]::Abs($d) -gt 0.005) { $delta += $d; if ($d -lt 0) { $saleItems += [string]$i.item } }
   }
-  $base = if ($r.cost_batch_true) { [double]$r.cost_batch_true } else { [double]$r.cost_batch }
-  $wc = [math]::Round($base + $delta, 2)
-  $costed.Add([pscustomobject]@{ slug=$r.slug; name=$r.name; calories=[int]$r.per_serving.calories; week_cost=$wc; per_serving=[math]::Round($wc/[int]$r.servings, 2); delta=[math]::Round($delta,2); sale_items=@($saleItems | Select-Object -Unique) })
+  $sv = [int]$r.servings; if($sv -le 0){ $sv = 14 }
+  if ($cheapestBySlug.ContainsKey([string]$r.slug)) {
+    $psv = $cheapestBySlug[[string]$r.slug]        # current cheapest whole-package per serving (headline basis)
+    $wc  = [math]::Round($psv * $sv, 2)
+  } else {
+    $base = if ($r.cost_batch_true) { [double]$r.cost_batch_true } else { [double]$r.cost_batch }
+    $wc = [math]::Round($base + $delta, 2); $psv = [math]::Round($wc / $sv, 2)
+  }
+  $costed.Add([pscustomobject]@{ slug=$r.slug; name=$r.name; calories=[int]$r.per_serving.calories; week_cost=$wc; per_serving=$psv; delta=[math]::Round($delta,2); sale_items=@($saleItems | Select-Object -Unique) })
 }
 $ranked = @($costed | Sort-Object per_serving, week_cost, slug)   # final slug key = deterministic tie-break so the free rotation (same 3-key sort) picks the identical top-5 on true double-ties
 $wk = ''

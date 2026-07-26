@@ -1,84 +1,84 @@
 ﻿{
     "week_of":  "2026-07-25",
-    "updated":  "2026-07-26T00:04:39",
+    "updated":  "2026-07-26T06:12:44",
     "note":  "This week free because they are the cheapest dinners per protein on the live Omaha board. They revert to members-only when prices re-rank.",
     "free":  [
                  {
-                     "slug":  "baked-sweet-and-sour-chicken-rice-bowls",
+                     "slug":  "chicken-bulgogi-rice-bowls",
                      "protein":  "chicken",
                      "rank":  1,
-                     "name":  "Baked Sweet and Sour Chicken Rice Bowls",
-                     "per_serving":  1.29
+                     "name":  "Chicken Bulgogi Rice Bowls",
+                     "per_serving":  1.33
                  },
                  {
-                     "slug":  "filipino-chicken-inasal-bowls",
+                     "slug":  "claypot-chicken-mushroom-rice",
                      "protein":  "chicken",
                      "rank":  2,
-                     "name":  "Filipino Chicken Inasal Bowls",
-                     "per_serving":  1.56
+                     "name":  "Claypot Chicken and Mushroom Rice",
+                     "per_serving":  1.53
                  },
                  {
-                     "slug":  "cajun-chicken-and-sausage-jambalaya",
+                     "slug":  "nigerian-chicken-suya-bowls",
                      "protein":  "chicken",
                      "rank":  3,
-                     "name":  "Cajun Chicken and Sausage Jambalaya",
+                     "name":  "Nigerian Chicken Suya Bowls",
+                     "per_serving":  1.61
+                 },
+                 {
+                     "slug":  "vietnamese-ginger-chicken-ga-kho-gung",
+                     "protein":  "chicken",
+                     "rank":  4,
+                     "name":  "Vietnamese Ginger Chicken (Ga Kho Gung)",
+                     "per_serving":  1.64
+                 },
+                 {
+                     "slug":  "chicken-40-cloves-garlic",
+                     "protein":  "chicken",
+                     "rank":  5,
+                     "name":  "Chicken with 40 Cloves of Garlic",
                      "per_serving":  1.68
                  },
                  {
-                     "slug":  "poppy-seed-chicken-and-rice-casserole",
-                     "protein":  "chicken",
-                     "rank":  4,
-                     "name":  "Poppy Seed Chicken and Rice Casserole",
-                     "per_serving":  1.75
-                 },
-                 {
-                     "slug":  "buffalo-chicken-pasta-bake",
-                     "protein":  "chicken",
-                     "rank":  5,
-                     "name":  "Buffalo Chicken Pasta Bake",
-                     "per_serving":  1.83
-                 },
-                 {
-                     "slug":  "kielbasa-mac-and-cheese-bake",
+                     "slug":  "red-beans-turkey-sausage-and-rice",
                      "protein":  "turkey",
                      "rank":  1,
-                     "name":  "Kielbasa Mac and Cheese Bake",
-                     "per_serving":  2.24
+                     "name":  "Red Beans, Turkey Sausage and Rice",
+                     "per_serving":  1.73
                  },
                  {
-                     "slug":  "turkey-noodle-casserole",
+                     "slug":  "turkey-maqluba-upside-down-rice-bake",
                      "protein":  "turkey",
                      "rank":  2,
-                     "name":  "Turkey Noodle Casserole",
-                     "per_serving":  2.24
+                     "name":  "Turkey Maqluba (Upside-Down Rice Bake)",
+                     "per_serving":  1.76
                  },
                  {
-                     "slug":  "turkey-mac-and-cheese-bake",
+                     "slug":  "turkey-alfredo-rotini-bake",
                      "protein":  "turkey",
                      "rank":  3,
-                     "name":  "Turkey Mac and Cheese Bake",
-                     "per_serving":  2.24
+                     "name":  "Turkey Alfredo Rotini Bake",
+                     "per_serving":  1.9
                  },
                  {
-                     "slug":  "cheesy-turkey-sausage-vegetable-rice-casserole",
+                     "slug":  "turkey-egg-roll-in-a-bowl-over-rice",
                      "protein":  "turkey",
                      "rank":  4,
-                     "name":  "Cheesy Turkey Sausage and Vegetable Rice Casserole",
-                     "per_serving":  2.24
+                     "name":  "Turkey Egg Roll in a Bowl over Rice",
+                     "per_serving":  1.9
                  },
                  {
-                     "slug":  "turkey-sausage-gravy-biscuit-bake",
+                     "slug":  "haluski-and-kielbasa-cabbage-noodles",
                      "protein":  "turkey",
                      "rank":  5,
-                     "name":  "Turkey Sausage Gravy Biscuit Bake",
-                     "per_serving":  2.24
+                     "name":  "Haluski and Kielbasa (Cabbage and Egg Noodles)",
+                     "per_serving":  1.94
                  },
                  {
-                     "slug":  "lebanese-hashweh",
+                     "slug":  "youvarlakia-avgolemono-greek-meatball-bowls",
                      "protein":  "beef",
                      "rank":  1,
-                     "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
-                     "per_serving":  2.21
+                     "name":  "Youvarlakia Avgolemono (Greek Beef and Rice Meatballs in Lemon Sauce)",
+                     "per_serving":  2.19
                  },
                  {
                      "slug":  "beef-potato-au-gratin-casserole",
@@ -88,60 +88,60 @@
                      "per_serving":  2.24
                  },
                  {
-                     "slug":  "chile-relleno-casserole-ground-beef",
+                     "slug":  "lebanese-hashweh",
                      "protein":  "beef",
                      "rank":  3,
-                     "name":  "Chile Relleno Casserole with Ground Beef",
-                     "per_serving":  2.25
+                     "name":  "Lebanese Hashweh (Spiced Beef and Rice)",
+                     "per_serving":  2.24
                  },
                  {
-                     "slug":  "filipino-beef-caldereta",
+                     "slug":  "mediterranean-beef-hummus-bowls",
                      "protein":  "beef",
                      "rank":  4,
-                     "name":  "Filipino Beef Caldereta",
-                     "per_serving":  2.25
+                     "name":  "Mediterranean Beef Hummus Bowls",
+                     "per_serving":  2.3
                  },
                  {
-                     "slug":  "albondigas-en-chipotle-rice-bowls",
+                     "slug":  "million-dollar-baked-spaghetti",
                      "protein":  "beef",
                      "rank":  5,
-                     "name":  "Albondigas en Chipotle (Mexican Meatballs in Chipotle Sauce)",
-                     "per_serving":  2.26
+                     "name":  "Million Dollar Baked Spaghetti",
+                     "per_serving":  2.3
                  },
                  {
-                     "slug":  "brazilianstyle-pork-ribs-bowls",
+                     "slug":  "bratwurst-sauerkraut-potatoes-bake",
                      "protein":  "pork",
                      "rank":  1,
-                     "name":  "Brazilian-Style Pork Ribs Bowls",
-                     "per_serving":  1.28
+                     "name":  "Bratwurst and Sauerkraut with Potatoes",
+                     "per_serving":  1.33
+                 },
+                 {
+                     "slug":  "orecchiette-italian-sausage-broccoli",
+                     "protein":  "pork",
+                     "rank":  2,
+                     "name":  "Orecchiette with Italian Sausage and Broccoli",
+                     "per_serving":  1.62
                  },
                  {
                      "slug":  "slow-cooker-kalua-pork-bowls",
                      "protein":  "pork",
-                     "rank":  2,
-                     "name":  "Slow Cooker Kalua Pork Bowls",
-                     "per_serving":  1.54
-                 },
-                 {
-                     "slug":  "braised-pork-ragu-over-pappardelle",
-                     "protein":  "pork",
                      "rank":  3,
-                     "name":  "Braised Pork Ragu over Pappardelle",
-                     "per_serving":  1.64
+                     "name":  "Slow Cooker Kalua Pork Bowls",
+                     "per_serving":  1.63
                  },
                  {
-                     "slug":  "slow-cooker-pork-tinga-bowls",
+                     "slug":  "vietnamese-thit-kho-braised-pork-and-eggs",
                      "protein":  "pork",
                      "rank":  4,
-                     "name":  "Slow Cooker Pork Tinga Bowls",
-                     "per_serving":  1.7
+                     "name":  "Vietnamese Thit Kho Braised Pork and Eggs",
+                     "per_serving":  1.66
                  },
                  {
-                     "slug":  "slow-cooker-honey-garlic-pork-bowls",
+                     "slug":  "slow-cooker-filipino-pork-adobo-bowls",
                      "protein":  "pork",
                      "rank":  5,
-                     "name":  "Slow Cooker Honey Garlic Pork Bowls",
-                     "per_serving":  1.77
+                     "name":  "Slow Cooker Filipino Pork Adobo Bowls",
+                     "per_serving":  1.74
                  }
              ]
 }
