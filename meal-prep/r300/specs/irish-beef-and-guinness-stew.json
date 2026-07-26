@@ -29,6 +29,7 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eOlive Oil:\u003c/strong\u003e 4.75 tbsp (63 g)",
                                 "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 5.75 lb (2646 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 4 tbsp (35 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 4.7 (513 g)",
                                 "\u003cstrong\u003eHickory Smoked Bacon (Great Value):\u003c/strong\u003e 1 lb (397 g)",
@@ -37,7 +38,10 @@
                                 "\u003cstrong\u003eTomato Paste (Great Value):\u003c/strong\u003e 1 can (149 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 1.8 cartons (1750 g)",
                                 "\u003cstrong\u003eCarrots (generic):\u003c/strong\u003e 7 (427 g)",
-                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 4.7 (257 g)"
+                                "\u003cstrong\u003eCelery:\u003c/strong\u003e 4.7 (257 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.11 oz (3 g)",
+                                "\u003cstrong\u003eDried Thyme (Great Value):\u003c/strong\u003e 2.25 tbsp (7 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -211,7 +215,7 @@
     "head":  {
                  "description":  "Irish beef and Guinness stew meal prep: chuck roast browned in bacon fat and simmered dark with carrots, celery, and thyme. 638 calories, 50g protein, about $4.33 per serving.",
                  "keywords":  "irish beef stew, guinness stew, beef and stout stew, bacon beef stew, budget meal prep, irish recipes",
-                 "image":  "",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",
                  "cookTime":  "PT3H",
                  "totalTime":  "PT3H25M",

@@ -34,17 +34,20 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eBeef Chuck Roast:\u003c/strong\u003e 7.5 lb (3360 g)",
                                 "\u003cstrong\u003eLemongrass Paste (Gourmet Garden (McCormick)):\u003c/strong\u003e 7 tbsp (105 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.25 oz (4 g)",
                                 "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 6.5 tbsp (98 g)",
                                 "\u003cstrong\u003eCoconut Milk (Thai Kitchen):\u003c/strong\u003e 4.4 cans (1750 g)",
                                 "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 2.75 cups (700 g)",
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 3.6 (762 g)",
                                 "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 3.8 cans (1575 g)",
                                 "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 17.5 tbsp (105 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 3.25 tbsp (22 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 6 tbsp (84 g)",
                                 "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 9 (980 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 8.25 tbsp (70 g)",
                                 "\u003cstrong\u003eCashews (generic):\u003c/strong\u003e 1.25 tbsp (10 g)",
-                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 17.5 tbsp (105 g)"
+                                "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 17.5 tbsp (105 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -228,7 +231,7 @@
     "head":  {
                  "description":  "Soto Betawi meal prep: Indonesian beef simmered in a coconut and milk broth with a fried shallot, cashew, and ginger paste. 885 calories, 55g protein, about $6.14 per serving.",
                  "keywords":  "soto betawi, indonesian beef soup, coconut beef soup, jakarta soto, budget meal prep, indonesian recipes",
-                 "image":  "",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",
                  "cookTime":  "PT2H15M",
                  "totalTime":  "PT2H40M",

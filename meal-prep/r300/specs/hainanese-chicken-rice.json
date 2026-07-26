@@ -30,6 +30,7 @@
     "intro_html":  "Hainanese chicken rice is Singapore\u0027s national dish and it is a masterclass in wasting nothing. You poach the chicken gently, then cook the rice in the poaching broth with garlic and ginger, so the grains carry every bit of flavor the meat gave up. The ginger garlic sauce on the side is what people actually dream about. Each bowl lands at 681 calories and \u003cstrong\u003e40 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$1.74 a serving\u003c/strong\u003e.",
     "ingredients_display":  [
                                 "\u003cstrong\u003eBoneless Skinless Chicken Breast (Member\u0027s Mark):\u003c/strong\u003e 4.25 lb (1890 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 4.25 tbsp (78 g)",
                                 "\u003cstrong\u003eGinger (generic):\u003c/strong\u003e 18 tbsp (108 g)",
                                 "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 11.75 tbsp (70 g)",
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.5 cups (132 g)",
@@ -40,7 +41,10 @@
                                 "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 6.75 tbsp (85 g)",
                                 "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 0.5 cups (149 g)",
                                 "\u003cstrong\u003eJalapeno:\u003c/strong\u003e 11 tbsp (98 g)",
-                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 2.25 tbsp (35 g)"
+                                "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 0.25 tbsp (3 g)",
+                                "\u003cstrong\u003eLime Juice:\u003c/strong\u003e 2.25 tbsp (35 g)",
+                                "\u003cstrong\u003eRice Vinegar (Nakano):\u003c/strong\u003e 0.5 tbsp (6 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -223,7 +227,7 @@
     "head":  {
                  "description":  "Hainanese chicken rice with poached chicken, broth cooked rice, and ginger garlic sauce, rebuilt for 14 meal prep servings at about $1.74 a bowl.",
                  "keywords":  "hainanese chicken rice, poached chicken rice, singapore chicken rice, ginger garlic sauce, cheap meal prep, budget chicken recipe, asian meal prep",
-                 "image":  "",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT30M",
                  "cookTime":  "PT50M",
                  "totalTime":  "PT1H20M",

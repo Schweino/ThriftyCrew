@@ -1,4 +1,4 @@
-﻿{
+{
     "name":  "Oyakodon (Japanese Chicken and Egg Rice Bowls)",
     "slug":  "oyakodon",
     "cuisine":  "Japanese",
@@ -18,17 +18,7 @@
                  "cost_ps":  "1.74"
              },
     "intro_html":  "Oyakodon is Japan\u0027s great weeknight bowl: chicken thighs and eggs simmered together in a sweet soy and mirin broth, spooned over rice so the sauce soaks in. Two proteins in one pot pushes each bowl to \u003cstrong\u003e48 grams of protein\u003c/strong\u003e for about \u003cstrong\u003e$1.74\u003c/strong\u003e. Humble ingredients, restaurant results.",
-    "ingredients_display":  [
-                                "\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 7 (794 g)",
-                                "\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 4.25 lb (1984 g)",
-                                "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2 lb (952 g)",
-                                "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 24 large eggs (1225 g)",
-                                "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 cups (224 g)",
-                                "\u003cstrong\u003eMirin (Mizkan):\u003c/strong\u003e 9 oz (252 g)",
-                                "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 4.75 tbsp (59 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 7 cups dry (1295 g)",
-                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 8.5 cups (420 g)"
-                            ],
+    "ingredients_display": ["\u003cstrong\u003eYellow Onion:\u003c/strong\u003e 7 (794 g)","\u003cstrong\u003eBoneless Skinless Chicken Thigh (Member\u0027s Mark):\u003c/strong\u003e 4.25 lb (1984 g)","\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 2 lb (952 g)","\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 24 large eggs (1225 g)","\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 1 cups (224 g)","\u003cstrong\u003eMirin (Mizkan):\u003c/strong\u003e 9 oz (252 g)","\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 4.75 tbsp (59 g)","\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 7 cups dry (1295 g)","\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 8.5 cups (420 g)","\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)","\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
                        "Yellow Onion, 7: ~$2.00. \u003cstrong\u003eBuy 2 lbs: $2.28.\u003c/strong\u003e",

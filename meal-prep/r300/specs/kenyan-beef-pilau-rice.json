@@ -27,6 +27,11 @@
              },
     "intro_html":  "Pilau is the dish Kenyan families make when there is something to celebrate. It came up the Swahili coast with the spice trade, which is why it tastes like cumin, cardamom, cloves, and cinnamon rather than like the curry powder most Americans expect from East African food. The rice cooks in the same pot as the beef so every grain takes on color and spice. It is one of the few dishes where cooking a huge amount is actually easier than cooking a small one, which makes it a natural fit for fourteen containers.",
     "ingredients_display":  [
+                                "\u003cstrong\u003eGround Cloves (Great Value):\u003c/strong\u003e 0.25 oz (5 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 4.5 tbsp (29 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 1.25 tbsp (8 g)",
+                                "\u003cstrong\u003eGaram Masala (McCormick Gourmet):\u003c/strong\u003e 4.25 tbsp (25 g)",
+                                "\u003cstrong\u003eGround Cinnamon (Great Value):\u003c/strong\u003e 0.75 tbsp (6 g)",
                                 "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 4.75 cups dry (863 g)",
                                 "\u003cstrong\u003ePotato (generic):\u003c/strong\u003e 11.7 (2485 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.5 cups (127 g)",
@@ -37,7 +42,9 @@
                                 "\u003cstrong\u003eBeef Broth (Great Value):\u003c/strong\u003e 4.75 cups (1120 g)",
                                 "\u003cstrong\u003eFresh Cilantro:\u003c/strong\u003e 9 tbsp (9 g)",
                                 "\u003cstrong\u003eBeef Flank/Sirloin Steak (generic):\u003c/strong\u003e 2.25 lb (1058 g)",
-                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 7 cans (2877 g)"
+                                "\u003cstrong\u003eDiced Tomatoes (Great Value):\u003c/strong\u003e 7 cans (2877 g)",
+                                "\u003cstrong\u003eBay Leaves (Great Value):\u003c/strong\u003e 0.11 oz (3 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 2.5 tbsp (47 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -235,7 +242,7 @@
     "head":  {
                  "description":  "Kenyan beef pilau rebuilt for 14-serving meal prep: spiced one-pot rice with beef, potatoes, and deeply browned onions. 633 calories, 28g protein, about $2.81 per serving.",
                  "keywords":  "kenyan pilau, east african beef pilau, spiced rice with beef, swahili pilau, african meal prep, one pot rice dinner",
-                 "image":  "",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",
                  "cookTime":  "PT60M",
                  "totalTime":  "PT85M",

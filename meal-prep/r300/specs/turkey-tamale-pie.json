@@ -33,7 +33,9 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003eGrits (Quaker):\u003c/strong\u003e 3 cups (467 g)",
                                 "\u003cstrong\u003eAll-Purpose Flour (Great Value):\u003c/strong\u003e 1.75 cups (219 g)",
+                                "\u003cstrong\u003eBaking Powder (generic (USDA)):\u003c/strong\u003e 1 oz (28 g)",
                                 "\u003cstrong\u003eSugar (Great Value):\u003c/strong\u003e 1.75 tbsp (22 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (16 g)",
                                 "\u003cstrong\u003eMilk (Fairlife):\u003c/strong\u003e 1.25 cups (322 g)",
                                 "\u003cstrong\u003eButter (generic):\u003c/strong\u003e 0.75 cups (198 g)",
                                 "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 2 large eggs (88 g)",
@@ -43,8 +45,13 @@
                                 "\u003cstrong\u003eBrown Gravy Mix (generic dry (USDA)):\u003c/strong\u003e 1.75 oz (52 g)",
                                 "\u003cstrong\u003eTurkey Breast (generic (USDA)):\u003c/strong\u003e 2.25 lb (980 g)",
                                 "\u003cstrong\u003eDiced Green Chiles (Old El Paso):\u003c/strong\u003e 1.8 cans (198 g)",
+                                "\u003cstrong\u003eChili Powder:\u003c/strong\u003e 1.75 tbsp (14 g)",
+                                "\u003cstrong\u003eGround Cumin:\u003c/strong\u003e 1 tbsp (7 g)",
+                                "\u003cstrong\u003ePaprika:\u003c/strong\u003e 0.5 tbsp (4 g)",
+                                "\u003cstrong\u003eGarlic Powder:\u003c/strong\u003e 0.5 tbsp (5 g)",
                                 "\u003cstrong\u003eSeasoned Black Beans (Great Value):\u003c/strong\u003e 1.2 cans (301 g)",
-                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 10 tbsp (60 g)"
+                                "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 10 tbsp (60 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.5 tbsp (4 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -269,7 +276,7 @@
     "head":  {
                  "description":  "Turkey tamale pie meal prep: chile-spiced turkey with black beans and green chiles under a scratch cornbread top. 561 calories, 31g protein, about $1.86 a serving.",
                  "keywords":  "turkey tamale pie, tex mex casserole, cornbread topped bake, black bean casserole, budget meal prep, high protein dinner",
-                 "image":  "",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",
                  "cookTime":  "PT40M",
                  "totalTime":  "PT1H5M",

@@ -84,11 +84,12 @@ foreach($r in $computed){
     $isSpice = ($ing.item -match 'Salt|Pepper$|Powder$|Paprika|Cumin|Coriander|Turmeric|Masala|Cinnamon|Cloves|Allspice|Nutmeg|Oregano|Thyme|Basil$|Dill|Parsley|Bay Leaves|Flakes|Seasoning$|Five-Spice|Cayenne|Italian Seasoning')
     $d = $dbm[$ing.item]
     $brand = ''; if($d -and $d.brand -and $d.brand -notmatch '^fresh$|store'){ $brand = ' (' + (($d.brand -split '/')[0].Trim()) + ')' }
+    # COST folds pantry staples into one "Pantry seasonings" line, but the INGREDIENTS list must still
+    # itemize every one (2026-07-26 fix: the list omitted salt/pepper/spices the recipe actually needs).
     if($isSpice -or ($ing.grams -lt 15 -and $util -lt 0.15)){
       $pantryItems += $ing.item.ToLower(); $pantryUtil += $util
-    } else {
-      $display += ('<strong>' + $ing.item + $brand + ':</strong> ' + (FriendlyAmt $ing.item $ing.grams) + ' (' + [int]$ing.grams + ' g)')
     }
+    $display += ('<strong>' + $ing.item + $brand + ':</strong> ' + (FriendlyAmt $ing.item $ing.grams) + ' (' + [int]$ing.grams + ' g)')
     # scaler entry (ALL items)
     $se = [ordered]@{ item=$ing.item; grams=[int]$ing.grams; buy=(FriendlyAmt $ing.item $ing.grams) }
     if($bidMap.ContainsKey($ing.item)){ $se.bid=$bidMap[$ing.item].bid; $se.gpu=(GpuStr $bidMap[$ing.item].gpu) }

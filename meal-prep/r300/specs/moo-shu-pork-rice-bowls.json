@@ -35,10 +35,12 @@
     "ingredients_display":  [
                                 "\u003cstrong\u003ePork Shoulder (generic (USDA)):\u003c/strong\u003e 2.75 lb (1276 g)",
                                 "\u003cstrong\u003eOyster Sauce (Lee Kum Kee):\u003c/strong\u003e 4.75 tbsp (84 g)",
+                                "\u003cstrong\u003eCornstarch (generic):\u003c/strong\u003e 1.25 tbsp (10 g)",
                                 "\u003cstrong\u003eVegetable Oil (Great Value):\u003c/strong\u003e 0.75 cups (141 g)",
                                 "\u003cstrong\u003eHoisin Sauce (generic):\u003c/strong\u003e 0.5 cups (149 g)",
                                 "\u003cstrong\u003eSoy Sauce (generic):\u003c/strong\u003e 5.75 tbsp (93 g)",
                                 "\u003cstrong\u003eSesame Oil (generic):\u003c/strong\u003e 1 tbsp (13 g)",
+                                "\u003cstrong\u003eBlack Pepper (Great Value):\u003c/strong\u003e 0.25 tbsp (1 g)",
                                 "\u003cstrong\u003eEggs (Great Value):\u003c/strong\u003e 5 large eggs (233 g)",
                                 "\u003cstrong\u003eGarlic:\u003c/strong\u003e 2.75 tbsp (23 g)",
                                 "\u003cstrong\u003eGreen Cabbage (generic):\u003c/strong\u003e 1 lb (490 g)",
@@ -46,7 +48,8 @@
                                 "\u003cstrong\u003eWhite Mushrooms:\u003c/strong\u003e 6.75 oz (188 g)",
                                 "\u003cstrong\u003eChicken Broth (Swanson):\u003c/strong\u003e 0.25 cups (37 g)",
                                 "\u003cstrong\u003eGreen Onions:\u003c/strong\u003e 11.75 tbsp (70 g)",
-                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5 cups dry (936 g)"
+                                "\u003cstrong\u003eRice (Member\u0027s Mark):\u003c/strong\u003e 5 cups dry (936 g)",
+                                "\u003cstrong\u003eSalt (Morton):\u003c/strong\u003e 1 tbsp (20 g)"
                             ],
     "cost_note_html":  "Real Omaha store prices from our weekly grocery board (2026). They still swing by store and by what is on sale.",
     "cost_lines":  [
@@ -239,7 +242,7 @@
     "head":  {
                  "description":  "Moo shu pork stir fry with cabbage, carrots, mushrooms and egg in a hoisin glaze, served over rice. 14 servings, 593 calories, 25g protein, about $1.39 each.",
                  "keywords":  "moo shu pork, pork rice bowls, cabbage stir fry, hoisin pork, takeout at home, budget meal prep",
-                 "image":  "",
+                 "image":  "https://storage.ghost.io/c/4b/5b/4b5b2999-07b7-4733-88cc-1bc0e25912c6/content/images/2026/07/tc-og-1200x630.png",
                  "prepTime":  "PT25M",
                  "cookTime":  "PT20M",
                  "totalTime":  "PT45M",

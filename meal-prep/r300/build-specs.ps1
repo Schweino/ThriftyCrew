@@ -227,11 +227,14 @@ foreach($r in $computed){
     # a renamed ingredient carries its own parenthetical; a second brand paren would read as nonsense
     # ("Korean glass noodles (dangmyeon) (Thai Kitchen)") and the brand belongs to the canonical item
     if($dispItem -ne $ing.item){ $brand = '' }
+    # COST folds pantry staples into one "Pantry seasonings" line, but the INGREDIENTS list must still
+    # itemize every one (2026-07-26: the list omitted salt/pepper/spices that the recipe actually needs -
+    # a reader shopping from it would miss them). So track the fold for the cost line AND always emit the
+    # display line, so Ingredients == the scaler's full item set.
     if(($isSpice -or ($ing.grams -lt 15 -and $util -lt 0.15)) -and $utilOnly){
       $pantryItems += $dispItem.ToLower(); $pantryUtil += $util; $foldSet[$ing.item]=1
-    } else {
-      $display += ('<strong>' + $dispItem + $brand + ':</strong> ' + (FriendlyAmt $ing.item $ing.grams) + ' (' + [int]$ing.grams + ' g)')
     }
+    $display += ('<strong>' + $dispItem + $brand + ':</strong> ' + (FriendlyAmt $ing.item $ing.grams) + ' (' + [int]$ing.grams + ' g)')
     # Scaler entry (ALL items). The widget renders scaler.item to the READER, so it carries the display
     # name or the same page contradicts itself ("Korean glass noodles" in the ingredient list,
     # "Cornstarch" in the size widget). 'canon' keeps the canonical DB name for machines: build-card
